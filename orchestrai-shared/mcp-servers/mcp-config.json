@@ -4,7 +4,7 @@
       "name": "sequential-thinking", 
       "description": "Advanced problem-solving with multi-agent coordination",
       "command": "npx",
-      "args": ["@anthropic-ai/mcp-server-sequential-thinking"],
+      "args": ["@modelcontextprotocol/server-sequential-thinking"],
       "env": {
         "GROQ_API_KEY": "${GROQ_API_KEY}",
         "DEEPSEEK_API_KEY": "${DEEPSEEK_API_KEY}",
@@ -16,9 +16,9 @@
     },
     "ref-tools": {
       "name": "ref-tools",
-      "description": "Documentation access for hallucination prevention", 
-      "type": "http",
-      "url": "https://api.ref.tools/mcp",
+      "description": "Documentation access for hallucination prevention",
+      "command": "npx",
+      "args": ["ref-tools-mcp"],
       "env": {
         "REF_API_KEY": "${REF_API_KEY}"
       },
@@ -56,6 +56,24 @@
       "capabilities": ["file-operations", "path-validation", "secure-access"],
       "priority": "medium",
       "enabled": true
+    },
+    "notion": {
+      "name": "notion",
+      "description": "Auto-sync research documents and content to Notion workspace",
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_TOKEN": "${NOTION_TOKEN}"
+      },
+      "capabilities": ["document-sync", "content-creation", "research-storage", "workspace-integration"],
+      "priority": "high",
+      "enabled": true,
+      "autoSync": {
+        "researchDocuments": true,
+        "contentArticles": true,
+        "webpageContent": true,
+        "syncInterval": "real-time"
+      }
     }
   },
   "serverConfig": {

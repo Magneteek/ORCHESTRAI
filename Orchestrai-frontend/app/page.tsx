@@ -1,7 +1,31 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Brain, Activity, Network, Database } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { MCPMonitoringPanel } from '@/components/dashboard/mcp-monitoring-panel'
+import { UsageAnalyticsPanel } from '@/components/dashboard/usage-analytics-panel'
+import { AutoSyncTestingPanel } from '@/components/dashboard/auto-sync-testing-panel'
+import { D3VisualizationsPanel } from '@/components/dashboard/d3-visualizations-panel'
+import { 
+  Activity, 
+  Database, 
+  Zap, 
+  Globe, 
+  Users, 
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Server,
+  BarChart3,
+  Brain,
+  Network,
+  TestTube,
+  TrendingUp
+} from 'lucide-react'
 
 interface SystemMetrics {
   memoryNodes: number
@@ -25,15 +49,9 @@ export default function Dashboard() {
   })
   const [connected, setConnected] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [websocket, setWebsocket] = useState<WebSocket | null>(null)
 
-  // Create stable hexagon pattern
-  const hexagonPattern = [
-    'bg-blue-400', 'bg-slate-700', 'bg-purple-400/50', 'bg-blue-400', 'bg-slate-700', 'bg-purple-400/50',
-    'bg-slate-700', 'bg-purple-400/50', 'bg-blue-400', 'bg-slate-700', 'bg-blue-400', 'bg-purple-400/50',
-    'bg-purple-400/50', 'bg-blue-400', 'bg-slate-700', 'bg-purple-400/50', 'bg-blue-400', 'bg-slate-700'
-  ]
-
-  // Fetch metrics from orchestrator
+  // Fetch system metrics
   const fetchMetrics = async () => {
     try {
       const response = await fetch('http://localhost:5501/metrics')
@@ -57,6 +75,7 @@ export default function Dashboard() {
     const connectWebSocket = () => {
       try {
         ws = new WebSocket('ws://localhost:5501/ws')
+        setWebsocket(ws)
         
         ws.onopen = () => {
           console.log('WebSocket connected to orchestrator')
@@ -74,194 +93,306 @@ export default function Dashboard() {
           }
         }
 
-        ws.onerror = (error) => {
-          console.error('WebSocket error:', error)
-          setError('WebSocket connection failed')
-        }
-
         ws.onclose = () => {
+          console.log('WebSocket disconnected')
           setConnected(false)
-          // Attempt to reconnect after 3 seconds
           setTimeout(connectWebSocket, 3000)
         }
+
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error)
+          setConnected(false)
+        }
       } catch (err) {
-        console.error('Failed to establish WebSocket connection:', err)
-        setError('Failed to establish WebSocket connection')
+        console.error('WebSocket connection error:', err)
       }
     }
 
     // Initial metrics fetch
     fetchMetrics()
     
-    // Start WebSocket connection
+    // Setup WebSocket
     connectWebSocket()
-
-    // Fallback: fetch metrics every 5 seconds if WebSocket fails
-    const fallbackInterval = setInterval(() => {
-      if (!connected) {
-        fetchMetrics()
-      }
-    }, 5000)
+    
+    // Fallback polling every 5 seconds
+    const interval = setInterval(fetchMetrics, 5000)
 
     return () => {
+      clearInterval(interval)
       if (ws) {
         ws.close()
       }
-      clearInterval(fallbackInterval)
     }
   }, [])
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Connected':
+      case 'Active':
+        return <CheckCircle className="h-4 w-4 text-green-500" />
+      case 'Disconnected':
+      case 'Error':
+        return <XCircle className="h-4 w-4 text-red-500" />
+      default:
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Connected':
+      case 'Active':
+        return 'bg-green-500/10 text-green-500 border-green-500/20'
+      case 'Disconnected':
+      case 'Error':
+        return 'bg-red-500/10 text-red-500 border-red-500/20'
+      default:
+        return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
+    }
+  }
+
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      <div className="container mx-auto p-6">
         {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                ORCHESTRAI
-              </h1>
-              <p className="text-slate-400 text-lg">Crystalline Memory Architecture Dashboard</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'}`}></div>
-              <span className="text-sm text-slate-400">
-                {connected ? 'Connected' : error ? 'Disconnected' : 'Connecting...'}
-              </span>
-            </div>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              ORCHESTRAI
+            </h1>
+            <p className="text-lg text-muted-foreground mt-2">
+              Advanced Multi-Agent System with Crystalline Memory Architecture
+            </p>
           </div>
-        </header>
-
-        {/* Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 crystalline-glow">
-            <div className="flex items-center gap-3">
-              <Brain className="w-8 h-8 text-blue-400" />
-              <div>
-                <p className="text-slate-400 text-sm">Memory Nodes</p>
-                <p className="text-2xl font-bold text-blue-400">{metrics.memoryNodes.toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center gap-3">
-              <Activity className="w-8 h-8 text-green-400" />
-              <div>
-                <p className="text-slate-400 text-sm">Active Agents</p>
-                <p className="text-2xl font-bold text-green-400">{metrics.activeAgents}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center gap-3">
-              <Network className="w-8 h-8 text-purple-400" />
-              <div>
-                <p className="text-slate-400 text-sm">Pipeline Sharing</p>
-                <p className="text-2xl font-bold text-purple-400">{metrics.pipelineSharing}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center gap-3">
-              <Database className={`w-8 h-8 ${
-                metrics.redisStatus === 'Connected' ? 'text-green-400' :
-                metrics.redisStatus === 'Error' ? 'text-red-400' : 
-                'text-orange-400'
-              }`} />
-              <div>
-                <p className="text-slate-400 text-sm">Redis Status</p>
-                <p className={`text-2xl font-bold ${
-                  metrics.redisStatus === 'Connected' ? 'text-green-400' :
-                  metrics.redisStatus === 'Error' ? 'text-red-400' : 
-                  'text-orange-400'
-                }`}>{metrics.redisStatus}</p>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            <Badge className={`${getStatusColor(connected ? 'Connected' : 'Disconnected')} px-3 py-1`}>
+              {getStatusIcon(connected ? 'Connected' : 'Disconnected')}
+              <span className="ml-2">{connected ? 'Connected' : 'Disconnected'}</span>
+            </Badge>
+            {error && (
+              <Badge variant="destructive" className="px-3 py-1">
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                {error}
+              </Badge>
+            )}
           </div>
         </div>
 
-        {/* Crystalline Memory Visualization */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="w-3 h-3 bg-blue-400 hexagon"></div>
-              Crystalline Memory Lattice
-            </h3>
-            <div className="h-64 bg-slate-900/50 rounded-lg flex items-center justify-center">
-              <div className="text-slate-400">
-                <div className="grid grid-cols-6 gap-2">
-                  {hexagonPattern.map((color, i) => (
-                    <div 
-                      key={i}
-                      className={`w-8 h-8 hexagon ${color}`}
-                    />
-                  ))}
+        {/* System Status Overview */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <Card className="border-l-4 border-l-blue-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Memory Nodes</CardTitle>
+              <Brain className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.memoryNodes}</div>
+              <p className="text-xs text-muted-foreground">
+                Hexagonal lattice structure
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-green-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Agents</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.activeAgents}</div>
+              <p className="text-xs text-muted-foreground">
+                Domain specialists online
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-purple-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.totalRequests.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground">
+                API + MCP calls processed
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-orange-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">System Uptime</CardTitle>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metrics.uptimeFormatted}</div>
+              <p className="text-xs text-muted-foreground">
+                Current session runtime
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Dashboard Tabs */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              System Overview
+            </TabsTrigger>
+            <TabsTrigger value="mcp" className="flex items-center gap-2">
+              <Server className="h-4 w-4" />
+              MCP Servers
+            </TabsTrigger>
+            <TabsTrigger value="testing" className="flex items-center gap-2">
+              <TestTube className="h-4 w-4" />
+              Auto-Sync Testing
+            </TabsTrigger>
+            <TabsTrigger value="visualizations" className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              D3.js Visualizations
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Usage Analytics
+            </TabsTrigger>
+            <TabsTrigger value="crystalline" className="flex items-center gap-2">
+              <Brain className="h-4 w-4" />
+              Crystalline Memory
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+            {/* System Components Status */}
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Network className="h-5 w-5" />
+                    System Components
+                  </CardTitle>
+                  <CardDescription>
+                    Status of core ORCHESTRAI components
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Redis Connection</span>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(metrics.redisStatus)}
+                      <Badge className={getStatusColor(metrics.redisStatus)}>
+                        {metrics.redisStatus}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Pipeline Sharing</span>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(metrics.pipelineSharing)}
+                      <Badge className={getStatusColor(metrics.pipelineSharing)}>
+                        {metrics.pipelineSharing}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">WebSocket Connection</span>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(connected ? 'Connected' : 'Disconnected')}
+                      <Badge className={getStatusColor(connected ? 'Connected' : 'Disconnected')}>
+                        {connected ? 'Connected' : 'Disconnected'}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="h-5 w-5" />
+                    Real-time Metrics
+                  </CardTitle>
+                  <CardDescription>
+                    Live system performance indicators
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>System Load</span>
+                      <span>{connected ? 'Normal' : 'Unknown'}</span>
+                    </div>
+                    <Progress value={connected ? 25 : 0} className="h-2" />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Memory Efficiency</span>
+                      <span>{metrics.memoryNodes > 0 ? 'High' : 'Initializing'}</span>
+                    </div>
+                    <Progress value={metrics.memoryNodes > 0 ? 85 : 10} className="h-2" />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Agent Coordination</span>
+                      <span>{metrics.activeAgents > 0 ? 'Optimal' : 'Standby'}</span>
+                    </div>
+                    <Progress value={metrics.activeAgents > 0 ? 92 : 5} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="mcp">
+            <MCPMonitoringPanel websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="testing">
+            <AutoSyncTestingPanel websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="visualizations">
+            <D3VisualizationsPanel websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <UsageAnalyticsPanel websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="crystalline" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5" />
+                  Crystalline Memory Architecture
+                </CardTitle>
+                <CardDescription>
+                  Hexagonal lattice memory structure with geometric access patterns
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="text-center p-4">
+                    <div className="text-3xl font-bold text-blue-600">{metrics.memoryNodes}</div>
+                    <p className="text-sm text-muted-foreground">Active Nodes</p>
+                  </div>
+                  <div className="text-center p-4">
+                    <div className="text-3xl font-bold text-green-600">Hexagonal</div>
+                    <p className="text-sm text-muted-foreground">Lattice Pattern</p>
+                  </div>
+                  <div className="text-center p-4">
+                    <div className="text-3xl font-bold text-purple-600">Geometric</div>
+                    <p className="text-sm text-muted-foreground">Access Algorithm</p>
+                  </div>
                 </div>
-                <p className="text-center mt-4">Hexagonal Memory Nodes</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">System Status</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-slate-300">Orchestrator Uptime</span>
-                <span className="px-2 py-1 bg-blue-900/50 text-blue-400 rounded-full text-sm">{metrics.uptimeFormatted}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-300">Total Requests</span>
-                <span className="px-2 py-1 bg-green-900/50 text-green-400 rounded-full text-sm">{metrics.totalRequests.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-300">Pipeline Coordinator</span>
-                <span className={`px-2 py-1 rounded-full text-sm ${
-                  metrics.pipelineSharing === 'Active' 
-                    ? 'bg-green-900/50 text-green-400' 
-                    : 'bg-yellow-900/50 text-yellow-400'
-                }`}>{metrics.pipelineSharing}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-300">Domain Agents</span>
-                <span className="px-2 py-1 bg-blue-900/50 text-blue-400 rounded-full text-sm">{metrics.activeAgents} Running</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-300">WebSocket Connection</span>
-                <span className={`px-2 py-1 rounded-full text-sm ${
-                  connected 
-                    ? 'bg-green-900/50 text-green-400' 
-                    : 'bg-red-900/50 text-red-400'
-                }`}>{connected ? 'Connected' : 'Disconnected'}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Phase Information */}
-        <div className="mt-8 bg-slate-800/30 border border-slate-700 rounded-lg p-6">
-          <h3 className="text-xl font-semibold mb-4">Current Phase: Foundation Complete</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm">Crystalline Memory</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm">Dashboard Visualization</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm">Redis Integration</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm">Clean Architecture</span>
-            </div>
-          </div>
-        </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )

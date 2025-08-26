@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const WebSocket = require('ws');
@@ -6,6 +7,9 @@ const Redis = require('redis');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const CrystallineMemoryManager = require('../crystalline-memory/memory-manager');
+const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
+const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
+const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
 
 // ORCHESTRAI Main Orchestrator
 // Port 5501 - Central coordination service
@@ -37,6 +41,7 @@ class OrchestraiMaster {
     this.setupRoutes();
     this.setupWebSocket();
     this.startMetricsUpdater();
+    this.initializeMCP();
   }
 
   async initializeRedis() {
@@ -56,12 +61,60 @@ class OrchestraiMaster {
         
         this.crystallineMemory = new CrystallineMemoryManager(this.redis);
         console.log('🧠 Crystalline Memory Manager initialized');
+        
+        this.mcpManager = new MCPManager();
+        console.log('🔌 MCP Manager initialized');
+        
+        this.usageTracker = new UsageTracker(this.redis);
+        console.log('📊 Usage Tracker initialized');
+        
+        this.claudeCodeHooks = new ClaudeCodeHooksManager(this.usageTracker, this.mcpManager);
+        console.log('🎣 Claude Code Hooks Manager initialized');
       });
 
       await this.redis.connect();
     } catch (error) {
       console.log('⚠️  Redis not available, using in-memory fallback');
       this.systemMetrics.redisStatus = 'Fallback Mode';
+    }
+  }
+
+  async initializeMCP() {
+    try {
+      this.mcpManager = new MCPManager();
+      console.log('🔧 MCP Manager initialized');
+      
+      // Auto-start MCP servers after a short delay
+      setTimeout(async () => {
+        try {
+          console.log('🚀 Starting MCP servers automatically...');
+          await this.mcpManager.startAllServers();
+          console.log('✅ All MCP servers started automatically');
+          
+          // Update system metrics to reflect MCP server count as active agents
+          this.updateMCPAgentCount();
+        } catch (error) {
+          console.error('❌ Auto-start MCP servers failed:', error);
+        }
+      }, 2000); // 2 second delay to ensure everything is initialized
+      
+      this.usageTracker = new UsageTracker(this.redis);
+      console.log('📊 Usage Tracker initialized');
+    } catch (error) {
+      console.error('❌ MCP initialization error:', error);
+    }
+  }
+  
+  updateMCPAgentCount() {
+    if (this.mcpManager) {
+      try {
+        const status = this.mcpManager.getAllServersStatus();
+        const runningServers = Object.values(status).filter(s => s.status === 'running').length;
+        this.systemMetrics.activeAgents = runningServers;
+        console.log(`📊 Updated active agents count: ${runningServers} MCP servers`);
+      } catch (error) {
+        console.error('Error updating MCP agent count:', error);
+      }
     }
   }
 
@@ -72,10 +125,23 @@ class OrchestraiMaster {
     }));
     this.app.use(express.json());
     
-    // Request logging and metrics
+    // Request logging and usage tracking
     this.app.use((req, res, next) => {
+      const startTime = Date.now();
+      
       this.systemMetrics.totalRequests++;
       console.log(`📊 [${new Date().toISOString()}] ${req.method} ${req.path}`);
+      
+      // Track usage after response
+      res.on('finish', () => {
+        const responseTime = Date.now() - startTime;
+        const userAgent = req.get('User-Agent') || 'unknown';
+        
+        if (this.usageTracker) {
+          this.usageTracker.trackApiCall(req.path, req.method, res.statusCode, responseTime, userAgent);
+        }
+      });
+      
       next();
     });
   }
@@ -142,6 +208,11 @@ class OrchestraiMaster {
         const nodeId = await this.crystallineMemory.storeMemory(domain, content, metadata);
         
         if (nodeId) {
+          // Track memory usage
+          if (this.usageTracker) {
+            this.usageTracker.trackMemoryOperation('node_created', { nodeId, domain });
+          }
+          
           res.json({ 
             success: true, 
             nodeId, 
@@ -163,7 +234,19 @@ class OrchestraiMaster {
 
       try {
         const { query, domain, maxResults } = req.body;
+        const startTime = Date.now();
         const results = await this.crystallineMemory.retrieveMemory(query, domain, maxResults);
+        
+        // Track memory usage
+        if (this.usageTracker) {
+          this.usageTracker.trackMemoryOperation('search_query', {
+            query: query.substring(0, 50), // First 50 chars for privacy
+            domain,
+            resultsCount: results.results?.length || 0,
+            responseTime: Date.now() - startTime
+          });
+        }
+        
         res.json(results);
       } catch (error) {
         res.status(500).json({ error: 'Retrieval error', details: error.message });
@@ -196,6 +279,231 @@ class OrchestraiMaster {
         res.json(snapshot);
       } catch (error) {
         res.status(500).json({ error: 'Export error', details: error.message });
+      }
+    });
+
+    // MCP Server Management endpoints
+    this.app.get('/mcp/status', (req, res) => {
+      if (!this.mcpManager) {
+        return res.status(503).json({ error: 'MCP Manager not initialized' });
+      }
+
+      try {
+        const status = this.mcpManager.getAllServersStatus();
+        res.json({
+          servers: status,
+          totalServers: Object.keys(status).length,
+          runningServers: Object.values(status).filter(s => s.status === 'running').length,
+          timestamp: new Date().toISOString()
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get MCP status', details: error.message });
+      }
+    });
+
+    // Test Notion connection
+    this.app.get('/mcp/notion/test', async (req, res) => {
+      if (!this.mcpManager) {
+        return res.status(503).json({ error: 'MCP Manager not initialized' });
+      }
+
+      try {
+        const result = await this.mcpManager.testNotionConnection();
+        res.json(result);
+      } catch (error) {
+        res.status(500).json({ error: 'Notion test failed', details: error.message });
+      }
+    });
+
+    // Start specific MCP server
+    this.app.post('/mcp/start/:serverName', async (req, res) => {
+      if (!this.mcpManager) {
+        return res.status(503).json({ error: 'MCP Manager not initialized' });
+      }
+
+      try {
+        const { serverName } = req.params;
+        await this.mcpManager.startServer(serverName);
+        res.json({ 
+          success: true, 
+          message: `MCP server ${serverName} started successfully`,
+          server: serverName 
+        });
+      } catch (error) {
+        res.status(500).json({ 
+          error: `Failed to start MCP server ${req.params.serverName}`, 
+          details: error.message 
+        });
+      }
+    });
+
+    // Stop specific MCP server
+    this.app.post('/mcp/stop/:serverName', async (req, res) => {
+      if (!this.mcpManager) {
+        return res.status(503).json({ error: 'MCP Manager not initialized' });
+      }
+
+      try {
+        const { serverName } = req.params;
+        await this.mcpManager.stopServer(serverName);
+        res.json({ 
+          success: true, 
+          message: `MCP server ${serverName} stopped successfully`,
+          server: serverName 
+        });
+      } catch (error) {
+        res.status(500).json({ 
+          error: `Failed to stop MCP server ${req.params.serverName}`, 
+          details: error.message 
+        });
+      }
+    });
+
+    // Start all enabled MCP servers
+    this.app.post('/mcp/start-all', async (req, res) => {
+      if (!this.mcpManager) {
+        return res.status(503).json({ error: 'MCP Manager not initialized' });
+      }
+
+      try {
+        const results = await this.mcpManager.startAllEnabledServers();
+        const successful = results.filter(r => r.status === 'started').length;
+        const failed = results.filter(r => r.status === 'failed').length;
+
+        res.json({
+          success: failed === 0,
+          message: `Started ${successful}/${results.length} MCP servers`,
+          results,
+          summary: { successful, failed, total: results.length }
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to start MCP servers', details: error.message });
+      }
+    });
+
+    // Get MCP startup logs
+    this.app.get('/mcp/logs', (req, res) => {
+      if (!this.mcpManager) {
+        return res.status(503).json({ error: 'MCP Manager not initialized' });
+      }
+
+      try {
+        const logs = this.mcpManager.getStartupLog();
+        res.json({
+          logs,
+          totalEntries: logs.length,
+          lastUpdate: logs.length > 0 ? logs[logs.length - 1].timestamp : null
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get MCP logs', details: error.message });
+      }
+    });
+
+    // Usage Tracking & Analytics endpoints
+    this.app.get('/analytics/usage', (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        const timeRange = req.query.range || '24h';
+        const summary = this.usageTracker.getUsageSummary(timeRange);
+        res.json(summary);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get usage analytics', details: error.message });
+      }
+    });
+
+    this.app.get('/analytics/metrics', (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        res.json({
+          sessionId: this.usageTracker.sessionId,
+          startTime: this.usageTracker.startTime,
+          metrics: this.usageTracker.metrics,
+          lastUpdated: Date.now()
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get metrics', details: error.message });
+      }
+    });
+    
+    // Agent statistics endpoint
+    this.app.get('/analytics/agents', (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        const stats = this.usageTracker.getAgentStatistics();
+        res.json(stats);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get agent statistics', details: error.message });
+      }
+    });
+    
+    // Cost analysis endpoint
+    this.app.get('/analytics/costs', (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        const summary = this.usageTracker.getUsageSummary('24h');
+        res.json(summary.costs);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get cost analysis', details: error.message });
+      }
+    });
+
+    this.app.get('/analytics/export', async (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        const format = req.query.format || 'json';
+        const exportData = await this.usageTracker.exportData(format);
+        
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+        const filename = `orchestrai-analytics-${timestamp}.${format}`;
+        
+        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+        res.setHeader('Content-Type', format === 'csv' ? 'text/csv' : 'application/json');
+        res.send(exportData);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to export analytics', details: error.message });
+      }
+    });
+
+    this.app.post('/analytics/track/token', (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        const { model, inputTokens, outputTokens, domain, cost } = req.body;
+        this.usageTracker.trackTokenUsage(model, inputTokens, outputTokens, domain, cost);
+        res.json({ success: true, message: 'Token usage tracked' });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to track token usage', details: error.message });
+      }
+    });
+
+    this.app.post('/analytics/track/feature', (req, res) => {
+      if (!this.usageTracker) {
+        return res.status(503).json({ error: 'Usage Tracker not initialized' });
+      }
+
+      try {
+        const { feature, details } = req.body;
+        this.usageTracker.trackFeatureUsage(feature, details);
+        res.json({ success: true, message: 'Feature usage tracked' });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to track feature usage', details: error.message });
       }
     });
 
@@ -258,6 +566,9 @@ class OrchestraiMaster {
         dynamicRouting: true
       });
     });
+
+    // Claude Code Hooks Integration
+    this.setupClaudeCodeHooks();
   }
 
   setupWebSocket() {
@@ -295,8 +606,21 @@ class OrchestraiMaster {
   }
 
   async updateSystemMetrics() {
-    // Update active agents count
-    this.systemMetrics.activeAgents = this.agents.size;
+    // Update active agents count (include both registered agents and MCP servers)
+    let activeAgentCount = this.agents.size;
+    
+    // Add running MCP servers as active agents
+    if (this.mcpManager) {
+      try {
+        const status = this.mcpManager.getAllServersStatus();
+        const runningServers = Object.values(status).filter(s => s.status === 'running').length;
+        activeAgentCount += runningServers;
+      } catch (error) {
+        // Silently handle error, use default count
+      }
+    }
+    
+    this.systemMetrics.activeAgents = activeAgentCount;
     
     // Update crystalline memory metrics
     if (this.crystallineMemory) {
@@ -392,6 +716,70 @@ class OrchestraiMaster {
       'webdev': { position: [1, 1], connections: ['research'] },
       'maintenance': { position: [0.5, 0.5], connections: ['all'] }
     };
+  }
+
+  setupClaudeCodeHooks() {
+    // Initialize hooks if not already done
+    if (!this.claudeCodeHooks && this.usageTracker && this.mcpManager) {
+      this.claudeCodeHooks = new ClaudeCodeHooksManager(this.usageTracker, this.mcpManager);
+      console.log('🎣 Claude Code Hooks Manager initialized in setup');
+    }
+    
+    if (!this.claudeCodeHooks) {
+      console.warn('⚠️  Claude Code Hooks Manager not available - skipping webhook setup');
+      return;
+    }
+
+    // Register all hook endpoints
+    Object.entries(this.claudeCodeHooks.endpoints).forEach(([path, handler]) => {
+      this.app.post(path, async (req, res) => {
+        try {
+          const result = await handler(req.body);
+          res.json({ success: true, ...result });
+        } catch (error) {
+          console.error(`❌ Hook error for ${path}:`, error);
+          res.status(500).json({ success: false, error: error.message });
+        }
+      });
+    });
+
+    // Hooks management endpoints
+    this.app.get('/hooks/status', (req, res) => {
+      try {
+        res.json({
+          activeWorkflows: this.claudeCodeHooks.getActiveWorkflows(),
+          metrics: this.claudeCodeHooks.getWorkflowMetrics(),
+          configurations: this.claudeCodeHooks.getHookConfigurations()
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get hooks status', details: error.message });
+      }
+    });
+
+    this.app.get('/hooks/workflows', (req, res) => {
+      try {
+        const workflows = this.claudeCodeHooks.getActiveWorkflows();
+        res.json({ workflows, count: workflows.length });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get workflows', details: error.message });
+      }
+    });
+
+    this.app.put('/hooks/config/:hookName', (req, res) => {
+      try {
+        const { hookName } = req.params;
+        const updated = this.claudeCodeHooks.updateHookConfiguration(hookName, req.body);
+        if (updated) {
+          res.json({ success: true, hook: hookName });
+        } else {
+          res.status(404).json({ error: 'Hook not found' });
+        }
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to update hook config', details: error.message });
+      }
+    });
+
+    console.log('🎣 Claude Code webhook endpoints registered');
   }
 
   async start() {
