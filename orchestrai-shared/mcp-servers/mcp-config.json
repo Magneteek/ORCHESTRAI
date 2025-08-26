@@ -1,0 +1,78 @@
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "name": "sequential-thinking", 
+      "description": "Advanced problem-solving with multi-agent coordination",
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-server-sequential-thinking"],
+      "env": {
+        "GROQ_API_KEY": "${GROQ_API_KEY}",
+        "DEEPSEEK_API_KEY": "${DEEPSEEK_API_KEY}",
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      },
+      "capabilities": ["complex-problem-solving", "iterative-refinement", "multi-step-analysis"],
+      "priority": "high",
+      "enabled": true
+    },
+    "ref-tools": {
+      "name": "ref-tools",
+      "description": "Documentation access for hallucination prevention", 
+      "type": "http",
+      "url": "https://api.ref.tools/mcp",
+      "env": {
+        "REF_API_KEY": "${REF_API_KEY}"
+      },
+      "capabilities": ["documentation-search", "web-scraping", "fact-checking"],
+      "priority": "high",
+      "enabled": true
+    },
+    "dataforseo": {
+      "name": "dataforseo",
+      "description": "Custom SEO data integration server",
+      "command": "node",
+      "args": ["./orchestrai-shared/mcp-servers/dataforseo-server.js"],
+      "env": {
+        "DATAFORSEO_USERNAME": "${DATAFORSEO_USERNAME}",
+        "DATAFORSEO_PASSWORD": "${DATAFORSEO_PASSWORD}"
+      },
+      "capabilities": ["seo-analysis", "keyword-research", "serp-data"],
+      "priority": "medium",
+      "enabled": true
+    },
+    "memory": {
+      "name": "memory",
+      "description": "Persistent knowledge graphs",
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-memory"],
+      "capabilities": ["knowledge-storage", "context-persistence", "learning-retention"],
+      "priority": "high", 
+      "enabled": true
+    },
+    "filesystem": {
+      "name": "filesystem",
+      "description": "Secure file operations",
+      "command": "npx", 
+      "args": ["@modelcontextprotocol/server-filesystem"],
+      "capabilities": ["file-operations", "path-validation", "secure-access"],
+      "priority": "medium",
+      "enabled": true
+    }
+  },
+  "serverConfig": {
+    "maxConcurrentConnections": 10,
+    "connectionTimeout": 30000,
+    "retryAttempts": 3,
+    "healthCheckInterval": 60000,
+    "logLevel": "info"
+  },
+  "securityConfig": {
+    "allowedOrigins": ["localhost:3000"],
+    "rateLimiting": {
+      "enabled": true,
+      "maxRequests": 1000,
+      "windowMs": 900000
+    },
+    "pathValidation": true,
+    "sandboxed": true
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-26",
+  "templates": {
+    "wireframes": {
+      "web-app-layouts": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "mobile-patterns": {
+        "version": "1.0.0", 
+        "files": [],
+        "usage_count": 0
+      },
+      "dashboard-templates": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      }
+    },
+    "design-systems": {
+      "component-libraries": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "style-guides": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "brand-templates": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      }
+    },
+    "code-patterns": {
+      "react-components": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "api-patterns": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "database-schemas": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "deployment-configs": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      }
+    },
+    "content-templates": {
+      "copywriting-frameworks": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "seo-structures": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      },
+      "multi-language-patterns": {
+        "version": "1.0.0",
+        "files": [],
+        "usage_count": 0
+      }
+    }
+  }
+}

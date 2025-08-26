@@ -1,0 +1,27 @@
+{
+  "analytics": {
+    "totalUsage": 0,
+    "lastAnalysisDate": "2025-01-26",
+    "templatePerformance": {},
+    "agentUsagePatterns": {},
+    "projectTemplateMapping": {},
+    "optimizationRecommendations": []
+  },
+  "metrics": {
+    "templateEfficiency": {
+      "reuseRate": 0,
+      "adaptationSuccess": 0,
+      "timeToImplementation": 0
+    },
+    "qualityMetrics": {
+      "templateAccuracy": 0,
+      "agentSatisfaction": 0,
+      "deliverableQuality": 0
+    }
+  },
+  "tracking": {
+    "enabled": true,
+    "anonymized": true,
+    "retentionDays": 90
+  }
+}
