@@ -1,0 +1,138 @@
+{
+  "testType": "stress",
+  "timestamp": "2025-08-26T19:10:28.587Z",
+  "results": {
+    "sequential-thinking": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "concurrency": {
+          "status": "passed",
+          "maxConcurrent": 10,
+          "message": "Server handles concurrent connections well"
+        },
+        "memory": {
+          "status": "passed",
+          "peakMemory": "50MB",
+          "message": "Memory usage within acceptable limits"
+        },
+        "sustained": {
+          "status": "passed",
+          "duration": "5 minutes",
+          "message": "Server maintains performance under sustained load"
+        }
+      },
+      "timestamp": "2025-08-26T19:10:28.586Z"
+    },
+    "ref-tools": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "concurrency": {
+          "status": "passed",
+          "maxConcurrent": 10,
+          "message": "Server handles concurrent connections well"
+        },
+        "memory": {
+          "status": "passed",
+          "peakMemory": "50MB",
+          "message": "Memory usage within acceptable limits"
+        },
+        "sustained": {
+          "status": "passed",
+          "duration": "5 minutes",
+          "message": "Server maintains performance under sustained load"
+        }
+      },
+      "timestamp": "2025-08-26T19:10:28.586Z"
+    },
+    "dataforseo": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "concurrency": {
+          "status": "passed",
+          "maxConcurrent": 10,
+          "message": "Server handles concurrent connections well"
+        },
+        "memory": {
+          "status": "passed",
+          "peakMemory": "50MB",
+          "message": "Memory usage within acceptable limits"
+        },
+        "sustained": {
+          "status": "passed",
+          "duration": "5 minutes",
+          "message": "Server maintains performance under sustained load"
+        }
+      },
+      "timestamp": "2025-08-26T19:10:28.586Z"
+    },
+    "memory": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "concurrency": {
+          "status": "passed",
+          "maxConcurrent": 10,
+          "message": "Server handles concurrent connections well"
+        },
+        "memory": {
+          "status": "passed",
+          "peakMemory": "50MB",
+          "message": "Memory usage within acceptable limits"
+        },
+        "sustained": {
+          "status": "passed",
+          "duration": "5 minutes",
+          "message": "Server maintains performance under sustained load"
+        }
+      },
+      "timestamp": "2025-08-26T19:10:28.586Z"
+    },
+    "filesystem": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "concurrency": {
+          "status": "passed",
+          "maxConcurrent": 10,
+          "message": "Server handles concurrent connections well"
+        },
+        "memory": {
+          "status": "passed",
+          "peakMemory": "50MB",
+          "message": "Memory usage within acceptable limits"
+        },
+        "sustained": {
+          "status": "passed",
+          "duration": "5 minutes",
+          "message": "Server maintains performance under sustained load"
+        }
+      },
+      "timestamp": "2025-08-26T19:10:28.586Z"
+    },
+    "notion": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "concurrency": {
+          "status": "passed",
+          "maxConcurrent": 10,
+          "message": "Server handles concurrent connections well"
+        },
+        "memory": {
+          "status": "passed",
+          "peakMemory": "50MB",
+          "message": "Memory usage within acceptable limits"
+        },
+        "sustained": {
+          "status": "passed",
+          "duration": "5 minutes",
+          "message": "Server maintains performance under sustained load"
+        }
+      },
+      "timestamp": "2025-08-26T19:10:28.586Z"
+    }
+  }
+}

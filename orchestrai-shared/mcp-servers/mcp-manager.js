@@ -61,9 +61,32 @@ class MCPManager {
       });
 
       serverProcess.stderr.on('data', (data) => {
-        const message = `[${serverName}] ERROR: ${data.toString()}`;
-        console.error(message);
-        this.startupLog.push({ server: serverName, type: 'stderr', message: data.toString(), timestamp: Date.now() });
+        const message = data.toString().trim();
+        
+        // Filter out normal MCP server status messages that aren't actually errors
+        const normalMessages = [
+          'running on stdio',
+          'Server running on stdio',
+          'MCP Server running on stdio',
+          'Knowledge Graph MCP Server running on stdio',
+          'DataForSEO MCP server running on stdio',
+          'Sequential Thinking MCP Server running on stdio',
+          'Ref MCP Server running on stdio',
+          'Secure MCP Filesystem Server running on stdio',
+          'Started without allowed directories - waiting for client to provide roots via MCP protocol'
+        ];
+        
+        const isNormalMessage = normalMessages.some(normalMsg => message.includes(normalMsg));
+        
+        if (isNormalMessage) {
+          // Log as info instead of error for normal operation messages
+          console.log(`[${serverName}] INFO: ${message}`);
+          this.startupLog.push({ server: serverName, type: 'info', message, timestamp: Date.now() });
+        } else {
+          // Only log actual errors
+          console.error(`[${serverName}] ERROR: ${message}`);
+          this.startupLog.push({ server: serverName, type: 'stderr', message, timestamp: Date.now() });
+        }
       });
 
       serverProcess.on('close', (code) => {

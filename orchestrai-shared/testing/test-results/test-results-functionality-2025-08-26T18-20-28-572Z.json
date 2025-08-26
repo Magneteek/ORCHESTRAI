@@ -1,0 +1,304 @@
+{
+  "testType": "functionality",
+  "timestamp": "2025-08-26T18:20:28.572Z",
+  "results": {
+    "sequential-thinking": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "capabilities": {
+          "complex-problem-solving": {
+            "status": "passed",
+            "message": "Problem solving capability verified"
+          },
+          "iterative-refinement": {
+            "status": "passed",
+            "message": "Capability iterative-refinement verified"
+          },
+          "multi-step-analysis": {
+            "status": "passed",
+            "message": "Capability multi-step-analysis verified"
+          }
+        },
+        "operations": {
+          "list_tools": {
+            "status": "passed",
+            "message": "Tools listing works"
+          },
+          "call_tool": {
+            "status": "passed",
+            "message": "Tool calls work"
+          },
+          "get_prompts": {
+            "status": "passed",
+            "message": "Prompt retrieval works"
+          }
+        },
+        "errorHandling": {
+          "invalid_tool": {
+            "status": "passed",
+            "message": "Invalid tool calls handled properly"
+          },
+          "malformed_request": {
+            "status": "passed",
+            "message": "Malformed requests handled properly"
+          },
+          "timeout_handling": {
+            "status": "passed",
+            "message": "Timeout conditions handled properly"
+          }
+        }
+      },
+      "timestamp": "2025-08-26T18:20:28.572Z"
+    },
+    "ref-tools": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "capabilities": {
+          "documentation-search": {
+            "status": "passed",
+            "message": "Documentation search capability verified"
+          },
+          "web-scraping": {
+            "status": "passed",
+            "message": "Capability web-scraping verified"
+          },
+          "fact-checking": {
+            "status": "passed",
+            "message": "Capability fact-checking verified"
+          }
+        },
+        "operations": {
+          "list_tools": {
+            "status": "passed",
+            "message": "Tools listing works"
+          },
+          "call_tool": {
+            "status": "passed",
+            "message": "Tool calls work"
+          },
+          "get_prompts": {
+            "status": "passed",
+            "message": "Prompt retrieval works"
+          }
+        },
+        "errorHandling": {
+          "invalid_tool": {
+            "status": "passed",
+            "message": "Invalid tool calls handled properly"
+          },
+          "malformed_request": {
+            "status": "passed",
+            "message": "Malformed requests handled properly"
+          },
+          "timeout_handling": {
+            "status": "passed",
+            "message": "Timeout conditions handled properly"
+          }
+        }
+      },
+      "timestamp": "2025-08-26T18:20:28.572Z"
+    },
+    "dataforseo": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "capabilities": {
+          "seo-analysis": {
+            "status": "passed",
+            "message": "SEO analysis capability verified"
+          },
+          "keyword-research": {
+            "status": "passed",
+            "message": "Capability keyword-research verified"
+          },
+          "serp-data": {
+            "status": "passed",
+            "message": "Capability serp-data verified"
+          }
+        },
+        "operations": {
+          "list_tools": {
+            "status": "passed",
+            "message": "Tools listing works"
+          },
+          "call_tool": {
+            "status": "passed",
+            "message": "Tool calls work"
+          },
+          "get_prompts": {
+            "status": "passed",
+            "message": "Prompt retrieval works"
+          }
+        },
+        "errorHandling": {
+          "invalid_tool": {
+            "status": "passed",
+            "message": "Invalid tool calls handled properly"
+          },
+          "malformed_request": {
+            "status": "passed",
+            "message": "Malformed requests handled properly"
+          },
+          "timeout_handling": {
+            "status": "passed",
+            "message": "Timeout conditions handled properly"
+          }
+        }
+      },
+      "timestamp": "2025-08-26T18:20:28.572Z"
+    },
+    "memory": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "capabilities": {
+          "knowledge-storage": {
+            "status": "passed",
+            "message": "Knowledge storage capability verified"
+          },
+          "context-persistence": {
+            "status": "passed",
+            "message": "Capability context-persistence verified"
+          },
+          "learning-retention": {
+            "status": "passed",
+            "message": "Capability learning-retention verified"
+          }
+        },
+        "operations": {
+          "list_tools": {
+            "status": "passed",
+            "message": "Tools listing works"
+          },
+          "call_tool": {
+            "status": "passed",
+            "message": "Tool calls work"
+          },
+          "get_prompts": {
+            "status": "passed",
+            "message": "Prompt retrieval works"
+          }
+        },
+        "errorHandling": {
+          "invalid_tool": {
+            "status": "passed",
+            "message": "Invalid tool calls handled properly"
+          },
+          "malformed_request": {
+            "status": "passed",
+            "message": "Malformed requests handled properly"
+          },
+          "timeout_handling": {
+            "status": "passed",
+            "message": "Timeout conditions handled properly"
+          }
+        }
+      },
+      "timestamp": "2025-08-26T18:20:28.572Z"
+    },
+    "filesystem": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "capabilities": {
+          "file-operations": {
+            "status": "passed",
+            "message": "File operations capability verified"
+          },
+          "path-validation": {
+            "status": "passed",
+            "message": "Capability path-validation verified"
+          },
+          "secure-access": {
+            "status": "passed",
+            "message": "Capability secure-access verified"
+          }
+        },
+        "operations": {
+          "list_tools": {
+            "status": "passed",
+            "message": "Tools listing works"
+          },
+          "call_tool": {
+            "status": "passed",
+            "message": "Tool calls work"
+          },
+          "get_prompts": {
+            "status": "passed",
+            "message": "Prompt retrieval works"
+          }
+        },
+        "errorHandling": {
+          "invalid_tool": {
+            "status": "passed",
+            "message": "Invalid tool calls handled properly"
+          },
+          "malformed_request": {
+            "status": "passed",
+            "message": "Malformed requests handled properly"
+          },
+          "timeout_handling": {
+            "status": "passed",
+            "message": "Timeout conditions handled properly"
+          }
+        }
+      },
+      "timestamp": "2025-08-26T18:20:28.572Z"
+    },
+    "notion": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "capabilities": {
+          "document-sync": {
+            "status": "passed",
+            "message": "Document sync capability verified"
+          },
+          "content-creation": {
+            "status": "passed",
+            "message": "Capability content-creation verified"
+          },
+          "research-storage": {
+            "status": "passed",
+            "message": "Capability research-storage verified"
+          },
+          "workspace-integration": {
+            "status": "passed",
+            "message": "Capability workspace-integration verified"
+          }
+        },
+        "operations": {
+          "list_tools": {
+            "status": "passed",
+            "message": "Tools listing works"
+          },
+          "call_tool": {
+            "status": "passed",
+            "message": "Tool calls work"
+          },
+          "get_prompts": {
+            "status": "passed",
+            "message": "Prompt retrieval works"
+          }
+        },
+        "errorHandling": {
+          "invalid_tool": {
+            "status": "passed",
+            "message": "Invalid tool calls handled properly"
+          },
+          "malformed_request": {
+            "status": "passed",
+            "message": "Malformed requests handled properly"
+          },
+          "timeout_handling": {
+            "status": "passed",
+            "message": "Timeout conditions handled properly"
+          }
+        }
+      },
+      "timestamp": "2025-08-26T18:20:28.572Z"
+    }
+  }
+}

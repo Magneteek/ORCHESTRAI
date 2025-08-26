@@ -1,4 +1,5 @@
 require('dotenv').config();
+const EventEmitter = require('events');
 const express = require('express');
 const cors = require('cors');
 const WebSocket = require('ws');
@@ -10,13 +11,17 @@ const CrystallineMemoryManager = require('../crystalline-memory/memory-manager')
 const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
 const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
 const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
+const DomainAgentManager = require('../../orchestrai-shared/domain-coordination/domain-agent-manager');
+const SEODomainHub = require('../../orchestrai-domains/seo/seo-domain-hub');
+const MasterCoordinatorInterface = require('../../orchestrai-shared/api/master-coordinator-interface');
 
 // ORCHESTRAI Main Orchestrator
 // Port 5501 - Central coordination service
 // Implements crystalline memory coordination and geometric routing
 
-class OrchestraiMaster {
+class OrchestraiMaster extends EventEmitter {
   constructor() {
+    super();
     this.app = express();
     this.server = http.createServer(this.app);
     this.wss = new WebSocket.Server({ server: this.server, path: '/ws' });
@@ -70,6 +75,9 @@ class OrchestraiMaster {
         
         this.claudeCodeHooks = new ClaudeCodeHooksManager(this.usageTracker, this.mcpManager);
         console.log('🎣 Claude Code Hooks Manager initialized');
+        
+        // Initialize Domain Agent Manager and domain agents
+        this.initializeDomainAgents();
       });
 
       await this.redis.connect();
@@ -88,7 +96,7 @@ class OrchestraiMaster {
       setTimeout(async () => {
         try {
           console.log('🚀 Starting MCP servers automatically...');
-          await this.mcpManager.startAllServers();
+          await this.mcpManager.startAllEnabledServers();
           console.log('✅ All MCP servers started automatically');
           
           // Update system metrics to reflect MCP server count as active agents
@@ -110,11 +118,81 @@ class OrchestraiMaster {
       try {
         const status = this.mcpManager.getAllServersStatus();
         const runningServers = Object.values(status).filter(s => s.status === 'running').length;
-        this.systemMetrics.activeAgents = runningServers;
-        console.log(`📊 Updated active agents count: ${runningServers} MCP servers`);
+        const domainAgents = this.domainAgentManager ? this.domainAgentManager.agents.size : 0;
+        this.systemMetrics.activeAgents = runningServers + domainAgents;
+        console.log(`📊 Updated active agents count: ${runningServers} MCP servers + ${domainAgents} domain agents`);
       } catch (error) {
         console.error('Error updating MCP agent count:', error);
       }
+    }
+  }
+
+  async initializeDomainAgents() {
+    try {
+      console.log('🎯 Initializing Domain Agent System...');
+      
+      // Initialize Domain Agent Manager
+      this.domainAgentManager = new DomainAgentManager(this, this.mcpManager, this.crystallineMemory);
+      await this.domainAgentManager.initialize();
+      console.log('✅ Domain Agent Manager initialized');
+      
+      // Initialize SEO Domain Hub with specialized sub-agents
+      setTimeout(async () => {
+        try {
+          console.log('🔗 Initializing SEO Domain Hub...');
+          this.seoHub = new SEODomainHub(
+            this, 
+            this.mcpManager, 
+            this.crystallineMemory,
+            this.domainAgentManager?.templateEngine,
+            this.domainAgentManager?.projectManager
+          );
+          console.log('✅ SEO Domain Hub initialized with 6 specialized sub-agents');
+          
+          // Initialize Master Coordinator Interface (Phase 1 Implementation)
+          setTimeout(async () => {
+            try {
+              console.log('🎯 Phase 1: Initializing Master Coordinator Interface...');
+              this.masterCoordinator = new MasterCoordinatorInterface(
+                this,
+                this.mcpManager,
+                this.crystallineMemory,
+                this.domainAgentManager?.templateEngine,
+                this.domainAgentManager?.projectManager
+              );
+              
+              console.log('✅ Master Coordinator Interface activated - Phase 1 Complete!');
+              console.log('🚀 Enhanced Hybrid Architecture now operational:');
+              console.log('   📋 Claude Code Master Coordinator → Primary interface');
+              console.log('   🔧 Node.js ORCHESTRAI Infrastructure → System operations'); 
+              console.log('   🤖 Specialized Claude Code Agents → Domain execution');
+              console.log('   💾 Crystalline Memory → Cross-system coordination');
+              
+            } catch (error) {
+              console.error('❌ Failed to initialize Master Coordinator Interface:', error);
+            }
+          }, 1000); // Initialize after SEO Hub is ready
+          
+          // Update active agent count to reflect hub + sub-agents
+          this.updateMCPAgentCount();
+          
+        } catch (error) {
+          console.error('❌ Failed to initialize SEO Domain Hub:', error);
+        }
+      }, 3000); // 3 second delay to ensure all dependencies are ready
+      
+    } catch (error) {
+      console.error('❌ Failed to initialize Domain Agent System:', error);
+    }
+  }
+
+  // Method to handle domain agent registration (called by agents)
+  async registerDomainAgent(agentInfo) {
+    if (this.domainAgentManager) {
+      return await this.domainAgentManager.registerDomainAgent(agentInfo);
+    } else {
+      console.error('Domain Agent Manager not initialized');
+      return false;
     }
   }
 
@@ -567,6 +645,82 @@ class OrchestraiMaster {
       });
     });
 
+    // Phase 1: Master Coordinator Interface API Endpoint
+    this.app.post('/coordinator/api', async (req, res) => {
+      if (!this.masterCoordinator) {
+        return res.status(503).json({ 
+          success: false,
+          error: 'Master Coordinator Interface not initialized',
+          phase: 'Phase 1 initialization required'
+        });
+      }
+
+      try {
+        const { method, params } = req.body;
+        
+        if (!method) {
+          return res.status(400).json({
+            success: false,
+            error: 'API method required',
+            availableMethods: Object.keys(this.masterCoordinator.apiMethods || {})
+          });
+        }
+
+        console.log(`🎯 Master Coordinator API call: ${method}`);
+        const result = await this.masterCoordinator.executeAPIMethod(method, params);
+        
+        res.json({
+          success: result.success,
+          method,
+          result,
+          timestamp: new Date().toISOString(),
+          phase: 'Phase 1 - Enhanced Hybrid Architecture'
+        });
+
+      } catch (error) {
+        console.error('❌ Master Coordinator API error:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Master Coordinator API execution failed',
+          details: error.message
+        });
+      }
+    });
+
+    // Master Coordinator status endpoint
+    this.app.get('/coordinator/status', (req, res) => {
+      if (!this.masterCoordinator) {
+        return res.json({
+          initialized: false,
+          phase: 'Phase 1 pending',
+          message: 'Master Coordinator Interface not yet initialized'
+        });
+      }
+
+      try {
+        const status = this.masterCoordinator.getCoordinationStatus();
+        res.json({
+          initialized: true,
+          phase: 'Phase 1 - Active',
+          status,
+          architecture: 'Enhanced Hybrid (Node.js + Claude Code)',
+          capabilities: [
+            'Intelligent task routing',
+            'Infrastructure management',
+            'Cross-system coordination',
+            'Specialized agent delegation'
+          ],
+          timestamp: new Date().toISOString()
+        });
+      } catch (error) {
+        res.status(500).json({
+          initialized: true,
+          error: 'Status retrieval failed',
+          details: error.message
+        });
+      }
+    });
+
     // Claude Code Hooks Integration
     this.setupClaudeCodeHooks();
   }
@@ -726,7 +880,7 @@ class OrchestraiMaster {
     }
     
     if (!this.claudeCodeHooks) {
-      console.warn('⚠️  Claude Code Hooks Manager not available - skipping webhook setup');
+      console.log('📝 Claude Code Hooks Manager: Optional webhooks not configured (normal operation)');
       return;
     }
 

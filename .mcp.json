@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "dataforseo": {
+      "command": "node",
+      "args": ["./orchestrai-shared/mcp-servers/dataforseo-server.js"],
+      "env": {
+        "DATAFORSEO_USERNAME": "kristjan@krisbal.com",
+        "DATAFORSEO_PASSWORD": "1e0416ba9122a90a"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-sequential-thinking"],
+      "env": {}
+    },
+    "ref-tools": {
+      "command": "npx", 
+      "args": ["ref-tools-mcp"],
+      "env": {}
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-memory"],
+      "env": {}
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/projects",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/temp"
+      ],
+      "env": {}
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_TOKEN": "ntn_UlNbVzHR4LNUJ3YRqgfbKcEcHGEfE7SRIDNAQr4jFjFKGL"
+      }
+    }
+  }
+}

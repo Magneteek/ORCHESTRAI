@@ -52,10 +52,15 @@
       "name": "filesystem",
       "description": "Secure file operations",
       "command": "npx", 
-      "args": ["@modelcontextprotocol/server-filesystem"],
+      "args": ["@modelcontextprotocol/server-filesystem", "/Users/kris/CLAUDEtools/ORCHESTRAI/projects", "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates"],
       "capabilities": ["file-operations", "path-validation", "secure-access"],
       "priority": "medium",
-      "enabled": true
+      "enabled": true,
+      "allowedDirectories": [
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/projects",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/temp"
+      ]
     },
     "notion": {
       "name": "notion",
