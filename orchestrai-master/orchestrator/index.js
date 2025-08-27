@@ -13,6 +13,8 @@ const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
 const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
 const DomainAgentManager = require('../../orchestrai-shared/domain-coordination/domain-agent-manager');
 const SEODomainHub = require('../../orchestrai-domains/seo/seo-domain-hub');
+const QualityDomainHub = require('../../orchestrai-domains/quality/quality-domain-hub');
+const ContentEnhancedDomainHub = require('../../orchestrai-domains/content-enhanced/content-domain-hub');
 const MasterCoordinatorInterface = require('../../orchestrai-shared/api/master-coordinator-interface');
 
 // ORCHESTRAI Main Orchestrator
@@ -149,6 +151,43 @@ class OrchestraiMaster extends EventEmitter {
           );
           console.log('✅ SEO Domain Hub initialized with 6 specialized sub-agents');
           
+          // Initialize Quality Control Domain Hub (Phase 3A Implementation)
+          setTimeout(async () => {
+            try {
+              console.log('🔍 Initializing Quality Control Domain Hub...');
+              this.qualityHub = new QualityDomainHub(
+                this,
+                this.crystallineMemory
+              );
+              console.log('✅ Quality Control Domain Hub initialized with 12 specialized quality agents');
+              
+            } catch (error) {
+              console.error('❌ Failed to initialize Quality Control Domain Hub:', error);
+            }
+          }, 2000);
+          
+          // Initialize Enhanced Content Domain Hub (Phase 3B Implementation)
+          setTimeout(async () => {
+            try {
+              console.log('📝 Initializing Enhanced Content Domain Hub...');
+              this.contentEnhancedHub = new ContentEnhancedDomainHub(
+                this, 
+                this.mcpManager, 
+                this.crystallineMemory,
+                this.domainAgentManager?.templateEngine,
+                this.domainAgentManager?.projectManager
+              );
+              await this.contentEnhancedHub.initialize();
+              
+              // Register Content Enhanced Service
+              this.contentEnhancedService = this.contentEnhancedHub;
+              console.log('🔗 Content Enhanced Service registered and integrated with Quality Control');
+              
+            } catch (error) {
+              console.error('❌ Failed to initialize Enhanced Content Domain Hub:', error);
+            }
+          }, 2500);
+          
           // Initialize Master Coordinator Interface (Phase 1 Implementation)
           setTimeout(async () => {
             try {
@@ -193,6 +232,64 @@ class OrchestraiMaster extends EventEmitter {
     } else {
       console.error('Domain Agent Manager not initialized');
       return false;
+    }
+  }
+
+  // Method to register quality control service with orchestrator
+  async registerQualityService(qualityHub) {
+    console.log('🔍 Registering Quality Control Service with orchestrator...');
+    
+    this.qualityService = qualityHub;
+    
+    // Integrate quality checking with existing domain workflows
+    if (this.seoHub) {
+      await this.integrateQualityWithSEO();
+    }
+    
+    console.log('✅ Quality Control Service registered and integrated');
+  }
+
+  // Integrate quality checking with SEO domain workflows
+  async integrateQualityWithSEO() {
+    console.log('🔗 Integrating quality control with SEO domain workflows...');
+    
+    try {
+      // Set up quality validation for SEO tasks
+      if (this.seoHub && this.qualityService) {
+        // Hook into SEO task completion to trigger quality validation
+        this.seoHub.on('taskCompleted', async (taskResult) => {
+          console.log(`🔍 Triggering quality validation for SEO task: ${taskResult.type}`);
+          
+          try {
+            const qualityResult = await this.qualityService.performQualityCheck(
+              taskResult,
+              taskResult.data,
+              'seo-domain'
+            );
+            
+            if (!qualityResult.passed) {
+              console.log(`⚠️  Quality check failed for SEO task: ${taskResult.id} (score: ${qualityResult.score})`);
+              
+              // Emit quality failure event for retry handling
+              this.emit('qualityCheckFailed', {
+                originalTask: taskResult,
+                qualityResult,
+                timestamp: new Date().toISOString()
+              });
+            } else {
+              console.log(`✅ Quality check passed for SEO task: ${taskResult.id} (score: ${qualityResult.score})`);
+            }
+            
+          } catch (qualityError) {
+            console.error('Error during quality validation:', qualityError);
+          }
+        });
+        
+        console.log('✅ Quality integration with SEO domain established');
+      }
+      
+    } catch (error) {
+      console.error('Error integrating quality with SEO domain:', error);
     }
   }
 
@@ -635,6 +732,218 @@ class OrchestraiMaster extends EventEmitter {
       });
     });
 
+    // Quality Control endpoints
+    this.app.get('/quality/status', (req, res) => {
+      if (!this.qualityService) {
+        return res.status(503).json({ error: 'Quality Control Service not available' });
+      }
+      
+      res.json({
+        status: 'active',
+        metrics: this.qualityService.getQualityMetrics(),
+        qualityPools: Array.from(this.qualityService.qualityMemoryPools.keys()),
+        totalAgents: this.qualityService.subAgents.size,
+        timestamp: Date.now()
+      });
+    });
+
+    this.app.post('/quality/validate', async (req, res) => {
+      if (!this.qualityService) {
+        return res.status(503).json({ error: 'Quality Control Service not available' });
+      }
+      
+      try {
+        const { task, data, sourceAgent } = req.body;
+        
+        if (!task || !data) {
+          return res.status(400).json({ error: 'Task and data are required' });
+        }
+        
+        const qualityResult = await this.qualityService.performQualityCheck(
+          task,
+          data,
+          sourceAgent || 'api-request'
+        );
+        
+        res.json(qualityResult);
+        
+      } catch (error) {
+        console.error('Quality validation API error:', error);
+        res.status(500).json({ error: 'Quality validation failed', message: error.message });
+      }
+    });
+
+    this.app.get('/quality/metrics', (req, res) => {
+      if (!this.qualityService) {
+        return res.status(503).json({ error: 'Quality Control Service not available' });
+      }
+      
+      res.json(this.qualityService.getQualityMetrics());
+    });
+
+    this.app.get('/quality/agents', (req, res) => {
+      if (!this.qualityService) {
+        return res.status(503).json({ error: 'Quality Control Service not available' });
+      }
+      
+      const qualityAgents = [];
+      this.qualityService.subAgents.forEach((agent, id) => {
+        qualityAgents.push({
+          id,
+          name: agent.name,
+          specialization: agent.specialization,
+          status: agent.status,
+          metrics: agent.metrics,
+          subHubType: agent.subHubType
+        });
+      });
+      
+      res.json({
+        totalAgents: qualityAgents.length,
+        agents: qualityAgents,
+        subHubBreakdown: {
+          qualityAssessment: this.qualityService.subHubs.qualityAssessment.size,
+          feedbackImprovement: this.qualityService.subHubs.feedbackImprovement.size,
+          qualityMemory: this.qualityService.subHubs.qualityMemory.size
+        }
+      });
+    });
+
+    // Enhanced Content Domain endpoints
+    this.app.get('/content/status', (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      res.json({
+        status: 'active',
+        domain: 'content-enhanced',
+        totalAgents: this.contentEnhancedService.agents.size,
+        contentPools: Array.from(this.contentEnhancedService.contentPools.keys()),
+        activeWorkflows: this.contentEnhancedService.activeWorkflows.size,
+        metrics: this.contentEnhancedService.contentMetrics,
+        timestamp: Date.now()
+      });
+    });
+
+    this.app.post('/content/workflow', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const workflowResult = await this.contentEnhancedService.createContentWorkflow(req.body);
+        res.json(workflowResult);
+      } catch (error) {
+        console.error('❌ Content workflow creation error:', error);
+        res.status(500).json({ error: 'Failed to create content workflow' });
+      }
+    });
+
+    this.app.post('/content/cluster', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const clusterAgent = this.contentEnhancedService.agents.get('content-cluster-suggester');
+        if (clusterAgent) {
+          const result = await clusterAgent.createContent('cluster-analysis', req.body);
+          res.json(result);
+        } else {
+          res.status(404).json({ error: 'Content Cluster Agent not found' });
+        }
+      } catch (error) {
+        console.error('❌ Content cluster generation error:', error);
+        res.status(500).json({ error: 'Failed to generate content clusters' });
+      }
+    });
+
+    this.app.post('/content/title', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const titleAgent = this.contentEnhancedService.agents.get('content-title-generator');
+        if (titleAgent) {
+          const result = await titleAgent.createContent('title-generation', req.body);
+          res.json(result);
+        } else {
+          res.status(404).json({ error: 'Content Title Generator not found' });
+        }
+      } catch (error) {
+        console.error('❌ Content title generation error:', error);
+        res.status(500).json({ error: 'Failed to generate content titles' });
+      }
+    });
+
+    this.app.post('/content/outline', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const outlineAgent = this.contentEnhancedService.agents.get('content-outline-architect');
+        if (outlineAgent) {
+          const result = await outlineAgent.createContent('outline-creation', req.body);
+          res.json(result);
+        } else {
+          res.status(404).json({ error: 'Content Outline Architect not found' });
+        }
+      } catch (error) {
+        console.error('❌ Content outline generation error:', error);
+        res.status(500).json({ error: 'Failed to generate content outline' });
+      }
+    });
+
+    this.app.post('/content/backlink-strategy', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const backlinkAgent = this.contentEnhancedService.agents.get('backlink-strategy-architect');
+        if (backlinkAgent) {
+          const result = await backlinkAgent.createContent('backlink-strategy', req.body);
+          res.json(result);
+        } else {
+          res.status(404).json({ error: 'Backlink Strategy Architect not found' });
+        }
+      } catch (error) {
+        console.error('❌ Backlink strategy generation error:', error);
+        res.status(500).json({ error: 'Failed to generate backlink strategy' });
+      }
+    });
+
+    this.app.get('/content/metrics', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const metrics = await this.contentEnhancedService.getContentMetrics();
+        res.json(metrics);
+      } catch (error) {
+        console.error('❌ Content metrics error:', error);
+        res.status(500).json({ error: 'Failed to retrieve content metrics' });
+      }
+    });
+
+    this.app.get('/content/agents', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const agentStatus = await this.contentEnhancedService.getAgentStatus();
+        res.json(agentStatus);
+      } catch (error) {
+        console.error('❌ Content agents status error:', error);
+        res.status(500).json({ error: 'Failed to retrieve content agents status' });
+      }
+    });
+
     // Geometric orchestration info
     this.app.get('/orchestration/topology', (req, res) => {
       res.json({
@@ -957,6 +1266,18 @@ class OrchestraiMaster extends EventEmitter {
         console.log('   POST /agents/register     - Register new agent');
         console.log('   GET  /pipeline/status     - Pipeline sharing');
         console.log('   GET  /orchestration/topology - System topology');
+        console.log('   GET  /quality/status      - Quality Control status');
+        console.log('   POST /quality/validate    - Validate content quality');
+        console.log('   GET  /quality/metrics     - Quality metrics');
+        console.log('   GET  /quality/agents      - Quality agents status');
+        console.log('   GET  /content/status      - Enhanced Content Domain status');
+        console.log('   POST /content/workflow     - Create content workflow');
+        console.log('   POST /content/cluster      - Generate content clusters');
+        console.log('   POST /content/title        - Generate optimized titles');
+        console.log('   POST /content/outline      - Create detailed outlines');
+        console.log('   POST /content/backlink-strategy - Develop backlink strategies');
+        console.log('   GET  /content/metrics     - Content creation metrics');
+        console.log('   GET  /content/agents      - Content agents status');
         console.log('');
         console.log('🎯 Phase 1: Crystalline Memory Foundation');
         console.log('   ✅ Orchestrator running');
