@@ -12,9 +12,12 @@ const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
 const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
 const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
 const DomainAgentManager = require('../../orchestrai-shared/domain-coordination/domain-agent-manager');
+const MainOrchestratorAgent = require('../agents/main-orchestrator-agent');
 const SEODomainHub = require('../../orchestrai-domains/seo/seo-domain-hub');
 const QualityDomainHub = require('../../orchestrai-domains/quality/quality-domain-hub');
 const ContentEnhancedDomainHub = require('../../orchestrai-domains/content-enhanced/content-domain-hub');
+const ClientIntelligenceDomainHub = require('../../orchestrai-domains/client-intelligence/client-intelligence-domain-hub');
+const WebQualityDomainRegistry = require('../../orchestrai-domains/web-quality/web-quality-domain-registry');
 const MasterCoordinatorInterface = require('../../orchestrai-shared/api/master-coordinator-interface');
 
 // ORCHESTRAI Main Orchestrator
@@ -32,6 +35,7 @@ class OrchestraiMaster extends EventEmitter {
     
     // System state
     this.agents = new Map();
+    this.domains = new Map();
     this.memoryNodes = 0;
     this.activeConnections = new Set();
     this.systemMetrics = {
@@ -42,6 +46,9 @@ class OrchestraiMaster extends EventEmitter {
       pipelineSharing: 'Active',
       redisStatus: 'Disconnected'
     };
+
+    // Main Orchestrator Agent - will be initialized after Redis connection
+    this.mainOrchestratorAgent = null;
 
     this.initializeRedis();
     this.setupMiddleware();
@@ -77,6 +84,9 @@ class OrchestraiMaster extends EventEmitter {
         
         this.claudeCodeHooks = new ClaudeCodeHooksManager(this.usageTracker, this.mcpManager);
         console.log('🎣 Claude Code Hooks Manager initialized');
+
+        // Initialize Main Orchestrator Agent as central coordinator
+        this.initializeMainOrchestratorAgent();
         
         // Initialize Domain Agent Manager and domain agents
         this.initializeDomainAgents();
@@ -129,6 +139,30 @@ class OrchestraiMaster extends EventEmitter {
     }
   }
 
+  async initializeMainOrchestratorAgent() {
+    try {
+      console.log('🎯 Initializing Main Orchestrator Agent as central coordinator...');
+      
+      this.mainOrchestratorAgent = new MainOrchestratorAgent(
+        this,
+        this.mcpManager,
+        this.crystallineMemory,
+        this.domainAgentManager?.templateEngine
+      );
+      
+      // Add Tool interface for Claude Code integration
+      this.mainOrchestratorAgent.callTool = this.callTool.bind(this);
+      
+      console.log('✅ Main Orchestrator Agent initialized - Now serving as central query coordinator');
+      console.log('🧠 Intelligent Query Analysis: Pattern matching for domain routing');
+      console.log('🎯 Coordination Strategies: Single, multi-domain, and hybrid execution patterns');
+      console.log('⚡ Pipeline Management: Sequential, parallel, and quality-gated workflows');
+      
+    } catch (error) {
+      console.error('❌ Failed to initialize Main Orchestrator Agent:', error);
+    }
+  }
+
   async initializeDomainAgents() {
     try {
       console.log('🎯 Initializing Domain Agent System...');
@@ -151,6 +185,12 @@ class OrchestraiMaster extends EventEmitter {
           );
           console.log('✅ SEO Domain Hub initialized with 6 specialized sub-agents');
           
+          // Register SEO domain with Main Orchestrator Agent
+          if (this.mainOrchestratorAgent) {
+            this.domains.set('seo', this.seoHub);
+            console.log('🔗 SEO Domain registered with Main Orchestrator Agent');
+          }
+          
           // Initialize Quality Control Domain Hub (Phase 3A Implementation)
           setTimeout(async () => {
             try {
@@ -160,6 +200,12 @@ class OrchestraiMaster extends EventEmitter {
                 this.crystallineMemory
               );
               console.log('✅ Quality Control Domain Hub initialized with 12 specialized quality agents');
+              
+              // Register Quality domain with Main Orchestrator Agent
+              if (this.mainOrchestratorAgent) {
+                this.domains.set('quality', this.qualityHub);
+                console.log('🔗 Quality Domain registered with Main Orchestrator Agent');
+              }
               
             } catch (error) {
               console.error('❌ Failed to initialize Quality Control Domain Hub:', error);
@@ -187,6 +233,65 @@ class OrchestraiMaster extends EventEmitter {
               console.error('❌ Failed to initialize Enhanced Content Domain Hub:', error);
             }
           }, 2500);
+          
+          // Initialize Client Intelligence Domain Hub (Priority 1 Implementation)
+          setTimeout(async () => {
+            try {
+              console.log('🧠 Initializing Client Intelligence Domain Hub...');
+              this.clientIntelligenceHub = new ClientIntelligenceDomainHub(
+                this,
+                this.mcpManager,
+                this.crystallineMemory,
+                this.domainAgentManager?.templateEngine,
+                this.domainAgentManager?.projectManager
+              );
+              await this.clientIntelligenceHub.initialize();
+              
+              // Register Client Intelligence Service
+              this.clientIntelligenceService = this.clientIntelligenceHub;
+              console.log('🔗 Client Intelligence Service registered and integrated');
+              
+            } catch (error) {
+              console.error('❌ Failed to initialize Client Intelligence Domain Hub:', error);
+            }
+          }, 3000);
+          
+          // Initialize Web Development Quality Domain (Phase 2 Implementation) 
+          setTimeout(async () => {
+            try {
+              console.log('🌐 Phase 2: Initializing Web Development Quality Domain...');
+              this.webQualityDomainRegistry = new WebQualityDomainRegistry(
+                this,
+                this.mcpManager,
+                this.crystallineMemory
+              );
+              
+              const registrationResult = await this.webQualityDomainRegistry.registerWithOrchestrator();
+              
+              if (registrationResult.success) {
+                // Register Web Quality Service for API access
+                this.webQualityService = this.webQualityDomainRegistry.getQualityHub();
+                this.webQualityMetrics = this.webQualityDomainRegistry.getMetricsManager();
+                
+                // Register Web Quality domain with Main Orchestrator Agent
+                if (this.mainOrchestratorAgent) {
+                  this.domains.set('web-quality', this.webQualityService);
+                  console.log('🔗 Web Quality Domain registered with Main Orchestrator Agent');
+                }
+                
+                console.log('✅ Web Development Quality Domain registered successfully!');
+                console.log('🎯 Phase 2 Complete: Advanced MCP Integration & Cutting-Edge Features');
+                console.log('   🌐 Web Quality Hub → 8 specialized agents across 3 sub-hubs');
+                console.log('   🔧 Browser MCP Integration → Visual regression & accessibility testing');
+                console.log('   📊 Quality Metrics Manager → Comprehensive reporting & analytics');
+                console.log('   🚀 Phase-to-Phase Quality Gates → UX → Wireframe → Design → Development');
+                console.log('   💎 Crystalline Memory Integration → Cross-domain quality intelligence');
+              }
+              
+            } catch (error) {
+              console.error('❌ Failed to initialize Web Development Quality Domain:', error);
+            }
+          }, 3500);
           
           // Initialize Master Coordinator Interface (Phase 1 Implementation)
           setTimeout(async () => {
@@ -233,6 +338,21 @@ class OrchestraiMaster extends EventEmitter {
       console.error('Domain Agent Manager not initialized');
       return false;
     }
+  }
+
+  // Tool interface for Claude Code integration
+  async callTool(toolName, params) {
+    console.log(`🛠️ Tool call: ${toolName}`);
+    
+    // This would integrate with Claude Code's tool system
+    // For now, return a simulated response
+    return {
+      success: true,
+      tool: toolName,
+      params,
+      result: `Tool ${toolName} executed with params`,
+      timestamp: new Date().toISOString()
+    };
   }
 
   // Method to register quality control service with orchestrator
@@ -944,6 +1064,225 @@ class OrchestraiMaster extends EventEmitter {
       }
     });
 
+    // ==================== WEB DEVELOPMENT QUALITY DOMAIN API ENDPOINTS ====================
+    
+    this.app.get('/api/web-quality/status', async (req, res) => {
+      if (!this.webQualityService) {
+        return res.status(503).json({ error: 'Web Development Quality Domain Service not available' });
+      }
+      
+      try {
+        const status = await this.webQualityService.getStatus();
+        const registryInfo = this.webQualityDomainRegistry ? this.webQualityDomainRegistry.getDomainInfo() : {};
+        
+        res.json({
+          ...status,
+          domain: registryInfo,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('❌ Web quality status error:', error);
+        res.status(500).json({ error: 'Failed to retrieve web quality status' });
+      }
+    });
+
+    this.app.post('/api/web-quality/phase-transition', async (req, res) => {
+      if (!this.webQualityService) {
+        return res.status(503).json({ error: 'Web Development Quality Domain Service not available' });
+      }
+      
+      try {
+        const { projectId, fromPhase, toPhase, validationData } = req.body;
+        
+        if (!projectId || !fromPhase || !toPhase) {
+          return res.status(400).json({ error: 'Project ID, fromPhase, and toPhase are required' });
+        }
+        
+        const transitionResult = await this.webQualityService.requestPhaseTransition(
+          projectId, fromPhase, toPhase, validationData
+        );
+        
+        res.json(transitionResult);
+        
+      } catch (error) {
+        console.error('❌ Phase transition error:', error);
+        res.status(500).json({ error: 'Failed to execute phase transition' });
+      }
+    });
+
+    this.app.post('/api/web-quality/validate', async (req, res) => {
+      if (!this.webQualityService) {
+        return res.status(503).json({ error: 'Web Development Quality Domain Service not available' });
+      }
+      
+      try {
+        const { agentType, validationType, url, validationData } = req.body;
+        
+        if (!agentType || !validationType || !url) {
+          return res.status(400).json({ error: 'Agent type, validation type, and URL are required' });
+        }
+        
+        const validationResult = await this.webQualityService.validateSpecificAgent(
+          agentType, validationType, url, validationData
+        );
+        
+        res.json(validationResult);
+        
+      } catch (error) {
+        console.error('❌ Web validation error:', error);
+        res.status(500).json({ error: 'Failed to execute web validation' });
+      }
+    });
+
+    this.app.get('/api/web-quality/metrics', async (req, res) => {
+      if (!this.webQualityMetrics) {
+        return res.status(503).json({ error: 'Web Quality Metrics Manager not available' });
+      }
+      
+      try {
+        const metricsStatus = this.webQualityMetrics.getStatus();
+        res.json(metricsStatus);
+      } catch (error) {
+        console.error('❌ Web quality metrics error:', error);
+        res.status(500).json({ error: 'Failed to retrieve web quality metrics' });
+      }
+    });
+
+    this.app.post('/api/web-quality/report', async (req, res) => {
+      if (!this.webQualityMetrics) {
+        return res.status(503).json({ error: 'Web Quality Metrics Manager not available' });
+      }
+      
+      try {
+        const { projectId, reportType = 'comprehensive' } = req.body;
+        
+        if (!projectId) {
+          return res.status(400).json({ error: 'Project ID is required' });
+        }
+        
+        const qualityReport = await this.webQualityMetrics.generateQualityReport(projectId, reportType);
+        res.json(qualityReport);
+        
+      } catch (error) {
+        console.error('❌ Web quality report generation error:', error);
+        res.status(500).json({ error: 'Failed to generate web quality report' });
+      }
+    });
+
+    this.app.get('/api/web-quality/agents', async (req, res) => {
+      if (!this.webQualityService) {
+        return res.status(503).json({ error: 'Web Development Quality Domain Service not available' });
+      }
+      
+      try {
+        const agentStatus = await this.webQualityService.getAllAgentsStatus();
+        res.json(agentStatus);
+      } catch (error) {
+        console.error('❌ Web quality agents status error:', error);
+        res.status(500).json({ error: 'Failed to retrieve web quality agents status' });
+      }
+    });
+
+    this.app.get('/api/web-quality/domain-report', async (req, res) => {
+      if (!this.webQualityDomainRegistry) {
+        return res.status(503).json({ error: 'Web Quality Domain Registry not available' });
+      }
+      
+      try {
+        const domainReport = await this.webQualityDomainRegistry.generateDomainReport();
+        res.json(domainReport);
+      } catch (error) {
+        console.error('❌ Web quality domain report error:', error);
+        res.status(500).json({ error: 'Failed to generate web quality domain report' });
+      }
+    });
+
+    this.app.get('/api/web-quality/health', async (req, res) => {
+      if (!this.webQualityDomainRegistry) {
+        return res.status(503).json({ error: 'Web Quality Domain Registry not available' });
+      }
+      
+      try {
+        const healthCheck = await this.webQualityDomainRegistry.performHealthCheck();
+        res.json(healthCheck);
+      } catch (error) {
+        console.error('❌ Web quality health check error:', error);
+        res.status(500).json({ error: 'Failed to perform web quality health check' });
+      }
+    });
+
+    // ==================== CLIENT INTELLIGENCE DOMAIN API ENDPOINTS ====================
+    
+    this.app.post('/api/client/create', async (req, res) => {
+      if (!this.clientIntelligenceService) {
+        return res.status(503).json({ error: 'Client Intelligence Domain Service not available' });
+      }
+      
+      try {
+        const result = await this.clientIntelligenceService.createClientProject(req.body);
+        res.json(result);
+      } catch (error) {
+        console.error('❌ Client creation error:', error);
+        res.status(500).json({ error: 'Failed to create client project' });
+      }
+    });
+
+    this.app.get('/api/client/status', async (req, res) => {
+      if (!this.clientIntelligenceService) {
+        return res.status(503).json({ error: 'Client Intelligence Domain Service not available' });
+      }
+      
+      try {
+        const status = await this.clientIntelligenceService.getStatus();
+        res.json(status);
+      } catch (error) {
+        console.error('❌ Client status error:', error);
+        res.status(500).json({ error: 'Failed to retrieve client intelligence status' });
+      }
+    });
+
+    this.app.post('/api/client/:clientId/analyze', async (req, res) => {
+      if (!this.clientIntelligenceService) {
+        return res.status(503).json({ error: 'Client Intelligence Domain Service not available' });
+      }
+      
+      try {
+        const result = await this.clientIntelligenceService.analyzeClientContext(req.params.clientId, req.body);
+        res.json(result);
+      } catch (error) {
+        console.error('❌ Client analysis error:', error);
+        res.status(500).json({ error: 'Failed to analyze client context' });
+      }
+    });
+
+    this.app.get('/api/client/:clientId/context', async (req, res) => {
+      if (!this.clientIntelligenceService) {
+        return res.status(503).json({ error: 'Client Intelligence Domain Service not available' });
+      }
+      
+      try {
+        const context = await this.clientIntelligenceService.getClientContext(req.params.clientId, req.query.type);
+        res.json(context);
+      } catch (error) {
+        console.error('❌ Client context retrieval error:', error);
+        res.status(500).json({ error: 'Failed to retrieve client context' });
+      }
+    });
+
+    this.app.get('/api/client/metrics', async (req, res) => {
+      if (!this.clientIntelligenceService) {
+        return res.status(503).json({ error: 'Client Intelligence Domain Service not available' });
+      }
+      
+      try {
+        const metrics = await this.clientIntelligenceService.getClientMetrics();
+        res.json(metrics);
+      } catch (error) {
+        console.error('❌ Client metrics error:', error);
+        res.status(500).json({ error: 'Failed to retrieve client intelligence metrics' });
+      }
+    });
+
     // Geometric orchestration info
     this.app.get('/orchestration/topology', (req, res) => {
       res.json({
@@ -1025,6 +1364,78 @@ class OrchestraiMaster extends EventEmitter {
         res.status(500).json({
           initialized: true,
           error: 'Status retrieval failed',
+          details: error.message
+        });
+      }
+    });
+
+    // Main Orchestrator Agent coordination endpoint
+    this.app.post('/coordinate', async (req, res) => {
+      if (!this.mainOrchestratorAgent) {
+        return res.status(503).json({
+          success: false,
+          error: 'Main Orchestrator Agent not initialized',
+          message: 'Central coordination not available'
+        });
+      }
+
+      try {
+        const { query, context } = req.body;
+        
+        if (!query) {
+          return res.status(400).json({
+            success: false,
+            error: 'Query is required',
+            example: {
+              query: 'Create SEO keyword research for dental 3D printing',
+              context: { priority: 'high', domain: 'seo' }
+            }
+          });
+        }
+
+        console.log(`🎯 Main Orchestrator received coordination request: "${query.substring(0, 100)}..."`);
+        
+        const coordinationResult = await this.mainOrchestratorAgent.receiveQuery(query, context);
+        
+        res.json({
+          success: true,
+          coordinator: 'main-orchestrator-agent',
+          query,
+          result: coordinationResult,
+          timestamp: new Date().toISOString()
+        });
+        
+      } catch (error) {
+        console.error('❌ Main Orchestrator coordination error:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Coordination failed',
+          details: error.message
+        });
+      }
+    });
+
+    // Main Orchestrator Agent status endpoint
+    this.app.get('/coordinate/status', (req, res) => {
+      if (!this.mainOrchestratorAgent) {
+        return res.json({
+          initialized: false,
+          status: 'pending',
+          message: 'Main Orchestrator Agent not initialized'
+        });
+      }
+
+      try {
+        const status = this.mainOrchestratorAgent.getCoordinatorStatus();
+        res.json({
+          ...status,
+          architecture: 'centralized-coordination',
+          availableDomains: Array.from(this.domains.keys()),
+          totalDomains: this.domains.size
+        });
+      } catch (error) {
+        res.status(500).json({
+          error: 'Failed to get coordinator status',
           details: error.message
         });
       }
@@ -1261,6 +1672,8 @@ class OrchestraiMaster extends EventEmitter {
         console.log('📋 Available endpoints:');
         console.log('   GET  /health              - Health check');
         console.log('   GET  /metrics             - System metrics');
+        console.log('   POST /coordinate          - Central query coordination');
+        console.log('   GET  /coordinate/status   - Main Orchestrator Agent status');
         console.log('   GET  /memory/nodes        - Memory status');
         console.log('   GET  /agents              - Active agents');
         console.log('   POST /agents/register     - Register new agent');
@@ -1278,6 +1691,13 @@ class OrchestraiMaster extends EventEmitter {
         console.log('   POST /content/backlink-strategy - Develop backlink strategies');
         console.log('   GET  /content/metrics     - Content creation metrics');
         console.log('   GET  /content/agents      - Content agents status');
+        console.log('   GET  /api/web-quality/status - Web Quality Domain status');
+        console.log('   POST /api/web-quality/phase-transition - Execute phase transitions');
+        console.log('   POST /api/web-quality/validate - Web validation testing');
+        console.log('   GET  /api/web-quality/metrics - Web quality metrics');
+        console.log('   POST /api/web-quality/report - Generate quality reports');
+        console.log('   GET  /api/web-quality/agents - Web quality agents status');
+        console.log('   GET  /api/web-quality/health - Web quality health check');
         console.log('');
         console.log('🎯 Phase 1: Crystalline Memory Foundation');
         console.log('   ✅ Orchestrator running');

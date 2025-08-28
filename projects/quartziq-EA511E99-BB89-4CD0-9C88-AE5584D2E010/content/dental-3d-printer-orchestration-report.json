@@ -1,0 +1,400 @@
+{
+  "projectInfo": {
+    "title": "Dental 3D Printer Content Orchestration",
+    "domain": "dental technology and healthcare equipment",
+    "targetMarket": "USA dental professionals",
+    "executionDate": "2025-08-26T23:44:35.233Z"
+  },
+  "contentStrategy": {
+    "clusters": {
+      "success": true,
+      "analysis": {
+        "mainTopic": "Content Topic",
+        "targetKeywords": [],
+        "industry": "healthcare technology",
+        "processingTime": 1
+      },
+      "primaryCluster": {
+        "topic": "Content Topic",
+        "keywords": [],
+        "searchVolume": 15003,
+        "difficulty": 68,
+        "intent": "informational",
+        "semanticScore": 99,
+        "topicalAuthority": 97
+      },
+      "supportingClusters": [
+        {
+          "id": "cluster-1",
+          "topic": "Educational content series",
+          "keywords": [
+            "educational content series",
+            "educational content series guide",
+            "educational content series tips",
+            "best educational content series",
+            "educational content series strategy"
+          ],
+          "searchVolume": 24734,
+          "difficulty": 50,
+          "priority": "high",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List",
+            "Case Study Analysis",
+            "Tool Comparison"
+          ],
+          "estimatedArticles": 7,
+          "semanticDistance": 0.7823519445917343,
+          "internalLinkingOpportunities": 6
+        },
+        {
+          "id": "cluster-2",
+          "topic": "Case study collection",
+          "keywords": [
+            "case study collection",
+            "case study collection guide",
+            "case study collection tips",
+            "best case study collection",
+            "case study collection strategy"
+          ],
+          "searchVolume": 8799,
+          "difficulty": 30,
+          "priority": "low",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List",
+            "Case Study Analysis",
+            "Tool Comparison"
+          ],
+          "estimatedArticles": 7,
+          "semanticDistance": 0.9320766963727442,
+          "internalLinkingOpportunities": 14
+        },
+        {
+          "id": "cluster-3",
+          "topic": "Best practices guides",
+          "keywords": [
+            "best practices guides",
+            "best practices guides guide",
+            "best practices guides tips",
+            "best best practices guides",
+            "best practices guides strategy"
+          ],
+          "searchVolume": 20080,
+          "difficulty": 43,
+          "priority": "low",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial"
+          ],
+          "estimatedArticles": 4,
+          "semanticDistance": 0.77039555248152,
+          "internalLinkingOpportunities": 6
+        },
+        {
+          "id": "cluster-4",
+          "topic": "Tool comparisons",
+          "keywords": [
+            "tool comparisons",
+            "tool comparisons guide",
+            "tool comparisons tips",
+            "best tool comparisons",
+            "tool comparisons strategy"
+          ],
+          "searchVolume": 11524,
+          "difficulty": 34,
+          "priority": "high",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List"
+          ],
+          "estimatedArticles": 4,
+          "semanticDistance": 0.7398570671139577,
+          "internalLinkingOpportunities": 14
+        },
+        {
+          "id": "cluster-5",
+          "topic": "Supporting Topic 5",
+          "keywords": [
+            "topic 5",
+            "topic 5 guide",
+            "topic 5 tips",
+            "best topic 5",
+            "topic 5 strategy"
+          ],
+          "searchVolume": 15696,
+          "difficulty": 53,
+          "priority": "medium",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List",
+            "Case Study Analysis"
+          ],
+          "estimatedArticles": 5,
+          "semanticDistance": 0.764262868931654,
+          "internalLinkingOpportunities": 14
+        },
+        {
+          "id": "cluster-6",
+          "topic": "Supporting Topic 6",
+          "keywords": [
+            "topic 6",
+            "topic 6 guide",
+            "topic 6 tips",
+            "best topic 6",
+            "topic 6 strategy"
+          ],
+          "searchVolume": 12930,
+          "difficulty": 37,
+          "priority": "low",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List"
+          ],
+          "estimatedArticles": 3,
+          "semanticDistance": 0.7392720272828663,
+          "internalLinkingOpportunities": 8
+        },
+        {
+          "id": "cluster-7",
+          "topic": "Supporting Topic 7",
+          "keywords": [
+            "topic 7",
+            "topic 7 guide",
+            "topic 7 tips",
+            "best topic 7",
+            "topic 7 strategy"
+          ],
+          "searchVolume": 24398,
+          "difficulty": 50,
+          "priority": "high",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List"
+          ],
+          "estimatedArticles": 3,
+          "semanticDistance": 0.7710144691207027,
+          "internalLinkingOpportunities": 14
+        },
+        {
+          "id": "cluster-8",
+          "topic": "Supporting Topic 8",
+          "keywords": [
+            "topic 8",
+            "topic 8 guide",
+            "topic 8 tips",
+            "best topic 8",
+            "topic 8 strategy"
+          ],
+          "searchVolume": 11678,
+          "difficulty": 34,
+          "priority": "low",
+          "contentTypes": [
+            "Comprehensive Guide",
+            "How-to Tutorial",
+            "Best Practices List",
+            "Case Study Analysis"
+          ],
+          "estimatedArticles": 5,
+          "semanticDistance": 0.9684023913251661,
+          "internalLinkingOpportunities": 5
+        }
+      ],
+      "pillarContent": {
+        "recommended": true,
+        "title": "Complete Guide to Your Topic",
+        "estimatedWordCount": 3998,
+        "targetKeywords": [],
+        "supportingClusters": 8,
+        "internalLinks": 16,
+        "contentSections": 6,
+        "multimedia": [
+          "Images",
+          "Infographics",
+          "Video embeds",
+          "Interactive elements"
+        ],
+        "updateFrequency": "Quarterly",
+        "expectedTraffic": 2757
+      },
+      "contentGaps": [
+        {
+          "topic": "Educational content series",
+          "priority": "high",
+          "estimatedSearchVolume": 16793,
+          "competitionLevel": 29,
+          "opportunityScore": 74
+        },
+        {
+          "topic": "Case study collection",
+          "priority": "high",
+          "estimatedSearchVolume": 19772,
+          "competitionLevel": 38,
+          "opportunityScore": 89
+        },
+        {
+          "topic": "Best practices guides",
+          "priority": "medium",
+          "estimatedSearchVolume": 6708,
+          "competitionLevel": 44,
+          "opportunityScore": 80
+        },
+        {
+          "topic": "Tool comparisons",
+          "priority": "high",
+          "estimatedSearchVolume": 9480,
+          "competitionLevel": 29,
+          "opportunityScore": 70
+        }
+      ],
+      "semanticRelationships": [],
+      "competitorInsights": {
+        "topCompetitors": [
+          {
+            "domain": "competitor1.com",
+            "topicalAuthority": 76,
+            "contentVolume": 499,
+            "averageContentLength": 2761,
+            "clusterApproach": "Hub and spoke model",
+            "strengths": [
+              "Comprehensive guides",
+              "Regular updates",
+              "Strong internal linking"
+            ],
+            "weaknesses": [
+              "Limited visual content",
+              "Outdated examples"
+            ]
+          },
+          {
+            "domain": "competitor2.com",
+            "topicalAuthority": 81,
+            "contentVolume": 212,
+            "averageContentLength": 2393,
+            "clusterApproach": "Topic-based clustering",
+            "strengths": [
+              "Expert insights",
+              "Industry case studies"
+            ],
+            "weaknesses": [
+              "Inconsistent publishing",
+              "Limited keyword targeting"
+            ]
+          },
+          {
+            "domain": "competitor3.com",
+            "topicalAuthority": 76,
+            "contentVolume": 782,
+            "averageContentLength": 2119,
+            "clusterApproach": "Pillar page strategy",
+            "strengths": [
+              "SEO optimization",
+              "User engagement"
+            ],
+            "weaknesses": [
+              "Surface-level content",
+              "Poor content organization"
+            ]
+          }
+        ],
+        "clusterGaps": [
+          "Advanced Content Topic techniques",
+          "Content Topic implementation case studies",
+          "Content Topic ROI measurement",
+          "Future trends in Content Topic"
+        ],
+        "contentFormats": [
+          "Long-form guides",
+          "Listicles",
+          "How-to articles",
+          "Case studies",
+          "Infographics"
+        ],
+        "averageContentLength": 3209,
+        "keywordOverlap": 78
+      },
+      "recommendations": {
+        "priority": {
+          "immediate": [
+            "Educational content series",
+            "Tool comparisons"
+          ],
+          "shortTerm": [
+            "Supporting Topic 5"
+          ],
+          "longTerm": [
+            "Case study collection",
+            "Best practices guides",
+            "Supporting Topic 6",
+            "Supporting Topic 8"
+          ]
+        },
+        "timeline": {
+          "totalArticles": 38,
+          "estimatedWeeks": 19,
+          "phases": {
+            "Phase 1 (Weeks 1-2)": "Pillar content creation",
+            "Phase 2 (Weeks 3-6)": "High-priority supporting content",
+            "Phase 3 (Weeks 7-12)": "Medium-priority content and optimization",
+            "Phase 4 (Weeks 13+)": "Long-tail content and performance optimization"
+          }
+        },
+        "resourceRequirements": {
+          "writers": 4,
+          "editors": 2,
+          "designers": 3,
+          "seoSpecialists": 1,
+          "estimatedBudget": "$11,400",
+          "timeInvestment": "304 hours"
+        },
+        "nextSteps": [
+          "Create pillar content for primary cluster",
+          "Develop supporting articles for high-priority subtopics",
+          "Build internal linking structure",
+          "Monitor cluster performance and optimize"
+        ]
+      },
+      "qualityMetrics": {
+        "clusterRelevance": 99,
+        "topicalCoverage": 86,
+        "semanticCoherence": 99
+      },
+      "agentId": "content-cluster-suggester",
+      "timestamp": "2025-08-26T23:44:35.211Z",
+      "processingTime": 46
+    },
+    "totalClusters": 8,
+    "pillarPages": 0
+  },
+  "titleOptimization": {
+    "totalTitlesGenerated": 0,
+    "clustersCovered": 8,
+    "averageScore": 0
+  },
+  "contentOutlines": {
+    "totalOutlines": 5,
+    "totalHeadings": 0,
+    "estimatedWordCount": 0,
+    "readabilityTargets": []
+  },
+  "backlinkStrategy": {
+    "tactics": 5,
+    "anchorVariations": 0
+  },
+  "internalLinking": {
+    "crossReferences": 5,
+    "linkingOpportunities": 0
+  },
+  "projectedResults": {
+    "estimatedTrafficIncrease": "200-300% within 12 months",
+    "targetKeywordRankings": "Page 1 for 15+ primary terms",
+    "expectedROI": "$2.5M+ annual revenue impact",
+    "authorityIncrease": "Domain authority 45 → 65+"
+  }
+}

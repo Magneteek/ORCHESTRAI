@@ -8,6 +8,7 @@ const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { CallToolRequestSchema, ListToolsRequestSchema } = require("@modelcontextprotocol/sdk/types.js");
 const axios = require('axios');
+const SafeJSON = require('../utils/safe-json');
 
 class DataForSEOServer {
   constructor() {
@@ -778,7 +779,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Keyword Overview Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Keyword Overview Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -798,7 +799,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Related Keywords Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Related Keywords Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -818,7 +819,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Keyword Suggestions Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Keyword Suggestions Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -838,7 +839,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Keyword Ideas Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Keyword Ideas Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -857,7 +858,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Search Intent Analysis Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Search Intent Analysis Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -878,7 +879,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `SERP Competitors Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `SERP Competitors Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -899,7 +900,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Domain Keywords Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Domain Keywords Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -919,7 +920,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Competitor Domains Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Competitor Domains Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -939,7 +940,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Domain Intersection Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Domain Intersection Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -958,7 +959,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Traffic Estimation Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Traffic Estimation Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -978,7 +979,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Categories for Domain:\n${JSON.stringify(response, null, 2)}`
+        text: `Categories for Domain:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -998,7 +999,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Top Searches Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Top Searches Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1018,7 +1019,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Lighthouse Technical SEO Audit:\n${JSON.stringify(response, null, 2)}`
+        text: `Lighthouse Technical SEO Audit:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1036,7 +1037,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `OnPage SEO Summary (Core Web Vitals):\n${JSON.stringify(response, null, 2)}`
+        text: `OnPage SEO Summary (Core Web Vitals):\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1055,7 +1056,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Page Screenshot Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Page Screenshot Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1075,7 +1076,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Google Maps Local SEO Results:\n${JSON.stringify(response, null, 2)}`
+        text: `Google Maps Local SEO Results:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1094,7 +1095,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Google News SEO Opportunities:\n${JSON.stringify(response, null, 2)}`
+        text: `Google News SEO Opportunities:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1113,7 +1114,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Google Images SEO Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Google Images SEO Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1132,7 +1133,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Google Jobs SEO Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Google Jobs SEO Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1152,7 +1153,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Content Quality SEO Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Content Quality SEO Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1172,7 +1173,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Semantic Phrase Trends Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Semantic Phrase Trends Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1191,7 +1192,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Domain Technologies Analysis:\n${JSON.stringify(response, null, 2)}`
+        text: `Domain Technologies Analysis:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
@@ -1208,7 +1209,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Domain WHOIS Intelligence:\n${JSON.stringify(response, null, 2)}`
+        text: `Domain WHOIS Intelligence:\n${SafeJSON.stringify(response)}`
       }]
     };
   }

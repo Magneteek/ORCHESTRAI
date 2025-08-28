@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/kris/CLAUDEtools/ORCHESTRAI/projects/quartziq-EA511E99-BB89-4CD0-9C88-AE5584D2E010/deliverables/development/quartziq-homepage-nextjs/src/app/layout\":[\"static/media/e4af272ccee01ff0-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

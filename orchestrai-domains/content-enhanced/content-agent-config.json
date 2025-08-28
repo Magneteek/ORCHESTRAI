@@ -1,0 +1,241 @@
+{
+  "domainId": "content-enhanced",
+  "domainName": "Enhanced Content Creation Domain",
+  "description": "Advanced content creation system with cluster analysis, title generation, detailed outlines, and backlink strategy",
+  "version": "1.0.0",
+  "architecture": "hybrid_orchestrai_claude_code",
+  "contentAgents": {
+    "contentStrategy": [
+      {
+        "id": "content-cluster-suggester",
+        "name": "Content Cluster Suggestion Agent",
+        "specialization": "content-cluster-analysis",
+        "claudeCodeAgent": "seo-semantic-clustering",
+        "description": "Analyzes topics and suggests content clusters based on semantic relationships and search intent",
+        "capabilities": [
+          "semantic-topic-clustering",
+          "content-gap-analysis", 
+          "cluster-hierarchy-mapping",
+          "related-content-suggestion",
+          "pillar-content-identification",
+          "topical-authority-building"
+        ],
+        "contentMetrics": {
+          "clusterRelevance": { "min": 85, "target": 95 },
+          "topicalCoverage": { "min": 80, "target": 90 },
+          "semanticCoherence": { "min": 90, "target": 98 }
+        },
+        "priority": "high"
+      },
+      {
+        "id": "content-title-generator",
+        "name": "Content Title Generation Agent",
+        "specialization": "title-generation-optimization",
+        "claudeCodeAgent": "seo-content-optimization",
+        "description": "Generates compelling, SEO-optimized titles with emotional triggers and click-through optimization",
+        "capabilities": [
+          "seo-title-optimization",
+          "emotional-trigger-integration",
+          "ctr-optimization",
+          "title-variant-generation",
+          "a-b-testing-suggestions",
+          "brand-voice-alignment"
+        ],
+        "contentMetrics": {
+          "seoOptimization": { "min": 85, "target": 95 },
+          "clickThroughPotential": { "min": 80, "target": 90 },
+          "brandAlignment": { "min": 90, "target": 100 }
+        },
+        "priority": "high"
+      },
+      {
+        "id": "content-outline-architect",
+        "name": "Content Outline Agent",
+        "specialization": "detailed-content-outlining",
+        "claudeCodeAgent": "seo-topical-authority",
+        "description": "Creates detailed content outlines with H2-H4 structure, keyword velocity, and SEO best practices",
+        "capabilities": [
+          "hierarchical-outline-creation",
+          "keyword-velocity-optimization",
+          "semantic-keyword-distribution",
+          "content-flow-optimization",
+          "readability-structure-planning",
+          "featured-snippet-targeting"
+        ],
+        "contentMetrics": {
+          "structureQuality": { "min": 90, "target": 98 },
+          "keywordDistribution": { "min": 85, "target": 95 },
+          "readabilityScore": { "min": 80, "target": 90 }
+        },
+        "priority": "high"
+      },
+      {
+        "id": "backlink-strategy-architect",
+        "name": "Backlink Strategy Agent", 
+        "specialization": "backlink-strategy-optimization",
+        "claudeCodeAgent": "seo-technical-analysis",
+        "description": "Develops comprehensive backlink strategies with anchor text distribution and link building tactics",
+        "capabilities": [
+          "anchor-text-ratio-optimization",
+          "link-building-strategy-development",
+          "competitor-backlink-analysis",
+          "internal-linking-optimization",
+          "link-velocity-planning",
+          "risk-assessment-protocols"
+        ],
+        "contentMetrics": {
+          "anchorTextBalance": { "min": 90, "target": 98 },
+          "linkQualityScore": { "min": 85, "target": 95 },
+          "riskAssessment": { "min": 95, "target": 100 }
+        },
+        "priority": "high"
+      }
+    ],
+    "contentProduction": [
+      {
+        "id": "content-writer-specialist",
+        "name": "Advanced Content Writer",
+        "specialization": "advanced-content-creation",
+        "claudeCodeAgent": "seo-content-optimization",
+        "description": "Creates high-quality content following outlines with advanced SEO techniques and engagement optimization",
+        "capabilities": [
+          "outline-based-content-creation",
+          "advanced-seo-integration",
+          "engagement-optimization",
+          "multi-format-content-creation",
+          "brand-voice-consistency",
+          "readability-optimization"
+        ],
+        "contentMetrics": {
+          "contentQuality": { "min": 85, "target": 95 },
+          "seoCompliance": { "min": 90, "target": 98 },
+          "engagementPotential": { "min": 80, "target": 90 }
+        },
+        "priority": "medium"
+      },
+      {
+        "id": "content-optimizer",
+        "name": "Content Optimization Specialist",
+        "specialization": "content-performance-optimization",
+        "claudeCodeAgent": "seo-ai-overviews",
+        "description": "Optimizes content for AI overviews, featured snippets, and search performance",
+        "capabilities": [
+          "ai-overview-optimization",
+          "featured-snippet-optimization",
+          "content-performance-analysis",
+          "search-intent-alignment",
+          "content-freshness-optimization",
+          "multimedia-integration-guidance"
+        ],
+        "contentMetrics": {
+          "aiOverviewCompatibility": { "min": 85, "target": 95 },
+          "snippetOptimization": { "min": 80, "target": 90 },
+          "searchAlignment": { "min": 90, "target": 98 }
+        },
+        "priority": "medium"
+      }
+    ],
+    "contentIntelligence": [
+      {
+        "id": "content-performance-analyst",
+        "name": "Content Performance Analyst",
+        "specialization": "content-analytics-intelligence",
+        "claudeCodeAgent": "seo-serp-analysis",
+        "description": "Analyzes content performance, identifies optimization opportunities, and tracks content success metrics",
+        "capabilities": [
+          "performance-metrics-analysis",
+          "content-gap-identification",
+          "competitor-content-analysis",
+          "trend-forecasting",
+          "roi-calculation",
+          "optimization-recommendations"
+        ],
+        "contentMetrics": {
+          "analyticsAccuracy": { "min": 85, "target": 95 },
+          "trendPrediction": { "min": 80, "target": 90 },
+          "optimizationImpact": { "min": 85, "target": 95 }
+        },
+        "priority": "medium"
+      },
+      {
+        "id": "content-workflow-coordinator",
+        "name": "Content Workflow Coordinator",
+        "specialization": "content-workflow-optimization",
+        "claudeCodeAgent": "orchestrai-master-coordinator",
+        "description": "Coordinates content creation workflow, manages dependencies, and ensures quality integration",
+        "capabilities": [
+          "workflow-orchestration",
+          "dependency-management",
+          "quality-integration",
+          "timeline-optimization",
+          "resource-allocation",
+          "cross-team-coordination"
+        ],
+        "contentMetrics": {
+          "workflowEfficiency": { "min": 85, "target": 95 },
+          "qualityIntegration": { "min": 90, "target": 98 },
+          "timelineAdherence": { "min": 80, "target": 90 }
+        },
+        "priority": "high"
+      }
+    ]
+  },
+  "contentWorkflow": {
+    "stages": [
+      "cluster-analysis",
+      "title-generation", 
+      "outline-creation",
+      "backlink-strategy",
+      "content-creation",
+      "optimization",
+      "quality-validation",
+      "performance-analysis"
+    ],
+    "qualityGates": {
+      "cluster": {
+        "clusterRelevance": 85,
+        "topicalCoverage": 80,
+        "semanticCoherence": 90
+      },
+      "title": {
+        "seoOptimization": 85,
+        "clickThroughPotential": 80,
+        "brandAlignment": 90
+      },
+      "outline": {
+        "structureQuality": 90,
+        "keywordDistribution": 85,
+        "readabilityScore": 80
+      },
+      "backlink": {
+        "anchorTextBalance": 90,
+        "linkQualityScore": 85,
+        "riskAssessment": 95
+      }
+    },
+    "integrations": {
+      "qualityControl": true,
+      "seoOptimization": true,
+      "semanticAnalysis": true,
+      "performanceTracking": true
+    }
+  },
+  "crystallineMemoryIntegration": {
+    "contentPools": [
+      "content-clusters-central",
+      "title-optimization-patterns",
+      "outline-templates-library", 
+      "backlink-strategies-database",
+      "content-performance-analytics",
+      "workflow-optimization-insights"
+    ],
+    "memoryCoordinates": {
+      "contentClustersCentral": { "q": 0, "r": 3 },
+      "titleOptimizationPatterns": { "q": 1, "r": 2 },
+      "outlineTemplatesLibrary": { "q": 2, "r": 1 },
+      "backlinkStrategiesDatabase": { "q": 3, "r": 0 },
+      "contentPerformanceAnalytics": { "q": 2, "r": 2 },
+      "workflowOptimizationInsights": { "q": 1, "r": 3 }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "command": {
+    "action": "screenshot",
+    "url": "http://localhost:8081/index-professional.html",
+    "selector": "#home",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "output": "qa-reports/screenshots/tablet-hero-section-1756379388998.png"
+  },
+  "simulated": true,
+  "timestamp": "2025-08-28T11:09:49.999Z"
+}

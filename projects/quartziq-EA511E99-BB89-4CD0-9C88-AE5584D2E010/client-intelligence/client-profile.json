@@ -1,0 +1,219 @@
+{
+  "clientProfile": {
+    "clientName": "QuartzIQ",
+    "projectId": "quartziq-EA511E99-BB89-4CD0-9C88-AE5584D2E010",
+    "profileCreatedAt": "2025-08-27T23:00:18.000Z",
+    "profileType": "business-intelligence-saas",
+    
+    "businessOverview": {
+      "industry": "Business Intelligence & Data Analytics",
+      "companyStage": "growth-stage",
+      "targetMarket": "Enterprise and mid-market businesses",
+      "valueProposition": "AI-powered analytics platform that transforms complex data into actionable business insights",
+      "competitiveAdvantage": "Intelligent automation + intuitive user experience",
+      "businessModel": "SaaS subscription with tiered feature access"
+    },
+    
+    "idealCustomerProfile": {
+      "primaryPersona": {
+        "title": "Chief Data Officer / VP of Analytics",
+        "company": "Mid-to-large enterprises (500-5000+ employees)",
+        "painPoints": [
+          "Complex data scattered across multiple systems",
+          "Time-consuming manual report generation",
+          "Difficulty extracting actionable insights from data",
+          "Need for real-time business intelligence"
+        ],
+        "goals": [
+          "Centralize data analytics and reporting",
+          "Reduce time-to-insight from days to minutes",
+          "Enable self-service analytics for business users",
+          "Improve data-driven decision making"
+        ],
+        "budgetRange": "$50K-$500K annually",
+        "decisionCriteria": [
+          "Ease of implementation and adoption",
+          "Scalability and performance",
+          "Advanced AI/ML capabilities", 
+          "Integration with existing tech stack"
+        ]
+      },
+      
+      "secondaryPersona": {
+        "title": "Business Analyst / Data Scientist",
+        "company": "Fast-growing mid-market companies",
+        "painPoints": [
+          "Limited access to advanced analytics tools",
+          "Steep learning curve for existing BI tools",
+          "Inability to create custom dashboards easily",
+          "Lack of predictive analytics capabilities"
+        ],
+        "goals": [
+          "Access powerful analytics without technical complexity",
+          "Create custom reports and dashboards",
+          "Leverage AI for predictive insights",
+          "Collaborate effectively on data projects"
+        ],
+        "budgetRange": "$10K-$100K annually",
+        "decisionCriteria": [
+          "User-friendly interface",
+          "Advanced visualization capabilities",
+          "Machine learning integration",
+          "Collaboration features"
+        ]
+      }
+    },
+    
+    "brandPersonality": {
+      "coreValues": [
+        "Innovation and cutting-edge technology",
+        "Simplicity in complex problem solving",
+        "Transparency and data-driven insights", 
+        "Reliability and enterprise-grade security"
+      ],
+      "brandVoice": {
+        "tone": "Professional yet approachable",
+        "personality": "Intelligent, trustworthy, innovative",
+        "communicationStyle": "Clear, data-driven, solution-oriented",
+        "emotionalAppeal": "Empowerment through insight"
+      },
+      "visualIdentity": {
+        "primaryColors": ["#2563EB", "#1E40AF", "#3B82F6"],
+        "accentColors": ["#10B981", "#F59E0B", "#EF4444"],
+        "typography": "Modern, clean, highly readable",
+        "designStyle": "Minimalist, data-focused, professional",
+        "iconography": "Geometric, analytical, tech-forward"
+      }
+    },
+    
+    "technicalRequirements": {
+      "targetPlatforms": ["Web (desktop-first)", "Mobile web", "Tablet optimization"],
+      "browserSupport": ["Chrome", "Firefox", "Safari", "Edge"],
+      "performanceTargets": {
+        "loadTime": "< 2 seconds",
+        "coreWebVitals": "90+ scores",
+        "dataProcessing": "Real-time or near real-time",
+        "scalability": "100K+ concurrent users"
+      },
+      "securityRequirements": [
+        "SOC 2 Type II compliance",
+        "GDPR compliance", 
+        "Enterprise SSO integration",
+        "Role-based access control",
+        "Data encryption at rest and in transit"
+      ],
+      "integrationNeeds": [
+        "Popular databases (PostgreSQL, MySQL, MongoDB)",
+        "Cloud platforms (AWS, Azure, GCP)",
+        "Business tools (Salesforce, HubSpot, Slack)",
+        "APIs and webhooks for custom integrations"
+      ]
+    },
+    
+    "userExperienceExpectations": {
+      "primaryUXGoals": [
+        "Intuitive dashboard creation",
+        "Drag-and-drop data visualization",
+        "Self-service analytics for non-technical users",
+        "Mobile-responsive design for executives on-the-go"
+      ],
+      "navigationPreferences": {
+        "structure": "Clean, hierarchical navigation",
+        "searchability": "Global search across all data and reports",
+        "customization": "Personalized dashboards and workflows",
+        "efficiency": "Minimal clicks to access key insights"
+      },
+      "visualDesignExpectations": {
+        "dataVisualization": "Interactive charts and graphs",
+        "dashboard": "Clean, uncluttered, information-dense",
+        "branding": "Subtle brand integration without overwhelming data",
+        "accessibility": "WCAG 2.1 AA compliance for inclusive access"
+      }
+    },
+    
+    "contentStrategy": {
+      "primaryMessaging": [
+        "Transform data complexity into business clarity",
+        "AI-powered insights at your fingertips", 
+        "From data to decisions in minutes, not hours",
+        "Enterprise analytics made simple"
+      ],
+      "contentTones": {
+        "marketing": "Confident, results-focused, innovative",
+        "product": "Clear, instructional, empowering",
+        "support": "Helpful, thorough, patient",
+        "technical": "Precise, detailed, authoritative"
+      },
+      "keywordStrategy": [
+        "business intelligence platform",
+        "AI-powered analytics",
+        "data visualization software",
+        "enterprise reporting tools",
+        "self-service BI",
+        "predictive analytics"
+      ]
+    },
+    
+    "competitiveAnalysis": {
+      "primaryCompetitors": [
+        {
+          "name": "Tableau",
+          "strengths": ["Market leader", "Powerful visualizations", "Strong ecosystem"],
+          "weaknesses": ["Complex for beginners", "High cost", "Steep learning curve"],
+          "differentiators": ["Better AI integration", "Simpler onboarding", "More affordable"]
+        },
+        {
+          "name": "Power BI",
+          "strengths": ["Microsoft integration", "Cost-effective", "Familiar interface"],
+          "weaknesses": ["Limited advanced features", "Microsoft ecosystem lock-in"],
+          "differentiators": ["Cross-platform flexibility", "Advanced ML capabilities", "Better UX"]
+        },
+        {
+          "name": "Looker",
+          "strengths": ["Developer-friendly", "Strong data modeling", "Cloud-native"],
+          "weaknesses": ["Technical complexity", "Limited self-service", "High implementation cost"],
+          "differentiators": ["Business user focus", "No-code/low-code approach", "Faster deployment"]
+        }
+      ]
+    },
+    
+    "successMetrics": {
+      "businessKPIs": [
+        "User adoption rate (target: 80%+ within 3 months)",
+        "Time-to-first-insight (target: < 10 minutes)",
+        "Dashboard creation rate (target: 3+ per user per month)", 
+        "Customer satisfaction score (target: 4.5+/5.0)"
+      ],
+      "technicalKPIs": [
+        "System uptime (target: 99.9%+)",
+        "Query response time (target: < 3 seconds)",
+        "Data processing throughput (target: 1M+ records/hour)",
+        "API response time (target: < 500ms)"
+      ],
+      "userEngagementKPIs": [
+        "Daily active users (target: 70%+ of total users)",
+        "Session duration (target: 15+ minutes average)",
+        "Feature adoption rate (target: 60%+ for core features)",
+        "Support ticket volume (target: < 5% of users/month)"
+      ]
+    },
+    
+    "projectPriorities": {
+      "phase1": {
+        "priority": "highest",
+        "focus": "Core dashboard functionality and data visualization",
+        "deliverables": ["Dashboard creation", "Basic charting", "Data connections", "User management"]
+      },
+      "phase2": {
+        "priority": "high", 
+        "focus": "AI-powered insights and advanced analytics",
+        "deliverables": ["Predictive analytics", "Automated insights", "Alert system", "Advanced visualizations"]
+      },
+      "phase3": {
+        "priority": "medium",
+        "focus": "Advanced features and enterprise integrations",
+        "deliverables": ["Custom integrations", "Advanced security", "API management", "White-label options"]
+      }
+    }
+  }
+}

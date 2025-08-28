@@ -1,0 +1,242 @@
+{
+  "orchestraiDeveloperStandards": {
+    "version": "3.0.0",
+    "lastUpdated": "2025-08-28",
+    "description": "ORCHESTRAI developer standards with Tailwind v4 and MagicUI integration",
+    
+    "requiredTechStack": {
+      "frontend": {
+        "framework": "Next.js 15",
+        "styling": "Tailwind CSS v4.0",
+        "components": "shadcn/ui + MagicUI",
+        "animations": "Framer Motion + MagicUI Animations",
+        "icons": "Lucide React",
+        "typeScript": "required"
+      },
+      "backend": {
+        "runtime": "Node.js 20+",
+        "language": "TypeScript",
+        "database": "PostgreSQL",
+        "memory": "Redis (Crystalline Memory)",
+        "queue": "Bull/BullMQ"
+      },
+      "development": {
+        "packageManager": "npm",
+        "linting": "ESLint + Prettier",
+        "testing": "Jest + React Testing Library",
+        "bundler": "Next.js built-in",
+        "deployment": "Vercel/Docker"
+      }
+    },
+
+    "defaultFileStructure": {
+      "nextjsProject": {
+        "src/": {
+          "app/": "App Router pages and layouts",
+          "components/": {
+            "ui/": "shadcn/ui and MagicUI components",
+            "examples/": "ORCHESTRAI example implementations",
+            "sections/": "Page sections and layouts"
+          },
+          "lib/": "Utility functions and configurations",
+          "styles/": "Global styles and Tailwind configuration",
+          "types/": "TypeScript type definitions",
+          "hooks/": "Custom React hooks"
+        },
+        "public/": "Static assets",
+        "docs/": "Project documentation"
+      }
+    },
+
+    "tailwindV4Configuration": {
+      "installation": "npm install tailwindcss@next @tailwindcss/cli@next",
+      "globalStyles": "/orchestrai-system/templates/global/styles/tailwind-v4-globals.css",
+      "features": [
+        "CSS-first configuration",
+        "Oxide engine (100x faster builds)",
+        "Cascade layers support",
+        "Custom properties integration",
+        "Automatic content detection"
+      ],
+      "dentalColorPalette": {
+        "primary": "14 165 233 (dental-blue-500)",
+        "secondary": "6 182 212 (dental-cyan-500)",
+        "success": "34 197 94 (dental-success)",
+        "glassmorphism": "255 255 255 / 0.25"
+      }
+    },
+
+    "magicUIIntegration": {
+      "mcpServer": "@magicuidesign/mcp@latest",
+      "componentLibrary": "/orchestrai-system/templates/global/code-patterns/react-components/magicui-component-library.tsx",
+      "setupScript": "/orchestrai-system/templates/global/scripts/setup-magicui.sh",
+      "coreComponents": [
+        "blur-fade", "border-beam", "marquee", "particles",
+        "animated-list", "number-ticker", "dock", "meteors",
+        "text-reveal", "typing-animation", "ripple"
+      ],
+      "dentalSpecific": [
+        "DentalHeroSection", "DentalServiceCards", "DentalEquipmentMarquee",
+        "DentalToolsDock", "DentalStatsSection", "DentalTestimonialsSection"
+      ]
+    },
+
+    "codeStandards": {
+      "typescript": {
+        "strictMode": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true
+      },
+      "react": {
+        "functionComponents": "preferred",
+        "hooks": "required for state management", 
+        "propsInterface": "required for all components",
+        "forwardRef": "use for reusable components"
+      },
+      "styling": {
+        "methodology": "Utility-first with Tailwind v4",
+        "customClasses": "Use @layer components in globals.css",
+        "responsiveDesign": "Mobile-first approach",
+        "darkMode": "Support required for all components"
+      },
+      "naming": {
+        "components": "PascalCase",
+        "files": "kebab-case.tsx",
+        "variables": "camelCase",
+        "constants": "SCREAMING_SNAKE_CASE"
+      }
+    },
+
+    "performanceStandards": {
+      "coreWebVitals": {
+        "LCP": "<2.5s",
+        "FID": "<100ms", 
+        "CLS": "<0.1",
+        "INP": "<200ms (2024 standard)"
+      },
+      "bundleSize": {
+        "maxInitialJS": "150KB gzipped",
+        "maxCSS": "50KB gzipped",
+        "imageOptimization": "Next.js Image component required"
+      },
+      "accessibility": {
+        "wcagLevel": "AA",
+        "colorContrast": "4.5:1 minimum",
+        "keyboardNavigation": "full support required"
+      }
+    },
+
+    "qualityGates": {
+      "development": [
+        "TypeScript compilation passes",
+        "ESLint passes with zero errors",
+        "Prettier formatting applied",
+        "All tests pass (>90% coverage)",
+        "Core Web Vitals meet standards"
+      ],
+      "preProduction": [
+        "Visual regression tests pass",
+        "Cross-browser compatibility verified",
+        "Accessibility audit passes",
+        "Performance budget maintained",
+        "SEO requirements met"
+      ]
+    },
+
+    "setupCommands": {
+      "newProject": [
+        "npx create-next-app@latest project-name --typescript --tailwind --app",
+        "cd project-name",
+        "bash /orchestrai-system/templates/global/scripts/setup-magicui.sh",
+        "npm install @radix-ui/react-* lucide-react framer-motion",
+        "npm run dev"
+      ],
+      "existingProject": [
+        "bash /orchestrai-system/templates/global/scripts/setup-magicui.sh",
+        "npm install tailwindcss@next @tailwindcss/cli@next",
+        "cp /orchestrai-system/templates/global/styles/tailwind-v4-globals.css ./src/app/globals.css"
+      ]
+    },
+
+    "mcpIntegration": {
+      "requiredServers": [
+        "sequential-thinking",
+        "ref-tools", 
+        "memory",
+        "filesystem",
+        "magicui"
+      ],
+      "developmentFlow": [
+        "AI suggests appropriate MagicUI components",
+        "Components auto-generated with dental branding",
+        "Visual validation through browser MCP",
+        "Performance testing with Playwright MCP"
+      ]
+    },
+
+    "dentalIndustrySpecific": {
+      "colorScheme": {
+        "primary": "Professional blues (#0ea5e9, #0284c7)",
+        "accent": "Trust-building cyans (#06b6d4, #0891b2)", 
+        "success": "Health greens (#22c55e, #16a34a)",
+        "warning": "Attention oranges (#f59e0b, #d97706)"
+      },
+      "typography": {
+        "headings": "Inter/Geist Sans - clean, professional",
+        "body": "Inter/Geist Sans - readable, accessible",
+        "accent": "Optional serif for luxury practices"
+      },
+      "imagery": {
+        "style": "Clean, modern, professional",
+        "content": "Real practice photos preferred over stock",
+        "optimization": "WebP format, Next.js Image component"
+      },
+      "animations": {
+        "approach": "Subtle, professional, trust-building",
+        "timing": "Smooth 300ms transitions",
+        "easing": "ease-out for natural feeling"
+      }
+    },
+
+    "documentationRequirements": {
+      "componentDocumentation": "JSDoc comments for all props",
+      "setupGuide": "ORCHESTRAI-MAGICUI-GUIDE.md in project root",
+      "exampleUsage": "Working examples in src/components/examples/",
+      "deploymentGuide": "Environment-specific deployment instructions"
+    },
+
+    "continuousImprovement": {
+      "monitoring": {
+        "performanceMetrics": "Real User Monitoring required",
+        "errorTracking": "Sentry or similar service",
+        "analyticsIntegration": "ORCHESTRAI hooks for workflow tracking"
+      },
+      "updates": {
+        "tailwindUpdates": "Follow v4 evolution closely",
+        "magicUIUpdates": "Monthly component library reviews",
+        "browserSupport": "Support latest 2 versions of major browsers"
+      }
+    }
+  },
+
+  "quickStartChecklist": [
+    "✅ Install Node.js 20+",
+    "✅ Create Next.js 15 project with TypeScript",
+    "✅ Run ORCHESTRAI MagicUI setup script",
+    "✅ Copy Tailwind v4 globals configuration", 
+    "✅ Install required dependencies (shadcn/ui, MagicUI, Framer Motion)",
+    "✅ Set up MCP servers in configuration",
+    "✅ Create first dental component using templates",
+    "✅ Test with npm run dev",
+    "✅ Validate performance and accessibility",
+    "✅ Deploy to production environment"
+  ],
+
+  "supportResources": {
+    "templates": "/orchestrai-system/templates/global/",
+    "components": "/orchestrai-system/templates/global/code-patterns/react-components/",
+    "scripts": "/orchestrai-system/templates/global/scripts/",
+    "documentation": "ORCHESTRAI-MAGICUI-GUIDE.md",
+    "examples": "src/components/examples/dental-website-example.tsx"
+  }
+}

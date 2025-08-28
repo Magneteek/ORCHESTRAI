@@ -1,0 +1,14 @@
+{
+  "command": {
+    "action": "screenshot",
+    "url": "http://localhost:8081/index-professional.html",
+    "selector": "#home",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "output": "qa-reports/screenshots/desktop-hero-section-1756379386992.png"
+  },
+  "simulated": true,
+  "timestamp": "2025-08-28T11:09:47.993Z"
+}

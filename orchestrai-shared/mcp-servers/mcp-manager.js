@@ -196,6 +196,14 @@ class MCPManager {
     return results;
   }
 
+  getServer(serverName) {
+    const server = this.servers.get(serverName);
+    if (!server || server.status !== 'running') {
+      return null;
+    }
+    return server;
+  }
+
   getServerStatus(serverName) {
     const server = this.servers.get(serverName);
     if (!server) {
@@ -271,6 +279,67 @@ class MCPManager {
 
   clearStartupLog() {
     this.startupLog = [];
+  }
+
+  async getHealthStatus() {
+    const healthStatus = {};
+    
+    for (const [serverName, server] of this.servers) {
+      try {
+        if (server.status === 'running' && server.process) {
+          healthStatus[serverName] = {
+            status: 'healthy',
+            uptime: Date.now() - server.startTime,
+            pid: server.process.pid,
+            capabilities: server.config.capabilities || [],
+            lastCheck: Date.now()
+          };
+        } else {
+          healthStatus[serverName] = {
+            status: 'unhealthy',
+            reason: 'Process not running',
+            lastCheck: Date.now()
+          };
+        }
+      } catch (error) {
+        healthStatus[serverName] = {
+          status: 'error',
+          error: error.message,
+          lastCheck: Date.now()
+        };
+      }
+    }
+
+    // Add configured but not running servers
+    Object.keys(this.config.mcpServers).forEach(serverName => {
+      if (!healthStatus[serverName]) {
+        const serverConfig = this.config.mcpServers[serverName];
+        healthStatus[serverName] = { 
+          status: serverConfig.enabled ? 'stopped' : 'disabled',
+          capabilities: serverConfig.capabilities || [],
+          lastCheck: Date.now()
+        };
+      }
+    });
+
+    return healthStatus;
+  }
+
+  async getIntegrationStatus() {
+    const allStatus = await this.getHealthStatus();
+    const integrationStatus = {};
+    
+    Object.keys(allStatus).forEach(serverName => {
+      const server = allStatus[serverName];
+      integrationStatus[serverName] = {
+        available: server.status === 'healthy',
+        capabilities: server.capabilities || [],
+        uptime: server.uptime || 0,
+        lastCheck: server.lastCheck
+      };
+    });
+
+    return integrationStatus;
   }
 }
 

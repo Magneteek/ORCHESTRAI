@@ -1,0 +1,189 @@
+{
+  "deliveryStructureConfig": {
+    "version": "1.0.0",
+    "description": "Enhanced delivery structure with separate CSS, JS, and pages organization",
+    "baseDeliveryPath": "./temp/projects/{project-uuid}/deliverables/development",
+    
+    "outputStructure": {
+      "pages": {
+        "path": "/",
+        "description": "HTML pages and components in root delivery folder",
+        "allowedExtensions": [".html", ".php", ".jsx", ".tsx", ".vue", ".svelte"],
+        "subfolders": {
+          "components": "React/Vue components",
+          "templates": "Page templates",
+          "layouts": "Layout structures"
+        }
+      },
+      
+      "css": {
+        "path": "/css",
+        "description": "Stylesheets and CSS assets",
+        "allowedExtensions": [".css", ".scss", ".sass", ".less", ".styl"],
+        "subfolders": {
+          "components": "Component-specific styles",
+          "layouts": "Layout and page styles", 
+          "utilities": "Utility and helper classes",
+          "vendor": "Third-party CSS libraries"
+        }
+      },
+      
+      "js": {
+        "path": "/js",
+        "description": "JavaScript files and modules",
+        "allowedExtensions": [".js", ".ts", ".jsx", ".tsx", ".mjs"],
+        "subfolders": {
+          "components": "Component JavaScript",
+          "utilities": "Helper functions and utilities",
+          "services": "API and service modules",
+          "vendor": "Third-party JavaScript libraries"
+        }
+      },
+      
+      "assets": {
+        "path": "/assets",
+        "description": "Static assets and media files",
+        "subfolders": {
+          "images": "Image assets",
+          "fonts": "Font files",
+          "icons": "Icon assets",
+          "media": "Video and audio files"
+        }
+      },
+      
+      "config": {
+        "path": "/config",
+        "description": "Configuration and deployment files",
+        "allowedExtensions": [".json", ".yaml", ".yml", ".env", ".config.js"],
+        "subfolders": {
+          "build": "Build configuration",
+          "deploy": "Deployment scripts",
+          "env": "Environment configuration"
+        }
+      }
+    },
+    
+    "qualityValidation": {
+      "enabled": true,
+      "description": "Web Quality Domain validation for delivery structure",
+      "validationRules": {
+        "enforceStructure": true,
+        "validateFileTypes": true,
+        "checkOptimization": true,
+        "ensureAccessibility": true
+      },
+      "qualityAgentMapping": {
+        "pages": ["web-quality-ux-validator", "web-quality-visual-regression-tester"],
+        "css": ["web-quality-responsive-validator", "web-quality-performance-tester"],
+        "js": ["web-quality-code-validator", "web-quality-performance-tester"],
+        "assets": ["web-quality-performance-tester"],
+        "config": ["web-quality-code-validator"]
+      }
+    },
+    
+    "templateIntegration": {
+      "enabled": true,
+      "templateSources": {
+        "pages": "orchestrai-system/templates/global/wireframes",
+        "css": "orchestrai-system/templates/global/design-systems/style-guides",
+        "js": "orchestrai-system/templates/global/code-patterns/react-components",
+        "config": "orchestrai-system/templates/global/code-patterns/deployment-configs"
+      }
+    },
+    
+    "buildConfiguration": {
+      "bundling": {
+        "enabled": true,
+        "cssMinification": true,
+        "jsMinification": true,
+        "assetOptimization": true
+      },
+      "developmentServer": {
+        "hotReload": true,
+        "cssSourceMaps": true,
+        "jsSourceMaps": true
+      },
+      "production": {
+        "compression": true,
+        "caching": true,
+        "cdnOptimization": true
+      }
+    },
+    
+    "deliveryMetadata": {
+      "trackFileGeneration": true,
+      "qualityMetrics": true,
+      "performanceAnalytics": true,
+      "crystallineMemoryStorage": true
+    }
+  },
+
+  "exampleProjectStructure": {
+    "description": "Example of how files would be organized in a typical web project",
+    "structure": {
+      "/projects/ecommerce-website-uuid/deliverables/development/": {
+        "pages": [
+          "index.html",
+          "product-listing.html", 
+          "checkout.html",
+          "components/ProductCard.jsx",
+          "components/ShoppingCart.jsx",
+          "templates/ProductPageTemplate.jsx"
+        ],
+        "css": [
+          "css/main.css",
+          "css/components/product-card.css",
+          "css/components/shopping-cart.css",
+          "css/layouts/header.css",
+          "css/layouts/footer.css",
+          "css/utilities/grid.css"
+        ],
+        "js": [
+          "js/main.js",
+          "js/components/ProductCard.js",
+          "js/components/ShoppingCart.js",
+          "js/utilities/api.js",
+          "js/utilities/validation.js",
+          "js/services/paymentService.js"
+        ],
+        "assets": [
+          "assets/images/logo.svg",
+          "assets/images/products/",
+          "assets/fonts/inter.woff2",
+          "assets/icons/shopping-cart.svg"
+        ],
+        "config": [
+          "config/webpack.config.js",
+          "config/package.json",
+          "config/.env.example",
+          "config/deploy/docker-compose.yml"
+        ]
+      }
+    }
+  },
+
+  "qualityGateConfiguration": {
+    "phaseValidation": {
+      "wireframe-to-pages": {
+        "requiredValidators": ["web-quality-ux-validator"],
+        "qualityThreshold": 80,
+        "checks": ["semantic-html", "accessibility-structure", "responsive-layout"]
+      },
+      "design-to-css": {
+        "requiredValidators": ["web-quality-responsive-validator", "web-quality-visual-regression-tester"],
+        "qualityThreshold": 85,
+        "checks": ["design-system-compliance", "responsive-breakpoints", "cross-browser-compatibility"]
+      },
+      "development-to-js": {
+        "requiredValidators": ["web-quality-code-validator", "web-quality-performance-tester"],
+        "qualityThreshold": 80,
+        "checks": ["code-quality", "performance-optimization", "security-compliance"]
+      },
+      "production-readiness": {
+        "requiredValidators": ["web-quality-e2e-coordinator", "web-quality-ux-flow-validator"],
+        "qualityThreshold": 90,
+        "checks": ["end-to-end-functionality", "user-flow-completion", "performance-benchmarks"]
+      }
+    }
+  }
+}

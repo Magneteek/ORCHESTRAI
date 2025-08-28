@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuartzIQ | Intelligent Analytics Platform for Dental Equipment Suppliers</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Stop losing dental sales to competitors with faster automation. QuartzIQ transforms your B2B marketing with intelligent analytics, automated lead qualification, and our Trust-to-Lead Guarantee.">
+    <meta name="keywords" content="dental equipment marketing, B2B sales automation, dental supplier analytics, lead generation, dental industry CRM">
+    <meta name="author" content="QuartzIQ">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="QuartzIQ | Intelligent Analytics Platform for Dental Equipment Suppliers">
+    <meta property="og:description" content="Transform your dental B2B marketing with intelligent automation and guaranteed results.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quartziq.com">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QuartzIQ | Intelligent Analytics Platform">
+    <meta name="twitter:description" content="Transform your dental B2B marketing with intelligent automation and guaranteed results.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="canonical" href="https://quartziq.com">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config with QuartzIQ Brand Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quartziq': {
+                            'dark-blue': '#1A2944',
+                            'brand-blue': '#357494', 
+                            'light-blue': '#3F86A4',
+                            'white': '#D7D9D7',
+                            'gray': '#C8C9C7',
+                            'dark-gray': '#828689'
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite alternate',
+                        'marquee': 'marquee 25s linear infinite',
+                        'particle': 'particle 20s infinite linear',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            'from': { opacity: '0', transform: 'translateY(20px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' }
+                        },
+                        scaleIn: {
+                            'from': { opacity: '0', transform: 'scale(0.95)' },
+                            'to': { opacity: '1', transform: 'scale(1)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        pulseGlow: {
+                            'from': { boxShadow: '0 0 20px rgba(53, 116, 148, 0.5)' },
+                            'to': { boxShadow: '0 0 40px rgba(53, 116, 148, 0.8), 0 0 60px rgba(53, 116, 148, 0.6)' }
+                        },
+                        marquee: {
+                            'from': { transform: 'translateX(0%)' },
+                            'to': { transform: 'translateX(-100%)' }
+                        },
+                        particle: {
+                            '0%': { transform: 'translateY(100vh) translateX(-10px)', opacity: '0' },
+                            '10%': { opacity: '1' },
+                            '90%': { opacity: '1' },
+                            '100%': { transform: 'translateY(-10vh) translateX(10px)', opacity: '0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Paper.js for shader effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .quartziq-gradient {
+            background: linear-gradient(135deg, #1A2944 0%, #357494 50%, #3F86A4 100%);
+        }
+        
+        .quartziq-text-gradient {
+            background: linear-gradient(135deg, #357494, #3F86A4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .triangle-pattern {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .magic-border {
+            position: relative;
+            background: linear-gradient(45deg, transparent, rgba(53, 116, 148, 0.3), transparent);
+            background-size: 200% 200%;
+            animation: borderShine 3s ease infinite;
+        }
+        
+        @keyframes borderShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .section-divider {
+            background: linear-gradient(90deg, transparent, rgba(53, 116, 148, 0.3), transparent);
+            height: 1px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+    
+    <!-- Animated Background Canvas -->
+    <canvas id="background-canvas" class="particle-canvas"></canvas>
+    
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center quartziq-gradient overflow-hidden">
+        <!-- Floating Triangular Patterns -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="triangle-pattern absolute top-10 right-10 w-32 h-32 bg-white bg-opacity-10 animate-float"></div>
+            <div class="triangle-pattern absolute bottom-20 left-10 w-24 h-24 bg-yellow-400 bg-opacity-20 animate-float" style="animation-delay: 1s;"></div>
+            <div class="triangle-pattern absolute top-1/2 left-1/4 w-16 h-16 bg-white bg-opacity-5 animate-float" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Content Column -->
+                <div class="text-white space-y-8 animate-fade-up">
+                    <!-- Trust Badge -->
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-yellow-500 bg-opacity-20 border border-yellow-400 text-yellow-300 text-sm font-medium">
+                        <i data-lucide="shield" class="w-4 h-4 mr-2"></i>
+                        90-Day Results Guarantee
+                    </div>
+                    
+                    <!-- Main Headline -->
+                    <div class="space-y-4">
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                            Stop Losing Dental Sales to
+                            <span class="text-yellow-400 animate-pulse-glow">Competitors</span>
+                            with Faster Automation
+                        </h1>
+                        
+                        <h2 class="text-xl md:text-2xl text-opacity-90 leading-relaxed">
+                            Transform your dental equipment sales with our proven Growth Engine framework 
+                            that delivers 50% more qualified leads while cutting response time from 47 hours to 5 minutes.
+                        </h2>
+                    </div>
+                    
+                    <!-- Supporting Text -->
+                    <p class="text-lg text-opacity-80 max-w-2xl">
+                        Most dental suppliers lose 79% of their marketing leads because they can't respond fast enough. 
+                        While you're waiting 47 hours to follow up, competitors with smart automation are closing deals in minutes.
+                    </p>
+                    
+                    <!-- Animated Statistics -->
+                    <div class="grid grid-cols-3 gap-6 py-6">
+                        <div class="text-center group">
+                            <div class="text-3xl font-bold text-yellow-400 group-hover:scale-110 transition-transform duration-300" id="stat-1">0%</div>
+                            <div class="text-sm text-opacity-70">Leads Lost Without Automation</div>
+                        </div>
+                        <div class="text-center group">
+                            <div class="text-3xl font-bold text-yellow-400 group-hover:scale-110 transition-transform duration-300" id="stat-2">0hrs</div>
+                            <div class="text-sm text-opacity-70">Average Response Time</div>
+                        </div>
+                        <div class="text-center group">
+                            <div class="text-3xl font-bold text-yellow-400 group-hover:scale-110 transition-transform duration-300" id="stat-3">0min</div>
+                            <div class="text-sm text-opacity-70">Our Response Time</div>
+                        </div>
+                    </div>
+                    
+                    <!-- CTA Buttons with Magic Effects -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="magic-border px-8 py-4 rounded-lg bg-yellow-500 text-quartziq-dark-blue hover:bg-yellow-400 font-semibold text-lg transition-all duration-300 transform hover:scale-105 group">
+                            Get Your Trust-to-Lead Audit (Free)
+                            <i data-lucide="arrow-right" class="inline-block w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                        
+                        <button class="px-8 py-4 rounded-lg border-2 border-white text-white hover:bg-white hover:text-quartziq-dark-blue font-semibold text-lg transition-all duration-300 transform hover:scale-105">
+                            See How the Growth Engine Works
+                        </button>
+                    </div>
+                    
+                    <!-- Trust Indicators -->
+                    <div class="flex items-center space-x-6 text-sm text-opacity-60">
+                        <div class="flex items-center">
+                            <i data-lucide="clock" class="w-4 h-4 mr-2"></i>
+                            5-minute response guarantee
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="trending-up" class="w-4 h-4 mr-2"></i>
+                            90% client satisfaction rate
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visual Column with D3.js Visualization -->
+                <div class="relative lg:block hidden">
+                    <div class="glass-morphism rounded-2xl p-8">
+                        <!-- D3.js Dashboard Visualization -->
+                        <div id="dashboard-viz" class="h-80 w-full"></div>
+                        
+                        <!-- Floating Elements -->
+                        <div class="absolute -top-4 -right-4 bg-yellow-500 text-quartziq-dark-blue px-4 py-2 rounded-full text-sm font-semibold animate-pulse">
+                            Live Lead Alert
+                        </div>
+                        
+                        <div class="absolute -bottom-4 -left-4 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold animate-bounce">
+                            5min Response ✓
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-6 h-10 border-2 border-white border-opacity-30 rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white bg-opacity-50 rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section Divider -->
+    <div class="section-divider"></div>
+    
+    <!-- Problem Section with Animated Elements -->
+    <section class="py-20 bg-gray-50 relative">
+        <div class="container mx-auto px-4">
+            <!-- Marquee of Problem Indicators -->
+            <div class="overflow-hidden mb-16">
+                <div class="flex animate-marquee space-x-8 text-red-600 font-semibold">
+                    <span class="whitespace-nowrap">79% Leads Lost • 47-Hour Response Time • Competitors Winning • Sales Cycles Increasing • Opportunities Missed •</span>
+                    <span class="whitespace-nowrap">79% Leads Lost • 47-Hour Response Time • Competitors Winning • Sales Cycles Increasing • Opportunities Missed •</span>
+                </div>
+            </div>
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-4xl mx-auto mb-16 animate-fade-up">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-red-100 text-red-600 text-sm font-medium mb-4">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i>
+                    The Reality Check
+                </div>
+                
+                <h2 class="text-4xl md:text-5xl font-bold text-quartziq-dark-blue mb-6">
+                    Why Are You Losing Dental Sales to
+                    <span class="text-red-600">Less Qualified</span> Competitors?
+                </h2>
+                
+                <p class="text-xl text-gray-600 leading-relaxed">
+                    The harsh reality facing dental equipment suppliers today:
+                </p>
+            </div>
+            
+            <!-- Animated Problem Cards -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="problem-cards">
+                <!-- Cards will be populated by JavaScript -->
+            </div>
+            
+            <!-- Competition Timeline Visualization -->
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-morphism rounded-2xl p-8 border border-red-200">
+                    <h3 class="text-2xl font-bold text-quartziq-dark-blue mb-6 text-center">
+                        While You Wait, Competitors Win
+                    </h3>
+                    <div id="competition-timeline" class="h-32"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- More sections will be added in subsequent files -->
+    
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Animate statistics counter
+        function animateCounter(elementId, finalValue, suffix = '') {
+            const element = document.getElementById(elementId);
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.floor(progress * parseInt(finalValue));
+                element.textContent = currentValue + suffix;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+        
+        // Initialize animations when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                animateCounter('stat-1', '79', '%');
+                animateCounter('stat-2', '47', 'hrs');
+                animateCounter('stat-3', '5', 'min');
+            }, 1000);
+            
+            initBackgroundAnimation();
+            createDashboardVisualization();
+            createProblemCards();
+            createCompetitionTimeline();
+        });
+        
+        // Background particle animation with Paper.js
+        function initBackgroundAnimation() {
+            const canvas = document.getElementById('background-canvas');
+            paper.setup(canvas);
+            
+            const particles = [];
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = new paper.Path.Circle({
+                    center: [Math.random() * paper.view.size.width, Math.random() * paper.view.size.height],
+                    radius: Math.random() * 3 + 1,
+                    fillColor: new paper.Color(53/255, 116/255, 148/255, Math.random() * 0.3)
+                });
+                
+                particle.velocity = new paper.Point(
+                    (Math.random() - 0.5) * 2,
+                    (Math.random() - 0.5) * 2
+                );
+                
+                particles.push(particle);
+            }
+            
+            paper.view.onFrame = function(event) {
+                particles.forEach(particle => {
+                    particle.position = particle.position.add(particle.velocity);
+                    
+                    // Wrap around screen
+                    if (particle.position.x < 0) particle.position.x = paper.view.size.width;
+                    if (particle.position.x > paper.view.size.width) particle.position.x = 0;
+                    if (particle.position.y < 0) particle.position.y = paper.view.size.height;
+                    if (particle.position.y > paper.view.size.height) particle.position.y = 0;
+                });
+            };
+        }
+        
+        // D3.js Dashboard Visualization
+        function createDashboardVisualization() {
+            const container = d3.select('#dashboard-viz');
+            const width = 400;
+            const height = 320;
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Create animated bars
+            const data = [
+                { label: 'Response Time', value: 85, color: '#22c55e' },
+                { label: 'Lead Quality', value: 92, color: '#3b82f6' },
+                { label: 'Conversion Rate', value: 78, color: '#f59e0b' },
+                { label: 'ROI Growth', value: 95, color: '#10b981' }
+            ];
+            
+            const barHeight = 40;
+            const barSpacing = 60;
+            
+            data.forEach((d, i) => {
+                const y = i * barSpacing + 50;
+                
+                // Background bar
+                svg.append('rect')
+                    .attr('x', 120)
+                    .attr('y', y)
+                    .attr('width', 200)
+                    .attr('height', barHeight)
+                    .attr('rx', 20)
+                    .style('fill', '#f3f4f6');
+                
+                // Animated progress bar
+                svg.append('rect')
+                    .attr('x', 120)
+                    .attr('y', y)
+                    .attr('width', 0)
+                    .attr('height', barHeight)
+                    .attr('rx', 20)
+                    .style('fill', d.color)
+                    .transition()
+                    .duration(2000)
+                    .delay(i * 200)
+                    .attr('width', (d.value / 100) * 200);
+                
+                // Label
+                svg.append('text')
+                    .attr('x', 115)
+                    .attr('y', y + 25)
+                    .style('text-anchor', 'end')
+                    .style('font-size', '14px')
+                    .style('font-weight', '500')
+                    .style('fill', '#374151')
+                    .text(d.label);
+                
+                // Value
+                svg.append('text')
+                    .attr('x', 330)
+                    .attr('y', y + 25)
+                    .style('text-anchor', 'start')
+                    .style('font-size', '14px')
+                    .style('font-weight', '600')
+                    .style('fill', d.color)
+                    .text(d.value + '%');
+            });
+        }
+        
+        // Create animated problem cards
+        function createProblemCards() {
+            const problems = [
+                {
+                    statistic: "79%",
+                    title: "of your marketing leads never convert",
+                    description: "without proper nurturing systems",
+                    icon: "trending-down",
+                    color: "text-red-500"
+                },
+                {
+                    statistic: "22%",
+                    title: "Sales cycles have increased",
+                    description: "due to more stakeholders in purchasing decisions",
+                    icon: "users",
+                    color: "text-orange-500"
+                },
+                {
+                    statistic: "35-50%",
+                    title: "You're missing potential sales",
+                    description: "by not being the first to respond to inquiries",
+                    icon: "target",
+                    color: "text-yellow-600"
+                },
+                {
+                    statistic: "47hr",
+                    title: "Your average response time",
+                    description: "gives competitors a 21x conversion advantage",
+                    icon: "clock",
+                    color: "text-red-600"
+                }
+            ];
+            
+            const container = document.getElementById('problem-cards');
+            
+            problems.forEach((problem, index) => {
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-lg shadow-lg p-6 text-center group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-up`;
+                card.style.animationDelay = `${index * 200}ms`;
+                
+                card.innerHTML = `
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4 group-hover:bg-red-50 transition-colors">
+                        <i data-lucide="${problem.icon}" class="w-8 h-8 ${problem.color}"></i>
+                    </div>
+                    
+                    <div class="text-3xl font-bold mb-2 ${problem.color}">
+                        ${problem.statistic}
+                    </div>
+                    
+                    <h3 class="font-semibold text-quartziq-dark-blue mb-2">
+                        ${problem.title}
+                    </h3>
+                    
+                    <p class="text-gray-600 text-sm">
+                        ${problem.description}
+                    </p>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            // Re-initialize Lucide icons for new elements
+            lucide.createIcons();
+        }
+        
+        // Create competition timeline with D3.js
+        function createCompetitionTimeline() {
+            const container = d3.select('#competition-timeline');
+            const width = container.node().clientWidth;
+            const height = 128;
+            
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Timeline data
+            const timelineData = [
+                { label: 'Inquiry Received', time: 0, you: true, competitor: true },
+                { label: 'First Response', time: 5, you: false, competitor: true },
+                { label: 'Follow-up', time: 30, you: false, competitor: true },
+                { label: 'Your Response', time: 2820, you: true, competitor: false }, // 47 hours = 2820 minutes
+                { label: 'Sale Closed', time: 2880, you: false, competitor: true }
+            ];
+            
+            const xScale = d3.scaleLinear()
+                .domain([0, 3000])
+                .range([50, width - 50]);
+            
+            // Draw timeline line
+            svg.append('line')
+                .attr('x1', 50)
+                .attr('y1', 64)
+                .attr('x2', width - 50)
+                .attr('y2', 64)
+                .style('stroke', '#d1d5db')
+                .style('stroke-width', 2);
+            
+            // Draw timeline points
+            timelineData.forEach(point => {
+                const x = xScale(point.time);
+                
+                if (point.competitor) {
+                    svg.append('circle')
+                        .attr('cx', x)
+                        .attr('cy', 44)
+                        .attr('r', 6)
+                        .style('fill', '#10b981')
+                        .style('stroke', 'white')
+                        .style('stroke-width', 2);
+                    
+                    svg.append('text')
+                        .attr('x', x)
+                        .attr('y', 35)
+                        .style('text-anchor', 'middle')
+                        .style('font-size', '10px')
+                        .style('font-weight', '600')
+                        .style('fill', '#10b981')
+                        .text('✓');
+                }
+                
+                if (point.you) {
+                    svg.append('circle')
+                        .attr('cx', x)
+                        .attr('cy', 84)
+                        .attr('r', 6)
+                        .style('fill', '#ef4444')
+                        .style('stroke', 'white')
+                        .style('stroke-width', 2);
+                    
+                    if (point.time > 0) {
+                        svg.append('text')
+                            .attr('x', x)
+                            .attr('y', 95)
+                            .style('text-anchor', 'middle')
+                            .style('font-size', '10px')
+                            .style('font-weight', '600')
+                            .style('fill', '#ef4444')
+                            .text('✓');
+                    }
+                }
+            });
+            
+            // Labels
+            svg.append('text')
+                .attr('x', 20)
+                .attr('y', 48)
+                .style('font-size', '12px')
+                .style('font-weight', '600')
+                .style('fill', '#10b981')
+                .text('Competitor');
+                
+            svg.append('text')
+                .attr('x', 20)
+                .attr('y', 88)
+                .style('font-size', '12px')
+                .style('font-weight', '600')
+                .style('fill', '#ef4444')
+                .text('You');
+        }
+    </script>
+    
+</body>
+</html>

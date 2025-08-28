@@ -66,6 +66,31 @@ This system maintains zero file pollution through strict organizational rules:
 3. **Temp Files**: Only written to `/temp/` subdirectories
 4. **No Cross-Contamination**: Templates never mixed with project files
 
+### CRITICAL: Client Project Coherence Rules
+All work for a single client MUST remain within the same project structure:
+
+#### Project Continuity Principles
+1. **Single Client = Single Project Folder**: All deliverables for one client belong in their existing `/projects/[client-uuid]/` directory
+2. **No Separate Project Creation**: When adding new deliverables (SEO research, content, design) to an existing client, always use their established project folder
+3. **Memory System Integration**: New deliverables must be integrated into the client's existing crystalline memory system, not create separate memory entities
+4. **Asset Organization**: All related assets (branding, research, content) must be consolidated under the client's deliverables structure
+
+#### Examples of CORRECT Behavior
+- QuartzIQ keyword research → `/projects/quartziq-[uuid]/deliverables/seo/`
+- QuartzIQ homepage content → `/projects/quartziq-[uuid]/deliverables/content/`  
+- QuartzIQ branding assets → `/projects/quartziq-[uuid]/client-intelligence/assets/`
+
+#### Examples of INCORRECT Behavior
+- Creating new project folder for keyword research when client project exists
+- Separate memory entities for related client deliverables
+- Multiple project UUIDs for the same client engagement
+
+#### Crystalline Memory Integration Rules
+1. **Existing Client Entities**: Always add observations to existing client memory entities
+2. **Related Asset Connections**: Create proper memory relations between new deliverables and existing client intelligence
+3. **Project Lifecycle Preservation**: Maintain the established memory pool architecture and access patterns
+4. **Context Preservation**: Ensure all new deliverables reference and build upon existing client knowledge
+
 ## Domain Agents
 
 ### Web Development Domain
@@ -89,26 +114,75 @@ This system maintains zero file pollution through strict organizational rules:
 
 ## Technology Stack
 
-### Frontend (Next.js 15 + ShadCN)
-- **Framework**: Next.js 15 with App Router
+### CRITICAL: Web Development Technology Choice Principles
+
+#### Principle of Appropriate Complexity
+**RULE: Always choose the simplest solution that meets the project requirements**
+
+```
+Static Content = Static HTML + Tailwind CSS + Modern Libraries
+Dynamic Content = Next.js/React + ShadCN UI + TypeScript
+Server Logic = Node.js + Express + Database Integration
+```
+
+#### Technology Decision Matrix
+
+| Project Type | Recommended Stack | Avoid Over-Engineering |
+|-------------|------------------|----------------------|
+| **Landing Pages** | Static HTML + Tailwind + MagicUI + D3.js | ❌ Next.js unless SSR needed |
+| **Marketing Sites** | Static HTML or Gatsby | ❌ Full-stack frameworks |
+| **Web Applications** | Next.js + ShadCN UI + TypeScript | ✅ Appropriate complexity |
+| **Dashboards** | Next.js + Real-time features | ✅ Justified framework use |
+
+#### Static-First Development Rules
+1. **Default to Static**: Start with static HTML unless dynamic features are explicitly required
+2. **No Server for Static**: Static HTML files work perfectly without development servers
+3. **Library Integration**: Use Tailwind CSS, MagicUI components, D3.js, Paper.js for rich interactions
+4. **Progressive Enhancement**: Add complexity only when business requirements demand it
+
+#### Anti-Patterns to Avoid
+```
+❌ WRONG: "I'll use Next.js for this landing page"
+✅ CORRECT: "This landing page works perfectly with static HTML"
+
+❌ WRONG: "We need a development server to view this static site"
+✅ CORRECT: "Static HTML opens directly in browsers"
+
+❌ WRONG: "Let's add React components for simple content"
+✅ CORRECT: "Static HTML with JavaScript libraries handles this"
+```
+
+### System Architecture Stack
+
+#### Frontend (For Dynamic Applications Only)
+- **Framework**: Next.js 15 with App Router (when SSR/dynamic features needed)
 - **UI Library**: ShadCN UI for flexibility and customization
 - **Visualization**: D3.js v7 for advanced semantic clustering
 - **Styling**: Tailwind CSS with custom ORCHESTRAI themes
 - **Real-time**: WebSocket connections for live updates
 
-### Backend (Node.js + TypeScript)
+#### Static Web Development (Default Choice)
+- **Structure**: Semantic HTML5 with proper accessibility
+- **Styling**: Tailwind CSS with custom brand configurations
+- **Interactions**: MagicUI components (orbiting, ripples, animated beams)
+- **Visualization**: D3.js v7 for data visualization and charts
+- **Animation**: Paper.js for advanced canvas effects and particles
+- **Icons**: Lucide React or Heroicons for consistent iconography
+
+#### Backend (Node.js + TypeScript)
 - **Runtime**: Node.js with TypeScript throughout
 - **Memory**: Redis for crystalline memory and pipeline sharing
 - **Database**: PostgreSQL for structured data
 - **Vector DB**: For semantic search and clustering
 - **Queues**: Message queues for async agent communication
 
-### MCP Server Integration
+#### MCP Server Integration
 - **Sequential Thinking**: Advanced problem-solving coordination
 - **Ref.tools**: Documentation access for hallucination prevention
 - **Custom DATAforSEO**: SEO data integration
 - **Memory MCP**: Persistent knowledge graphs
 - **Template MCP**: Global template access and analytics
+- **MagicUI MCP**: Component library for static sites
 
 ## Development Workflow
 
@@ -125,6 +199,41 @@ This system maintains zero file pollution through strict organizational rules:
 3. **Respect File Structure**: Follow strict path validation rules
 4. **Leverage Crystalline Memory**: Store and retrieve context efficiently
 5. **Coordinate Geometrically**: Use spatial positioning for communication
+6. **Apply Appropriate Complexity**: Choose the simplest technology solution that meets requirements
+7. **Static-First Development**: Default to static HTML unless dynamic features are explicitly needed
+8. **Avoid Over-Engineering**: Never suggest servers, frameworks, or backend systems for static content
+
+### CRITICAL: Agent Orchestration File Handling Rules
+When orchestrating agents for client work, these rules are MANDATORY:
+
+#### Pre-Orchestration Checks
+1. **Client Project Search**: ALWAYS search for existing client projects before creating new ones
+2. **UUID Verification**: Use existing client project UUID for all related deliverables
+3. **Memory System Check**: Verify existing crystalline memory entities for the client
+4. **Asset Inventory**: Review existing deliverables to understand project context
+
+#### Agent Deployment Protocol
+1. **Target Directory Specification**: Always specify the existing client project directory in agent prompts
+2. **Memory Integration Instructions**: Instruct agents to integrate with existing client memory entities
+3. **Context Preservation**: Ensure agents reference existing client intelligence and deliverables
+4. **Relationship Mapping**: Create proper memory relations between new and existing assets
+
+#### Examples of Correct Agent Instructions
+```
+CORRECT: "Create SEO research for QuartzIQ and save to /projects/quartziq-EA511E99-BB89-4CD0-9C88-AE5584D2E010/deliverables/seo/"
+
+CORRECT: "Integrate findings into existing QuartzIQ memory entities and create relations to ICP analysis"
+
+INCORRECT: "Create new project for QuartzIQ SEO research"
+
+INCORRECT: "Create separate memory entities for this research"
+```
+
+#### Agent Instruction Templates
+- Always include existing project path in file creation instructions
+- Always specify memory integration requirements
+- Always reference existing client intelligence for context
+- Always create proper entity relationships in memory system
 
 ### Code Standards
 - **TypeScript**: All code must be typed
@@ -242,12 +351,29 @@ npm run setup       # Complete setup process
 - **Memory Efficiency**: Use crystalline memory for context storage
 - **Template Utilization**: Always use global templates
 - **Clean Outputs**: Write only final deliverables to project folders
+- **Technology Appropriateness**: Match complexity to actual requirements
+- **Static-First Mindset**: Default to simple HTML unless dynamic features needed
+
+### Web Development Anti-Patterns (AVOID THESE)
+- **Over-Engineering Landing Pages**: Using React/Next.js for static content
+- **Unnecessary Development Servers**: Suggesting servers for static HTML
+- **Framework Addiction**: Choosing complex stacks for simple requirements
+- **Backend for Static Content**: Adding server-side logic when client-side suffices
+- **Premature Optimization**: Adding features not required by project scope
+
+### Technology Selection Principles
+- **Requirements Analysis First**: Understand what features are actually needed
+- **Progressive Enhancement**: Start simple, add complexity only when justified
+- **Static HTML Baseline**: Can this work with just HTML/CSS/JS? Start there.
+- **Library vs Framework**: Prefer lightweight libraries over full frameworks when possible
+- **No Server Unless Required**: Static files work fine without development servers
 
 ### System Integration
 - **MCP Utilization**: Leverage all available MCP servers
 - **Pipeline Sharing**: Share computational workflows where possible
 - **Geometric Coordination**: Optimize agent positioning and communication
 - **Continuous Learning**: Enable cross-agent knowledge sharing
+- **Complexity Awareness**: Question every technology decision for appropriateness
 
 ---
 

@@ -1,0 +1,1762 @@
+{
+  "success": true,
+  "detailedOutline": {
+    "articleTitle": "Dental 3D Printing Materials: A Complete Comparison Guide",
+    "totalWordCount": 4000,
+    "totalHeadings": 32,
+    "estimatedReadingTime": 16,
+    "introduction": {
+      "wordCount": 320,
+      "sections": [
+        {
+          "type": "hook",
+          "wordCount": 80,
+          "instructions": "Start with a compelling statistic, question, or statement that immediately captures attention and relates to the main topic."
+        },
+        {
+          "type": "context",
+          "wordCount": 112,
+          "instructions": "Provide background context about the topic, explaining why it matters and what challenges or opportunities it addresses."
+        },
+        {
+          "type": "preview",
+          "wordCount": 80,
+          "instructions": "Preview what the reader will learn, including key takeaways and benefits they will gain from reading."
+        },
+        {
+          "type": "keyword_integration",
+          "wordCount": 48,
+          "instructions": "Naturally integrate the primary keyword \"target keyword\" within the first 100 words for SEO optimization."
+        }
+      ]
+    },
+    "mainSections": [
+      {
+        "sectionNumber": 1,
+        "h2": "Understanding the Fundamentals",
+        "wordCount": 422,
+        "keywordFocus": "biocompatible dental resin",
+        "contentInstructions": {
+          "contentFocus": "Provide foundational knowledge and key definitions",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Core Components",
+            "wordCount": 140,
+            "keywordVariation": "biocompatible dental resin",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Getting Started",
+            "wordCount": 140,
+            "keywordVariation": "biocompatible dental resin benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Expert Tips",
+            "wordCount": 140,
+            "keywordVariation": "biocompatible dental resin implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 1
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 2,
+        "h2": "Key Components and Features",
+        "wordCount": 409,
+        "keywordFocus": "dental printing resin",
+        "contentInstructions": {
+          "contentFocus": "Detail specific features, components, or characteristics",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Essential Features",
+            "wordCount": 136,
+            "keywordVariation": "dental printing resin",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Implementation Process",
+            "wordCount": 136,
+            "keywordVariation": "dental printing resin benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Best Practices",
+            "wordCount": 136,
+            "keywordVariation": "dental printing resin implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 1
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 3,
+        "h2": "Dental Implementation Strategies",
+        "wordCount": 420,
+        "keywordFocus": "dental 3d printing material types",
+        "contentInstructions": {
+          "contentFocus": "Explain practical implementation steps and strategies",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Core Components",
+            "wordCount": 140,
+            "keywordVariation": "dental 3d printing material types",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Setup Requirements",
+            "wordCount": 140,
+            "keywordVariation": "dental 3d printing material types benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Advanced Strategies",
+            "wordCount": 140,
+            "keywordVariation": "dental 3d printing material types implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 1
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 4,
+        "h2": "Best Practices and Guidelines",
+        "wordCount": 412,
+        "keywordFocus": "biocompatible dental resin",
+        "contentInstructions": {
+          "contentFocus": "Share proven best practices and industry standards",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Key Benefits and Advantages",
+            "wordCount": 137,
+            "keywordVariation": "biocompatible dental resin",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Getting Started",
+            "wordCount": 137,
+            "keywordVariation": "biocompatible dental resin benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Expert Tips",
+            "wordCount": 137,
+            "keywordVariation": "biocompatible dental resin implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 5,
+        "h2": "Common Challenges and Solutions",
+        "wordCount": 428,
+        "keywordFocus": "dental printing resin",
+        "contentInstructions": {
+          "contentFocus": "Address common challenges with specific solutions",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Primary Characteristics",
+            "wordCount": 142,
+            "keywordVariation": "dental printing resin",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Configuration Steps",
+            "wordCount": 142,
+            "keywordVariation": "dental printing resin benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Optimization Techniques",
+            "wordCount": 142,
+            "keywordVariation": "dental printing resin implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 6,
+        "h2": "Advanced Techniques",
+        "wordCount": 372,
+        "keywordFocus": "dental 3d printing material types",
+        "contentInstructions": {
+          "contentFocus": "Cover advanced concepts and techniques",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Optional",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Core Components",
+            "wordCount": 186,
+            "keywordVariation": "dental 3d printing material types",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Use 2-3 paragraphs with clear topic sentences",
+              "elements": [
+                "Use bullet points for key takeaways"
+              ]
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Setup Requirements",
+            "wordCount": 186,
+            "keywordVariation": "dental 3d printing material types benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Use 2-3 paragraphs with clear topic sentences",
+              "elements": [
+                "Use bullet points for key takeaways"
+              ]
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 1,
+          "externalLinks": 0
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 7,
+        "h2": "Industry Applications",
+        "wordCount": 414,
+        "keywordFocus": "biocompatible dental resin",
+        "contentInstructions": {
+          "contentFocus": "Explore real-world applications and use cases",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Core Components",
+            "wordCount": 138,
+            "keywordVariation": "biocompatible dental resin",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Implementation Process",
+            "wordCount": 138,
+            "keywordVariation": "biocompatible dental resin benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Optimization Techniques",
+            "wordCount": 138,
+            "keywordVariation": "biocompatible dental resin implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 8,
+        "h2": "Future Trends and Developments",
+        "wordCount": 404,
+        "keywordFocus": "dental printing resin",
+        "contentInstructions": {
+          "contentFocus": "Discuss future trends and emerging developments",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "h3Subsections": [
+          {
+            "h3Number": 1,
+            "heading": "Core Components",
+            "wordCount": 134,
+            "keywordVariation": "dental printing resin",
+            "contentInstructions": {
+              "contentFocus": "Explain the most important aspects and benefits",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 2,
+            "heading": "Setup Requirements",
+            "wordCount": 134,
+            "keywordVariation": "dental printing resin benefits",
+            "contentInstructions": {
+              "contentFocus": "Detail the step-by-step process or methodology",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          },
+          {
+            "h3Number": 3,
+            "heading": "Advanced Strategies",
+            "wordCount": 134,
+            "keywordVariation": "dental printing resin implementation",
+            "contentInstructions": {
+              "contentFocus": "Share proven strategies and optimization techniques",
+              "depth": "Cover key points concisely",
+              "structure": "Single focused paragraph",
+              "elements": []
+            },
+            "h4Subsections": []
+          }
+        ],
+        "seoOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formatting": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      }
+    ],
+    "conclusion": {
+      "wordCount": 240,
+      "sections": [
+        {
+          "type": "summary",
+          "wordCount": 96,
+          "instructions": "Summarize the key points covered in the article, reinforcing main takeaways and benefits."
+        },
+        {
+          "type": "actionable_next_steps",
+          "wordCount": 84,
+          "instructions": "Provide specific, actionable next steps readers can take to implement the information."
+        },
+        {
+          "type": "call_to_action",
+          "wordCount": 60,
+          "instructions": "Include compelling call-to-action aligned with business goals and user journey stage."
+        }
+      ],
+      "seoOptimization": {
+        "keywordIncluding": "Include primary keyword \"target keyword\" once in conclusion",
+        "internalLinking": "Link to 1-2 related articles or resources",
+        "socialSharing": "Include social sharing encouragement"
+      }
+    },
+    "seoGuidelines": {
+      "keywordOptimization": {
+        "primary": {
+          "keyword": "",
+          "density": "1.0-1.5%",
+          "placement": [
+            "Title (H1)",
+            "First paragraph within first 100 words",
+            "2-3 H2 headings",
+            "Conclusion paragraph",
+            "Meta description",
+            "URL slug"
+          ],
+          "variations": []
+        },
+        "secondary": [
+          {
+            "keyword": "biocompatible dental resin",
+            "density": "0.5-1.0%",
+            "placement": "Use in H2/H3 headings and naturally throughout section 1",
+            "priority": "high"
+          },
+          {
+            "keyword": "dental printing resin",
+            "density": "0.5-1.0%",
+            "placement": "Use in H2/H3 headings and naturally throughout section 2",
+            "priority": "high"
+          },
+          {
+            "keyword": "dental 3d printing material types",
+            "density": "0.5-1.0%",
+            "placement": "Use in H2/H3 headings and naturally throughout section 3",
+            "priority": "high"
+          }
+        ],
+        "longTail": [
+          "biocompatible dental resin vs ",
+          "biocompatible dental resin implementation guide",
+          "dental printing resin vs ",
+          "dental printing resin implementation guide",
+          "dental 3d printing material types vs ",
+          "dental 3d printing material types implementation guide"
+        ]
+      },
+      "onPageSEO": {
+        "titleTag": {
+          "recommended": "Dental 3D Printing Materials: A Complete Comparison Guide",
+          "length": "50-60 characters for optimal display",
+          "requirements": [
+            "Include primary keyword near the beginning",
+            "Make it compelling and click-worthy",
+            "Avoid keyword stuffing",
+            "Match search intent"
+          ]
+        },
+        "metaDescription": {
+          "template": "Discover  with our comprehensive guide. Learn [key benefit 1], [key benefit 2], and [key benefit 3]. Get expert insights and practical tips.",
+          "length": "150-160 characters for optimal display",
+          "requirements": [
+            "Include primary keyword naturally",
+            "Highlight key benefits or takeaways",
+            "Include a call-to-action",
+            "Make it compelling and informative"
+          ]
+        },
+        "headerStructure": {
+          "h1": "Single H1 tag for article title",
+          "h2Count": 8,
+          "h3Count": 23,
+          "h4Count": 0,
+          "hierarchy": "Proper H1 > H2 > H3 > H4 hierarchy maintained",
+          "keywordIntegration": "Keywords integrated in 30-50% of headings"
+        },
+        "internalLinking": {
+          "strategy": "Hub and spoke model with contextual linking",
+          "frequency": "11 internal links total",
+          "placement": [
+            "Introduction - 1 contextual link to related content",
+            "Main sections - 1 link per 300-400 words",
+            "Conclusion - 1-2 links to next steps or related resources"
+          ],
+          "anchorTextGuidelines": [
+            "70% descriptive anchor text",
+            "20% partial keyword matches",
+            "10% branded anchors"
+          ],
+          "linkTypes": [
+            "Related topic deep dives",
+            "Tool or resource pages",
+            "Case studies and examples",
+            "Implementation guides"
+          ]
+        },
+        "externalLinking": {
+          "frequency": "2-3 external links",
+          "sources": [
+            "Industry research and studies",
+            "Government or educational institutions",
+            "Recognized industry authorities",
+            "Statistical databases"
+          ],
+          "placement": "Support claims with authoritative external sources",
+          "guidelines": [
+            "Open in new tab/window",
+            "Use authoritative, relevant sources",
+            "Verify links are functional",
+            "Include nofollow for commercial links"
+          ]
+        },
+        "schemaMarkup": {
+          "primarySchema": "Article + HowTo schema",
+          "additionalSchema": [
+            "Breadcrumb navigation",
+            "FAQ schema for Q&A sections",
+            "Person schema for author information"
+          ],
+          "implementation": "Add JSON-LD structured data to page head"
+        }
+      },
+      "featuredSnippets": {
+        "opportunities": [],
+        "optimization": {
+          "definitionBoxes": "Start relevant sections with clear, concise definitions (40-60 words)",
+          "listSnippets": "Format key points as numbered or bulleted lists",
+          "tableSnippets": "Present comparison data in properly formatted tables",
+          "paragraphSnippets": "Answer questions directly in 40-50 word paragraphs",
+          "placement": "Position snippet-optimized content early in relevant sections"
+        }
+      },
+      "technicalSEO": {
+        "urlStructure": {
+          "recommended": "dental-3d-printing-materials-a-complete-comparison-guide",
+          "requirements": [
+            "Use lowercase letters",
+            "Separate words with hyphens",
+            "Include primary keyword",
+            "Keep under 60 characters",
+            "Avoid special characters"
+          ]
+        },
+        "imageOptimization": {
+          "quantity": "5 optimized images minimum",
+          "altTags": "Descriptive alt text with keyword variations (125 characters max)",
+          "fileNames": "Descriptive file names with keywords and hyphens",
+          "compression": "Optimize for web - target <100KB per image",
+          "formats": "Use WebP format when possible, JPEG/PNG as fallback",
+          "captions": "Include captions for complex images or diagrams"
+        },
+        "pageSpeed": "Optimize for Core Web Vitals - target LCP <2.5s, FID <100ms, CLS <0.1",
+        "mobileOptimization": "Ensure mobile-first design with responsive formatting"
+      }
+    },
+    "contentInstructions": {
+      "overallGuidelines": {
+        "tone": "Professional, authoritative, and trustworthy",
+        "readabilityLevel": "Grade 10-12 (College level)",
+        "expertiseIntegration": {
+          "expertQuotes": "1-2 expert perspectives",
+          "industryData": "Include relevant statistics and research data",
+          "caseStudies": "Provide practical examples",
+          "authorityBuilding": "Demonstrate deep knowledge through specific details and nuanced understanding"
+        },
+        "multimediaIntegration": {
+          "heroImage": "High-quality featured image related to main topic",
+          "sectionImages": "Include 4 relevant images throughout content",
+          "infographics": "Optional",
+          "videos": "Optional",
+          "charts": "Include data visualizations for statistics and comparisons",
+          "screenshots": "Include step-by-step screenshots if applicable"
+        }
+      },
+      "sectionSpecificInstructions": [
+        {
+          "sectionNumber": 1,
+          "writingInstructions": {
+            "contentFocus": "Provide foundational knowledge and key definitions",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 1
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 2,
+          "writingInstructions": {
+            "contentFocus": "Detail specific features, components, or characteristics",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 1
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 3,
+          "writingInstructions": {
+            "contentFocus": "Explain practical implementation steps and strategies",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 1
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 4,
+          "writingInstructions": {
+            "contentFocus": "Share proven best practices and industry standards",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 0
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 5,
+          "writingInstructions": {
+            "contentFocus": "Address common challenges with specific solutions",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 0
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 6,
+          "writingInstructions": {
+            "contentFocus": "Cover advanced concepts and techniques",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Optional",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 1,
+            "externalLinks": 0
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 7,
+          "writingInstructions": {
+            "contentFocus": "Explore real-world applications and use cases",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 0
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        },
+        {
+          "sectionNumber": 8,
+          "writingInstructions": {
+            "contentFocus": "Discuss future trends and emerging developments",
+            "writingStyle": {
+              "tone": "Professional and authoritative",
+              "technicalLevel": "High - use industry terminology",
+              "examples": "Include clinical applications and case scenarios",
+              "readabilityTarget": "Grade 10-12",
+              "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+              "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+            },
+            "structureRequirements": {
+              "paragraphs": 3,
+              "subheadings": "Include H3 subheadings every 200-300 words",
+              "bulletPoints": "Use bullet points for lists of 3+ items",
+              "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+              "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+            },
+            "expertiseLevel": {
+              "research": "Reference 1-2 reliable sources",
+              "expertise": "Include industry best practices",
+              "examples": "Provide practical examples and scenarios",
+              "technicality": "Balance technical accuracy with accessibility"
+            }
+          },
+          "keywordOptimization": {
+            "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+            "internalLinks": 2,
+            "externalLinks": 0
+          },
+          "formattingRequirements": {
+            "bulletPoints": "Optional",
+            "images": 0,
+            "callouts": "Optional"
+          }
+        }
+      ]
+    },
+    "complexityScore": 100,
+    "seoScore": 80,
+    "depthScore": 60,
+    "clarityScore": 96,
+    "writingTimeEstimate": 8,
+    "requiredResources": {
+      "writer": {
+        "level": "Experienced professional writer",
+        "estimatedHours": 7,
+        "specializations": [
+          "Industry expertise",
+          "Technical writing"
+        ]
+      },
+      "research": {
+        "sources": "3-5 reliable sources",
+        "expertInterviews": "Optional",
+        "timeRequired": "4 hours for research"
+      },
+      "multimedia": {
+        "images": "5 custom images",
+        "graphics": "Optional",
+        "videos": "Optional"
+      },
+      "editing": {
+        "copyEditing": "Professional copy editing recommended",
+        "seoReview": "SEO specialist review for optimization",
+        "factChecking": "Standard fact-checking"
+      }
+    },
+    "qualityCheckpoints": {
+      "preWriting": [
+        "Keyword research validation",
+        "Competitor content analysis",
+        "Target audience confirmation",
+        "Content structure approval"
+      ],
+      "duringWriting": [
+        "Section-by-section word count tracking",
+        "Keyword density monitoring",
+        "Internal linking implementation",
+        "Readability score checking"
+      ],
+      "postWriting": [
+        "Complete SEO audit",
+        "Fact-checking verification",
+        "Expert review (if applicable)",
+        "Final proofread and editing",
+        "Technical SEO validation"
+      ],
+      "prePublication": [
+        "Meta data optimization",
+        "Image optimization check",
+        "Internal/external link verification",
+        "Mobile responsiveness test",
+        "Core Web Vitals assessment"
+      ]
+    },
+    "createdAt": "2025-08-27T07:30:59.536Z",
+    "agentVersion": "1.0.0",
+    "optimizationLevel": "comprehensive"
+  },
+  "contentInstructions": {
+    "overallGuidelines": {
+      "tone": "Professional, authoritative, and trustworthy",
+      "readabilityLevel": "Grade 10-12 (College level)",
+      "expertiseIntegration": {
+        "expertQuotes": "1-2 expert perspectives",
+        "industryData": "Include relevant statistics and research data",
+        "caseStudies": "Provide practical examples",
+        "authorityBuilding": "Demonstrate deep knowledge through specific details and nuanced understanding"
+      },
+      "multimediaIntegration": {
+        "heroImage": "High-quality featured image related to main topic",
+        "sectionImages": "Include 4 relevant images throughout content",
+        "infographics": "Optional",
+        "videos": "Optional",
+        "charts": "Include data visualizations for statistics and comparisons",
+        "screenshots": "Include step-by-step screenshots if applicable"
+      }
+    },
+    "sectionSpecificInstructions": [
+      {
+        "sectionNumber": 1,
+        "writingInstructions": {
+          "contentFocus": "Provide foundational knowledge and key definitions",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 1
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 2,
+        "writingInstructions": {
+          "contentFocus": "Detail specific features, components, or characteristics",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 1
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 3,
+        "writingInstructions": {
+          "contentFocus": "Explain practical implementation steps and strategies",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 1
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 4,
+        "writingInstructions": {
+          "contentFocus": "Share proven best practices and industry standards",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 5,
+        "writingInstructions": {
+          "contentFocus": "Address common challenges with specific solutions",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 6,
+        "writingInstructions": {
+          "contentFocus": "Cover advanced concepts and techniques",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Optional",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 1,
+          "externalLinks": 0
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 7,
+        "writingInstructions": {
+          "contentFocus": "Explore real-world applications and use cases",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      },
+      {
+        "sectionNumber": 8,
+        "writingInstructions": {
+          "contentFocus": "Discuss future trends and emerging developments",
+          "writingStyle": {
+            "tone": "Professional and authoritative",
+            "technicalLevel": "High - use industry terminology",
+            "examples": "Include clinical applications and case scenarios",
+            "readabilityTarget": "Grade 10-12",
+            "sentenceLength": "Mix short (10-15 words) and medium (16-25 words) sentences",
+            "paragraphLength": "3-5 sentences per paragraph for optimal readability"
+          },
+          "structureRequirements": {
+            "paragraphs": 3,
+            "subheadings": "Include H3 subheadings every 200-300 words",
+            "bulletPoints": "Use bullet points for lists of 3+ items",
+            "transitionWords": "Use transitional phrases to connect ideas between paragraphs",
+            "whiteSpace": "Ensure adequate white space with short paragraphs and subheadings"
+          },
+          "expertiseLevel": {
+            "research": "Reference 1-2 reliable sources",
+            "expertise": "Include industry best practices",
+            "examples": "Provide practical examples and scenarios",
+            "technicality": "Balance technical accuracy with accessibility"
+          }
+        },
+        "keywordOptimization": {
+          "keywordPlacement": "Include target keyword in H2 heading and first paragraph",
+          "internalLinks": 2,
+          "externalLinks": 0
+        },
+        "formattingRequirements": {
+          "bulletPoints": "Optional",
+          "images": 0,
+          "callouts": "Optional"
+        }
+      }
+    ]
+  },
+  "seoGuidelines": {
+    "keywordOptimization": {
+      "primary": {
+        "keyword": "",
+        "density": "1.0-1.5%",
+        "placement": [
+          "Title (H1)",
+          "First paragraph within first 100 words",
+          "2-3 H2 headings",
+          "Conclusion paragraph",
+          "Meta description",
+          "URL slug"
+        ],
+        "variations": []
+      },
+      "secondary": [
+        {
+          "keyword": "biocompatible dental resin",
+          "density": "0.5-1.0%",
+          "placement": "Use in H2/H3 headings and naturally throughout section 1",
+          "priority": "high"
+        },
+        {
+          "keyword": "dental printing resin",
+          "density": "0.5-1.0%",
+          "placement": "Use in H2/H3 headings and naturally throughout section 2",
+          "priority": "high"
+        },
+        {
+          "keyword": "dental 3d printing material types",
+          "density": "0.5-1.0%",
+          "placement": "Use in H2/H3 headings and naturally throughout section 3",
+          "priority": "high"
+        }
+      ],
+      "longTail": [
+        "biocompatible dental resin vs ",
+        "biocompatible dental resin implementation guide",
+        "dental printing resin vs ",
+        "dental printing resin implementation guide",
+        "dental 3d printing material types vs ",
+        "dental 3d printing material types implementation guide"
+      ]
+    },
+    "onPageSEO": {
+      "titleTag": {
+        "recommended": "Dental 3D Printing Materials: A Complete Comparison Guide",
+        "length": "50-60 characters for optimal display",
+        "requirements": [
+          "Include primary keyword near the beginning",
+          "Make it compelling and click-worthy",
+          "Avoid keyword stuffing",
+          "Match search intent"
+        ]
+      },
+      "metaDescription": {
+        "template": "Discover  with our comprehensive guide. Learn [key benefit 1], [key benefit 2], and [key benefit 3]. Get expert insights and practical tips.",
+        "length": "150-160 characters for optimal display",
+        "requirements": [
+          "Include primary keyword naturally",
+          "Highlight key benefits or takeaways",
+          "Include a call-to-action",
+          "Make it compelling and informative"
+        ]
+      },
+      "headerStructure": {
+        "h1": "Single H1 tag for article title",
+        "h2Count": 8,
+        "h3Count": 23,
+        "h4Count": 0,
+        "hierarchy": "Proper H1 > H2 > H3 > H4 hierarchy maintained",
+        "keywordIntegration": "Keywords integrated in 30-50% of headings"
+      },
+      "internalLinking": {
+        "strategy": "Hub and spoke model with contextual linking",
+        "frequency": "11 internal links total",
+        "placement": [
+          "Introduction - 1 contextual link to related content",
+          "Main sections - 1 link per 300-400 words",
+          "Conclusion - 1-2 links to next steps or related resources"
+        ],
+        "anchorTextGuidelines": [
+          "70% descriptive anchor text",
+          "20% partial keyword matches",
+          "10% branded anchors"
+        ],
+        "linkTypes": [
+          "Related topic deep dives",
+          "Tool or resource pages",
+          "Case studies and examples",
+          "Implementation guides"
+        ]
+      },
+      "externalLinking": {
+        "frequency": "2-3 external links",
+        "sources": [
+          "Industry research and studies",
+          "Government or educational institutions",
+          "Recognized industry authorities",
+          "Statistical databases"
+        ],
+        "placement": "Support claims with authoritative external sources",
+        "guidelines": [
+          "Open in new tab/window",
+          "Use authoritative, relevant sources",
+          "Verify links are functional",
+          "Include nofollow for commercial links"
+        ]
+      },
+      "schemaMarkup": {
+        "primarySchema": "Article + HowTo schema",
+        "additionalSchema": [
+          "Breadcrumb navigation",
+          "FAQ schema for Q&A sections",
+          "Person schema for author information"
+        ],
+        "implementation": "Add JSON-LD structured data to page head"
+      }
+    },
+    "featuredSnippets": {
+      "opportunities": [],
+      "optimization": {
+        "definitionBoxes": "Start relevant sections with clear, concise definitions (40-60 words)",
+        "listSnippets": "Format key points as numbered or bulleted lists",
+        "tableSnippets": "Present comparison data in properly formatted tables",
+        "paragraphSnippets": "Answer questions directly in 40-50 word paragraphs",
+        "placement": "Position snippet-optimized content early in relevant sections"
+      }
+    },
+    "technicalSEO": {
+      "urlStructure": {
+        "recommended": "dental-3d-printing-materials-a-complete-comparison-guide",
+        "requirements": [
+          "Use lowercase letters",
+          "Separate words with hyphens",
+          "Include primary keyword",
+          "Keep under 60 characters",
+          "Avoid special characters"
+        ]
+      },
+      "imageOptimization": {
+        "quantity": "5 optimized images minimum",
+        "altTags": "Descriptive alt text with keyword variations (125 characters max)",
+        "fileNames": "Descriptive file names with keywords and hyphens",
+        "compression": "Optimize for web - target <100KB per image",
+        "formats": "Use WebP format when possible, JPEG/PNG as fallback",
+        "captions": "Include captions for complex images or diagrams"
+      },
+      "pageSpeed": "Optimize for Core Web Vitals - target LCP <2.5s, FID <100ms, CLS <0.1",
+      "mobileOptimization": "Ensure mobile-first design with responsive formatting"
+    }
+  },
+  "wordCountBreakdown": {
+    "totalWordCount": 4000,
+    "introduction": 320,
+    "conclusion": 240,
+    "mainSections": 8,
+    "wordsPerSection": 430,
+    "sectionDistribution": [
+      {
+        "sectionIndex": 1,
+        "estimatedWords": 422,
+        "priority": "high"
+      },
+      {
+        "sectionIndex": 2,
+        "estimatedWords": 409,
+        "priority": "high"
+      },
+      {
+        "sectionIndex": 3,
+        "estimatedWords": 420,
+        "priority": "high"
+      },
+      {
+        "sectionIndex": 4,
+        "estimatedWords": 412,
+        "priority": "medium"
+      },
+      {
+        "sectionIndex": 5,
+        "estimatedWords": 428,
+        "priority": "medium"
+      },
+      {
+        "sectionIndex": 6,
+        "estimatedWords": 372,
+        "priority": "medium"
+      },
+      {
+        "sectionIndex": 7,
+        "estimatedWords": 414,
+        "priority": "standard"
+      },
+      {
+        "sectionIndex": 8,
+        "estimatedWords": 404,
+        "priority": "standard"
+      }
+    ]
+  },
+  "qualityMetrics": {
+    "structuralComplexity": 100,
+    "seoOptimization": 80,
+    "contentDepth": 60,
+    "implementationClarity": 96
+  },
+  "performanceMetrics": {
+    "processingTime": 1,
+    "totalHeadings": 32
+  },
+  "agentId": "article-outline-specialist",
+  "timestamp": "2025-08-27T07:30:59.536Z"
+}
