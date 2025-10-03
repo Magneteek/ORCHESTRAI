@@ -18,7 +18,11 @@
     "mcp:status": "curl -s http://localhost:5501/mcp/status | jq",
     "mcp:start": "curl -X POST http://localhost:5501/mcp/start-all | jq",
     "mcp:notion": "curl -X POST http://localhost:5501/mcp/start/notion | jq",
-    "mcp:logs": "curl -s http://localhost:5501/mcp/logs | jq"
+    "mcp:logs": "curl -s http://localhost:5501/mcp/logs | jq",
+    "git:setup-domains": ".github/scripts/setup-domain-branches.sh",
+    "git:setup-worktrees": ".github/scripts/setup-worktrees.sh",
+    "git:sparse-checkout": ".github/scripts/sparse-checkout-domain.sh",
+    "git:workflow-help": "cat .github/GIT-WORKFLOW.md"
   },
   "keywords": [
     "ai-agents",
