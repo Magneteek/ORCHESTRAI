@@ -45,6 +45,16 @@ class TemplateRecommendationEngine extends EventEmitter {
         'system-monitoring': ['code-patterns/deployment-configs'],
         'performance-optimization': ['code-patterns/api-patterns'],
         'documentation': ['content-templates/copywriting-frameworks']
+      },
+      'copywriting': {
+        'direct-response-copy': ['content-templates/copywriting-frameworks/direct-response'],
+        'cold-email-sequences': ['content-templates/copywriting-frameworks/cold-email'],
+        'nurture-email-sequences': ['content-templates/copywriting-frameworks/nurture-email'],
+        'sales-funnel-copy': ['content-templates/copywriting-frameworks/sales-funnel'],
+        'followup-automation': ['content-templates/copywriting-frameworks/follow-up-automation'],
+        'conversion-optimization': ['content-templates/copywriting-frameworks/direct-response', 'content-templates/copywriting-frameworks/sales-funnel'],
+        'email-marketing': ['content-templates/copywriting-frameworks/cold-email', 'content-templates/copywriting-frameworks/nurture-email'],
+        'personalization-at-scale': ['content-templates/copywriting-frameworks/cold-email', 'content-templates/copywriting-frameworks/follow-up-automation']
       }
     };
     

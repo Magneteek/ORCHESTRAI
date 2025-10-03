@@ -1,0 +1,175 @@
+{
+  "industry": "ecommerce",
+  "name": "E-commerce Marketing Framework",
+  "description": "Comprehensive templates for online stores, digital products, subscription services, and e-commerce brands",
+  "version": "1.0.0",
+  "templates": {
+    "customer_acquisition": {
+      "pain_points": [
+        "Uncertainty about product quality when buying online",
+        "Concerns about payment security and data privacy",
+        "Shipping costs and delivery time expectations",
+        "Return and refund policy complications",
+        "Overwhelming product choices and decision fatigue",
+        "Previous negative online shopping experiences",
+        "Trust issues with unfamiliar online brands"
+      ],
+      "value_propositions": [
+        {
+          "type": "quality_guarantee",
+          "template": "Premium quality [product category] with [guarantee period] satisfaction guarantee - love it or return it free",
+          "use_case": "Quality-concerned customers"
+        },
+        {
+          "type": "convenience_focused",
+          "template": "Skip the store hassle - get [product category] delivered to your door in [timeframe] with free shipping",
+          "use_case": "Convenience-seeking customers"
+        },
+        {
+          "type": "value_proposition",
+          "template": "Get premium [product category] at direct-to-consumer prices - no middleman markup",
+          "use_case": "Value-conscious shoppers"
+        },
+        {
+          "type": "expert_curation",
+          "template": "Expertly curated [product category] collection - we test everything so you don't have to",
+          "use_case": "Choice-overwhelmed customers"
+        }
+      ]
+    },
+    "product_descriptions": {
+      "physical_products": {
+        "template": "[Product name] solves [customer problem] with [key benefits]. Made from [materials/features], this [product type] delivers [specific outcomes] that [target audience] love. Perfect for [use cases].",
+        "psychological_triggers": ["problem_solution", "benefit_focused", "social_proof"],
+        "cta": "Add to cart - Free shipping over $[amount]"
+      },
+      "digital_products": {
+        "template": "Get instant access to [product name] and [primary benefit] starting today. This [product type] includes [key features] and helps you [desired outcome] without [common struggle].",
+        "psychological_triggers": ["instant_gratification", "outcome_focused", "struggle_elimination"],
+        "cta": "Download instantly for $[price]"
+      },
+      "subscription_products": {
+        "template": "Never run out of [product category] again. Get [product name] delivered [frequency] with [customization options] and save [percentage]% compared to one-time purchases.",
+        "psychological_triggers": ["convenience", "savings", "customization"],
+        "cta": "Start your subscription today"
+      }
+    },
+    "customer_communication": {
+      "abandoned_cart_sequence": [
+        {
+          "timing": "1_hour",
+          "template": "Hi [Customer Name], you left [product name] in your cart. Complete your order in the next [timeframe] and get free shipping!"
+        },
+        {
+          "timing": "24_hours",
+          "template": "Still thinking about [product name], [Customer Name]? Here's what other customers are saying: [testimonial]. 10% off if you complete your order today."
+        },
+        {
+          "timing": "72_hours",
+          "template": "Last chance, [Customer Name]! Your cart expires soon. Don't miss out on [product name] - only [quantity] left in stock."
+        }
+      ],
+      "post_purchase_sequence": [
+        {
+          "timing": "order_confirmation",
+          "template": "Order confirmed, [Customer Name]! Your [product name] will arrive [delivery date]. Track your order: [tracking link]"
+        },
+        {
+          "timing": "shipped",
+          "template": "Great news, [Customer Name]! Your [product name] is on its way and will arrive [delivery date]. Here's how to get the most from your purchase: [usage tips]"
+        },
+        {
+          "timing": "delivered",
+          "template": "Your [product name] should have arrived, [Customer Name]! How do you like it? Leave a review and get 15% off your next order."
+        }
+      ]
+    },
+    "educational_content": {
+      "product_guides": [
+        "Complete buyer's guide to [product category]: What to look for",
+        "How to choose the right [product type] for your [use case]",
+        "[Product category] care and maintenance: Extend lifespan",
+        "Common [product category] mistakes and how to avoid them",
+        "[Product] vs [competitor product]: Detailed comparison",
+        "Getting the most from your [product]: Tips and tricks"
+      ],
+      "industry_insights": [
+        "Latest trends in [industry]: What's driving consumer behavior",
+        "Behind the scenes: How we source and create [product category]",
+        "Sustainability in [industry]: Our commitment and practices",
+        "Customer spotlight: How [customer type] uses [product category]",
+        "Innovation showcase: New features and improvements to [product]",
+        "Expert interview: [Industry expert] discusses [relevant topic]"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Customer reviews and ratings display",
+      "Secure payment badges and SSL certificates",
+      "Clear return and refund policy",
+      "Customer service contact information and hours",
+      "Product guarantee and warranty information",
+      "Free shipping thresholds and delivery promises",
+      "Social media presence and customer engagement"
+    ],
+    "social_proof_types": [
+      "Product reviews with photos and detailed feedback",
+      "Customer testimonials focusing on results and satisfaction",
+      "User-generated content from social media",
+      "Sales numbers and popularity indicators",
+      "Media mentions and press coverage",
+      "Awards and certifications for products or company"
+    ],
+    "urgency_creators": [
+      "Limited-time sales and promotional pricing",
+      "Low stock notifications and inventory counters",
+      "Flash sales with countdown timers",
+      "Seasonal promotions and holiday deadlines",
+      "Bundle deals with limited availability",
+      "Early access for newsletter subscribers"
+    ]
+  },
+  "psychological_frameworks": {
+    "customer_journey_stages": [
+      {
+        "stage": "awareness",
+        "mindset": "I have a problem/need but don't know the solution",
+        "messaging": "Problem identification and solution education",
+        "cta": "Learn more about [solution category]"
+      },
+      {
+        "stage": "consideration",
+        "mindset": "I know what I need but comparing options",
+        "messaging": "Product differentiation and value demonstration",
+        "cta": "Compare products and find your perfect match"
+      },
+      {
+        "stage": "purchase",
+        "mindset": "I'm ready to buy but need final reassurance",
+        "messaging": "Risk reversal and purchase facilitation",
+        "cta": "Order now with confidence"
+      },
+      {
+        "stage": "retention",
+        "mindset": "I bought and want to maximize value from purchase",
+        "messaging": "Usage optimization and loyalty building",
+        "cta": "Unlock more value with [complementary product/service]"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "conversion_metrics": {
+      "average_conversion_rate": "2-4%",
+      "cart_abandonment_rate": "60-70%",
+      "email_recovery_rate": "15-25%",
+      "repeat_purchase_rate": "20-30%"
+    },
+    "engagement_metrics": {
+      "email_open_rate": "20-30%",
+      "product_page_time": "2-4_minutes",
+      "review_participation": "5-15%",
+      "social_sharing_rate": "1-3%"
+    }
+  }
+}

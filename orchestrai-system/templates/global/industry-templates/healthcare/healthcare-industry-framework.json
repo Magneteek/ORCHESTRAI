@@ -1,0 +1,181 @@
+{
+  "industry": "healthcare",
+  "name": "Healthcare Marketing Framework",
+  "description": "Comprehensive templates for medical practices, healthcare providers, wellness centers, and health services",
+  "version": "1.0.0",
+  "templates": {
+    "patient_acquisition": {
+      "pain_points": [
+        "Fear and anxiety about medical procedures and diagnoses",
+        "Confusion about insurance coverage and medical billing",
+        "Long wait times for appointments and treatment",
+        "Difficulty understanding medical terminology and options",
+        "Previous negative experiences with healthcare providers",
+        "Concerns about cost and unexpected medical expenses",
+        "Lack of personalized attention and rushed consultations"
+      ],
+      "value_propositions": [
+        {
+          "type": "compassionate_care",
+          "template": "Experience healthcare that puts you first - compassionate, personalized care that addresses your concerns and respects your time",
+          "use_case": "Patient-centered positioning"
+        },
+        {
+          "type": "expertise_focused",
+          "template": "Advanced [specialty] care with [years] years of experience and the latest treatment technologies for optimal outcomes",
+          "use_case": "Specialized medical practices"
+        },
+        {
+          "type": "convenience_focused",
+          "template": "Healthcare that fits your schedule - same-day appointments, extended hours, and multiple convenient locations",
+          "use_case": "Busy professionals and families"
+        },
+        {
+          "type": "prevention_focused",
+          "template": "Stay healthy with comprehensive preventive care, early detection, and personalized wellness plans",
+          "use_case": "Wellness and prevention services"
+        }
+      ]
+    },
+    "service_descriptions": {
+      "primary_care": {
+        "template": "Comprehensive primary care that builds lasting relationships, focuses on prevention, and coordinates all aspects of your health with personalized attention and thorough care.",
+        "psychological_triggers": ["relationship_building", "prevention", "comprehensive_care"],
+        "cta": "Schedule your wellness visit today"
+      },
+      "specialty_care": {
+        "template": "Expert [specialty] care using advanced diagnostic tools and treatment options, with clear communication about your condition and personalized treatment plans.",
+        "psychological_triggers": ["expertise", "advanced_technology", "personalized_treatment"],
+        "cta": "Consult with our specialists"
+      },
+      "urgent_care": {
+        "template": "Fast, professional care for non-emergency medical needs with shorter wait times, transparent pricing, and quality treatment when you need it most.",
+        "psychological_triggers": ["speed", "transparency", "accessibility"],
+        "cta": "Get care now - no appointment needed"
+      },
+      "preventive_care": {
+        "template": "Proactive health management with comprehensive screenings, vaccinations, and wellness programs designed to keep you healthy and catch issues early.",
+        "psychological_triggers": ["proactive_health", "early_detection", "wellness_focus"],
+        "cta": "Start your wellness journey"
+      },
+      "mental_health": {
+        "template": "Confidential, compassionate mental health support with evidence-based treatments and a safe environment to address your emotional and psychological well-being.",
+        "psychological_triggers": ["confidentiality", "compassion", "safety"],
+        "cta": "Take the first step - schedule confidentially"
+      }
+    },
+    "patient_communication": {
+      "appointment_management": [
+        {
+          "timing": "appointment_confirmation",
+          "template": "Hi [Patient Name], your appointment with Dr. [Doctor Name] is confirmed for [Date] at [Time]. Please arrive 15 minutes early. Call with questions: [Phone]"
+        },
+        {
+          "timing": "pre_appointment_prep",
+          "template": "[Patient Name], your appointment is tomorrow at [Time]. Please bring [required items] and your insurance card. We look forward to seeing you."
+        },
+        {
+          "timing": "post_visit_followup",
+          "template": "Thank you for visiting us today, [Patient Name]. Your test results will be available in [timeframe]. Any questions about your visit? Call us at [Phone]."
+        }
+      ],
+      "care_coordination": [
+        {
+          "timing": "referral_coordination",
+          "template": "[Patient Name], we've scheduled your specialist referral with Dr. [Specialist Name] for [Date]. They have your medical records and will coordinate with our office."
+        },
+        {
+          "timing": "test_results",
+          "template": "[Patient Name], your [test type] results are ready. Dr. [Doctor Name] will discuss these with you at your follow-up appointment on [Date]. No immediate concerns."
+        }
+      ]
+    },
+    "educational_content": {
+      "health_information": [
+        "Understanding [condition]: Symptoms, causes, and treatment options",
+        "Prevention guide: [Health topic] screening and lifestyle recommendations",
+        "Medication management: What you need to know about [medication type]",
+        "Preparing for [procedure/test]: What to expect and how to prepare",
+        "Managing [chronic condition]: Lifestyle changes and treatment compliance",
+        "When to seek immediate care: Warning signs and emergency situations"
+      ],
+      "wellness_content": [
+        "Healthy aging: Preventive care recommendations by age group",
+        "Nutrition and health: Evidence-based dietary guidelines",
+        "Exercise and wellness: Safe physical activity recommendations",
+        "Stress management: Healthy coping strategies and resources",
+        "Sleep hygiene: Improving sleep quality for better health",
+        "Mental health awareness: Recognizing signs and seeking help"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Board certifications and medical credentials",
+      "Years of medical experience and continuing education",
+      "Hospital affiliations and professional memberships",
+      "Patient testimonials focusing on care quality and outcomes",
+      "Advanced medical technology and treatment options",
+      "Insurance acceptance and transparent pricing",
+      "HIPAA compliance and patient privacy protection"
+    ],
+    "social_proof_types": [
+      "Patient success stories and treatment outcomes",
+      "Testimonials emphasizing compassionate care and communication",
+      "Medical awards and recognition from professional organizations",
+      "Community health involvement and educational programs",
+      "Research participation and medical publication contributions",
+      "Peer referrals from other healthcare professionals"
+    ],
+    "urgency_creators": [
+      "Limited appointment availability and booking windows",
+      "Seasonal health campaigns (flu shots, cancer screenings)",
+      "Early detection importance and screening deadlines",
+      "Insurance benefit year-end deadlines",
+      "Specialist referral timing and wait list management",
+      "Health condition progression and treatment timing"
+    ]
+  },
+  "psychological_frameworks": {
+    "patient_journey_stages": [
+      {
+        "stage": "health_concern",
+        "mindset": "I have symptoms/concerns but unsure if I need medical care",
+        "messaging": "Symptom validation and when-to-seek-care guidance",
+        "cta": "Speak with our nurse hotline"
+      },
+      {
+        "stage": "provider_selection",
+        "mindset": "I need medical care but choosing the right provider",
+        "messaging": "Expertise demonstration and compassionate care emphasis",
+        "cta": "Meet our providers and schedule consultation"
+      },
+      {
+        "stage": "treatment_decision",
+        "mindset": "I have a diagnosis and need to choose treatment options",
+        "messaging": "Treatment explanation and shared decision making",
+        "cta": "Discuss your treatment options"
+      },
+      {
+        "stage": "ongoing_care",
+        "mindset": "I'm in treatment and need continued support and monitoring",
+        "messaging": "Care coordination and treatment progress tracking",
+        "cta": "Schedule your follow-up care"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "patient_engagement": {
+      "appointment_show_rate": "85-92%",
+      "patient_satisfaction_score": "90%+",
+      "new_patient_conversion": "70-85%",
+      "patient_retention_rate": "80-90%"
+    },
+    "digital_health_metrics": {
+      "patient_portal_adoption": "60-75%",
+      "online_appointment_booking": "40-60%",
+      "telehealth_utilization": "varies_by_specialty",
+      "health_content_engagement": "5-15%"
+    }
+  }
+}

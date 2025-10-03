@@ -1,11 +1,15 @@
-const { Task } = require('../../../../orchestrai-shared/utils/task-delegation');
+const { Task } = require('../../../orchestrai-shared/utils/task-delegation');
+const VisualDesignStrategist = require('./visual-design-strategist');
 
 class WebVisualDesignAgent {
   constructor(orchestrator, crystallineMemory) {
     this.orchestrator = orchestrator;
     this.crystallineMemory = crystallineMemory;
     this.agentId = 'web-visual-design-agent';
-    this.specialization = 'visual-design-analysis-and-optimization';
+    this.specialization = 'visual-design-implementation-and-optimization';
+    
+    // Initialize Visual Design Strategist for strategic analysis
+    this.visualStrategist = new VisualDesignStrategist(orchestrator, crystallineMemory);
     
     this.designPrinciples = [
       'visual-hierarchy',
@@ -22,6 +26,15 @@ class WebVisualDesignAgent {
       spacing: ['margins', 'padding', 'gaps', 'line-height'],
       components: ['buttons', 'forms', 'cards', 'navigation', 'modals'],
       layout: ['grid-systems', 'breakpoints', 'containers', 'alignment']
+    };
+    
+    // Implementation coordination capabilities
+    this.implementationCapabilities = {
+      magicUI: ['orbiting-circles', 'particles', 'animated-beams', 'ripple-effects'],
+      framerMotion: ['page-transitions', 'hover-animations', 'micro-interactions'],
+      visualEffects: ['glassmorphism', 'neumorphism', 'particle-systems', 'morphing-gradients'],
+      businessIntelligence: ['data-flow-visualizations', 'metric-displays', 'dashboard-enhancements'],
+      industrySpecific: ['fintech-trust-indicators', 'healthcare-calm-animations', 'saas-efficiency-metaphors']
     };
   }
 
@@ -388,12 +401,286 @@ Generate a professional, actionable report with specific recommendations and imp
     }
   }
 
+  // Strategic Visual Enhancement Coordination Methods
+  async coordinateVisualEnhancementStrategy(websiteContext, industry, targetAudience, businessGoals) {
+    try {
+      console.log(`🎨 Coordinating visual enhancement strategy for ${industry} project`);
+      
+      // Generate strategic plan using Visual Design Strategist
+      const strategyResult = await this.visualStrategist.generateVisualEnhancementStrategy(
+        websiteContext, 
+        industry, 
+        targetAudience, 
+        businessGoals
+      );
+      
+      if (!strategyResult.success) {
+        throw new Error(`Strategic planning failed: ${strategyResult.error}`);
+      }
+      
+      // Create implementation plan based on strategy
+      const implementationPlan = await this.createImplementationPlan(strategyResult.strategy, websiteContext);
+      
+      // Store coordination results in crystalline memory
+      await this.crystallineMemory.store('visual-enhancement-coordination', {
+        type: 'strategic-coordination',
+        agentId: this.agentId,
+        strategy: strategyResult.strategy,
+        implementationPlan,
+        industryContext: strategyResult.industryContext,
+        recommendedTechnologies: strategyResult.recommendedTechnologies,
+        timestamp: Date.now()
+      });
+      
+      return {
+        success: true,
+        strategy: strategyResult.strategy,
+        implementationPlan,
+        industryContext: strategyResult.industryContext,
+        recommendedTechnologies: strategyResult.recommendedTechnologies,
+        implementationPriority: strategyResult.implementationPriority,
+        coordinationId: `coord-${Date.now()}`
+      };
+      
+    } catch (error) {
+      console.error('❌ Visual enhancement coordination failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  async createImplementationPlan(strategy, websiteContext) {
+    try {
+      console.log('🛠️ Creating detailed implementation plan');
+      
+      const task = new Task({
+        prompt: `As a Visual Design Implementation Expert, create a detailed implementation plan based on this strategic analysis:
+
+STRATEGIC ANALYSIS:
+${JSON.stringify(strategy, null, 2)}
+
+WEBSITE CONTEXT:
+${JSON.stringify(websiteContext, null, 2)}
+
+IMPLEMENTATION CAPABILITIES:
+${JSON.stringify(this.implementationCapabilities, null, 2)}
+
+CREATE IMPLEMENTATION PLAN:
+
+1. TECHNOLOGY STACK MAPPING
+   - Map strategic recommendations to specific technologies
+   - Identify required MagicUI components and configurations
+   - Specify Framer Motion animation requirements
+   - Define custom CSS/styling needs
+
+2. COMPONENT IMPLEMENTATION SEQUENCE
+   - Phase 1: Quick wins (immediate visual impact)
+   - Phase 2: Core enhancements (foundation improvements)
+   - Phase 3: Advanced features (differentiation elements)
+   - Phase 4: Premium touches (industry-leading elements)
+
+3. SPECIFIC CODE REQUIREMENTS
+   - Required React components and their props
+   - CSS classes and styling specifications
+   - Animation parameters and timing
+   - Interactive element configurations
+
+4. INTEGRATION GUIDELINES
+   - How components work together
+   - Performance optimization considerations
+   - Accessibility implementation requirements
+   - Mobile optimization specifications
+
+5. TESTING AND VALIDATION
+   - Visual regression testing checkpoints
+   - User experience validation criteria
+   - Performance benchmarks to maintain
+   - Accessibility compliance verification
+
+6. DEPLOYMENT STRATEGY
+   - Staging implementation approach
+   - Progressive enhancement rollout
+   - User feedback integration points
+   - Success metrics measurement
+
+DELIVERABLE: Comprehensive implementation plan with specific technical requirements, code specifications, and execution timeline.`,
+        
+        subagent_type: 'general-purpose',
+        description: 'Create visual design implementation plan'
+      });
+
+      const implementationResult = await this.orchestrator.delegateTask(task);
+      
+      return {
+        technologyMapping: implementationResult.technologyMapping || {},
+        componentSequence: implementationResult.componentSequence || [],
+        codeRequirements: implementationResult.codeRequirements || {},
+        integrationGuidelines: implementationResult.integrationGuidelines || {},
+        testingStrategy: implementationResult.testingStrategy || {},
+        deploymentStrategy: implementationResult.deploymentStrategy || {},
+        timeline: implementationResult.timeline || 'assess',
+        complexity: implementationResult.complexity || 'moderate'
+      };
+      
+    } catch (error) {
+      console.error('❌ Implementation plan creation failed:', error);
+      return { error: error.message };
+    }
+  }
+
+  async assessImplementationReadiness(websiteUrl, technicalStack, designRequirements) {
+    try {
+      console.log(`🔍 Assessing implementation readiness for: ${websiteUrl}`);
+      
+      const task = new Task({
+        prompt: `Assess technical readiness for visual design implementation.
+
+WEBSITE URL: ${websiteUrl}
+TECHNICAL STACK: ${JSON.stringify(technicalStack, null, 2)}
+DESIGN REQUIREMENTS: ${JSON.stringify(designRequirements, null, 2)}
+
+READINESS ASSESSMENT:
+
+1. TECHNICAL INFRASTRUCTURE
+   - Current framework compatibility (React, Next.js, etc.)
+   - Required dependency installation needs
+   - Build system compatibility
+   - Performance impact projections
+
+2. DESIGN SYSTEM INTEGRATION
+   - Existing design system compatibility
+   - Required design token updates
+   - Component library integration needs
+   - Style architecture modifications
+
+3. IMPLEMENTATION COMPLEXITY
+   - Development effort estimation
+   - Required expertise levels
+   - Potential technical challenges
+   - Risk mitigation strategies
+
+4. RESOURCE REQUIREMENTS
+   - Development time estimates
+   - Required team skills
+   - External resource needs
+   - Testing and QA requirements
+
+5. COMPATIBILITY ASSESSMENT
+   - Browser support requirements
+   - Mobile device compatibility
+   - Performance impact analysis
+   - Accessibility compliance verification
+
+DELIVERABLE: Complete readiness assessment with implementation recommendations and risk analysis.`,
+        
+        subagent_type: 'general-purpose',
+        description: 'Assess visual implementation readiness'
+      });
+
+      const readinessResult = await this.orchestrator.delegateTask(task);
+      
+      return {
+        overallReadiness: readinessResult.overallReadiness || 'assess',
+        technicalCompatibility: readinessResult.technicalCompatibility || {},
+        implementationComplexity: readinessResult.implementationComplexity || 'moderate',
+        resourceRequirements: readinessResult.resourceRequirements || {},
+        riskFactors: readinessResult.riskFactors || [],
+        recommendations: readinessResult.recommendations || [],
+        estimatedTimeline: readinessResult.estimatedTimeline || 'to-be-determined'
+      };
+      
+    } catch (error) {
+      console.error('❌ Implementation readiness assessment failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  async executeVisualEnhancements(implementationPlan, targetPath, progressCallback) {
+    try {
+      console.log('🚀 Executing visual enhancements');
+      
+      const task = new Task({
+        prompt: `Execute visual design enhancements based on the implementation plan.
+
+IMPLEMENTATION PLAN:
+${JSON.stringify(implementationPlan, null, 2)}
+
+TARGET PATH: ${targetPath}
+
+EXECUTION REQUIREMENTS:
+
+1. COMPONENT GENERATION
+   - Create required React components with TypeScript
+   - Implement specified animations and interactions
+   - Apply design system tokens and styling
+   - Ensure accessibility compliance
+
+2. INTEGRATION IMPLEMENTATION
+   - Integrate components into existing pages
+   - Update styling and layout systems
+   - Implement responsive design requirements
+   - Add performance optimizations
+
+3. TESTING AND VALIDATION
+   - Verify visual implementation accuracy
+   - Test responsive behavior across devices
+   - Validate accessibility compliance
+   - Confirm performance benchmarks
+
+4. DOCUMENTATION GENERATION
+   - Create component usage documentation
+   - Generate style guide updates
+   - Document integration patterns
+   - Provide maintenance guidelines
+
+DELIVERABLE: Complete visual enhancement implementation with all required files, components, and documentation.`,
+        
+        subagent_type: 'general-purpose',
+        description: 'Execute visual design enhancements'
+      });
+
+      const executionResult = await this.orchestrator.delegateTask(task);
+      
+      // Report progress if callback provided
+      if (progressCallback && typeof progressCallback === 'function') {
+        progressCallback({
+          phase: 'execution-complete',
+          progress: 100,
+          result: executionResult
+        });
+      }
+      
+      // Store execution results
+      await this.crystallineMemory.store('visual-enhancement-execution', {
+        type: 'implementation-execution',
+        agentId: this.agentId,
+        implementationPlan,
+        executionResult,
+        targetPath,
+        timestamp: Date.now()
+      });
+      
+      return {
+        success: true,
+        executionResult,
+        componentsCreated: executionResult.componentsCreated || [],
+        filesModified: executionResult.filesModified || [],
+        performanceImpact: executionResult.performanceImpact || {},
+        validationResults: executionResult.validationResults || {}
+      };
+      
+    } catch (error) {
+      console.error('❌ Visual enhancement execution failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
   getCapabilities() {
     return {
       agentId: this.agentId,
       specialization: this.specialization,
       designPrinciples: this.designPrinciples,
       designSystemComponents: this.designSystemComponents,
+      implementationCapabilities: this.implementationCapabilities,
       capabilities: [
         'brand-compliance-analysis',
         'layout-consistency-evaluation',
@@ -401,8 +688,20 @@ Generate a professional, actionable report with specific recommendations and imp
         'visual-hierarchy-analysis',
         'color-accessibility-evaluation',
         'typography-effectiveness-assessment',
-        'visual-quality-reporting'
-      ]
+        'visual-quality-reporting',
+        // New strategic coordination capabilities
+        'visual-enhancement-strategy-coordination',
+        'implementation-plan-creation',
+        'implementation-readiness-assessment',
+        'visual-enhancement-execution',
+        'strategic-design-analysis-integration'
+      ],
+      strategicCoordination: {
+        visualStrategistIntegration: true,
+        industrySpecificImplementation: true,
+        technologyStackMapping: true,
+        performanceOptimizedExecution: true
+      }
     };
   }
 

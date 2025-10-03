@@ -11,7 +11,14 @@ const CrystallineMemoryManager = require('../crystalline-memory/memory-manager')
 const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
 const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
 const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
+const TTSHooksIntegration = require('../../orchestrai-shared/notifications/tts-hooks-integration');
 const DomainAgentManager = require('../../orchestrai-shared/domain-coordination/domain-agent-manager');
+
+// Self-Iterating Evaluation Loop Components
+const PerformanceMemorySchema = require('../../orchestrai-shared/memory/performance-memory-schema');
+const HookMemoryBridge = require('../../orchestrai-shared/memory/hook-memory-bridge');
+const LearningAlgorithmFoundation = require('../../orchestrai-shared/learning/learning-algorithm-foundation');
+const DynamicAgentSelection = require('../../orchestrai-shared/orchestration/dynamic-agent-selection');
 const MainOrchestratorAgent = require('../agents/main-orchestrator-agent');
 const SEODomainHub = require('../../orchestrai-domains/seo/seo-domain-hub');
 const QualityDomainHub = require('../../orchestrai-domains/quality/quality-domain-hub');
@@ -49,6 +56,13 @@ class OrchestraiMaster extends EventEmitter {
 
     // Main Orchestrator Agent - will be initialized after Redis connection
     this.mainOrchestratorAgent = null;
+    
+    // Self-Iterating Evaluation Loop Components - will be initialized after Redis
+    this.performanceMemorySchema = null;
+    this.hookMemoryBridge = null;
+    this.learningFoundation = null;
+    this.dynamicAgentSelection = null;
+    this.selfLearningActive = false;
 
     this.initializeRedis();
     this.setupMiddleware();
@@ -84,6 +98,12 @@ class OrchestraiMaster extends EventEmitter {
         
         this.claudeCodeHooks = new ClaudeCodeHooksManager(this.usageTracker, this.mcpManager);
         console.log('🎣 Claude Code Hooks Manager initialized');
+        
+        // Initialize TTS Notifications
+        this.initializeTTSService();
+        
+        // Initialize Self-Iterating Evaluation Loop System
+        this.initializeSelfLearningSystem();
 
         // Initialize Main Orchestrator Agent as central coordinator
         this.initializeMainOrchestratorAgent();
@@ -139,6 +159,95 @@ class OrchestraiMaster extends EventEmitter {
     }
   }
 
+  async initializeSelfLearningSystem() {
+    try {
+      console.log('🧠 Initializing Self-Iterating Evaluation Loop System...');
+      
+      // Initialize Performance Memory Schema
+      this.performanceMemorySchema = new PerformanceMemorySchema(
+        this.crystallineMemory,
+        this.claudeCodeHooks
+      );
+      console.log('📊 Performance Memory Schema initialized');
+      
+      // Initialize Hook-Memory Bridge
+      this.hookMemoryBridge = new HookMemoryBridge(
+        this.crystallineMemory,
+        this.claudeCodeHooks
+      );
+      console.log('🌉 Hook-Memory Bridge initialized');
+      
+      // Initialize Learning Algorithm Foundation
+      this.learningFoundation = new LearningAlgorithmFoundation(
+        this.performanceMemorySchema,
+        this.crystallineMemory
+      );
+      console.log('🎓 Learning Algorithm Foundation initialized');
+      
+      // Initialize Dynamic Agent Selection (will be connected to domain manager later)
+      this.dynamicAgentSelection = new DynamicAgentSelection(
+        this.learningFoundation,
+        this.performanceMemorySchema,
+        null // Will be set after domain manager initialization
+      );
+      console.log('🎯 Dynamic Agent Selection initialized');
+      
+      // Mark self-learning as active
+      this.selfLearningActive = true;
+      
+      console.log('✅ Self-Iterating Evaluation Loop System fully initialized');
+      console.log('🔄 Adaptive agent selection: ACTIVE');
+      console.log('📈 Performance pattern learning: ACTIVE');
+      console.log('⚡ Hook-to-memory integration: ACTIVE');
+      console.log('🧠 Failure pattern recognition: ACTIVE');
+      
+    } catch (error) {
+      console.error('❌ Failed to initialize Self-Learning System:', error);
+      this.selfLearningActive = false;
+    }
+  }
+
+  async initializeTTSService() {
+    try {
+      console.log('🔊 Initializing Text-to-Speech Notification Service...');
+      
+      // Get TTS settings from environment or defaults
+      const ttsOptions = {
+        enabled: process.env.TTS_ENABLED !== 'false', // Default enabled
+        voice: process.env.TTS_VOICE || 'Alex',
+        speed: parseFloat(process.env.TTS_SPEED || '1.2'),
+        volume: parseFloat(process.env.TTS_VOLUME || '0.7')
+      };
+      
+      // Initialize TTS Integration with hooks
+      this.ttsIntegration = new TTSHooksIntegration(
+        this.claudeCodeHooks,
+        this,
+        ttsOptions
+      );
+      
+      console.log('✅ TTS Notification Service initialized');
+      console.log(`🔊 Voice: ${ttsOptions.voice}, Speed: ${ttsOptions.speed}, Volume: ${ttsOptions.volume}`);
+      console.log('🔊 Agent notifications: ENABLED');
+      console.log('🔊 System status announcements: ENABLED');
+      console.log('🔊 Error notifications: ENABLED');
+      
+      // Test TTS if enabled
+      if (ttsOptions.enabled) {
+        setTimeout(() => {
+          this.ttsIntegration.getTTSService().announce(
+            'ORCHESTRAI Text-to-Speech notifications are now active',
+            { priority: 'high' }
+          );
+        }, 3000); // 3 second delay to let system stabilize
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to initialize TTS Service:', error);
+      console.log('🔇 TTS notifications disabled due to initialization error');
+    }
+  }
+
   async initializeMainOrchestratorAgent() {
     try {
       console.log('🎯 Initializing Main Orchestrator Agent as central coordinator...');
@@ -171,6 +280,13 @@ class OrchestraiMaster extends EventEmitter {
       this.domainAgentManager = new DomainAgentManager(this, this.mcpManager, this.crystallineMemory);
       await this.domainAgentManager.initialize();
       console.log('✅ Domain Agent Manager initialized');
+      
+      // Connect Dynamic Agent Selection to Domain Manager
+      if (this.dynamicAgentSelection && this.selfLearningActive) {
+        this.dynamicAgentSelection.domainAgentManager = this.domainAgentManager;
+        await this.dynamicAgentSelection.discoverAvailableAgents();
+        console.log('🔗 Self-Learning System connected to Domain Agent Manager');
+      }
       
       // Initialize SEO Domain Hub with specialized sub-agents
       setTimeout(async () => {
@@ -1064,6 +1180,211 @@ class OrchestraiMaster extends EventEmitter {
       }
     });
 
+    // ==================== WORDPRESS PUBLISHING API ENDPOINTS ====================
+    
+    this.app.post('/api/wordpress/publish', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const { contentData, wordpressConfig, options = {} } = req.body;
+        
+        if (!contentData || !wordpressConfig) {
+          return res.status(400).json({ 
+            error: 'Content data and WordPress configuration are required',
+            example: {
+              contentData: {
+                title: 'Article Title',
+                content: 'Article content...',
+                excerpt: 'Brief description'
+              },
+              wordpressConfig: {
+                siteUrl: 'https://yoursite.com',
+                username: 'your-username',
+                applicationPassword: 'your-app-password'
+              },
+              options: {
+                status: 'draft',
+                targetKeyword: 'your keyword',
+                contentType: 'article'
+              }
+            }
+          });
+        }
+        
+        // Initialize WordPress pipeline if not exists
+        if (!this.wordpressPipeline) {
+          const WordPressContentPipeline = require('../../orchestrai-domains/content-enhanced/workflows/wordpress-content-pipeline');
+          this.wordpressPipeline = new WordPressContentPipeline(
+            this.contentEnhancedService,
+            this.crystallineMemory
+          );
+        }
+        
+        console.log(`🚀 WordPress publishing request: "${contentData.title?.substring(0, 50)}..."`);
+        
+        const publishResult = await this.wordpressPipeline.executePublishingPipeline(
+          contentData,
+          wordpressConfig,
+          options
+        );
+        
+        res.json(publishResult);
+        
+      } catch (error) {
+        console.error('❌ WordPress publishing error:', error);
+        res.status(500).json({ 
+          error: 'WordPress publishing failed', 
+          details: error.message 
+        });
+      }
+    });
+
+    this.app.post('/api/wordpress/gutenberg-preview', async (req, res) => {
+      if (!this.contentEnhancedService) {
+        return res.status(503).json({ error: 'Enhanced Content Domain Service not available' });
+      }
+      
+      try {
+        const { contentData, options = {} } = req.body;
+        
+        if (!contentData) {
+          return res.status(400).json({ error: 'Content data is required for preview' });
+        }
+        
+        // Initialize WordPress publisher for preview
+        const WordPressGutenbergPublisher = require('../../orchestrai-domains/content-enhanced/agents/wordpress-gutenberg-publisher');
+        const publisher = new WordPressGutenbergPublisher(this, this.crystallineMemory);
+        
+        // Generate Gutenberg blocks preview
+        const gutenbergBlocks = await publisher.convertToGutenbergBlocks(contentData, options);
+        
+        // Generate WordPress post structure
+        const wordpressPost = await publisher.generateWordPressPost(
+          contentData,
+          gutenbergBlocks,
+          options
+        );
+        
+        res.json({
+          success: true,
+          preview: {
+            blocksGenerated: gutenbergBlocks.length,
+            blockTypes: [...new Set(gutenbergBlocks.map(b => b.blockName))],
+            gutenbergBlocks,
+            wordpressPost,
+            estimatedReadingTime: this.calculateReadingTime(contentData),
+            seoScore: this.calculateSEOScore(contentData, options)
+          }
+        });
+        
+      } catch (error) {
+        console.error('❌ Gutenberg preview error:', error);
+        res.status(500).json({ 
+          error: 'Gutenberg preview generation failed', 
+          details: error.message 
+        });
+      }
+    });
+
+    this.app.get('/api/wordpress/pipeline/status', (req, res) => {
+      try {
+        if (!this.wordpressPipeline) {
+          return res.json({
+            initialized: false,
+            message: 'WordPress pipeline not yet initialized'
+          });
+        }
+        
+        const status = this.wordpressPipeline.getStatus();
+        res.json({
+          initialized: true,
+          ...status,
+          timestamp: new Date().toISOString()
+        });
+        
+      } catch (error) {
+        res.status(500).json({ 
+          error: 'Failed to get WordPress pipeline status', 
+          details: error.message 
+        });
+      }
+    });
+
+    this.app.post('/api/wordpress/validate-config', async (req, res) => {
+      try {
+        const { wordpressConfig } = req.body;
+        
+        if (!wordpressConfig) {
+          return res.status(400).json({ error: 'WordPress configuration is required' });
+        }
+        
+        // Basic validation
+        const required = ['siteUrl', 'username', 'applicationPassword'];
+        const missing = required.filter(field => !wordpressConfig[field]);
+        
+        if (missing.length > 0) {
+          return res.status(400).json({
+            valid: false,
+            error: 'Missing required fields',
+            missingFields: missing,
+            requiredFields: required
+          });
+        }
+        
+        // Test WordPress connection
+        const axios = require('axios');
+        try {
+          const response = await axios.get(
+            `${wordpressConfig.siteUrl}/wp-json/wp/v2/users/me`,
+            {
+              auth: {
+                username: wordpressConfig.username,
+                password: wordpressConfig.applicationPassword
+              },
+              timeout: 10000
+            }
+          );
+          
+          res.json({
+            valid: true,
+            connection: 'success',
+            userInfo: {
+              id: response.data.id,
+              name: response.data.name,
+              roles: response.data.roles
+            },
+            capabilities: response.data.capabilities || {},
+            siteInfo: {
+              url: wordpressConfig.siteUrl,
+              apiAvailable: true
+            }
+          });
+          
+        } catch (apiError) {
+          res.json({
+            valid: false,
+            connection: 'failed',
+            error: apiError.response?.data?.message || apiError.message,
+            statusCode: apiError.response?.status,
+            suggestions: [
+              'Verify the site URL is correct',
+              'Check username and application password',
+              'Ensure REST API is enabled',
+              'Confirm user has publishing permissions'
+            ]
+          });
+        }
+        
+      } catch (error) {
+        res.status(500).json({ 
+          error: 'Configuration validation failed', 
+          details: error.message 
+        });
+      }
+    });
+
     // ==================== WEB DEVELOPMENT QUALITY DOMAIN API ENDPOINTS ====================
     
     this.app.get('/api/web-quality/status', async (req, res) => {
@@ -1283,6 +1604,128 @@ class OrchestraiMaster extends EventEmitter {
       }
     });
 
+    // ==================== SELF-ITERATING EVALUATION LOOP API ENDPOINTS ====================
+    
+    this.app.get('/api/learning/status', async (req, res) => {
+      if (!this.selfLearningActive || !this.learningFoundation) {
+        return res.status(503).json({ error: 'Self-learning system not available' });
+      }
+      
+      try {
+        const learningStatus = await this.learningFoundation.getLearningStatus();
+        const selectionStatus = await this.dynamicAgentSelection.getSystemStatus();
+        const bridgeStatus = await this.hookMemoryBridge.getBridgeStatus();
+        
+        res.json({
+          active: this.selfLearningActive,
+          learning: learningStatus,
+          agentSelection: selectionStatus,
+          hookBridge: bridgeStatus,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('❌ Learning status error:', error);
+        res.status(500).json({ error: 'Failed to retrieve learning system status' });
+      }
+    });
+
+    this.app.post('/api/learning/select-agent', async (req, res) => {
+      if (!this.selfLearningActive || !this.dynamicAgentSelection) {
+        return res.status(503).json({ error: 'Dynamic agent selection not available' });
+      }
+      
+      try {
+        const { taskContext, options } = req.body;
+        
+        if (!taskContext) {
+          return res.status(400).json({ error: 'Task context is required' });
+        }
+        
+        const selection = await this.dynamicAgentSelection.selectBestAgentForTask(taskContext, options);
+        res.json(selection);
+        
+      } catch (error) {
+        console.error('❌ Agent selection error:', error);
+        res.status(500).json({ error: 'Failed to select agent', details: error.message });
+      }
+    });
+
+    this.app.get('/api/learning/agent-recommendations', async (req, res) => {
+      if (!this.selfLearningActive || !this.dynamicAgentSelection) {
+        return res.status(503).json({ error: 'Dynamic agent selection not available' });
+      }
+      
+      try {
+        const taskContext = {
+          type: req.query.type,
+          domain: req.query.domain,
+          complexity: req.query.complexity,
+          keywords: req.query.keywords ? req.query.keywords.split(',') : []
+        };
+        
+        const maxRecommendations = parseInt(req.query.max) || 3;
+        const recommendations = await this.dynamicAgentSelection.getAgentRecommendations(
+          taskContext, 
+          maxRecommendations
+        );
+        
+        res.json(recommendations);
+        
+      } catch (error) {
+        console.error('❌ Agent recommendations error:', error);
+        res.status(500).json({ error: 'Failed to get agent recommendations' });
+      }
+    });
+
+    this.app.get('/api/learning/performance-stats', async (req, res) => {
+      if (!this.selfLearningActive || !this.performanceMemorySchema) {
+        return res.status(503).json({ error: 'Performance memory schema not available' });
+      }
+      
+      try {
+        const stats = await this.performanceMemorySchema.getPerformanceStats();
+        res.json(stats);
+      } catch (error) {
+        console.error('❌ Performance stats error:', error);
+        res.status(500).json({ error: 'Failed to retrieve performance statistics' });
+      }
+    });
+
+    this.app.get('/api/learning/report', async (req, res) => {
+      if (!this.selfLearningActive || !this.learningFoundation) {
+        return res.status(503).json({ error: 'Learning foundation not available' });
+      }
+      
+      try {
+        const report = await this.learningFoundation.generateLearningReport();
+        res.json(report);
+      } catch (error) {
+        console.error('❌ Learning report error:', error);
+        res.status(500).json({ error: 'Failed to generate learning report' });
+      }
+    });
+
+    this.app.get('/api/learning/metrics', async (req, res) => {
+      if (!this.selfLearningActive || !this.dynamicAgentSelection) {
+        return res.status(503).json({ error: 'Dynamic agent selection not available' });
+      }
+      
+      try {
+        const selectionMetrics = await this.dynamicAgentSelection.getSelectionMetrics();
+        const processingStats = await this.hookMemoryBridge.getProcessingStats();
+        
+        res.json({
+          agentSelection: selectionMetrics,
+          hookProcessing: processingStats,
+          selfLearningActive: this.selfLearningActive,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('❌ Learning metrics error:', error);
+        res.status(500).json({ error: 'Failed to retrieve learning metrics' });
+      }
+    });
+
     // Geometric orchestration info
     this.app.get('/orchestration/topology', (req, res) => {
       res.json({
@@ -1441,6 +1884,161 @@ class OrchestraiMaster extends EventEmitter {
       }
     });
 
+    // ==================== TEXT-TO-SPEECH NOTIFICATION API ENDPOINTS ====================
+    
+    this.app.get('/api/tts/status', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        const status = this.ttsIntegration.getStatus();
+        res.json(status);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get TTS status', details: error.message });
+      }
+    });
+
+    this.app.post('/api/tts/configure', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        const { notificationTypes, settings } = req.body;
+        
+        if (notificationTypes) {
+          this.ttsIntegration.configureNotifications(notificationTypes);
+        }
+        
+        if (settings) {
+          this.ttsIntegration.getTTSService().updateSettings(settings);
+        }
+        
+        res.json({ 
+          success: true, 
+          message: 'TTS configuration updated',
+          currentStatus: this.ttsIntegration.getStatus()
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to configure TTS', details: error.message });
+      }
+    });
+
+    this.app.post('/api/tts/enable', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        this.ttsIntegration.setEnabled(true);
+        res.json({ success: true, message: 'TTS notifications enabled' });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to enable TTS', details: error.message });
+      }
+    });
+
+    this.app.post('/api/tts/disable', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        this.ttsIntegration.setEnabled(false);
+        res.json({ success: true, message: 'TTS notifications disabled' });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to disable TTS', details: error.message });
+      }
+    });
+
+    this.app.post('/api/tts/test', async (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        const testResult = await this.ttsIntegration.testTTS();
+        res.json(testResult);
+      } catch (error) {
+        res.status(500).json({ error: 'TTS test failed', details: error.message });
+      }
+    });
+
+    this.app.post('/api/tts/announce', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        const { message, priority } = req.body;
+        
+        if (!message) {
+          return res.status(400).json({ error: 'Message is required' });
+        }
+        
+        this.ttsIntegration.getTTSService().announce(message, { priority: priority || 'normal' });
+        
+        res.json({ 
+          success: true, 
+          message: 'Announcement queued',
+          announcement: message,
+          priority: priority || 'normal'
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to queue announcement', details: error.message });
+      }
+    });
+
+    this.app.get('/api/tts/voices', async (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        const voices = await this.ttsIntegration.getTTSService().getAvailableVoices();
+        res.json({
+          voices,
+          currentVoice: this.ttsIntegration.getTTSService().voice,
+          totalVoices: voices.length
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get available voices', details: error.message });
+      }
+    });
+
+    this.app.get('/api/tts/queue', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        const ttsService = this.ttsIntegration.getTTSService();
+        const status = ttsService.getStatus();
+        
+        res.json({
+          queueLength: status.queueLength,
+          isPlaying: status.isPlaying,
+          rateLimitMs: status.rateLimitMs,
+          stats: status.stats
+        });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to get queue status', details: error.message });
+      }
+    });
+
+    this.app.post('/api/tts/clear-queue', (req, res) => {
+      if (!this.ttsIntegration) {
+        return res.status(503).json({ error: 'TTS Service not available' });
+      }
+      
+      try {
+        this.ttsIntegration.getTTSService().clearQueue();
+        res.json({ success: true, message: 'TTS queue cleared' });
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to clear queue', details: error.message });
+      }
+    });
+
     // Claude Code Hooks Integration
     this.setupClaudeCodeHooks();
   }
@@ -1590,6 +2188,164 @@ class OrchestraiMaster extends EventEmitter {
       'webdev': { position: [1, 1], connections: ['research'] },
       'maintenance': { position: [0.5, 0.5], connections: ['all'] }
     };
+  }
+
+  // WordPress helper methods
+  calculateReadingTime(contentData) {
+    let wordCount = 0;
+    
+    if (contentData.content) {
+      wordCount += contentData.content.split(/\s+/).length;
+    }
+    
+    if (contentData.sections && Array.isArray(contentData.sections)) {
+      contentData.sections.forEach(section => {
+        if (section.content) {
+          wordCount += section.content.split(/\s+/).length;
+        }
+      });
+    }
+    
+    // Average reading speed: 200 words per minute
+    const readingTimeMinutes = Math.ceil(wordCount / 200);
+    
+    return {
+      wordCount,
+      readingTimeMinutes,
+      readingTimeText: readingTimeMinutes === 1 ? '1 minute' : `${readingTimeMinutes} minutes`
+    };
+  }
+
+  calculateSEOScore(contentData, options) {
+    let score = 0;
+    const factors = [];
+    
+    // Title optimization (20 points)
+    if (contentData.title) {
+      if (contentData.title.length >= 30 && contentData.title.length <= 60) {
+        score += 20;
+        factors.push({ factor: 'Title length', score: 20, status: 'good' });
+      } else {
+        score += 10;
+        factors.push({ factor: 'Title length', score: 10, status: 'needs improvement' });
+      }
+    }
+    
+    // Target keyword in title (15 points)
+    if (options.targetKeyword && contentData.title) {
+      if (contentData.title.toLowerCase().includes(options.targetKeyword.toLowerCase())) {
+        score += 15;
+        factors.push({ factor: 'Keyword in title', score: 15, status: 'good' });
+      } else {
+        factors.push({ factor: 'Keyword in title', score: 0, status: 'missing' });
+      }
+    }
+    
+    // Meta description (15 points)
+    if (contentData.excerpt || contentData.metaDescription) {
+      const desc = contentData.excerpt || contentData.metaDescription;
+      if (desc.length >= 120 && desc.length <= 160) {
+        score += 15;
+        factors.push({ factor: 'Meta description length', score: 15, status: 'good' });
+      } else {
+        score += 8;
+        factors.push({ factor: 'Meta description length', score: 8, status: 'needs improvement' });
+      }
+    }
+    
+    // Content length (20 points)
+    const readingTime = this.calculateReadingTime(contentData);
+    if (readingTime.wordCount >= 300) {
+      if (readingTime.wordCount >= 1000) {
+        score += 20;
+        factors.push({ factor: 'Content length', score: 20, status: 'excellent' });
+      } else {
+        score += 15;
+        factors.push({ factor: 'Content length', score: 15, status: 'good' });
+      }
+    } else {
+      score += 5;
+      factors.push({ factor: 'Content length', score: 5, status: 'too short' });
+    }
+    
+    // Structured content (15 points)
+    if (contentData.sections && contentData.sections.length > 2) {
+      score += 15;
+      factors.push({ factor: 'Content structure', score: 15, status: 'good' });
+    } else {
+      score += 8;
+      factors.push({ factor: 'Content structure', score: 8, status: 'needs improvement' });
+    }
+    
+    // Images (15 points)
+    if (contentData.featuredImage) {
+      score += 10;
+      factors.push({ factor: 'Featured image', score: 10, status: 'good' });
+    }
+    
+    if (contentData.sections && contentData.sections.some(s => s.image)) {
+      score += 5;
+      factors.push({ factor: 'Content images', score: 5, status: 'good' });
+    }
+    
+    return {
+      score: Math.min(score, 100),
+      maxScore: 100,
+      grade: score >= 80 ? 'A' : score >= 60 ? 'B' : score >= 40 ? 'C' : 'D',
+      factors,
+      recommendations: this.generateSEORecommendations(factors, contentData, options)
+    };
+  }
+
+  generateSEORecommendations(factors, contentData, options) {
+    const recommendations = [];
+    
+    factors.forEach(factor => {
+      if (factor.status === 'missing' || factor.status === 'needs improvement' || factor.status === 'too short') {
+        switch (factor.factor) {
+          case 'Title length':
+            recommendations.push('Optimize title length to 30-60 characters for better SEO');
+            break;
+          case 'Keyword in title':
+            recommendations.push(`Include target keyword "${options.targetKeyword}" in the title`);
+            break;
+          case 'Meta description length':
+            recommendations.push('Write a meta description between 120-160 characters');
+            break;
+          case 'Content length':
+            recommendations.push('Increase content length to at least 300 words, ideally 1000+');
+            break;
+          case 'Content structure':
+            recommendations.push('Add more headings and sections to improve content structure');
+            break;
+        }
+      }
+    });
+    
+    // Additional recommendations
+    if (!contentData.featuredImage) {
+      recommendations.push('Add a featured image to improve engagement');
+    }
+    
+    if (options.targetKeyword && contentData.content) {
+      const keywordDensity = this.calculateKeywordDensity(contentData.content, options.targetKeyword);
+      if (keywordDensity < 0.5) {
+        recommendations.push('Consider increasing keyword density (aim for 0.5-1.5%)');
+      } else if (keywordDensity > 2.5) {
+        recommendations.push('Reduce keyword density to avoid over-optimization');
+      }
+    }
+    
+    return recommendations;
+  }
+
+  calculateKeywordDensity(content, keyword) {
+    if (!content || !keyword) return 0;
+    
+    const words = content.toLowerCase().split(/\s+/);
+    const keywordCount = words.filter(word => word.includes(keyword.toLowerCase())).length;
+    
+    return (keywordCount / words.length) * 100;
   }
 
   setupClaudeCodeHooks() {

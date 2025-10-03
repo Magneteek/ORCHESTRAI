@@ -84,6 +84,43 @@ class ContentEnhancedDomainHub extends EventEmitter {
         specialization: 'multi-language-adaptation',
         claudeCodeAgent: 'multi-language-content-adapter',
         description: 'Cultural and linguistic content adaptation specialist'
+      },
+      
+      // Copywriting Specialists (5 agents) - NEW ADDITION
+      {
+        id: 'direct-response-copywriter',
+        name: 'Direct Response Copywriter',
+        specialization: 'direct-response-copy',
+        claudeCodeAgent: 'direct-response-copywriter',
+        description: 'AIDA, PAS, PASTOR framework specialist for high-converting sales copy'
+      },
+      {
+        id: 'cold-email-copywriter',
+        name: 'Cold Email Copywriter',
+        specialization: 'cold-email-sequences',
+        claudeCodeAgent: 'cold-email-copywriter',
+        description: 'Personalized cold outreach and subject line optimization specialist'
+      },
+      {
+        id: 'nurture-email-copywriter',
+        name: 'Nurture Email Copywriter',
+        specialization: 'nurture-email-sequences',
+        claudeCodeAgent: 'nurture-email-copywriter',
+        description: 'Relationship building and trust development through email nurturing'
+      },
+      {
+        id: 'sales-funnel-copywriter',
+        name: 'Sales Funnel Copywriter',
+        specialization: 'sales-funnel-copy',
+        claudeCodeAgent: 'sales-funnel-copywriter',
+        description: 'VSL, landing page, and funnel conversion optimization specialist'
+      },
+      {
+        id: 'followup-sequence-copywriter',
+        name: 'Follow-up Sequence Copywriter',
+        specialization: 'followup-automation',
+        claudeCodeAgent: 'followup-sequence-copywriter',
+        description: 'Multi-touch follow-up sequences and persistence framework specialist'
       }
     ];
     
@@ -128,8 +165,8 @@ class ContentEnhancedDomainHub extends EventEmitter {
       this.startCoordinationServices();
       
       this.status = 'active';
-      console.log('✅ Content Domain Hub initialized with 8 Claude Code + 5 Node.js agents (Hybrid Architecture)');
-      console.log('   → 8 Claude Code Agents: Content creation, quality, strategy, optimization');
+      console.log('✅ Content Domain Hub initialized with 13 Claude Code + 5 Node.js agents (Hybrid Architecture)');
+      console.log('   → 13 Claude Code Agents: Content creation, quality, strategy, optimization, copywriting');
       console.log('   → 5 Node.js Agents: Workflow coordination, performance analysis, structure');
       console.log('   → Hybrid: ORCHESTRAI coordination + Claude Code execution + Node.js efficiency');
       
@@ -194,7 +231,7 @@ class ContentEnhancedDomainHub extends EventEmitter {
       }
     }
     
-    console.log(`🎯 Content Domain Hub: ${this.subAgents.size}/8 Claude Code sub-agents active`);
+    console.log(`🎯 Content Domain Hub: ${this.subAgents.size}/13 Claude Code sub-agents active`);
   }
 
   async createClaudeCodeAgent(spec) {
@@ -275,7 +312,10 @@ class ContentEnhancedDomainHub extends EventEmitter {
     // Initialize content-specific memory pools
     const memoryPools = [
       'content-strategy', 'content-quality', 'content-clusters', 
-      'title-optimization', 'backlink-strategies', 'multi-language-assets'
+      'title-optimization', 'backlink-strategies', 'multi-language-assets',
+      // Copywriting memory pools
+      'direct-response-frameworks', 'cold-email-sequences', 'nurture-email-campaigns',
+      'sales-funnel-optimization', 'followup-automation-patterns'
     ];
     
     for (const pool of memoryPools) {
@@ -326,7 +366,10 @@ class ContentEnhancedDomainHub extends EventEmitter {
     const claudeCodeTasks = [
       'content-creation', 'ai-phrase-detection', 'quality-validation', 
       'title-optimization', 'outline-architecture', 'content-clustering',
-      'backlink-strategy', 'multi-language-adaptation'
+      'backlink-strategy', 'multi-language-adaptation',
+      // Copywriting specializations
+      'direct-response-copy', 'cold-email-sequences', 'nurture-email-sequences',
+      'sales-funnel-copy', 'followup-automation'
     ];
     
     if (claudeCodeTasks.includes(task.type)) {

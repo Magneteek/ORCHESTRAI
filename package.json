@@ -33,6 +33,7 @@
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.10.0",
+    "@mendable/firecrawl-js": "^4.3.5",
     "@modelcontextprotocol/sdk": "^1.17.4",
     "@modelcontextprotocol/server-puppeteer": "^2025.5.12",
     "@playwright/mcp": "^0.0.35",

@@ -1,0 +1,146 @@
+{
+  "industry": "dental",
+  "name": "Dental Practice Marketing Framework",
+  "description": "Comprehensive templates for dental practice marketing, patient acquisition, and retention",
+  "version": "1.0.0",
+  "templates": {
+    "patient_acquisition": {
+      "pain_points": [
+        "Dental anxiety and fear of procedures",
+        "Cost concerns and insurance complications", 
+        "Time constraints and scheduling difficulties",
+        "Previous negative dental experiences",
+        "Lack of understanding about treatment necessity"
+      ],
+      "value_propositions": [
+        {
+          "type": "comfort_focused",
+          "template": "Experience gentle, pain-free dentistry with our [sedation options/comfort technology]",
+          "use_case": "Anxious patients"
+        },
+        {
+          "type": "convenience_focused", 
+          "template": "Complete your treatment in fewer visits with our [advanced technology/same-day procedures]",
+          "use_case": "Busy professionals"
+        },
+        {
+          "type": "family_focused",
+          "template": "Comprehensive dental care for the whole family under one roof",
+          "use_case": "Family practices"
+        }
+      ]
+    },
+    "service_descriptions": {
+      "preventive_care": {
+        "template": "Keep your smile healthy and bright with our comprehensive preventive care including professional cleanings, fluoride treatments, and early detection screenings.",
+        "psychological_triggers": ["health_preservation", "cost_avoidance"],
+        "cta": "Schedule your preventive care appointment today"
+      },
+      "cosmetic_dentistry": {
+        "template": "Transform your smile and boost your confidence with our advanced cosmetic treatments including [veneers/whitening/Invisalign].",
+        "psychological_triggers": ["confidence_building", "social_proof"],
+        "cta": "Book your smile makeover consultation"
+      },
+      "restorative_dentistry": {
+        "template": "Restore full function and natural beauty to your smile with our expert restorative treatments.",
+        "psychological_triggers": ["pain_relief", "function_restoration"],
+        "cta": "Get relief - schedule your consultation"
+      }
+    },
+    "patient_communication": {
+      "appointment_reminders": [
+        {
+          "timing": "24_hours_before",
+          "template": "Hi [Patient Name], this is a friendly reminder about your appointment with Dr. [Doctor Name] tomorrow at [Time]. Reply STOP to opt out."
+        },
+        {
+          "timing": "2_hours_before", 
+          "template": "Your dental appointment is in 2 hours. We're located at [Address]. Need directions? Call [Phone]."
+        }
+      ],
+      "treatment_follow_up": [
+        {
+          "timing": "same_day",
+          "template": "How are you feeling after your treatment today? If you have any concerns, don't hesitate to call us at [Phone]."
+        },
+        {
+          "timing": "3_days_after",
+          "template": "Just checking in after your recent treatment. Any questions or concerns? Your comfort is our priority."
+        }
+      ]
+    },
+    "educational_content": {
+      "oral_health_tips": [
+        "The connection between oral health and overall health",
+        "How to properly brush and floss for maximum effectiveness",
+        "Warning signs that indicate you need to see a dentist",
+        "Foods that promote healthy teeth and gums",
+        "Understanding dental insurance and maximizing benefits"
+      ],
+      "procedure_education": [
+        "What to expect during a root canal (it's not what you think!)",
+        "Dental implants vs. bridges vs. dentures: choosing the right option",
+        "The complete guide to Invisalign treatment",
+        "Understanding sedation dentistry options",
+        "How modern technology makes dentistry more comfortable"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Years of experience and continuing education",
+      "State-of-the-art technology and techniques",
+      "Gentle, patient-centered approach",
+      "Flexible payment options and insurance acceptance",
+      "Emergency availability and after-hours care"
+    ],
+    "social_proof_types": [
+      "Before/after smile transformations",
+      "Patient testimonials focusing on comfort and results",
+      "Professional credentials and continuing education",
+      "Community involvement and charitable work",
+      "Technology and equipment investments"
+    ],
+    "urgency_creators": [
+      "Limited consultation spots available this month",
+      "Insurance benefits expire at year-end",
+      "Early detection prevents more extensive treatment",
+      "Same-day emergency appointments available",
+      "Financing offers with limited-time terms"
+    ]
+  },
+  "psychological_frameworks": {
+    "patient_journey_stages": [
+      {
+        "stage": "awareness",
+        "mindset": "I might have a dental problem",
+        "messaging": "Education and gentle guidance",
+        "cta": "Learn more about [condition/treatment]"
+      },
+      {
+        "stage": "consideration", 
+        "mindset": "I need dental treatment but I'm nervous",
+        "messaging": "Comfort, competence, and care emphasis",
+        "cta": "Schedule a no-pressure consultation"
+      },
+      {
+        "stage": "decision",
+        "mindset": "I'm ready to choose a dentist",
+        "messaging": "Differentiation and urgency",
+        "cta": "Book your appointment today"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "email_campaigns": {
+      "appointment_reminders": {"open_rate": "70%", "response_rate": "15%"},
+      "educational_content": {"open_rate": "35%", "click_rate": "8%"},
+      "promotional_offers": {"open_rate": "40%", "conversion_rate": "12%"}
+    },
+    "website_conversion": {
+      "consultation_requests": "3-6%",
+      "appointment_bookings": "2-4%",
+      "newsletter_signups": "8-15%"
+    }
+  }
+}

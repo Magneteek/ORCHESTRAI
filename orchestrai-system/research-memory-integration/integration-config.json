@@ -1,0 +1,164 @@
+{
+  "automatedIntegration": {
+    "enabled": true,
+    "monitoringMode": "realtime",
+    "processingInterval": 1000,
+    "batchSize": 5,
+    "retryAttempts": 3
+  },
+  
+  "researchTypes": {
+    "psychographic": {
+      "priority": 1,
+      "memoryPool": "psychographic-intelligence",
+      "importance": 0.95,
+      "entityTypes": ["PsychographicSegment", "CulturalValues", "GenerationalAnalysis"],
+      "keywordPatterns": ["psychographic", "segments", "demografija", "vrednote"],
+      "autoTriggerAgents": ["content-writer-specialist", "seo-content-optimization"]
+    },
+    
+    "seo": {
+      "priority": 1,
+      "memoryPool": "seo-intelligence", 
+      "importance": 0.90,
+      "entityTypes": ["TargetKeyword", "SemanticFlow", "CompetitorAnalysis", "LocalSEO"],
+      "keywordPatterns": ["keyword", "seo", "search", "serp", "ranking"],
+      "autoTriggerAgents": ["seo-keyword-research", "seo-content-optimization", "seo-competitor-analysis"]
+    },
+    
+    "semantic": {
+      "priority": 2,
+      "memoryPool": "semantic-intelligence",
+      "importance": 0.88,
+      "entityTypes": ["SemanticCluster", "TopicModeling", "ContentStructure"],
+      "keywordPatterns": ["semantic", "clustering", "topic", "flow", "structure"],
+      "autoTriggerAgents": ["seo-semantic-clustering", "content-outline-architect"]
+    },
+    
+    "competitive": {
+      "priority": 2,
+      "memoryPool": "competitive-intelligence",
+      "importance": 0.85,
+      "entityTypes": ["CompetitiveGaps", "MarketAnalysis", "OpportunityMatrix"],
+      "keywordPatterns": ["competitive", "competitor", "gaps", "opportunities", "market"],
+      "autoTriggerAgents": ["seo-competitor-analysis", "backlink-strategy-architect"]
+    },
+    
+    "content-strategy": {
+      "priority": 3,
+      "memoryPool": "content-intelligence",
+      "importance": 0.87,
+      "entityTypes": ["ContentStrategy", "ContentPillars", "DistributionPlan"],
+      "keywordPatterns": ["content", "strategy", "pillars", "editorial", "calendar"],
+      "autoTriggerAgents": ["content-outline-architect", "content-writer-specialist"]
+    }
+  },
+  
+  "memoryIntegrationRules": {
+    "entityCreation": {
+      "maxObservationsPerEntity": 10,
+      "observationLengthLimit": 500,
+      "requireUniqueNames": true,
+      "autoGenerateRelations": true
+    },
+    
+    "relationMapping": {
+      "psychographic-seo": {
+        "relationType": "informs",
+        "strength": 0.90,
+        "description": "Psychographic segments inform SEO keyword targeting"
+      },
+      "seo-semantic": {
+        "relationType": "structures", 
+        "strength": 0.85,
+        "description": "SEO research structures semantic clustering"
+      },
+      "semantic-content": {
+        "relationType": "guides",
+        "strength": 0.88,
+        "description": "Semantic clustering guides content creation"
+      },
+      "competitive-seo": {
+        "relationType": "reveals",
+        "strength": 0.82,
+        "description": "Competitive analysis reveals SEO opportunities"
+      }
+    },
+    
+    "qualityGates": {
+      "minImportanceScore": 0.7,
+      "maxDuplicatePercentage": 0.1,
+      "requiredDataFields": ["observations", "entityType"],
+      "validateIntegrity": true
+    }
+  },
+  
+  "agentNotification": {
+    "enabled": true,
+    "notificationMethods": ["websocket", "redis-pub"],
+    "triggers": {
+      "newResearchIntegrated": {
+        "notify": ["orchestrai-master-coordinator", "content-writer-specialist"],
+        "includeData": true,
+        "priority": "high"
+      },
+      "memoryPoolUpdated": {
+        "notify": ["all-agents"],
+        "includeData": false,
+        "priority": "medium"
+      },
+      "integrationError": {
+        "notify": ["orchestrai-master-coordinator"],
+        "includeData": true,
+        "priority": "critical"
+      }
+    }
+  },
+  
+  "performanceOptimization": {
+    "memoryIndexing": {
+      "enabled": true,
+      "indexFields": ["entityType", "projectId", "importance", "lastUpdated"],
+      "rebuildInterval": 3600000
+    },
+    
+    "caching": {
+      "enabled": true,
+      "cacheSize": 1000,
+      "ttl": 1800000,
+      "evictionPolicy": "lru"
+    },
+    
+    "batchProcessing": {
+      "enabled": true,
+      "batchSize": 10,
+      "processingDelay": 500,
+      "maxQueueSize": 100
+    }
+  },
+  
+  "monitoringPaths": {
+    "clientIntelligence": "client-intelligence",
+    "deliverableSEO": "deliverables/seo",
+    "deliverableContent": "deliverables/content",
+    "deliverableResearch": "deliverables/research",
+    "fileExtensions": [".json", ".md"],
+    "excludePatterns": ["*.tmp", "*.lock", "*~", ".DS_Store"]
+  },
+  
+  "healthChecks": {
+    "enabled": true,
+    "checkInterval": 30000,
+    "metrics": {
+      "integrationLatency": true,
+      "memoryUtilization": true,
+      "queueBacklog": true,
+      "errorRate": true
+    },
+    "alerts": {
+      "highLatency": 5000,
+      "highMemoryUsage": 0.85,
+      "highErrorRate": 0.1
+    }
+  }
+}

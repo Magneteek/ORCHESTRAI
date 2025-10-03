@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 const path = require('path');
 const fs = require('fs');
+const WebDevLearningFoundation = require('./learning/webdev-learning-foundation');
 
 // Import Web Quality Agent classes
 const UXQualityValidator = require('./agents/ux-quality-validator');
@@ -11,6 +12,19 @@ const PerformanceQualityTester = require('./agents/performance-quality-tester');
 const BrowserCompatibilityValidator = require('./agents/browser-compatibility-validator');
 const E2ETestingCoordinator = require('./agents/e2e-testing-coordinator');
 const UXFlowValidator = require('./agents/ux-flow-validator');
+
+// Import Claude Code Enhanced Agents
+const WebFrontendDeveloper = require('./claude-code-agents/web-frontend-developer');
+const WebVisualDesignAgent = require('./claude-code-agents/web-visual-design-agent');
+const VisualDesignStrategist = require('./claude-code-agents/visual-design-strategist');
+
+// Import MCP-Based Specialized Agents
+const WireframeCreationSpecialist = require('./mcp-agents/wireframe-creation-specialist');
+const VisualDesignSpecialist = require('./mcp-agents/visual-design-specialist');
+const FrontendDevelopmentSpecialist = require('./mcp-agents/frontend-development-specialist');
+
+// Import ShadCN Integration
+const ShadCnMemoryIntegration = require('../../orchestrai-master/crystalline-memory/shadcn-memory-integration');
 
 // Import MCP Integration Manager
 const MCPIntegrationManager = require('./mcp-integrations/mcp-integration-manager');
@@ -173,6 +187,38 @@ class WebDevelopmentQualityHub extends EventEmitter {
     // Crystalline memory pools for web quality intelligence
     this.webQualityMemoryPools = new Map();
     
+    // Initialize WebDev Learning Foundation for quality gate optimization
+    this.webDevLearning = new WebDevLearningFoundation(crystallineMemory, null);
+    
+    // Initialize ShadCN Memory Integration
+    this.shadcnMemoryIntegration = new ShadCnMemoryIntegration(crystallineMemory, null);
+    
+    // Enhanced web frontend developer with ShadCN intelligence
+    this.webFrontendDeveloper = null;
+    
+    // Visual Design Strategist and Web Visual Design Agent
+    this.visualDesignStrategist = null;
+    this.webVisualDesignAgent = null;
+
+    // MCP-Based Specialized Agents
+    this.wireframeCreationSpecialist = null;
+    this.visualDesignSpecialist = null;
+    this.frontendDevelopmentSpecialist = null;
+    
+    // Quality gate effectiveness tracking
+    this.qualityGateEffectiveness = new Map();
+    this.gateAdjustmentHistory = [];
+    this.lastEffectivenessAnalysis = Date.now();
+    
+    // Self-adjustment configuration
+    this.adjustmentConfig = {
+      minDataPoints: 5, // Minimum quality gate decisions before adjustment
+      effectivenessThreshold: 0.7, // Below this threshold, gates will be adjusted
+      adjustmentInterval: 300000, // 5 minutes between effectiveness checks
+      maxAdjustment: 10, // Maximum points to adjust thresholds
+      adaptiveLearning: true
+    };
+    
     this.initialize();
   }
 
@@ -205,6 +251,18 @@ class WebDevelopmentQualityHub extends EventEmitter {
       // Initialize all 8 specialized web quality agents
       await this.initializeWebQualityAgents();
       
+      // Initialize ShadCN Memory Integration
+      await this.initializeShadCnIntegration();
+      
+      // Initialize enhanced web frontend developer
+      await this.initializeWebFrontendDeveloper();
+      
+      // Initialize Visual Design Strategist and Web Visual Design Agent
+      await this.initializeVisualDesignAgents();
+
+      // Initialize MCP-Based Specialized Agents
+      await this.initializeMCPSpecializedAgents();
+      
       // Initialize Phase Quality Coordinator
       this.phaseQualityCoordinator = new PhaseQualityCoordinator(this, this.config);
       
@@ -214,10 +272,19 @@ class WebDevelopmentQualityHub extends EventEmitter {
       // Start web quality intelligence services
       this.startWebQualityIntelligenceServices();
       
+      // Start quality gate effectiveness monitoring
+      this.startQualityGateEffectivenessLoop();
+      
       this.status = 'active';
-      console.log('✅ Web Development Quality Domain Hub initialized with 8 specialized web quality agents');
+      console.log('✅ Web Development Quality Domain Hub initialized with 8 specialized web quality agents + Visual Design System + MCP Specialized Agents');
       console.log('   → 3 Design Quality + 3 Development Quality + 2 Integration Quality agents');
       console.log('   → MCP integration: Browser automation + Visual testing + E2E validation');
+      console.log('   → ShadCN UI integration: Component intelligence + Memory-enhanced recommendations');
+      console.log('   → Enhanced Web Frontend Developer: TypeScript + React + ShadCN intelligence');
+      console.log('   → Visual Design Strategist: Industry-specific design analysis and enhancement planning');
+      console.log('   → Web Visual Design Agent: Strategic coordination and implementation execution');
+      console.log('   → MCP Specialized Agents: Wireframe Creation + Visual Design + Frontend Development specialists');
+      console.log('   → Proactive Visual Enhancement: Automatic design optimization triggers');
       console.log('   → Phase-to-phase quality gates: UX → Wireframe → Design → Development → Production');
       
       this.emit('webQualityHubInitialized', {
@@ -388,6 +455,299 @@ class WebDevelopmentQualityHub extends EventEmitter {
       console.error('❌ Failed to initialize Web Development Quality Domain Hub:', error);
       this.status = 'failed';
       throw error;
+    }
+  }
+
+  async initializeShadCnIntegration() {
+    try {
+      console.log('🎨 Initializing ShadCN Memory Integration...');
+      
+      const initResult = await this.shadcnMemoryIntegration.initialize();
+      
+      if (initResult.success) {
+        console.log('✅ ShadCN Memory Integration initialized successfully');
+        
+        // Store ShadCN integration stats in web quality metrics
+        this.webQualityMetrics.shadcnIntegration = {
+          status: 'active',
+          memoryStats: this.shadcnMemoryIntegration.getMemoryStats(),
+          initializationTime: Date.now()
+        };
+      } else {
+        console.warn('⚠️ ShadCN Memory Integration failed, continuing without component intelligence');
+        this.webQualityMetrics.shadcnIntegration = {
+          status: 'inactive',
+          error: initResult.error
+        };
+      }
+      
+    } catch (error) {
+      console.error('❌ ShadCN Memory Integration error:', error);
+      this.webQualityMetrics.shadcnIntegration = {
+        status: 'error',
+        error: error.message
+      };
+    }
+  }
+
+  async initializeWebFrontendDeveloper() {
+    try {
+      console.log('🤖 Initializing Enhanced Web Frontend Developer with ShadCN intelligence...');
+      
+      this.webFrontendDeveloper = new WebFrontendDeveloper(
+        this.orchestrator,
+        this.crystallineMemory
+      );
+      
+      // Initialize ShadCN integration for the web frontend developer
+      const shadcnInitResult = await this.webFrontendDeveloper.initializeShadCnIntegration();
+      
+      if (shadcnInitResult.success) {
+        console.log('✅ Web Frontend Developer with ShadCN intelligence ready');
+        
+        // Add to subAgents map for coordination
+        this.subAgents.set('web-frontend-developer-enhanced', {
+          id: 'web-frontend-developer-enhanced',
+          name: 'Enhanced Web Frontend Developer',
+          specialization: 'frontend-development-with-shadcn-intelligence',
+          instance: this.webFrontendDeveloper,
+          capabilities: this.webFrontendDeveloper.getCapabilities().capabilities,
+          shadcnIntegration: true,
+          integrationStats: this.webFrontendDeveloper.getShadCnIntegrationStats()
+        });
+        
+        console.log(`   🎨 ShadCN Integration Stats: ${JSON.stringify(this.webFrontendDeveloper.getShadCnIntegrationStats())}`);
+      } else {
+        console.warn('⚠️ Web Frontend Developer ShadCN integration failed, using standard capabilities');
+      }
+      
+    } catch (error) {
+      console.error('❌ Web Frontend Developer initialization error:', error);
+      this.webFrontendDeveloper = null;
+    }
+  }
+
+  async initializeVisualDesignAgents() {
+    try {
+      console.log('🎨 Initializing Visual Design Strategist and Web Visual Design Agent...');
+
+      // Initialize Visual Design Strategist
+      this.visualDesignStrategist = new VisualDesignStrategist(
+        this.orchestrator,
+        this.crystallineMemory
+      );
+
+      // Initialize Web Visual Design Agent with coordination capabilities
+      this.webVisualDesignAgent = new WebVisualDesignAgent(
+        this.orchestrator,
+        this.crystallineMemory
+      );
+
+      console.log('✅ Visual Design agents initialized with strategic coordination');
+
+      // Add to subAgents map for coordination
+      this.subAgents.set('visual-design-strategist', {
+        id: 'visual-design-strategist',
+        name: 'Visual Design Strategist',
+        specialization: 'strategic-visual-design-analysis-and-enhancement',
+        instance: this.visualDesignStrategist,
+        capabilities: this.visualDesignStrategist.getCapabilities().capabilities,
+        type: 'claude-code-agent',
+        category: 'visual-design-strategic'
+      });
+
+      this.subAgents.set('web-visual-design-agent', {
+        id: 'web-visual-design-agent',
+        name: 'Web Visual Design Agent',
+        specialization: 'visual-design-implementation-and-optimization',
+        instance: this.webVisualDesignAgent,
+        capabilities: this.webVisualDesignAgent.getCapabilities().capabilities,
+        strategicCoordination: this.webVisualDesignAgent.getCapabilities().strategicCoordination,
+        type: 'claude-code-agent',
+        category: 'visual-design-implementation'
+      });
+
+      // Set up visual enhancement trigger system
+      await this.setupVisualEnhancementTriggers();
+
+      console.log(`   🎯 Visual Design Strategist: Industry-specific analysis and enhancement planning`);
+      console.log(`   🛠️ Web Visual Design Agent: Implementation coordination and execution`);
+      console.log(`   🚀 Visual enhancement triggers: Proactive design optimization detection`);
+
+    } catch (error) {
+      console.error('❌ Visual Design agents initialization error:', error);
+      this.visualDesignStrategist = null;
+      this.webVisualDesignAgent = null;
+    }
+  }
+
+  async initializeMCPSpecializedAgents() {
+    try {
+      console.log('🔧 Initializing MCP-Based Specialized Agents...');
+
+      // Initialize Wireframe Creation Specialist
+      this.wireframeCreationSpecialist = new WireframeCreationSpecialist(
+        this.mcpManager,
+        this.crystallineMemory,
+        this.templateEngine
+      );
+
+      // Initialize Visual Design Specialist
+      this.visualDesignSpecialist = new VisualDesignSpecialist(
+        this.mcpManager,
+        this.crystallineMemory,
+        this.templateEngine
+      );
+
+      // Initialize Frontend Development Specialist
+      this.frontendDevelopmentSpecialist = new FrontendDevelopmentSpecialist(
+        this.mcpManager,
+        this.crystallineMemory,
+        this.templateEngine
+      );
+
+      console.log('✅ MCP-Based Specialized Agents initialized successfully');
+
+      // Add to subAgents map for coordination
+      this.subAgents.set('wireframe-creation-specialist', {
+        id: 'wireframe-creation-specialist',
+        name: 'Wireframe Creation Specialist',
+        specialization: 'comprehensive-wireframe-design-with-mcp-tools',
+        instance: this.wireframeCreationSpecialist,
+        capabilities: this.wireframeCreationSpecialist.config.capabilities,
+        type: 'mcp-agent',
+        category: 'wireframe-design',
+        mcpServers: this.wireframeCreationSpecialist.config.mcpServers,
+        wireframeTypes: this.wireframeCreationSpecialist.config.wireframeTypes
+      });
+
+      this.subAgents.set('visual-design-specialist', {
+        id: 'visual-design-specialist',
+        name: 'Visual Design Specialist',
+        specialization: 'comprehensive-visual-design-with-mcp-tools',
+        instance: this.visualDesignSpecialist,
+        capabilities: this.visualDesignSpecialist.config.capabilities,
+        type: 'mcp-agent',
+        category: 'visual-design',
+        mcpServers: this.visualDesignSpecialist.config.mcpServers,
+        designFrameworks: this.visualDesignSpecialist.config.designFrameworks
+      });
+
+      this.subAgents.set('frontend-development-specialist', {
+        id: 'frontend-development-specialist',
+        name: 'Frontend Development Specialist',
+        specialization: 'comprehensive-frontend-development-with-mcp-tools',
+        instance: this.frontendDevelopmentSpecialist,
+        capabilities: this.frontendDevelopmentSpecialist.config.capabilities,
+        type: 'mcp-agent',
+        category: 'frontend-development',
+        mcpServers: this.frontendDevelopmentSpecialist.config.mcpServers,
+        technologies: this.frontendDevelopmentSpecialist.config.technologies
+      });
+
+      console.log(`   🎨 Wireframe Creation Specialist: Information architecture + User flows + Interactive prototypes`);
+      console.log(`   🎯 Visual Design Specialist: Brand identity + Color systems + Component design + Accessibility`);
+      console.log(`   💻 Frontend Development Specialist: React/Next.js + TypeScript + Performance optimization + Testing`);
+      console.log(`   🔧 MCP Integration: FileSystem + Ref.tools + Memory + Sequential Thinking + Notion`);
+
+    } catch (error) {
+      console.error('❌ MCP Specialized Agents initialization error:', error);
+      this.wireframeCreationSpecialist = null;
+      this.visualDesignSpecialist = null;
+      this.frontendDevelopmentSpecialist = null;
+    }
+  }
+
+  async setupVisualEnhancementTriggers() {
+    try {
+      console.log('🎯 Setting up proactive visual enhancement trigger system...');
+      
+      // Listen for design-related events that should trigger visual enhancement
+      this.on('designEnhancementRequest', async (event) => {
+        console.log(`🎨 Visual enhancement trigger activated: ${event.trigger}`);
+        await this.handleVisualEnhancementRequest(event);
+      });
+      
+      // Listen for project phase transitions that might benefit from visual enhancement
+      this.on('phaseTransitionResult', async (event) => {
+        if (this.shouldTriggerVisualEnhancement(event)) {
+          this.emit('designEnhancementRequest', {
+            trigger: 'phase-transition',
+            projectId: event.projectId,
+            phase: event.toPhase,
+            context: event
+          });
+        }
+      });
+      
+      console.log('✅ Visual enhancement trigger system active');
+      
+    } catch (error) {
+      console.error('❌ Error setting up visual enhancement triggers:', error);
+    }
+  }
+
+  shouldTriggerVisualEnhancement(phaseTransitionEvent) {
+    // Trigger visual enhancement for design-related phases
+    const designPhases = [
+      'wireframe-quality-check',
+      'design-implementation-validation',
+      'development-quality-assessment'
+    ];
+    
+    return designPhases.includes(phaseTransitionEvent.fromPhase) ||
+           designPhases.includes(phaseTransitionEvent.toPhase);
+  }
+
+  async handleVisualEnhancementRequest(event) {
+    try {
+      console.log(`🚀 Processing visual enhancement request for ${event.projectId}`);
+      
+      if (!this.visualDesignStrategist || !this.webVisualDesignAgent) {
+        console.warn('⚠️ Visual design agents not available for enhancement request');
+        return;
+      }
+      
+      // Generate strategic analysis first
+      const strategyResult = await this.visualDesignStrategist.generateVisualEnhancementStrategy(
+        event.context.websiteContext || { url: 'unknown', industry: 'generic' },
+        event.context.industry || 'business_intelligence',
+        event.context.targetAudience || { primary: 'business_users' },
+        event.context.businessGoals || ['engagement_optimization', 'professional_aesthetics']
+      );
+      
+      if (strategyResult.success) {
+        // Coordinate implementation planning
+        const coordinationResult = await this.webVisualDesignAgent.coordinateVisualEnhancementStrategy(
+          event.context.websiteContext || { url: 'unknown' },
+          event.context.industry || 'business_intelligence',
+          event.context.targetAudience || { primary: 'business_users' },
+          event.context.businessGoals || ['engagement_optimization']
+        );
+        
+        // Store enhancement recommendation in crystalline memory
+        await this.crystallineMemory.storeMemory('visual-enhancement-recommendations', {
+          type: 'proactive-visual-enhancement',
+          projectId: event.projectId,
+          trigger: event.trigger,
+          strategy: strategyResult,
+          coordination: coordinationResult,
+          timestamp: Date.now()
+        });
+        
+        console.log(`✅ Visual enhancement recommendation generated for ${event.projectId}`);
+        
+        // Emit enhancement ready event
+        this.emit('visualEnhancementReady', {
+          projectId: event.projectId,
+          strategy: strategyResult,
+          coordination: coordinationResult,
+          trigger: event.trigger
+        });
+      }
+      
+    } catch (error) {
+      console.error('❌ Error handling visual enhancement request:', error);
     }
   }
 
@@ -617,6 +977,313 @@ class WebDevelopmentQualityHub extends EventEmitter {
     console.log(`🤝 Phase quality coordination established for ${phases.length} phases`);
   }
 
+  // ============ QUALITY GATE EFFECTIVENESS & SELF-ADJUSTMENT ============
+
+  startQualityGateEffectivenessLoop() {
+    console.log('🎯 Starting quality gate effectiveness monitoring...');
+    
+    // Analyze quality gate effectiveness every 5 minutes
+    this.gateEffectivenessInterval = setInterval(async () => {
+      await this.analyzeQualityGateEffectiveness();
+    }, this.adjustmentConfig.adjustmentInterval);
+    
+    // Initialize effectiveness tracking for all gates
+    this.initializeGateEffectivenessTracking();
+    
+    console.log('✅ Quality gate effectiveness loop started');
+  }
+
+  initializeGateEffectivenessTracking() {
+    const phases = Object.keys(this.qualityWorkflow.phaseToPhaseGates);
+    
+    for (const phase of phases) {
+      this.qualityGateEffectiveness.set(phase, {
+        totalDecisions: 0,
+        correctDecisions: 0,
+        falsePositives: 0, // Rejected but should have passed
+        falseNegatives: 0, // Passed but should have been rejected
+        effectiveness: 0.5,
+        lastAnalysis: Date.now(),
+        adjustmentCount: 0
+      });
+    }
+    
+    console.log(`🎯 Effectiveness tracking initialized for ${phases.length} quality gates`);
+  }
+
+  async analyzeQualityGateEffectiveness() {
+    if (Date.now() - this.lastEffectivenessAnalysis < this.adjustmentConfig.adjustmentInterval) {
+      return; // Too soon since last analysis
+    }
+
+    console.log('🔍 Analyzing quality gate effectiveness...');
+
+    try {
+      // Retrieve recent quality gate decisions from crystalline memory
+      const recentGateDecisions = await this.crystallineMemory.retrieveMemory(
+        'quality gate decisions effectiveness',
+        'web-quality-scores-central',
+        100
+      );
+
+      const effectivenessAnalysis = await this.processGateEffectivenessData(recentGateDecisions);
+      
+      // Identify gates that need adjustment
+      const adjustmentNeeds = this.identifyAdjustmentNeeds(effectivenessAnalysis);
+      
+      if (adjustmentNeeds.length > 0) {
+        await this.performQualityGateAdjustments(adjustmentNeeds);
+        this.webQualityMetrics.qualityGateAdjustments++;
+      }
+
+      this.lastEffectivenessAnalysis = Date.now();
+      
+      console.log(`✅ Quality gate effectiveness analysis complete. Adjustments made: ${adjustmentNeeds.length}`);
+      
+    } catch (error) {
+      console.error('Error analyzing quality gate effectiveness:', error);
+    }
+  }
+
+  async processGateEffectivenessData(gateDecisions) {
+    const effectivenessAnalysis = new Map();
+
+    for (const decision of gateDecisions.results || []) {
+      try {
+        const decisionData = JSON.parse(decision.content);
+        
+        if (decisionData.type === 'quality-gate-decision' && decisionData.phase) {
+          const phase = decisionData.phase;
+          
+          if (!effectivenessAnalysis.has(phase)) {
+            effectivenessAnalysis.set(phase, {
+              phase,
+              decisions: [],
+              effectiveness: 0,
+              needsAdjustment: false,
+              adjustmentDirection: null,
+              confidence: 0
+            });
+          }
+
+          const phaseData = effectivenessAnalysis.get(phase);
+          phaseData.decisions.push(decisionData);
+          
+          // Calculate effectiveness based on actual outcomes vs predictions
+          if (decisionData.actualOutcome !== undefined) {
+            const wasCorrect = (decisionData.gateDecision === 'pass') === (decisionData.actualOutcome === 'success');
+            
+            if (wasCorrect) {
+              phaseData.effectiveness += 1;
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Error processing gate decision data:', error);
+      }
+    }
+
+    // Normalize effectiveness scores
+    for (const [phase, data] of effectivenessAnalysis) {
+      if (data.decisions.length > 0) {
+        data.effectiveness = data.effectiveness / data.decisions.length;
+        data.confidence = Math.min(data.decisions.length / this.adjustmentConfig.minDataPoints, 1.0);
+      }
+    }
+
+    return effectivenessAnalysis;
+  }
+
+  identifyAdjustmentNeeds(effectivenessAnalysis) {
+    const adjustmentNeeds = [];
+
+    for (const [phase, analysis] of effectivenessAnalysis) {
+      if (analysis.decisions.length < this.adjustmentConfig.minDataPoints) {
+        continue; // Not enough data yet
+      }
+
+      if (analysis.effectiveness < this.adjustmentConfig.effectivenessThreshold) {
+        // Gate is not effective enough - needs adjustment
+        
+        const adjustment = {
+          phase,
+          currentThreshold: this.qualityWorkflow.phaseToPhaseGates[phase]?.requiredScore || 80,
+          effectiveness: analysis.effectiveness,
+          adjustmentType: this.determineAdjustmentType(analysis),
+          adjustmentAmount: this.calculateAdjustmentAmount(analysis),
+          reasoning: this.generateAdjustmentReasoning(analysis)
+        };
+
+        adjustmentNeeds.push(adjustment);
+      }
+    }
+
+    return adjustmentNeeds;
+  }
+
+  determineAdjustmentType(analysis) {
+    // Analyze the pattern of incorrect decisions
+    let falsePositives = 0;
+    let falseNegatives = 0;
+
+    for (const decision of analysis.decisions) {
+      if (decision.actualOutcome !== undefined) {
+        const gateDecision = decision.gateDecision === 'pass';
+        const actualSuccess = decision.actualOutcome === 'success';
+
+        if (gateDecision && !actualSuccess) {
+          falsePositives++; // Gate passed but project failed
+        } else if (!gateDecision && actualSuccess) {
+          falseNegatives++; // Gate failed but project succeeded
+        }
+      }
+    }
+
+    if (falsePositives > falseNegatives) {
+      return 'increase-threshold'; // Gate is too lenient
+    } else if (falseNegatives > falsePositives) {
+      return 'decrease-threshold'; // Gate is too strict
+    } else {
+      return 'recalibrate'; // Mixed signals, need more sophisticated adjustment
+    }
+  }
+
+  calculateAdjustmentAmount(analysis) {
+    const effectivenessGap = this.adjustmentConfig.effectivenessThreshold - analysis.effectiveness;
+    const baseAdjustment = Math.ceil(effectivenessGap * 20); // Scale to quality score points
+    
+    return Math.min(baseAdjustment, this.adjustmentConfig.maxAdjustment);
+  }
+
+  generateAdjustmentReasoning(analysis) {
+    const effectiveness = (analysis.effectiveness * 100).toFixed(1);
+    const threshold = this.adjustmentConfig.effectivenessThreshold * 100;
+    
+    return `Quality gate effectiveness is ${effectiveness}%, below threshold of ${threshold}%. ` +
+           `Based on ${analysis.decisions.length} recent decisions, adjusting to improve accuracy.`;
+  }
+
+  async performQualityGateAdjustments(adjustmentNeeds) {
+    console.log(`🔧 Performing ${adjustmentNeeds.length} quality gate adjustments...`);
+
+    for (const adjustment of adjustmentNeeds) {
+      await this.adjustQualityGateThreshold(adjustment);
+    }
+
+    // Store adjustment history in crystalline memory
+    await this.crystallineMemory.storeMemory(
+      'webdev-quality-gate-effectiveness',
+      JSON.stringify({
+        type: 'quality-gate-adjustments',
+        timestamp: Date.now(),
+        adjustments: adjustmentNeeds,
+        systemLearning: true
+      }),
+      {
+        importance: 0.9,
+        semantic_tags: ['quality-gate', 'adjustment', 'learning', 'effectiveness']
+      }
+    );
+  }
+
+  async adjustQualityGateThreshold(adjustment) {
+    const { phase, adjustmentType, adjustmentAmount, reasoning } = adjustment;
+    
+    const currentGate = this.qualityWorkflow.phaseToPhaseGates[phase];
+    if (!currentGate) return;
+
+    const oldThreshold = currentGate.requiredScore;
+    let newThreshold = oldThreshold;
+
+    switch (adjustmentType) {
+      case 'increase-threshold':
+        newThreshold = Math.min(oldThreshold + adjustmentAmount, 95);
+        break;
+      case 'decrease-threshold':
+        newThreshold = Math.max(oldThreshold - adjustmentAmount, 60);
+        break;
+      case 'recalibrate':
+        // More sophisticated adjustment based on detailed analysis
+        newThreshold = await this.recalibrateThreshold(phase, adjustment);
+        break;
+    }
+
+    // Apply the adjustment
+    this.qualityWorkflow.phaseToPhaseGates[phase].requiredScore = newThreshold;
+    
+    // Track the adjustment
+    const adjustmentRecord = {
+      phase,
+      timestamp: Date.now(),
+      oldThreshold,
+      newThreshold,
+      adjustmentType,
+      reasoning,
+      effectiveness: adjustment.effectiveness
+    };
+    
+    this.gateAdjustmentHistory.push(adjustmentRecord);
+
+    // Update effectiveness tracking
+    const gateData = this.qualityGateEffectiveness.get(phase);
+    if (gateData) {
+      gateData.adjustmentCount++;
+      gateData.lastAnalysis = Date.now();
+    }
+
+    console.log(`🎯 Quality gate adjusted: ${phase} threshold ${oldThreshold} → ${newThreshold} (${adjustmentType})`);
+    console.log(`   Reasoning: ${reasoning}`);
+
+    // Emit adjustment event for other system components
+    this.emit('qualityGateAdjusted', adjustmentRecord);
+  }
+
+  async recalibrateThreshold(phase, adjustment) {
+    // Advanced recalibration using learning data
+    const historicalData = await this.crystallineMemory.retrieveMemory(
+      `quality gate ${phase} historical performance`,
+      'webdev-quality-gate-effectiveness',
+      20
+    );
+
+    let optimalThreshold = adjustment.currentThreshold;
+
+    // Analyze historical success patterns to find optimal threshold
+    if (historicalData.results && historicalData.results.length > 0) {
+      const successfulProjects = [];
+      const failedProjects = [];
+
+      for (const record of historicalData.results) {
+        try {
+          const data = JSON.parse(record.content);
+          if (data.qualityScore && data.actualOutcome) {
+            if (data.actualOutcome === 'success') {
+              successfulProjects.push(data.qualityScore);
+            } else {
+              failedProjects.push(data.qualityScore);
+            }
+          }
+        } catch (error) {
+          // Skip malformed records
+        }
+      }
+
+      if (successfulProjects.length > 0 && failedProjects.length > 0) {
+        // Find threshold that maximizes accuracy
+        const minSuccess = Math.min(...successfulProjects);
+        const maxFailure = Math.max(...failedProjects);
+        
+        // Optimal threshold is typically between these values
+        optimalThreshold = Math.round((minSuccess + maxFailure) / 2);
+        
+        // Ensure it's within reasonable bounds
+        optimalThreshold = Math.max(60, Math.min(95, optimalThreshold));
+      }
+    }
+
+    return optimalThreshold;
+  }
+
   startWebQualityIntelligenceServices() {
     console.log('🧠 Starting web quality intelligence services...');
     
@@ -633,14 +1300,29 @@ class WebDevelopmentQualityHub extends EventEmitter {
     console.log('✅ Web quality intelligence services started');
   }
 
-  // Core Web Quality Domain functionality
+  // Core Web Quality Domain functionality with learning integration
   async requestPhaseTransition(projectId, fromPhase, toPhase, validationData = {}) {
     try {
       if (!this.phaseQualityCoordinator) {
         throw new Error('Phase Quality Coordinator not initialized');
       }
       
-      console.log(`🚦 Web Quality Hub: Processing phase transition for ${projectId}`);
+      console.log(`🚦 [Learning Mode] Web Quality Hub: Processing phase transition for ${projectId}`);
+      
+      // Make learning prediction before quality gate decision
+      const predictionId = await this.webDevLearning.makePrediction(
+        this.agentId,
+        'quality-gate',
+        {
+          projectId,
+          fromPhase,
+          toPhase,
+          validationData,
+          gateName: `${fromPhase}_to_${toPhase}`,
+          currentThreshold: this.qualityWorkflow.phaseToPhaseGates[fromPhase]?.requiredScore || 80
+        },
+        0.8
+      );
       
       const result = await this.phaseQualityCoordinator.requestPhaseTransition(
         projectId, 
@@ -648,6 +1330,17 @@ class WebDevelopmentQualityHub extends EventEmitter {
         toPhase, 
         validationData
       );
+      
+      // Enhanced result with learning integration
+      const enhancedResult = {
+        ...result,
+        predictionId,
+        learningEnhanced: true,
+        recordOutcome: (actualOutcome) => this.recordPhaseTransitionOutcome(predictionId, actualOutcome)
+      };
+      
+      // Store quality gate decision for effectiveness analysis
+      await this.storeQualityGateDecision(projectId, fromPhase, toPhase, result, predictionId);
       
       // Update web quality metrics
       this.webQualityMetrics.totalWebQualityChecks++;
@@ -663,12 +1356,61 @@ class WebDevelopmentQualityHub extends EventEmitter {
         (this.webQualityMetrics.avgQualityScore * (this.webQualityMetrics.totalWebQualityChecks - 1) + 
          result.qualityScore) / this.webQualityMetrics.totalWebQualityChecks;
       
-      return result;
+      return enhancedResult;
       
     } catch (error) {
       console.error(`❌ Phase transition failed for ${projectId}:`, error);
       this.webQualityMetrics.failedChecks++;
       throw error;
+    }
+  }
+
+  async storeQualityGateDecision(projectId, fromPhase, toPhase, result, predictionId) {
+    try {
+      const gateDecision = {
+        type: 'quality-gate-decision',
+        projectId,
+        phase: fromPhase,
+        targetPhase: toPhase,
+        predictionId,
+        gateDecision: result.approved ? 'pass' : 'fail',
+        qualityScore: result.qualityScore,
+        threshold: this.qualityWorkflow.phaseToPhaseGates[fromPhase]?.requiredScore || 80,
+        timestamp: Date.now(),
+        reasoning: result.reasoning || 'Standard quality gate evaluation',
+        actualOutcome: null // To be filled when actual project outcome is known
+      };
+
+      await this.crystallineMemory.storeMemory(
+        'web-quality-scores-central',
+        JSON.stringify(gateDecision),
+        {
+          importance: 0.8,
+          semantic_tags: ['quality-gate', 'decision', fromPhase, toPhase, 'learning']
+        }
+      );
+
+      console.log(`📊 Quality gate decision stored: ${fromPhase} → ${toPhase} (${result.approved ? 'PASS' : 'FAIL'})`);
+      
+    } catch (error) {
+      console.error('Error storing quality gate decision:', error);
+    }
+  }
+
+  async recordPhaseTransitionOutcome(predictionId, actualOutcome) {
+    try {
+      // Record the actual outcome for learning
+      const accuracy = await this.webDevLearning.recordActualOutcome(predictionId, {
+        passed: actualOutcome === 'success',
+        actualOutcome
+      });
+
+      console.log(`📚 Phase transition outcome recorded: ${predictionId} (accuracy: ${(accuracy * 100).toFixed(1)}%)`);
+      
+      return accuracy;
+    } catch (error) {
+      console.error('Error recording phase transition outcome:', error);
+      return 0;
     }
   }
 
@@ -822,6 +1564,203 @@ class WebDevelopmentQualityHub extends EventEmitter {
   monitorMCPPerformance() {
     // MCP performance monitoring - to be implemented
     console.log('🔌 Monitoring MCP performance...');
+  }
+
+  // Public methods for visual enhancement access
+  async requestVisualEnhancement(projectId, websiteContext, industry, targetAudience, businessGoals) {
+    try {
+      console.log(`🎨 External visual enhancement request for project: ${projectId}`);
+      
+      if (!this.visualDesignStrategist || !this.webVisualDesignAgent) {
+        throw new Error('Visual design agents not available');
+      }
+      
+      // Trigger the visual enhancement request
+      this.emit('designEnhancementRequest', {
+        trigger: 'external-request',
+        projectId,
+        context: {
+          websiteContext,
+          industry,
+          targetAudience,
+          businessGoals
+        }
+      });
+      
+      return {
+        success: true,
+        message: 'Visual enhancement request initiated',
+        projectId,
+        timestamp: new Date().toISOString()
+      };
+      
+    } catch (error) {
+      console.error('❌ External visual enhancement request failed:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  getVisualDesignCapabilities() {
+    const capabilities = {
+      visualDesignStrategist: this.visualDesignStrategist ?
+        this.visualDesignStrategist.getCapabilities() : null,
+      webVisualDesignAgent: this.webVisualDesignAgent ?
+        this.webVisualDesignAgent.getCapabilities() : null,
+      proactiveEnhancement: true,
+      industrySpecificAnalysis: true,
+      strategicCoordination: true,
+      implementationPlanning: true
+    };
+
+    return capabilities;
+  }
+
+  // Public methods for accessing MCP-based specialized agents
+  async createWireframe(request) {
+    if (!this.wireframeCreationSpecialist) {
+      throw new Error('Wireframe Creation Specialist not available');
+    }
+
+    console.log(`🎨 Creating wireframe for ${request.projectType} - ${request.pageType}`);
+    return await this.wireframeCreationSpecialist.createWireframe(request);
+  }
+
+  async createVisualDesign(request) {
+    if (!this.visualDesignSpecialist) {
+      throw new Error('Visual Design Specialist not available');
+    }
+
+    console.log(`🎯 Creating visual design for ${request.projectType} - ${request.designStyle}`);
+    return await this.visualDesignSpecialist.createVisualDesign(request);
+  }
+
+  async developFrontend(request) {
+    if (!this.frontendDevelopmentSpecialist) {
+      throw new Error('Frontend Development Specialist not available');
+    }
+
+    console.log(`💻 Developing frontend for ${request.projectType} - ${request.framework}`);
+    return await this.frontendDevelopmentSpecialist.developFrontend(request);
+  }
+
+  getMCPSpecializedAgentsStatus() {
+    return {
+      wireframeCreationSpecialist: this.wireframeCreationSpecialist ?
+        this.wireframeCreationSpecialist.getAgentStatus() : null,
+      visualDesignSpecialist: this.visualDesignSpecialist ?
+        this.visualDesignSpecialist.getAgentStatus() : null,
+      frontendDevelopmentSpecialist: this.frontendDevelopmentSpecialist ?
+        this.frontendDevelopmentSpecialist.getAgentStatus() : null,
+      totalMCPAgents: [
+        this.wireframeCreationSpecialist,
+        this.visualDesignSpecialist,
+        this.frontendDevelopmentSpecialist
+      ].filter(Boolean).length
+    };
+  }
+
+  async executeComprehensiveDesignDevelopmentWorkflow(request) {
+    try {
+      console.log(`🚀 Executing comprehensive design & development workflow for project: ${request.projectId}`);
+
+      const workflow = {
+        wireframe: null,
+        visualDesign: null,
+        frontendDevelopment: null,
+        errors: []
+      };
+
+      // Phase 1: Wireframe Creation
+      if (this.wireframeCreationSpecialist) {
+        try {
+          console.log('📐 Phase 1: Creating wireframes...');
+          workflow.wireframe = await this.wireframeCreationSpecialist.createWireframe({
+            projectId: request.projectId,
+            projectType: request.projectType || 'landing-page',
+            pageType: request.pageType || 'homepage',
+            targetAudience: request.targetAudience,
+            features: request.features,
+            branding: request.branding
+          });
+          console.log('✅ Phase 1 completed: Wireframes created');
+        } catch (error) {
+          workflow.errors.push({ phase: 'wireframe', error: error.message });
+          console.error('❌ Phase 1 failed:', error.message);
+        }
+      }
+
+      // Phase 2: Visual Design Creation
+      if (this.visualDesignSpecialist && workflow.wireframe) {
+        try {
+          console.log('🎨 Phase 2: Creating visual design...');
+          workflow.visualDesign = await this.visualDesignSpecialist.createVisualDesign({
+            projectId: request.projectId,
+            projectType: request.projectType || 'landing-page',
+            designStyle: request.designStyle || 'modern',
+            branding: request.branding,
+            targetAudience: request.targetAudience,
+            industry: request.industry,
+            accessibility: request.accessibility
+          });
+          console.log('✅ Phase 2 completed: Visual design created');
+        } catch (error) {
+          workflow.errors.push({ phase: 'visual-design', error: error.message });
+          console.error('❌ Phase 2 failed:', error.message);
+        }
+      }
+
+      // Phase 3: Frontend Development
+      if (this.frontendDevelopmentSpecialist && workflow.visualDesign) {
+        try {
+          console.log('💻 Phase 3: Developing frontend...');
+          workflow.frontendDevelopment = await this.frontendDevelopmentSpecialist.developFrontend({
+            projectId: request.projectId,
+            projectType: request.projectType || 'landing-page',
+            framework: request.framework || 'react',
+            features: request.features,
+            performance: request.performance,
+            accessibility: request.accessibility,
+            devices: request.devices
+          });
+          console.log('✅ Phase 3 completed: Frontend developed');
+        } catch (error) {
+          workflow.errors.push({ phase: 'frontend-development', error: error.message });
+          console.error('❌ Phase 3 failed:', error.message);
+        }
+      }
+
+      const workflowResult = {
+        projectId: request.projectId,
+        success: workflow.errors.length === 0,
+        completedPhases: Object.keys(workflow).filter(key => workflow[key] && key !== 'errors').length,
+        totalPhases: 3,
+        workflow: workflow,
+        timestamp: new Date().toISOString()
+      };
+
+      // Store comprehensive workflow result in memory
+      if (this.crystallineMemory) {
+        await this.crystallineMemory.storeMemory(
+          'comprehensive-design-development-workflows',
+          JSON.stringify(workflowResult),
+          {
+            importance: 0.9,
+            semantic_tags: ['comprehensive-workflow', 'wireframe', 'visual-design', 'frontend-development', request.projectType]
+          }
+        );
+      }
+
+      console.log(`🎉 Comprehensive workflow completed: ${workflowResult.completedPhases}/${workflowResult.totalPhases} phases successful`);
+
+      return workflowResult;
+
+    } catch (error) {
+      console.error('❌ Comprehensive design & development workflow failed:', error);
+      throw error;
+    }
   }
 
   // Status and health methods

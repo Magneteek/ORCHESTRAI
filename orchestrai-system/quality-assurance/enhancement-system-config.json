@@ -1,0 +1,392 @@
+{
+  "automatedEnhancementSystem": {
+    "enabled": true,
+    "version": "2.0.0",
+    "systemName": "ORCHESTRAI Write-Evaluate-Iterate Loop with Natural Flow Framework",
+    "enhancedCopywriting": true,
+    "frameworkIntegration": "enhanced-content-writing-framework.md"
+  },
+
+  "enhancementLoop": {
+    "maxIterations": 5,
+    "qualityThreshold": 85,
+    "timeoutMinutes": 30,
+    "retryFailedEnhancements": true,
+    "maxRetries": 2
+  },
+
+  "autoTriggerRules": {
+    "enabled": true,
+    "triggerPatterns": [
+      "content-generation",
+      "pillar-article", 
+      "comprehensive-content",
+      "blog-post-long-form",
+      "strategic-content",
+      "authority-content"
+    ],
+    "minimumWordCount": 2000,
+    "requireOutline": true,
+    "excludePatterns": [
+      "outline-only",
+      "draft-content",
+      "test-content",
+      "template-content"
+    ]
+  },
+
+  "qualityGates": {
+    "structural": {
+      "minScore": 80,
+      "weight": 0.25,
+      "criticalElements": [
+        "h1-h2-h3-hierarchy",
+        "word-count-targets",
+        "section-completeness",
+        "compelling-hook-presence"
+      ]
+    },
+    "naturalFlow": {
+      "minScore": 85,
+      "weight": 0.25,
+      "criticalElements": [
+        "paragraph-to-list-ratio-70-20-10",
+        "conversational-tone-medical",
+        "story-thread-continuity",
+        "smooth-section-transitions",
+        "natural-paragraph-distribution-35-45-20"
+      ]
+    },
+    "content": {
+      "minScore": 80, 
+      "weight": 0.15,
+      "criticalElements": [
+        "strategic-engagement-elements",
+        "natural-list-integration",
+        "story-based-examples",
+        "trust-building-elements"
+      ]
+    },
+    "psychographic": {
+      "minScore": 75,
+      "weight": 0.20,
+      "criticalElements": [
+        "segment-targeting",
+        "pain-point-resolution",
+        "motivation-alignment",
+        "cultural-resonance"
+      ]
+    },
+    "seo": {
+      "minScore": 80,
+      "weight": 0.15,
+      "criticalElements": [
+        "primary-keyword-integration",
+        "secondary-keyword-density",
+        "local-seo-elements",
+        "internal-linking"
+      ]
+    },
+    "conversion": {
+      "minScore": 70,
+      "weight": 0.10,
+      "criticalElements": [
+        "cta-placement",
+        "trust-signals",
+        "urgency-elements",
+        "value-propositions"
+      ]
+    },
+    "readability": {
+      "minScore": 85,
+      "weight": 0.10,
+      "criticalElements": [
+        "grade-level-appropriate",
+        "conversational-flow",
+        "sentence-variation",
+        "cultural-authenticity"
+      ]
+    },
+    "factualAccuracy": {
+      "minScore": 95,
+      "weight": 0.15,
+      "criticalElements": [
+        "no-pricing-hallucinations",
+        "no-invented-statistics",
+        "no-treatment-guarantees",
+        "verified-claims-only",
+        "realistic-expectations"
+      ]
+    }
+  },
+
+  "enhancementStrategies": {
+    "missing_compelling_hook": {
+      "priority": 1,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 8,
+      "frameworkRequired": "story-solution-credibility",
+      "requirements": [
+        "attention-grabber-25-30-words",
+        "personal-connection-40-50-words",
+        "credibility-statement-30-40-words",
+        "content-promise-40-50-words",
+        "smooth-transition-15-20-words"
+      ]
+    },
+    "paragraph_to_list_ratio_violation": {
+      "priority": 1,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 15,
+      "requirements": [
+        "convert-excessive-lists-to-paragraphs",
+        "maintain-70-20-10-ratio",
+        "preserve-strategic-lists-only",
+        "enhance-conversational-flow"
+      ]
+    },
+    "missing_sections": {
+      "priority": 2,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 15,
+      "maxSections": 3,
+      "frameworkRequired": "PAS-or-BAB"
+    },
+    "word_count_deficit": {
+      "priority": 2,
+      "agent": "content-writer-specialist", 
+      "estimatedTimeMinutes": 12,
+      "maxWordsPerIteration": 800,
+      "requirements": [
+        "paragraph-focused-expansion",
+        "story-continuity-maintenance",
+        "natural-flow-preservation"
+      ]
+    },
+    "poor_section_transitions": {
+      "priority": 2,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 8,
+      "requirements": [
+        "bridge-sentences",
+        "question-transitions",
+        "story-continuations",
+        "callback-references"
+      ]
+    },
+    "engagement_elements_overuse": {
+      "priority": 3,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 10,
+      "requirements": [
+        "reduce-excessive-lists",
+        "convert-to-narrative-flow",
+        "maintain-strategic-elements-only"
+      ]
+    },
+    "internal_linking": {
+      "priority": 3,
+      "agent": "seo-content-optimization",
+      "estimatedTimeMinutes": 8,
+      "maxLinksPerIteration": 15
+    },
+    "cta_integration": {
+      "priority": 2,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 5,
+      "maxCtasPerIteration": 5
+    },
+    "psychographic_targeting": {
+      "priority": 3,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 12,
+      "maxSegmentsPerIteration": 2,
+      "requirements": [
+        "story-based-targeting",
+        "natural-integration-in-paragraphs",
+        "avoid-list-format-targeting"
+      ]
+    },
+    "factual_accuracy_violations": {
+      "priority": 1,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 10,
+      "requirements": [
+        "remove-specific-pricing-without-verification",
+        "eliminate-invented-statistics",
+        "replace-guarantees-with-realistic-expectations",
+        "verify-all-claims"
+      ]
+    },
+    "seo_optimization": {
+      "priority": 3,
+      "agent": "seo-content-optimization",
+      "estimatedTimeMinutes": 10,
+      "maxOptimizationsPerIteration": 8
+    },
+    "structured_data": {
+      "priority": 4,
+      "agent": "seo-content-optimization",
+      "estimatedTimeMinutes": 6,
+      "maxSchemaTypes": 4
+    },
+    "conversational_flow_enhancement": {
+      "priority": 2,
+      "agent": "content-writer-specialist",
+      "estimatedTimeMinutes": 12,
+      "requirements": [
+        "paragraph-length-distribution-35-45-20",
+        "natural-conversation-tone",
+        "smooth-topic-progression",
+        "question-answer-flow"
+      ]
+    }
+  },
+
+  "agentConfiguration": {
+    "content-writer-specialist": {
+      "maxConcurrentTasks": 2,
+      "timeoutMinutes": 15,
+      "retryOnFailure": true,
+      "contextPreservation": true
+    },
+    "content-quality-validator": {
+      "maxConcurrentTasks": 3,
+      "timeoutMinutes": 5,
+      "detailedAnalysis": true,
+      "scoreWeighting": "qualityGates"
+    },
+    "seo-content-optimization": {
+      "maxConcurrentTasks": 2,
+      "timeoutMinutes": 10,
+      "keywordDensityTarget": 1.2,
+      "naturalIntegration": true
+    }
+  },
+
+  "memoryIntegration": {
+    "enabled": true,
+    "storeEnhancementResults": true,
+    "learningFromPatterns": true,
+    "crossProjectInsights": true,
+    "memoryPools": {
+      "enhancement-intelligence": {
+        "importance": 0.85,
+        "retention": "long-term",
+        "categories": [
+          "enhancement-patterns",
+          "success-metrics", 
+          "client-preferences",
+          "optimization-history"
+        ]
+      }
+    }
+  },
+
+  "performanceOptimization": {
+    "parallelProcessing": {
+      "enabled": true,
+      "maxConcurrentEnhancements": 3,
+      "resourceAllocation": "dynamic"
+    },
+    "caching": {
+      "enabled": true,
+      "cacheQualityAssessments": true,
+      "cacheDurationMinutes": 30,
+      "cacheSize": 100
+    },
+    "loadBalancing": {
+      "enabled": true,
+      "distributeByComplexity": true,
+      "prioritizeByDeadline": true
+    }
+  },
+
+  "notifications": {
+    "enhancementStarted": {
+      "enabled": true,
+      "recipients": ["orchestrator", "requesting-agent"]
+    },
+    "enhancementCompleted": {
+      "enabled": true,
+      "recipients": ["orchestrator", "requesting-agent", "project-memory"],
+      "includeMetrics": true
+    },
+    "enhancementFailed": {
+      "enabled": true,
+      "recipients": ["orchestrator", "system-admin"],
+      "includeTroubleshooting": true
+    },
+    "qualityThresholdMet": {
+      "enabled": true,
+      "recipients": ["orchestrator", "project-memory"],
+      "celebration": true
+    }
+  },
+
+  "reportingAndAnalytics": {
+    "enabled": true,
+    "dailyReports": true,
+    "weeklyAnalytics": true,
+    "performanceTracking": {
+      "averageIterations": true,
+      "successRate": true,
+      "timeSaved": true,
+      "qualityImprovement": true,
+      "clientSatisfaction": true
+    },
+    "systemLearning": {
+      "patternRecognition": true,
+      "optimizationSuggestions": true,
+      "predictiveQuality": true,
+      "customRecommendations": true
+    }
+  },
+
+  "fallbackProcedures": {
+    "maxIterationsReached": {
+      "action": "manual-review-trigger",
+      "notification": true,
+      "preserveProgress": true
+    },
+    "agentFailure": {
+      "action": "retry-with-different-agent",
+      "maxRetries": 2,
+      "escalation": "manual-intervention"
+    },
+    "systemOverload": {
+      "action": "queue-enhancement",
+      "priorityBased": true,
+      "resourceReallocation": true
+    },
+    "criticalError": {
+      "action": "emergency-disable",
+      "notification": "immediate",
+      "rollbackCapability": true
+    }
+  },
+
+  "clientSpecificSettings": {
+    "nasmehpg": {
+      "qualityThreshold": 88,
+      "culturalAuthenticity": "slovenian",
+      "psychographicWeighting": 0.25,
+      "localSeoEmphasis": true,
+      "premiumPositioning": true
+    },
+    "quartziq": {
+      "qualityThreshold": 90,
+      "technicalAccuracy": "high",
+      "b2bTone": true,
+      "authorityFocus": true
+    }
+  },
+
+  "systemMaintenance": {
+    "automaticUpdates": false,
+    "maintenanceWindow": "02:00-04:00",
+    "backupFrequency": "daily",
+    "logRotation": "weekly",
+    "performanceMonitoring": "continuous"
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "industry": "saas",
+  "name": "SaaS Marketing Framework", 
+  "description": "Comprehensive templates for software-as-a-service companies, subscription platforms, and B2B software solutions",
+  "version": "1.0.0",
+  "templates": {
+    "customer_acquisition": {
+      "pain_points": [
+        "Complex software implementation and integration challenges",
+        "Uncertainty about ROI and business value from software investments",
+        "Concerns about data security and compliance requirements",
+        "Fear of vendor lock-in and lack of flexibility",
+        "Difficulty scaling current systems and processes",
+        "Time-consuming manual processes and inefficiencies",
+        "Integration challenges with existing tech stack"
+      ],
+      "value_propositions": [
+        {
+          "type": "efficiency_focused",
+          "template": "Automate [process/workflow] and save [time amount] per [frequency] while reducing errors by [percentage]%",
+          "use_case": "Productivity-focused prospects"
+        },
+        {
+          "type": "roi_focused",
+          "template": "Proven ROI: Customers see average [percentage]% cost reduction and [metric] improvement within [timeframe]",
+          "use_case": "ROI-conscious decision makers"
+        },
+        {
+          "type": "scalability_focused",
+          "template": "Scale your [business function] from [current state] to [future state] without adding headcount or complexity",
+          "use_case": "Growth-stage companies"
+        },
+        {
+          "type": "integration_focused",
+          "template": "Seamlessly integrate with [popular tools] and be up and running in [timeframe] - no disruption to current workflows",
+          "use_case": "Integration-concerned prospects"
+        }
+      ]
+    },
+    "product_descriptions": {
+      "enterprise_solution": {
+        "template": "[Product name] empowers enterprise teams to [primary benefit] through [key features]. Built for scale with enterprise-grade security, compliance, and integrations that [specific outcome].",
+        "psychological_triggers": ["enterprise_credibility", "scalability", "security"],
+        "cta": "Schedule your enterprise demo"
+      },
+      "small_business_solution": {
+        "template": "Simple, powerful [solution category] designed for growing businesses. Get [primary benefit] without the complexity - set up in minutes, results in days.",
+        "psychological_triggers": ["simplicity", "quick_results", "growth_focus"],
+        "cta": "Start your free trial today"
+      },
+      "developer_tools": {
+        "template": "Developer-first [tool category] with robust APIs, comprehensive documentation, and the flexibility to [specific capability]. Built by developers, for developers.",
+        "psychological_triggers": ["developer_credibility", "flexibility", "technical_depth"],
+        "cta": "Explore the API documentation"
+      },
+      "analytics_platform": {
+        "template": "Turn your data into actionable insights with [platform name]. Advanced analytics, beautiful dashboards, and automated reporting that helps you [business outcome].",
+        "psychological_triggers": ["data_insights", "automation", "business_intelligence"],
+        "cta": "See your data in action"
+      }
+    },
+    "customer_communication": {
+      "onboarding_sequence": [
+        {
+          "timing": "welcome",
+          "template": "Welcome to [Product Name], [Customer Name]! Your account is ready. Here's how to get the most value in your first week: [onboarding checklist]"
+        },
+        {
+          "timing": "day_3",
+          "template": "How's your [Product Name] setup going, [Customer Name]? Need help with [common setup task]? Our success team is here to help: [contact info]"
+        },
+        {
+          "timing": "day_7",
+          "template": "Week 1 complete, [Customer Name]! You've already [achievement]. Ready for the next level? Here's how to unlock [advanced feature]: [guide link]"
+        },
+        {
+          "timing": "day_30",
+          "template": "30 days with [Product Name], [Customer Name]! You've achieved [specific metrics]. Let's discuss how to expand usage and maximize ROI: [calendar link]"
+        }
+      ],
+      "retention_campaigns": [
+        {
+          "timing": "usage_drop",
+          "template": "[Customer Name], we noticed decreased usage of [Product Name]. Is everything working well for you? Let's schedule a quick check-in: [calendar link]"
+        },
+        {
+          "timing": "feature_announcement",
+          "template": "Exciting news, [Customer Name]! [New feature] is now available and will help you [specific benefit]. Here's how to enable it: [instructions]"
+        }
+      ]
+    },
+    "educational_content": {
+      "product_education": [
+        "Getting started with [Product Name]: Complete setup guide",
+        "Advanced [feature] techniques for power users",
+        "Integration guide: Connecting [Product Name] with [popular tool]",
+        "Best practices: How top customers use [Product Name]",
+        "Troubleshooting common [Product Name] issues and solutions",
+        "ROI calculator: Measuring the business impact of [Product Name]"
+      ],
+      "industry_insights": [
+        "The future of [industry]: Trends and predictions for [year]",
+        "Benchmark report: How [industry] companies use [solution category]",
+        "Case study: How [Customer Company] achieved [specific result] with [Product Name]",
+        "Expert interview: [Industry Leader] discusses [relevant topic]",
+        "Research report: [Industry] challenges and technology solutions",
+        "Webinar series: [Topic] masterclass for [target audience]"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Enterprise security certifications (SOC 2, GDPR, etc.)",
+      "Customer case studies with specific results and metrics",
+      "Free trial or freemium tier with no credit card required",
+      "Uptime guarantees and SLA commitments",
+      "Integration ecosystem and API documentation",
+      "Customer support response time guarantees",
+      "Transparent pricing and no hidden fees"
+    ],
+    "social_proof_types": [
+      "Customer testimonials with specific use cases and ROI data",
+      "Case studies showing before/after business metrics",
+      "User logos and customer count milestones",
+      "Industry awards and analyst recognition (Gartner, G2, etc.)",
+      "Community size and user engagement metrics",
+      "Media coverage and thought leadership content"
+    ],
+    "urgency_creators": [
+      "Limited-time discounts for annual subscriptions",
+      "Free trial expiration with premium feature access",
+      "Seasonal promotions and budget deadline alignment",
+      "Feature launches with early adopter pricing",
+      "Capacity limitations for high-touch onboarding",
+      "Competitive analysis showing market timing advantages"
+    ]
+  },
+  "psychological_frameworks": {
+    "customer_journey_stages": [
+      {
+        "stage": "problem_aware",
+        "mindset": "I have a business problem but not sure about solutions",
+        "messaging": "Problem education and solution category introduction",
+        "cta": "Learn about [solution category] solutions"
+      },
+      {
+        "stage": "solution_research",
+        "mindset": "I understand the solution category and comparing options",
+        "messaging": "Product differentiation and competitive advantages",
+        "cta": "Compare [Product Name] to alternatives"
+      },
+      {
+        "stage": "vendor_evaluation",
+        "mindset": "I'm evaluating specific vendors and making purchasing decisions",
+        "messaging": "ROI demonstration and implementation confidence",
+        "cta": "Schedule your personalized demo"
+      },
+      {
+        "stage": "implementation",
+        "mindset": "I've purchased and need to successfully implement the solution",
+        "messaging": "Implementation support and quick wins",
+        "cta": "Access your onboarding resources"
+      },
+      {
+        "stage": "expansion",
+        "mindset": "I'm successful with the solution and considering expansion",
+        "messaging": "Advanced features and expanded use cases",
+        "cta": "Explore advanced features and integrations"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "saas_metrics": {
+      "trial_to_paid_conversion": "15-25%",
+      "monthly_churn_rate": "3-7%",
+      "net_revenue_retention": "100-120%",
+      "customer_acquisition_cost": "varies_by_segment",
+      "time_to_value": "varies_by_complexity"
+    },
+    "marketing_effectiveness": {
+      "content_marketing_ctr": "2-5%",
+      "email_marketing_open_rate": "20-30%",
+      "demo_conversion_rate": "20-40%",
+      "organic_search_traffic": "varies_by_competition"
+    }
+  }
+}

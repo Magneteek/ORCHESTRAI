@@ -37,7 +37,14 @@
       "command": "npx",
       "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
-        "NOTION_TOKEN": "ntn_UlNbVzHR4LNUJ3YRqgfbKcEcHGEfE7SRIDNAQr4jFjFKGL"
+        "NOTION_TOKEN": "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"
+      }
+    },
+    "shadcn-ui": {
+      "command": "npx",
+      "args": ["@jpisnice/shadcn-ui-mcp-server"],
+      "env": {
+        "GITHUB_API_KEY": "${GITHUB_API_KEY}"
       }
     }
   }

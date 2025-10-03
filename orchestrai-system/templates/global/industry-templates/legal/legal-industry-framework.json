@@ -1,0 +1,167 @@
+{
+  "industry": "legal",
+  "name": "Legal Practice Marketing Framework",
+  "description": "Comprehensive templates for law firm marketing, client acquisition, and professional service positioning",
+  "version": "1.0.0",
+  "templates": {
+    "client_acquisition": {
+      "pain_points": [
+        "Legal complexity and overwhelming legal processes",
+        "Fear of high legal costs and hidden fees",
+        "Uncertainty about case outcomes and timelines",
+        "Previous negative experiences with attorneys",
+        "Intimidation by legal jargon and procedures",
+        "Urgency of legal deadlines and consequences"
+      ],
+      "value_propositions": [
+        {
+          "type": "expertise_focused",
+          "template": "Navigate complex [legal area] matters with our [years] years of specialized expertise and proven track record",
+          "use_case": "Specialized practice areas"
+        },
+        {
+          "type": "transparency_focused",
+          "template": "Clear, upfront pricing and regular case updates - no surprises, no hidden fees",
+          "use_case": "Fee-sensitive clients"
+        },
+        {
+          "type": "results_focused",
+          "template": "Proven results in [case type] - [percentage]% success rate with [specific outcome] cases",
+          "use_case": "Outcome-focused clients"
+        },
+        {
+          "type": "accessibility_focused",
+          "template": "Legal guidance made simple - we handle the complexity while keeping you informed every step",
+          "use_case": "First-time legal clients"
+        }
+      ]
+    },
+    "practice_area_descriptions": {
+      "personal_injury": {
+        "template": "When you've been injured due to someone else's negligence, you deserve compensation that covers your medical bills, lost wages, and pain and suffering. Our personal injury team fights for maximum compensation while you focus on recovery.",
+        "psychological_triggers": ["justice_seeking", "financial_protection", "advocate_positioning"],
+        "cta": "Get your free case evaluation today"
+      },
+      "family_law": {
+        "template": "Family legal matters require both legal expertise and emotional understanding. We provide compassionate guidance through divorce, custody, and family disputes while protecting your rights and your family's future.",
+        "psychological_triggers": ["family_protection", "emotional_support", "future_security"],
+        "cta": "Schedule your confidential consultation"
+      },
+      "criminal_defense": {
+        "template": "Facing criminal charges can be life-changing. Our experienced defense attorneys protect your rights, freedom, and future with aggressive representation and strategic defense planning.",
+        "psychological_triggers": ["freedom_protection", "rights_defense", "future_preservation"],
+        "cta": "Contact us immediately for defense representation"
+      },
+      "business_law": {
+        "template": "Protect and grow your business with comprehensive legal counsel covering contracts, compliance, disputes, and strategic planning. We're your legal partner for business success.",
+        "psychological_triggers": ["business_protection", "growth_enabling", "partnership_positioning"],
+        "cta": "Schedule your business legal consultation"
+      },
+      "estate_planning": {
+        "template": "Secure your family's future and protect your legacy with comprehensive estate planning including wills, trusts, and succession planning tailored to your unique situation.",
+        "psychological_triggers": ["family_security", "legacy_preservation", "peace_of_mind"],
+        "cta": "Plan your family's secure future today"
+      }
+    },
+    "client_communication": {
+      "initial_consultation": [
+        {
+          "timing": "pre_consultation",
+          "template": "Hi [Client Name], thank you for choosing [Firm Name]. Your consultation with [Attorney Name] is scheduled for [Date] at [Time]. Please bring [relevant documents]. We're here to help."
+        },
+        {
+          "timing": "post_consultation",
+          "template": "Thank you for meeting with us today, [Client Name]. As discussed, we'll review your case and provide our recommended strategy within 48 hours. Questions? Call us at [Phone]."
+        }
+      ],
+      "case_updates": [
+        {
+          "timing": "case_milestone",
+          "template": "[Client Name], important update on your [case type]: [milestone achieved]. Next steps: [action items]. We'll keep you informed of all developments."
+        },
+        {
+          "timing": "settlement_offer",
+          "template": "[Client Name], we've received a [settlement amount] offer in your [case type]. We recommend [recommendation] because [reasoning]. Let's discuss at your convenience."
+        }
+      ]
+    },
+    "educational_content": {
+      "legal_guides": [
+        "What to do immediately after [accident type/legal issue]",
+        "Understanding your rights in [legal situation]",
+        "How [legal process] works: A step-by-step guide",
+        "Common mistakes that hurt your [case type] case",
+        "Questions to ask when choosing a [practice area] attorney",
+        "How legal fees work: Understanding costs and payment options"
+      ],
+      "legal_insights": [
+        "Recent changes in [legal area] law and what they mean for you",
+        "Case study: How we achieved [outcome] in [case type]",
+        "Debunking myths about [legal topic]",
+        "The real cost of not having legal representation",
+        "How to document [evidence type] for your case"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Bar certifications and professional memberships",
+      "Years of practice and successful case history",
+      "Client testimonials and case results",
+      "Awards and professional recognition",
+      "Transparent fee structures and payment options",
+      "Available for urgent legal matters",
+      "Free consultations and case evaluations"
+    ],
+    "social_proof_types": [
+      "Successful case settlements and verdicts",
+      "Client testimonials focusing on results and service",
+      "Professional peer endorsements and referrals",
+      "Media appearances and legal commentary",
+      "Bar association leadership and community involvement",
+      "Legal publication contributions and speaking engagements"
+    ],
+    "urgency_creators": [
+      "Statute of limitations deadlines approaching",
+      "Free consultation slots filling quickly",
+      "Evidence preservation time sensitivity",
+      "Insurance claim filing deadlines",
+      "Court appearance scheduling requirements",
+      "Limited-time fee arrangements or payment plans"
+    ]
+  },
+  "psychological_frameworks": {
+    "client_journey_stages": [
+      {
+        "stage": "legal_crisis",
+        "mindset": "I need legal help but don't know where to start",
+        "messaging": "Immediate help and guidance with expertise emphasis",
+        "cta": "Get emergency legal consultation"
+      },
+      {
+        "stage": "attorney_research",
+        "mindset": "I need to find the right attorney for my situation",
+        "messaging": "Specialization, results, and client service focus",
+        "cta": "Schedule your free consultation"
+      },
+      {
+        "stage": "decision_making",
+        "mindset": "I'm ready to hire an attorney",
+        "messaging": "Next steps clarity and process transparency",
+        "cta": "Retain our services today"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "consultation_conversion": {
+      "phone_inquiries_to_consultation": "65-75%",
+      "consultations_to_retained_clients": "45-60%",
+      "website_visitors_to_contact": "3-8%"
+    },
+    "digital_marketing": {
+      "legal_content_engagement": "4-12% click-through rate",
+      "case_result_content": "15-25% higher engagement",
+      "educational_content": "8-18% lead generation rate"
+    }
+  }
+}

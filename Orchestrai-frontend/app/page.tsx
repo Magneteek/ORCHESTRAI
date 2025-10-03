@@ -9,6 +9,9 @@ import { MCPMonitoringPanel } from '@/components/dashboard/mcp-monitoring-panel'
 import { UsageAnalyticsPanel } from '@/components/dashboard/usage-analytics-panel'
 import { AutoSyncTestingPanel } from '@/components/dashboard/auto-sync-testing-panel'
 import { D3VisualizationsPanel } from '@/components/dashboard/d3-visualizations-panel'
+import { DomainHubOrchestration } from '@/components/dashboard/domain-hub-orchestration'
+import { LiveAgentsPanel } from '@/components/dashboard/live-agents-panel'
+import { MemoryActivityPanel } from '@/components/dashboard/memory-activity-panel'
 import { 
   Activity, 
   Database, 
@@ -235,10 +238,22 @@ export default function Dashboard() {
 
         {/* Main Dashboard Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <Database className="h-4 w-4" />
-              System Overview
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="domains" className="flex items-center gap-2">
+              <Network className="h-4 w-4" />
+              Domain Hubs
+            </TabsTrigger>
+            <TabsTrigger value="agents" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Live Agents
+            </TabsTrigger>
+            <TabsTrigger value="memory-activity" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Live Memory
             </TabsTrigger>
             <TabsTrigger value="mcp" className="flex items-center gap-2">
               <Server className="h-4 w-4" />
@@ -246,19 +261,19 @@ export default function Dashboard() {
             </TabsTrigger>
             <TabsTrigger value="testing" className="flex items-center gap-2">
               <TestTube className="h-4 w-4" />
-              Auto-Sync Testing
+              Testing
             </TabsTrigger>
             <TabsTrigger value="visualizations" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
-              D3.js Visualizations
+              D3.js Charts
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              Usage Analytics
+              Analytics
             </TabsTrigger>
-            <TabsTrigger value="crystalline" className="flex items-center gap-2">
-              <Brain className="h-4 w-4" />
-              Crystalline Memory
+            <TabsTrigger value="intelligence" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Client Intel
             </TabsTrigger>
           </TabsList>
 
@@ -363,31 +378,35 @@ export default function Dashboard() {
             <UsageAnalyticsPanel websocket={websocket} />
           </TabsContent>
 
-          <TabsContent value="crystalline" className="space-y-6">
+          <TabsContent value="domains">
+            <DomainHubOrchestration websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="agents">
+            <LiveAgentsPanel websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="memory-activity">
+            <MemoryActivityPanel websocket={websocket} />
+          </TabsContent>
+
+          <TabsContent value="intelligence" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5" />
-                  Crystalline Memory Architecture
+                  <Users className="h-5 w-5" />
+                  Client Intelligence Hub
                 </CardTitle>
                 <CardDescription>
-                  Hexagonal lattice memory structure with geometric access patterns
+                  ICP analysis, psychographic mapping, and cross-domain context injection
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="text-center p-4">
-                    <div className="text-3xl font-bold text-blue-600">{metrics.memoryNodes}</div>
-                    <p className="text-sm text-muted-foreground">Active Nodes</p>
-                  </div>
-                  <div className="text-center p-4">
-                    <div className="text-3xl font-bold text-green-600">Hexagonal</div>
-                    <p className="text-sm text-muted-foreground">Lattice Pattern</p>
-                  </div>
-                  <div className="text-center p-4">
-                    <div className="text-3xl font-bold text-purple-600">Geometric</div>
-                    <p className="text-sm text-muted-foreground">Access Algorithm</p>
-                  </div>
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">Client Intelligence Dashboard - Coming Soon</p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Will feature real-time ICP analysis, psychographic visualization, and cross-domain context flow monitoring
+                  </p>
                 </div>
               </CardContent>
             </Card>

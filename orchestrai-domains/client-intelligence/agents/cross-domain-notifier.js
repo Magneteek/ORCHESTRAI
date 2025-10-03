@@ -376,27 +376,51 @@ class CrossDomainNotifier extends EventEmitter {
 
   setupDomainMonitoring() {
     // Monitor domain agent health and responsiveness
+    // Reduced frequency for Task tool delegation architecture
     this.domainMonitor = setInterval(() => {
       this.checkDomainAgentHealth();
-    }, 30000); // Check every 30 seconds
+    }, 300000); // Check every 5 minutes instead of 30 seconds
   }
 
   checkDomainAgentHealth() {
+    // Skip health monitoring in Task tool delegation mode
+    // Domain agents are now called directly via Task tool, not context notifications
+    if (this.orchestrator && this.orchestrator.taskDelegationActive !== false) {
+      return; // Task tool delegation is active, no need for context notification monitoring
+    }
+    
+    // Only monitor if we're actually using the client context notification system
+    let hasActiveNotifications = false;
     for (const [domain, subscription] of this.domainSubscriptions) {
-      // Check response times and success rates
-      const successRate = subscription.successCount / 
-        (subscription.successCount + subscription.failureCount);
-      
-      if (successRate < 0.8 && subscription.successCount + subscription.failureCount > 10) {
-        console.warn(`⚠️ Domain agent ${domain} has low success rate: ${(successRate * 100).toFixed(1)}%`);
+      if (subscription.successCount + subscription.failureCount > 0) {
+        hasActiveNotifications = true;
+        break;
       }
-      
-      // Check if agent is still responsive
-      const lastNotified = subscription.lastNotified ? 
-        Date.now() - new Date(subscription.lastNotified).getTime() : Infinity;
-      
-      if (lastNotified > 300000) { // 5 minutes
-        console.warn(`⚠️ Domain agent ${domain} hasn't been notified in ${Math.round(lastNotified / 60000)} minutes`);
+    }
+    
+    if (!hasActiveNotifications) {
+      return; // No client context activity, skip monitoring
+    }
+    
+    for (const [domain, subscription] of this.domainSubscriptions) {
+      // Check response times and success rates only if we have actual activity
+      if (subscription.successCount + subscription.failureCount > 0) {
+        const successRate = subscription.successCount / 
+          (subscription.successCount + subscription.failureCount);
+        
+        if (successRate < 0.8 && subscription.successCount + subscription.failureCount > 10) {
+          console.warn(`⚠️ Domain agent ${domain} has low context notification success rate: ${(successRate * 100).toFixed(1)}%`);
+        }
+        
+        // Only warn about timing if we have recent activity
+        if (subscription.lastNotified) {
+          const lastNotified = Date.now() - new Date(subscription.lastNotified).getTime();
+          
+          // Much longer timeout for client context notifications
+          if (lastNotified > 3600000) { // 60 minutes
+            console.warn(`⚠️ Domain agent ${domain} hasn't received client context updates in ${Math.round(lastNotified / 60000)} minutes`);
+          }
+        }
       }
     }
   }

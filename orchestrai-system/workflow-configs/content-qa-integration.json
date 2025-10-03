@@ -1,0 +1,273 @@
+{
+  "workflowName": "content-generation-with-qa",
+  "version": "2.0",
+  "description": "Enhanced content generation workflow with automated self-iterating quality assurance",
+  "
+  "phases": [
+    {
+      "phase": "1-preparation",
+      "description": "Client intelligence loading and outline preparation",
+      "steps": [
+        {
+          "step": "load_client_intelligence",
+          "agent": "intelligence-coordinator",
+          "inputs": ["client_project_path"],
+          "outputs": ["parsed_intelligence", "psychographic_data", "competitive_analysis"]
+        },
+        {
+          "step": "validate_outline_completeness", 
+          "agent": "outline-validator",
+          "inputs": ["outline_file", "intelligence_data"],
+          "outputs": ["outline_compliance_score", "missing_specifications"]
+        }
+      ],
+      "qualityGates": {
+        "outline_completeness": 95,
+        "intelligence_integration": 90
+      }
+    },
+    
+    {
+      "phase": "2-content-generation",
+      "description": "Initial content creation using verified intelligence",
+      "steps": [
+        {
+          "step": "generate_initial_content",
+          "agent": "content-writer-specialist", 
+          "inputs": ["validated_outline", "client_intelligence", "competitive_gaps"],
+          "outputs": ["generated_content_file"],
+          "constraints": {
+            "hallucination_tolerance": 0,
+            "authenticity_requirement": "verified_data_only"
+          }
+        }
+      ],
+      "qualityGates": {
+        "content_generation": 80,
+        "authenticity": 100
+      }
+    },
+
+    {
+      "phase": "3-automated-qa",
+      "description": "Self-iterating quality assurance with automatic enhancement",
+      "steps": [
+        {
+          "step": "execute_qa_loop",
+          "agent": "qa-system",
+          "service": "SelfIteratingQASystem",
+          "inputs": [
+            "generated_content_file",
+            "outline_specifications", 
+            "client_intelligence_path"
+          ],
+          "outputs": [
+            "qa_compliance_report",
+            "enhanced_content_file",
+            "quality_metrics"
+          ],
+          "parameters": {
+            "max_iterations": 3,
+            "compliance_thresholds": {
+              "overall": 85,
+              "formatting": 80,
+              "psychological": 90,
+              "structural": 95,
+              "authenticity": 100
+            },
+            "auto_enhancement": true
+          }
+        }
+      ],
+      "qualityGates": {
+        "overall_compliance": 85,
+        "formatting_compliance": 80,
+        "structural_compliance": 95
+      },
+      "failureHandling": {
+        "on_qa_failure": "trigger_manual_review",
+        "escalation_threshold": 75,
+        "max_attempts": 3
+      }
+    },
+
+    {
+      "phase": "4-validation",
+      "description": "Final validation and approval",
+      "steps": [
+        {
+          "step": "validate_enhancements",
+          "agent": "quality-validator",
+          "inputs": ["enhanced_content", "qa_report"],
+          "outputs": ["validation_result", "publication_approval"]
+        },
+        {
+          "step": "update_crystalline_memory",
+          "agent": "memory-coordinator", 
+          "inputs": ["qa_metrics", "enhancement_patterns", "project_id"],
+          "outputs": ["memory_update_confirmation"]
+        }
+      ]
+    },
+
+    {
+      "phase": "5-publication",
+      "description": "SEO optimization and publication preparation",
+      "condition": "qa_passed",
+      "steps": [
+        {
+          "step": "seo_optimization",
+          "agent": "seo-specialist",
+          "inputs": ["approved_content", "keyword_targets"],
+          "outputs": ["seo_optimized_content"]
+        },
+        {
+          "step": "schema_markup_generation",
+          "agent": "technical-seo-specialist",
+          "inputs": ["optimized_content", "business_data"],
+          "outputs": ["schema_enhanced_content"]
+        }
+      ]
+    }
+  ],
+
+  "automaticTriggers": {
+    "post_content_generation": {
+      "trigger": "content_file_created",
+      "action": "execute_phase_3_qa",
+      "parameters": {
+        "immediate": true,
+        "background": false
+      }
+    },
+    "qa_completion": {
+      "trigger": "qa_loop_completed",
+      "condition": "qa_passed",
+      "action": "proceed_to_publication",
+      "parameters": {
+        "notify_user": true
+      }
+    },
+    "qa_failure": {
+      "trigger": "qa_compliance_failed",
+      "action": "create_manual_review_task",
+      "parameters": {
+        "priority": "high",
+        "assign_to": "content_quality_reviewer"
+      }
+    }
+  },
+
+  "qualityAssuranceConfig": {
+    "complianceChecks": {
+      "structural": {
+        "h2_sections": "exact_match_required",
+        "word_counts": "range_tolerance_10_percent",
+        "section_order": "strict_enforcement"
+      },
+      "formatting": {
+        "paragraph_distribution": {
+          "short_1_2_sentences": 35,
+          "medium_3_4_sentences": 45, 
+          "long_5_plus_sentences": 20,
+          "tolerance": 5
+        },
+        "engagement_elements": {
+          "bulleted_lists_per_h2": "3-4",
+          "numbered_lists_per_h2": "2-3",
+          "comparison_tables_per_section": "1-2", 
+          "callout_boxes_per_h2": "2-3"
+        }
+      },
+      "psychological": {
+        "trigger_integration": "required_triggers_present",
+        "psychographic_alignment": "segment_specific_messaging",
+        "emotional_tone": "consistent_with_specifications"
+      },
+      "authenticity": {
+        "hallucination_detection": "zero_tolerance",
+        "client_data_verification": "cross_reference_intelligence",
+        "pricing_accuracy": "exact_match_price_list"
+      }
+    },
+
+    "enhancementStrategies": {
+      "word_count_gaps": {
+        "method": "expand_existing_content",
+        "focus": "detailed_explanations_and_examples",
+        "maintain_authenticity": true
+      },
+      "formatting_gaps": {
+        "missing_lists": "generate_from_existing_content",
+        "missing_tables": "create_comparison_matrices",
+        "paragraph_restructuring": "automated_sentence_grouping"
+      },
+      "psychological_gaps": {
+        "trigger_enhancement": "strengthen_emotional_hooks",
+        "psychographic_alignment": "segment_specific_adjustments"
+      }
+    }
+  },
+
+  "monitoringAndReporting": {
+    "realTimeMetrics": [
+      "qa_compliance_score",
+      "enhancement_iterations_used",
+      "time_to_quality_approval",
+      "manual_intervention_rate"
+    ],
+    "dashboardIntegration": {
+      "show_qa_progress": true,
+      "highlight_quality_gates": true,
+      "display_compliance_breakdown": true
+    },
+    "alerting": {
+      "qa_failure": {
+        "notify": ["content_manager", "project_lead"],
+        "urgency": "high"
+      },
+      "repeated_failures": {
+        "threshold": 3,
+        "action": "escalate_to_system_administrator"
+      }
+    }
+  },
+
+  "learningIntegration": {
+    "patternRecognition": {
+      "track_common_gaps": true,
+      "identify_improvement_patterns": true,
+      "update_enhancement_strategies": true
+    },
+    "continuousImprovement": {
+      "adjust_thresholds_based_on_performance": true,
+      "refine_enhancement_algorithms": true,
+      "optimize_iteration_efficiency": true
+    }
+  },
+
+  "humanOverride": {
+    "manualReviewTriggers": [
+      "qa_compliance_below_75_percent",
+      "max_iterations_exceeded",
+      "authenticity_concerns_detected"
+    ],
+    "approvalRequired": [
+      "first_time_client_content",
+      "sensitive_industry_content", 
+      "high_visibility_publications"
+    ]
+  },
+
+  "integrationPoints": {
+    "crystallineMemory": {
+      "store_qa_results": true,
+      "track_quality_trends": true,
+      "share_learning_across_projects": true
+    },
+    "pipelineSharing": {
+      "enhancement_strategies": "shared_across_agents",
+      "quality_patterns": "available_to_all_content_agents"
+    }
+  }
+}

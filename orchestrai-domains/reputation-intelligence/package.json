@@ -1,0 +1,87 @@
+{
+  "name": "@orchestrai/reputation-intelligence",
+  "version": "1.0.0",
+  "description": "Advanced Google Business Profile negative review monitoring and analysis system",
+  "main": "reputation-intelligence-domain-hub.js",
+  "scripts": {
+    "start": "node reputation-intelligence-domain-hub.js",
+    "demo": "node ../../reputation-intelligence-demo.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration",
+    "install:deps": "npm install",
+    "setup": "npm run install:deps && npm run install:playwright",
+    "install:playwright": "npx playwright install chromium",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "docs": "jsdoc -d docs -r ."
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "redis": "^4.6.0",
+    "nodemailer": "^6.9.0",
+    "csv-writer": "^1.6.0",
+    "exceljs": "^4.4.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "natural": "^6.12.0",
+    "sentiment": "^5.0.2",
+    "cheerio": "^1.0.0-rc.12",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "cron": "^3.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.54.0",
+    "jsdoc": "^4.0.2",
+    "@types/node": "^20.10.0",
+    "supertest": "^6.3.3"
+  },
+  "keywords": [
+    "reputation-monitoring",
+    "google-business-profile",
+    "review-scraping",
+    "sentiment-analysis",
+    "orchestrai",
+    "negative-reviews",
+    "business-intelligence",
+    "playwright",
+    "web-scraping"
+  ],
+  "author": "ORCHESTRAI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orchestrai/reputation-intelligence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/orchestrai/reputation-intelligence/issues"
+  },
+  "homepage": "https://github.com/orchestrai/reputation-intelligence#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!docs/**"
+    ]
+  },
+  "eslintConfig": {
+    "extends": ["eslint:recommended"],
+    "env": {
+      "node": true,
+      "es2022": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2022,
+      "sourceType": "module"
+    }
+  }
+}

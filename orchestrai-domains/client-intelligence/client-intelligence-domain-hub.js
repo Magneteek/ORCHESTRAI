@@ -71,7 +71,7 @@ class ClientIntelligenceDomainHub extends EventEmitter {
       }
     ];
 
-    // Node.js Coordination Agents (4 agents)
+    // Node.js Coordination Agents (5 agents)
     this.coordinationAgents = new Map();
     this.coordinationSpecs = [
       {
@@ -81,22 +81,28 @@ class ClientIntelligenceDomainHub extends EventEmitter {
         description: 'Monitors client folders for file changes and triggers context updates'
       },
       {
-        id: 'client-folder-manager', 
+        id: 'client-folder-manager',
         name: 'Client Folder Structure Manager',
         type: 'node-coordination',
         description: 'Creates and manages client folder structures and organization'
       },
       {
         id: 'context-cache-optimizer',
-        name: 'Client Context Cache Optimizer', 
+        name: 'Client Context Cache Optimizer',
         type: 'node-coordination',
         description: 'Optimizes client context storage and retrieval performance'
       },
       {
         id: 'cross-domain-notifier',
         name: 'Cross-Domain Context Notification System',
-        type: 'node-coordination', 
+        type: 'node-coordination',
         description: 'Notifies domain agents of client context updates and changes'
+      },
+      {
+        id: 'reviews-monitor',
+        name: 'Google Reviews Intelligence Monitor',
+        type: 'node-coordination',
+        description: 'Monitors Netherlands business reviews for 1-3 star ratings within last 10 days and provides reputation intelligence'
       }
     ];
 
@@ -138,10 +144,10 @@ class ClientIntelligenceDomainHub extends EventEmitter {
       await this.setupAPIEndpoints();
       
       this.status = 'active';
-      console.log('✅ Client Intelligence Domain Hub initialized with 6 Claude Code + 4 Node.js agents (Hybrid Architecture)');
+      console.log('✅ Client Intelligence Domain Hub initialized with 6 Claude Code + 5 Node.js agents (Hybrid Architecture)');
       console.log('   → 6 Claude Code Agents: Branding, ICP, Business, Market, Integration, Orchestration');
-      console.log('   → 4 Node.js Agents: File monitoring, folder management, cache optimization, notifications');
-      console.log('   → Hybrid: Client intelligence analysis + Cross-domain context injection');
+      console.log('   → 5 Node.js Agents: File monitoring, folder management, cache optimization, notifications, reviews monitoring');
+      console.log('   → Hybrid: Client intelligence analysis + Cross-domain context injection + Reviews intelligence');
       
       this.emit('initialized', {
         domain: this.domain,
@@ -214,9 +220,10 @@ class ClientIntelligenceDomainHub extends EventEmitter {
       'file-system-monitor': require('./agents/file-system-monitor'),
       'client-folder-manager': require('./agents/client-folder-manager'),
       'context-cache-optimizer': require('./agents/context-cache-optimizer'),
-      'cross-domain-notifier': require('./agents/cross-domain-notifier')
+      'cross-domain-notifier': require('./agents/cross-domain-notifier'),
+      'reviews-monitor': require('./agents/reviews-monitor')
     };
-    
+
     return coordinationAgents[agentId];
   }
 
@@ -225,11 +232,12 @@ class ClientIntelligenceDomainHub extends EventEmitter {
     
     const contextPools = [
       'client-brand-intelligence',
-      'client-icp-profiles', 
+      'client-icp-profiles',
       'client-business-contexts',
       'client-market-intelligence',
       'client-integrated-contexts',
-      'client-project-coordination'
+      'client-project-coordination',
+      'client-reviews-intelligence'
     ];
     
     for (const poolName of contextPools) {

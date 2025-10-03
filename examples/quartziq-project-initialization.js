@@ -1800,7 +1800,7 @@ class QuartzIQAnalyticsEngine {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = \`quartziq-export-\${Date.now()}.\${format}\`;
+      link.download = `quartziq-export-${Date.now()}.${format}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1951,10 +1951,10 @@ class AIInsightsGenerator {
     
     if (Math.abs(trend) > 0.1) {
       return {
-        id: \`trend-\${Date.now()}\`,
+        id: `trend-${Date.now()}`,
         type: 'trend',
-        title: \`\${trend > 0 ? 'Upward' : 'Downward'} Trend Detected\`,
-        description: \`Data shows a \${(trend * 100).toFixed(1)}% \${trend > 0 ? 'increase' : 'decrease'} trend.\`,
+        title: `${trend > 0 ? 'Upward' : 'Downward'} Trend Detected`,
+        description: `Data shows a ${(trend * 100).toFixed(1)}% ${trend > 0 ? 'increase' : 'decrease'} trend.`,
         confidence: 85,
         impact: Math.abs(trend) > 0.3 ? 'high' : 'medium',
         aiGenerated: true,

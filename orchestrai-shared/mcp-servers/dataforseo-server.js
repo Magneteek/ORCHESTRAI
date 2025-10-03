@@ -636,6 +636,142 @@ class DataForSEOServer {
               },
               required: ["targets"]
             }
+          },
+          // Business Data API - Reviews and Local Business Intelligence
+          {
+            name: "business_data_search",
+            description: "Search for businesses in a specific location with keyword filtering",
+            inputSchema: {
+              type: "object",
+              properties: {
+                keyword: {
+                  type: "string",
+                  description: "Business search query (e.g., 'tandarts', 'restaurant')"
+                },
+                location_name: {
+                  type: "string",
+                  description: "Location (e.g., 'Amsterdam,Netherlands', 'Nederland')"
+                },
+                location_code: {
+                  type: "number",
+                  description: "Location code (2528 for Netherlands)",
+                  default: 2528
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name",
+                  default: "Dutch"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of businesses to return",
+                  default: 50
+                }
+              },
+              required: ["keyword"]
+            }
+          },
+          {
+            name: "business_data_info",
+            description: "Get detailed information about a specific business using its CID",
+            inputSchema: {
+              type: "object",
+              properties: {
+                cid: {
+                  type: "string",
+                  description: "Business Client ID from Google My Business"
+                },
+                location_code: {
+                  type: "number",
+                  description: "Location code (2528 for Netherlands)",
+                  default: 2528
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name",
+                  default: "Dutch"
+                }
+              },
+              required: ["cid"]
+            }
+          },
+          {
+            name: "business_data_reviews",
+            description: "Get reviews for a specific business with rating and date filtering",
+            inputSchema: {
+              type: "object",
+              properties: {
+                cid: {
+                  type: "string",
+                  description: "Business Client ID from Google My Business"
+                },
+                location_code: {
+                  type: "number",
+                  description: "Location code (2528 for Netherlands)",
+                  default: 2528
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name",
+                  default: "Dutch"
+                },
+                sort_by: {
+                  type: "string",
+                  description: "Sort order: 'date', 'rating', 'relevance'",
+                  default: "date"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of reviews to return",
+                  default: 100
+                },
+                priority: {
+                  type: "number",
+                  description: "API priority (1=normal, 2=high)",
+                  default: 1
+                }
+              },
+              required: ["cid"]
+            }
+          },
+          {
+            name: "business_data_reviews_filtered",
+            description: "Get filtered business reviews by rating (1-3 stars) and date range (last N days) for Netherlands businesses",
+            inputSchema: {
+              type: "object",
+              properties: {
+                cid: {
+                  type: "string",
+                  description: "Business Client ID from Google My Business"
+                },
+                max_rating: {
+                  type: "number",
+                  description: "Maximum rating to include (1-3 for negative reviews)",
+                  default: 3
+                },
+                days_back: {
+                  type: "number",
+                  description: "Number of days to look back for reviews",
+                  default: 10
+                },
+                location_code: {
+                  type: "number",
+                  description: "Location code (2528 for Netherlands)",
+                  default: 2528
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name",
+                  default: "Dutch"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of reviews to return",
+                  default: 50
+                }
+              },
+              required: ["cid"]
+            }
           }
         ]
       };
@@ -700,6 +836,15 @@ class DataForSEOServer {
             return await this.getDomainTechnologies(args);
           case "domain_whois_overview":
             return await this.getDomainWhoisOverview(args);
+          // Business Data API Tools
+          case "business_data_search":
+            return await this.getBusinessDataSearch(args);
+          case "business_data_info":
+            return await this.getBusinessDataInfo(args);
+          case "business_data_reviews":
+            return await this.getBusinessDataReviews(args);
+          case "business_data_reviews_filtered":
+            return await this.getBusinessDataReviewsFiltered(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -1210,6 +1355,125 @@ class DataForSEOServer {
       content: [{
         type: "text",
         text: `Domain WHOIS Intelligence:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  // Business Data API Tools Implementation
+  async getBusinessDataSearch(args) {
+    const { keyword, location_name, location_code = 2528, language_name = "Dutch", limit = 50 } = args;
+
+    const postData = [{
+      keyword,
+      ...(location_name && { location_name }),
+      location_code,
+      language_name,
+      limit
+    }];
+
+    const response = await this.makeAPICall('/business_data/business_listings/search/live', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Business Search Results (${keyword}):\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getBusinessDataInfo(args) {
+    const { cid, location_code = 2528, language_name = "Dutch" } = args;
+
+    const postData = [{
+      cid,
+      location_code,
+      language_name
+    }];
+
+    const response = await this.makeAPICall('/business_data/google/my_business_info/live', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Business Information (CID: ${cid}):\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getBusinessDataReviews(args) {
+    const { cid, location_code = 2528, language_name = "Dutch", sort_by = "date", limit = 100, priority = 1 } = args;
+
+    const postData = [{
+      cid,
+      location_code,
+      language_name,
+      sort_by,
+      limit,
+      priority
+    }];
+
+    const response = await this.makeAPICall('/business_data/google/reviews/task_post', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Business Reviews (CID: ${cid}):\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getBusinessDataReviewsFiltered(args) {
+    const { cid, max_rating = 3, days_back = 10, location_code = 2528, language_name = "Dutch", limit = 50 } = args;
+
+    // First get all reviews
+    const postData = [{
+      cid,
+      location_code,
+      language_name,
+      sort_by: "date",
+      limit: 200, // Get more to filter
+      priority: 1
+    }];
+
+    const response = await this.makeAPICall('/business_data/google/reviews/task_post', postData);
+
+    // Filter reviews by rating and date
+    let filteredResults = null;
+    if (response && response.tasks && response.tasks[0] && response.tasks[0].result) {
+      const allReviews = response.tasks[0].result;
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - days_back);
+
+      const filtered = allReviews.filter(review => {
+        if (!review) return false;
+
+        // Filter by rating (1-3 stars only)
+        const rating = review.rating && review.rating.value ? review.rating.value : null;
+        if (!rating || rating > max_rating) return false;
+
+        // Filter by date (last N days)
+        const reviewDate = review.timestamp ? new Date(review.timestamp) : null;
+        if (!reviewDate || reviewDate < cutoffDate) return false;
+
+        return true;
+      }).slice(0, limit); // Limit results
+
+      filteredResults = {
+        ...response,
+        tasks: [{
+          ...response.tasks[0],
+          result: filtered,
+          result_count: filtered.length
+        }]
+      };
+    } else {
+      filteredResults = response;
+    }
+
+    return {
+      content: [{
+        type: "text",
+        text: `Filtered Low-Rating Reviews (CID: ${cid}, ≤${max_rating} stars, last ${days_back} days):\n${SafeJSON.stringify(filteredResults)}`
       }]
     };
   }

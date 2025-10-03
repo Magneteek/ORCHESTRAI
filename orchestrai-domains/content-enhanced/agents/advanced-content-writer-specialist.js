@@ -106,6 +106,14 @@ class AdvancedContentWriterSpecialist extends EventEmitter {
         console.log(`🎯 Using framework: ${contentBlueprint.framework.name}`);
         console.log('✍️ Phase 1: Initializing content generation pipeline...');
         
+        // CRITICAL: Enforce outline requirement - PREVENTIVE VALIDATION
+        console.log('🔍 Validating outline requirements...');
+        const outlineValidation = this.validateOutlineRequirement(contentBlueprint);
+        if (!outlineValidation.isValid) {
+            throw new Error(`OUTLINE_REQUIRED: ${outlineValidation.message}\nIssues: ${outlineValidation.issues.join(', ')}`);
+        }
+        console.log('✅ Outline validation passed');
+        
         try {
             // Phase 1: Setup and Preparation
             const contentSetup = await this.setupContentGeneration(contentBlueprint, structureAnalysis, writingGuidelines);
@@ -1706,10 +1714,16 @@ Apply these strategies systematically and measure your results. Success in ${thi
             humanVoiceScore: content.humanVoiceMetrics?.improvedHumanScore || 75,
             aiDetectionRisk: content.humanVoiceMetrics?.originalRiskScore || 0,
             totalReplacements: content.humanVoiceMetrics?.totalReplacements || 0,
-            readinessLevel: content.humanVoiceMetrics?.readinessLevel || 'unknown'
+            readinessLevel: content.humanVoiceMetrics?.readinessLevel || 'unknown',
+            // NEW: Content mix ratio validation (detect executive vs consumer content)
+            contentMixScore: this.calculateContentMixScore(fullContent, this.detectContentType(contentSetup)),
+            contentMixBreakdown: this.analyzeContentMix(fullContent),
+            // CRITICAL: Outline compliance validation (reactive check)
+            outlineComplianceScore: this.calculateOutlineCompliance(content, contentSetup),
+            outlineAdherenceDetails: this.analyzeOutlineAdherence(content, contentSetup)
         };
 
-        // Calculate overall score including human voice factor
+        // Calculate overall score including content mix factor
         qualityMetrics.overallScore = this.calculateOverallScore(content, contentSetup, qualityMetrics);
         
         return qualityMetrics;
@@ -1766,13 +1780,15 @@ Apply these strategies systematically and measure your results. Success in ${thi
     }
 
     calculateOverallScore(content, contentSetup, qualityMetrics) {
-        // Weighted average of quality metrics including human voice factor
+        // Weighted average of quality metrics including outline compliance
         const weights = {
-            readabilityScore: 0.20,
-            seoScore: 0.20,
-            structureScore: 0.20,
-            engagementScore: 0.20,
-            humanVoiceScore: 0.20  // New human voice factor
+            readabilityScore: 0.15,
+            seoScore: 0.15,
+            structureScore: 0.15,
+            engagementScore: 0.15,
+            humanVoiceScore: 0.15,
+            contentMixScore: 0.15,  // Content format compliance
+            outlineComplianceScore: 0.10  // CRITICAL: Outline adherence factor
         };
         
         return Math.round(
@@ -1780,8 +1796,469 @@ Apply these strategies systematically and measure your results. Success in ${thi
             qualityMetrics.seoScore * weights.seoScore +
             qualityMetrics.structureScore * weights.structureScore +
             qualityMetrics.engagementScore * weights.engagementScore +
-            qualityMetrics.humanVoiceScore * weights.humanVoiceScore
+            qualityMetrics.humanVoiceScore * weights.humanVoiceScore +
+            qualityMetrics.contentMixScore * weights.contentMixScore +
+            qualityMetrics.outlineComplianceScore * weights.outlineComplianceScore
         );
+    }
+
+    /**
+     * Calculate content mix score based on content type and audience
+     * Differentiates between executive vs consumer content requirements
+     */
+    calculateContentMixScore(content, contentType = 'consumer') {
+        const analysis = this.analyzeContentMix(content);
+        const target = this.getContentMixTargets(contentType);
+        
+        // Calculate score with flexible ranges rather than strict targets
+        let score = 100;
+        
+        // Dynamic scoring based on content type
+        if (contentType === 'executive') {
+            // Executive content: Heavy penalty for excessive lists and special elements
+            const paraDev = Math.abs(analysis.percentages.paragraphs - target.paragraphs);
+            if (analysis.percentages.paragraphs < 60) {
+                score -= 30; // Heavy penalty for low paragraph ratio
+            } else if (paraDev > 10) {
+                score -= paraDev * 0.5;
+            }
+            
+            // Executive content should have minimal lists (integrated into paragraphs)
+            if (analysis.percentages.lists > 10) {
+                score -= (analysis.percentages.lists - 10) * 2;  // Heavy penalty
+            }
+            
+            // Tables are acceptable for executive data presentation
+            const tableDev = Math.abs(analysis.percentages.tables - target.tables);
+            if (tableDev > 10) {
+                score -= tableDev * 0.3;
+            }
+            
+            // Executive content: Minimal special elements
+            if (analysis.percentages.special > 8) {
+                score -= (analysis.percentages.special - 8) * 3;  // Very heavy penalty
+            }
+        } else {
+            // Consumer content: More flexible
+            const paraDev = Math.abs(analysis.percentages.paragraphs - target.paragraphs);
+            if (analysis.percentages.paragraphs < 35 || analysis.percentages.paragraphs > 70) {
+                score -= Math.min(25, paraDev);
+            } else if (paraDev > 10) {
+                score -= paraDev * 0.5;
+            }
+            
+            const listDev = Math.abs(analysis.percentages.lists - target.lists);
+            if (analysis.percentages.lists > 40) {
+                score -= (analysis.percentages.lists - 40) * 0.5;
+            }
+            
+            const tableDev = Math.abs(analysis.percentages.tables - target.tables);
+            if (tableDev > 10) {
+                score -= tableDev * 0.3;
+            }
+            
+            const specDev = Math.abs(analysis.percentages.special - target.special);
+            if (analysis.percentages.special > 20) {
+                score -= specDev * 0.5;
+            }
+        }
+        
+        // Content-type specific bonus
+        if (contentType === 'executive') {
+            // Bonus for executive-appropriate structure
+            if (analysis.percentages.paragraphs >= 60 && analysis.percentages.paragraphs <= 75 &&
+                analysis.percentages.lists <= 10 &&
+                analysis.percentages.tables >= 15 && analysis.percentages.tables <= 35 &&
+                analysis.percentages.special <= 8) {
+                score += 15; // Executive excellence bonus
+            }
+        } else {
+            // Bonus for good consumer balance
+            if (analysis.percentages.paragraphs >= 40 && analysis.percentages.paragraphs <= 60 &&
+                analysis.percentages.lists >= 20 && analysis.percentages.lists <= 35 &&
+                analysis.percentages.tables >= 10 && analysis.percentages.tables <= 20 &&
+                analysis.percentages.special >= 5 && analysis.percentages.special <= 15) {
+                score += 10; // Consumer balance bonus
+            }
+        }
+        
+        const finalScore = Math.max(0, Math.min(100, score));
+        
+        console.log(`📊 Content Mix Analysis (${contentType.toUpperCase()} format):`);
+        console.log(`   📝 Paragraphs: ${analysis.percentages.paragraphs}% (target: ${target.paragraphs}%)`);
+        console.log(`   📋 Lists: ${analysis.percentages.lists}% (target: ${target.lists}%)`);
+        console.log(`   📊 Tables: ${analysis.percentages.tables}% (target: ${target.tables}%)`);
+        console.log(`   ⭐ Special Elements: ${analysis.percentages.special}% (target: ${target.special}%)`);
+        console.log(`   🎯 Content Mix Score: ${Math.round(finalScore)}/100`);
+        
+        return Math.round(finalScore);
+    }
+
+    /**
+     * Get content mix targets based on content type and audience
+     */
+    getContentMixTargets(contentType) {
+        const targets = {
+            'executive': {
+                paragraphs: 65,   // Executives prefer deep, analytical prose
+                lists: 5,         // Minimal lists, integrated into paragraphs
+                tables: 25,       // Data-heavy for decision making
+                special: 5        // Minimal special formatting
+            },
+            'consumer': {
+                paragraphs: 45,   // More balanced for general audience
+                lists: 30,        // Lists for scanability
+                tables: 15,       // Moderate data presentation
+                special: 10       // Moderate special elements
+            },
+            'technical': {
+                paragraphs: 50,   // Technical depth in paragraphs
+                lists: 25,        // Technical specifications
+                tables: 20,       // Data and comparisons
+                special: 5        // Minimal distractions
+            }
+        };
+
+        return targets[contentType] || targets.consumer;
+    }
+
+    /**
+     * CRITICAL: Validate outline requirement - PREVENTIVE VALIDATION
+     * Enforces that all content generation must have a proper outline
+     */
+    validateOutlineRequirement(contentBlueprint) {
+        const validation = {
+            isValid: true,
+            issues: [],
+            message: ''
+        };
+
+        // Check for outline existence
+        if (!contentBlueprint.blueprint?.sections && !contentBlueprint.sections) {
+            validation.isValid = false;
+            validation.issues.push('No content sections/outline provided');
+        }
+
+        // Check for meaningful structure
+        const sections = contentBlueprint.blueprint?.sections || contentBlueprint.sections || [];
+        if (sections.length < 2) {
+            validation.isValid = false;
+            validation.issues.push('Outline must have at least 2 sections');
+        }
+
+        // Check section quality
+        const validSections = sections.filter(section => 
+            section.heading && section.heading.trim().length > 0
+        );
+        if (validSections.length !== sections.length) {
+            validation.isValid = false;
+            validation.issues.push('All sections must have valid headings');
+        }
+
+        // Check for section content guidelines
+        const sectionsWithGuidelines = sections.filter(section => 
+            section.content || section.description || section.keyPoints
+        );
+        if (sectionsWithGuidelines.length === 0) {
+            validation.isValid = false;
+            validation.issues.push('Sections must include content guidelines or descriptions');
+        }
+
+        // Set validation message
+        if (!validation.isValid) {
+            validation.message = 'Content generation requires a detailed outline created by content-outline-architect agent first';
+        }
+
+        return validation;
+    }
+
+    /**
+     * REACTIVE: Calculate outline compliance score - post-creation validation
+     * Validates that generated content follows the original outline structure
+     */
+    calculateOutlineCompliance(content, contentSetup) {
+        const originalOutline = contentSetup?.blueprint?.sections || contentSetup?.sections || [];
+        const generatedSections = content.mainContent || [];
+
+        if (originalOutline.length === 0) {
+            console.log('⚠️ No original outline found for compliance check');
+            return 50; // Penalty for missing outline
+        }
+
+        let complianceScore = 100;
+        const issues = [];
+
+        // Check section count adherence
+        const sectionCountRatio = generatedSections.length / originalOutline.length;
+        if (sectionCountRatio < 0.8 || sectionCountRatio > 1.2) {
+            complianceScore -= 20;
+            issues.push('Section count deviation from outline');
+        }
+
+        // Check heading alignment
+        let headingMatches = 0;
+        for (let i = 0; i < Math.min(generatedSections.length, originalOutline.length); i++) {
+            const generatedHeading = generatedSections[i]?.heading?.toLowerCase() || '';
+            const outlineHeading = originalOutline[i]?.heading?.toLowerCase() || '';
+            
+            // Check semantic similarity (simple keyword matching)
+            const sharedWords = generatedHeading.split(' ').filter(word => 
+                outlineHeading.includes(word) && word.length > 3
+            );
+            
+            if (sharedWords.length > 0 || generatedHeading.includes(outlineHeading) || outlineHeading.includes(generatedHeading)) {
+                headingMatches++;
+            }
+        }
+
+        const headingComplianceRatio = headingMatches / Math.max(generatedSections.length, originalOutline.length);
+        complianceScore *= headingComplianceRatio;
+
+        // Check content focus alignment
+        let contentFocusScore = 0;
+        for (let i = 0; i < Math.min(generatedSections.length, originalOutline.length); i++) {
+            const generatedContent = generatedSections[i]?.content?.toLowerCase() || '';
+            const outlineDescription = (
+                originalOutline[i]?.description || 
+                originalOutline[i]?.content || 
+                originalOutline[i]?.keyPoints?.join(' ') || ''
+            ).toLowerCase();
+
+            if (outlineDescription) {
+                const keywords = outlineDescription.split(' ').filter(word => word.length > 4);
+                const keywordMatches = keywords.filter(keyword => 
+                    generatedContent.includes(keyword)
+                ).length;
+                
+                contentFocusScore += keywordMatches / Math.max(keywords.length, 1);
+            }
+        }
+
+        contentFocusScore = contentFocusScore / Math.max(generatedSections.length, 1);
+        complianceScore *= (0.7 + (contentFocusScore * 0.3)); // Weight content focus at 30%
+
+        const finalScore = Math.max(0, Math.min(100, Math.round(complianceScore)));
+        
+        console.log(`📋 Outline Compliance Analysis:`);
+        console.log(`   📝 Generated sections: ${generatedSections.length}`);
+        console.log(`   📋 Original outline sections: ${originalOutline.length}`);
+        console.log(`   🎯 Heading alignment: ${Math.round(headingComplianceRatio * 100)}%`);
+        console.log(`   📖 Content focus alignment: ${Math.round(contentFocusScore * 100)}%`);
+        console.log(`   📊 Outline Compliance Score: ${finalScore}/100`);
+
+        return finalScore;
+    }
+
+    /**
+     * Analyze detailed outline adherence for quality reporting
+     */
+    analyzeOutlineAdherence(content, contentSetup) {
+        const originalOutline = contentSetup?.blueprint?.sections || contentSetup?.sections || [];
+        const generatedSections = content.mainContent || [];
+
+        return {
+            outlineProvided: originalOutline.length > 0,
+            originalSectionCount: originalOutline.length,
+            generatedSectionCount: generatedSections.length,
+            sectionCountMatch: Math.abs(originalOutline.length - generatedSections.length) <= 1,
+            headingAlignments: this.compareHeadings(originalOutline, generatedSections),
+            missingSections: this.identifyMissingSections(originalOutline, generatedSections),
+            extraSections: this.identifyExtraSections(originalOutline, generatedSections),
+            contentFocusDeviations: this.identifyContentDeviations(originalOutline, generatedSections)
+        };
+    }
+
+    /**
+     * Helper methods for outline analysis
+     */
+    compareHeadings(originalOutline, generatedSections) {
+        const alignments = [];
+        for (let i = 0; i < Math.max(originalOutline.length, generatedSections.length); i++) {
+            const original = originalOutline[i]?.heading || '';
+            const generated = generatedSections[i]?.heading || '';
+            alignments.push({
+                index: i,
+                originalHeading: original,
+                generatedHeading: generated,
+                isAligned: this.areHeadingsSimilar(original, generated)
+            });
+        }
+        return alignments;
+    }
+
+    areHeadingsSimilar(heading1, heading2) {
+        const h1 = heading1.toLowerCase();
+        const h2 = heading2.toLowerCase();
+        const words1 = h1.split(' ').filter(w => w.length > 3);
+        const words2 = h2.split(' ').filter(w => w.length > 3);
+        
+        const sharedWords = words1.filter(word => words2.includes(word));
+        return sharedWords.length > 0 || h1.includes(h2) || h2.includes(h1);
+    }
+
+    identifyMissingSections(originalOutline, generatedSections) {
+        const generatedHeadings = generatedSections.map(s => s.heading?.toLowerCase() || '');
+        return originalOutline.filter(section => {
+            const outlineHeading = section.heading?.toLowerCase() || '';
+            return !generatedHeadings.some(genHeading => 
+                this.areHeadingsSimilar(outlineHeading, genHeading)
+            );
+        }).map(section => section.heading);
+    }
+
+    identifyExtraSections(originalOutline, generatedSections) {
+        const outlineHeadings = originalOutline.map(s => s.heading?.toLowerCase() || '');
+        return generatedSections.filter(section => {
+            const generatedHeading = section.heading?.toLowerCase() || '';
+            return !outlineHeadings.some(outHeading => 
+                this.areHeadingsSimilar(generatedHeading, outHeading)
+            );
+        }).map(section => section.heading);
+    }
+
+    identifyContentDeviations(originalOutline, generatedSections) {
+        const deviations = [];
+        for (let i = 0; i < Math.min(originalOutline.length, generatedSections.length); i++) {
+            const outlineDesc = (originalOutline[i]?.description || '').toLowerCase();
+            const generatedContent = (generatedSections[i]?.content || '').toLowerCase();
+            
+            if (outlineDesc) {
+                const keywords = outlineDesc.split(' ').filter(w => w.length > 4);
+                const missingKeywords = keywords.filter(kw => !generatedContent.includes(kw));
+                
+                if (missingKeywords.length > keywords.length * 0.5) {
+                    deviations.push({
+                        section: originalOutline[i].heading,
+                        missingTopics: missingKeywords.length,
+                        coverage: Math.round((1 - missingKeywords.length / keywords.length) * 100)
+                    });
+                }
+            }
+        }
+        return deviations;
+    }
+
+    /**
+     * Detect content type based on setup parameters and target audience
+     */
+    detectContentType(contentSetup) {
+        // Check explicit content type
+        if (contentSetup?.contentType) {
+            return contentSetup.contentType;
+        }
+
+        // Detect from psychographic segments or target audience
+        const audienceIndicators = [
+            contentSetup?.targetAudience?.toLowerCase() || '',
+            contentSetup?.psychographicProfile?.toLowerCase() || '',
+            contentSetup?.toneProfile?.toLowerCase() || '',
+            JSON.stringify(contentSetup?.audiencePreferences || {}).toLowerCase()
+        ].join(' ');
+
+        // Executive content indicators
+        if (audienceIndicators.includes('executive') || 
+            audienceIndicators.includes('c-suite') ||
+            audienceIndicators.includes('director') ||
+            audienceIndicators.includes('ceo') ||
+            audienceIndicators.includes('professional') ||
+            audienceIndicators.includes('maned') ||
+            audienceIndicators.includes('leader') ||
+            audienceIndicators.includes('decision maker') ||
+            audienceIndicators.includes('sophisticated') ||
+            audienceIndicators.includes('analytical')) {
+            return 'executive';
+        }
+
+        // Technical content indicators
+        if (audienceIndicators.includes('technical') ||
+            audienceIndicators.includes('engineer') ||
+            audienceIndicators.includes('developer') ||
+            audienceIndicators.includes('specialist')) {
+            return 'technical';
+        }
+
+        // Default to consumer content
+        return 'consumer';
+    }
+
+    /**
+     * Analyze content types and their distribution
+     */
+    analyzeContentMix(content) {
+        // Split content into meaningful blocks and analyze types
+        const lines = content.split('\n').filter(line => line.trim().length > 0);
+        
+        let paragraphBlocks = 0;
+        let listBlocks = 0;
+        let tableBlocks = 0;
+        let specialBlocks = 0;
+        
+        let inList = false;
+        let inTable = false;
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            
+            // Skip headers
+            if (line.startsWith('#')) continue;
+            
+            // Detect table blocks
+            if (line.startsWith('|') && line.endsWith('|')) {
+                if (!inTable) {
+                    tableBlocks++;
+                    inTable = true;
+                }
+            } else {
+                inTable = false;
+            }
+            
+            // Detect list blocks
+            if (line.match(/^[•\-\*]\s/) || line.match(/^\d+\.\s/)) {
+                if (!inList) {
+                    listBlocks++;
+                    inList = true;
+                }
+            } else {
+                inList = false;
+            }
+            
+            // Detect special elements (quotes, callouts, statistics)
+            if (line.startsWith('>') || 
+                line.match(/\*\*📊.*\*\*:/) || 
+                line.match(/\*\*💡.*\*\*:/) || 
+                line.match(/\*\*⚠️.*\*\*/)) {
+                specialBlocks++;
+            }
+            
+            // Count paragraph blocks (everything else that's substantial)
+            if (!inTable && !inList && 
+                !line.startsWith('>') && 
+                !line.match(/\*\*📊.*\*\*:/) && 
+                !line.match(/\*\*💡.*\*\*:/) && 
+                !line.match(/\*\*⚠️.*\*\*/) &&
+                line.length > 50) { // Only count substantial paragraphs
+                paragraphBlocks++;
+            }
+        }
+        
+        const totalElements = paragraphBlocks + listBlocks + tableBlocks + specialBlocks;
+        
+        const breakdown = {
+            paragraphs: paragraphBlocks,
+            lists: listBlocks,
+            tables: tableBlocks,
+            special: specialBlocks,
+            total: totalElements
+        };
+        
+        const percentages = {
+            paragraphs: totalElements > 0 ? Math.round((paragraphBlocks / totalElements) * 100) : 0,
+            lists: totalElements > 0 ? Math.round((listBlocks / totalElements) * 100) : 0,
+            tables: totalElements > 0 ? Math.round((tableBlocks / totalElements) * 100) : 0,
+            special: totalElements > 0 ? Math.round((specialBlocks / totalElements) * 100) : 0
+        };
+        
+        return { breakdown, percentages };
     }
 
     predictContentPerformance(content, contentSetup, qualityMetrics) {
@@ -1913,16 +2390,53 @@ Apply these strategies systematically and measure your results. Success in ${thi
             validations.push({ type: 'warning', message: 'SEO optimization could be enhanced' });
         }
         
+        // NEW: Content mix validation
+        if (qualityMetrics.contentMixScore < 70) {
+            validations.push({ 
+                type: 'error', 
+                message: 'Content mix ratios are severely off target. Needs restructuring with proper lists, tables, and special elements.' 
+            });
+        } else if (qualityMetrics.contentMixScore < 85) {
+            validations.push({ 
+                type: 'warning', 
+                message: 'Content mix could be improved. Target: 65% paragraphs, 20% lists, 10% tables, 5% special elements.' 
+            });
+        }
+        
         // Structure validation
         if (content.mainContent.length < 5) {
             validations.push({ type: 'warning', message: 'Consider adding more main sections for comprehensive coverage' });
         }
         
+        // Content mix specific warnings
+        const breakdown = qualityMetrics.contentMixBreakdown;
+        if (breakdown.percentages.paragraphs > 85) {
+            validations.push({ 
+                type: 'warning', 
+                message: 'Content is too paragraph-heavy. Add more lists, tables, and visual elements for better readability.' 
+            });
+        }
+        
+        if (breakdown.percentages.lists < 10) {
+            validations.push({ 
+                type: 'warning', 
+                message: 'Content lacks sufficient list elements. Add bulleted or numbered lists to improve scanability.' 
+            });
+        }
+        
+        if (breakdown.percentages.tables < 5 && qualityMetrics.wordCount > 2000) {
+            validations.push({ 
+                type: 'warning', 
+                message: 'Long-form content should include comparison tables for better information structure.' 
+            });
+        }
+        
         return {
-            passed: validations.length === 0,
+            passed: validations.filter(v => v.type === 'error').length === 0,
             warnings: validations.filter(v => v.type === 'warning'),
             errors: validations.filter(v => v.type === 'error'),
-            overallQuality: qualityMetrics.overallScore >= 80 ? 'good' : 'needs-improvement'
+            overallQuality: qualityMetrics.overallScore >= 80 ? 'good' : 'needs-improvement',
+            contentMixCompliant: qualityMetrics.contentMixScore >= 85
         };
     }
 
