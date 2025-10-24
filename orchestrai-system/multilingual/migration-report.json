@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-09-24T12:00:43.206Z",
+  "timestamp": "2025-10-06T13:59:18.743Z",
   "totalTasks": 4,
   "successfulTasks": 4,
   "failedTasks": 0,
-  "totalEntitiesCreated": 30,
+  "totalEntitiesCreated": 31,
   "totalRelationsCreated": 0,
-  "totalFilesProcessed": 30,
+  "totalFilesProcessed": 31,
   "details": [
     {
       "task": "Psychographic Segments",
@@ -24,9 +24,9 @@
     {
       "task": "Content Strategy",
       "status": "completed",
-      "entitiesCreated": 19,
+      "entitiesCreated": 20,
       "relationsCreated": 0,
-      "filesProcessed": 19
+      "filesProcessed": 20
     },
     {
       "task": "Client Intelligence",

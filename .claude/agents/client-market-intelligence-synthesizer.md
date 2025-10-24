@@ -1,3 +1,10 @@
+---
+name: client-market-intelligence-synthesizer
+description: Market intelligence synthesis
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+---
+
 # Client Market Intelligence Synthesizer
 
 ## Agent Overview

@@ -2,6 +2,7 @@
 // Adaptive agent selection based on performance patterns, context matching, and predictive analytics
 
 const EventEmitter = require('events');
+const { AGENT_REGISTRY, AgentSelector } = require('../agents');
 
 class DynamicAgentSelection extends EventEmitter {
   constructor(learningFoundation, performanceSchema, domainAgentManager) {
@@ -110,6 +111,26 @@ class DynamicAgentSelection extends EventEmitter {
   }
 
   registerDefaultAgents() {
+    // Register Phase 1.3 specialized agents first (higher priority)
+    Object.entries(AGENT_REGISTRY).forEach(([agentType, agentData]) => {
+      this.registerAgent({
+        id: agentType,
+        name: agentType,
+        domain: agentData.domain,
+        type: 'specialized-agent',
+        capabilities: agentData.capabilities,
+        priority: agentData.priority >= 0.85 ? 'high' : 'medium',
+        loadCapacity: 3, // Specialized agents handle fewer concurrent tasks
+        currentLoad: 0,
+        available: true,
+        estimatedDuration: agentData.estimatedDuration,
+        description: agentData.description
+      });
+    });
+
+    console.log(`✅ Registered ${Object.keys(AGENT_REGISTRY).length} Phase 1.3 specialized agents`);
+
+    // Register fallback Claude Code agents
     const defaultAgents = [
       {
         id: 'general-purpose-agent',

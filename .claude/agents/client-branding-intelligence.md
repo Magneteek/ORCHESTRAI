@@ -1,3 +1,10 @@
+---
+name: client-branding-intelligence
+description: Brand identity analysis and positioning
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+---
+
 # Client Branding Intelligence Agent
 
 ## Agent Overview

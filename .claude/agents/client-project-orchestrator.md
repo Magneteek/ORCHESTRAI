@@ -1,3 +1,10 @@
+---
+name: client-project-orchestrator
+description: Client project coordination
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+---
+
 # Client Project Orchestrator
 
 ## Agent Overview

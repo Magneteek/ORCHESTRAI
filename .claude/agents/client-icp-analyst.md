@@ -1,3 +1,10 @@
+---
+name: client-icp-analyst
+description: Ideal customer profile analysis
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+---
+
 # Client ICP Analysis Specialist
 
 ## Agent Overview

@@ -1,3 +1,10 @@
+---
+name: client-business-context-analyzer
+description: Business context and market analysis
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+---
+
 # Client Business Context Analyzer
 
 ## Agent Overview

@@ -220,20 +220,33 @@ Server Logic = Node.js + Express + Database Integration
 #### Phase 4: Article Writing (Only After Approval) - MANDATORY AGENT USAGE
 1. **TodoWrite Checkpoint**: Mark "Write full article" as IN_PROGRESS
 2. **MANDATORY: Use Task Tool with content-writer-specialist**: Never write articles directly with Write tool
-3. **Specialized Agent Instructions**: Provide comprehensive outline and requirements to content-writer-specialist
-4. **Natural Flow First**: Agent writes conversationally, guiding readers through their concerns naturally
-5. **Follow Outline Structure**: Agent implements planned sections while maintaining conversational flow
-6. **Psychographic Integration**: Agent executes planned emotional tones through natural language
-7. **Keyword Implementation**: Agent integrates keywords naturally within conversational flow
-8. **CRITICAL Content Architecture**: Agent follows mandatory paragraph distribution and natural writing flow requirements
+3. **PARALLEL EXECUTION DEFAULT**: When writing 2+ independent articles, launch ALL agents simultaneously in ONE message (60-70% time savings)
+4. **AI DETECTION PREVENTION (NEW MANDATORY)**: Include explicit anti-AI instructions in every agent prompt:
+   - Forbidden phrases list (Picture yourself, Let's be honest, If you've ever dreamed of, Here's what makes, etc.)
+   - Structural pattern avoidance (no repetitive section openings, varied transitions)
+   - Specific details over generic superlatives (measurements, numbers, honest limitations)
+5. **Specialized Agent Instructions**: Provide comprehensive outline and requirements to content-writer-specialist
+6. **Natural Flow First**: Agent writes conversationally, guiding readers through their concerns naturally
+7. **Follow Outline Structure**: Agent implements planned sections while maintaining conversational flow
+8. **Psychographic Integration**: Agent executes planned emotional tones through natural language
+9. **Keyword Implementation**: Agent integrates keywords naturally within conversational flow
+10. **CRITICAL Content Architecture**: Agent follows mandatory paragraph distribution and natural writing flow requirements
 
-#### Phase 5: Content Flow Review & Optimization (NEW MANDATORY STEP)
-1. **Natural Flow Audit**: Review entire article for conversational flow and natural transitions
-2. **Quality Assurance Checklist**: Apply comprehensive readability and engagement checks
-3. **SEO Optimization**: Final keyword placement within natural language flow
-4. **Memory Integration**: Update crystalline memory with new content relationships
-5. **Internal Linking**: Implement planned internal linking architecture
-6. **Final Validation**: Ensure all psychographic, SEO, and natural writing requirements are met
+#### Phase 5: Content Flow Review & Optimization (MANDATORY QA GATES)
+1. **AI DETECTION VALIDATION (NEW MANDATORY GATE)**: Run content-ai-phrase-detector on all articles
+   - **Threshold**: AI detection risk must be <30% or automatic revision required
+   - **Target**: Achieve 15-25% (human-level detection range)
+   - **Common Issues**: Picture yourself, Let's be honest, repetitive patterns, weak intensifiers
+2. **Natural Flow Audit**: Review entire article for conversational flow and natural transitions
+3. **Quality Assurance Coordinator**: Apply content-quality-validator for comprehensive checks
+   - Paragraph distribution validation (40/40/20)
+   - Readability assessment
+   - Engagement element verification
+4. **SEO Optimization**: Final keyword placement within natural language flow
+5. **Memory Integration**: Update crystalline memory with new content relationships
+6. **Internal Linking**: Implement planned internal linking architecture
+7. **Final Validation**: Ensure all psychographic, SEO, and natural writing requirements are met
+8. **STOP POINT**: Content ONLY marked complete after passing all QA gates including AI detection <30%
 
 #### Phase 6: Iterative Revision Process (WHEN NEEDED)
 1. **Flow Assessment**: If content feels robotic or forced, apply iterative revision

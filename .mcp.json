@@ -2,7 +2,9 @@
   "mcpServers": {
     "dataforseo": {
       "command": "node",
-      "args": ["./orchestrai-shared/mcp-servers/dataforseo-server.js"],
+      "args": [
+        "./orchestrai-shared/mcp-servers/dataforseo-server.js"
+      ],
       "env": {
         "DATAFORSEO_USERNAME": "kristjan@krisbal.com",
         "DATAFORSEO_PASSWORD": "1e0416ba9122a90a"
@@ -10,17 +12,23 @@
     },
     "sequential-thinking": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-sequential-thinking"],
+      "args": [
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
       "env": {}
     },
     "ref-tools": {
-      "command": "npx", 
-      "args": ["ref-tools-mcp"],
+      "command": "npx",
+      "args": [
+        "ref-tools-mcp"
+      ],
       "env": {}
     },
     "memory": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-memory"],
+      "args": [
+        "@modelcontextprotocol/server-memory"
+      ],
       "env": {}
     },
     "filesystem": {
@@ -35,17 +43,32 @@
     },
     "notion": {
       "command": "npx",
-      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "args": [
+        "-y",
+        "@notionhq/notion-mcp-server"
+      ],
       "env": {
         "NOTION_TOKEN": "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"
       }
     },
     "shadcn-ui": {
       "command": "npx",
-      "args": ["@jpisnice/shadcn-ui-mcp-server"],
+      "args": [
+        "@jpisnice/shadcn-ui-mcp-server"
+      ],
       "env": {
         "GITHUB_API_KEY": "${GITHUB_API_KEY}"
       }
+    },
+    "n8n": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--sse",
+        "https://aia.magneteek.com/mcp/8a194d83-d742-4c48-92b7-cef49b890f00/sse"
+      ],
+      "env": {}
     }
   }
 }

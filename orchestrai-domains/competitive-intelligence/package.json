@@ -1,0 +1,126 @@
+{
+  "name": "@orchestrai/competitive-intelligence",
+  "version": "1.0.0",
+  "description": "Facebook/Instagram Ad Intelligence System - Monitor, analyze, and curate competitor ads with AI-powered insights",
+  "main": "competitive-intelligence-domain-hub.js",
+  "scripts": {
+    "start": "node competitive-intelligence-domain-hub.js",
+    "dev": "nodemon competitive-intelligence-domain-hub.js",
+    "api": "node api/server.js",
+    "api:dev": "nodemon api/server.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration",
+    "test:e2e": "playwright test",
+    "test:meta-api": "node tests/integration/meta-ad-library-test.js",
+    "test:apify": "node tests/integration/apify-integration-test.js",
+    "db:migrate": "node database/migrations/run-migrations.js",
+    "db:seed": "node database/seeds/run-seeds.js",
+    "db:reset": "npm run db:migrate && npm run db:seed",
+    "verify": "node scripts/verify-setup.js",
+    "setup": "npm install && node scripts/verify-setup.js",
+    "setup:full": "npm install && npm run db:migrate && npm run db:seed && node scripts/verify-setup.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "docs": "jsdoc -d docs -r .",
+    "pipeline:collection": "node pipelines/ad-collection-pipeline.js",
+    "pipeline:analysis": "node pipelines/ad-analysis-pipeline.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.478.0",
+    "axios": "^1.6.2",
+    "redis": "^4.6.11",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.7",
+    "csv-writer": "^1.6.0",
+    "exceljs": "^4.4.0",
+    "pdfkit": "^0.13.0",
+    "sharp": "^0.33.1",
+    "cheerio": "^1.0.0-rc.12",
+    "natural": "^6.12.0",
+    "sentiment": "^5.0.2",
+    "uuid": "^9.0.1",
+    "date-fns": "^3.0.6",
+    "chalk": "^4.1.2",
+    "winston": "^3.11.0",
+    "bull": "^4.12.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "nodemon": "^3.0.2",
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "@playwright/test": "^1.40.1",
+    "jsdoc": "^4.0.2",
+    "@types/node": "^20.10.5",
+    "@types/jest": "^29.5.11"
+  },
+  "keywords": [
+    "facebook-ads",
+    "instagram-ads",
+    "competitive-intelligence",
+    "ad-monitoring",
+    "meta-ad-library",
+    "ad-analysis",
+    "ai-analysis",
+    "orchestrai",
+    "performance-scoring",
+    "creative-analysis",
+    "template-generation"
+  ],
+  "author": "ORCHESTRAI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orchestrai/competitive-intelligence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/orchestrai/competitive-intelligence/issues"
+  },
+  "homepage": "https://github.com/orchestrai/competitive-intelligence#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!docs/**",
+      "!tests/**"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  },
+  "eslintConfig": {
+    "extends": ["eslint:recommended"],
+    "env": {
+      "node": true,
+      "es2022": true,
+      "jest": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2022,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "off",
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    }
+  }
+}

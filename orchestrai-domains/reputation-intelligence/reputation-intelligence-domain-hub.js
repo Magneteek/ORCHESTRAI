@@ -35,6 +35,7 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
     setupAgents() {
         // Core reputation intelligence agents
         this.agents.set('business-discovery', require('./agents/business-discovery-agent'));
+        this.agents.set('contact-enrichment', require('./agents/contact-enrichment-agent'));
         this.agents.set('review-scraper', require('./agents/review-scraper-agent'));
         this.agents.set('sentiment-analyzer', require('./agents/sentiment-analyzer-agent'));
         this.agents.set('trend-detector', require('./agents/trend-detector-agent'));
@@ -71,9 +72,36 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
             console.log(`📊 Found ${businesses.length} businesses for monitoring`);
             this.emit('businesses-discovered', businesses);
 
-            // Trigger review scraping for discovered businesses
-            await this.agents.get('review-scraper').processBusinesses(businesses);
+            // Trigger contact enrichment for discovered businesses
+            const enrichmentAgent = this.agents.get('contact-enrichment');
+            if (enrichmentAgent && enrichmentAgent.isInitialized) {
+                const enrichedBusinesses = await enrichmentAgent.enrichBusinesses(businesses);
+                this.emit('businesses-enriched', enrichedBusinesses);
+
+                // Trigger review scraping with enriched data
+                await this.agents.get('review-scraper').processBusinesses(enrichedBusinesses);
+            } else {
+                // Fallback to review scraping without enrichment
+                await this.agents.get('review-scraper').processBusinesses(businesses);
+            }
         });
+
+        // Contact enrichment events
+        const enrichmentAgent = this.agents.get('contact-enrichment');
+        if (enrichmentAgent) {
+            enrichmentAgent.on('business-enriched', (enrichedBusiness) => {
+                console.log(`✅ Enriched ${enrichedBusiness.name}: ${enrichedBusiness.decisionMakers?.length || 0} decision makers`);
+            });
+
+            enrichmentAgent.on('enrichment-progress', (progress) => {
+                this.emit('enrichment-progress', progress);
+            });
+
+            enrichmentAgent.on('bulk-enrichment-complete', (stats) => {
+                console.log(`✅ Bulk enrichment complete: ${stats.successful}/${stats.total} successful`);
+                this.emit('bulk-enrichment-complete', stats);
+            });
+        }
 
         // Review scraping events
         this.agents.get('review-scraper').on('negative-reviews-found', async (reviews) => {
@@ -132,22 +160,78 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
         try {
             const sentimentAgent = this.agents.get('sentiment-analyzer');
             const trendAgent = this.agents.get('trend-detector');
+            const enrichmentAgent = this.agents.get('contact-enrichment');
 
-            const [sentimentData, trendData] = await Promise.all([
+            const reportData = await Promise.all([
                 sentimentAgent.getBusinessSentiment(businessId),
                 trendAgent.getBusinessTrends(businessId)
             ]);
 
-            return {
+            const report = {
                 businessId,
-                sentiment: sentimentData,
-                trends: trendData,
+                sentiment: reportData[0],
+                trends: reportData[1],
                 generatedAt: new Date()
             };
+
+            // Add enrichment data if available
+            if (enrichmentAgent && enrichmentAgent.isInitialized) {
+                const stats = enrichmentAgent.getEnrichmentStats();
+                report.enrichment = stats;
+            }
+
+            return report;
         } catch (error) {
             console.error(`❌ Failed to generate reputation report:`, error);
             throw error;
         }
+    }
+
+    /**
+     * Get enriched business data with decision-maker contacts
+     * @param {string} businessId - Business ID or domain
+     * @returns {Promise<Object>} Enriched business data
+     */
+    async getEnrichedBusinessData(businessId) {
+        try {
+            const enrichmentAgent = this.agents.get('contact-enrichment');
+
+            if (!enrichmentAgent || !enrichmentAgent.isInitialized) {
+                throw new Error('Contact enrichment agent not available');
+            }
+
+            // Find business in cache or fetch
+            const enrichedBusiness = enrichmentAgent.enrichmentCache.get(businessId);
+
+            if (!enrichedBusiness) {
+                throw new Error(`Business ${businessId} not found in enrichment cache`);
+            }
+
+            return enrichedBusiness;
+        } catch (error) {
+            console.error(`❌ Failed to get enriched business data:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get enrichment statistics across all businesses
+     * @returns {Object} Enrichment statistics
+     */
+    getEnrichmentStats() {
+        const enrichmentAgent = this.agents.get('contact-enrichment');
+
+        if (!enrichmentAgent || !enrichmentAgent.isInitialized) {
+            return {
+                enabled: false,
+                message: 'Contact enrichment not available'
+            };
+        }
+
+        return {
+            enabled: true,
+            ...enrichmentAgent.getEnrichmentStats()
+        };
     }
 
     async exportNegativeReviews(criteria, format = 'json') {

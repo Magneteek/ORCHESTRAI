@@ -41,6 +41,7 @@ class MultiLanguageContentPipeline extends EventEmitter {
       'psychographic_research',
       'outline_creation',
       'content_writing',
+      'ai_detection_validation',  // NEW: Mandatory AI detection gate
       'quality_validation',
       'seo_optimization',
       'memory_publishing'
@@ -51,6 +52,7 @@ class MultiLanguageContentPipeline extends EventEmitter {
       'psychographic_research': 'general-purpose', // Psychographic research specialist
       'outline_creation': 'content-outline-architect',
       'content_writing': 'content-writer-specialist',
+      'ai_detection_validation': 'content-ai-phrase-detector', // NEW: AI detection validation
       'quality_validation': 'content-quality-validator',
       'seo_optimization': 'seo-content-optimization',
       'memory_publishing': 'general-purpose'
@@ -126,7 +128,19 @@ class MultiLanguageContentPipeline extends EventEmitter {
       execution.stageResults.content_writing = contentData;
       this.emit('stage-completed', { executionId, stage: 'content_writing', result: contentData });
 
-      // Stage 4: Quality Validation (Language Purity 100%)
+      // Stage 4a: AI Detection Validation (MANDATORY GATE - <30% threshold)
+      execution.currentStage = 'ai_detection_validation';
+      this.emit('stage-started', { executionId, stage: 'ai_detection_validation' });
+      const aiDetectionData = await this.executeAIDetectionValidation(execution, contentData, projectSpec);
+      execution.stageResults.ai_detection_validation = aiDetectionData;
+      this.emit('stage-completed', { executionId, stage: 'ai_detection_validation', result: aiDetectionData });
+
+      // BLOCKING GATE: AI detection risk must be <30% (target: 15-25%)
+      if (aiDetectionData.aiDetectionRisk >= 30) {
+        throw new Error(`AI detection validation failed: ${aiDetectionData.aiDetectionRisk}% (required: <30%)`);
+      }
+
+      // Stage 4b: Quality Validation (Language Purity 100%)
       execution.currentStage = 'quality_validation';
       this.emit('stage-started', { executionId, stage: 'quality_validation' });
       const qualityData = await this.executeQualityValidation(execution, contentData, outlineData, projectSpec);
@@ -401,10 +415,86 @@ class MultiLanguageContentPipeline extends EventEmitter {
   }
 
   /**
-   * Stage 4: Quality Validation (Language Purity 100% - BLOCKING GATE)
+   * Stage 4a: AI Detection Validation (MANDATORY GATE - <30% threshold)
+   */
+  async executeAIDetectionValidation(execution, contentData, projectSpec) {
+    console.log('\n🤖 Stage 4a: AI Detection Validation (MANDATORY GATE - <30% threshold)');
+    const stageStart = Date.now();
+
+    const agent = await this.dynamicAgentSelection.selectAgentForTask({
+      agentType: this.requiredAgents.ai_detection_validation,
+      domain: 'content',
+      capabilities: ['ai-phrase-detection', 'pattern-analysis', 'human-voice-validation'],
+      context: {
+        language: projectSpec.language,
+        content: contentData.content
+      }
+    });
+
+    console.log(`   Selected Agent: ${agent.agentId}`);
+
+    const aiDetectionPrompt = this.buildAIDetectionPrompt(projectSpec, contentData);
+
+    const aiDetectionResult = await this.coordinationPatterns.executeTask({
+      taskId: `${execution.executionId}-ai-detection-validation`,
+      agentId: agent.agentId,
+      agentType: agent.agentType,
+      prompt: aiDetectionPrompt,
+      context: {
+        language: projectSpec.language,
+        content: contentData.content,
+        targetThreshold: 30,
+        targetRange: '15-25%'
+      }
+    });
+
+    // Enforce blocking gate: AI detection risk must be <30%
+    if (aiDetectionResult.aiDetectionRisk >= 30) {
+      console.error(`\n❌ BLOCKING GATE FAILED: AI Detection Risk`);
+      console.error(`   Required: <30%`);
+      console.error(`   Actual: ${aiDetectionResult.aiDetectionRisk}%`);
+      console.error(`   Forbidden Phrases Found: ${aiDetectionResult.forbiddenPhrasesCount || 0}`);
+      console.error(`   Pattern Repetition: ${aiDetectionResult.patternRepetition || 0}%`);
+
+      // Save failed validation report
+      await this.saveAIDetectionFailureReport(execution, aiDetectionResult, projectSpec);
+
+      throw new Error(`AI detection validation failed: ${aiDetectionResult.aiDetectionRisk}% (required: <30%)`);
+    }
+
+    // Save AI detection validation deliverables
+    const deliverablePath = await this.saveAIDetectionDeliverables(
+      execution,
+      aiDetectionResult,
+      projectSpec
+    );
+
+    execution.deliverablePaths.ai_detection = deliverablePath;
+    execution.performance.stageTimings.ai_detection_validation = Date.now() - stageStart;
+
+    console.log(`   ✅ AI detection validation PASSED`);
+    console.log(`   AI Detection Risk: ${aiDetectionResult.aiDetectionRisk}% ✓`);
+    console.log(`   Target Range: 15-25% (Human-level)`);
+    console.log(`   Forbidden Phrases: ${aiDetectionResult.forbiddenPhrasesCount || 0}`);
+    console.log(`   Saved to: ${deliverablePath}`);
+
+    return {
+      aiDetectionRisk: aiDetectionResult.aiDetectionRisk,
+      forbiddenPhrases: aiDetectionResult.forbiddenPhrases || [],
+      forbiddenPhrasesCount: aiDetectionResult.forbiddenPhrasesCount || 0,
+      patternRepetition: aiDetectionResult.patternRepetition || 0,
+      structuralIssues: aiDetectionResult.structuralIssues || [],
+      humanVoiceScore: aiDetectionResult.humanVoiceScore || 0,
+      deliverablePath,
+      stageDuration: Date.now() - stageStart
+    };
+  }
+
+  /**
+   * Stage 4b: Quality Validation (Language Purity 100% - BLOCKING GATE)
    */
   async executeQualityValidation(execution, contentData, outlineData, projectSpec) {
-    console.log('\n✅ Stage 4: Quality Validation (Language Purity 100% - BLOCKING)');
+    console.log('\n✅ Stage 4b: Quality Validation (Language Purity 100% - BLOCKING)');
     const stageStart = Date.now();
 
     const agent = await this.dynamicAgentSelection.selectAgentForTask({
@@ -837,6 +927,7 @@ Provide complete outline ready for content writing phase.`;
 2. **Natural, conversational flow - like expert explaining to friend**
 3. **Psychographic targeting - address specific segment concerns naturally**
 4. **Smooth transitions between paragraphs - guide reader journey**
+5. **AI DETECTION PREVENTION - MANDATORY (Target: <25% AI detection risk)**
 
 **Approved Outline:**
 ${JSON.stringify(outlineData.outline, null, 2)}
@@ -846,6 +937,37 @@ ${JSON.stringify(outlineData.psychographicMapping, null, 2)}
 
 **Keyword Mapping:**
 ${JSON.stringify(outlineData.keywordMapping, null, 2)}
+
+**AI DETECTION PREVENTION (MANDATORY):**
+
+**Forbidden Phrases - NEVER USE:**
+- "Picture yourself" / "Imagine yourself" / "Imagine [number]"
+- "Let's be honest..." / "Let's start with..."
+- "If you've ever dreamed of..."
+- "Here's what makes..." / "Here's the thing..."
+- "What's interesting is..." / "Building on this..."
+- "There's something truly special about..."
+- "Ready for [experience]?" / "Excited about..."
+- "The truth is..." / "Let's face it..."
+- Excessive weak intensifiers: truly, really, absolutely, incredibly (max 3-4 total)
+- "In today's fast-paced world" / "In the digital age"
+
+**Structural Requirements:**
+- Vary ALL section openings (no repetitive patterns - max 15% similarity)
+- Use specific measurements over vague superlatives
+  Example: "150 kilometers of coastline" not "spectacular beaches"
+- Include honest limitations where relevant
+  Example: "parking can be challenging" not all positive
+- Write with direct confidence, avoid meta-commentary
+- Add human imperfections (varied rhythm, not perfectly polished)
+- Reduce em-dashes usage by 60%
+- NO formulaic sentence starters (avoid "In order to", "With regards to", "In terms of")
+
+**Quality Targets:**
+- AI detection risk: <25% (human-level)
+- Read-aloud test: Must sound conversational
+- Pattern repetition: <15% identical structures
+- Specific details: Include exact numbers, measurements, honest observations
 
 **NATURAL WRITING FLOW REQUIREMENTS:**
 
@@ -893,6 +1015,72 @@ ${JSON.stringify(outlineData.keywordMapping, null, 2)}
 - NEVER convert Content Requirements into bulleted lists
 
 Write complete article that sounds like trusted expert having conversation, not academic textbook.`;
+  }
+
+  buildAIDetectionPrompt(projectSpec, contentData) {
+    return `Analyze content for AI-generated patterns and phrases (Target: <25% AI detection risk, Accept: <30%).
+
+**Content to Analyze:**
+${JSON.stringify(contentData.content, null, 2)}
+
+**Language:** ${projectSpec.language}
+
+**MANDATORY AI DETECTION ANALYSIS:**
+
+1. **Forbidden Phrases Detection:**
+   - Scan for ALL forbidden phrases from the critical list:
+     * "Picture yourself" / "Imagine yourself" / "Imagine [number]"
+     * "Let's be honest..." / "Let's start with..."
+     * "If you've ever dreamed of..."
+     * "Here's what makes..." / "Here's the thing..."
+     * "What's interesting is..." / "Building on this..."
+     * "There's something truly special about..."
+     * "In today's fast-paced world" / "In the digital age"
+     * Excessive weak intensifiers (truly, really, absolutely, incredibly)
+   - Report: Every instance found with location and count
+   - Calculate: forbiddenPhrasesCount
+
+2. **Pattern Repetition Analysis:**
+   - Analyze section openings for formulaic patterns
+   - Identify repetitive sentence structures
+   - Check for identical transitions between paragraphs
+   - Calculate: patternRepetition percentage (target: <15%)
+   - Report: Specific patterns that repeat
+
+3. **Structural AI Patterns:**
+   - Formulaic sentence starters ("In order to", "With regards to", "In terms of")
+   - Meta-commentary padding ("It's important to note", "It should be emphasized")
+   - Excessive em-dashes (count and flag if >10% of sentences)
+   - Generic superlatives without specific details
+   - Report: List of structural issues found
+
+4. **Human Voice Score:**
+   - Assess conversational tone (0-100)
+   - Evaluate natural transitions
+   - Check for specific details vs. vague statements
+   - Measure sentence variety
+   - Report: humanVoiceScore (0-100, target: >75)
+
+5. **Overall AI Detection Risk:**
+   - Calculate comprehensive AI detection risk (0-100%)
+   - Weight: Forbidden phrases (40%), Pattern repetition (30%), Structural issues (20%), Human voice (10%)
+   - Report: aiDetectionRisk percentage
+   - **BLOCKING GATE**: If aiDetectionRisk >= 30%, validation FAILS
+
+**Required Output Format:**
+{
+  "aiDetectionRisk": [percentage],
+  "forbiddenPhrases": [array of found phrases with locations],
+  "forbiddenPhrasesCount": [count],
+  "patternRepetition": [percentage],
+  "structuralIssues": [array of issues],
+  "humanVoiceScore": [0-100],
+  "passesGate": [true if <30%, false otherwise]
+}
+
+**CRITICAL**: This is a BLOCKING gate. If aiDetectionRisk >= 30%, content MUST be revised.
+
+Provide complete AI detection analysis.`;
   }
 
   buildQualityValidationPrompt(projectSpec, contentData, outlineData) {
@@ -1177,6 +1365,59 @@ Provide complete publishing package ready for CMS integration.`;
     return deliverablePath;
   }
 
+  async saveAIDetectionDeliverables(execution, aiDetectionResult, projectSpec) {
+    const projectUuid = projectSpec.projectUuid || 'default-project';
+    const deliverablePath = path.join(
+      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
+      projectUuid,
+      'deliverables/content/ai-detection-reports'
+    );
+
+    await fs.mkdir(deliverablePath, { recursive: true });
+
+    const aiDetectionFile = path.join(deliverablePath, `${projectSpec.targetKeyword}-ai-detection-report.json`);
+    await fs.writeFile(
+      aiDetectionFile,
+      JSON.stringify(aiDetectionResult, null, 2),
+      'utf-8'
+    );
+
+    console.log(`   💾 AI detection report saved: ${aiDetectionFile}`);
+    return deliverablePath;
+  }
+
+  async saveAIDetectionFailureReport(execution, aiDetectionResult, projectSpec) {
+    const projectUuid = projectSpec.projectUuid || 'default-project';
+    const deliverablePath = path.join(
+      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
+      projectUuid,
+      'deliverables/content/failed-ai-detection'
+    );
+
+    await fs.mkdir(deliverablePath, { recursive: true });
+
+    const failedFile = path.join(deliverablePath, `${projectSpec.targetKeyword}-failed-ai-detection.json`);
+    await fs.writeFile(
+      failedFile,
+      JSON.stringify({
+        timestamp: Date.now(),
+        executionId: execution.executionId,
+        reason: 'AI Detection Validation Failed',
+        aiDetectionRisk: aiDetectionResult.aiDetectionRisk,
+        requiredThreshold: 30,
+        targetRange: '15-25%',
+        forbiddenPhrasesFound: aiDetectionResult.forbiddenPhrasesCount || 0,
+        forbiddenPhrases: aiDetectionResult.forbiddenPhrases || [],
+        patternRepetition: aiDetectionResult.patternRepetition || 0,
+        structuralIssues: aiDetectionResult.structuralIssues || [],
+        humanVoiceScore: aiDetectionResult.humanVoiceScore || 0
+      }, null, 2),
+      'utf-8'
+    );
+
+    console.log(`   💾 Failed AI detection report saved: ${failedFile}`);
+  }
+
   async saveFailedValidationReport(execution, qualityResult, projectSpec) {
     const projectUuid = projectSpec.projectUuid || 'default-project';
     const deliverablePath = path.join(
@@ -1211,16 +1452,24 @@ Provide complete publishing package ready for CMS integration.`;
     return {
       pipelineId: this.pipelineId,
       pipelineName: this.pipelineName,
-      version: this.version,
+      version: '2.0.0', // Updated with AI detection integration
       stages: this.stages,
       estimatedDuration: 180, // minutes (3 hours)
       requiredAgents: this.requiredAgents,
       qualityGates: [
         'outline_approval',
+        'ai_detection_risk_30', // NEW: AI detection must be <30%
         'language_purity_100',
         'content_architecture_compliance',
         'overall_quality_90'
-      ]
+      ],
+      enhancementsV2: {
+        aiDetectionPrevention: true,
+        mandatoryAIGate: true,
+        targetAIRisk: '15-25%',
+        forbiddenPhrasesList: true,
+        parallelExecutionReady: true
+      }
     };
   }
 }

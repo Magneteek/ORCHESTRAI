@@ -12,6 +12,14 @@ A comprehensive system for discovering, scraping, analyzing, and monitoring nega
 - **Geographic Targeting**: Search by location, category, and proximity
 - **Risk Scoring**: Automatic calculation of reputation risk scores
 
+### 💼 **Contact Enrichment (Apollo.io)**
+- **Organization Enrichment**: Company details, employee count, revenue, tech stack
+- **Decision-Maker Discovery**: Names, titles, emails, phone numbers, LinkedIn profiles
+- **Smart Targeting**: Industry-specific decision-maker profiles (dental, medical, restaurant)
+- **Quality Scoring**: 0-100 enrichment quality assessment
+- **Best Contact Selection**: Automatic identification of primary outreach contact
+- **Bulk Enrichment**: Process multiple businesses efficiently with caching
+
 ### 🕷️ **Advanced Web Scraping**
 - **Playwright-Powered**: Modern, reliable scraping with anti-detection
 - **Smart Filtering**: Extract only 1-3 star reviews from last 14 days
@@ -58,11 +66,16 @@ npm run setup
 ```
 
 ### 2. **Configure Environment**
+
 Create a `.env` file:
+
 ```env
 # DataForSEO API (if using direct API)
 DATAFORSEO_API_LOGIN=your_login
 DATAFORSEO_API_PASSWORD=your_password
+
+# Apollo.io Contact Enrichment
+APOLLO_API_KEY=your_apollo_io_api_key_here
 
 # Email Alerts
 SMTP_HOST=smtp.gmail.com

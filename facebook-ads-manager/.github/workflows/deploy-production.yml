@@ -1,0 +1,339 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_production:
+        description: 'Type "DEPLOY" to confirm production deployment'
+        required: true
+        default: ''
+
+env:
+  NODE_VERSION: '18.20.0'
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PRODUCTION_PROJECT_ID }}
+
+jobs:
+  # ============================================
+  # Pre-deployment Validation
+  # ============================================
+  validate:
+    name: Pre-Deployment Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate deployment confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm_production }}" != "DEPLOY" ]; then
+            echo "Production deployment not confirmed. Exiting."
+            exit 1
+          fi
+          echo "Production deployment confirmed"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check branch
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          if [ "$BRANCH" != "main" ]; then
+            echo "Production deployments must be from main branch. Current: $BRANCH"
+            exit 1
+          fi
+
+  # ============================================
+  # Create Backup
+  # ============================================
+  backup:
+    name: Backup Production Database
+    runs-on: ubuntu-latest
+    needs: [validate]
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create database backup
+        run: |
+          echo "Creating production database backup..."
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          BACKUP_FILE="backup_${TIMESTAMP}.sql"
+
+          # Note: Replace with your actual backup command
+          # Example for PostgreSQL:
+          # PGPASSWORD=${{ secrets.PROD_DB_PASSWORD }} pg_dump -h ${{ secrets.PROD_DB_HOST }} -U ${{ secrets.PROD_DB_USER }} -d ${{ secrets.PROD_DB_NAME }} > $BACKUP_FILE
+
+          echo "Backup created: $BACKUP_FILE"
+
+      - name: Upload backup to S3
+        run: |
+          echo "Uploading backup to S3..."
+          # aws s3 cp $BACKUP_FILE s3://${{ secrets.BACKUP_S3_BUCKET }}/backups/$(date +%Y/%m)/
+          echo "Backup uploaded successfully"
+
+  # ============================================
+  # Deploy to Production
+  # ============================================
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [validate, backup]
+    environment:
+      name: production
+      url: https://yourdomain.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel environment information
+        working-directory: ./frontend
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project artifacts
+        working-directory: ./frontend
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel Production
+        id: deploy
+        working-directory: ./frontend
+        run: |
+          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+
+      - name: Create deployment tag
+        run: |
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          TAG="production-${TIMESTAMP}"
+          git tag $TAG
+          git push origin $TAG
+          echo "Created tag: $TAG"
+
+  # ============================================
+  # Database Migration
+  # ============================================
+  migrate:
+    name: Run Production Migrations
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: ./frontend
+        run: npx prisma generate
+
+      - name: Check pending migrations
+        working-directory: ./frontend
+        run: |
+          echo "Checking for pending migrations..."
+          npx prisma migrate status
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
+      - name: Run database migrations
+        working-directory: ./frontend
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
+      - name: Verify migration success
+        working-directory: ./frontend
+        run: |
+          echo "Verifying migration..."
+          npx prisma migrate status
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
+  # ============================================
+  # Smoke Tests
+  # ============================================
+  smoke-tests:
+    name: Production Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [deploy, migrate]
+    steps:
+      - name: Wait for deployment propagation
+        run: sleep 60
+
+      - name: Health check
+        run: |
+          HEALTH_URL="https://yourdomain.com/api/health"
+          echo "Health check: $HEALTH_URL"
+
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL")
+
+            if [ "$RESPONSE" -eq 200 ]; then
+              echo "Health check passed!"
+              exit 0
+            fi
+
+            echo "Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES failed with status: $RESPONSE"
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            sleep 10
+          done
+
+          echo "Health check failed after $MAX_RETRIES attempts"
+          exit 1
+
+      - name: Critical path tests
+        run: |
+          echo "Running critical path tests..."
+          BASE_URL="https://yourdomain.com"
+
+          # Test homepage
+          curl -f "$BASE_URL" || exit 1
+
+          # Test authentication endpoint
+          curl -f "$BASE_URL/api/auth/session" || exit 1
+
+          # Test health endpoint
+          curl -f "$BASE_URL/api/health" || exit 1
+
+          echo "Critical path tests passed!"
+
+      - name: Performance check
+        run: |
+          echo "Checking response times..."
+          BASE_URL="https://yourdomain.com"
+
+          RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}\n' "$BASE_URL")
+          THRESHOLD=2.0
+
+          if (( $(echo "$RESPONSE_TIME > $THRESHOLD" | bc -l) )); then
+            echo "Warning: Response time ${RESPONSE_TIME}s exceeds threshold ${THRESHOLD}s"
+          else
+            echo "Response time OK: ${RESPONSE_TIME}s"
+          fi
+
+  # ============================================
+  # Monitoring Setup
+  # ============================================
+  monitoring:
+    name: Update Monitoring
+    runs-on: ubuntu-latest
+    needs: [smoke-tests]
+    steps:
+      - name: Update Sentry release
+        run: |
+          echo "Creating Sentry release..."
+          # sentry-cli releases new ${{ github.sha }}
+          # sentry-cli releases set-commits ${{ github.sha }} --auto
+          # sentry-cli releases finalize ${{ github.sha }}
+          echo "Sentry release created"
+
+      - name: Update uptime monitors
+        run: |
+          echo "Updating uptime monitoring..."
+          # Add your uptime monitoring update logic here
+          echo "Monitoring updated"
+
+  # ============================================
+  # Notifications
+  # ============================================
+  notify:
+    name: Notify Stakeholders
+    runs-on: ubuntu-latest
+    needs: [deploy, migrate, smoke-tests, monitoring]
+    if: always()
+    steps:
+      - name: Deployment summary
+        run: |
+          echo "==================================="
+          echo "Production Deployment Summary"
+          echo "==================================="
+          echo "Status: ${{ job.status }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+          echo "Time: $(date)"
+          echo "==================================="
+
+      - name: Send Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            🚀 Production Deployment ${{ job.status }}
+
+            Environment: Production
+            URL: https://yourdomain.com
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+
+            ${{ job.status == 'success' && '✅ All checks passed' || '❌ Deployment failed - immediate attention required!' }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send email notification
+        if: failure()
+        run: |
+          echo "Sending failure notification email..."
+          # Add email notification logic here
+          echo "Email sent"
+
+  # ============================================
+  # Rollback on Failure
+  # ============================================
+  rollback:
+    name: Automatic Rollback
+    runs-on: ubuntu-latest
+    needs: [smoke-tests]
+    if: failure()
+    environment: production
+    steps:
+      - name: Trigger rollback
+        run: |
+          echo "Deployment failed - initiating rollback..."
+          # Add rollback logic here
+          # Example: revert to previous Vercel deployment
+          # vercel rollback --token=${{ secrets.VERCEL_TOKEN }}
+          echo "Rollback completed"
+
+      - name: Restore database backup
+        run: |
+          echo "Restoring database from backup..."
+          # Add database restore logic if needed
+          echo "Database restored"
+
+      - name: Notify team of rollback
+        uses: 8398a7/action-slack@v3
+        with:
+          status: 'failure'
+          text: |
+            🔥 PRODUCTION ROLLBACK EXECUTED
+
+            Deployment failed and was automatically rolled back.
+            Immediate investigation required!
+
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

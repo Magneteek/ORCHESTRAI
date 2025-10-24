@@ -1,0 +1,188 @@
+'use client';
+
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Plus, Search, Filter, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
+import { CampaignTable } from '@/components/campaigns/campaign-table';
+import { CampaignFilters } from '@/components/campaigns/campaign-filters';
+import { CampaignStats } from '@/components/campaigns/campaign-stats';
+import { apiClient } from '@/lib/helpers/api-client';
+import type { FacebookCampaign } from '@/types/facebook';
+
+interface CampaignsResponse {
+  data: FacebookCampaign[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export default function CampaignsPage() {
+  const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState({
+    status: 'all',
+    objective: 'all',
+    adAccountId: '',
+  });
+  const [page, setPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Fetch campaigns with search and filters
+  const { data, isLoading, error, refetch } = useQuery<CampaignsResponse>({
+    queryKey: ['campaigns', search, filters, page],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '20',
+        ...(search && { search }),
+        ...(filters.status !== 'all' && { status: filters.status }),
+        ...(filters.objective !== 'all' && { objective: filters.objective }),
+        ...(filters.adAccountId && { adAccountId: filters.adAccountId }),
+      });
+
+      return apiClient.get<CampaignsResponse>(`/api/campaigns?${params}`);
+    },
+    staleTime: 30000, // 30 seconds
+  });
+
+  const campaigns = data?.data || [];
+  const total = data?.total || 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
+          <p className="text-muted-foreground">
+            Manage your Facebook ad campaigns
+          </p>
+        </div>
+        <Link href="/dashboard/campaigns/new">
+          <Button size="lg" data-testid="create-campaign-button">
+            <Plus className="mr-2 h-4 w-4" />
+            Create Campaign
+          </Button>
+        </Link>
+      </div>
+
+      {/* Stats Overview */}
+      <CampaignStats campaigns={campaigns} />
+
+      {/* Search and Filters */}
+      <Card className="p-4">
+        <div className="flex items-center gap-4">
+          {/* Search */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search campaigns..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+              data-testid="campaign-search"
+            />
+          </div>
+
+          {/* Filter Toggle */}
+          <Button
+            variant="outline"
+            onClick={() => setShowFilters(!showFilters)}
+            data-testid="toggle-filters"
+          >
+            <Filter className="mr-2 h-4 w-4" />
+            Filters
+            {Object.values(filters).filter((f) => f && f !== 'all').length >
+              0 && (
+              <span className="ml-2 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+                {Object.values(filters).filter((f) => f && f !== 'all').length}
+              </span>
+            )}
+          </Button>
+
+          {/* Refresh */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => refetch()}
+            data-testid="refresh-campaigns"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* Filters Panel */}
+        {showFilters && (
+          <div className="mt-4 border-t pt-4">
+            <CampaignFilters
+              filters={filters}
+              onChange={setFilters}
+              onReset={() =>
+                setFilters({ status: 'all', objective: 'all', adAccountId: '' })
+              }
+            />
+          </div>
+        )}
+      </Card>
+
+      {/* Campaign Table */}
+      <Card>
+        {isLoading ? (
+          <div className="flex h-64 items-center justify-center">
+            <div className="text-center">
+              <RefreshCw className="mx-auto h-8 w-8 animate-spin text-muted-foreground" />
+              <p className="mt-2 text-sm text-muted-foreground">
+                Loading campaigns...
+              </p>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="flex h-64 items-center justify-center">
+            <div className="text-center">
+              <p className="text-sm font-medium text-destructive">
+                Error loading campaigns
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {error instanceof Error ? error.message : 'Unknown error'}
+              </p>
+              <Button onClick={() => refetch()} className="mt-4" size="sm">
+                Try Again
+              </Button>
+            </div>
+          </div>
+        ) : campaigns.length === 0 ? (
+          <div className="flex h-64 items-center justify-center">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold">No campaigns found</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {search || Object.values(filters).some((f) => f && f !== 'all')
+                  ? 'Try adjusting your search or filters'
+                  : 'Get started by creating your first campaign'}
+              </p>
+              {!search &&
+                !Object.values(filters).some((f) => f && f !== 'all') && (
+                  <Link href="/dashboard/campaigns/new">
+                    <Button className="mt-4">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create Campaign
+                    </Button>
+                  </Link>
+                )}
+            </div>
+          </div>
+        ) : (
+          <CampaignTable
+            campaigns={campaigns}
+            onRefresh={refetch}
+            currentPage={page}
+            totalPages={Math.ceil(total / 20)}
+            onPageChange={setPage}
+          />
+        )}
+      </Card>
+    </div>
+  );
+}

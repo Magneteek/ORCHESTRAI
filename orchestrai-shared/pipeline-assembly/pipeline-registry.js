@@ -68,10 +68,60 @@ class PipelineRegistry {
         className: 'ReputationIntelligencePipeline',
         domain: 'reputation',
         estimatedDuration: 60
+      },
+      'local-seo': {
+        pipelineId: 'local-seo',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/local-seo/pipelines/local-seo-pipeline.js',
+        className: 'LocalSEOPipeline',
+        domain: 'local-seo',
+        estimatedDuration: 90
+      },
+      'email-marketing': {
+        pipelineId: 'email-marketing',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/email-marketing/pipelines/email-marketing-pipeline.js',
+        className: 'EmailMarketingPipeline',
+        domain: 'email-marketing',
+        estimatedDuration: 120
+      },
+      'landing-page-optimization': {
+        pipelineId: 'landing-page-optimization',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/webdev/pipelines/landing-page-optimization-pipeline.js',
+        className: 'LandingPageOptimizationPipeline',
+        domain: 'webdev',
+        estimatedDuration: 105
+      },
+      // Phase 2: Infrastructure Pipelines
+      'technical-seo-audit': {
+        pipelineId: 'technical-seo-audit',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/seo/pipelines/technical-seo-audit-pipeline.js',
+        className: 'TechnicalSEOAuditPipeline',
+        domain: 'seo',
+        estimatedDuration: 180
+      },
+      'comprehensive-testing': {
+        pipelineId: 'comprehensive-testing',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/quality/pipelines/comprehensive-testing-pipeline.js',
+        className: 'ComprehensiveTestingPipeline',
+        domain: 'quality',
+        estimatedDuration: 210
+      },
+      'cicd-pipeline': {
+        pipelineId: 'cicd-pipeline',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/devops/pipelines/cicd-pipeline.js',
+        className: 'CICDPipeline',
+        domain: 'devops',
+        estimatedDuration: 185
+      },
+      'api-development': {
+        pipelineId: 'api-development',
+        pipelinePath: '/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/api/pipelines/api-development-pipeline.js',
+        className: 'APIDevelopmentPipeline',
+        domain: 'api',
+        estimatedDuration: 390
       }
     };
 
-    console.log('📚 Pipeline Registry initialized');
+    console.log('📚 Pipeline Registry initialized with 15 pipelines (11 Phase 1 + 4 Phase 2)');
   }
 
   /**

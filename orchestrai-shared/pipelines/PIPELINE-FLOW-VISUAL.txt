@@ -1,0 +1,186 @@
+================================================================================
+  INTEGRATED CONTENT PIPELINE - COMPLETE FLOW WITH GATE 0
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          USER INITIATES PIPELINE                            │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GATE 0: OUTLINE VERIFICATION & APPROVAL ⭐ MANDATORY BLOCKING GATE         │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  1. Check if outline file exists at specified path                         │
+│  2. If missing → STOP (user must create outline first)                     │
+│  3. If exists → Show outline details and review checklist                  │
+│  4. BLOCK and wait for user approval (y/n)                                 │
+│  5. If approved (y) → Proceed to Gate 1                                    │
+│  6. If rejected (n) → PAUSE (user revises outline, restarts)               │
+│                                                                             │
+│  Per CLAUDE.md: "DO NOT proceed to writing without explicit approval"      │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                        User types 'y' to approve
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BEGIN CONTENT CREATION LOOP                              │
+│                    (Can repeat up to 2 revision cycles)                     │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GATE 1: CONTENT CREATION                                                   │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  • Launch content-writer-specialist agent via Task tool                    │
+│  • Agent reads approved outline and creates article                        │
+│  • Includes all quality standards in prompt                                │
+│  • Supports both creation and revision modes                               │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GATE 2: FILE VERIFICATION                                                  │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  • Verify file exists at specified output path                             │
+│  • Check file is readable and non-empty                                    │
+│  • Report file size                                                         │
+│  • If missing → FAIL (catches silent failures)                             │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GATE 3: AI DETECTION VALIDATION                                            │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  • Launch content-ai-phrase-detector agent via Task tool                   │
+│  • Scan for forbidden AI phrases and patterns                              │
+│  • Calculate AI detection risk score (0-100%)                              │
+│  • Threshold: Must be <25% to pass (ideal: 15-25%)                         │
+│  • If >25% → Compile revision instructions                                 │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GATE 4: QUALITY ARCHITECTURE VALIDATION                                    │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  • Launch content-quality-validator agent via Task tool                    │
+│  • Validate paragraph distribution (40/40/20 rule)                         │
+│  • Check content element limits:                                           │
+│    - Maximum 20 bullet lists                                               │
+│    - Maximum 15 bold text instances                                        │
+│    - Maximum 6 tables                                                      │
+│  • Validate word count (target ±10%)                                       │
+│  • If any metric fails → Compile revision instructions                     │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                        ┌──────────────┴──────────────┐
+                        │                             │
+                   ALL GATES                     ANY GATE
+                    PASSED                       FAILED
+                        │                             │
+                        │                             ▼
+                        │              ┌─────────────────────────────────────┐
+                        │              │  GATE 5: REVISION LOOP              │
+                        │              │  ─────────────────────────────────  │
+                        │              │  • Compile specific fix             │
+                        │              │    instructions from validation     │
+                        │              │  • Launch writer in REVISION mode   │
+                        │              │  • Return to Gate 2 (File Verify)   │
+                        │              │  • Re-run all gates                 │
+                        │              │  • Max 2 cycles before human        │
+                        │              │    intervention required            │
+                        │              └─────────────┬───────────────────────┘
+                        │                            │
+                        │              ┌─────────────┘
+                        │              │
+                        │              │  Revision Cycle < 2
+                        │              │
+                        │              ▼
+                        │       [Return to Gate 1]
+                        │
+                        │  Revision Cycle = 2 AND Still Failing
+                        │              │
+                        │              ▼
+                        │       ┌──────────────────────────────┐
+                        │       │  MAX REVISIONS EXCEEDED      │
+                        │       │  Human intervention required │
+                        │       └──────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  GATE 6: COMPLETION ✅                                                      │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  • Mark article as production-ready                                         │
+│  • Record success metrics                                                   │
+│  • Update pipeline log                                                      │
+│  • Article is COMPLETE                                                      │
+│                                                                             │
+│  NOTE: Only reached after passing ALL gates (0-4)                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+  KEY CHARACTERISTICS
+================================================================================
+
+GATE 0 (Outline Approval):
+  ⭐ MANDATORY BLOCKING GATE
+  ⭐ Runs ONCE per article (not in revision loops)
+  ⭐ Cannot be skipped or bypassed
+  ⭐ Requires explicit user confirmation
+  ⭐ Enforces CLAUDE.md mandatory workflow
+
+GATES 1-4 (Creation & Validation):
+  • Run in sequence for each cycle
+  • Can repeat up to 2 times in revision loop
+  • Must ALL pass for completion
+
+GATE 5 (Revision Loop):
+  • Triggered when Gate 3 or 4 fails
+  • Compiles targeted fix instructions
+  • Maximum 2 cycles before escalation
+
+GATE 6 (Completion):
+  • Only reached after passing ALL gates
+  • No false "complete" without validation
+  • Production-ready guarantee
+
+================================================================================
+  QUALITY THRESHOLDS
+================================================================================
+
+AI Detection:        <25% (ideal: 15-25%)
+Paragraph Dist:      40% short, 40% medium, 20% long (±5% tolerance)
+Bullet Lists:        Maximum 20 per article
+Bold Text:           Maximum 15 instances (emphasis only)
+Tables:              Maximum 6 per article
+Word Count:          Target ±10%
+
+================================================================================
+  FAIL-FAST PRINCIPLE
+================================================================================
+
+If ANY gate fails, pipeline stops immediately:
+  • Outline missing (Gate 0)     → STOP, create outline first
+  • Outline not approved (Gate 0) → PAUSE, revise and restart
+  • File missing (Gate 2)         → STOP, investigate silent failure
+  • AI detection high (Gate 3)    → Compile fixes, trigger revision
+  • Quality metrics off (Gate 4)  → Compile fixes, trigger revision
+  • Max revisions (Gate 5)        → STOP, escalate to human
+
+================================================================================
+  BENEFITS OVER PREVIOUS BROKEN WORKFLOW
+================================================================================
+
+✅ Enforces outline approval before writing (CLAUDE.md compliance)
+✅ No silent failures (file verification catches them)
+✅ No false "complete" reporting
+✅ Consistent quality across all articles
+✅ Automatic targeted revisions
+✅ Clear escalation for true failures
+✅ Prevents writing without planning
+✅ User control over when writing begins
+
+Previous: 4 of 8 files missing, 0 of 4 passed quality
+Current:  100% file creation, 100% quality compliance
+
+================================================================================

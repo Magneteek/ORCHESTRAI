@@ -9,6 +9,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest --testPathPattern=tests/unit",
     "test:integration": "jest --testPathPattern=tests/integration",
+    "test:apollo": "node tests/apollo-enrichment-test.js",
     "install:deps": "npm install",
     "setup": "npm run install:deps && npm run install:playwright",
     "install:playwright": "npx playwright install chromium",

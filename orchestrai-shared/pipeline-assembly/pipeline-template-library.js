@@ -35,7 +35,15 @@ class PipelineTemplateLibrary {
       this.reputationIntelligencePipeline(),
       this.competitiveAnalysisPipeline(),
       this.psychographicResearchPipeline(),
-      this.contentCreationPipeline()
+      this.contentCreationPipeline(),
+      this.localSeoPipeline(),
+      this.emailMarketingPipeline(),
+      this.landingPageOptimizationPipeline(),
+      // Phase 2: Infrastructure Pipelines
+      this.technicalSeoAuditPipeline(),
+      this.comprehensiveTestingPipeline(),
+      this.cicdPipeline(),
+      this.apiDevelopmentPipeline()
     ].forEach(template => {
       templates.set(template.id, template);
     });
@@ -1237,6 +1245,615 @@ INTEGRATION TARGETS:
   }
 
   /**
+   * Local SEO Pipeline Template
+   */
+  localSeoPipeline() {
+    return {
+      id: 'local-seo',
+      name: 'Local SEO Pipeline',
+      description: 'Comprehensive local SEO optimization from GBP to local citations and review management',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'gbp_audit_optimization',
+          stageName: 'Google Business Profile Audit & Optimization',
+          agents: ['seo-local-seo'],
+          tasks: [
+            {
+              taskId: 'gbp_audit',
+              name: 'GBP Profile Audit',
+              agentType: 'seo-local-seo',
+              prompt: 'Conduct comprehensive audit of Google Business Profile for {businessName}. Analyze categories, business description, attributes, photos, posts, and Q&A optimization opportunities.',
+              outputFormat: 'gbp-audit-report',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'gbp_optimization',
+              name: 'GBP Optimization Recommendations',
+              agentType: 'seo-local-seo',
+              prompt: 'Create detailed GBP optimization plan including category selection, attribute optimization, photo strategy, post calendar, and Q&A management for {businessName}.',
+              dependencies: ['gbp_audit'],
+              outputFormat: 'gbp-optimization-plan',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 20
+        },
+        {
+          stage: 'local_citation_building',
+          stageName: 'Local Citation Building & NAP Consistency',
+          agents: ['seo-local-seo'],
+          tasks: [
+            {
+              taskId: 'nap_audit',
+              name: 'NAP Consistency Audit',
+              agentType: 'seo-local-seo',
+              prompt: 'Audit NAP (Name, Address, Phone) consistency across all major directories and citations for {businessName}. Identify inconsistencies and opportunities.',
+              outputFormat: 'nap-audit-report',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'citation_building_strategy',
+              name: 'Citation Building Strategy',
+              agentType: 'seo-local-seo',
+              prompt: 'Develop comprehensive local citation building strategy for {businessName} targeting {location}. Prioritize industry-specific and location-specific directories.',
+              dependencies: ['nap_audit'],
+              outputFormat: 'citation-building-plan',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 25
+        },
+        {
+          stage: 'review_management',
+          stageName: 'Review Management Strategy',
+          agents: ['reviews-intelligence-specialist', 'seo-local-seo'],
+          tasks: [
+            {
+              taskId: 'review_analysis',
+              name: 'Current Review Analysis',
+              agentType: 'reviews-intelligence-specialist',
+              prompt: 'Analyze current Google reviews for {businessName}, identify patterns in negative reviews, competitor review intelligence, and sentiment trends.',
+              outputFormat: 'review-analysis-report',
+              estimatedDuration: 8
+            },
+            {
+              taskId: 'review_generation_strategy',
+              name: 'Review Generation Strategy',
+              agentType: 'seo-local-seo',
+              prompt: 'Create review generation and management strategy including review request templates, response guidelines, and reputation monitoring for {businessName}.',
+              dependencies: ['review_analysis'],
+              outputFormat: 'review-strategy',
+              estimatedDuration: 7
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 15
+        },
+        {
+          stage: 'local_content_creation',
+          stageName: 'Local Content Strategy',
+          agents: ['seo-local-seo'],
+          tasks: [
+            {
+              taskId: 'local_keyword_research',
+              name: 'Local Keyword Research',
+              agentType: 'seo-local-seo',
+              prompt: 'Conduct local keyword research for {businessName} in {location}. Focus on "near me" searches, location modifiers, and local intent keywords.',
+              outputFormat: 'local-keyword-dataset',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'local_content_plan',
+              name: 'Local Content Plan',
+              agentType: 'seo-local-seo',
+              prompt: 'Develop local content strategy including location pages, local blog topics, and community engagement content for {businessName}.',
+              dependencies: ['local_keyword_research'],
+              outputFormat: 'local-content-plan',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 20
+        },
+        {
+          stage: 'local_link_building',
+          stageName: 'Local Link Building Strategy',
+          agents: ['seo-local-seo'],
+          tasks: [
+            {
+              taskId: 'local_link_opportunities',
+              name: 'Local Link Opportunity Identification',
+              agentType: 'seo-local-seo',
+              prompt: 'Identify local link building opportunities including chamber of commerce, local business associations, community sponsorships, and local media for {businessName} in {location}.',
+              outputFormat: 'local-link-opportunities',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 10
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 90, // Total pipeline duration
+      complexity: 'moderate',
+      requiredDomains: ['local-seo'],
+      primaryAgent: 'seo-local-seo',
+      supportingAgents: ['reviews-intelligence-specialist'],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'gbp_audit_optimization',
+          condition: 'GBP optimization plan includes all critical elements',
+          blocking: true
+        },
+        {
+          stage: 'local_citation_building',
+          condition: 'NAP consistency verified across top 20 citations',
+          blocking: true
+        },
+        {
+          stage: 'review_management',
+          condition: 'Review strategy includes response templates for 1-5 star reviews',
+          blocking: false
+        },
+        {
+          stage: 'local_content_creation',
+          condition: 'Local keyword dataset includes minimum 20 keywords',
+          blocking: false
+        }
+      ],
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/local-seo',
+        files: [
+          'gbp-optimization-plan.json',
+          'citation-building-strategy.json',
+          'review-management-strategy.json',
+          'local-content-plan.json',
+          'local-link-opportunities.json'
+        ]
+      }
+    };
+  }
+
+  /**
+   * Email Marketing Pipeline Template
+   */
+  emailMarketingPipeline() {
+    return {
+      id: 'email-marketing',
+      name: 'Email Marketing Pipeline',
+      description: 'Complete email marketing automation from audience research to nurture sequences and campaign setup',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'audience_research',
+          stageName: 'Audience Research & Segmentation',
+          agents: ['client-icp-analyst'],
+          tasks: [
+            {
+              taskId: 'icp_analysis',
+              name: 'Ideal Customer Profile Analysis',
+              agentType: 'client-icp-analyst',
+              prompt: 'Analyze target audience for {clientName} email campaigns. Identify psychographic segments, pain points, and messaging preferences.',
+              outputFormat: 'icp-analysis',
+              estimatedDuration: 12
+            },
+            {
+              taskId: 'segmentation_strategy',
+              name: 'Email List Segmentation Strategy',
+              agentType: 'email-marketing-automator',
+              prompt: 'Create email list segmentation strategy based on demographics, behavior, engagement level, and lifecycle stage for {clientName}.',
+              dependencies: ['icp_analysis'],
+              outputFormat: 'segmentation-strategy',
+              estimatedDuration: 8
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 20
+        },
+        {
+          stage: 'cold_email_campaign',
+          stageName: 'Cold Email Campaign Creation',
+          agents: ['cold-email-copywriter'],
+          tasks: [
+            {
+              taskId: 'cold_email_sequence',
+              name: 'Cold Email Sequence (5 emails)',
+              agentType: 'cold-email-copywriter',
+              prompt: 'Create personalized cold email sequence (5 emails) for {targetAudience}. Include subject lines, preview text, and follow-up cadence using PREP framework.',
+              dependencies: ['icp_analysis'],
+              outputFormat: 'cold-email-sequence',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'personalization_strategy',
+              name: 'Personalization & Targeting Strategy',
+              agentType: 'cold-email-copywriter',
+              prompt: 'Develop personalization strategy including dynamic variables, account-based messaging, and trigger-based customization for cold outreach.',
+              dependencies: ['cold_email_sequence'],
+              outputFormat: 'personalization-strategy',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'nurture_sequence_development',
+          stageName: 'Nurture Sequence Development',
+          agents: ['nurture-email-copywriter'],
+          tasks: [
+            {
+              taskId: 'welcome_series',
+              name: 'Welcome Series (5 emails)',
+              agentType: 'nurture-email-copywriter',
+              prompt: 'Create welcome email series (5 emails) for new subscribers. Focus on value delivery, expectation setting, and relationship building for {clientName}.',
+              dependencies: ['segmentation_strategy'],
+              outputFormat: 'welcome-series',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'engagement_nurture',
+              name: 'Engagement Nurture Sequence (7 emails)',
+              agentType: 'nurture-email-copywriter',
+              prompt: 'Develop ongoing engagement nurture sequence (7 emails) with educational content, case studies, and soft conversion opportunities.',
+              dependencies: ['welcome_series'],
+              outputFormat: 'engagement-nurture',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'reengagement_flow',
+              name: 'Re-engagement Win-back Flow',
+              agentType: 'nurture-email-copywriter',
+              prompt: 'Create re-engagement sequence for inactive subscribers (4 emails) with value reminders, special offers, and sunset policy.',
+              outputFormat: 're-engagement-flow',
+              estimatedDuration: 12
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'automation_setup',
+          stageName: 'Email Automation Setup',
+          agents: ['email-marketing-automator'],
+          tasks: [
+            {
+              taskId: 'automation_workflows',
+              name: 'Automation Workflow Configuration',
+              agentType: 'email-marketing-automator',
+              prompt: 'Design email automation workflows including behavioral triggers, lifecycle campaigns, and drip sequences for {clientName} using ActiveCampaign/HubSpot.',
+              dependencies: ['welcome_series', 'engagement_nurture'],
+              outputFormat: 'automation-workflows',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'lead_scoring',
+              name: 'Lead Scoring & Tagging System',
+              agentType: 'email-marketing-automator',
+              prompt: 'Create lead scoring system with engagement-based scoring rules, tagging logic, and automated segmentation triggers.',
+              dependencies: ['automation_workflows'],
+              outputFormat: 'lead-scoring-system',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 25
+        },
+        {
+          stage: 'ab_testing_strategy',
+          stageName: 'A/B Testing & Optimization',
+          agents: ['email-marketing-automator'],
+          tasks: [
+            {
+              taskId: 'testing_plan',
+              name: 'A/B Testing Plan',
+              agentType: 'email-marketing-automator',
+              prompt: 'Develop comprehensive A/B testing plan for subject lines, preview text, CTA buttons, and send times. Include success metrics and testing schedule.',
+              outputFormat: 'testing-plan',
+              estimatedDuration: 8
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 8
+        },
+        {
+          stage: 'performance_optimization',
+          stageName: 'Performance Tracking & Optimization',
+          agents: ['email-marketing-automator'],
+          tasks: [
+            {
+              taskId: 'analytics_setup',
+              name: 'Analytics & Tracking Setup',
+              agentType: 'email-marketing-automator',
+              prompt: 'Configure email analytics tracking including open rates, click-through rates, conversion tracking, and attribution setup for {clientName}.',
+              outputFormat: 'analytics-configuration',
+              estimatedDuration: 7
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 7
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 120,
+      complexity: 'advanced',
+      requiredDomains: ['email-marketing'],
+      primaryAgent: 'email-marketing-automator',
+      supportingAgents: ['cold-email-copywriter', 'nurture-email-copywriter', 'client-icp-analyst'],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'audience_research',
+          condition: 'ICP analysis includes minimum 3 distinct segments',
+          blocking: true
+        },
+        {
+          stage: 'cold_email_campaign',
+          condition: 'Cold email sequence includes personalization tokens and tested subject lines',
+          blocking: true
+        },
+        {
+          stage: 'nurture_sequence_development',
+          condition: 'All nurture sequences include value-first content and clear CTAs',
+          blocking: true
+        },
+        {
+          stage: 'automation_setup',
+          condition: 'Automation workflows include proper triggers and conditional logic',
+          blocking: true
+        },
+        {
+          stage: 'ab_testing_strategy',
+          condition: 'Testing plan includes minimum 5 test hypotheses',
+          blocking: false
+        }
+      ],
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/email-marketing',
+        files: [
+          'cold-email-sequence.json',
+          'welcome-series.json',
+          'engagement-nurture-sequence.json',
+          're-engagement-flow.json',
+          'automation-workflows.json',
+          'lead-scoring-system.json',
+          'testing-plan.json'
+        ]
+      }
+    };
+  }
+
+  /**
+   * Landing Page Optimization Pipeline Template
+   */
+  landingPageOptimizationPipeline() {
+    return {
+      id: 'landing-page-optimization',
+      name: 'Landing Page Optimization Pipeline',
+      description: 'Comprehensive landing page CRO from audit to A/B testing and conversion optimization',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'page_audit',
+          stageName: 'Current Page Analysis & Audit',
+          agents: ['landing-page-optimizer', 'conversion-optimization-specialist'],
+          tasks: [
+            {
+              taskId: 'heuristic_analysis',
+              name: 'Heuristic Analysis (LIFT Model)',
+              agentType: 'landing-page-optimizer',
+              prompt: 'Conduct heuristic analysis of {pageUrl} using LIFT Model. Evaluate Value, Relevance, Clarity, Anxiety, and Distraction factors.',
+              outputFormat: 'heuristic-analysis',
+              estimatedDuration: 12
+            },
+            {
+              taskId: 'friction_audit',
+              name: 'Friction Point Analysis',
+              agentType: 'conversion-optimization-specialist',
+              prompt: 'Identify all friction points on {pageUrl} including form friction, cognitive load, technical issues, and emotional barriers.',
+              outputFormat: 'friction-audit',
+              estimatedDuration: 8
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 15
+        },
+        {
+          stage: 'cro_strategy',
+          stageName: 'CRO Strategy Development',
+          agents: ['conversion-optimization-specialist'],
+          tasks: [
+            {
+              taskId: 'funnel_analysis',
+              name: 'Conversion Funnel Analysis',
+              agentType: 'conversion-optimization-specialist',
+              prompt: 'Analyze full conversion funnel for {pageUrl}. Identify drop-off points, bottlenecks, and optimization opportunities using MECLABS framework.',
+              dependencies: ['friction_audit'],
+              outputFormat: 'funnel-analysis',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'optimization_roadmap',
+              name: 'CRO Optimization Roadmap',
+              agentType: 'conversion-optimization-specialist',
+              prompt: 'Create prioritized CRO roadmap using PIE framework. Include quick wins, high-impact changes, and long-term optimizations.',
+              dependencies: ['funnel_analysis'],
+              outputFormat: 'cro-roadmap',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 25
+        },
+        {
+          stage: 'ab_test_design',
+          stageName: 'A/B Test Design & Implementation',
+          agents: ['landing-page-optimizer'],
+          tasks: [
+            {
+              taskId: 'headline_testing',
+              name: 'Headline Variation Testing',
+              agentType: 'landing-page-optimizer',
+              prompt: 'Create 3 headline variations for {pageUrl} using proven headline formulas. Include benefit-focused and outcome-oriented options.',
+              dependencies: ['heuristic_analysis'],
+              outputFormat: 'headline-variations',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'cta_optimization',
+              name: 'CTA Button Optimization',
+              agentType: 'landing-page-optimizer',
+              prompt: 'Design CTA button variations testing copy, color, placement, and size. Create 3 variations based on conversion psychology.',
+              dependencies: ['friction_audit'],
+              outputFormat: 'cta-variations',
+              estimatedDuration: 8
+            },
+            {
+              taskId: 'test_implementation_plan',
+              name: 'A/B Test Implementation Plan',
+              agentType: 'landing-page-optimizer',
+              prompt: 'Create comprehensive A/B test implementation plan including test setup, traffic allocation, success metrics, and statistical significance requirements.',
+              dependencies: ['headline_testing', 'cta_optimization'],
+              outputFormat: 'test-plan',
+              estimatedDuration: 7
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 20
+        },
+        {
+          stage: 'element_optimization',
+          stageName: 'Conversion Element Optimization',
+          agents: ['landing-page-optimizer', 'conversion-optimization-specialist'],
+          tasks: [
+            {
+              taskId: 'social_proof_strategy',
+              name: 'Social Proof Integration Strategy',
+              agentType: 'landing-page-optimizer',
+              prompt: 'Design social proof strategy for {pageUrl} including testimonials, case studies, client logos, and trust badges placement.',
+              outputFormat: 'social-proof-strategy',
+              estimatedDuration: 8
+            },
+            {
+              taskId: 'form_optimization',
+              name: 'Form Optimization',
+              agentType: 'conversion-optimization-specialist',
+              prompt: 'Optimize forms on {pageUrl} by reducing fields, adding inline validation, implementing multi-step flow, and improving mobile experience.',
+              dependencies: ['friction_audit'],
+              outputFormat: 'form-optimization-plan',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'mobile_optimization',
+              name: 'Mobile Conversion Optimization',
+              agentType: 'landing-page-optimizer',
+              prompt: 'Create mobile-specific optimization recommendations including tap targets, scroll depth, form simplification, and sticky CTAs for {pageUrl}.',
+              outputFormat: 'mobile-optimization',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 15
+        },
+        {
+          stage: 'monitoring_iteration',
+          stageName: 'Performance Monitoring & Iteration',
+          agents: ['conversion-optimization-specialist'],
+          tasks: [
+            {
+              taskId: 'analytics_configuration',
+              name: 'Conversion Analytics Setup',
+              agentType: 'conversion-optimization-specialist',
+              prompt: 'Configure comprehensive conversion tracking including goal setup, event tracking, heatmaps, and session recording for {pageUrl}.',
+              outputFormat: 'analytics-setup',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'iteration_framework',
+              name: 'Continuous Optimization Framework',
+              agentType: 'conversion-optimization-specialist',
+              prompt: 'Create ongoing optimization framework with monthly testing cadence, performance review schedule, and iteration priorities.',
+              dependencies: ['analytics_configuration'],
+              outputFormat: 'optimization-framework',
+              estimatedDuration: 8
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 15
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 105,
+      complexity: 'advanced',
+      requiredDomains: ['webdev', 'cro'],
+      primaryAgent: 'landing-page-optimizer',
+      supportingAgents: ['conversion-optimization-specialist'],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'page_audit',
+          condition: 'LIFT Model analysis covers all 5 factors with scores',
+          blocking: true
+        },
+        {
+          stage: 'cro_strategy',
+          condition: 'CRO roadmap includes minimum 10 prioritized optimizations',
+          blocking: true
+        },
+        {
+          stage: 'ab_test_design',
+          condition: 'A/B test plan includes proper sample size calculations and statistical significance requirements',
+          blocking: true
+        },
+        {
+          stage: 'element_optimization',
+          condition: 'Form optimization reduces fields by minimum 30%',
+          blocking: false
+        },
+        {
+          stage: 'monitoring_iteration',
+          condition: 'Analytics setup includes conversion goals and micro-conversions',
+          blocking: true
+        }
+      ],
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/landing-page-optimization',
+        files: [
+          'heuristic-analysis.json',
+          'friction-audit.json',
+          'cro-roadmap.json',
+          'headline-variations.json',
+          'cta-variations.json',
+          'test-implementation-plan.json',
+          'social-proof-strategy.json',
+          'form-optimization.json',
+          'mobile-optimization.json',
+          'analytics-setup.json'
+        ]
+      }
+    };
+  }
+
+  /**
    * Extract capabilities from template
    */
   extractTemplateCapabilities(template) {
@@ -1267,6 +1884,980 @@ INTEGRATION TARGETS:
     };
 
     return agentCapabilityMap[agentType] || [];
+  }
+
+  /**
+   * Technical SEO Audit Pipeline Template
+   */
+  technicalSeoAuditPipeline() {
+    return {
+      id: 'technical-seo-audit',
+      name: 'Technical SEO Audit Pipeline',
+      description: 'Comprehensive technical SEO audit from Core Web Vitals to crawl analysis and schema markup validation',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'crawl_analysis',
+          stageName: 'Crawl Analysis & Site Architecture',
+          agents: ['seo-technical-analysis'],
+          tasks: [
+            {
+              taskId: 'site_crawl',
+              name: 'Comprehensive Site Crawl',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Perform comprehensive crawl of {siteUrl} using Screaming Frog or Sitebulb. Analyze URL structure, status codes, redirects, and crawl depth.',
+              outputFormat: 'crawl-report',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'indexability_audit',
+              name: 'Indexability & Robots Analysis',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Audit indexability issues including robots.txt, noindex tags, canonical issues, and XML sitemap validation for {siteUrl}.',
+              dependencies: ['site_crawl'],
+              outputFormat: 'indexability-report',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'internal_linking_audit',
+              name: 'Internal Linking Architecture Audit',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Analyze internal linking structure, PageRank flow, orphan pages, and link depth issues.',
+              dependencies: ['site_crawl'],
+              outputFormat: 'linking-audit',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 50
+        },
+        {
+          stage: 'core_web_vitals',
+          stageName: 'Core Web Vitals & Performance Audit',
+          agents: ['seo-technical-analysis', 'performance-testing-expert'],
+          tasks: [
+            {
+              taskId: 'lighthouse_audit',
+              name: 'Lighthouse Performance Audit',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Run Lighthouse CI audit for {siteUrl} analyzing INP, LCP, CLS, FCP, and TTFB. Test on mobile and desktop viewports.',
+              outputFormat: 'lighthouse-report',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'cwv_analysis',
+              name: 'Core Web Vitals Analysis',
+              agentType: 'performance-testing-expert',
+              prompt: 'Analyze field data from CrUX and lab data from Lighthouse. Identify performance bottlenecks affecting SEO rankings.',
+              dependencies: ['lighthouse_audit'],
+              outputFormat: 'cwv-analysis',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'speed_optimization_plan',
+              name: 'Speed Optimization Recommendations',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Create prioritized speed optimization plan including image optimization, code splitting, lazy loading, and server optimization for {siteUrl}.',
+              dependencies: ['cwv_analysis'],
+              outputFormat: 'speed-optimization-plan',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 45
+        },
+        {
+          stage: 'security_validation',
+          stageName: 'Security & Technical Validation',
+          agents: ['security-testing-specialist', 'seo-technical-analysis'],
+          tasks: [
+            {
+              taskId: 'https_ssl_audit',
+              name: 'HTTPS & SSL Certificate Audit',
+              agentType: 'security-testing-specialist',
+              prompt: 'Audit SSL certificate validity, mixed content issues, HSTS implementation, and secure protocol enforcement for {siteUrl}.',
+              outputFormat: 'ssl-audit',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'security_headers_audit',
+              name: 'Security Headers Validation',
+              agentType: 'security-testing-specialist',
+              prompt: 'Validate security headers including CSP, X-Frame-Options, X-Content-Type-Options, and Referrer-Policy.',
+              dependencies: ['https_ssl_audit'],
+              outputFormat: 'security-headers-report',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'vulnerability_scan',
+              name: 'Basic Vulnerability Scan',
+              agentType: 'security-testing-specialist',
+              prompt: 'Perform basic security scan using OWASP ZAP passive mode. Identify common vulnerabilities affecting SEO (clickjacking, insecure forms).',
+              outputFormat: 'vulnerability-report',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'schema_markup',
+          stageName: 'Schema Markup & Structured Data Audit',
+          agents: ['seo-technical-analysis'],
+          tasks: [
+            {
+              taskId: 'schema_validation',
+              name: 'Schema Markup Validation',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Validate existing schema markup using Google Rich Results Test and Schema.org validator. Identify missing or broken structured data.',
+              outputFormat: 'schema-validation',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'schema_opportunities',
+              name: 'Schema Implementation Opportunities',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Identify schema markup opportunities including Organization, Product, Breadcrumb, FAQ, HowTo, and Review schema for {siteUrl}.',
+              dependencies: ['schema_validation'],
+              outputFormat: 'schema-opportunities',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'mobile_optimization',
+          stageName: 'Mobile-First & Responsive Optimization',
+          agents: ['seo-technical-analysis'],
+          tasks: [
+            {
+              taskId: 'mobile_usability',
+              name: 'Mobile Usability Audit',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Audit mobile usability using Google Mobile-Friendly Test. Analyze tap targets, viewport configuration, and mobile readability for {siteUrl}.',
+              outputFormat: 'mobile-usability-report',
+              estimatedDuration: 10
+            },
+            {
+              taskId: 'responsive_design_validation',
+              name: 'Responsive Design Validation',
+              agentType: 'seo-technical-analysis',
+              prompt: 'Validate responsive design implementation across breakpoints. Test mobile navigation, forms, and conversion elements.',
+              dependencies: ['mobile_usability'],
+              outputFormat: 'responsive-validation',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 25
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 180,
+      complexity: 'advanced',
+      requiredDomains: ['seo', 'performance', 'security'],
+      primaryAgent: 'seo-technical-analysis',
+      supportingAgents: ['performance-testing-expert', 'security-testing-specialist'],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'crawl_analysis',
+          condition: 'Crawl report identifies all indexability issues and URL structure problems',
+          blocking: true
+        },
+        {
+          stage: 'core_web_vitals',
+          condition: 'Core Web Vitals analysis includes field and lab data with actionable recommendations',
+          blocking: true
+        },
+        {
+          stage: 'security_validation',
+          condition: 'All critical security issues identified and prioritized',
+          blocking: true
+        },
+        {
+          stage: 'schema_markup',
+          condition: 'Schema validation complete with minimum 5 implementation opportunities identified',
+          blocking: false
+        },
+        {
+          stage: 'mobile_optimization',
+          condition: 'Mobile usability score above 90/100',
+          blocking: false
+        }
+      ],
+
+      coordinationPattern: 'pipeline',
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/technical-seo',
+        files: [
+          'crawl-report.json',
+          'indexability-report.json',
+          'linking-audit.json',
+          'lighthouse-report.json',
+          'cwv-analysis.json',
+          'speed-optimization-plan.json',
+          'ssl-audit.json',
+          'security-headers-report.json',
+          'schema-validation.json',
+          'mobile-usability-report.json'
+        ]
+      }
+    };
+  }
+
+  /**
+   * Comprehensive Testing Pipeline Template
+   */
+  comprehensiveTestingPipeline() {
+    return {
+      id: 'comprehensive-testing',
+      name: 'Comprehensive Testing Pipeline',
+      description: 'Complete testing strategy from unit to E2E, functional, visual regression, and performance testing',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'unit_testing',
+          stageName: 'Unit Testing Setup',
+          agents: ['unit-test-generator'],
+          tasks: [
+            {
+              taskId: 'unit_test_suite',
+              name: 'Unit Test Suite Generation',
+              agentType: 'unit-test-generator',
+              prompt: 'Generate comprehensive unit tests for {projectPath} using Jest/Vitest. Target 80%+ code coverage with focus on business logic and utilities.',
+              outputFormat: 'unit-test-suite',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'test_coverage_analysis',
+              name: 'Test Coverage Analysis',
+              agentType: 'test-coverage-analyzer',
+              prompt: 'Analyze test coverage using Istanbul/NYC. Identify untested code paths and critical missing tests.',
+              dependencies: ['unit_test_suite'],
+              outputFormat: 'coverage-report',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'integration_testing',
+          stageName: 'Integration Testing',
+          agents: ['integration-test-specialist'],
+          tasks: [
+            {
+              taskId: 'api_integration_tests',
+              name: 'API Integration Tests',
+              agentType: 'integration-test-specialist',
+              prompt: 'Create integration tests for API endpoints in {projectPath}. Test request/response cycles, authentication flows, and error handling.',
+              outputFormat: 'integration-test-suite',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'database_integration_tests',
+              name: 'Database Integration Tests',
+              agentType: 'integration-test-specialist',
+              prompt: 'Build database integration tests using test containers. Validate CRUD operations, transactions, and data integrity.',
+              dependencies: ['api_integration_tests'],
+              outputFormat: 'database-test-suite',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 35
+        },
+        {
+          stage: 'e2e_testing',
+          stageName: 'End-to-End Testing',
+          agents: ['e2e-test-automator'],
+          tasks: [
+            {
+              taskId: 'critical_user_flows',
+              name: 'Critical User Flow Tests',
+              agentType: 'e2e-test-automator',
+              prompt: 'Implement E2E tests for critical user flows using Playwright. Cover authentication, checkout, and primary conversion paths for {projectPath}.',
+              outputFormat: 'e2e-test-suite',
+              estimatedDuration: 25
+            },
+            {
+              taskId: 'cross_browser_testing',
+              name: 'Cross-Browser Testing Suite',
+              agentType: 'e2e-test-automator',
+              prompt: 'Configure cross-browser testing across Chromium, Firefox, and WebKit. Implement parallel execution for efficiency.',
+              dependencies: ['critical_user_flows'],
+              outputFormat: 'cross-browser-suite',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 40
+        },
+        {
+          stage: 'functional_testing',
+          stageName: 'Functional Testing',
+          agents: ['functional-testing-specialist'],
+          tasks: [
+            {
+              taskId: 'form_validation_tests',
+              name: 'Form Validation Tests',
+              agentType: 'functional-testing-specialist',
+              prompt: 'Create functional tests for all forms in {projectPath}. Test validation rules, error states, and submission workflows.',
+              outputFormat: 'form-test-suite',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'business_logic_tests',
+              name: 'Business Logic Functional Tests',
+              agentType: 'functional-testing-specialist',
+              prompt: 'Build functional tests for core business logic including calculations, workflows, and state management.',
+              outputFormat: 'business-logic-tests',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'visual_regression',
+          stageName: 'Visual Regression Testing',
+          agents: ['visual-regression-tester'],
+          tasks: [
+            {
+              taskId: 'visual_baseline_creation',
+              name: 'Visual Baseline Creation',
+              agentType: 'visual-regression-tester',
+              prompt: 'Create visual regression baseline using Percy or Chromatic for {projectPath}. Capture key pages across desktop, tablet, and mobile viewports.',
+              outputFormat: 'visual-baseline',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'component_visual_tests',
+              name: 'Component Visual Tests',
+              agentType: 'visual-regression-tester',
+              prompt: 'Implement component-level visual regression tests. Test UI component states, themes, and responsive behaviors.',
+              dependencies: ['visual_baseline_creation'],
+              outputFormat: 'component-visual-suite',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'performance_testing',
+          stageName: 'Performance & Load Testing',
+          agents: ['performance-testing-expert'],
+          tasks: [
+            {
+              taskId: 'load_testing_suite',
+              name: 'Load Testing Suite (k6)',
+              agentType: 'performance-testing-expert',
+              prompt: 'Create k6 load testing suite for {apiEndpoints}. Implement constant, ramping, spike, and stress test scenarios.',
+              outputFormat: 'k6-test-suite',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'performance_benchmarks',
+              name: 'Performance Benchmarking',
+              agentType: 'performance-testing-expert',
+              prompt: 'Establish performance benchmarks and thresholds. Define SLAs for response times, throughput, and error rates.',
+              dependencies: ['load_testing_suite'],
+              outputFormat: 'performance-benchmarks',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 30
+        },
+        {
+          stage: 'test_reporting',
+          stageName: 'Test Reporting & Quality Gates',
+          agents: ['testing-report-generator'],
+          tasks: [
+            {
+              taskId: 'comprehensive_test_report',
+              name: 'Comprehensive Test Report Generation',
+              agentType: 'testing-report-generator',
+              prompt: 'Generate consolidated test report combining results from all testing stages. Include pass/fail metrics, coverage data, and quality scores.',
+              dependencies: ['unit_test_suite', 'e2e_test_suite', 'visual_baseline_creation', 'load_testing_suite'],
+              outputFormat: 'test-report',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 15
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 210,
+      complexity: 'very-high',
+      requiredDomains: ['testing', 'quality'],
+      primaryAgent: 'quality-assurance-coordinator',
+      supportingAgents: [
+        'unit-test-generator',
+        'integration-test-specialist',
+        'e2e-test-automator',
+        'functional-testing-specialist',
+        'visual-regression-tester',
+        'performance-testing-expert',
+        'testing-report-generator'
+      ],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'unit_testing',
+          condition: 'Unit test coverage above 80%',
+          blocking: true
+        },
+        {
+          stage: 'integration_testing',
+          condition: 'All critical API endpoints have integration tests',
+          blocking: true
+        },
+        {
+          stage: 'e2e_testing',
+          condition: 'Critical user flows pass across all browsers',
+          blocking: true
+        },
+        {
+          stage: 'visual_regression',
+          condition: 'Visual baseline established for all key pages',
+          blocking: false
+        },
+        {
+          stage: 'performance_testing',
+          condition: 'Performance benchmarks meet defined SLAs',
+          blocking: false
+        }
+      ],
+
+      coordinationPattern: 'mesh',
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/testing',
+        files: [
+          'unit-test-suite/',
+          'integration-test-suite/',
+          'e2e-test-suite/',
+          'visual-regression-suite/',
+          'k6-test-suite/',
+          'test-report.json',
+          'coverage-report.json'
+        ]
+      }
+    };
+  }
+
+  /**
+   * CI/CD Pipeline Template
+   */
+  cicdPipeline() {
+    return {
+      id: 'cicd-pipeline',
+      name: 'CI/CD Pipeline',
+      description: 'Enterprise CI/CD pipeline from build automation to production deployment with quality gates',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'pipeline_architecture',
+          stageName: 'CI/CD Pipeline Architecture Design',
+          agents: ['cicd-pipeline-architect'],
+          tasks: [
+            {
+              taskId: 'pipeline_design',
+              name: 'Pipeline Architecture Design',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Design comprehensive CI/CD pipeline architecture for {projectPath}. Define stages, jobs, and workflow orchestration using {cicdPlatform}.',
+              outputFormat: 'pipeline-architecture',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'branching_strategy',
+              name: 'Git Branching & Deployment Strategy',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Define Git branching strategy (GitFlow/trunk-based) and deployment workflows for dev, staging, and production environments.',
+              dependencies: ['pipeline_design'],
+              outputFormat: 'branching-strategy',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 35
+        },
+        {
+          stage: 'build_automation',
+          stageName: 'Build Automation & Optimization',
+          agents: ['cicd-pipeline-architect', 'docker-container-specialist'],
+          tasks: [
+            {
+              taskId: 'build_configuration',
+              name: 'Build Configuration',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Configure build automation with dependency caching, parallel builds, and matrix builds for {projectPath}. Optimize build times.',
+              dependencies: ['branching_strategy'],
+              outputFormat: 'build-config',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'docker_build_optimization',
+              name: 'Docker Multi-Stage Build',
+              agentType: 'docker-container-specialist',
+              prompt: 'Create optimized multi-stage Docker builds with BuildKit caching, security hardening, and minimal image size for {projectPath}.',
+              dependencies: ['build_configuration'],
+              outputFormat: 'dockerfile',
+              estimatedDuration: 20
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 35
+        },
+        {
+          stage: 'quality_gates',
+          stageName: 'Quality Gates & Testing Integration',
+          agents: ['cicd-pipeline-architect', 'security-testing-specialist'],
+          tasks: [
+            {
+              taskId: 'automated_testing_integration',
+              name: 'Automated Testing Integration',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Integrate unit, integration, and E2E tests into CI pipeline. Configure parallel test execution and failure handling.',
+              dependencies: ['build_configuration'],
+              outputFormat: 'test-integration-config',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'security_scanning',
+              name: 'Security Scanning Integration',
+              agentType: 'security-testing-specialist',
+              prompt: 'Integrate security scanning (SAST, dependency scanning, container scanning) using Snyk, Trivy, and SonarQube in CI pipeline.',
+              dependencies: ['docker_build_optimization'],
+              outputFormat: 'security-scan-config',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'code_quality_gates',
+              name: 'Code Quality Gates',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Configure code quality gates with SonarQube/CodeClimate. Define quality thresholds for coverage, complexity, and duplication.',
+              outputFormat: 'quality-gates-config',
+              estimatedDuration: 10
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 40
+        },
+        {
+          stage: 'deployment_automation',
+          stageName: 'Deployment Automation',
+          agents: ['deployment-orchestration-agent', 'kubernetes-deployment-expert'],
+          tasks: [
+            {
+              taskId: 'deployment_strategy',
+              name: 'Deployment Strategy Configuration',
+              agentType: 'deployment-orchestration-agent',
+              prompt: 'Configure deployment strategies including blue-green, canary, and rolling deployments for {projectPath}. Define rollback procedures.',
+              dependencies: ['branching_strategy'],
+              outputFormat: 'deployment-strategy',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'kubernetes_deployment',
+              name: 'Kubernetes Deployment Configuration',
+              agentType: 'kubernetes-deployment-expert',
+              prompt: 'Create production Kubernetes manifests with proper resource limits, health probes, HPA, and monitoring integration for {projectPath}.',
+              dependencies: ['deployment_strategy', 'docker_build_optimization'],
+              outputFormat: 'k8s-manifests',
+              estimatedDuration: 25
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 45
+        },
+        {
+          stage: 'monitoring_observability',
+          stageName: 'Monitoring & Observability Integration',
+          agents: ['cicd-pipeline-architect'],
+          tasks: [
+            {
+              taskId: 'monitoring_setup',
+              name: 'Monitoring & Alerting Setup',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Integrate monitoring and alerting for deployment pipeline. Configure Slack/email notifications, deployment tracking, and failure alerts.',
+              outputFormat: 'monitoring-config',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'deployment_metrics',
+              name: 'Deployment Metrics Dashboard',
+              agentType: 'cicd-pipeline-architect',
+              prompt: 'Create deployment metrics dashboard tracking deployment frequency, lead time, MTTR, and change failure rate (DORA metrics).',
+              dependencies: ['monitoring_setup'],
+              outputFormat: 'metrics-dashboard',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 30
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 185,
+      complexity: 'very-high',
+      requiredDomains: ['devops', 'cicd', 'kubernetes', 'security'],
+      primaryAgent: 'cicd-pipeline-architect',
+      supportingAgents: [
+        'docker-container-specialist',
+        'kubernetes-deployment-expert',
+        'deployment-orchestration-agent',
+        'security-testing-specialist'
+      ],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'pipeline_architecture',
+          condition: 'Pipeline architecture includes all stages with proper dependencies',
+          blocking: true
+        },
+        {
+          stage: 'build_automation',
+          condition: 'Build times optimized with caching and parallelization',
+          blocking: true
+        },
+        {
+          stage: 'quality_gates',
+          condition: 'All quality gates configured with proper thresholds',
+          blocking: true
+        },
+        {
+          stage: 'deployment_automation',
+          condition: 'Deployment strategy includes rollback procedures',
+          blocking: true
+        },
+        {
+          stage: 'monitoring_observability',
+          condition: 'DORA metrics tracking configured',
+          blocking: false
+        }
+      ],
+
+      coordinationPattern: 'pipeline',
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/cicd',
+        files: [
+          '.github/workflows/ci-cd.yml',
+          'Dockerfile',
+          'docker-compose.yml',
+          'kubernetes/deployment.yml',
+          'kubernetes/service.yml',
+          'kubernetes/ingress.yml',
+          'kubernetes/hpa.yml',
+          'sonar-project.properties',
+          'deployment-strategy.md'
+        ]
+      }
+    };
+  }
+
+  /**
+   * API Development Pipeline Template
+   */
+  apiDevelopmentPipeline() {
+    return {
+      id: 'api-development',
+      name: 'API Development Pipeline',
+      description: 'Complete API development from design to documentation, testing, and production deployment',
+      version: '1.0',
+
+      stages: [
+        {
+          stage: 'api_design',
+          stageName: 'API Design & Specification',
+          agents: ['api-architect'],
+          tasks: [
+            {
+              taskId: 'api_architecture_design',
+              name: 'API Architecture Design',
+              agentType: 'api-architect',
+              prompt: 'Design API architecture for {projectName}. Define RESTful or GraphQL approach, resource modeling, and endpoint structure.',
+              outputFormat: 'api-architecture',
+              estimatedDuration: 25
+            },
+            {
+              taskId: 'openapi_specification',
+              name: 'OpenAPI/GraphQL Schema Definition',
+              agentType: 'api-architect',
+              prompt: 'Create comprehensive OpenAPI 3.0 specification or GraphQL schema for {projectName}. Include request/response models, authentication, and error handling.',
+              dependencies: ['api_architecture_design'],
+              outputFormat: 'api-specification',
+              estimatedDuration: 30
+            },
+            {
+              taskId: 'versioning_strategy',
+              name: 'API Versioning Strategy',
+              agentType: 'api-architect',
+              prompt: 'Define API versioning strategy (URL path, header, or query parameter). Plan backward compatibility and deprecation policies.',
+              dependencies: ['openapi_specification'],
+              outputFormat: 'versioning-strategy',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 70
+        },
+        {
+          stage: 'authentication_authorization',
+          stageName: 'Authentication & Authorization',
+          agents: ['api-architect', 'security-testing-specialist'],
+          tasks: [
+            {
+              taskId: 'auth_implementation',
+              name: 'Authentication Implementation',
+              agentType: 'api-architect',
+              prompt: 'Implement authentication using JWT/OAuth 2.0 for {projectName}. Configure token generation, validation, and refresh mechanisms.',
+              dependencies: ['openapi_specification'],
+              outputFormat: 'auth-implementation',
+              estimatedDuration: 25
+            },
+            {
+              taskId: 'rbac_implementation',
+              name: 'RBAC & Authorization',
+              agentType: 'api-architect',
+              prompt: 'Implement role-based access control (RBAC) with proper permission checks. Define roles, permissions, and resource access policies.',
+              dependencies: ['auth_implementation'],
+              outputFormat: 'rbac-config',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'security_validation',
+              name: 'API Security Validation',
+              agentType: 'security-testing-specialist',
+              prompt: 'Validate API security implementation against OWASP API Security Top 10. Test authentication, authorization, and input validation.',
+              dependencies: ['rbac_implementation'],
+              outputFormat: 'security-validation-report',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 60
+        },
+        {
+          stage: 'api_implementation',
+          stageName: 'API Implementation & Business Logic',
+          agents: ['backend-development-specialist', 'api-integration-specialist'],
+          tasks: [
+            {
+              taskId: 'endpoint_implementation',
+              name: 'Endpoint Implementation',
+              agentType: 'backend-development-specialist',
+              prompt: 'Implement API endpoints following OpenAPI specification for {projectName}. Include request validation, error handling, and response formatting.',
+              dependencies: ['openapi_specification', 'rbac_implementation'],
+              outputFormat: 'api-implementation',
+              estimatedDuration: 40
+            },
+            {
+              taskId: 'database_integration',
+              name: 'Database Integration',
+              agentType: 'backend-development-specialist',
+              prompt: 'Integrate database layer with Prisma ORM or TypeORM. Implement repositories, query optimization, and transaction handling.',
+              dependencies: ['endpoint_implementation'],
+              outputFormat: 'database-layer',
+              estimatedDuration: 30
+            },
+            {
+              taskId: 'resilience_patterns',
+              name: 'Resilience Patterns Implementation',
+              agentType: 'api-integration-specialist',
+              prompt: 'Implement API resilience patterns including circuit breakers, rate limiting, retry logic, and timeout handling for {projectName}.',
+              dependencies: ['endpoint_implementation'],
+              outputFormat: 'resilience-implementation',
+              estimatedDuration: 25
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 95
+        },
+        {
+          stage: 'api_testing',
+          stageName: 'API Testing & Validation',
+          agents: ['integration-test-specialist', 'performance-testing-expert'],
+          tasks: [
+            {
+              taskId: 'integration_testing',
+              name: 'API Integration Testing',
+              agentType: 'integration-test-specialist',
+              prompt: 'Create comprehensive integration tests for all API endpoints. Test success cases, error scenarios, and edge cases.',
+              dependencies: ['database_integration'],
+              outputFormat: 'api-integration-tests',
+              estimatedDuration: 30
+            },
+            {
+              taskId: 'contract_testing',
+              name: 'API Contract Testing',
+              agentType: 'integration-test-specialist',
+              prompt: 'Implement contract testing using Pact or similar. Validate API contracts between consumers and providers.',
+              dependencies: ['integration_testing'],
+              outputFormat: 'contract-tests',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'api_load_testing',
+              name: 'API Load & Performance Testing',
+              agentType: 'performance-testing-expert',
+              prompt: 'Create k6 load tests for API endpoints. Test throughput, latency, and scalability under various load conditions.',
+              dependencies: ['resilience_patterns'],
+              outputFormat: 'api-load-tests',
+              estimatedDuration: 25
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 75
+        },
+        {
+          stage: 'api_documentation',
+          stageName: 'API Documentation & Developer Experience',
+          agents: ['api-architect'],
+          tasks: [
+            {
+              taskId: 'interactive_documentation',
+              name: 'Interactive API Documentation',
+              agentType: 'api-architect',
+              prompt: 'Generate interactive API documentation using Swagger UI or ReDoc from OpenAPI specification. Include code examples and try-it-out functionality.',
+              dependencies: ['openapi_specification'],
+              outputFormat: 'api-docs',
+              estimatedDuration: 15
+            },
+            {
+              taskId: 'sdk_generation',
+              name: 'Client SDK Generation',
+              agentType: 'api-architect',
+              prompt: 'Generate client SDKs for popular languages (TypeScript, Python, Go) using OpenAPI Generator. Include usage examples and installation guides.',
+              dependencies: ['interactive_documentation'],
+              outputFormat: 'client-sdks',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'postman_collection',
+              name: 'Postman Collection Creation',
+              agentType: 'api-architect',
+              prompt: 'Create Postman collection with all endpoints, example requests, and environment variables for easy API testing.',
+              dependencies: ['openapi_specification'],
+              outputFormat: 'postman-collection',
+              estimatedDuration: 15
+            }
+          ],
+          parallelizable: true,
+          estimatedDuration: 50
+        },
+        {
+          stage: 'api_deployment',
+          stageName: 'API Deployment & Monitoring',
+          agents: ['deployment-orchestration-agent'],
+          tasks: [
+            {
+              taskId: 'api_gateway_setup',
+              name: 'API Gateway Configuration',
+              agentType: 'deployment-orchestration-agent',
+              prompt: 'Configure API gateway with rate limiting, request transformation, and routing for {projectName}. Set up CORS and security policies.',
+              outputFormat: 'gateway-config',
+              estimatedDuration: 20
+            },
+            {
+              taskId: 'monitoring_observability',
+              name: 'API Monitoring & Observability',
+              agentType: 'deployment-orchestration-agent',
+              prompt: 'Set up API monitoring with request tracing, error tracking, and performance metrics. Configure dashboards and alerts.',
+              dependencies: ['api_gateway_setup'],
+              outputFormat: 'monitoring-setup',
+              estimatedDuration: 20
+            }
+          ],
+          parallelizable: false,
+          estimatedDuration: 40
+        }
+      ],
+
+      // Overall pipeline metrics
+      estimatedDuration: 390,
+      complexity: 'very-high',
+      requiredDomains: ['api', 'backend', 'security', 'testing'],
+      primaryAgent: 'api-architect',
+      supportingAgents: [
+        'backend-development-specialist',
+        'api-integration-specialist',
+        'security-testing-specialist',
+        'integration-test-specialist',
+        'performance-testing-expert',
+        'deployment-orchestration-agent'
+      ],
+
+      // Quality gates
+      qualityGates: [
+        {
+          stage: 'api_design',
+          condition: 'OpenAPI specification complete with all endpoints and models documented',
+          blocking: true
+        },
+        {
+          stage: 'authentication_authorization',
+          condition: 'Security validation passes OWASP API Security Top 10 checks',
+          blocking: true
+        },
+        {
+          stage: 'api_implementation',
+          condition: 'All endpoints implement proper error handling and validation',
+          blocking: true
+        },
+        {
+          stage: 'api_testing',
+          condition: 'Integration test coverage above 85% for all endpoints',
+          blocking: true
+        },
+        {
+          stage: 'api_documentation',
+          condition: 'Interactive documentation deployed and client SDKs generated',
+          blocking: false
+        },
+        {
+          stage: 'api_deployment',
+          condition: 'API monitoring and alerting configured',
+          blocking: true
+        }
+      ],
+
+      coordinationPattern: 'pipeline',
+
+      // Output configuration
+      deliverables: {
+        path: 'projects/{projectId}/deliverables/api',
+        files: [
+          'openapi.yml',
+          'src/api/',
+          'tests/api/',
+          'docs/api/',
+          'client-sdks/',
+          'postman-collection.json',
+          'api-gateway-config.yml',
+          'monitoring-dashboard.json'
+        ]
+      }
+    };
   }
 
   /**

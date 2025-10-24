@@ -11,13 +11,16 @@ class WordPressContentPipeline {
     this.wordpressPublisher = new WordPressGutenbergPublisher(null, crystallineMemory);
     
     this.pipelineStages = [
-      'content_analysis',
+      'content_analysis', // Includes AI detection validation
       'seo_optimization',
       'gutenberg_conversion',
       'quality_validation',
       'wordpress_publication',
       'post_publish_analysis'
     ];
+
+    // AI detection threshold (MANDATORY)
+    this.aiDetectionThreshold = 30; // <30% required, 15-25% target
     
     this.activeWorkflows = new Map();
     this.metrics = {
@@ -130,18 +133,37 @@ class WordPressContentPipeline {
         enhancedContent = contentRequest;
       }
       
-      // Enhance with AI phrase detection
+      // AI PHRASE DETECTION (MANDATORY) - <30% threshold
       const phraseDetector = this.contentDomainHub.agents.get('ai-phrase-detector');
       if (phraseDetector && enhancedContent.content) {
         const phraseAnalysis = await phraseDetector.analyzeContent(enhancedContent.content);
         enhancedContent.aiPhraseAnalysis = phraseAnalysis;
-        
-        // Apply humanization suggestions
-        if (phraseAnalysis.suggestions) {
-          enhancedContent.humanizedContent = this.applyHumanizationSuggestions(
-            enhancedContent.content, 
-            phraseAnalysis.suggestions
-          );
+
+        // BLOCKING GATE: AI detection risk must be <30%
+        if (phraseAnalysis.aiDetectionRisk >= 30) {
+          console.warn(`⚠️  WARNING: AI detection risk ${phraseAnalysis.aiDetectionRisk}% exceeds 30% threshold`);
+          console.warn(`   Forbidden phrases found: ${phraseAnalysis.forbiddenPhrasesCount || 0}`);
+          console.warn(`   Content requires humanization before publication`);
+
+          // Apply automatic humanization suggestions
+          if (phraseAnalysis.suggestions) {
+            enhancedContent.humanizedContent = this.applyHumanizationSuggestions(
+              enhancedContent.content,
+              phraseAnalysis.suggestions
+            );
+
+            // Re-analyze after humanization
+            const reAnalysis = await phraseDetector.analyzeContent(enhancedContent.humanizedContent);
+            enhancedContent.aiPhraseReanalysis = reAnalysis;
+
+            if (reAnalysis.aiDetectionRisk >= 30) {
+              throw new Error(`AI detection validation failed: ${reAnalysis.aiDetectionRisk}% after humanization (required: <30%)`);
+            }
+
+            console.log(`   ✅ Humanization successful: AI risk reduced to ${reAnalysis.aiDetectionRisk}%`);
+          }
+        } else {
+          console.log(`   ✅ AI detection check passed: ${phraseAnalysis.aiDetectionRisk}% (target: 15-25%)`);
         }
       }
       

@@ -1,3 +1,10 @@
+---
+name: client-context-integration-coordinator
+description: Client intelligence coordination
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+---
+
 # Client Context Integration Coordinator
 
 ## Agent Overview

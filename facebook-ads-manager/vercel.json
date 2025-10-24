@@ -1,0 +1,97 @@
+{
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.next",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "REDIS_URL": "@redis-url",
+    "NEXTAUTH_SECRET": "@nextauth-secret",
+    "FACEBOOK_APP_ID": "@facebook-app-id",
+    "FACEBOOK_APP_SECRET": "@facebook-app-secret",
+    "ANTHROPIC_API_KEY": "@anthropic-api-key"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_APP_URL": "@next-public-app-url",
+      "NEXT_PUBLIC_FACEBOOK_APP_ID": "@next-public-facebook-app-id",
+      "NEXT_PUBLIC_SOCKET_URL": "@next-public-socket-url"
+    }
+  },
+  "functions": {
+    "frontend/app/api/**/*.ts": {
+      "memory": 3008,
+      "maxDuration": 60
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "/api/health"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/dashboard",
+      "destination": "/",
+      "permanent": false,
+      "has": [
+        {
+          "type": "cookie",
+          "key": "next-auth.session-token",
+          "value": "^$"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/sync-facebook-data",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/generate-ai-insights",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-old-data",
+      "schedule": "0 3 * * 0"
+    }
+  ]
+}

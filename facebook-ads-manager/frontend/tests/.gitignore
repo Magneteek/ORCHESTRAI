@@ -1,0 +1,22 @@
+# Playwright artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Authentication states
+.auth/
+
+# Screenshots and videos
+screenshots/
+videos/
+traces/
+
+# Coverage reports
+coverage/
+
+# Test databases
+*.db
+*.sqlite
+
+# Logs
+*.log
