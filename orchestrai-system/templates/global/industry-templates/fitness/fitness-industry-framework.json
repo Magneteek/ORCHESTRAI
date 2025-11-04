@@ -1,0 +1,175 @@
+{
+  "industry": "fitness",
+  "name": "Fitness Business Marketing Framework",
+  "description": "Comprehensive templates for gyms, personal trainers, fitness studios, and wellness businesses",
+  "version": "1.0.0",
+  "templates": {
+    "member_acquisition": {
+      "pain_points": [
+        "Lack of motivation and accountability",
+        "Previous failed attempts at fitness routines",
+        "Intimidation by gym environments and equipment",
+        "Time constraints and busy schedules",
+        "Confusion about proper exercise techniques",
+        "Plateau in fitness progress and results",
+        "Cost concerns and membership commitment anxiety"
+      ],
+      "value_propositions": [
+        {
+          "type": "results_focused",
+          "template": "Achieve your [fitness goal] in [timeframe] with our proven [program type] that's helped [number] people transform their bodies",
+          "use_case": "Goal-oriented clients"
+        },
+        {
+          "type": "community_focused",
+          "template": "Join a supportive fitness community where everyone celebrates your progress and keeps you motivated",
+          "use_case": "Social/community-minded clients"
+        },
+        {
+          "type": "convenience_focused",
+          "template": "Flexible [workout type] that fits your busy schedule - train anytime, anywhere with expert guidance",
+          "use_case": "Time-constrained professionals"
+        },
+        {
+          "type": "beginner_friendly",
+          "template": "Start your fitness journey with confidence - beginner-friendly programs designed for real people, not just athletes",
+          "use_case": "Fitness newcomers"
+        }
+      ]
+    },
+    "service_descriptions": {
+      "personal_training": {
+        "template": "Get personalized workouts, proper form coaching, and accountability from certified trainers who adapt every session to your goals, fitness level, and schedule.",
+        "psychological_triggers": ["personalization", "expertise", "accountability"],
+        "cta": "Book your complimentary training assessment"
+      },
+      "group_fitness_classes": {
+        "template": "Experience the energy and motivation of group workouts with expert instruction, varied routines, and a supportive community that makes fitness fun.",
+        "psychological_triggers": ["community", "variety", "fun_factor"],
+        "cta": "Try your first class free"
+      },
+      "nutrition_coaching": {
+        "template": "Transform your relationship with food through sustainable nutrition coaching that teaches you how to fuel your body for energy, performance, and long-term health.",
+        "psychological_triggers": ["education", "sustainability", "health_focus"],
+        "cta": "Start your nutrition transformation"
+      },
+      "strength_training": {
+        "template": "Build lean muscle, increase metabolism, and gain functional strength with progressive strength training programs designed for all fitness levels.",
+        "psychological_triggers": ["strength_building", "metabolism", "progression"],
+        "cta": "Begin your strength journey"
+      },
+      "weight_loss_programs": {
+        "template": "Lose weight and keep it off with our comprehensive approach combining effective workouts, nutrition guidance, and lifestyle coaching for lasting results.",
+        "psychological_triggers": ["lasting_results", "comprehensive_approach", "lifestyle_change"],
+        "cta": "Start your transformation today"
+      }
+    },
+    "member_communication": {
+      "onboarding_sequence": [
+        {
+          "timing": "welcome",
+          "template": "Welcome to [Gym Name], [Member Name]! Your fitness journey starts now. Here's what to expect in your first week and how to get the most from your membership."
+        },
+        {
+          "timing": "first_week",
+          "template": "How was your first week, [Member Name]? Our team is here to help you feel comfortable and confident. Book your complimentary fitness assessment to create your personalized plan."
+        },
+        {
+          "timing": "30_days",
+          "template": "30 days in, [Member Name]! You're building great habits. Ready to take it to the next level? Let's discuss your progress and set new goals."
+        }
+      ],
+      "motivation_messages": [
+        {
+          "timing": "missed_workouts",
+          "template": "We miss you at [Gym Name], [Member Name]! Life gets busy, but your health is worth 30 minutes today. What can we do to help you get back on track?"
+        },
+        {
+          "timing": "milestone_achievement",
+          "template": "Congratulations, [Member Name]! You've achieved [milestone]. Your dedication is paying off - keep up the amazing work!"
+        }
+      ]
+    },
+    "educational_content": {
+      "fitness_guides": [
+        "Beginner's guide to strength training: Building confidence in the weight room",
+        "How to create a sustainable workout routine that fits your lifestyle",
+        "Nutrition basics: Fueling your body for optimal performance and recovery",
+        "Understanding macronutrients: Protein, carbs, and fats explained",
+        "Home workout essentials: Staying active without a gym membership",
+        "Recovery and rest: Why they're crucial for your fitness success"
+      ],
+      "workout_tips": [
+        "5 common gym mistakes beginners make (and how to avoid them)",
+        "How to break through fitness plateaus and keep making progress",
+        "The science behind HIIT: Why high-intensity intervals work",
+        "Proper form guide: [Exercise name] technique breakdown",
+        "Pre and post-workout nutrition: What to eat and when",
+        "Setting realistic fitness goals: A step-by-step planning guide"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Certified trainers with ongoing education",
+      "Success stories and transformation photos",
+      "Clean, well-maintained facilities and equipment",
+      "Flexible membership options and no long-term contracts",
+      "Free trial periods and satisfaction guarantees",
+      "Health and safety protocols and certifications",
+      "Community involvement and local partnerships"
+    ],
+    "social_proof_types": [
+      "Member transformation stories and before/after photos",
+      "Testimonials focusing on lifestyle improvements",
+      "Trainer certifications and continuing education",
+      "Awards for business excellence and community service",
+      "Member retention rates and success statistics",
+      "Partnerships with healthcare professionals"
+    ],
+    "urgency_creators": [
+      "Limited-time membership promotions and discounts",
+      "Seasonal fitness challenges with registration deadlines",
+      "Personal training packages with bonus sessions",
+      "Early bird pricing for new program launches",
+      "Summer/New Year fitness preparation campaigns",
+      "Limited spots available for popular classes or programs"
+    ]
+  },
+  "psychological_frameworks": {
+    "member_journey_stages": [
+      {
+        "stage": "contemplation",
+        "mindset": "I know I need to get in shape but I'm not sure how to start",
+        "messaging": "Beginner-friendly guidance and small first steps",
+        "cta": "Take our fitness readiness quiz"
+      },
+      {
+        "stage": "preparation",
+        "mindset": "I'm ready to commit but need to find the right gym/program",
+        "messaging": "Program variety, expertise, and trial opportunities",
+        "cta": "Schedule your free tour and consultation"
+      },
+      {
+        "stage": "action",
+        "mindset": "I'm ready to start my fitness journey",
+        "messaging": "Onboarding support and quick wins",
+        "cta": "Join our fitness family today"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "membership_metrics": {
+      "trial_to_membership_conversion": "30-45%",
+      "monthly_retention_rate": "85-92%",
+      "annual_retention_rate": "70-80%",
+      "referral_rate": "15-25%"
+    },
+    "digital_engagement": {
+      "email_open_rates": "25-35%",
+      "social_media_engagement": "3-8%",
+      "website_conversion_rate": "2-5%",
+      "class_booking_rate": "60-75%"
+    }
+  }
+}

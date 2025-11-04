@@ -50,6 +50,20 @@ orchestrai-shared/logs/*
 projects/*/temp/
 cache/
 
+# CRITICAL: Never commit client project files to git
+# Only system architecture and templates should be in version control
+projects/quartziq-*/
+projects/drnl-*/
+projects/nasmehpg-*/
+projects/redeyemonkey-*/
+projects/rezensia-*/
+projects/dental-3d-*/
+# Catch-all for any client project directories
+projects/*/
+# But allow the projects directory structure itself
+!projects/
+!projects/.gitkeep
+
 # Redis dumps
 dump.rdb
 
@@ -65,3 +79,25 @@ dump.rdb
 Orchestrai-frontend/.next/
 Orchestrai-frontend/out/
 Orchestrai-frontend/dist/
+
+# Prevent test files and summaries in root directory
+/*-COMPLETE.md
+/*-SUMMARY.md
+/*-REPORT.md
+/*-RESULTS.md
+/*-TEST*.md
+/PHASE-*.md
+/*-ANALYSIS.md
+/test-*.js
+/test-*.sh
+/*-test.js
+/tracking-report-*.json
+/*-scan.json
+/postproceduralna-*.txt
+/CLEANUP-PLAN*.md
+
+# Test directories
+/tests/
+/tools/
+/Copy/
+/applications/

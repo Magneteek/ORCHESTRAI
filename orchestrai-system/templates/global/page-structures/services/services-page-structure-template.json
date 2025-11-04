@@ -1,0 +1,191 @@
+{
+  "page_type": "services",
+  "name": "Services Page Structure Template",
+  "description": "Comprehensive services page structure templates optimized for service explanation, differentiation, and conversion",
+  "version": "1.0.0",
+  "templates": {
+    "service_presentation_formats": {
+      "detailed_service_pages": {
+        "structure": [
+          {
+            "section": "service_hero",
+            "elements": ["service_headline", "problem_statement", "solution_preview", "service_cta"],
+            "content_focus": "Service positioning and immediate value clarity",
+            "word_count": "30-50 words headline, 75-100 words problem/solution"
+          },
+          {
+            "section": "service_overview",
+            "elements": ["what_we_do", "how_we_do_it", "why_choose_us", "service_benefits"],
+            "content_focus": "Service explanation and differentiation",
+            "word_count": "150-250 words per section"
+          },
+          {
+            "section": "process_breakdown",
+            "elements": ["step_by_step", "timeline", "deliverables", "client_involvement"],
+            "content_focus": "Process transparency and expectation setting",
+            "word_count": "50-75 words per process step"
+          },
+          {
+            "section": "results_proof",
+            "elements": ["case_studies", "success_metrics", "client_testimonials", "before_after"],
+            "content_focus": "Results demonstration and credibility",
+            "word_count": "100-150 words per case study"
+          },
+          {
+            "section": "service_packages",
+            "elements": ["package_options", "pricing_tiers", "feature_comparison", "custom_solutions"],
+            "content_focus": "Service options and pricing transparency",
+            "word_count": "75-125 words per package description"
+          },
+          {
+            "section": "faq_section",
+            "elements": ["common_questions", "detailed_answers", "concern_addressing", "next_steps"],
+            "content_focus": "Objection handling and clarity provision",
+            "word_count": "30-60 words per answer"
+          },
+          {
+            "section": "consultation_cta",
+            "elements": ["consultation_offer", "contact_form", "scheduling_options", "guarantee_promise"],
+            "content_focus": "Conversion and next step facilitation",
+            "word_count": "40-70 words for CTA section"
+          }
+        ]
+      },
+      "service_comparison_format": {
+        "structure": [
+          {
+            "section": "services_overview",
+            "elements": ["service_grid", "quick_descriptions", "ideal_client_indicators", "pricing_preview"],
+            "content_focus": "Service portfolio presentation and comparison",
+            "word_count": "40-60 words per service summary"
+          },
+          {
+            "section": "comparison_matrix",
+            "elements": ["feature_comparison", "benefit_breakdown", "suitability_guide", "recommendation_logic"],
+            "content_focus": "Service differentiation and selection guidance",
+            "word_count": "20-35 words per comparison point"
+          },
+          {
+            "section": "service_selection_guide",
+            "elements": ["decision_framework", "client_assessment", "consultation_process", "recommendation_system"],
+            "content_focus": "Decision making assistance and guidance",
+            "word_count": "75-125 words for guidance sections"
+          }
+        ]
+      },
+      "industry_specific_services": {
+        "structure": [
+          {
+            "section": "industry_expertise",
+            "elements": ["industry_experience", "specialized_knowledge", "regulatory_understanding", "market_insights"],
+            "content_focus": "Industry credibility and specialized expertise",
+            "word_count": "100-175 words industry overview"
+          },
+          {
+            "section": "industry_challenges",
+            "elements": ["common_problems", "industry_pain_points", "regulatory_challenges", "competitive_pressures"],
+            "content_focus": "Problem identification and understanding demonstration",
+            "word_count": "50-75 words per challenge"
+          },
+          {
+            "section": "specialized_solutions",
+            "elements": ["industry_specific_services", "compliance_solutions", "competitive_advantages", "outcome_focus"],
+            "content_focus": "Tailored solution presentation",
+            "word_count": "75-125 words per solution"
+          }
+        ]
+      }
+    },
+    "content_frameworks": {
+      "service_explanation": {
+        "problem_agitation_solution": {
+          "problem": "Identify and articulate the client's core business challenge",
+          "agitation": "Amplify the cost and consequences of not addressing the problem",
+          "solution": "Present your service as the logical, proven solution"
+        },
+        "before_after_bridge": {
+          "before_state": "Describe the client's current frustrating situation",
+          "after_state": "Paint a picture of the desired outcome and transformation", 
+          "bridge": "Position your service as the bridge between current and desired state"
+        },
+        "feature_advantage_benefit": {
+          "feature": "What you do (the service component)",
+          "advantage": "How you do it differently or better",
+          "benefit": "What this means for the client's business results"
+        }
+      }
+    },
+    "psychological_positioning": {
+      "expert_authority": {
+        "elements": ["credentials", "experience_years", "certifications", "specializations"],
+        "messaging": "Position as the go-to expert in specific service areas"
+      },
+      "results_focus": {
+        "elements": ["case_studies", "metrics", "testimonials", "guarantees"],
+        "messaging": "Emphasize outcomes and measurable business impact"
+      },
+      "partnership_approach": {
+        "elements": ["collaborative_process", "client_involvement", "knowledge_transfer", "ongoing_support"],
+        "messaging": "Present as partner rather than vendor"
+      },
+      "risk_mitigation": {
+        "elements": ["guarantees", "insurance", "references", "trial_periods"],
+        "messaging": "Reduce perceived risk of engagement"
+      }
+    }
+  },
+  "conversion_optimization": {
+    "trust_building_elements": [
+      "detailed_service_explanations",
+      "transparent_process_breakdown",
+      "clear_pricing_and_timelines",
+      "client_success_stories",
+      "professional_credentials",
+      "industry_experience_proof"
+    ],
+    "urgency_elements": [
+      "limited_capacity_messaging",
+      "seasonal_business_impact",
+      "competitive_timing_advantages",
+      "problem_cost_escalation",
+      "implementation_timeline_benefits"
+    ],
+    "objection_handling": [
+      "cost_justification_content",
+      "roi_demonstration",
+      "risk_mitigation_messaging",
+      "timeline_expectations",
+      "process_transparency",
+      "outcome_guarantees"
+    ]
+  },
+  "service_page_types": {
+    "individual_service_page": {
+      "focus": "Deep dive into one specific service offering",
+      "content_depth": "Comprehensive explanation, process, results, FAQ",
+      "conversion_goal": "Service-specific consultation or engagement"
+    },
+    "services_overview_page": {
+      "focus": "Portfolio of all services with comparison guidance",
+      "content_depth": "Service summaries with comparison framework",
+      "conversion_goal": "General consultation to determine best service fit"
+    },
+    "industry_services_page": {
+      "focus": "Services tailored to specific industry or market segment",
+      "content_depth": "Industry expertise demonstration with specialized solutions",
+      "conversion_goal": "Industry-specific consultation and credibility building"
+    }
+  },
+  "performance_benchmarks": {
+    "engagement_metrics": {
+      "time_on_page": "2-5 minutes for detailed service pages",
+      "bounce_rate": "30-50% for well-optimized service pages",
+      "conversion_rate": "5-12% visitor to consultation request"
+    },
+    "content_effectiveness": {
+      "faq_engagement": "15-30% of visitors interact with FAQ section",
+      "case_study_views": "40-60% of visitors view case studies or testimonials",
+      "contact_form_completion": "60-80% completion rate for started forms"
+    }
+  }
+}

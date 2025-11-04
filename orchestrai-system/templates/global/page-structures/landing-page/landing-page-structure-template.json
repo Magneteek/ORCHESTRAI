@@ -1,0 +1,204 @@
+{
+  "page_type": "landing_page",
+  "name": "Landing Page Structure Template", 
+  "description": "High-converting landing page templates optimized for specific campaigns, traffic sources, and conversion goals",
+  "version": "1.0.0",
+  "templates": {
+    "landing_page_types": {
+      "lead_generation_landing_page": {
+        "structure": [
+          {
+            "section": "hero_section",
+            "elements": ["attention_grabbing_headline", "compelling_subheadline", "hero_image_video", "social_proof_teaser"],
+            "content_focus": "Immediate attention capture and value proposition",
+            "word_count": "25-40 words headline, 40-70 words subheadline",
+            "conversion_goal": "Capture attention and build initial interest"
+          },
+          {
+            "section": "problem_agitation",
+            "elements": ["problem_identification", "pain_amplification", "consequence_highlighting", "urgency_building"],
+            "content_focus": "Problem awareness and urgency creation",
+            "word_count": "150-250 words problem section",
+            "conversion_goal": "Create urgency and need awareness"
+          },
+          {
+            "section": "solution_preview",
+            "elements": ["solution_introduction", "benefit_highlights", "unique_mechanism", "transformation_promise"],
+            "content_focus": "Solution positioning and benefit communication",
+            "word_count": "200-300 words solution section",
+            "conversion_goal": "Position solution as the logical answer"
+          },
+          {
+            "section": "social_proof",
+            "elements": ["testimonials", "case_studies", "success_metrics", "trust_indicators"],
+            "content_focus": "Credibility building and risk reduction",
+            "word_count": "30-60 words per testimonial",
+            "conversion_goal": "Build trust and reduce skepticism"
+          },
+          {
+            "section": "lead_magnet_offer",
+            "elements": ["offer_description", "value_breakdown", "what_they_get", "delivery_method"],
+            "content_focus": "Lead magnet value communication",
+            "word_count": "100-175 words offer section",
+            "conversion_goal": "Clearly communicate the value exchange"
+          },
+          {
+            "section": "opt_in_form",
+            "elements": ["form_fields", "privacy_assurance", "submit_button", "guarantee_promise"],
+            "content_focus": "Form completion optimization",
+            "word_count": "15-30 words form copy",
+            "conversion_goal": "Maximize form completion rate"
+          },
+          {
+            "section": "objection_handling",
+            "elements": ["common_concerns", "faq_preview", "risk_reversal", "guarantee_details"],
+            "content_focus": "Address hesitation and concerns",
+            "word_count": "50-100 words per objection",
+            "conversion_goal": "Remove barriers to conversion"
+          }
+        ]
+      },
+      "product_sales_landing_page": {
+        "structure": [
+          {
+            "section": "product_hero",
+            "elements": ["product_headline", "key_benefit", "product_image", "price_offer", "urgency_element"],
+            "content_focus": "Product positioning and immediate value",
+            "word_count": "30-50 words headline, 50-75 words benefit",
+            "conversion_goal": "Product interest and purchase consideration"
+          },
+          {
+            "section": "product_demonstration",
+            "elements": ["product_demo", "feature_breakdown", "use_cases", "before_after"],
+            "content_focus": "Product understanding and visualization",
+            "word_count": "75-125 words per major feature",
+            "conversion_goal": "Product comprehension and desire building"
+          },
+          {
+            "section": "benefits_focus",
+            "elements": ["transformation_outcomes", "life_improvement", "problem_resolution", "goal_achievement"],
+            "content_focus": "Outcome-focused benefit communication",
+            "word_count": "50-100 words per benefit",
+            "conversion_goal": "Desire amplification through outcome visualization"
+          },
+          {
+            "section": "pricing_and_offers",
+            "elements": ["pricing_display", "special_offers", "payment_options", "guarantee_terms"],
+            "content_focus": "Purchase facilitation and risk reduction",
+            "word_count": "75-150 words pricing section",
+            "conversion_goal": "Purchase decision facilitation"
+          },
+          {
+            "section": "purchase_urgency",
+            "elements": ["limited_time", "scarcity_indicators", "bonus_offers", "deadline_countdown"],
+            "content_focus": "Urgency creation and immediate action",
+            "word_count": "50-100 words urgency section",
+            "conversion_goal": "Immediate purchase decision"
+          },
+          {
+            "section": "purchase_cta",
+            "elements": ["buy_now_button", "secure_checkout", "satisfaction_guarantee", "instant_access"],
+            "content_focus": "Purchase completion optimization",
+            "word_count": "20-40 words CTA section",
+            "conversion_goal": "Purchase completion"
+          }
+        ]
+      },
+      "webinar_registration_landing_page": {
+        "structure": [
+          {
+            "section": "webinar_promise",
+            "elements": ["webinar_title", "learning_outcomes", "expert_positioning", "value_preview"],
+            "content_focus": "Learning value and expertise demonstration",
+            "word_count": "40-60 words title, 100-150 words outcomes",
+            "conversion_goal": "Interest in learning opportunity"
+          },
+          {
+            "section": "content_preview",
+            "elements": ["agenda_highlights", "key_takeaways", "exclusive_insights", "actionable_strategies"],
+            "content_focus": "Content value and exclusivity",
+            "word_count": "30-50 words per agenda item",
+            "conversion_goal": "Value perception and FOMO creation"
+          },
+          {
+            "section": "expert_credibility",
+            "elements": ["presenter_bio", "credentials", "experience", "previous_results"],
+            "content_focus": "Presenter authority and credibility",
+            "word_count": "150-250 words presenter section",
+            "conversion_goal": "Trust in expertise and value delivery"
+          },
+          {
+            "section": "registration_incentive",
+            "elements": ["bonus_materials", "exclusive_access", "limited_seating", "early_bird_benefits"],
+            "content_focus": "Registration motivation and urgency",
+            "word_count": "75-125 words incentive section",
+            "conversion_goal": "Registration urgency and value enhancement"
+          }
+        ]
+      }
+    },
+    "conversion_psychology": {
+      "attention_patterns": {
+        "headline_formulas": [
+          "How to [achieve desired outcome] without [common struggle]",
+          "The [number] [time period] [solution] that [specific result]",
+          "[Target audience]: Stop [frustrating situation] and start [desired outcome]",
+          "Finally, a [solution type] that [unique benefit] in just [timeframe]"
+        ]
+      },
+      "persuasion_sequences": {
+        "aida_implementation": {
+          "attention": "Compelling headline and visual that stops scrolling",
+          "interest": "Problem identification and solution preview",
+          "desire": "Benefit amplification and social proof",
+          "action": "Clear CTA with urgency and risk reversal"
+        },
+        "pas_framework": {
+          "problem": "Specific pain point identification and relatability",
+          "agitation": "Consequence amplification and cost of inaction",
+          "solution": "Your offering as the logical resolution"
+        }
+      }
+    },
+    "traffic_source_optimization": {
+      "google_ads_landing_pages": {
+        "message_match": "Headline matches ad copy and search intent",
+        "load_speed": "Optimized for fast loading and mobile experience",
+        "conversion_focus": "Single conversion goal with minimal distractions"
+      },
+      "facebook_ads_landing_pages": {
+        "social_proof_heavy": "Testimonials and social validation prominent",
+        "visual_continuity": "Visual style matches ad creative",
+        "engagement_elements": "Interactive elements and social sharing"
+      },
+      "email_campaign_landing_pages": {
+        "personalization": "Content references email context and messaging",
+        "subscriber_exclusive": "Exclusive offers for email subscribers",
+        "segmentation_match": "Content matches email list segment interests"
+      }
+    },
+    "mobile_optimization": {
+      "mobile_first_elements": [
+        "thumb_friendly_buttons",
+        "simplified_forms",
+        "fast_loading_images",
+        "easy_scrolling_sections",
+        "clear_visual_hierarchy",
+        "minimal_text_input"
+      ]
+    }
+  },
+  "performance_benchmarks": {
+    "conversion_rates": {
+      "lead_generation": "15-30% for optimized pages",
+      "product_sales": "2-8% depending on price point",
+      "webinar_registration": "20-40% for targeted traffic",
+      "consultation_booking": "10-25% for service businesses"
+    },
+    "engagement_metrics": {
+      "time_on_page": "45-90 seconds for effective landing pages",
+      "scroll_depth": "70-85% scroll through key sections",
+      "bounce_rate": "20-40% for well-matched traffic"
+    }
+  }
+}

@@ -39,6 +39,19 @@
       "priority": "medium",
       "enabled": true
     },
+    "google-search-console": {
+      "name": "google-search-console",
+      "description": "Google Search Console API integration for search analytics and indexing",
+      "command": "npx",
+      "args": ["-y", "mcp-server-gsc"],
+      "env": {
+        "GSC_CREDENTIALS_PATH": "/Users/kris/CLAUDEtools/GSC Orchestrai IAM Admin Krisbal.json",
+        "GSC_SKIP_OAUTH": "true"
+      },
+      "capabilities": ["search-analytics", "indexing-status", "sitemap-management", "url-inspection", "performance-data"],
+      "priority": "high",
+      "enabled": true
+    },
     "memory": {
       "name": "memory",
       "description": "Persistent knowledge graphs",
@@ -52,10 +65,15 @@
       "name": "filesystem",
       "description": "Secure file operations",
       "command": "npx", 
-      "args": ["@modelcontextprotocol/server-filesystem"],
+      "args": ["@modelcontextprotocol/server-filesystem", "/Users/kris/CLAUDEtools/ORCHESTRAI/projects", "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates"],
       "capabilities": ["file-operations", "path-validation", "secure-access"],
       "priority": "medium",
-      "enabled": true
+      "enabled": true,
+      "allowedDirectories": [
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/projects",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/temp"
+      ]
     },
     "notion": {
       "name": "notion",
@@ -73,6 +91,97 @@
         "contentArticles": true,
         "webpageContent": true,
         "syncInterval": "real-time"
+      }
+    },
+    "browser-mcp": {
+      "name": "browser-mcp", 
+      "description": "Lightweight browser automation using Playwright for visual testing",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest", "--headless"],
+      "env": {},
+      "capabilities": [
+        "visual-regression-testing",
+        "screenshot-capture", 
+        "accessibility-validation",
+        "wcag-compliance-checking",
+        "core-web-vitals-measurement",
+        "performance-monitoring",
+        "responsive-design-validation"
+      ],
+      "priority": "high",
+      "enabled": true,
+      "webQualityDomain": {
+        "role": "primary-visual-testing",
+        "agents": ["visual-regression-tester", "ux-quality-validator", "responsive-design-validator", "performance-quality-tester"],
+        "useCases": [
+          "Quick visual validation cycles",
+          "Accessibility compliance checking", 
+          "Performance metrics capture",
+          "Responsive design verification"
+        ]
+      }
+    },
+    "playwright-mcp": {
+      "name": "playwright-mcp",
+      "description": "Comprehensive cross-browser testing and E2E automation",
+      "command": "npx", 
+      "args": ["-y", "@playwright/mcp@latest", "--browser", "chrome", "--device", "Desktop Chrome"],
+      "env": {},
+      "capabilities": [
+        "cross-browser-testing",
+        "e2e-user-flows",
+        "multi-device-testing",
+        "complex-interactions",
+        "authentication-flows",
+        "file-upload-testing",
+        "mobile-device-emulation",
+        "network-condition-testing"
+      ],
+      "priority": "high", 
+      "enabled": true,
+      "webQualityDomain": {
+        "role": "comprehensive-e2e-testing",
+        "agents": ["e2e-testing-coordinator", "browser-compatibility-validator", "ux-flow-validator"],
+        "browsers": ["chromium", "firefox", "webkit"],
+        "useCases": [
+          "Complex user journey testing",
+          "Cross-browser compatibility validation", 
+          "Mobile responsive testing",
+          "Authentication and security flows"
+        ]
+      }
+    },
+    "magicui": {
+      "name": "magicui",
+      "description": "Professional animated UI components library with 150+ React components",
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp@latest"],
+      "env": {},
+      "capabilities": [
+        "animated-components",
+        "react-ui-library", 
+        "professional-animations",
+        "component-generation",
+        "ui-enhancement",
+        "framer-motion-integration",
+        "copy-paste-components"
+      ],
+      "priority": "high",
+      "enabled": true,
+      "webQualityDomain": {
+        "role": "ui-component-enhancement",
+        "agents": ["ui-component-generator", "animation-specialist", "web-developer"],
+        "componentCategories": [
+          "marquee", "border-beam", "blur-fade", "particle-effects", 
+          "animated-cards", "interactive-dock", "globe-visualization", 
+          "device-mockups", "loading-animations", "text-effects"
+        ],
+        "useCases": [
+          "Professional website animations",
+          "Interactive UI components",
+          "Modern dental website enhancement",
+          "Copy-paste component integration"
+        ]
       }
     }
   },

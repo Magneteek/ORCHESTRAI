@@ -1,0 +1,32 @@
+{
+  "name": "facebook-ads-manager",
+  "version": "1.0.0",
+  "description": "Multi-tenant SaaS platform for Facebook Ads management with AI-powered insights and template franchising",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "lint": "cd frontend && npm run lint",
+    "test": "cd frontend && npm test",
+    "db:migrate": "node database/migrations/run-migrations.js",
+    "db:seed": "node database/seeds/run-seeds.js"
+  },
+  "keywords": [
+    "facebook-ads",
+    "meta-marketing-api",
+    "saas",
+    "multi-tenant",
+    "ai-analytics",
+    "ad-templates"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

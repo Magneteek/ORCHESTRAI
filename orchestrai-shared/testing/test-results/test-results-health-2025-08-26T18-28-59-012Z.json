@@ -1,0 +1,126 @@
+{
+  "testType": "health",
+  "timestamp": "2025-08-26T18:28:59.012Z",
+  "results": {
+    "sequential-thinking": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "process": {
+          "status": "passed",
+          "message": "Server process is healthy"
+        },
+        "connectivity": {
+          "status": "passed",
+          "message": "Server is reachable"
+        },
+        "responseTime": {
+          "status": "passed",
+          "responseTime": 0,
+          "threshold": 5000
+        }
+      },
+      "timestamp": "2025-08-26T18:28:59.012Z"
+    },
+    "ref-tools": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "process": {
+          "status": "passed",
+          "message": "Server process is healthy"
+        },
+        "connectivity": {
+          "status": "passed",
+          "message": "Server is reachable"
+        },
+        "responseTime": {
+          "status": "passed",
+          "responseTime": 0,
+          "threshold": 5000
+        }
+      },
+      "timestamp": "2025-08-26T18:28:59.012Z"
+    },
+    "dataforseo": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "process": {
+          "status": "passed",
+          "message": "Server process is healthy"
+        },
+        "connectivity": {
+          "status": "passed",
+          "message": "Server is reachable"
+        },
+        "responseTime": {
+          "status": "passed",
+          "responseTime": 0,
+          "threshold": 5000
+        }
+      },
+      "timestamp": "2025-08-26T18:28:59.012Z"
+    },
+    "memory": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "process": {
+          "status": "passed",
+          "message": "Server process is healthy"
+        },
+        "connectivity": {
+          "status": "passed",
+          "message": "Server is reachable"
+        },
+        "responseTime": {
+          "status": "passed",
+          "responseTime": 0,
+          "threshold": 5000
+        }
+      },
+      "timestamp": "2025-08-26T18:28:59.012Z"
+    },
+    "filesystem": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "process": {
+          "status": "passed",
+          "message": "Server process is healthy"
+        },
+        "connectivity": {
+          "status": "passed",
+          "message": "Server is reachable"
+        },
+        "responseTime": {
+          "status": "passed",
+          "responseTime": 0,
+          "threshold": 5000
+        }
+      },
+      "timestamp": "2025-08-26T18:28:59.012Z"
+    },
+    "notion": {
+      "status": "passed",
+      "duration": 0,
+      "tests": {
+        "process": {
+          "status": "passed",
+          "message": "Server process is healthy"
+        },
+        "connectivity": {
+          "status": "passed",
+          "message": "Server is reachable"
+        },
+        "responseTime": {
+          "status": "passed",
+          "responseTime": 0,
+          "threshold": 5000
+        }
+      },
+      "timestamp": "2025-08-26T18:28:59.012Z"
+    }
+  }
+}

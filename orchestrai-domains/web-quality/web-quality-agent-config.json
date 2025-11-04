@@ -1,0 +1,315 @@
+{
+  "domainId": "web-development-quality",
+  "domainName": "Web Development Quality Domain",
+  "description": "Comprehensive web development quality validation with MCP browser automation integration",
+  "version": "1.0.0",
+  "architecture": "hybrid_orchestrai_claude_code_mcp",
+  "webQualityAgents": {
+    "designQuality": [
+      {
+        "id": "web-quality-ux-validator",
+        "name": "UX Quality Validator",
+        "specialization": "ux-quality-validation",
+        "claudeCodeAgent": "web-ux-research-agent",
+        "mcpIntegration": "browser-mcp",
+        "description": "User experience validation with automated accessibility and usability testing",
+        "capabilities": [
+          "user-journey-validation",
+          "accessibility-compliance-checking",
+          "usability-scoring",
+          "wcag-automated-testing",
+          "user-interaction-validation",
+          "conversion-funnel-testing"
+        ],
+        "qualityMetrics": {
+          "accessibilityScore": { "min": 90, "target": 100 },
+          "usabilityScore": { "min": 80, "target": 95 },
+          "userJourneyCompletion": { "min": 85, "target": 95 }
+        },
+        "mcpCapabilities": [
+          "accessibility-testing",
+          "user-interaction-simulation",
+          "screen-reader-testing"
+        ],
+        "priority": "high"
+      },
+      {
+        "id": "web-quality-visual-regression-tester",
+        "name": "Visual Regression Tester",
+        "specialization": "visual-regression-testing",
+        "claudeCodeAgent": "web-visual-design-agent",
+        "mcpIntegration": "browser-mcp",
+        "description": "Visual design validation with automated screenshot comparison and layout testing",
+        "capabilities": [
+          "design-implementation-comparison",
+          "layout-validation",
+          "brand-compliance-checking",
+          "visual-consistency-validation",
+          "pixel-perfect-testing",
+          "design-system-compliance"
+        ],
+        "qualityMetrics": {
+          "visualAccuracy": { "min": 95, "target": 99 },
+          "brandCompliance": { "min": 90, "target": 100 },
+          "layoutConsistency": { "min": 85, "target": 95 }
+        },
+        "mcpCapabilities": [
+          "screenshot-comparison",
+          "layout-testing",
+          "visual-diff-analysis"
+        ],
+        "priority": "high"
+      },
+      {
+        "id": "web-quality-responsive-validator",
+        "name": "Responsive Design Validator",
+        "specialization": "responsive-design-validation",
+        "claudeCodeAgent": "web-responsive-design-agent",
+        "mcpIntegration": "browser-mcp",
+        "description": "Responsive design validation across multiple devices and breakpoints",
+        "capabilities": [
+          "breakpoint-testing",
+          "mobile-optimization-validation",
+          "cross-device-consistency",
+          "responsive-layout-validation",
+          "touch-interface-testing",
+          "viewport-adaptation-testing"
+        ],
+        "qualityMetrics": {
+          "responsiveCompliance": { "min": 90, "target": 100 },
+          "mobileOptimization": { "min": 85, "target": 95 },
+          "crossDeviceConsistency": { "min": 80, "target": 90 }
+        },
+        "mcpCapabilities": [
+          "multi-device-testing",
+          "breakpoint-validation",
+          "responsive-screenshot-testing"
+        ],
+        "priority": "high"
+      }
+    ],
+    "developmentQuality": [
+      {
+        "id": "web-quality-code-validator",
+        "name": "Code Quality Validator",
+        "specialization": "code-quality-validation",
+        "claudeCodeAgent": "web-frontend-developer",
+        "mcpIntegration": "none",
+        "description": "Frontend code quality validation with TypeScript, React best practices, and security compliance",
+        "capabilities": [
+          "typescript-validation",
+          "react-best-practices-checking",
+          "security-compliance-validation",
+          "code-structure-analysis",
+          "component-architecture-validation",
+          "performance-code-analysis"
+        ],
+        "qualityMetrics": {
+          "codeQuality": { "min": 85, "target": 95 },
+          "securityCompliance": { "min": 90, "target": 100 },
+          "architectureCompliance": { "min": 80, "target": 90 }
+        },
+        "priority": "high"
+      },
+      {
+        "id": "web-quality-performance-tester",
+        "name": "Performance Quality Tester",
+        "specialization": "performance-quality-testing",
+        "claudeCodeAgent": "web-performance-optimizer",
+        "mcpIntegration": "browser-mcp",
+        "description": "Performance validation with Core Web Vitals measurement and optimization recommendations",
+        "capabilities": [
+          "core-web-vitals-measurement",
+          "load-time-validation",
+          "bundle-size-optimization",
+          "performance-scoring",
+          "lighthouse-integration",
+          "performance-regression-detection"
+        ],
+        "qualityMetrics": {
+          "performanceScore": { "min": 80, "target": 95 },
+          "coreWebVitals": { "min": 85, "target": 95 },
+          "loadTime": { "max": 3000, "target": 1500 }
+        },
+        "mcpCapabilities": [
+          "lighthouse-auditing",
+          "performance-measurement",
+          "core-web-vitals-testing"
+        ],
+        "priority": "high"
+      },
+      {
+        "id": "web-quality-browser-compatibility-validator",
+        "name": "Browser Compatibility Validator",
+        "specialization": "browser-compatibility-validation",
+        "claudeCodeAgent": "web-browser-compatibility-agent",
+        "mcpIntegration": "playwright-mcp",
+        "description": "Cross-browser compatibility testing with automated multi-browser validation",
+        "capabilities": [
+          "multi-browser-testing",
+          "feature-detection-validation",
+          "polyfill-validation",
+          "browser-specific-bug-detection",
+          "compatibility-matrix-generation",
+          "progressive-enhancement-testing"
+        ],
+        "qualityMetrics": {
+          "browserCompatibility": { "min": 90, "target": 98 },
+          "featureSupport": { "min": 85, "target": 95 },
+          "crossBrowserConsistency": { "min": 80, "target": 90 }
+        },
+        "mcpCapabilities": [
+          "chrome-testing",
+          "firefox-testing",
+          "safari-testing",
+          "edge-testing"
+        ],
+        "priority": "medium"
+      }
+    ],
+    "integrationQuality": [
+      {
+        "id": "web-quality-e2e-coordinator",
+        "name": "E2E Testing Coordinator",
+        "specialization": "e2e-testing-coordination",
+        "claudeCodeAgent": "web-testing-orchestrator",
+        "mcpIntegration": "playwright-mcp",
+        "description": "End-to-end testing coordination with automated user flow validation",
+        "capabilities": [
+          "user-flow-testing",
+          "form-validation-testing",
+          "integration-testing",
+          "api-integration-validation",
+          "error-handling-testing",
+          "data-flow-validation"
+        ],
+        "qualityMetrics": {
+          "e2eTestCoverage": { "min": 80, "target": 95 },
+          "userFlowCompletion": { "min": 90, "target": 98 },
+          "integrationReliability": { "min": 85, "target": 95 }
+        },
+        "mcpCapabilities": [
+          "automated-form-testing",
+          "user-journey-automation",
+          "integration-testing"
+        ],
+        "priority": "high"
+      },
+      {
+        "id": "web-quality-ux-flow-validator",
+        "name": "UX Flow Validator",
+        "specialization": "ux-flow-validation",
+        "claudeCodeAgent": "web-ux-flow-analyst",
+        "mcpIntegration": "browser-mcp",
+        "description": "User experience flow validation with conversion funnel optimization",
+        "capabilities": [
+          "conversion-funnel-testing",
+          "user-journey-optimization",
+          "interaction-validation",
+          "cta-effectiveness-testing",
+          "user-engagement-measurement",
+          "abandonment-point-analysis"
+        ],
+        "qualityMetrics": {
+          "conversionOptimization": { "min": 75, "target": 90 },
+          "userEngagement": { "min": 80, "target": 95 },
+          "journeyCompletion": { "min": 85, "target": 95 }
+        },
+        "mcpCapabilities": [
+          "conversion-tracking",
+          "user-interaction-simulation",
+          "funnel-analysis"
+        ],
+        "priority": "high"
+      }
+    ]
+  },
+  "qualityWorkflow": {
+    "phases": [
+      "ux-research-validation",
+      "wireframe-quality-check",
+      "design-implementation-validation",
+      "development-quality-assessment",
+      "browser-compatibility-testing",
+      "e2e-integration-validation",
+      "performance-optimization-validation",
+      "production-readiness-check"
+    ],
+    "phaseToPhaseGates": {
+      "uxToWireframe": {
+        "accessibilityScore": 90,
+        "usabilityScore": 80,
+        "userJourneyCompletion": 85
+      },
+      "wireframeToDesign": {
+        "visualAccuracy": 95,
+        "brandCompliance": 90,
+        "layoutConsistency": 85
+      },
+      "designToDevelopment": {
+        "responsiveCompliance": 90,
+        "mobileOptimization": 85,
+        "crossDeviceConsistency": 80
+      },
+      "developmentToTesting": {
+        "codeQuality": 85,
+        "performanceScore": 80,
+        "securityCompliance": 90
+      },
+      "testingToProduction": {
+        "e2eTestCoverage": 80,
+        "browserCompatibility": 90,
+        "conversionOptimization": 75
+      }
+    },
+    "retryLimits": {
+      "maxRetries": 3,
+      "escalationThreshold": 2,
+      "qualityImprovementRequired": 15
+    }
+  },
+  "mcpIntegration": {
+    "supportedMCPs": [
+      "browser-mcp",
+      "playwright-mcp",
+      "bright-data-mcp"
+    ],
+    "mcpCapabilities": {
+      "browser-mcp": [
+        "screenshot-comparison",
+        "accessibility-testing",
+        "user-interaction-simulation",
+        "performance-measurement",
+        "visual-regression-testing"
+      ],
+      "playwright-mcp": [
+        "multi-browser-testing",
+        "e2e-automation",
+        "cross-browser-compatibility",
+        "automated-form-testing"
+      ]
+    }
+  },
+  "crystallineMemoryIntegration": {
+    "webQualityPools": [
+      "web-quality-scores-central",
+      "visual-regression-history",
+      "performance-benchmarks",
+      "accessibility-compliance-tracking",
+      "browser-compatibility-matrix",
+      "user-flow-optimization-insights",
+      "quality-improvement-patterns",
+      "mcp-integration-performance"
+    ],
+    "memoryCoordinates": {
+      "webQualityScoresCentral": { "q": 2, "r": -2 },
+      "visualRegressionHistory": { "q": 3, "r": -3 },
+      "performanceBenchmarks": { "q": 3, "r": -2 },
+      "accessibilityComplianceTracking": { "q": 3, "r": -1 },
+      "browserCompatibilityMatrix": { "q": 2, "r": -1 },
+      "userFlowOptimizationInsights": { "q": 2, "r": 0 },
+      "qualityImprovementPatterns": { "q": 1, "r": -2 },
+      "mcpIntegrationPerformance": { "q": 1, "r": -1 }
+    }
+  }
+}

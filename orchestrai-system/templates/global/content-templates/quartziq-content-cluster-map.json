@@ -1,0 +1,166 @@
+{
+  "quartziqContentClusters": {
+    "hubPages": {
+      "crm-platform-hub": {
+        "title": "CRM Platform Hub",
+        "url": "/crm-software-platform",
+        "primaryKeywords": ["CRM software", "B2B SaaS CRM", "CRM platform"],
+        "targetClusters": ["C1_CORE_CRM", "C7_B2B_SAAS"],
+        "supportingPages": [
+          {
+            "title": "CRM Features Overview",
+            "url": "/crm-features",
+            "anchorText": ["CRM features", "customer management features", "CRM capabilities"]
+          },
+          {
+            "title": "B2B SaaS CRM Guide",
+            "url": "/b2b-saas-crm-guide",
+            "anchorText": ["B2B SaaS CRM", "SaaS customer management", "B2B CRM solutions"]
+          },
+          {
+            "title": "Enterprise CRM Solutions",
+            "url": "/enterprise-crm",
+            "anchorText": ["enterprise CRM", "enterprise customer management", "scalable CRM platform"]
+          }
+        ]
+      },
+      "customer-intelligence-hub": {
+        "title": "Customer Intelligence Hub", 
+        "url": "/customer-intelligence-platform",
+        "primaryKeywords": ["customer intelligence platform", "AI customer intelligence", "customer analytics"],
+        "targetClusters": ["C2_CUSTOMER_INTELLIGENCE", "C6_AI_POWERED"],
+        "supportingPages": [
+          {
+            "title": "AI-Powered Customer Intelligence Guide",
+            "url": "/ai-powered-customer-intelligence-platform-flagship-article",
+            "anchorText": ["AI-powered customer intelligence", "predictive customer analytics", "intelligent customer insights"]
+          },
+          {
+            "title": "Customer Analytics Dashboard",
+            "url": "/customer-analytics-dashboard", 
+            "anchorText": ["customer analytics", "customer insights dashboard", "customer behavior analytics"]
+          },
+          {
+            "title": "Predictive Analytics CRM",
+            "url": "/predictive-analytics-crm",
+            "anchorText": ["predictive analytics", "predictive CRM", "AI-powered forecasting"]
+          }
+        ]
+      },
+      "sales-analytics-hub": {
+        "title": "Sales Analytics Hub",
+        "url": "/sales-analytics-platform",
+        "primaryKeywords": ["sales analytics tool", "sales intelligence", "sales reporting"],
+        "targetClusters": ["C3_SALES_ANALYTICS", "C5_BUSINESS_INTELLIGENCE"],
+        "supportingPages": [
+          {
+            "title": "Sales Reporting Dashboard",
+            "url": "/sales-reporting-dashboard",
+            "anchorText": ["sales reporting", "sales metrics dashboard", "sales performance analytics"]
+          },
+          {
+            "title": "Revenue Intelligence Platform",
+            "url": "/revenue-intelligence",
+            "anchorText": ["revenue intelligence", "sales forecasting", "pipeline analytics"]
+          },
+          {
+            "title": "Business Intelligence for Sales",
+            "url": "/sales-business-intelligence",
+            "anchorText": ["sales BI", "business intelligence", "sales data analytics"]
+          }
+        ]
+      },
+      "competitive-alternatives-hub": {
+        "title": "Competitive Alternatives Hub",
+        "url": "/crm-alternatives",
+        "primaryKeywords": ["Salesforce alternative", "HubSpot alternative", "CRM comparison"],
+        "targetClusters": ["C4_COMPETITOR_ALTERNATIVES"],
+        "supportingPages": [
+          {
+            "title": "QuartzIQ vs Salesforce",
+            "url": "/quartziq-vs-salesforce", 
+            "anchorText": ["Salesforce alternative", "vs Salesforce", "Salesforce competitor"]
+          },
+          {
+            "title": "QuartzIQ vs HubSpot",
+            "url": "/quartziq-vs-hubspot",
+            "anchorText": ["HubSpot alternative", "vs HubSpot", "HubSpot competitor"]
+          },
+          {
+            "title": "QuartzIQ vs Pipedrive",
+            "url": "/quartziq-vs-pipedrive",
+            "anchorText": ["Pipedrive alternative", "vs Pipedrive", "Pipedrive competitor"]
+          },
+          {
+            "title": "Best CRM Software Comparison",
+            "url": "/best-crm-software-comparison",
+            "anchorText": ["best CRM software", "CRM comparison", "top CRM platforms"]
+          }
+        ]
+      }
+    },
+    "internalLinkingRules": {
+      "hubToSupporting": {
+        "linksPerHub": "5-8 supporting articles",
+        "anchorTextStrategy": "Target keywords + semantic variations",
+        "placement": "Throughout content sections naturally"
+      },
+      "supportingToHub": {
+        "requirement": "Always link back to parent hub",
+        "anchorText": "Hub's primary keywords",
+        "placement": "Introduction and conclusion sections"
+      },
+      "crossClusterLinking": {
+        "frequency": "2-3 strategic cross-links per article",
+        "strategy": "Connect related topics across clusters",
+        "examples": [
+          "AI customer intelligence → Sales Analytics Hub (AI forecasting)",
+          "B2B SaaS CRM → Customer Intelligence Hub (SaaS analytics)",
+          "Sales Analytics → Competitive Alternatives (performance comparisons)"
+        ]
+      },
+      "competitorLinking": {
+        "rule": "Always link competitor mentions to alternative pages",
+        "anchorText": "[Competitor] alternative or vs [Competitor]",
+        "examples": [
+          "Salesforce → /quartziq-vs-salesforce",
+          "HubSpot → /quartziq-vs-hubspot", 
+          "Pipedrive → /quartziq-vs-pipedrive"
+        ]
+      }
+    },
+    "externalLinkingStrategy": {
+      "authorityLinks": {
+        "sources": ["Forrester Research", "Gartner", "IDC", "McKinsey"],
+        "frequency": "2-3 per article",
+        "purpose": "Statistical backing and credibility"
+      },
+      "industryReports": {
+        "linkTypes": ["Market research", "Industry surveys", "Technology reports"],
+        "relAttribute": "nofollow for competitive sources"
+      },
+      "competitorLinks": {
+        "policy": "rel='nofollow' for direct competitor links",
+        "purpose": "Reference only, no link equity transfer"
+      }
+    },
+    "anchorTextVariations": {
+      "crmSoftware": [
+        "CRM software", "CRM platform", "customer relationship management software",
+        "CRM solution", "business CRM", "QuartzIQ CRM platform"
+      ],
+      "customerIntelligence": [
+        "customer intelligence platform", "AI customer intelligence", "customer analytics solution", 
+        "customer insights platform", "intelligent customer analytics", "predictive customer intelligence"
+      ],
+      "salesAnalytics": [
+        "sales analytics tool", "sales intelligence platform", "sales reporting software",
+        "revenue analytics", "sales performance analytics", "sales metrics dashboard"
+      ],
+      "competitorAlternatives": [
+        "Salesforce alternative", "HubSpot alternative", "Pipedrive alternative",
+        "CRM alternatives", "vs Salesforce", "vs HubSpot", "enterprise CRM alternative"
+      ]
+    }
+  }
+}

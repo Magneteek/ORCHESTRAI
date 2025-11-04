@@ -61,9 +61,32 @@ class MCPManager {
       });
 
       serverProcess.stderr.on('data', (data) => {
-        const message = `[${serverName}] ERROR: ${data.toString()}`;
-        console.error(message);
-        this.startupLog.push({ server: serverName, type: 'stderr', message: data.toString(), timestamp: Date.now() });
+        const message = data.toString().trim();
+        
+        // Filter out normal MCP server status messages that aren't actually errors
+        const normalMessages = [
+          'running on stdio',
+          'Server running on stdio',
+          'MCP Server running on stdio',
+          'Knowledge Graph MCP Server running on stdio',
+          'DataForSEO MCP server running on stdio',
+          'Sequential Thinking MCP Server running on stdio',
+          'Ref MCP Server running on stdio',
+          'Secure MCP Filesystem Server running on stdio',
+          'Started without allowed directories - waiting for client to provide roots via MCP protocol'
+        ];
+        
+        const isNormalMessage = normalMessages.some(normalMsg => message.includes(normalMsg));
+        
+        if (isNormalMessage) {
+          // Log as info instead of error for normal operation messages
+          console.log(`[${serverName}] INFO: ${message}`);
+          this.startupLog.push({ server: serverName, type: 'info', message, timestamp: Date.now() });
+        } else {
+          // Only log actual errors
+          console.error(`[${serverName}] ERROR: ${message}`);
+          this.startupLog.push({ server: serverName, type: 'stderr', message, timestamp: Date.now() });
+        }
       });
 
       serverProcess.on('close', (code) => {
@@ -173,6 +196,14 @@ class MCPManager {
     return results;
   }
 
+  getServer(serverName) {
+    const server = this.servers.get(serverName);
+    if (!server || server.status !== 'running') {
+      return null;
+    }
+    return server;
+  }
+
   getServerStatus(serverName) {
     const server = this.servers.get(serverName);
     if (!server) {
@@ -248,6 +279,67 @@ class MCPManager {
 
   clearStartupLog() {
     this.startupLog = [];
+  }
+
+  async getHealthStatus() {
+    const healthStatus = {};
+    
+    for (const [serverName, server] of this.servers) {
+      try {
+        if (server.status === 'running' && server.process) {
+          healthStatus[serverName] = {
+            status: 'healthy',
+            uptime: Date.now() - server.startTime,
+            pid: server.process.pid,
+            capabilities: server.config.capabilities || [],
+            lastCheck: Date.now()
+          };
+        } else {
+          healthStatus[serverName] = {
+            status: 'unhealthy',
+            reason: 'Process not running',
+            lastCheck: Date.now()
+          };
+        }
+      } catch (error) {
+        healthStatus[serverName] = {
+          status: 'error',
+          error: error.message,
+          lastCheck: Date.now()
+        };
+      }
+    }
+
+    // Add configured but not running servers
+    Object.keys(this.config.mcpServers).forEach(serverName => {
+      if (!healthStatus[serverName]) {
+        const serverConfig = this.config.mcpServers[serverName];
+        healthStatus[serverName] = { 
+          status: serverConfig.enabled ? 'stopped' : 'disabled',
+          capabilities: serverConfig.capabilities || [],
+          lastCheck: Date.now()
+        };
+      }
+    });
+
+    return healthStatus;
+  }
+
+  async getIntegrationStatus() {
+    const allStatus = await this.getHealthStatus();
+    const integrationStatus = {};
+    
+    Object.keys(allStatus).forEach(serverName => {
+      const server = allStatus[serverName];
+      integrationStatus[serverName] = {
+        available: server.status === 'healthy',
+        capabilities: server.capabilities || [],
+        uptime: server.uptime || 0,
+        lastCheck: server.lastCheck
+      };
+    });
+
+    return integrationStatus;
   }
 }
 

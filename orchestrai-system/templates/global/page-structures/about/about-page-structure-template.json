@@ -1,0 +1,163 @@
+{
+  "page_type": "about",
+  "name": "About Page Structure Template",
+  "description": "Trust-building about page templates that convert visitors into prospects through storytelling and credibility",
+  "version": "1.0.0",
+  "templates": {
+    "about_page_formats": {
+      "founder_story_format": {
+        "structure": [
+          {
+            "section": "personal_connection",
+            "elements": ["founder_photo", "personal_headline", "mission_statement", "why_we_exist"],
+            "content_focus": "Personal connection and mission clarity",
+            "word_count": "50-75 words for headline/mission"
+          },
+          {
+            "section": "origin_story",
+            "elements": ["founding_moment", "problem_discovery", "solution_development", "early_struggles"],
+            "content_focus": "Authentic founding narrative and problem-solving origin",
+            "word_count": "200-300 words origin story"
+          },
+          {
+            "section": "values_and_approach",
+            "elements": ["core_values", "business_philosophy", "client_approach", "what_drives_us"],
+            "content_focus": "Values alignment and business philosophy",
+            "word_count": "150-250 words values section"
+          },
+          {
+            "section": "credentials_and_experience",
+            "elements": ["professional_background", "relevant_experience", "certifications", "achievements"],
+            "content_focus": "Credibility and expertise establishment",
+            "word_count": "100-175 words credentials"
+          },
+          {
+            "section": "client_focus",
+            "elements": ["ideal_client_description", "client_success_stories", "commitment_statement", "service_promise"],
+            "content_focus": "Client-centric positioning and results commitment",
+            "word_count": "125-200 words client focus"
+          }
+        ]
+      },
+      "company_story_format": {
+        "structure": [
+          {
+            "section": "company_overview",
+            "elements": ["company_headline", "market_position", "unique_value", "company_mission"],
+            "content_focus": "Company positioning and market differentiation",
+            "word_count": "75-125 words overview"
+          },
+          {
+            "section": "company_history",
+            "elements": ["founding_year", "key_milestones", "growth_story", "evolution_narrative"],
+            "content_focus": "Company development and growth trajectory",
+            "word_count": "200-300 words history"
+          },
+          {
+            "section": "team_and_expertise",
+            "elements": ["team_overview", "key_personnel", "collective_experience", "specialized_skills"],
+            "content_focus": "Team capability and expertise demonstration",
+            "word_count": "50-100 words per key team member"
+          },
+          {
+            "section": "company_culture",
+            "elements": ["work_philosophy", "team_values", "client_relationships", "community_involvement"],
+            "content_focus": "Culture and values that attract ideal clients",
+            "word_count": "150-250 words culture section"
+          },
+          {
+            "section": "achievements_and_recognition",
+            "elements": ["awards", "certifications", "media_mentions", "client_testimonials"],
+            "content_focus": "External validation and credibility proof",
+            "word_count": "100-150 words achievements"
+          }
+        ]
+      },
+      "expertise_focused_format": {
+        "structure": [
+          {
+            "section": "expertise_statement",
+            "elements": ["specialization_headline", "expertise_areas", "experience_depth", "unique_approach"],
+            "content_focus": "Specialized knowledge and approach differentiation",
+            "word_count": "100-150 words expertise statement"
+          },
+          {
+            "section": "background_and_qualifications",
+            "elements": ["professional_journey", "relevant_education", "certifications", "continuous_learning"],
+            "content_focus": "Qualification demonstration and learning commitment",
+            "word_count": "175-275 words background"
+          },
+          {
+            "section": "methodology_and_process",
+            "elements": ["approach_explanation", "process_overview", "quality_standards", "client_collaboration"],
+            "content_focus": "Work methodology and quality assurance",
+            "word_count": "200-300 words methodology"
+          },
+          {
+            "section": "results_and_impact",
+            "elements": ["client_outcomes", "success_metrics", "case_study_highlights", "testimonials"],
+            "content_focus": "Results demonstration and impact proof",
+            "word_count": "150-250 words results section"
+          }
+        ]
+      }
+    },
+    "psychological_elements": {
+      "trust_building": {
+        "authenticity_markers": ["personal_vulnerabilities", "honest_challenges", "genuine_motivations", "real_photos"],
+        "credibility_signals": ["specific_achievements", "measurable_results", "third_party_validation", "professional_credentials"],
+        "relatability_factors": ["shared_experiences", "common_struggles", "familiar_situations", "universal_challenges"]
+      },
+      "connection_building": {
+        "shared_values": ["mission_alignment", "value_resonance", "belief_systems", "priority_matching"],
+        "emotional_connection": ["personal_stories", "vulnerable_moments", "passion_demonstration", "care_expression"],
+        "common_ground": ["similar_backgrounds", "shared_challenges", "parallel_journeys", "mutual_understanding"]
+      }
+    },
+    "storytelling_frameworks": {
+      "hero_journey": {
+        "ordinary_world": "Life/business before the transformation or calling",
+        "call_to_adventure": "The moment that sparked the business or career change",
+        "challenges_and_trials": "Obstacles faced while building the business or expertise",
+        "transformation": "How overcoming challenges changed approach or philosophy",
+        "return_with_wisdom": "How this experience now helps others"
+      },
+      "problem_solution_story": {
+        "problem_discovery": "When and how the founder discovered the problem",
+        "failed_solutions": "Initial attempts that didn't work",
+        "breakthrough_moment": "The insight or approach that finally worked",
+        "solution_development": "How the current solution was developed and refined",
+        "helping_others": "How this solution now helps clients"
+      }
+    }
+  },
+  "conversion_focus": {
+    "trust_conversion_elements": [
+      "authentic_personal_story",
+      "professional_credibility_proof",
+      "client_success_demonstrations",
+      "values_and_mission_alignment",
+      "transparent_business_approach",
+      "community_and_social_proof"
+    ],
+    "next_step_facilitation": [
+      "consultation_invitation",
+      "value_first_offering",
+      "low_commitment_engagement",
+      "direct_contact_encouragement",
+      "resource_sharing_opportunity"
+    ]
+  },
+  "performance_benchmarks": {
+    "engagement_metrics": {
+      "time_on_page": "1-3 minutes for story-based about pages",
+      "scroll_depth": "60-80% of visitors read most of the page",
+      "bounce_rate": "20-40% for compelling about pages"
+    },
+    "conversion_indicators": {
+      "contact_page_visits": "15-25% navigate to contact after about page",
+      "services_exploration": "30-45% explore services after reading about page",
+      "trust_building_impact": "About page visitors convert 2-3x higher than average"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); dir=$(basename \"$(pwd)\"); model=$(echo \"$input\" | jq -r '.model.display_name'); branch=$(git branch --show-current 2>/dev/null || echo \"\"); if [ -n \"$branch\" ]; then printf \"%s (%s) | %s\" \"$dir\" \"$branch\" \"$model\"; else printf \"%s | %s\" \"$dir\" \"$model\"; fi"
+  },
+  "alwaysThinkingEnabled": true,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "data=$(cat); prompt=$(echo \"$data\" | jq -r '.prompt // \"\"'); sessionId=$(echo \"$data\" | jq -r '.sessionId // \"unknown\"'); curl -s -X POST http://localhost:5501/hooks/user-prompt-submit -H 'Content-Type: application/json' -d \"{\\\"prompt\\\": \\\"$prompt\\\", \\\"sessionId\\\": \\\"$sessionId\\\", \\\"timestamp\\\": $(date +%s)}\" > /dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matchers": [
+          {
+            "toolName": "Write"
+          },
+          {
+            "toolName": "Edit"
+          },
+          {
+            "toolName": "Bash"
+          }
+        ],
+        "hooks": [
+          {
+            "type": "command",
+            "command": "data=$(cat); tool=$(echo \"$data\" | jq -r '.toolName // \"unknown\"'); params=$(echo \"$data\" | jq -c '.parameters // {}'); curl -s -X POST http://localhost:5501/hooks/tool-call -H 'Content-Type: application/json' -d \"{\\\"tool\\\": \\\"$tool\\\", \\\"parameters\\\": $params, \\\"stage\\\": \\\"pre\\\", \\\"timestamp\\\": $(date +%s)}\" > /dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "data=$(cat); json=$(echo \"$data\" | jq -c '{workflowId: (now | tostring), model: (.model // \"claude-sonnet-4-5-20250929\"), inputTokens: (.usage.inputTokens // 0), outputTokens: (.usage.outputTokens // 0), timestamp: now}'); curl -s -X POST http://localhost:5501/hooks/token-usage -H 'Content-Type: application/json' -d \"$json\" > /dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sessionId=$(uuidgen); curl -s -X POST http://localhost:5501/hooks/session-start -H 'Content-Type: application/json' -d \"{\\\"sessionId\\\": \\\"$sessionId\\\", \\\"timestamp\\\": $(date +%s), \\\"workingDir\\\": \\\"$(pwd)\\\"}\" > /dev/null 2>&1 || true; echo \"ORCHESTRAI_SESSION_ID=$sessionId\" >> \"$CLAUDE_ENV_FILE\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sessionId=${ORCHESTRAI_SESSION_ID:-unknown}; curl -s -X POST http://localhost:5501/hooks/session-end -H 'Content-Type: application/json' -d \"{\\\"sessionId\\\": \\\"$sessionId\\\", \\\"timestamp\\\": $(date +%s)}\" > /dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "data=$(cat); notificationType=$(echo \"$data\" | jq -r '.type // \"unknown\"'); message=$(echo \"$data\" | jq -r '.message // \"\"'); curl -s -X POST http://localhost:5501/hooks/notification -H 'Content-Type: application/json' -d \"{\\\"type\\\": \\\"$notificationType\\\", \\\"message\\\": \\\"$message\\\", \\\"timestamp\\\": $(date +%s)}\" > /dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -s -X POST http://localhost:5501/hooks/pre-compact -H 'Content-Type: application/json' -d \"{\\\"timestamp\\\": $(date +%s), \\\"sessionId\\\": \\\"${ORCHESTRAI_SESSION_ID:-unknown}\\\"}\" > /dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

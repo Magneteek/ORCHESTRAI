@@ -1,0 +1,191 @@
+{
+  "industry": "consulting",
+  "name": "Consulting Services Marketing Framework",
+  "description": "Comprehensive templates for management consultants, business advisors, specialized consultancies, and professional services",
+  "version": "1.0.0",
+  "templates": {
+    "client_acquisition": {
+      "pain_points": [
+        "Uncertainty about ROI and measurable outcomes from consulting engagements",
+        "Previous negative experiences with consultants who didn't deliver",
+        "Concerns about cost and budget allocation for consulting services",
+        "Skepticism about external consultants understanding internal business",
+        "Fear of disruption to current operations and team dynamics",
+        "Difficulty finding consultants with relevant industry experience",
+        "Unclear engagement scope and deliverable expectations"
+      ],
+      "value_propositions": [
+        {
+          "type": "results_guarantee",
+          "template": "Proven results in [industry/function]: [specific outcome] guaranteed within [timeframe] or your investment back",
+          "use_case": "Results-focused prospects"
+        },
+        {
+          "type": "industry_expertise",
+          "template": "[Years] years of [industry] expertise with [number] successful transformations and deep understanding of [specific challenges]",
+          "use_case": "Industry-specific consulting"
+        },
+        {
+          "type": "implementation_focused",
+          "template": "Not just strategy - we implement solutions and transfer knowledge to ensure lasting change and internal capability building",
+          "use_case": "Implementation-concerned clients"
+        },
+        {
+          "type": "partnership_approach",
+          "template": "True partnership approach: We work alongside your team as an extension of your organization, not external observers",
+          "use_case": "Collaborative-minded prospects"
+        }
+      ]
+    },
+    "service_descriptions": {
+      "strategy_consulting": {
+        "template": "Strategic guidance that translates vision into actionable plans. We help leadership teams make confident decisions about growth, market positioning, and organizational direction.",
+        "psychological_triggers": ["strategic_clarity", "confidence_building", "actionable_outcomes"],
+        "cta": "Schedule your strategic assessment"
+      },
+      "operations_consulting": {
+        "template": "Operational excellence through process optimization, efficiency improvements, and performance measurement systems that drive sustainable results.",
+        "psychological_triggers": ["efficiency_improvement", "performance_measurement", "sustainable_results"],
+        "cta": "Optimize your operations today"
+      },
+      "digital_transformation": {
+        "template": "Navigate digital transformation with expert guidance on technology adoption, change management, and digital strategy that drives competitive advantage.",
+        "psychological_triggers": ["competitive_advantage", "technology_mastery", "change_navigation"],
+        "cta": "Begin your digital transformation"
+      },
+      "organizational_development": {
+        "template": "Build high-performing organizations through leadership development, culture transformation, and organizational design that unlocks human potential.",
+        "psychological_triggers": ["performance_optimization", "culture_enhancement", "human_potential"],
+        "cta": "Develop your organization's potential"
+      },
+      "financial_consulting": {
+        "template": "Financial expertise that drives profitability through cost optimization, revenue enhancement, and financial strategy aligned with business objectives.",
+        "psychological_triggers": ["profitability_focus", "cost_optimization", "strategic_alignment"],
+        "cta": "Improve your financial performance"
+      }
+    },
+    "client_communication": {
+      "engagement_lifecycle": [
+        {
+          "timing": "proposal_stage",
+          "template": "Thank you for considering [Consulting Firm], [Client Name]. Our proposal outlines how we'll deliver [specific outcome] through [methodology]. Questions about our approach?"
+        },
+        {
+          "timing": "engagement_kickoff",
+          "template": "Engagement kickoff confirmed, [Client Name]. Our team is ready to begin [project name] on [date]. Here's your project timeline and key milestones: [timeline]"
+        },
+        {
+          "timing": "milestone_update",
+          "template": "[Client Name], [milestone] completed successfully. Key insights: [findings]. Next phase begins [date] focusing on [next deliverable]."
+        },
+        {
+          "timing": "engagement_completion",
+          "template": "[Client Name], [project name] is complete. Final deliverables attached. Implementation support available for [timeframe]. Thank you for your partnership."
+        }
+      ],
+      "relationship_nurturing": [
+        {
+          "timing": "quarterly_checkin",
+          "template": "[Client Name], checking in on [previous project outcomes]. How are the results tracking? Any new challenges where we can provide strategic input?"
+        },
+        {
+          "timing": "industry_insights",
+          "template": "[Client Name], thought you'd find this relevant: [insight] is impacting [industry]. Here's how it might affect your [business area]: [analysis]"
+        }
+      ]
+    },
+    "educational_content": {
+      "thought_leadership": [
+        "Industry trends: What [industry] leaders need to know about [emerging trend]",
+        "Strategic framework: [Methodology name] for [business challenge]",
+        "Case study: How [Company] achieved [specific result] through [approach]",
+        "Research report: [Industry] transformation patterns and success factors",
+        "Expert opinion: Navigating [current business challenge] in [timeframe]",
+        "Methodology deep-dive: When and how to use [consulting framework]"
+      ],
+      "client_education": [
+        "Preparing for a consulting engagement: How to maximize value",
+        "Change management: Leading organizational transformation effectively",
+        "Measuring consulting ROI: Key metrics and evaluation frameworks",
+        "Implementation best practices: Turning strategy into results",
+        "Building internal capability: Knowledge transfer and sustainability",
+        "Consultant selection: Questions to ask and red flags to avoid"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Detailed case studies with specific client results and metrics",
+      "Professional credentials and certifications (MBA, industry certifications)",
+      "Years of experience in specific industries and functional areas",
+      "Client testimonials focusing on results delivery and partnership",
+      "Thought leadership content and speaking engagements",
+      "Clear methodology and structured approach to problem-solving",
+      "Transparent pricing and engagement structure options"
+    ],
+    "social_proof_types": [
+      "Client success stories with quantified business impact",
+      "Testimonials emphasizing problem-solving capability and results",
+      "Recognition from professional organizations and industry bodies",
+      "Media coverage and thought leadership publication credits",
+      "Speaking engagements at industry conferences and events",
+      "Client logos and long-term relationship testimonials"
+    ],
+    "urgency_creators": [
+      "Market timing and competitive advantage windows",
+      "Regulatory deadline compliance requirements",
+      "Budget year planning and allocation deadlines",
+      "Strategic planning cycles and board meeting schedules",
+      "Limited availability due to high demand for specialized expertise",
+      "Performance improvement initiatives with time-sensitive targets"
+    ]
+  },
+  "psychological_frameworks": {
+    "client_journey_stages": [
+      {
+        "stage": "challenge_recognition",
+        "mindset": "We have a business challenge but uncertain about solutions",
+        "messaging": "Problem validation and solution path education",
+        "cta": "Discuss your business challenges"
+      },
+      {
+        "stage": "solution_exploration",
+        "mindset": "We need outside expertise but evaluating options",
+        "messaging": "Methodology demonstration and capability showcase",
+        "cta": "Learn about our approach"
+      },
+      {
+        "stage": "consultant_selection",
+        "mindset": "We're ready to engage but choosing the right consultant",
+        "messaging": "Differentiation, results proof, and cultural fit",
+        "cta": "Schedule your consultation"
+      },
+      {
+        "stage": "engagement_execution",
+        "mindset": "We're working together and need to ensure success",
+        "messaging": "Progress communication and collaborative problem-solving",
+        "cta": "Review progress and next steps"
+      },
+      {
+        "stage": "results_sustainment",
+        "mindset": "The engagement is complete and we want lasting impact",
+        "messaging": "Implementation support and ongoing relationship",
+        "cta": "Ensure sustainable results"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "consulting_metrics": {
+      "proposal_win_rate": "30-50%",
+      "client_retention_rate": "70-85%",
+      "project_success_rate": "85-95%",
+      "referral_generation_rate": "40-60%"
+    },
+    "business_development": {
+      "thought_leadership_engagement": "5-15%",
+      "speaking_engagement_conversion": "10-25%",
+      "networking_roi": "varies_significantly",
+      "content_marketing_effectiveness": "3-8%"
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "industry": "real_estate",
+  "name": "Real Estate Marketing Framework",
+  "description": "Comprehensive templates for real estate agents, brokerages, property management, and real estate services",
+  "version": "1.0.0",
+  "templates": {
+    "client_acquisition": {
+      "pain_points": [
+        "Fear of making wrong property investment decisions",
+        "Overwhelm from complex buying/selling process",
+        "Uncertainty about property values and market timing",
+        "Previous bad experiences with real estate agents",
+        "Stress from mortgage and financing complications",
+        "Time pressure from competitive market conditions",
+        "Lack of local market knowledge and insights"
+      ],
+      "value_propositions": [
+        {
+          "type": "market_expertise",
+          "template": "Navigate [local area] real estate with insider market knowledge and [years] years of local expertise",
+          "use_case": "Market expertise positioning"
+        },
+        {
+          "type": "process_guidance",
+          "template": "Stress-free [buying/selling] with step-by-step guidance and full-service support from start to closing",
+          "use_case": "Process-overwhelmed clients"
+        },
+        {
+          "type": "results_focused",
+          "template": "Proven results: Average [percentage]% over asking price for sellers, [days] average days on market",
+          "use_case": "Results-oriented clients"
+        },
+        {
+          "type": "technology_advantage",
+          "template": "Cutting-edge marketing technology and data analysis to maximize your property's exposure and value",
+          "use_case": "Tech-savvy clients"
+        }
+      ]
+    },
+    "service_descriptions": {
+      "home_buying": {
+        "template": "From pre-approval to keys in hand, we guide first-time and experienced buyers through every step of the home buying process with personalized service and market expertise.",
+        "psychological_triggers": ["guidance", "expertise", "personalization"],
+        "cta": "Start your home search today"
+      },
+      "home_selling": {
+        "template": "Sell your home faster and for top dollar with our comprehensive marketing strategy, professional staging guidance, and expert negotiation skills.",
+        "psychological_triggers": ["speed", "value_maximization", "professional_service"],
+        "cta": "Get your free home valuation"
+      },
+      "investment_properties": {
+        "template": "Build wealth through real estate with expert guidance on investment properties, rental income analysis, and portfolio growth strategies.",
+        "psychological_triggers": ["wealth_building", "investment_growth", "expert_analysis"],
+        "cta": "Explore investment opportunities"
+      },
+      "luxury_homes": {
+        "template": "Discreet, white-glove service for luxury property transactions with exclusive market access, confidential marketing, and concierge-level support.",
+        "psychological_triggers": ["exclusivity", "discretion", "luxury_service"],
+        "cta": "Schedule your private consultation"
+      },
+      "commercial_real_estate": {
+        "template": "Strategic commercial real estate solutions for business owners and investors, including market analysis, lease negotiations, and investment advisory.",
+        "psychological_triggers": ["strategic_advantage", "business_growth", "investment_returns"],
+        "cta": "Discuss your commercial needs"
+      }
+    },
+    "client_communication": {
+      "buyer_journey": [
+        {
+          "timing": "pre_approval",
+          "template": "Congratulations on getting pre-approved, [Client Name]! You're ready to shop for homes up to $[amount]. Here's your personalized home search strategy."
+        },
+        {
+          "timing": "property_showing",
+          "template": "Thank you for viewing [Property Address] today, [Client Name]. Based on our discussion, I've found [number] similar properties that might interest you."
+        },
+        {
+          "timing": "offer_submitted",
+          "template": "[Client Name], your offer on [Property Address] has been submitted. I'll keep you updated on any response and guide you through next steps."
+        }
+      ],
+      "seller_updates": [
+        {
+          "timing": "listing_live",
+          "template": "Great news, [Client Name]! Your home at [Property Address] is now live on MLS and major real estate websites. Here's your marketing timeline."
+        },
+        {
+          "timing": "showing_feedback",
+          "template": "[Client Name], we had [number] showings this week at [Property Address]. Here's the feedback from potential buyers and our strategy adjustments."
+        }
+      ]
+    },
+    "educational_content": {
+      "buyer_guides": [
+        "First-time home buyer's complete guide to [local area]",
+        "How to make a competitive offer in today's market",
+        "Understanding mortgage options: Conventional, FHA, VA loans explained",
+        "Home inspection checklist: What to look for and expect",
+        "Closing costs breakdown: What buyers need to budget",
+        "Neighborhood guide: Schools, amenities, and lifestyle in [area]"
+      ],
+      "seller_guides": [
+        "Preparing your home for sale: Staging tips that work",
+        "Pricing strategy: How to price your home for maximum return",
+        "The selling timeline: What to expect from listing to closing",
+        "Marketing your home: Professional photography and online presence",
+        "Negotiating offers: Getting the best terms for your sale",
+        "Capital gains and tax implications of selling your home"
+      ],
+      "market_insights": [
+        "[Local Area] market report: Trends, prices, and predictions",
+        "Interest rate impact: How rates affect buying power and timing",
+        "Seasonal market patterns: Best times to buy and sell",
+        "Investment property analysis: Cash flow and ROI calculations",
+        "New construction vs. existing homes: Pros and cons",
+        "Market predictions: Expert insights on [local area] real estate"
+      ]
+    }
+  },
+  "conversion_elements": {
+    "trust_builders": [
+      "Years of local market experience and expertise",
+      "Professional certifications and continuing education",
+      "Client testimonials and success stories",
+      "Awards and recognition from industry peers",
+      "Comprehensive marketing strategy and technology tools",
+      "Full-service team support (photography, staging, legal)",
+      "Transparent communication and regular updates"
+    ],
+    "social_proof_types": [
+      "Recent sale prices and success stories",
+      "Client testimonials focusing on service and results",
+      "Professional designations (ABR, CRS, GRI, etc.)",
+      "Years in business and transactions completed",
+      "Market share and volume rankings",
+      "Community involvement and local expertise"
+    ],
+    "urgency_creators": [
+      "Current market conditions and inventory levels",
+      "Interest rate trends and timing implications",
+      "Seasonal market patterns and optimal timing",
+      "Limited inventory in desired neighborhoods",
+      "Pre-approval deadline and rate lock expiration",
+      "Multiple offer situations and competitive markets"
+    ]
+  },
+  "psychological_frameworks": {
+    "client_journey_stages": [
+      {
+        "stage": "consideration",
+        "mindset": "I'm thinking about buying/selling but not sure if it's the right time",
+        "messaging": "Market education and timing guidance",
+        "cta": "Get your personalized market analysis"
+      },
+      {
+        "stage": "preparation",
+        "mindset": "I'm ready to start the process but need the right agent",
+        "messaging": "Expertise demonstration and process explanation",
+        "cta": "Schedule your consultation"
+      },
+      {
+        "stage": "active_search",
+        "mindset": "I'm ready to buy/sell and need immediate support",
+        "messaging": "Immediate action and professional service",
+        "cta": "Let's start your search/listing today"
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "sales_metrics": {
+      "lead_conversion_rate": "8-15%",
+      "listing_to_sale_conversion": "90-95%",
+      "average_days_on_market": "market_dependent",
+      "client_referral_rate": "70-80%"
+    },
+    "marketing_effectiveness": {
+      "email_campaign_open_rate": "25-35%",
+      "property_listing_views": "varies_by_price_range",
+      "social_media_engagement": "2-6%",
+      "website_inquiry_conversion": "3-8%"
+    }
+  }
+}

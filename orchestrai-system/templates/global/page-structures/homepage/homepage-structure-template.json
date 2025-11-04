@@ -1,0 +1,208 @@
+{
+  "page_type": "homepage",
+  "name": "Homepage Structure Template",
+  "description": "Comprehensive homepage structure templates for different business types and conversion goals",
+  "version": "1.0.0",
+  "templates": {
+    "business_types": {
+      "service_business": {
+        "structure": [
+          {
+            "section": "hero",
+            "elements": ["headline", "subheadline", "cta_primary", "hero_image_video", "value_proposition"],
+            "content_focus": "Problem solution and immediate value",
+            "word_count": "25-40 words headline, 40-60 words subheadline"
+          },
+          {
+            "section": "social_proof",
+            "elements": ["client_logos", "testimonial_highlight", "stats_numbers"],
+            "content_focus": "Credibility and trust building",
+            "word_count": "15-25 words per testimonial"
+          },
+          {
+            "section": "services_overview",
+            "elements": ["service_cards", "benefits_list", "process_preview"],
+            "content_focus": "Service categories and differentiation",
+            "word_count": "20-30 words per service card"
+          },
+          {
+            "section": "about_preview",
+            "elements": ["founder_story", "team_expertise", "company_values"],
+            "content_focus": "Trust and expertise establishment",
+            "word_count": "100-150 words total"
+          },
+          {
+            "section": "case_studies",
+            "elements": ["success_stories", "before_after", "client_results"],
+            "content_focus": "Results demonstration and proof",
+            "word_count": "50-75 words per case study"
+          },
+          {
+            "section": "cta_section",
+            "elements": ["consultation_offer", "contact_form", "urgency_element"],
+            "content_focus": "Conversion and action driving",
+            "word_count": "20-35 words for CTA copy"
+          }
+        ]
+      },
+      "ecommerce_business": {
+        "structure": [
+          {
+            "section": "hero",
+            "elements": ["product_hero", "value_proposition", "shop_now_cta", "promotional_banner"],
+            "content_focus": "Product showcase and immediate shopping",
+            "word_count": "20-35 words headline, 30-45 words value prop"
+          },
+          {
+            "section": "featured_products",
+            "elements": ["product_grid", "bestsellers", "new_arrivals", "promotional_items"],
+            "content_focus": "Product discovery and browsing",
+            "word_count": "10-20 words per product title"
+          },
+          {
+            "section": "categories",
+            "elements": ["category_navigation", "category_images", "category_descriptions"],
+            "content_focus": "Site navigation and product organization",
+            "word_count": "5-15 words per category"
+          },
+          {
+            "section": "social_proof",
+            "elements": ["customer_reviews", "ratings", "user_photos", "purchase_stats"],
+            "content_focus": "Trust and purchase confidence",
+            "word_count": "25-40 words per review highlight"
+          },
+          {
+            "section": "benefits",
+            "elements": ["shipping_info", "return_policy", "guarantees", "payment_options"],
+            "content_focus": "Purchase confidence and risk reduction",
+            "word_count": "15-25 words per benefit"
+          },
+          {
+            "section": "newsletter_signup",
+            "elements": ["email_capture", "discount_offer", "exclusives_promise"],
+            "content_focus": "Lead capture and retention",
+            "word_count": "15-30 words for signup incentive"
+          }
+        ]
+      },
+      "saas_business": {
+        "structure": [
+          {
+            "section": "hero",
+            "elements": ["problem_solution", "product_demo", "free_trial_cta", "roi_promise"],
+            "content_focus": "Problem identification and solution positioning",
+            "word_count": "25-40 words headline, 50-75 words solution description"
+          },
+          {
+            "section": "features_overview",
+            "elements": ["key_features", "feature_benefits", "use_cases", "integrations"],
+            "content_focus": "Product capabilities and value demonstration",
+            "word_count": "20-35 words per feature"
+          },
+          {
+            "section": "social_proof",
+            "elements": ["customer_logos", "case_studies", "user_stats", "testimonials"],
+            "content_focus": "Credibility and success demonstration",
+            "word_count": "30-50 words per testimonial"
+          },
+          {
+            "section": "pricing_preview",
+            "elements": ["pricing_tiers", "feature_comparison", "trial_offer", "enterprise_option"],
+            "content_focus": "Pricing transparency and options",
+            "word_count": "10-20 words per pricing tier description"
+          },
+          {
+            "section": "resources",
+            "elements": ["documentation", "api_reference", "support_options", "community"],
+            "content_focus": "Implementation confidence and support",
+            "word_count": "15-25 words per resource description"
+          },
+          {
+            "section": "cta_final",
+            "elements": ["trial_signup", "demo_request", "contact_sales", "risk_free_messaging"],
+            "content_focus": "Final conversion push",
+            "word_count": "20-35 words for final CTA"
+          }
+        ]
+      }
+    },
+    "conversion_elements": {
+      "trust_signals": [
+        "client_testimonials",
+        "company_logos",
+        "security_badges",
+        "awards_recognition",
+        "years_in_business",
+        "team_credentials"
+      ],
+      "urgency_creators": [
+        "limited_time_offers",
+        "stock_availability",
+        "booking_limitations",
+        "price_increases",
+        "seasonal_promotions",
+        "exclusive_access"
+      ],
+      "value_propositions": [
+        "unique_selling_points",
+        "competitive_advantages",
+        "benefit_statements",
+        "problem_solutions",
+        "outcome_promises",
+        "guarantee_offers"
+      ]
+    },
+    "psychological_triggers": {
+      "reciprocity": {
+        "elements": ["free_resources", "valuable_content", "no_obligation_consultations"],
+        "implementation": "Offer valuable content or services before asking for commitment"
+      },
+      "social_proof": {
+        "elements": ["customer_testimonials", "usage_statistics", "social_media_followers"],
+        "implementation": "Display evidence that others trust and use your service"
+      },
+      "authority": {
+        "elements": ["expert_credentials", "media_mentions", "industry_awards"],
+        "implementation": "Demonstrate expertise and recognition in your field"
+      },
+      "scarcity": {
+        "elements": ["limited_availability", "exclusive_offers", "time_sensitive_deals"],
+        "implementation": "Create urgency through genuine limitations"
+      },
+      "consistency": {
+        "elements": ["commitment_statements", "goal_setting", "public_commitments"],
+        "implementation": "Help visitors commit to small steps toward larger goals"
+      }
+    }
+  },
+  "design_principles": {
+    "visual_hierarchy": {
+      "primary_focus": "Hero headline and main CTA",
+      "secondary_focus": "Value proposition and social proof",
+      "supporting_elements": "Features, benefits, and secondary CTAs"
+    },
+    "content_flow": {
+      "attention": "Grab attention with compelling headline",
+      "interest": "Build interest with value proposition and benefits",
+      "desire": "Create desire with social proof and results",
+      "action": "Drive action with clear, compelling CTAs"
+    },
+    "mobile_optimization": {
+      "above_fold": "Hero message and primary CTA visible",
+      "navigation": "Simplified menu and easy scrolling",
+      "content_density": "Reduced content per screen, optimized for touch"
+    }
+  },
+  "performance_benchmarks": {
+    "conversion_rates": {
+      "service_business": "2-5% visitor to inquiry",
+      "ecommerce": "1-3% visitor to purchase", 
+      "saas": "2-5% visitor to trial signup"
+    },
+    "engagement_metrics": {
+      "time_on_page": "30-60 seconds average",
+      "bounce_rate": "40-60% target range",
+      "scroll_depth": "50%+ scroll through content"
+    }
+  }
+}

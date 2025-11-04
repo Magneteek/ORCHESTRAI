@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-10-31T12:00:14.822Z",
+  "totalTasks": 4,
+  "successfulTasks": 4,
+  "failedTasks": 0,
+  "totalEntitiesCreated": 33,
+  "totalRelationsCreated": 0,
+  "totalFilesProcessed": 33,
+  "details": [
+    {
+      "task": "Psychographic Segments",
+      "status": "completed",
+      "entitiesCreated": 0,
+      "relationsCreated": 0,
+      "filesProcessed": 0
+    },
+    {
+      "task": "SEO Research Data",
+      "status": "completed",
+      "entitiesCreated": 7,
+      "relationsCreated": 0,
+      "filesProcessed": 7
+    },
+    {
+      "task": "Content Strategy",
+      "status": "completed",
+      "entitiesCreated": 21,
+      "relationsCreated": 0,
+      "filesProcessed": 21
+    },
+    {
+      "task": "Client Intelligence",
+      "status": "completed",
+      "entitiesCreated": 5,
+      "relationsCreated": 0,
+      "filesProcessed": 5
+    }
+  ]
+}

@@ -341,6 +341,55 @@ class CrystallineMemoryManager {
 
     return snapshot;
   }
+
+  /**
+   * Create a memory pool for multilingual system compatibility
+   * This method provides compatibility with the multilingual system's expected interface
+   */
+  async createMemoryPool(poolConfig) {
+    try {
+      const { poolId, language, isolation, crossContaminationPrevention, validationLevel, temperature } = poolConfig;
+      
+      // Initialize the memory pool if it doesn't exist
+      if (!this.memoryPools.has(poolId)) {
+        this.memoryPools.set(poolId, []);
+        console.log(`📁 Created memory pool: ${poolId} for language ${language || 'general'}`);
+      }
+      
+      // Store pool configuration in crystalline memory
+      const poolMetadata = {
+        poolId,
+        language,
+        isolation,
+        crossContaminationPrevention,
+        validationLevel,
+        temperature,
+        createdAt: new Date().toISOString(),
+        poolType: 'multilingual'
+      };
+      
+      const poolConfigNodeId = await this.storeMemory(`pool-config-${poolId}`, poolMetadata, {
+        importance: 0.9,
+        poolConfiguration: true
+      });
+      
+      return {
+        success: true,
+        poolId,
+        language,
+        nodeId: poolConfigNodeId,
+        isolation: isolation || 'standard'
+      };
+      
+    } catch (error) {
+      console.error(`❌ Failed to create memory pool ${poolConfig.poolId}:`, error.message);
+      return {
+        success: false,
+        error: error.message,
+        poolId: poolConfig.poolId
+      };
+    }
+  }
 }
 
 module.exports = CrystallineMemoryManager;

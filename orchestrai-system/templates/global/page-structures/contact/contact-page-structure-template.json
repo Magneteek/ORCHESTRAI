@@ -1,0 +1,188 @@
+{
+  "page_type": "contact",
+  "name": "Contact Page Structure Template",
+  "description": "Contact page templates optimized for lead generation, consultation booking, and customer communication",
+  "version": "1.0.0",
+  "templates": {
+    "contact_page_formats": {
+      "consultation_focused_contact": {
+        "structure": [
+          {
+            "section": "contact_hero",
+            "elements": ["consultation_headline", "value_proposition", "response_time_promise", "consultation_benefit"],
+            "content_focus": "Consultation value and response commitment",
+            "word_count": "40-60 words headline, 75-125 words value proposition",
+            "conversion_goal": "Position consultation as valuable, not sales-focused"
+          },
+          {
+            "section": "contact_options",
+            "elements": ["contact_methods", "preferred_method", "response_expectations", "urgency_options"],
+            "content_focus": "Communication preference accommodation",
+            "word_count": "25-40 words per contact method",
+            "conversion_goal": "Remove friction by offering multiple contact options"
+          },
+          {
+            "section": "consultation_form",
+            "elements": ["contact_details", "project_information", "timeline_questions", "budget_range", "additional_notes"],
+            "content_focus": "Consultation preparation and qualification",
+            "word_count": "10-20 words per form field label",
+            "conversion_goal": "Gather information for productive consultation"
+          },
+          {
+            "section": "what_to_expect",
+            "elements": ["consultation_process", "timeline", "preparation_needed", "outcome_explanation"],
+            "content_focus": "Process transparency and expectation setting",
+            "word_count": "50-100 words per process step",
+            "conversion_goal": "Reduce anxiety about consultation process"
+          },
+          {
+            "section": "contact_information",
+            "elements": ["phone_number", "email_address", "office_address", "business_hours", "emergency_contact"],
+            "content_focus": "Accessibility and professionalism",
+            "word_count": "Direct information display",
+            "conversion_goal": "Provide easy access to contact details"
+          }
+        ]
+      },
+      "multi_purpose_contact": {
+        "structure": [
+          {
+            "section": "contact_navigation",
+            "elements": ["inquiry_types", "department_routing", "urgency_categories", "preferred_contact_method"],
+            "content_focus": "Inquiry categorization and routing",
+            "word_count": "15-25 words per category",
+            "conversion_goal": "Route inquiries to appropriate team/response"
+          },
+          {
+            "section": "general_contact_form",
+            "elements": ["basic_information", "inquiry_type", "message_content", "follow_up_preference"],
+            "content_focus": "General inquiry accommodation",
+            "word_count": "Simple form field structure",
+            "conversion_goal": "Capture various types of inquiries effectively"
+          },
+          {
+            "section": "location_and_hours",
+            "elements": ["office_locations", "business_hours", "holiday_schedule", "parking_information"],
+            "content_focus": "Practical visit information",
+            "word_count": "Factual information display",
+            "conversion_goal": "Facilitate in-person meetings and visits"
+          },
+          {
+            "section": "team_contact",
+            "elements": ["team_member_contacts", "department_contacts", "specialization_matching", "direct_contact_options"],
+            "content_focus": "Specific expertise connection",
+            "word_count": "25-40 words per team member",
+            "conversion_goal": "Connect inquirers with relevant expertise"
+          }
+        ]
+      },
+      "support_focused_contact": {
+        "structure": [
+          {
+            "section": "support_options",
+            "elements": ["support_categories", "self_service_resources", "direct_support_channels", "escalation_paths"],
+            "content_focus": "Support option clarity and accessibility",
+            "word_count": "30-50 words per support option",
+            "conversion_goal": "Efficient support resolution"
+          },
+          {
+            "section": "issue_reporting",
+            "elements": ["issue_category", "urgency_level", "system_information", "detailed_description"],
+            "content_focus": "Issue documentation and triage",
+            "word_count": "Form-based information collection",
+            "conversion_goal": "Accurate issue reporting for faster resolution"
+          },
+          {
+            "section": "knowledge_base_integration",
+            "elements": ["common_solutions", "faq_links", "tutorial_resources", "troubleshooting_guides"],
+            "content_focus": "Self-service empowerment",
+            "word_count": "20-35 words per resource link",
+            "conversion_goal": "Enable self-service problem resolution"
+          }
+        ]
+      }
+    },
+    "form_optimization": {
+      "form_design_principles": [
+        "minimal_required_fields",
+        "logical_field_progression", 
+        "clear_field_labels",
+        "helpful_placeholder_text",
+        "error_message_clarity",
+        "mobile_friendly_inputs"
+      ],
+      "conversion_optimization": [
+        "progress_indicators",
+        "save_and_continue_options",
+        "auto_save_functionality",
+        "field_validation_feedback",
+        "submission_confirmation",
+        "next_steps_communication"
+      ]
+    },
+    "psychological_elements": {
+      "trust_building": [
+        "response_time_commitments",
+        "privacy_policy_links", 
+        "security_assurances",
+        "professional_contact_methods",
+        "team_accessibility",
+        "communication_transparency"
+      ],
+      "friction_reduction": [
+        "multiple_contact_options",
+        "flexible_communication_timing",
+        "no_pressure_messaging",
+        "easy_form_completion",
+        "clear_next_steps",
+        "immediate_confirmation"
+      ]
+    },
+    "contact_psychology": {
+      "inquiry_motivation": {
+        "information_seeking": "Provide comprehensive resources and clear expertise demonstration",
+        "problem_solving": "Emphasize solution focus and problem-solving capability",
+        "service_evaluation": "Highlight differentiation and service quality indicators",
+        "urgency_driven": "Offer immediate response options and priority handling"
+      },
+      "hesitation_addressing": [
+        "no_obligation_messaging",
+        "free_consultation_offers",
+        "privacy_and_confidentiality_assurance",
+        "professional_yet_approachable_tone",
+        "clear_communication_expectations",
+        "multiple_engagement_options"
+      ]
+    }
+  },
+  "industry_adaptations": {
+    "professional_services": {
+      "focus": "Consultation booking and expertise demonstration",
+      "elements": ["consultation_scheduling", "expertise_areas", "case_study_references", "credential_display"]
+    },
+    "healthcare": {
+      "focus": "Appointment scheduling and privacy compliance",
+      "elements": ["appointment_booking", "insurance_information", "hipaa_compliance", "emergency_contact_options"]
+    },
+    "ecommerce": {
+      "focus": "Customer support and order assistance",
+      "elements": ["order_support", "return_assistance", "product_questions", "shipping_inquiries"]
+    },
+    "saas": {
+      "focus": "Technical support and sales inquiries",
+      "elements": ["technical_support_tiers", "demo_requests", "integration_questions", "billing_support"]
+    }
+  },
+  "performance_benchmarks": {
+    "form_completion_rates": {
+      "simple_contact_forms": "70-85% completion rate",
+      "detailed_consultation_forms": "45-65% completion rate",
+      "multi_step_forms": "60-75% completion rate per step"
+    },
+    "response_quality": {
+      "qualified_inquiry_rate": "60-80% of inquiries are actionable",
+      "consultation_booking_rate": "30-50% of form submissions book consultations",
+      "follow_up_engagement": "70-90% respond to follow-up communications"
+    }
+  }
+}

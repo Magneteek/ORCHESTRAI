@@ -81,6 +81,16 @@ class ClaudeCodeHooksManager extends EventEmitter {
         enabled: true,
         description: 'Triggered when Claude Code session ends',
         actions: ['save-session', 'generate-summary', 'cleanup-resources']
+      },
+      'notification': {
+        enabled: true,
+        description: 'Triggered on Claude Code notifications (permission requests, etc.)',
+        actions: ['log-notification', 'evaluate-approval', 'track-requests']
+      },
+      'pre-compact': {
+        enabled: true,
+        description: 'Triggered before context window compaction',
+        actions: ['save-context', 'preserve-critical-data', 'log-compaction']
       }
     };
     
@@ -98,6 +108,8 @@ class ClaudeCodeHooksManager extends EventEmitter {
       '/hooks/token-usage': this.handleTokenUsage.bind(this),
       '/hooks/task-complete': this.handleTaskComplete.bind(this),
       '/hooks/task-error': this.handleTaskError.bind(this),
+      '/hooks/notification': this.handleNotification.bind(this),
+      '/hooks/pre-compact': this.handlePreCompact.bind(this),
       '/hooks/session-start': this.handleSessionStart.bind(this),
       '/hooks/session-end': this.handleSessionEnd.bind(this)
     };
@@ -318,14 +330,94 @@ class ClaudeCodeHooksManager extends EventEmitter {
   async handleSessionEnd(data) {
     const sessionDuration = Date.now() - this.sessionStartTime;
     const sessionSummary = this.generateSessionSummary(sessionDuration);
-    
+
     // Save session data
     await this.saveSessionData(sessionSummary);
-    
+
     this.emit('session-ended', sessionSummary);
     return { status: 'session-ended', summary: sessionSummary };
   }
-  
+
+  async handleNotification(data) {
+    const notificationData = {
+      type: data.type || 'unknown',
+      message: data.message || '',
+      timestamp: data.timestamp || Date.now(),
+      sessionId: this.sessionId
+    };
+
+    console.log(`🔔 Notification [${notificationData.type}]: ${notificationData.message}`);
+
+    // Track notification in workflow if one is active
+    const activeWorkflows = Array.from(this.activeWorkflows.values());
+    if (activeWorkflows.length > 0) {
+      const workflow = activeWorkflows[0];
+      if (!workflow.notifications) {
+        workflow.notifications = [];
+      }
+      workflow.notifications.push(notificationData);
+    }
+
+    this.emit('notification-received', notificationData);
+
+    return {
+      status: 'notification-logged',
+      notification: notificationData
+    };
+  }
+
+  async handlePreCompact(data) {
+    const compactionData = {
+      timestamp: data.timestamp || Date.now(),
+      sessionId: data.sessionId || this.sessionId,
+      activeWorkflows: this.activeWorkflows.size
+    };
+
+    console.log(`💾 Context compaction triggered - saving critical data`);
+
+    // Save current workflow states before compaction
+    const workflowStates = Array.from(this.activeWorkflows.entries()).map(([id, workflow]) => ({
+      id: workflow.id,
+      intent: workflow.intent,
+      status: workflow.status,
+      tokenUsage: workflow.tokenUsage,
+      toolCalls: workflow.toolCalls.length,
+      mcpCalls: workflow.mcpCalls.length,
+      startTime: workflow.startTime
+    }));
+
+    // Preserve critical context
+    const criticalContext = {
+      compactionData,
+      workflowStates,
+      metrics: {
+        totalWorkflows: this.workflowMetrics.totalWorkflows,
+        completedWorkflows: this.workflowMetrics.completedWorkflows,
+        failedWorkflows: this.workflowMetrics.failedWorkflows,
+        totalCost: this.workflowMetrics.costs.total,
+        totalTokens: this.workflowMetrics.tokenUsage.total
+      }
+    };
+
+    // Save to file for persistence
+    try {
+      const filePath = path.join(__dirname, '../logs', `pre-compact-${Date.now()}.json`);
+      await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.promises.writeFile(filePath, JSON.stringify(criticalContext, null, 2));
+      console.log(`✅ Critical context saved to ${filePath}`);
+    } catch (error) {
+      console.error('⚠️  Error saving pre-compact context:', error);
+    }
+
+    this.emit('pre-compact', criticalContext);
+
+    return {
+      status: 'context-preserved',
+      data: compactionData,
+      workflowsPreserved: workflowStates.length
+    };
+  }
+
   // Utility Methods
   analyzeIntent(prompt) {
     const keywords = {

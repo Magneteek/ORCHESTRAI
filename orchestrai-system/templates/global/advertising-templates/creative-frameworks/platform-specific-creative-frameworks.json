@@ -1,0 +1,252 @@
+{
+  "framework": "platform_specific_creative_frameworks",
+  "name": "Platform-Specific Creative Frameworks",
+  "description": "Creative frameworks optimized for Meta, LinkedIn, Google, and Reddit advertising based on 2024 best practices",
+  "version": "1.0.0",
+  "templates": {
+    "meta_ads_creative_framework": {
+      "platform": "meta_facebook_instagram",
+      "primary_formats": {
+        "video_creative": {
+          "aspect_ratio": "4:5 (default starting point)",
+          "duration": "15-30 seconds optimal",
+          "sound_strategy": "Optimized for sound-off viewing",
+          "subtitle_requirements": "Large black-on-white subtitles mandatory",
+          "engagement_features": ["Pop-in product PNGs", "Ingredient close-ups", "Feature zoom shots"]
+        },
+        "static_creative": {
+          "format": "Split-screen layouts for better recall",
+          "composition": "Product on one side, tutorial on other",
+          "performance_lift": "12% better memory retention",
+          "color_strategy": "Eye-catching colors and bold typography"
+        },
+        "carousel_creative": {
+          "card_count": "3-5 cards optimal",
+          "storytelling": "Progressive narrative across cards",
+          "cta_placement": "Strong CTA on final card"
+        }
+      },
+      "creative_structures": {
+        "drama_setup_script": {
+          "description": "Present relatable problem, then resolve with product",
+          "structure": [
+            "Problem introduction (relatable situation)",
+            "Problem amplification (consequences/frustration)",
+            "Solution reveal (product introduction)",
+            "Resolution demonstration (problem solved)",
+            "Call to action (clear next step)"
+          ],
+          "performance": "Consistently outperforms generic formats"
+        },
+        "interview_style": {
+          "description": "Testimonials or founder Q&As that mimic social proof",
+          "formats": ["Customer testimonials", "Founder interviews", "Expert Q&As"],
+          "performance": "Outperforms traditional VO-led ads in wellness categories"
+        },
+        "ugc_framework": {
+          "description": "User-generated content that puts face to brand",
+          "requirements": "Keep UGC fresh to maintain performance",
+          "implementation": "Push UGC to new creative heights",
+          "performance": "Still ranks #1 when executed properly"
+        }
+      },
+      "hook_strategies": {
+        "attention_grabbers": {
+          "curiosity_hooks": "Tease answer without revealing it",
+          "question_hooks": "Ask compelling questions that spark interest",
+          "fomo_hooks": "Create fear of missing out",
+          "gifting_angles": "Use gifting as primary hook (trending 2024)",
+          "social_proof_hooks": "Lead with customer results/testimonials"
+        },
+        "hook_optimization": {
+          "mobile_attention": "1.7 seconds average attention span",
+          "desktop_attention": "2.5 seconds average attention span",
+          "hook_placement": "First 2 seconds are critical"
+        }
+      },
+      "performance_optimizations": {
+        "captions": "Not optional - they're performance levers",
+        "visual_elements": "No bland stock photos - original, high-quality only",
+        "brand_recall": "Pop-in elements during hook moments boost recall by ~10%",
+        "mobile_first": "Design for mobile consumption primarily"
+      }
+    },
+    "linkedin_ads_creative_framework": {
+      "platform": "linkedin_b2b",
+      "design_specifications": {
+        "mobile_optimization": {
+          "reasoning": "40% of LinkedIn traffic is mobile",
+          "headline_limit": "92 characters or less",
+          "creative_size": "628 x 1200 vertical format",
+          "description_limit": "70 characters for mobile readability"
+        },
+        "visual_strategy": {
+          "bold_creative": "Bright colors, surprising visuals, animated GIFs",
+          "goal": "Stand out, don't blend in with feed",
+          "professional_balance": "Maintain B2B professionalism while being eye-catching"
+        }
+      },
+      "campaign_structure": {
+        "ads_per_campaign": "4-5 ads per campaign for optimal reach",
+        "headline_guidelines": "Under 150 characters for engagement",
+        "copy_optimization": "Under 70 characters descriptive copy"
+      },
+      "b2b_messaging": {
+        "professional_tone": "Authoritative but approachable",
+        "value_proposition": "Clear business benefits and ROI",
+        "social_proof": "Industry credentials and case studies",
+        "lead_generation": "Native LinkedIn lead forms for 1,250% increase"
+      },
+      "content_themes": {
+        "thought_leadership": "Industry insights and expertise",
+        "case_studies": "B2B success stories with metrics",
+        "product_demos": "Professional software demonstrations",
+        "webinar_promotion": "Educational content marketing"
+      }
+    },
+    "google_ads_creative_framework": {
+      "platform": "google_search_display",
+      "search_ads": {
+        "headline_strategy": {
+          "character_limits": "30 characters per headline (3 headlines max)",
+          "keyword_integration": "Primary keywords in headlines",
+          "value_proposition": "Clear benefit in headline 1",
+          "differentiation": "Unique selling point in headline 2",
+          "cta_integration": "Action-oriented headline 3"
+        },
+        "description_strategy": {
+          "character_limit": "90 characters per description (2 descriptions)",
+          "benefit_focus": "Emphasize customer benefits over features",
+          "social_proof": "Include ratings, reviews, or testimonials",
+          "urgency_scarcity": "Limited time offers or availability"
+        },
+        "extensions_optimization": {
+          "sitelinks": "Additional relevant page links",
+          "callouts": "Key selling points and features",
+          "structured_snippets": "Service categories or product types",
+          "price_extensions": "Transparent pricing information"
+        }
+      },
+      "display_ads": {
+        "visual_requirements": {
+          "formats": "Responsive display ads preferred",
+          "image_quality": "High-resolution, professional images",
+          "brand_consistency": "Consistent with landing page design",
+          "mobile_optimization": "Clear readability on small screens"
+        },
+        "messaging_strategy": {
+          "attention_grabbing": "Bold headlines and clear value props",
+          "audience_targeting": "Message match with audience segments",
+          "retargeting": "Specific messaging for previous visitors"
+        }
+      },
+      "performance_max": {
+        "asset_variety": "Multiple headlines, descriptions, images",
+        "ai_optimization": "Let Google's AI find best combinations",
+        "feed_integration": "Product feeds for e-commerce",
+        "audience_signals": "Provide quality audience data"
+      }
+    },
+    "reddit_ads_creative_framework": {
+      "platform": "reddit_community",
+      "native_integration": {
+        "community_tone": "Match subreddit culture and language",
+        "value_first": "Provide value before promoting",
+        "authenticity": "Genuine engagement, not obvious advertising",
+        "conversation_ads": "Appear within comment threads naturally"
+      },
+      "creative_specifications": {
+        "video_format": {
+          "aspect_ratio": "4:5 or 1:1 for mobile optimization",
+          "sound_strategy": "Optimized for sound-off viewing",
+          "text_overlays": "Essential for silent consumption",
+          "closed_captions": "Mandatory for accessibility"
+        },
+        "static_format": {
+          "visual_style": "Fits Reddit's authentic aesthetic",
+          "text_integration": "Clear, readable text overlays",
+          "community_relevant": "Visually appropriate for target subreddits"
+        }
+      },
+      "messaging_strategy": {
+        "community_first": "How does this help the community?",
+        "transparency": "Clear disclosure of promotional content",
+        "value_delivery": "Immediate useful information",
+        "conversation_starter": "Encourage genuine discussion"
+      },
+      "campaign_management": {
+        "creative_rotation": "Refresh every 2-3 weeks to combat fatigue",
+        "performance_monitoring": "Track engagement and conversion metrics",
+        "budget_efficiency": "$0.20 CPC achievable with optimization",
+        "scaling_strategy": "Test in multiple relevant subreddits"
+      }
+    },
+    "universal_creative_principles": {
+      "hook_story_offer_framework": {
+        "hook": {
+          "purpose": "Stop the scroll and grab attention",
+          "duration": "First 2-3 seconds critical",
+          "elements": ["Attention-grabbing opener", "Curiosity gap creation", "Pattern interrupt"]
+        },
+        "story": {
+          "purpose": "Build connection and context",
+          "structure": ["Problem identification", "Journey narrative", "Transformation moment"],
+          "emotional_connection": "Create relatability and empathy"
+        },
+        "offer": {
+          "purpose": "Present solution and drive action",
+          "components": ["Clear value proposition", "Social proof", "Risk reversal", "Call to action"]
+        }
+      },
+      "psychological_triggers": {
+        "social_proof": "Others like you have succeeded",
+        "authority": "Expert credentials and recognition",
+        "scarcity": "Limited availability or time",
+        "reciprocity": "Free value before asking",
+        "consistency": "Align with customer values",
+        "urgency": "Time-sensitive action required"
+      },
+      "mobile_optimization": {
+        "thumb_friendly": "Easy mobile interaction",
+        "quick_loading": "Fast load times essential",
+        "clear_hierarchy": "Important elements prominently displayed",
+        "readable_text": "Large enough fonts for mobile"
+      }
+    }
+  },
+  "creative_testing_framework": {
+    "testing_variables": [
+      "Hook variations (opening 3 seconds)",
+      "Visual style and format",
+      "Call-to-action placement and wording",
+      "Social proof integration",
+      "Color schemes and typography"
+    ],
+    "testing_methodology": {
+      "statistical_significance": "Minimum sample size requirements",
+      "testing_duration": "Allow sufficient time for data collection",
+      "single_variable": "Test one element at a time",
+      "performance_metrics": "Track relevant KPIs for each platform"
+    },
+    "creative_refresh_schedule": {
+      "meta_ads": "Every 2-3 weeks to combat fatigue",
+      "linkedin_ads": "Monthly refresh for B2B audiences",
+      "google_ads": "Quarterly optimization based on performance",
+      "reddit_ads": "Bi-weekly to maintain community relevance"
+    }
+  },
+  "performance_benchmarks": {
+    "engagement_rates": {
+      "meta_ads": "1-3% engagement rate target",
+      "linkedin_ads": "0.5-2% engagement rate target",
+      "google_ads": "2-5% CTR for search, 0.5-1% for display",
+      "reddit_ads": "5-15% engagement rate achievable"
+    },
+    "creative_performance_indicators": {
+      "attention_metrics": "View-through rates and watch time",
+      "engagement_metrics": "Clicks, comments, shares, saves",
+      "conversion_metrics": "Click-to-conversion rates by platform",
+      "cost_efficiency": "CPC, CPM, and ROAS by creative type"
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "page_type": "pricing",
+  "name": "Pricing Page Structure Template",
+  "description": "Conversion-optimized pricing page templates that address concerns, build value, and drive purchase decisions",
+  "version": "1.0.0",
+  "templates": {
+    "pricing_models": {
+      "tiered_pricing": {
+        "structure": [
+          {
+            "section": "pricing_hero",
+            "elements": ["pricing_headline", "value_statement", "tier_preview", "guarantee_mention"],
+            "content_focus": "Value positioning and confidence building",
+            "word_count": "40-60 words headline, 75-100 words value statement"
+          },
+          {
+            "section": "pricing_tiers",
+            "elements": ["tier_cards", "feature_lists", "price_displays", "popular_badge", "cta_buttons"],
+            "content_focus": "Clear tier differentiation and selection guidance",
+            "word_count": "20-35 words per feature, 10-15 words per tier name/tagline"
+          },
+          {
+            "section": "feature_comparison",
+            "elements": ["comparison_matrix", "feature_explanations", "value_justification", "upgrade_benefits"],
+            "content_focus": "Feature understanding and value demonstration",
+            "word_count": "15-25 words per feature explanation"
+          },
+          {
+            "section": "value_justification",
+            "elements": ["roi_calculator", "cost_comparison", "value_breakdown", "savings_demonstration"],
+            "content_focus": "Price justification and value proof",
+            "word_count": "100-175 words value section"
+          },
+          {
+            "section": "social_proof",
+            "elements": ["customer_testimonials", "usage_stats", "success_stories", "company_logos"],
+            "content_focus": "Purchase confidence through social validation",
+            "word_count": "30-50 words per testimonial"
+          },
+          {
+            "section": "faq_pricing",
+            "elements": ["pricing_questions", "billing_information", "refund_policy", "upgrade_process"],
+            "content_focus": "Concern addressing and clarity provision",
+            "word_count": "25-50 words per FAQ answer"
+          }
+        ]
+      },
+      "custom_pricing": {
+        "structure": [
+          {
+            "section": "custom_pricing_hero",
+            "elements": ["custom_headline", "consultation_focus", "tailored_solutions", "enterprise_positioning"],
+            "content_focus": "Custom solution positioning and consultation emphasis",
+            "word_count": "50-75 words custom positioning"
+          },
+          {
+            "section": "pricing_factors",
+            "elements": ["factor_explanation", "scope_variables", "customization_options", "value_drivers"],
+            "content_focus": "Pricing transparency and factor education",
+            "word_count": "50-75 words per pricing factor"
+          },
+          {
+            "section": "consultation_process",
+            "elements": ["process_steps", "timeline", "deliverables", "commitment_level"],
+            "content_focus": "Process transparency and expectation setting",
+            "word_count": "40-60 words per process step"
+          },
+          {
+            "section": "investment_ranges",
+            "elements": ["typical_ranges", "project_examples", "value_indicators", "roi_examples"],
+            "content_focus": "Investment guidance and value demonstration",
+            "word_count": "75-125 words per range explanation"
+          }
+        ]
+      },
+      "subscription_pricing": {
+        "structure": [
+          {
+            "section": "subscription_value",
+            "elements": ["ongoing_value", "service_included", "support_benefits", "update_promises"],
+            "content_focus": "Subscription value and ongoing benefit emphasis",
+            "word_count": "100-150 words value proposition"
+          },
+          {
+            "section": "billing_options",
+            "elements": ["billing_frequencies", "discount_incentives", "payment_methods", "cancellation_terms"],
+            "content_focus": "Billing flexibility and commitment clarity",
+            "word_count": "25-40 words per billing option"
+          },
+          {
+            "section": "trial_and_guarantees",
+            "elements": ["free_trial", "money_back_guarantee", "cancellation_policy", "risk_reversal"],
+            "content_focus": "Risk reduction and trial encouragement",
+            "word_count": "50-100 words guarantee section"
+          }
+        ]
+      }
+    },
+    "psychological_frameworks": {
+      "anchoring": {
+        "high_anchor": "Present premium option first to set high value expectation",
+        "reference_points": "Compare to competitor pricing or alternative solutions",
+        "value_anchors": "Establish value metrics before revealing prices"
+      },
+      "loss_aversion": {
+        "cost_of_inaction": "Highlight costs of not taking action or using solution",
+        "limited_time_offers": "Create urgency through time-limited pricing",
+        "upgrade_deadlines": "Encourage action through pricing increase warnings"
+      },
+      "social_proof": {
+        "popular_choice": "Highlight most popular or recommended tier",
+        "customer_success": "Show results achieved by customers at each tier",
+        "usage_statistics": "Display customer counts and satisfaction metrics"
+      }
+    },
+    "objection_handling": {
+      "price_objections": [
+        {
+          "objection": "Too expensive",
+          "response_framework": "ROI demonstration and cost comparison with alternatives",
+          "content_elements": ["value_breakdown", "roi_calculator", "competitor_comparison"]
+        },
+        {
+          "objection": "Need to think about it",
+          "response_framework": "Risk reversal and limited-time incentives",
+          "content_elements": ["guarantee_policy", "trial_option", "deadline_urgency"]
+        },
+        {
+          "objection": "Not sure which tier",
+          "response_framework": "Clear differentiation and guidance tools",
+          "content_elements": ["comparison_matrix", "use_case_examples", "consultation_offer"]
+        }
+      ]
+    }
+  },
+  "conversion_optimization": {
+    "visual_design_elements": [
+      "clear_tier_differentiation",
+      "popular_option_highlighting", 
+      "easy_price_comparison",
+      "prominent_cta_buttons",
+      "trust_signals_placement",
+      "mobile_optimized_layout"
+    ],
+    "pricing_psychology": [
+      "charm_pricing_effects",
+      "bundling_value_perception",
+      "decoy_pricing_strategy",
+      "scarcity_and_urgency",
+      "payment_plan_options",
+      "guarantee_risk_reversal"
+    ]
+  },
+  "industry_adaptations": {
+    "saas_pricing": {
+      "focus": "Per-user or usage-based pricing with clear scaling",
+      "elements": ["user_tiers", "feature_limits", "api_calls", "storage_limits"]
+    },
+    "service_pricing": {
+      "focus": "Package-based or hourly pricing with scope definition",
+      "elements": ["service_packages", "hourly_rates", "project_scope", "deliverables"]
+    },
+    "product_pricing": {
+      "focus": "Product variations and bundle options",
+      "elements": ["product_options", "bundle_deals", "quantity_discounts", "shipping_costs"]
+    }
+  },
+  "performance_benchmarks": {
+    "conversion_metrics": {
+      "pricing_page_conversion": "10-25% for well-optimized pages",
+      "tier_selection_distribution": "Varies by strategy and tier count",
+      "time_on_pricing_page": "1-3 minutes average engagement"
+    },
+    "optimization_indicators": {
+      "faq_engagement": "20-35% interact with pricing FAQ",
+      "comparison_tool_usage": "40-60% use comparison features",
+      "guarantee_section_views": "50-70% read guarantee/policy sections"
+    }
+  }
+}
