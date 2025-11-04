@@ -79,3 +79,25 @@ dump.rdb
 Orchestrai-frontend/.next/
 Orchestrai-frontend/out/
 Orchestrai-frontend/dist/
+
+# Prevent test files and summaries in root directory
+/*-COMPLETE.md
+/*-SUMMARY.md
+/*-REPORT.md
+/*-RESULTS.md
+/*-TEST*.md
+/PHASE-*.md
+/*-ANALYSIS.md
+/test-*.js
+/test-*.sh
+/*-test.js
+/tracking-report-*.json
+/*-scan.json
+/postproceduralna-*.txt
+/CLEANUP-PLAN*.md
+
+# Test directories
+/tests/
+/tools/
+/Copy/
+/applications/

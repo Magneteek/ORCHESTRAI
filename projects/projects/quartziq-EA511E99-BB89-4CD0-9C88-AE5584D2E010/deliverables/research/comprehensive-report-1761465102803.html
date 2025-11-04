@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive Intelligence Report - Client - ORCHESTRAI Intelligence Report">
+    <title>Comprehensive Intelligence Report - Client</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            header, nav {
+                break-inside: avoid;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Collapsible sections */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .collapsible-content.expanded {
+            max-height: 10000px;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Gradient backgrounds */
+        .gradient-orchestrai {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+
+        /* Card hover effects */
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-high { background-color: #10B981; color: white; }
+        .badge-medium { background-color: #F59E0B; color: white; }
+        .badge-low { background-color: #6B7280; color: white; }
+
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+            transition: width 1s ease-out;
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    
+    <header class="gradient-orchestrai text-white py-16 px-6 no-print">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-lg p-3">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm font-semibold uppercase tracking-wider opacity-90">ORCHESTRAI Intelligence</div>
+                        <div class="text-xs opacity-75">comprehensive Report</div>
+                    </div>
+                </div>
+                <button onclick="window.print()" class="bg-white/20 backdrop-blur-sm hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-medium transition">
+                    📄 Export PDF
+                </button>
+            </div>
+
+            <h1 class="text-5xl font-bold mb-4 fade-in">Comprehensive Intelligence Report - Client</h1>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div class="text-sm opacity-75 mb-1">Client</div>
+                    <div class="text-lg font-semibold">Client Intelligence Report</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div class="text-sm opacity-75 mb-1">Report Date</div>
+                    <div class="text-lg font-semibold">2025-10-26</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div class="text-sm opacity-75 mb-1">Generated</div>
+                    <div class="text-lg font-semibold">10/26/2025</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div class="text-sm opacity-75 mb-1">Type</div>
+                    <div class="text-lg font-semibold capitalize">comprehensive</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="sticky top-0 bg-white border-b border-gray-200 shadow-sm z-50 no-print">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex space-x-6 overflow-x-auto">
+                    
+                        <a href="#eos-overview" class="text-sm font-medium text-gray-600 hover:text-blue-600 whitespace-nowrap transition">
+                            EOS Framework
+                        </a>
+                    
+                        <a href="#icp-framework" class="text-sm font-medium text-gray-600 hover:text-blue-600 whitespace-nowrap transition">
+                            Ideal Customer Profile (ICP)
+                        </a>
+                    
+                </div>
+                <button onclick="scrollToTop()" class="text-sm text-gray-600 hover:text-blue-600">
+                    ↑ Top
+                </button>
+            </div>
+        </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-6 py-12">
+    <section id="eos-overview" class="mb-16 page-break">
+        <h2 class="text-3xl font-bold mb-8 text-gray-900">EOS Framework</h2>
+        
+    <div class="space-y-8">
+        
+
+        
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-8 border border-purple-100">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <span class="bg-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3">🎯</span>
+                Core Focus
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <div class="text-sm font-medium text-purple-600 mb-2">Purpose / Passion</div>
+                    <div class="text-lg font-semibold">undefined</div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <div class="text-sm font-medium text-purple-600 mb-2">Our Niche</div>
+                    <div class="text-lg font-semibold">undefined</div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-8 border border-green-100">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <span class="bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3">📈</span>
+                Marketing Strategy
+            </h3>
+
+            
+
+            
+
+            
+
+            
+        </div>
+        
+    </div>
+    </section>
+    <section id="icp-framework" class="mb-16 page-break">
+        <h2 class="text-3xl font-bold mb-8 text-gray-900">Ideal Customer Profile (ICP)</h2>
+        
+    <div class="space-y-8">
+        
+        
+
+        
+        
+
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            
+
+            
+        </div>
+
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            
+
+            
+        </div>
+
+        
+        
+
+        
+        
+    </div>
+    </section>
+    <section id="raw-data" class="mb-16 page-break">
+        <h2 class="text-3xl font-bold mb-8 text-gray-900">Complete Data</h2>
+        
+    <div class="bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
+        <div class="bg-gray-100 px-6 py-4 flex justify-between items-center border-b border-gray-200">
+            <h4 class="font-semibold">Raw Data (JSON)</h4>
+            <button
+                data-collapsible
+                data-target="json-content"
+                class="text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition">
+                ▶ Show
+            </button>
+        </div>
+        <div id="json-content" class="collapsible-content">
+            <pre class="p-6 text-xs overflow-x-auto"><code>{
+  &quot;metadata&quot;: {
+    &quot;aggregatedAt&quot;: &quot;2025-10-26T07:51:42.801Z&quot;,
+    &quot;sources&quot;: [
+      &quot;EOS&quot;,
+      &quot;ICP&quot;,
+      &quot;Client Profile&quot;
+    ],
+    &quot;completeness&quot;: 50
+  },
+  &quot;eos&quot;: {
+    &quot;coreValues&quot;: [],
+    &quot;coreFocus&quot;: {},
+    &quot;marketingStrategy&quot;: {}
+  },
+  &quot;icp&quot;: {},
+  &quot;personas&quot;: [],
+  &quot;psychographic&quot;: null,
+  &quot;marketAnalysis&quot;: [],
+  &quot;clientProfile&quot;: {
+    &quot;clientProfile&quot;: {
+      &quot;clientName&quot;: &quot;QuartzIQ&quot;,
+      &quot;projectId&quot;: &quot;quartziq-EA511E99-BB89-4CD0-9C88-AE5584D2E010&quot;,
+      &quot;profileCreatedAt&quot;: &quot;2025-08-27T23:00:18.000Z&quot;,
+      &quot;profileType&quot;: &quot;business-intelligence-saas&quot;,
+      &quot;businessOverview&quot;: {
+        &quot;industry&quot;: &quot;Business Intelligence &amp; Data Analytics&quot;,
+        &quot;companyStage&quot;: &quot;growth-stage&quot;,
+        &quot;targetMarket&quot;: &quot;Enterprise and mid-market businesses&quot;,
+        &quot;valueProposition&quot;: &quot;AI-powered analytics platform that transforms complex data into actionable business insights&quot;,
+        &quot;competitiveAdvantage&quot;: &quot;Intelligent automation + intuitive user experience&quot;,
+        &quot;businessModel&quot;: &quot;SaaS subscription with tiered feature access&quot;
+      },
+      &quot;idealCustomerProfile&quot;: {
+        &quot;primaryPersona&quot;: {
+          &quot;title&quot;: &quot;Chief Data Officer / VP of Analytics&quot;,
+          &quot;company&quot;: &quot;Mid-to-large enterprises (500-5000+ employees)&quot;,
+          &quot;painPoints&quot;: [
+            &quot;Complex data scattered across multiple systems&quot;,
+            &quot;Time-consuming manual report generation&quot;,
+            &quot;Difficulty extracting actionable insights from data&quot;,
+            &quot;Need for real-time business intelligence&quot;
+          ],
+          &quot;goals&quot;: [
+            &quot;Centralize data analytics and reporting&quot;,
+            &quot;Reduce time-to-insight from days to minutes&quot;,
+            &quot;Enable self-service analytics for business users&quot;,
+            &quot;Improve data-driven decision making&quot;
+          ],
+          &quot;budgetRange&quot;: &quot;$50K-$500K annually&quot;,
+          &quot;decisionCriteria&quot;: [
+            &quot;Ease of implementation and adoption&quot;,
+            &quot;Scalability and performance&quot;,
+            &quot;Advanced AI/ML capabilities&quot;,
+            &quot;Integration with existing tech stack&quot;
+          ]
+        },
+        &quot;secondaryPersona&quot;: {
+          &quot;title&quot;: &quot;Business Analyst / Data Scientist&quot;,
+          &quot;company&quot;: &quot;Fast-growing mid-market companies&quot;,
+          &quot;painPoints&quot;: [
+            &quot;Limited access to advanced analytics tools&quot;,
+            &quot;Steep learning curve for existing BI tools&quot;,
+            &quot;Inability to create custom dashboards easily&quot;,
+            &quot;Lack of predictive analytics capabilities&quot;
+          ],
+          &quot;goals&quot;: [
+            &quot;Access powerful analytics without technical complexity&quot;,
+            &quot;Create custom reports and dashboards&quot;,
+            &quot;Leverage AI for predictive insights&quot;,
+            &quot;Collaborate effectively on data projects&quot;
+          ],
+          &quot;budgetRange&quot;: &quot;$10K-$100K annually&quot;,
+          &quot;decisionCriteria&quot;: [
+            &quot;User-friendly interface&quot;,
+            &quot;Advanced visualization capabilities&quot;,
+            &quot;Machine learning integration&quot;,
+            &quot;Collaboration features&quot;
+          ]
+        }
+      },
+      &quot;brandPersonality&quot;: {
+        &quot;coreValues&quot;: [
+          &quot;Innovation and cutting-edge technology&quot;,
+          &quot;Simplicity in complex problem solving&quot;,
+          &quot;Transparency and data-driven insights&quot;,
+          &quot;Reliability and enterprise-grade security&quot;
+        ],
+        &quot;brandVoice&quot;: {
+          &quot;tone&quot;: &quot;Professional yet approachable&quot;,
+          &quot;personality&quot;: &quot;Intelligent, trustworthy, innovative&quot;,
+          &quot;communicationStyle&quot;: &quot;Clear, data-driven, solution-oriented&quot;,
+          &quot;emotionalAppeal&quot;: &quot;Empowerment through insight&quot;
+        },
+        &quot;visualIdentity&quot;: {
+          &quot;primaryColors&quot;: [
+            &quot;#2563EB&quot;,
+            &quot;#1E40AF&quot;,
+            &quot;#3B82F6&quot;
+          ],
+          &quot;accentColors&quot;: [
+            &quot;#10B981&quot;,
+            &quot;#F59E0B&quot;,
+            &quot;#EF4444&quot;
+          ],
+          &quot;typography&quot;: &quot;Modern, clean, highly readable&quot;,
+          &quot;designStyle&quot;: &quot;Minimalist, data-focused, professional&quot;,
+          &quot;iconography&quot;: &quot;Geometric, analytical, tech-forward&quot;
+        }
+      },
+      &quot;technicalRequirements&quot;: {
+        &quot;targetPlatforms&quot;: [
+          &quot;Web (desktop-first)&quot;,
+          &quot;Mobile web&quot;,
+          &quot;Tablet optimization&quot;
+        ],
+        &quot;browserSupport&quot;: [
+          &quot;Chrome&quot;,
+          &quot;Firefox&quot;,
+          &quot;Safari&quot;,
+          &quot;Edge&quot;
+        ],
+        &quot;performanceTargets&quot;: {
+          &quot;loadTime&quot;: &quot;&lt; 2 seconds&quot;,
+          &quot;coreWebVitals&quot;: &quot;90+ scores&quot;,
+          &quot;dataProcessing&quot;: &quot;Real-time or near real-time&quot;,
+          &quot;scalability&quot;: &quot;100K+ concurrent users&quot;
+        },
+        &quot;securityRequirements&quot;: [
+          &quot;SOC 2 Type II compliance&quot;,
+          &quot;GDPR compliance&quot;,
+          &quot;Enterprise SSO integration&quot;,
+          &quot;Role-based access control&quot;,
+          &quot;Data encryption at rest and in transit&quot;
+        ],
+        &quot;integrationNeeds&quot;: [
+          &quot;Popular databases (PostgreSQL, MySQL, MongoDB)&quot;,
+          &quot;Cloud platforms (AWS, Azure, GCP)&quot;,
+          &quot;Business tools (Salesforce, HubSpot, Slack)&quot;,
+          &quot;APIs and webhooks for custom integrations&quot;
+        ]
+      },
+      &quot;userExperienceExpectations&quot;: {
+        &quot;primaryUXGoals&quot;: [
+          &quot;Intuitive dashboard creation&quot;,
+          &quot;Drag-and-drop data visualization&quot;,
+          &quot;Self-service analytics for non-technical users&quot;,
+          &quot;Mobile-responsive design for executives on-the-go&quot;
+        ],
+        &quot;navigationPreferences&quot;: {
+          &quot;structure&quot;: &quot;Clean, hierarchical navigation&quot;,
+          &quot;searchability&quot;: &quot;Global search across all data and reports&quot;,
+          &quot;customization&quot;: &quot;Personalized dashboards and workflows&quot;,
+          &quot;efficiency&quot;: &quot;Minimal clicks to access key insights&quot;
+        },
+        &quot;visualDesignExpectations&quot;: {
+          &quot;dataVisualization&quot;: &quot;Interactive charts and graphs&quot;,
+          &quot;dashboard&quot;: &quot;Clean, uncluttered, information-dense&quot;,
+          &quot;branding&quot;: &quot;Subtle brand integration without overwhelming data&quot;,
+          &quot;accessibility&quot;: &quot;WCAG 2.1 AA compliance for inclusive access&quot;
+        }
+      },
+      &quot;contentStrategy&quot;: {
+        &quot;primaryMessaging&quot;: [
+          &quot;Transform data complexity into business clarity&quot;,
+          &quot;AI-powered insights at your fingertips&quot;,
+          &quot;From data to decisions in minutes, not hours&quot;,
+          &quot;Enterprise analytics made simple&quot;
+        ],
+        &quot;contentTones&quot;: {
+          &quot;marketing&quot;: &quot;Confident, results-focused, innovative&quot;,
+          &quot;product&quot;: &quot;Clear, instructional, empowering&quot;,
+          &quot;support&quot;: &quot;Helpful, thorough, patient&quot;,
+          &quot;technical&quot;: &quot;Precise, detailed, authoritative&quot;
+        },
+        &quot;keywordStrategy&quot;: [
+          &quot;business intelligence platform&quot;,
+          &quot;AI-powered analytics&quot;,
+          &quot;data visualization software&quot;,
+          &quot;enterprise reporting tools&quot;,
+          &quot;self-service BI&quot;,
+          &quot;predictive analytics&quot;
+        ]
+      },
+      &quot;competitiveAnalysis&quot;: {
+        &quot;primaryCompetitors&quot;: [
+          {
+            &quot;name&quot;: &quot;Tableau&quot;,
+            &quot;strengths&quot;: [
+              &quot;Market leader&quot;,
+              &quot;Powerful visualizations&quot;,
+              &quot;Strong ecosystem&quot;
+            ],
+            &quot;weaknesses&quot;: [
+              &quot;Complex for beginners&quot;,
+              &quot;High cost&quot;,
+              &quot;Steep learning curve&quot;
+            ],
+            &quot;differentiators&quot;: [
+              &quot;Better AI integration&quot;,
+              &quot;Simpler onboarding&quot;,
+              &quot;More affordable&quot;
+            ]
+          },
+          {
+            &quot;name&quot;: &quot;Power BI&quot;,
+            &quot;strengths&quot;: [
+              &quot;Microsoft integration&quot;,
+              &quot;Cost-effective&quot;,
+              &quot;Familiar interface&quot;
+            ],
+            &quot;weaknesses&quot;: [
+              &quot;Limited advanced features&quot;,
+              &quot;Microsoft ecosystem lock-in&quot;
+            ],
+            &quot;differentiators&quot;: [
+              &quot;Cross-platform flexibility&quot;,
+              &quot;Advanced ML capabilities&quot;,
+              &quot;Better UX&quot;
+            ]
+          },
+          {
+            &quot;name&quot;: &quot;Looker&quot;,
+            &quot;strengths&quot;: [
+              &quot;Developer-friendly&quot;,
+              &quot;Strong data modeling&quot;,
+              &quot;Cloud-native&quot;
+            ],
+            &quot;weaknesses&quot;: [
+              &quot;Technical complexity&quot;,
+              &quot;Limited self-service&quot;,
+              &quot;High implementation cost&quot;
+            ],
+            &quot;differentiators&quot;: [
+              &quot;Business user focus&quot;,
+              &quot;No-code/low-code approach&quot;,
+              &quot;Faster deployment&quot;
+            ]
+          }
+        ]
+      },
+      &quot;successMetrics&quot;: {
+        &quot;businessKPIs&quot;: [
+          &quot;User adoption rate (target: 80%+ within 3 months)&quot;,
+          &quot;Time-to-first-insight (target: &lt; 10 minutes)&quot;,
+          &quot;Dashboard creation rate (target: 3+ per user per month)&quot;,
+          &quot;Customer satisfaction score (target: 4.5+/5.0)&quot;
+        ],
+        &quot;technicalKPIs&quot;: [
+          &quot;System uptime (target: 99.9%+)&quot;,
+          &quot;Query response time (target: &lt; 3 seconds)&quot;,
+          &quot;Data processing throughput (target: 1M+ records/hour)&quot;,
+          &quot;API response time (target: &lt; 500ms)&quot;
+        ],
+        &quot;userEngagementKPIs&quot;: [
+          &quot;Daily active users (target: 70%+ of total users)&quot;,
+          &quot;Session duration (target: 15+ minutes average)&quot;,
+          &quot;Feature adoption rate (target: 60%+ for core features)&quot;,
+          &quot;Support ticket volume (target: &lt; 5% of users/month)&quot;
+        ]
+      },
+      &quot;projectPriorities&quot;: {
+        &quot;phase1&quot;: {
+          &quot;priority&quot;: &quot;highest&quot;,
+          &quot;focus&quot;: &quot;Core dashboard functionality and data visualization&quot;,
+          &quot;deliverables&quot;: [
+            &quot;Dashboard creation&quot;,
+            &quot;Basic charting&quot;,
+            &quot;Data connections&quot;,
+            &quot;User management&quot;
+          ]
+        },
+        &quot;phase2&quot;: {
+          &quot;priority&quot;: &quot;high&quot;,
+          &quot;focus&quot;: &quot;AI-powered insights and advanced analytics&quot;,
+          &quot;deliverables&quot;: [
+            &quot;Predictive analytics&quot;,
+            &quot;Automated insights&quot;,
+            &quot;Alert system&quot;,
+            &quot;Advanced visualizations&quot;
+          ]
+        },
+        &quot;phase3&quot;: {
+          &quot;priority&quot;: &quot;medium&quot;,
+          &quot;focus&quot;: &quot;Advanced features and enterprise integrations&quot;,
+          &quot;deliverables&quot;: [
+            &quot;Custom integrations&quot;,
+            &quot;Advanced security&quot;,
+            &quot;API management&quot;,
+            &quot;White-label options&quot;
+          ]
+        }
+      }
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+    </section></main>
+    
+    <footer class="bg-gray-900 text-white py-12 mt-20 no-print">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="mb-4">
+                <svg class="w-10 h-10 mx-auto mb-2 opacity-75" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                </svg>
+                <h3 class="text-xl font-semibold">ORCHESTRAI Intelligence System</h3>
+            </div>
+            <p class="text-gray-400 text-sm mb-2">Advanced Multi-Agent Intelligence & Research Platform</p>
+            <p class="text-gray-500 text-xs">
+                Generated: 10/26/2025, 7:51:42 AM |
+                Report Type: comprehensive |
+                Client: Client Intelligence Report
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Collapsible sections
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-collapsible]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const target = document.getElementById(button.dataset.target);
+                    const isExpanded = target.classList.contains('expanded');
+
+                    target.classList.toggle('expanded');
+                    button.textContent = isExpanded ? '▶ Show' : '▼ Hide';
+                });
+            });
+
+            // Fade-in animations on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+
+            // Progress bar animations
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const width = bar.dataset.width || '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+
+        // Print handler
+        window.addEventListener('beforeprint', () => {
+            // Expand all collapsible sections for printing
+            document.querySelectorAll('.collapsible-content').forEach(el => {
+                el.classList.add('expanded');
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Collapse sections after printing
+            document.querySelectorAll('.collapsible-content').forEach(el => {
+                if (!el.classList.contains('keep-expanded')) {
+                    el.classList.remove('expanded');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

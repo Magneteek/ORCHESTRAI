@@ -4,6 +4,8 @@
 
 ORCHESTRAI is a cutting-edge self-iterating multi-agent orchestration system implementing crystalline memory architecture, pipeline sharing, and geometric orchestration patterns. This system creates a revolutionary approach to AI agent coordination with enterprise-grade file organization and advanced semantic visualization.
 
+---
+
 ## Architecture Principles
 
 ### Crystalline Memory System
@@ -24,6 +26,49 @@ ORCHESTRAI is a cutting-edge self-iterating multi-agent orchestration system imp
 - **Spatial Optimization**: Agent positioning for optimal communication efficiency
 - **Emergent Coordination**: Complex behaviors from geometric relationships
 
+---
+
+## Universal Agent Delegation Pattern
+
+### CRITICAL: Agent Invocation is Domain-Agnostic
+
+**The Task tool + specialized agents pattern works for ALL domains, not just content creation.**
+
+#### Two Execution Patterns
+
+**Pattern 1: Direct Agent Invocation** (Simple tasks)
+```
+Task tool → Specialized Agent → Results
+```
+
+**Examples:**
+- Content: `Task(subagent_type="content-writer-specialist")`
+- SEO: `Task(subagent_type="seo-competitor-analysis")`
+- Client Intelligence: `Task(subagent_type="client-icp-analyst")`
+- Web Dev: `Task(subagent_type="frontend-architect-specialist")`
+
+**Pattern 2: Hybrid Delegation** (Complex workflows)
+```
+orchestrai-master-coordinator → Node.js Infrastructure → Task tool → Agent → Synthesis
+```
+
+**Examples:**
+- Client projects: Infrastructure setup + strategic analysis
+- SEO strategies: Tracking setup + competitive analysis
+- Content pipelines: Quality gates + multi-agent writing
+- Web applications: CI/CD setup + architecture design
+
+#### Key Principles
+
+1. **No Hardcoding**: ANY agent in `.claude/agents/` can be invoked via Task tool
+2. **Domain Flexibility**: Pattern works for content, SEO, client intelligence, web dev, healthcare, etc.
+3. **Parallel Execution**: Independent tasks from ANY domain can run simultaneously
+4. **Extensibility**: Add new agents by creating `.md` files - no code changes needed
+
+**See [UNIVERSAL-AGENT-DELEGATION-PATTERN.md](UNIVERSAL-AGENT-DELEGATION-PATTERN.md) for complete details.**
+
+---
+
 ## File Organization Rules
 
 ### CRITICAL: Clean File Structure
@@ -33,7 +78,7 @@ This system maintains zero file pollution through strict organizational rules:
 ```
 /orchestrai-system/templates/global/
 ├── wireframes/          # Web layouts, mobile patterns, dashboards
-├── design-systems/      # Components, styles, brand templates  
+├── design-systems/      # Components, styles, brand templates
 ├── code-patterns/       # React components, APIs, schemas
 └── content-templates/   # Copy frameworks, SEO, multi-language
 ```
@@ -77,7 +122,7 @@ All work for a single client MUST remain within the same project structure:
 
 #### Examples of CORRECT Behavior
 - QuartzIQ keyword research → `/projects/quartziq-[uuid]/deliverables/seo/`
-- QuartzIQ homepage content → `/projects/quartziq-[uuid]/deliverables/content/`  
+- QuartzIQ homepage content → `/projects/quartziq-[uuid]/deliverables/content/`
 - QuartzIQ branding assets → `/projects/quartziq-[uuid]/client-intelligence/assets/`
 
 #### Examples of INCORRECT Behavior
@@ -90,6 +135,8 @@ All work for a single client MUST remain within the same project structure:
 2. **Related Asset Connections**: Create proper memory relations between new deliverables and existing client intelligence
 3. **Project Lifecycle Preservation**: Maintain the established memory pool architecture and access patterns
 4. **Context Preservation**: Ensure all new deliverables reference and build upon existing client knowledge
+
+---
 
 ## Domain Agents
 
@@ -111,6 +158,10 @@ All work for a single client MUST remain within the same project structure:
 - **Memory Coordinator**: Crystalline memory management
 - **Pipeline Manager**: Shared workflow optimization
 - **Maintenance Agent**: System health and optimization
+
+**See [.claude/agents/](.claude/agents/) for complete list of 89 specialized agents.**
+
+---
 
 ## Technology Stack
 
@@ -184,6 +235,8 @@ Server Logic = Node.js + Express + Database Integration
 - **Template MCP**: Global template access and analytics
 - **MagicUI MCP**: Component library for static sites
 
+---
+
 ## Development Workflow
 
 ### Starting Development
@@ -193,312 +246,22 @@ Server Logic = Node.js + Express + Database Integration
 4. Start development server: `npm run dev`
 5. Access dashboard at `http://localhost:3000`
 
-### MANDATORY CONTENT CREATION WORKFLOW
-**CRITICAL: All content creation MUST follow this exact sequence - NO EXCEPTIONS**
+### Content Creation Workflow
 
-#### Phase 1: Research & Analysis (Always Required)
-1. **Psychographic Research**: Review existing client psychographic data and segmentation
-2. **Competitive Analysis**: Analyze existing cluster content and identify gaps
-3. **Keyword Integration**: Identify target keywords and semantic relationships
-4. **Memory System Review**: Check existing crystalline memory entities and relationships
+**MANDATORY: All content creation must use specialized agents via Task tool**
 
-#### Phase 2: Outline Creation (MANDATORY BEFORE WRITING)
-1. **Create Comprehensive Outline**: Use `[topic]-comprehensive-outline.md` naming convention
-2. **TodoWrite Checkpoint**: Mark "Create article outline" as IN_PROGRESS
-3. **Psychographic Integration**: Specify targeting for each section (percentages and emotional tones)
-4. **Keyword Mapping**: Define primary/secondary keyword placement and density
-5. **Word Count Planning**: Specify exact word counts for each H2/H3 section
-6. **Internal Linking Architecture**: Plan connections to existing cluster content
-7. **CTA Strategy**: Define call-to-action placement and messaging per psychographic segment
+#### Quick Reference:
+1. **Research & Analysis**: Review psychographic data, competitive analysis, keywords
+2. **Outline Creation**: Create comprehensive outline with TodoWrite tracking
+3. **Outline Approval**: STOP POINT - get explicit approval before proceeding
+4. **Article Writing**: Use Task tool with appropriate specialized agent:
+   - `content-writer-specialist` (general content)
+   - `healthcare-content-specialist` (healthcare)
+   - `technical-documentation-specialist` (technical)
+5. **Quality Assurance**: Run content-ai-phrase-detector (<30% detection threshold)
+6. **Iterative Revision**: Apply natural flow validation and compliance checks
 
-#### Phase 3: Outline Approval (MANDATORY CHECKPOINT)
-1. **TodoWrite Update**: Mark outline as COMPLETED only after explicit approval
-2. **Review Requirements**: Outline must be reviewed and approved before proceeding
-3. **Validation Check**: Ensure all psychographic targeting and keyword integration is planned
-4. **STOP POINT**: DO NOT proceed to writing without explicit approval
-
-#### Phase 4: Article Writing (Only After Approval) - MANDATORY AGENT USAGE
-1. **TodoWrite Checkpoint**: Mark "Write full article" as IN_PROGRESS
-2. **MANDATORY: Use Task Tool with content-writer-specialist**: Never write articles directly with Write tool
-3. **PARALLEL EXECUTION DEFAULT**: When writing 2+ independent articles, launch ALL agents simultaneously in ONE message (60-70% time savings)
-4. **AI DETECTION PREVENTION (NEW MANDATORY)**: Include explicit anti-AI instructions in every agent prompt:
-   - Forbidden phrases list (Picture yourself, Let's be honest, If you've ever dreamed of, Here's what makes, etc.)
-   - Structural pattern avoidance (no repetitive section openings, varied transitions)
-   - Specific details over generic superlatives (measurements, numbers, honest limitations)
-5. **Specialized Agent Instructions**: Provide comprehensive outline and requirements to content-writer-specialist
-6. **Natural Flow First**: Agent writes conversationally, guiding readers through their concerns naturally
-7. **Follow Outline Structure**: Agent implements planned sections while maintaining conversational flow
-8. **Psychographic Integration**: Agent executes planned emotional tones through natural language
-9. **Keyword Implementation**: Agent integrates keywords naturally within conversational flow
-10. **CRITICAL Content Architecture**: Agent follows mandatory paragraph distribution and natural writing flow requirements
-
-#### Phase 5: Content Flow Review & Optimization (MANDATORY QA GATES)
-1. **AI DETECTION VALIDATION (NEW MANDATORY GATE)**: Run content-ai-phrase-detector on all articles
-   - **Threshold**: AI detection risk must be <30% or automatic revision required
-   - **Target**: Achieve 15-25% (human-level detection range)
-   - **Common Issues**: Picture yourself, Let's be honest, repetitive patterns, weak intensifiers
-2. **Natural Flow Audit**: Review entire article for conversational flow and natural transitions
-3. **Quality Assurance Coordinator**: Apply content-quality-validator for comprehensive checks
-   - Paragraph distribution validation (40/40/20)
-   - Readability assessment
-   - Engagement element verification
-4. **SEO Optimization**: Final keyword placement within natural language flow
-5. **Memory Integration**: Update crystalline memory with new content relationships
-6. **Internal Linking**: Implement planned internal linking architecture
-7. **Final Validation**: Ensure all psychographic, SEO, and natural writing requirements are met
-8. **STOP POINT**: Content ONLY marked complete after passing all QA gates including AI detection <30%
-
-#### Phase 6: Iterative Revision Process (WHEN NEEDED)
-1. **Flow Assessment**: If content feels robotic or forced, apply iterative revision
-2. **Transition Enhancement**: Strengthen paragraph connections and reader journey
-3. **Voice Refinement**: Adjust tone for more natural, conversational feel
-4. **Final Polish**: Ensure content sounds like expert conversation, not academic paper
-
-### MANDATORY ITERATIVE REVISION PROCESS
-**CRITICAL: NEVER consider any content "complete" without following this multi-stage revision process**
-
-#### Stage 1: Initial Content Creation
-1. **Write First Draft**: Focus on covering all Content Requirements in paragraph form
-2. **IMMEDIATE PAUSE**: Do NOT call content complete after first draft
-3. **Self-Assessment Checkpoint**: Does this feel natural and conversational?
-4. **Flag Issues**: Note any sections that feel robotic or formulaic
-
-#### Stage 2: Paragraph Distribution Analysis (MANDATORY)
-**Must perform this analysis on every article:**
-
-1. **Count All Paragraphs**: Systematically count every paragraph in the article
-2. **Categorize by Length**:
-   - **Short**: 1-2 sentences (15-30 words)
-   - **Medium**: 3-5 sentences (30-70 words)  
-   - **Long**: 6+ sentences (70+ words)
-3. **Calculate Distribution**:
-   - Target: 40% short, 40% medium, 20% long
-   - If distribution is off by >10%, MUST revise
-4. **Break Up Long Paragraphs**: Split overly long paragraphs into shorter, punchier segments
-5. **Add Engagement Elements**: Insert tables, boxes, bullet points for variety
-
-#### Stage 3: Content Type Variety Check (MANDATORY)
-**Every article must include diverse content types:**
-
-1. **Paragraph Text**: Main narrative content ✓
-2. **Engagement Elements**: 
-   - Comparison tables (at least 1)
-   - Information boxes or callouts (2-3)
-   - Occasional bullet point lists (maximum 16-20 total)
-   - Timeline elements or step-by-step boxes
-3. **Visual Breaks**: Ensure no more than 3-4 paragraphs in a row without variety
-4. **Bold Text Audit**: Remove structural bold text, keep only true emphasis
-
-#### Stage 4: Natural Flow Validation (MANDATORY)
-1. **Read-Aloud Test**: Does it sound conversational when spoken?
-2. **Transition Check**: Does each paragraph connect naturally to the next?
-3. **Reader Journey**: Would someone feel guided and informed, not overwhelmed?
-4. **Psychographic Alignment**: Does tone match target audience expectations?
-
-#### Stage 5: Final Compliance Verification (MANDATORY)
-**Complete this checklist before marking ANY content as "done":**
-
-□ **LANGUAGE CONSISTENCY**: Pure target language throughout, no mixing or English words
-□ All Content Requirements covered in paragraph form (not lists)
-□ Paragraph distribution: 40% short, 40% medium, 20% long (±5% tolerance)
-□ Content variety: Tables, boxes, engagement elements included
-□ Bold text: Used sparingly for emphasis only
-□ Natural transitions between all sections
-□ Conversational tone throughout
-□ Psychographic targeting properly implemented
-□ Word count within target range
-□ Supporting keywords naturally integrated
-
-**IF ANY BOX UNCHECKED = CONTENT IS NOT COMPLETE**
-
-#### Enforcement Protocol:
-- **No exceptions**: Every piece of content follows this process
-- **TodoWrite tracking**: Each stage must be tracked as separate todo items
-- **Quality over speed**: Better to take time for proper revision than publish poor content
-- **Document issues**: When revisions are needed, clearly explain what was wrong
-
-### COMPREHENSIVE QUALITY ASSURANCE CHECKLIST
-**MANDATORY: Apply this checklist to every article before marking as complete**
-
-#### ✅ Natural Flow and Readability Assessment
-- **Paragraph Flow Test**: Does each paragraph naturally lead to the next?
-- **Transition Quality**: Are there smooth bridges between topics and sections?
-- **Conversational Tone**: Does it sound like a knowledgeable friend explaining the topic?
-- **Reader Journey**: Can you follow the logical progression without confusion?
-- **Voice Consistency**: Does the tone remain consistent and engaging throughout?
-
-#### ✅ Content Architecture Compliance
-- **Paragraph Distribution**: 40% short / 40% medium / 20% long paragraphs achieved?
-- **Bold Text Usage**: Used sparingly (max 10-15 instances) for true emphasis only?
-- **List Limitations**: Maximum 16-20 bulleted lists total across entire article?
-- **Table Integration**: 4-6 tables maximum, used for comparison or data presentation?
-- **Visual Breaks**: Adequate spacing and formatting variety for readability?
-
-#### ✅ Language and Engagement Quality
-- **Natural Sentence Variety**: Mix of short, medium, and long sentences throughout?
-- **Question Integration**: Rhetorical questions used to engage readers naturally?
-- **Reader Address**: Direct "you" language used appropriately throughout?
-- **Relatable Examples**: Real-world scenarios and situations included?
-- **Empathy Expression**: Reader concerns and emotions acknowledged and addressed?
-
-#### ✅ Structural and SEO Requirements
-- **Keyword Integration**: Primary keywords integrated naturally, not forced?
-- **Semantic Flow**: Related terms and concepts woven naturally into text?
-- **Internal Linking**: Planned connections to other cluster content included?
-- **Psychographic Targeting**: Content addresses specific segment concerns naturally?
-- **Call-to-Action**: CTAs integrated naturally within content flow?
-
-#### ✅ Final Validation Checklist
-- **Read-Aloud Test**: Does the content sound natural when read aloud?
-- **Expert-Friend Balance**: Professional expertise delivered with approachable warmth?
-- **Information Hierarchy**: Most important information emphasized naturally?
-- **Reader Value**: Does every paragraph provide clear value to the target audience?
-- **Conversion Optimization**: Does content guide readers toward desired actions naturally?
-
-#### 🚨 Red Flags - IMMEDIATE REVISION REQUIRED
-- Every paragraph starts with bold text
-- Abrupt topic jumps without transitions
-- Formulaic sentence structures repeated throughout
-- Excessive lists dominating the content
-- Robotic or academic tone instead of conversational
-- Missing emotional connection or reader empathy
-- Keyword stuffing or unnatural keyword placement
-- Information presented without clear reader benefit
-
-### MANDATORY CONTENT ARCHITECTURE STANDARDS
-
-#### Content Formatting Rules - CRITICAL INTERPRETATION
-**These rules prevent list over-usage and ensure proper paragraph flow:**
-
-1. **Content Requirements vs. Engagement Elements in Outlines**:
-   - **Content Requirements** = Information to cover in PARAGRAPH FORM (flowing text)
-   - **Engagement Elements** = Optional formatting enhancements (tables, boxes, occasional lists)
-   - **NEVER convert Content Requirements into bulleted lists**
-
-2. **Paragraph Distribution (MANDATORY)**:
-   - **40% Short Paragraphs** (1-2 sentences): Quick, punchy information
-   - **40% Medium Paragraphs** (3-4 sentences): Main content flow, explanations
-   - **20% Long Paragraphs** (5+ sentences): Detailed explanations, storytelling
-
-3. **Content Element Limits (STRICT ENFORCEMENT)**:
-   - **Bulleted Lists**: Maximum 16-20 total per article (2-3 per H2 section)
-   - **Numbered Lists**: Maximum 8-12 total per article
-   - **Tables**: 6-8 comparison tables maximum
-   - **Callout Boxes**: 15-18 boxes for engagement
-   - **Statistics Boxes**: 6-8 boxes for credibility
-
-4. **List Usage Guidelines**:
-   - Use lists ONLY for: step-by-step processes, feature comparisons, key takeaways
-   - AVOID lists for: general information, explanations, benefits descriptions
-   - Convert outline "Content Requirements" into flowing paragraph narrative
-   - Reserve lists for genuine "Engagement Elements" enhancements
-
-5. **Content Flow Principles**:
-   - Each H3 section should read as natural, flowing text
-   - Break up long paragraphs with occasional engagement elements
-   - Maintain readability while avoiding choppy, list-heavy structure
-   - Tell a story, don't just present information
-
-### NATURAL WRITING FLOW REQUIREMENTS
-**CRITICAL: These guidelines ensure human-like, conversational content that builds trust and engagement**
-
-#### 1. Conversational Flow and Transitions
-- **Seamless Paragraph Connections**: Each paragraph must flow naturally to the next using transition phrases
-- **Bridge Sentences**: Use connecting thoughts like "Building on this...", "However, there's more to consider...", "This brings us to..."
-- **Reader Journey**: Create a conversational path through topics, not abrupt topic jumps
-- **Natural Progression**: Information should build logically, addressing reader concerns in sequence
-
-#### 2. Varied and Natural Sentence Structure
-- **Mixed Sentence Lengths**: Combine short punchy statements (3-6 words) with flowing explanations (15-25 words) and detailed descriptions (25+ words)
-- **AVOID Formulaic Openings**: NEVER start every paragraph with bold text - this creates robotic reading
-- **Question Integration**: Use rhetorical questions to engage readers: "But what does this mean for you?", "Why is this important?"
-- **Conversational Markers**: Include natural speech patterns: "Here's what most people don't realize...", "The truth is...", "What's interesting is..."
-
-#### 3. Authentic Paragraph Rhythm (Enhanced Distribution)
-- **Short Paragraphs (1-2 sentences)**: For impact, emphasis, and attention-grabbing statements
-- **Medium Paragraphs (3-5 sentences)**: For explanations, main content flow, and connecting ideas
-- **Long Paragraphs (6+ sentences)**: For complex topics, storytelling, detailed analyses, and building rapport
-- **NO Formulaic Patterns**: Avoid predictable paragraph structures that feel mechanical
-
-#### 4. Reader-Centric and Relatable Language
-- **Direct Address**: Speak directly to the reader using "you", "your", "when you're considering..."
-- **Relatable Scenarios**: Include realistic situations: "Imagine sitting in the dentist's chair wondering...", "Most people feel overwhelmed when..."
-- **Empathy and Understanding**: Acknowledge reader concerns: "It's completely normal to worry about...", "Many patients tell us they feel..."
-- **Expert-Friend Tone**: Balance professional expertise with approachable, conversational warmth
-
-#### 5. Strategic Emphasis and Formatting
-- **Minimal Bold Usage**: Use bold text ONLY for true emphasis and key takeaways, not paragraph starters
-- **Natural Emphasis**: Let conversational language and story flow carry the content weight
-- **Varied Formatting**: Mix paragraph text with occasional tables, quotes, or callouts for visual breaks
-- **Organic Integration**: Formatting should feel natural, not forced or formulaic
-
-#### 6. Storytelling and Engagement Elements
-- **Patient Stories**: Include realistic scenarios and examples that readers can relate to
-- **Problem-Solution Flow**: Start with reader concerns, build understanding, then provide solutions
-- **Emotional Connection**: Address fears, hopes, and practical concerns with genuine understanding
-- **Credible Expertise**: Demonstrate knowledge through experience sharing, not just facts listing
-
-### ENHANCED AGENT PROMPTING STRATEGY
-**CRITICAL: Use these improved prompting approaches for natural, conversational content creation**
-
-#### Traditional Prompting (AVOID THESE)
-❌ **"Write paragraphs covering these content requirements"**
-❌ **"Create content about the following topics"**
-❌ **"Cover these points in paragraph form"**
-❌ **"Write about: topic A, topic B, topic C"**
-
-#### Enhanced Conversational Prompting (USE THESE)
-✅ **"Write a natural, conversational section that guides the reader through [topic]. Start with their main concerns about [specific worry], build understanding progressively, and connect each idea to the next. Make it sound like an expert friend explaining this over coffee."**
-
-✅ **"Create content that addresses the reader's journey from [starting point] to [end goal]. Use varied sentence length, avoid formulaic bold text, and ensure each paragraph flows naturally to the next. Think of yourself as a trusted advisor having a conversation."**
-
-✅ **"Develop this section as if you're answering questions from someone who is [psychographic description]. Address their specific concerns about [topic], use language they relate to, and guide them through the information in a way that builds confidence and trust."**
-
-#### Specific Prompting Templates by Content Type
-
-**For Explanatory Sections:**
-*"Explain [topic] conversationally, starting with why the reader should care, then building understanding step-by-step. Use natural transitions, vary your sentence structure, and include relatable examples. Make complex information accessible without dumbing it down."*
-
-**For Comparison Sections:**
-*"Guide the reader through comparing [option A] vs [option B] as if you're helping a friend make this decision. Start with what they're probably wondering about, address their concerns naturally, and help them understand the real-world implications."*
-
-**For Process/Procedure Sections:**
-*"Walk the reader through [process] conversationally, addressing their likely anxieties and questions as you go. Don't just list steps - explain what each step means for them, why it matters, and what to expect."*
-
-**For Cost/Pricing Sections:**
-*"Help the reader understand [pricing topic] with the transparency and empathy they need when making financial decisions. Address their budget concerns, explain value naturally, and guide them toward informed choices without pressure."*
-
-#### Content Review Prompting
-**Instead of:** *"Review this content for errors"*
-**Use:** *"Review this content for natural conversational flow. Does it sound like a knowledgeable friend explaining this topic? Are transitions smooth? Does each paragraph connect naturally to the next? Would someone feel comfortable and informed reading this?"*
-
-#### Examples of CORRECT vs. INCORRECT Implementation:
-
-**✅ CORRECT Approach**:
-```
-H3: Napredni keramični materiali (250 words)
-Content Requirements: Cirkonij vs. titanij primerjava, materialne lastnosti
-
-WRITE AS: 2-3 flowing paragraphs explaining materials, their properties, 
-and recommendations, with 1 comparison table as engagement element.
-```
-
-**❌ INCORRECT Approach**:
-```
-AVOID: Converting everything into bulleted lists:
-- Cirkonij prednosti
-- Titanij lastnosti  
-- Biokompatibilnost
-- Priporočila
-(This creates 4+ lists from what should be paragraph content)
-```
-
-### WORKFLOW ENFORCEMENT RULES
-- **NEVER write an article without creating and approving an outline first**
-- **ALWAYS use TodoWrite to track and enforce workflow phases**
-- **STOP at each checkpoint until explicitly approved to proceed**
-- **NO EXCEPTIONS**: Any content creation that skips outline phase must be restarted
-- **MANDATORY**: Follow content architecture standards - paragraph distribution and element limits
+**See [CONTENT-CREATION-GUIDE.md](CONTENT-CREATION-GUIDE.md) for complete workflow details, quality checklists, and agent prompting strategies.**
 
 ### Agent Development Guidelines
 1. **Use Global Templates**: Always reference global templates, never duplicate
@@ -509,7 +272,7 @@ AVOID: Converting everything into bulleted lists:
 6. **Apply Appropriate Complexity**: Choose the simplest technology solution that meets requirements
 7. **Static-First Development**: Default to static HTML unless dynamic features are explicitly needed
 8. **Avoid Over-Engineering**: Never suggest servers, frameworks, or backend systems for static content
-9. **MANDATORY OUTLINE-FIRST**: Always create comprehensive outlines before any article writing
+9. **Universal Agent Pattern**: Use Task tool for ANY specialized agent, not just content
 
 ### CRITICAL: Agent Orchestration File Handling Rules
 When orchestrating agents for client work, these rules are MANDATORY:
@@ -550,6 +313,8 @@ INCORRECT: "Create separate memory entities for this research"
 - **Testing**: Jest for unit tests, comprehensive coverage
 - **Documentation**: JSDoc comments for all functions
 
+---
+
 ## Dashboard Features
 
 ### Real-Time Monitoring
@@ -570,6 +335,8 @@ INCORRECT: "Create separate memory entities for this research"
 - **Template Browsing**: Explore and analyze global templates
 - **Project Tracking**: Monitor deliverable progress
 
+---
+
 ## Semantic Visualization (D3.js)
 
 ### Topic Clustering
@@ -580,9 +347,11 @@ INCORRECT: "Create separate memory entities for this research"
 
 ### Psychographic Visualization
 - **ICP Mapping**: Interactive customer profile relationships
-- **Cultural Clustering**: Multi-language content analysis  
+- **Cultural Clustering**: Multi-language content analysis
 - **Intent Networks**: User intent and behavior visualization
 - **Demographic Segmentation**: Market analysis visualization
+
+---
 
 ## Performance Optimization
 
@@ -598,6 +367,8 @@ INCORRECT: "Create separate memory entities for this research"
 - **Parallel Processing**: Multiple agents working simultaneously
 - **Intelligent Routing**: Optimal communication paths
 
+---
+
 ## Security & Compliance
 
 ### Data Protection
@@ -612,6 +383,8 @@ INCORRECT: "Create separate memory entities for this research"
 - **Access Controls**: Domain-specific file permissions
 - **Audit Logging**: Complete file operation tracking
 
+---
+
 ## Troubleshooting
 
 ### Common Issues
@@ -625,6 +398,8 @@ INCORRECT: "Create separate memory entities for this research"
 - **Memory Inspector**: Crystalline memory visualization
 - **Pipeline Debugger**: Shared workflow analysis
 - **Agent Tracer**: Individual agent activity tracking
+
+---
 
 ## Support Commands
 
@@ -644,6 +419,32 @@ npm run redis       # Start Redis server
 npm run setup       # Complete setup process
 ```
 
+---
+
+## Claude Code Hooks Integration
+
+The ORCHESTRAI system provides comprehensive workflow tracking and analytics through Claude Code hooks integration.
+
+### Available Webhook Endpoints
+**Base URL**: `http://localhost:5501`
+
+- `POST /hooks/user-prompt-submit` - User prompt submission
+- `POST /hooks/task-start` - Task initiation
+- `POST /hooks/task-complete` - Task completion
+- `POST /hooks/tool-call` - Tool usage tracking
+- `POST /hooks/token-usage` - AI model token consumption
+
+### Workflow Analytics Features
+1. **Intent Recognition**: Automatically categorizes tasks
+2. **Agent Recommendations**: Suggests optimal agents based on task type
+3. **Cost Projections**: Real-time cost estimates and projections
+4. **Performance Tracking**: Efficiency metrics and optimization suggestions
+5. **Resource Monitoring**: Agent health and usage patterns
+
+**See [CLAUDE-CODE-HOOKS.md](CLAUDE-CODE-HOOKS.md) for complete hook configuration, management endpoints, and testing instructions.**
+
+---
+
 ## Contributing Guidelines
 
 1. **Follow Architecture**: Respect crystalline memory and geometric patterns
@@ -651,6 +452,8 @@ npm run setup       # Complete setup process
 3. **Use Templates**: Leverage global templates for consistency
 4. **Document Changes**: Update CLAUDE.md for significant changes
 5. **Test Thoroughly**: Ensure all agent interactions work correctly
+
+---
 
 ## Best Practices
 
@@ -685,153 +488,14 @@ npm run setup       # Complete setup process
 
 ---
 
-## Claude Code Hooks Integration
+## Additional Documentation
 
-The ORCHESTRAI system provides comprehensive workflow tracking and analytics through Claude Code hooks integration.
-
-### Available Webhook Endpoints
-
-**Base URL**: `http://localhost:5501`
-
-#### Workflow Tracking Hooks
-- `POST /hooks/user-prompt-submit` - User prompt submission
-- `POST /hooks/task-start` - Task initiation
-- `POST /hooks/task-complete` - Task completion
-- `POST /hooks/task-error` - Task error handling
-
-#### Real-time Monitoring Hooks  
-- `POST /hooks/tool-call` - Tool usage tracking
-- `POST /hooks/mcp-call` - MCP server call monitoring
-- `POST /hooks/token-usage` - AI model token consumption
-
-#### Session Management Hooks
-- `POST /hooks/session-start` - Session initialization
-- `POST /hooks/session-end` - Session termination
-
-### Hook Configuration
-
-Configure Claude Code hooks by adding these to your hooks configuration:
-
-```json
-{
-  "user-prompt-submit-hook": {
-    "type": "http",
-    "url": "http://localhost:5501/hooks/user-prompt-submit",
-    "method": "POST",
-    "headers": {
-      "Content-Type": "application/json",
-      "X-ORCHESTRAI-Source": "claude-code"
-    },
-    "payload": {
-      "prompt": "{{prompt}}",
-      "userId": "{{user_id}}",
-      "timestamp": "{{timestamp}}",
-      "sessionId": "{{session_id}}"
-    }
-  },
-  
-  "task-start-hook": {
-    "type": "http", 
-    "url": "http://localhost:5501/hooks/task-start",
-    "method": "POST",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "payload": {
-      "workflowId": "{{workflow_id}}",
-      "task": "{{task}}",
-      "timestamp": "{{timestamp}}"
-    }
-  },
-
-  "tool-call-hook": {
-    "type": "http",
-    "url": "http://localhost:5501/hooks/tool-call", 
-    "method": "POST",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "payload": {
-      "workflowId": "{{workflow_id}}",
-      "tool": "{{tool_name}}",
-      "parameters": "{{tool_parameters}}",
-      "duration": "{{duration_ms}}",
-      "success": "{{success}}",
-      "result": "{{result}}",
-      "error": "{{error}}"
-    }
-  },
-
-  "token-usage-hook": {
-    "type": "http",
-    "url": "http://localhost:5501/hooks/token-usage",
-    "method": "POST", 
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "payload": {
-      "workflowId": "{{workflow_id}}",
-      "model": "{{model_name}}",
-      "inputTokens": "{{input_tokens}}",
-      "outputTokens": "{{output_tokens}}",
-      "timestamp": "{{timestamp}}"
-    }
-  },
-
-  "task-complete-hook": {
-    "type": "http",
-    "url": "http://localhost:5501/hooks/task-complete",
-    "method": "POST",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "payload": {
-      "workflowId": "{{workflow_id}}",
-      "result": "{{task_result}}",
-      "timestamp": "{{timestamp}}"
-    }
-  }
-}
-```
-
-### Management Endpoints
-
-#### Get Hooks Status
-```bash
-curl http://localhost:5501/hooks/status
-```
-
-#### View Active Workflows
-```bash
-curl http://localhost:5501/hooks/workflows
-```
-
-#### Update Hook Configuration
-```bash
-curl -X PUT http://localhost:5501/hooks/config/task-start \
-  -H "Content-Type: application/json" \
-  -d '{"enabled": false}'
-```
-
-### Test Hook Integration
-```bash
-# Simulate user prompt submission
-curl -X POST http://localhost:5501/hooks/user-prompt-submit \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Create a React component",
-    "userId": "test-user",
-    "sessionId": "test-session"
-  }'
-```
-
-### Workflow Analytics Features
-
-1. **Intent Recognition**: Automatically categorizes tasks (coding, research, analysis, etc.)
-2. **Agent Recommendations**: Suggests optimal MCP servers based on task type
-3. **Cost Projections**: Real-time cost estimates and projections
-4. **Performance Tracking**: Efficiency metrics and optimization suggestions
-5. **Resource Monitoring**: MCP server health and usage patterns
+- **[UNIVERSAL-AGENT-DELEGATION-PATTERN.md](UNIVERSAL-AGENT-DELEGATION-PATTERN.md)** - Complete guide to domain-agnostic agent invocation
+- **[CONTENT-CREATION-GUIDE.md](CONTENT-CREATION-GUIDE.md)** - Detailed content creation workflow, quality checklists, and prompting strategies
+- **[CLAUDE-CODE-HOOKS.md](CLAUDE-CODE-HOOKS.md)** - Hook configuration and workflow analytics
+- **[tests/hybrid-delegation-test-workflow.md](tests/hybrid-delegation-test-workflow.md)** - Testing guide for hybrid delegation system
+- **[HYBRID-DELEGATION-QUICK-START.md](HYBRID-DELEGATION-QUICK-START.md)** - Quick start guide for orchestrai-master-coordinator
+- **[ORCHESTRAI-IMPLEMENTATION-PLAN.md](ORCHESTRAI-IMPLEMENTATION-PLAN.md)** - Complete implementation roadmap
 
 ---
 

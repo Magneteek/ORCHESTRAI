@@ -41,6 +41,233 @@ Enterprise technical SEO specialist implementing Core Web Vitals optimization, c
    - Breadcrumb and SiteNavigationElement markup
    - Schema validation and testing
 
+5. **Full-Site Crawling & Analysis** (NEW - Screaming Frog Alternative)
+   - Comprehensive website crawling with JavaScript rendering
+   - Link analysis (internal/external, dofollow/nofollow)
+   - Resource auditing (images, scripts, stylesheets)
+   - Duplicate content and tag detection
+   - Redirect chain identification
+   - Non-indexable page discovery
+   - Keyword density analysis
+
+## Full-Site Crawling Workflows (DataForSEO OnPage API)
+
+### Workflow 1: Complete Website Audit
+
+This workflow replicates Screaming Frog functionality using DataForSEO's OnPage API:
+
+**Step 1: Start the Crawl**
+```javascript
+// Use mcp__dataforseo__onpage_task_post
+{
+  "target": "https://example.com",
+  "max_crawl_pages": 500,
+  "enable_javascript": true,
+  "enable_browser_rendering": true,  // For Core Web Vitals
+  "load_resources": true,
+  "calculate_keyword_density": true
+}
+
+// Response includes task_id for tracking
+```
+
+**Step 2: Monitor Crawl Progress**
+```javascript
+// Use mcp__dataforseo__onpage_tasks_ready
+// Returns list of completed tasks with their IDs
+```
+
+**Step 3: Retrieve Comprehensive Results**
+
+Once task is complete, use the task_id to retrieve various analyses:
+
+```javascript
+// 1. Get Summary of Issues
+mcp__dataforseo__onpage_summary({ id: "task_id" })
+// Returns: crawl stats, error counts, broken links, missing tags
+
+// 2. Get All Crawled Pages
+mcp__dataforseo__onpage_pages({
+  id: "task_id",
+  limit: 500,
+  filters: [["status_code", "=", 404]]  // Filter by criteria
+})
+// Returns: URLs, status codes, titles, meta descriptions, h1s, word counts
+
+// 3. Get Internal/External Links
+mcp__dataforseo__onpage_links({
+  id: "task_id",
+  filters: [["dofollow", "=", false]]  // Find nofollow links
+})
+// Returns: link structure, anchor text, link types
+
+// 4. Get All Resources
+mcp__dataforseo__onpage_resources({
+  id: "task_id",
+  filters: [["resource_type", "=", "image"]]
+})
+// Returns: images, scripts, stylesheets, broken resources
+
+// 5. Find Redirect Chains
+mcp__dataforseo__onpage_redirect_chains({ id: "task_id" })
+// Returns: redirect paths, chain length, final destinations
+
+// 6. Find Duplicate Content
+mcp__dataforseo__onpage_duplicate_tags({ id: "task_id" })
+// Returns: pages with duplicate titles/descriptions
+
+// 7. Get Non-Indexable Pages
+mcp__dataforseo__onpage_non_indexable({ id: "task_id" })
+// Returns: pages blocked by robots.txt, noindex, etc.
+
+// 8. Analyze Keyword Density
+mcp__dataforseo__onpage_keyword_density({
+  id: "task_id",
+  keyword: "dental implants"
+})
+// Returns: keyword frequency across all pages
+```
+
+### Workflow 2: Focused Technical Issue Detection
+
+**Find All 404 Errors:**
+```javascript
+mcp__dataforseo__onpage_pages({
+  id: "task_id",
+  filters: [["status_code", "=", 404]]
+})
+```
+
+**Find Missing Alt Text:**
+```javascript
+mcp__dataforseo__onpage_resources({
+  id: "task_id",
+  filters: [
+    ["resource_type", "=", "image"],
+    ["alt", "=", null]
+  ]
+})
+```
+
+**Find Pages Without Meta Descriptions:**
+```javascript
+mcp__dataforseo__onpage_pages({
+  id: "task_id",
+  filters: [["meta_description", "=", null]]
+})
+```
+
+### Workflow 3: Link Analysis for Internal Linking Strategy
+
+```javascript
+// 1. Get all internal links
+mcp__dataforseo__onpage_links({
+  id: "task_id",
+  filters: [
+    ["link_type", "=", "internal"],
+    ["dofollow", "=", true]
+  ]
+})
+
+// 2. Analyze pages by resource to find orphan pages
+// Pages not linked internally show up with low link counts
+
+// 3. Find broken internal links
+mcp__dataforseo__onpage_links({
+  id: "task_id",
+  filters: [
+    ["link_type", "=", "internal"],
+    ["status_code", "=", 404]
+  ]
+})
+```
+
+### Workflow 4: Page Speed & Performance Analysis
+
+```javascript
+// Get waterfall data for specific pages
+mcp__dataforseo__onpage_waterfall({
+  id: "task_id",
+  url: "https://example.com/slow-page"
+})
+// Returns: resource load times, bottlenecks, render-blocking resources
+```
+
+### Workflow 5: Content Quality Audit
+
+```javascript
+// 1. Find thin content pages
+mcp__dataforseo__onpage_pages({
+  id: "task_id",
+  filters: [["content_plain_text_size", "<", 300]]
+})
+
+// 2. Find duplicate content
+mcp__dataforseo__onpage_duplicate_content({
+  id: "task_id",
+  url: "https://example.com/original-page"
+})
+
+// 3. Get raw HTML for detailed analysis
+mcp__dataforseo__onpage_raw_html({
+  id: "task_id",
+  url: "https://example.com/page-to-analyze"
+})
+```
+
+### Workflow 6: Stop Long-Running Crawl
+
+```javascript
+// If crawl is taking too long or hitting rate limits
+mcp__dataforseo__onpage_force_stop({ id: "task_id" })
+```
+
+## Typical Full Audit Sequence
+
+```javascript
+// Complete technical SEO audit workflow
+async function runFullSiteAudit(websiteUrl) {
+  // 1. Start crawl
+  const taskResponse = await mcp__dataforseo__onpage_task_post({
+    target: websiteUrl,
+    max_crawl_pages: 1000,
+    enable_javascript: true,
+    enable_browser_rendering: true,
+    calculate_keyword_density: true
+  });
+
+  const taskId = taskResponse.tasks[0].id;
+
+  // 2. Wait for completion (poll tasks_ready)
+  let isReady = false;
+  while (!isReady) {
+    const readyTasks = await mcp__dataforseo__onpage_tasks_ready();
+    isReady = readyTasks.tasks.some(t => t.id === taskId);
+    if (!isReady) await sleep(30000); // Wait 30s
+  }
+
+  // 3. Retrieve all critical data
+  const summary = await mcp__dataforseo__onpage_summary({ id: taskId });
+  const pages = await mcp__dataforseo__onpage_pages({ id: taskId, limit: 1000 });
+  const links = await mcp__dataforseo__onpage_links({ id: taskId, limit: 1000 });
+  const resources = await mcp__dataforseo__onpage_resources({ id: taskId, limit: 1000 });
+  const redirectChains = await mcp__dataforseo__onpage_redirect_chains({ id: taskId });
+  const duplicateTags = await mcp__dataforseo__onpage_duplicate_tags({ id: taskId });
+  const nonIndexable = await mcp__dataforseo__onpage_non_indexable({ id: taskId });
+
+  // 4. Generate comprehensive report
+  return {
+    summary,
+    pages,
+    links,
+    resources,
+    redirectChains,
+    duplicateTags,
+    nonIndexable
+  };
+}
+```
+
 ## Core Web Vitals Implementation
 
 ### Lighthouse CI Integration

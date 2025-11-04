@@ -1,0 +1,275 @@
+{
+  "trackingConfig": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-11-04",
+    "defaultSettings": {
+      "locationCode": 2840,
+      "locationName": "United States",
+      "device": "desktop",
+      "trackingFrequency": "weekly",
+      "priority": "medium",
+      "dataSource": "dataforseo"
+    },
+    "schedules": {
+      "daily": {
+        "time": "02:00",
+        "timezone": "America/New_York",
+        "enabled": true
+      },
+      "weekly": {
+        "time": "09:00",
+        "dayOfWeek": 1,
+        "timezone": "America/New_York",
+        "enabled": true
+      },
+      "monthly": {
+        "time": "10:00",
+        "dayOfMonth": 1,
+        "timezone": "America/New_York",
+        "enabled": true
+      }
+    },
+    "alertThresholds": {
+      "critical": {
+        "positionDrop": 10,
+        "dropOutOfTop": 10,
+        "enabled": true,
+        "notificationChannels": ["webhook", "notion"]
+      },
+      "warning": {
+        "positionDrop": 5,
+        "ctrDropPercentage": 20,
+        "enabled": true,
+        "notificationChannels": ["notion"]
+      },
+      "opportunity": {
+        "enterTopN": 20,
+        "lowCtrThreshold": 0.02,
+        "minImpressions": 100,
+        "enabled": true,
+        "notificationChannels": ["notion"]
+      },
+      "competitor": {
+        "competitorEntersTopN": 3,
+        "enabled": true,
+        "notificationChannels": ["webhook"]
+      }
+    },
+    "apiLimits": {
+      "dataForSEO": {
+        "batchSize": 10,
+        "delayBetweenBatches": 2000,
+        "maxRequestsPerMinute": 30,
+        "cacheTimeout": 3600000
+      },
+      "googleSearchConsole": {
+        "maxRowsPerRequest": 1000,
+        "dateRangeMaxDays": 90,
+        "delayBetweenRequests": 1000
+      },
+      "notion": {
+        "requestsPerSecond": 3,
+        "batchSize": 100
+      }
+    },
+    "projects": {
+      "drnl-A0582FF4-6715-4266-9A54-A7E311912E41": {
+        "name": "DeleteReviews.nl",
+        "siteUrl": "sc-domain:deletereviews.nl",
+        "location": {
+          "code": 2528,
+          "name": "Netherlands",
+          "language": "Dutch"
+        },
+        "competitors": [
+          "reputationdefender.com",
+          "removify.nl",
+          "suppresslaw.com"
+        ],
+        "keywords": {
+          "high": [
+            {
+              "keyword": "deletereviews verwijderen",
+              "targetPosition": 1,
+              "trackingFrequency": "daily",
+              "searchVolume": 590
+            },
+            {
+              "keyword": "slechte google reviews verwijderen",
+              "targetPosition": 3,
+              "trackingFrequency": "daily",
+              "searchVolume": 320
+            },
+            {
+              "keyword": "negatieve recensies verwijderen google",
+              "targetPosition": 3,
+              "trackingFrequency": "daily",
+              "searchVolume": 260
+            }
+          ],
+          "medium": [
+            {
+              "keyword": "negatieve recensies verwijderen",
+              "targetPosition": 5,
+              "trackingFrequency": "weekly",
+              "searchVolume": 210
+            },
+            {
+              "keyword": "google review verwijderen",
+              "targetPosition": 5,
+              "trackingFrequency": "weekly",
+              "searchVolume": 480
+            },
+            {
+              "keyword": "slechte reviews verwijderen",
+              "targetPosition": 5,
+              "trackingFrequency": "weekly",
+              "searchVolume": 170
+            }
+          ],
+          "low": [
+            {
+              "keyword": "hoe verwijder je een google review",
+              "targetPosition": 10,
+              "trackingFrequency": "monthly",
+              "searchVolume": 140
+            },
+            {
+              "keyword": "google recensie laten verwijderen",
+              "targetPosition": 10,
+              "trackingFrequency": "monthly",
+              "searchVolume": 110
+            }
+          ]
+        }
+      },
+      "nasmehpg-2d61080a-ebee-4290-a276-0e4a996f433e": {
+        "name": "NaSmehPG",
+        "siteUrl": "sc-domain:nasmehpg.si",
+        "location": {
+          "code": 2705,
+          "name": "Slovenia",
+          "language": "Slovenian"
+        },
+        "competitors": [
+          "zobozdravstvo-ortoimplant.si",
+          "dentaldent.si"
+        ],
+        "keywords": {
+          "high": [
+            {
+              "keyword": "zobni implantati maribor",
+              "targetPosition": 1,
+              "trackingFrequency": "daily",
+              "searchVolume": 170
+            },
+            {
+              "keyword": "zobni implantati cena",
+              "targetPosition": 3,
+              "trackingFrequency": "daily",
+              "searchVolume": 390
+            }
+          ],
+          "medium": [
+            {
+              "keyword": "estetska zobozdravstvo maribor",
+              "targetPosition": 5,
+              "trackingFrequency": "weekly",
+              "searchVolume": 90
+            },
+            {
+              "keyword": "beljenje zob maribor",
+              "targetPosition": 5,
+              "trackingFrequency": "weekly",
+              "searchVolume": 110
+            }
+          ],
+          "low": [
+            {
+              "keyword": "ortodontija maribor",
+              "targetPosition": 10,
+              "trackingFrequency": "monthly",
+              "searchVolume": 70
+            }
+          ]
+        }
+      },
+      "quartziq-EA511E99-BB89-4CD0-9C88-AE5584D2E010": {
+        "name": "QuartzIQ",
+        "siteUrl": "sc-domain:quartziq.com",
+        "location": {
+          "code": 2840,
+          "name": "United States",
+          "language": "English"
+        },
+        "competitors": [
+          "tableau.com",
+          "looker.com",
+          "powerbi.microsoft.com"
+        ],
+        "keywords": {
+          "high": [
+            {
+              "keyword": "business intelligence platform",
+              "targetPosition": 3,
+              "trackingFrequency": "daily",
+              "searchVolume": 8100
+            },
+            {
+              "keyword": "data analytics software",
+              "targetPosition": 5,
+              "trackingFrequency": "daily",
+              "searchVolume": 6600
+            }
+          ],
+          "medium": [
+            {
+              "keyword": "real-time data visualization",
+              "targetPosition": 10,
+              "trackingFrequency": "weekly",
+              "searchVolume": 1900
+            },
+            {
+              "keyword": "self-service analytics",
+              "targetPosition": 10,
+              "trackingFrequency": "weekly",
+              "searchVolume": 1300
+            }
+          ],
+          "low": [
+            {
+              "keyword": "embedded analytics platform",
+              "targetPosition": 20,
+              "trackingFrequency": "monthly",
+              "searchVolume": 720
+            }
+          ]
+        }
+      }
+    },
+    "notionConfig": {
+      "enabled": true,
+      "workspaceId": "",
+      "databaseIds": {
+        "keywords": "",
+        "positionHistory": "",
+        "competitors": "",
+        "alerts": ""
+      },
+      "syncSettings": {
+        "syncOnTracking": true,
+        "syncInterval": "daily",
+        "createDashboards": true
+      }
+    },
+    "webhookConfig": {
+      "enabled": false,
+      "endpoints": {
+        "slack": "",
+        "discord": "",
+        "custom": ""
+      },
+      "alertTypes": ["critical", "warning"]
+    }
+  }
+}

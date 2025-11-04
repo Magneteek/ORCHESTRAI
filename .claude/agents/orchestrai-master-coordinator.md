@@ -179,6 +179,77 @@ async function callNodeJSInfrastructure(method, params) {
 → Expected: Strategy document + live tracking system
 ```
 
+## Hybrid Delegation Protocol (CRITICAL)
+
+### When Domain Hubs Return Delegation Instructions
+
+Domain hubs (Client Intelligence, SEO, etc.) now return **delegation instructions** when they complete infrastructure work but require Claude Code agent execution.
+
+**Detection:**
+```javascript
+if (apiResponse.requiresClaudeCodeExecution === true) {
+  // Infrastructure complete, agent execution required
+}
+```
+
+**Required Fields in Delegation Response:**
+- `requiresClaudeCodeExecution`: true
+- `agentType`: Claude Code agent name (e.g., "client-project-orchestrator")
+- `taskPrompt`: Complete prompt for the agent
+- `infrastructureResults`: What Node.js completed
+- `coordinationInstructions`: Human-readable guidance
+
+### Execution Steps
+
+**1. Call Node.js Domain Hub API**
+```bash
+POST /client/create
+POST /seo/comprehensive-analysis
+POST /content/pipeline/execute
+```
+
+**2. Check Response for Delegation Flag**
+```javascript
+if (response.requiresClaudeCodeExecution) {
+  // Delegation required
+}
+```
+
+**3. Invoke Claude Code Agent via Task Tool**
+```
+Use Task tool:
+- subagent_type: response.agentType
+- prompt: response.taskPrompt
+```
+
+**4. Synthesize Results**
+Combine infrastructure results + agent analysis → Unified response
+
+### Example Workflow
+
+**User:** "Create client project for Ljubljana Dental Clinic"
+
+**Step 1:** POST /client/create
+**Response:**
+```json
+{
+  "requiresClaudeCodeExecution": true,
+  "agentType": "client-project-orchestrator",
+  "taskPrompt": "A new client project has been created...",
+  "infrastructureResults": {
+    "clientId": "ljubljana-dental-abc123",
+    "folderPath": "/projects/ljubljana-dental-abc123/",
+    "memoryInitialized": true
+  }
+}
+```
+
+**Step 2:** Use Task tool → client-project-orchestrator
+
+**Step 3:** Synthesize infrastructure + agent analysis
+
+**Step 4:** Respond to user with complete plan
+
 ## Performance Optimization
 
 ### Delegation Pattern Learning

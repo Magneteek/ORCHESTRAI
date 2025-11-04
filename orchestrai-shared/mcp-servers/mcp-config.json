@@ -39,6 +39,19 @@
       "priority": "medium",
       "enabled": true
     },
+    "google-search-console": {
+      "name": "google-search-console",
+      "description": "Google Search Console API integration for search analytics and indexing",
+      "command": "npx",
+      "args": ["-y", "mcp-server-gsc"],
+      "env": {
+        "GSC_CREDENTIALS_PATH": "/Users/kris/CLAUDEtools/GSC Orchestrai IAM Admin Krisbal.json",
+        "GSC_SKIP_OAUTH": "true"
+      },
+      "capabilities": ["search-analytics", "indexing-status", "sitemap-management", "url-inspection", "performance-data"],
+      "priority": "high",
+      "enabled": true
+    },
     "memory": {
       "name": "memory",
       "description": "Persistent knowledge graphs",

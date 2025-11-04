@@ -1,0 +1,691 @@
+/**
+ * Token Monitor WebSocket Server
+ * Real-time token usage and cost monitoring for Claude Code
+ * Integrates with hooks-manager.js and broadcasts updates to connected clients
+ */
+
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+const path = require('path');
+const TokenAggregator = require('./token-aggregator');
+
+class TokenMonitorServer {
+  constructor(options = {}) {
+    this.options = {
+      port: options.port || 5505,
+      hooksManagerPort: options.hooksManagerPort || 5501,
+      corsOrigins: options.corsOrigins || ['http://localhost:3000', 'http://localhost:5501'],
+      heartbeatInterval: options.heartbeatInterval || 30000, // 30 seconds
+      silent: options.silent || false, // Silent mode (no console.log)
+      ...options
+    };
+
+    // Logger that respects silent mode
+    this.log = (...args) => {
+      if (!this.options.silent) {
+        console.log(...args);
+      }
+    };
+    this.logError = (...args) => {
+      if (!this.options.silent) {
+        console.error(...args);
+      }
+    };
+
+    // Initialize components
+    this.app = express();
+    this.server = http.createServer(this.app);
+    this.wss = new WebSocket.Server({ server: this.server });
+    this.aggregator = new TokenAggregator({
+      maxWorkflowHistory: 10,
+      maxSessionHistory: 50
+    });
+
+    // Client management
+    this.clients = new Set();
+    this.clientMetadata = new Map();
+
+    // Hooks manager reference (set externally)
+    this.hooksManager = null;
+
+    // Server state
+    this.isRunning = false;
+    this.startTime = null;
+
+    // Setup server
+    this.setupMiddleware();
+    this.setupWebSocket();
+    this.setupAPIRoutes();
+    this.setupHealthCheck();
+  }
+
+  /**
+   * Setup Express middleware
+   */
+  setupMiddleware() {
+    this.app.use(express.json());
+
+    // CORS middleware
+    this.app.use((req, res, next) => {
+      const origin = req.headers.origin;
+      if (this.options.corsOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+      }
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+      if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+      }
+      next();
+    });
+
+    // Request logging
+    this.app.use((req, res, next) => {
+      this.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+      next();
+    });
+  }
+
+  /**
+   * Setup WebSocket server and handlers
+   */
+  setupWebSocket() {
+    this.wss.on('connection', (ws, req) => {
+      const clientId = this.generateClientId();
+      const clientIp = req.socket.remoteAddress;
+
+      this.log(`🔌 Client connected: ${clientId} from ${clientIp}`);
+
+      // Store client
+      this.clients.add(ws);
+      this.clientMetadata.set(ws, {
+        id: clientId,
+        connectedAt: Date.now(),
+        ip: clientIp,
+        lastHeartbeat: Date.now()
+      });
+
+      // Send initial data
+      ws.send(JSON.stringify({
+        type: 'connection',
+        clientId,
+        data: {
+          message: 'Connected to Token Monitor Server',
+          snapshot: this.aggregator.getSnapshot()
+        }
+      }));
+
+      // Handle messages from client
+      ws.on('message', (message) => {
+        try {
+          const data = JSON.parse(message);
+          this.handleClientMessage(ws, data);
+        } catch (error) {
+          console.error('Error parsing client message:', error);
+          ws.send(JSON.stringify({
+            type: 'error',
+            error: 'Invalid message format'
+          }));
+        }
+      });
+
+      // Handle pong (heartbeat response)
+      ws.on('pong', () => {
+        const metadata = this.clientMetadata.get(ws);
+        if (metadata) {
+          metadata.lastHeartbeat = Date.now();
+        }
+      });
+
+      // Handle client disconnect
+      ws.on('close', () => {
+        console.log(`🔌 Client disconnected: ${clientId}`);
+        this.clients.delete(ws);
+        this.clientMetadata.delete(ws);
+      });
+
+      // Handle errors
+      ws.on('error', (error) => {
+        console.error(`WebSocket error for client ${clientId}:`, error);
+      });
+    });
+
+    // Start heartbeat interval
+    this.heartbeatInterval = setInterval(() => {
+      this.sendHeartbeat();
+    }, this.options.heartbeatInterval);
+  }
+
+  /**
+   * Handle messages from WebSocket clients
+   * @param {WebSocket} ws - Client WebSocket
+   * @param {Object} data - Message data
+   */
+  handleClientMessage(ws, data) {
+    const { type, payload } = data;
+
+    switch (type) {
+      case 'ping':
+        ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
+        break;
+
+      case 'get_snapshot':
+        ws.send(JSON.stringify({
+          type: 'snapshot',
+          data: this.aggregator.getSnapshot()
+        }));
+        break;
+
+      case 'get_stats':
+        ws.send(JSON.stringify({
+          type: 'statistics',
+          data: this.aggregator.getStatistics()
+        }));
+        break;
+
+      case 'subscribe':
+        // Handle subscription to specific event types
+        const metadata = this.clientMetadata.get(ws);
+        if (metadata) {
+          metadata.subscriptions = payload?.events || ['all'];
+        }
+        ws.send(JSON.stringify({
+          type: 'subscribed',
+          events: metadata?.subscriptions || ['all']
+        }));
+        break;
+
+      default:
+        ws.send(JSON.stringify({
+          type: 'error',
+          error: `Unknown message type: ${type}`
+        }));
+    }
+  }
+
+  /**
+   * Send heartbeat to all connected clients
+   */
+  sendHeartbeat() {
+    const now = Date.now();
+    const snapshot = this.aggregator.getSnapshot();
+
+    this.clients.forEach((ws) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.ping();
+
+        // Send mini update with current stats
+        ws.send(JSON.stringify({
+          type: 'heartbeat',
+          timestamp: now,
+          stats: {
+            totalCost: snapshot.session.totalCost,
+            totalTokens: snapshot.session.totalTokens,
+            workflowCount: snapshot.session.workflowCount
+          }
+        }));
+      }
+    });
+
+    // Clean up dead connections
+    this.cleanupDeadConnections();
+  }
+
+  /**
+   * Clean up connections that haven't responded to heartbeat
+   */
+  cleanupDeadConnections() {
+    const now = Date.now();
+    const timeout = this.options.heartbeatInterval * 3; // 3x heartbeat interval
+
+    this.clients.forEach((ws) => {
+      const metadata = this.clientMetadata.get(ws);
+      if (metadata && now - metadata.lastHeartbeat > timeout) {
+        console.log(`⚠️  Terminating dead connection: ${metadata.id}`);
+        ws.terminate();
+        this.clients.delete(ws);
+        this.clientMetadata.delete(ws);
+      }
+    });
+  }
+
+  /**
+   * Setup REST API routes
+   */
+  setupAPIRoutes() {
+    // Get current session statistics
+    this.app.get('/api/session-stats', (req, res) => {
+      try {
+        const stats = this.aggregator.getSessionSummary();
+        res.json({
+          success: true,
+          data: stats,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error getting session stats:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Get workflow history
+    this.app.get('/api/workflows', (req, res) => {
+      try {
+        const limit = parseInt(req.query.limit) || 10;
+        const workflows = this.aggregator.getWorkflowHistory(limit);
+        res.json({
+          success: true,
+          data: workflows,
+          count: workflows.length,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error getting workflows:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Get cost breakdown
+    this.app.get('/api/costs', (req, res) => {
+      try {
+        const costs = this.aggregator.getCostBreakdown();
+        res.json({
+          success: true,
+          data: costs,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error getting costs:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Get full statistics
+    this.app.get('/api/statistics', (req, res) => {
+      try {
+        const statistics = this.aggregator.getStatistics();
+        res.json({
+          success: true,
+          data: statistics,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error getting statistics:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Get complete snapshot
+    this.app.get('/api/snapshot', (req, res) => {
+      try {
+        const snapshot = this.aggregator.getSnapshot();
+        res.json({
+          success: true,
+          data: snapshot,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error getting snapshot:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Reset session counters
+    this.app.post('/api/reset', (req, res) => {
+      try {
+        const result = this.aggregator.resetSession();
+
+        // Broadcast reset to all clients
+        this.broadcast({
+          type: 'session_reset',
+          data: result
+        });
+
+        res.json({
+          success: true,
+          data: result,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error resetting session:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Direct token usage submission (bypasses hooks manager)
+    this.app.post('/api/token-usage', (req, res) => {
+      try {
+        const { workflow, tokenData } = req.body;
+
+        if (!tokenData || !tokenData.inputTokens === undefined) {
+          return res.status(400).json({
+            success: false,
+            error: 'Missing required fields: tokenData.inputTokens, tokenData.outputTokens'
+          });
+        }
+
+        // Process token usage
+        const result = this.aggregator.processTokenUsage({
+          workflow: workflow || {
+            id: `manual-${Date.now()}`,
+            intent: 'Manual submission'
+          },
+          tokenData: {
+            inputTokens: tokenData.inputTokens || 0,
+            outputTokens: tokenData.outputTokens || 0,
+            model: tokenData.model || 'claude-sonnet-4-5-20250929'
+          }
+        });
+
+        // Broadcast to all connected clients
+        this.broadcast({
+          type: 'token_usage',
+          data: result
+        });
+
+        res.json({
+          success: true,
+          data: result,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error processing token usage:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+
+    // Get connected clients info
+    this.app.get('/api/clients', (req, res) => {
+      try {
+        const clientInfo = Array.from(this.clientMetadata.values()).map(metadata => ({
+          id: metadata.id,
+          connectedAt: metadata.connectedAt,
+          uptime: Date.now() - metadata.connectedAt,
+          subscriptions: metadata.subscriptions || ['all']
+        }));
+
+        res.json({
+          success: true,
+          data: {
+            count: this.clients.size,
+            clients: clientInfo
+          },
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error('Error getting clients:', error);
+        res.status(500).json({
+          success: false,
+          error: error.message
+        });
+      }
+    });
+  }
+
+  /**
+   * Setup health check endpoint
+   */
+  setupHealthCheck() {
+    this.app.get('/health', (req, res) => {
+      const uptime = this.startTime ? Date.now() - this.startTime : 0;
+
+      res.json({
+        status: 'healthy',
+        service: 'Token Monitor Server',
+        version: '1.0.0',
+        uptime,
+        port: this.options.port,
+        connectedClients: this.clients.size,
+        hooksManagerConnected: this.hooksManager !== null,
+        timestamp: Date.now()
+      });
+    });
+  }
+
+  /**
+   * Connect to hooks manager and setup event listeners
+   * @param {ClaudeCodeHooksManager} hooksManager - Hooks manager instance
+   */
+  connectToHooksManager(hooksManager) {
+    if (!hooksManager) {
+      console.error('❌ Invalid hooks manager provided');
+      return false;
+    }
+
+    this.hooksManager = hooksManager;
+
+    // Listen for token usage events
+    hooksManager.on('tokens-used', (data) => {
+      const result = this.aggregator.processTokenUsage(data);
+      this.broadcast({
+        type: 'token_usage',
+        data: result
+      });
+    });
+
+    // Listen for workflow events
+    hooksManager.on('workflow-initiated', (workflow) => {
+      const result = this.aggregator.processWorkflowInitiated(workflow);
+      this.broadcast({
+        type: 'workflow_initiated',
+        data: { workflow, result }
+      });
+    });
+
+    hooksManager.on('workflow-completed', (data) => {
+      const result = this.aggregator.processWorkflowCompleted(data);
+      this.broadcast({
+        type: 'workflow_completed',
+        data: result
+      });
+    });
+
+    hooksManager.on('session-started', (data) => {
+      this.broadcast({
+        type: 'session_started',
+        data
+      });
+    });
+
+    hooksManager.on('session-ended', (data) => {
+      this.broadcast({
+        type: 'session_ended',
+        data
+      });
+    });
+
+    console.log('✅ Connected to Claude Code Hooks Manager');
+    return true;
+  }
+
+  /**
+   * Broadcast message to all connected clients
+   * @param {Object} message - Message to broadcast
+   * @param {Function} filter - Optional filter function for selective broadcasting
+   */
+  broadcast(message, filter = null) {
+    const payload = JSON.stringify({
+      ...message,
+      timestamp: Date.now()
+    });
+
+    let sentCount = 0;
+
+    this.clients.forEach((ws) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        // Apply filter if provided
+        if (filter && !filter(ws, this.clientMetadata.get(ws))) {
+          return;
+        }
+
+        ws.send(payload);
+        sentCount++;
+      }
+    });
+
+    if (sentCount > 0) {
+      this.log(`📡 Broadcasted ${message.type} to ${sentCount} client(s)`);
+    }
+  }
+
+  /**
+   * Start the server
+   * @returns {Promise<boolean>} Success status
+   */
+  async start() {
+    return new Promise((resolve, reject) => {
+      try {
+        this.server.listen(this.options.port, () => {
+          this.isRunning = true;
+          this.startTime = Date.now();
+
+          console.log('');
+          console.log('🚀 Token Monitor Server Started');
+          console.log('================================');
+          console.log(`📡 WebSocket Server: ws://localhost:${this.options.port}`);
+          console.log(`🌐 HTTP API: http://localhost:${this.options.port}`);
+          console.log(`❤️  Health Check: http://localhost:${this.options.port}/health`);
+          console.log('');
+          console.log('API Endpoints:');
+          console.log(`  GET  /api/session-stats  - Current session statistics`);
+          console.log(`  GET  /api/workflows      - Recent workflow history`);
+          console.log(`  GET  /api/costs          - Cost breakdown`);
+          console.log(`  GET  /api/statistics     - Full statistics`);
+          console.log(`  GET  /api/snapshot       - Complete monitoring snapshot`);
+          console.log(`  POST /api/reset          - Reset session counters`);
+          console.log(`  GET  /api/clients        - Connected clients info`);
+          console.log('');
+          console.log('WebSocket Events:');
+          console.log('  - token_usage           - Real-time token usage updates');
+          console.log('  - workflow_initiated    - Workflow start notifications');
+          console.log('  - workflow_completed    - Workflow completion notifications');
+          console.log('  - heartbeat             - Periodic status updates');
+          console.log('================================');
+          console.log('');
+
+          resolve(true);
+        });
+
+        this.server.on('error', (error) => {
+          console.error('❌ Server error:', error);
+          reject(error);
+        });
+      } catch (error) {
+        console.error('❌ Failed to start server:', error);
+        reject(error);
+      }
+    });
+  }
+
+  /**
+   * Stop the server gracefully
+   * @returns {Promise<boolean>} Success status
+   */
+  async stop() {
+    return new Promise((resolve) => {
+      console.log('🛑 Stopping Token Monitor Server...');
+
+      // Clear heartbeat interval
+      if (this.heartbeatInterval) {
+        clearInterval(this.heartbeatInterval);
+      }
+
+      // Close all WebSocket connections
+      this.clients.forEach((ws) => {
+        ws.send(JSON.stringify({
+          type: 'server_shutdown',
+          message: 'Server is shutting down'
+        }));
+        ws.close();
+      });
+
+      // Close WebSocket server
+      this.wss.close(() => {
+        console.log('✅ WebSocket server closed');
+      });
+
+      // Close HTTP server
+      this.server.close(() => {
+        this.isRunning = false;
+        console.log('✅ Token Monitor Server stopped');
+        resolve(true);
+      });
+    });
+  }
+
+  /**
+   * Generate unique client ID
+   * @returns {string} Client ID
+   */
+  generateClientId() {
+    return `client_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+  }
+
+  /**
+   * Get server status
+   * @returns {Object} Server status
+   */
+  getStatus() {
+    return {
+      isRunning: this.isRunning,
+      uptime: this.startTime ? Date.now() - this.startTime : 0,
+      port: this.options.port,
+      connectedClients: this.clients.size,
+      hooksManagerConnected: this.hooksManager !== null,
+      sessionStats: this.aggregator.getSessionSummary()
+    };
+  }
+}
+
+// Export the class
+module.exports = TokenMonitorServer;
+
+// CLI execution if run directly
+if (require.main === module) {
+  const server = new TokenMonitorServer({
+    port: process.env.TOKEN_MONITOR_PORT || 5505
+  });
+
+  // Start server
+  server.start().catch((error) => {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  });
+
+  // Graceful shutdown
+  process.on('SIGINT', async () => {
+    console.log('\n🛑 Received SIGINT, shutting down gracefully...');
+    await server.stop();
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', async () => {
+    console.log('\n🛑 Received SIGTERM, shutting down gracefully...');
+    await server.stop();
+    process.exit(0);
+  });
+}

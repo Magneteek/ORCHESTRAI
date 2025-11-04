@@ -36,7 +36,7 @@ class DataForSEOServer {
 
     // Validate API credentials
     if (!this.apiConfig.username || !this.apiConfig.password) {
-      console.error('⚠️ DataForSEO credentials not found in environment variables');
+      console.error('� DataForSEO credentials not found in environment variables');
       console.error('   Please set DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD');
     }
 
@@ -386,7 +386,7 @@ class DataForSEOServer {
               }
             }
           },
-          // OnPage API - Technical SEO Auditing Tools
+          // OnPage API - Technical SEO Auditing Tools (Live/Instant)
           {
             name: "onpage_lighthouse",
             description: "Run comprehensive Lighthouse performance audit for technical SEO",
@@ -413,8 +413,8 @@ class DataForSEOServer {
             }
           },
           {
-            name: "onpage_summary",
-            description: "Get comprehensive on-page SEO summary including Core Web Vitals",
+            name: "onpage_instant_summary",
+            description: "Get instant on-page SEO summary for a single page including Core Web Vitals",
             inputSchema: {
               type: "object",
               properties: {
@@ -453,6 +453,327 @@ class DataForSEOServer {
                 }
               },
               required: ["url"]
+            }
+          },
+          // OnPage API - Full Site Crawling (Task Management)
+          {
+            name: "onpage_task_post",
+            description: "Start full website crawl with JavaScript rendering and customizable parameters",
+            inputSchema: {
+              type: "object",
+              properties: {
+                target: {
+                  type: "string",
+                  description: "Website URL to crawl (e.g., 'https://example.com')"
+                },
+                max_crawl_pages: {
+                  type: "number",
+                  description: "Maximum pages to crawl (default: 100)",
+                  default: 100
+                },
+                enable_javascript: {
+                  type: "boolean",
+                  description: "Enable JavaScript rendering",
+                  default: true
+                },
+                enable_browser_rendering: {
+                  type: "boolean",
+                  description: "Enable full browser rendering for Core Web Vitals",
+                  default: false
+                },
+                custom_js: {
+                  type: "string",
+                  description: "Custom JavaScript to execute on each page"
+                },
+                load_resources: {
+                  type: "boolean",
+                  description: "Load images, stylesheets, scripts",
+                  default: true
+                },
+                check_spell: {
+                  type: "boolean",
+                  description: "Check spelling errors",
+                  default: false
+                },
+                calculate_keyword_density: {
+                  type: "boolean",
+                  description: "Calculate keyword density",
+                  default: true
+                }
+              },
+              required: ["target"]
+            }
+          },
+          {
+            name: "onpage_tasks_ready",
+            description: "Check which crawl tasks have completed and are ready for data retrieval",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
+          },
+          {
+            name: "onpage_summary",
+            description: "Get summary of on-page issues found during website crawl (requires completed task)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_pages",
+            description: "Get list of all crawled pages with check-ups and performance metrics",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of pages to return",
+                  default: 100
+                },
+                offset: {
+                  type: "number",
+                  description: "Offset for pagination",
+                  default: 0
+                },
+                filters: {
+                  type: "array",
+                  description: "Filter criteria (e.g., ['status_code', '=', 404])"
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_resources",
+            description: "Get list of resources (images, scripts, stylesheets, etc.) found on website",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of resources to return",
+                  default: 100
+                },
+                filters: {
+                  type: "array",
+                  description: "Filter criteria (e.g., ['resource_type', '=', 'image'])"
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_links",
+            description: "Get list of internal and external links detected on target website",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of links to return",
+                  default: 100
+                },
+                filters: {
+                  type: "array",
+                  description: "Filter criteria (e.g., ['dofollow', '=', true])"
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_redirect_chains",
+            description: "Identify and trace redirect chains on website",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of redirect chains to return",
+                  default: 100
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_non_indexable",
+            description: "Get pages blocked from being indexed by search engines",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of pages to return",
+                  default: 100
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_duplicate_tags",
+            description: "Find pages with duplicate title or description tags",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of duplicates to return",
+                  default: 100
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_duplicate_content",
+            description: "Find pages with content similar to specified page",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                url: {
+                  type: "string",
+                  description: "URL of page to compare against"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of similar pages to return",
+                  default: 100
+                }
+              },
+              required: ["id", "url"]
+            }
+          },
+          {
+            name: "onpage_keyword_density",
+            description: "Get keyword density and frequency data for website",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                keyword: {
+                  type: "string",
+                  description: "Keyword to analyze density for"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of results to return",
+                  default: 100
+                }
+              },
+              required: ["id"]
+            }
+          },
+          {
+            name: "onpage_waterfall",
+            description: "Get page speed waterfall data for performance analysis",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                url: {
+                  type: "string",
+                  description: "Specific page URL to get waterfall for"
+                }
+              },
+              required: ["id", "url"]
+            }
+          },
+          {
+            name: "onpage_raw_html",
+            description: "Get raw HTML source of a crawled page",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                url: {
+                  type: "string",
+                  description: "Specific page URL to get HTML for"
+                }
+              },
+              required: ["id", "url"]
+            }
+          },
+          {
+            name: "onpage_pages_by_resource",
+            description: "Find pages that contain a specific resource (image, script, etc.)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID from completed crawl"
+                },
+                resource_url: {
+                  type: "string",
+                  description: "URL of resource to search for"
+                },
+                limit: {
+                  type: "number",
+                  description: "Max number of pages to return",
+                  default: 100
+                }
+              },
+              required: ["id", "resource_url"]
+            }
+          },
+          {
+            name: "onpage_force_stop",
+            description: "Force stop a running crawl task",
+            inputSchema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  description: "Task ID to stop"
+                }
+              },
+              required: ["id"]
             }
           },
           // Additional SERP API - Specialized Search Types
@@ -810,13 +1131,44 @@ class DataForSEOServer {
             return await this.getCategoriesForDomain(args);
           case "top_searches":
             return await this.getTopSearches(args);
-          // OnPage API Tools
+          // OnPage API Tools - Live (Single Page)
           case "onpage_lighthouse":
             return await this.getOnPageLighthouse(args);
-          case "onpage_summary":
-            return await this.getOnPageSummary(args);
+          case "onpage_instant_summary":
+            return await this.getOnPageInstantSummary(args);
           case "onpage_page_screenshot":
             return await this.getOnPageScreenshot(args);
+          // OnPage API Tools - Full Site Crawling
+          case "onpage_task_post":
+            return await this.postOnPageTask(args);
+          case "onpage_tasks_ready":
+            return await this.getOnPageTasksReady(args);
+          case "onpage_summary":
+            return await this.getOnPageSummary(args);
+          case "onpage_pages":
+            return await this.getOnPagePages(args);
+          case "onpage_resources":
+            return await this.getOnPageResources(args);
+          case "onpage_links":
+            return await this.getOnPageLinks(args);
+          case "onpage_redirect_chains":
+            return await this.getOnPageRedirectChains(args);
+          case "onpage_non_indexable":
+            return await this.getOnPageNonIndexable(args);
+          case "onpage_duplicate_tags":
+            return await this.getOnPageDuplicateTags(args);
+          case "onpage_duplicate_content":
+            return await this.getOnPageDuplicateContent(args);
+          case "onpage_keyword_density":
+            return await this.getOnPageKeywordDensity(args);
+          case "onpage_waterfall":
+            return await this.getOnPageWaterfall(args);
+          case "onpage_raw_html":
+            return await this.getOnPageRawHTML(args);
+          case "onpage_pages_by_resource":
+            return await this.getOnPagePagesByResource(args);
+          case "onpage_force_stop":
+            return await this.forceStopOnPageTask(args);
           // Additional SERP API Tools
           case "serp_google_maps":
             return await this.getSerpGoogleMaps(args);
@@ -865,20 +1217,20 @@ class DataForSEOServer {
   // Helper method to make DataForSEO API calls
   async makeAPICall(endpoint, postData = []) {
     const cacheKey = `${endpoint}_${JSON.stringify(postData)}`;
-    
+
     // Check cache first
     if (this.cache.has(cacheKey)) {
       const cached = this.cache.get(cacheKey);
       if (Date.now() - cached.timestamp < this.cacheTimeout) {
-        console.log(`📋 Using cached data for ${endpoint}`);
+        console.log(`=� Using cached data for ${endpoint}`);
         return cached.data;
       }
       this.cache.delete(cacheKey);
     }
 
     try {
-      console.log(`🔍 Making DataForSEO API call: ${endpoint}`);
-      
+      console.log(`= Making DataForSEO API call: ${endpoint}`);
+
       const response = await axios({
         method: 'POST',
         url: `${this.apiConfig.baseURL}${endpoint}`,
@@ -897,14 +1249,14 @@ class DataForSEOServer {
           data: response.data,
           timestamp: Date.now()
         });
-        
-        console.log(`✅ DataForSEO API call successful: ${endpoint}`);
+
+        console.log(` DataForSEO API call successful: ${endpoint}`);
         return response.data;
       } else {
         throw new Error(`API Error: ${response.data?.status_message || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error(`❌ DataForSEO API Error (${endpoint}):`, error.message);
+      console.error(`L DataForSEO API Error (${endpoint}):`, error.message);
       throw error;
     }
   }
@@ -912,7 +1264,7 @@ class DataForSEOServer {
   // Keyword Research Tools Implementation
   async getKeywordOverview(args) {
     const { keywords, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       keywords,
       location_code,
@@ -920,7 +1272,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/keyword_overview/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -931,7 +1283,7 @@ class DataForSEOServer {
 
   async getRelatedKeywords(args) {
     const { keyword, location_code = 2840, language_name = "English", limit = 100 } = args;
-    
+
     const postData = [{
       keyword,
       location_code,
@@ -940,7 +1292,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/related_keywords/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -951,7 +1303,7 @@ class DataForSEOServer {
 
   async getKeywordSuggestions(args) {
     const { keyword, location_code = 2840, language_name = "English", limit = 100 } = args;
-    
+
     const postData = [{
       keyword,
       location_code,
@@ -960,7 +1312,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/keyword_suggestions/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -971,7 +1323,7 @@ class DataForSEOServer {
 
   async getKeywordIdeas(args) {
     const { keyword, location_code = 2840, language_name = "English", limit = 100 } = args;
-    
+
     const postData = [{
       keyword,
       location_code,
@@ -980,7 +1332,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/keyword_ideas/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -991,7 +1343,7 @@ class DataForSEOServer {
 
   async getSearchIntent(args) {
     const { keywords, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       keywords,
       location_code,
@@ -999,7 +1351,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/search_intent/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1011,7 +1363,7 @@ class DataForSEOServer {
   // SERP Analysis Tools Implementation
   async getSerpCompetitors(args) {
     const { keyword, location_code = 2840, language_name = "English", limit = 10 } = args;
-    
+
     const postData = [{
       keyword,
       location_code,
@@ -1020,7 +1372,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/serp_competitors/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1032,7 +1384,7 @@ class DataForSEOServer {
   // Domain Analysis Tools Implementation
   async getDomainKeywords(args) {
     const { target, location_code = 2840, language_name = "English", limit = 100 } = args;
-    
+
     const postData = [{
       target,
       location_code,
@@ -1041,7 +1393,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/ranked_keywords/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1052,7 +1404,7 @@ class DataForSEOServer {
 
   async getCompetitorDomains(args) {
     const { target, location_code = 2840, language_name = "English", limit = 20 } = args;
-    
+
     const postData = [{
       target,
       location_code,
@@ -1061,7 +1413,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/competitors_domain/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1072,7 +1424,7 @@ class DataForSEOServer {
 
   async getDomainIntersection(args) {
     const { targets, location_code = 2840, language_name = "English", limit = 100 } = args;
-    
+
     const postData = [{
       targets,
       location_code,
@@ -1081,7 +1433,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/domain_intersection/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1092,7 +1444,7 @@ class DataForSEOServer {
 
   async getTrafficEstimation(args) {
     const { targets, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       targets,
       location_code,
@@ -1100,7 +1452,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/bulk_traffic_estimation/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1112,7 +1464,7 @@ class DataForSEOServer {
   // Market Analysis Tools Implementation
   async getCategoriesForDomain(args) {
     const { target, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       target,
       location_code,
@@ -1120,7 +1472,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/categories_for_domain/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1131,7 +1483,7 @@ class DataForSEOServer {
 
   async getTopSearches(args) {
     const { location_code = 2840, language_name = "English", category_code, limit = 100 } = args;
-    
+
     const postData = [{
       location_code,
       language_name,
@@ -1140,7 +1492,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/dataforseo_labs/google/top_searches/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1149,10 +1501,10 @@ class DataForSEOServer {
     };
   }
 
-  // OnPage API Tools Implementation
+  // OnPage API Tools Implementation - Live (Single Page)
   async getOnPageLighthouse(args) {
     const { url, enable_javascript = true, audits = ["accessibility", "best-practices", "performance", "pwa", "seo"] } = args;
-    
+
     const postData = [{
       url,
       enable_javascript,
@@ -1160,7 +1512,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/on_page/lighthouse/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1169,27 +1521,27 @@ class DataForSEOServer {
     };
   }
 
-  async getOnPageSummary(args) {
+  async getOnPageInstantSummary(args) {
     const { url, enable_javascript = true } = args;
-    
+
     const postData = [{
       url,
       enable_javascript
     }];
 
-    const response = await this.makeAPICall('/on_page/summary/live', postData);
-    
+    const response = await this.makeAPICall('/on_page/instant_pages', postData);
+
     return {
       content: [{
         type: "text",
-        text: `OnPage SEO Summary (Core Web Vitals):\n${SafeJSON.stringify(response)}`
+        text: `Instant On-Page SEO Summary:\n${SafeJSON.stringify(response)}`
       }]
     };
   }
 
   async getOnPageScreenshot(args) {
     const { url, full_page_screenshot = true, enable_javascript = true } = args;
-    
+
     const postData = [{
       url,
       full_page_screenshot,
@@ -1197,7 +1549,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/on_page/page_screenshot/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1206,10 +1558,294 @@ class DataForSEOServer {
     };
   }
 
+  // OnPage API Tools Implementation - Full Site Crawling
+  async postOnPageTask(args) {
+    const {
+      target,
+      max_crawl_pages = 100,
+      enable_javascript = true,
+      enable_browser_rendering = false,
+      custom_js,
+      load_resources = true,
+      check_spell = false,
+      calculate_keyword_density = true
+    } = args;
+
+    const postData = [{
+      target,
+      max_crawl_pages,
+      enable_javascript,
+      enable_browser_rendering,
+      ...(custom_js && { custom_js }),
+      load_resources,
+      check_spell,
+      calculate_keyword_density
+    }];
+
+    const response = await this.makeAPICall('/on_page/task_post', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Crawl Task Started:\n${SafeJSON.stringify(response)}\n\nUse the task ID to check status with onpage_tasks_ready and retrieve results.`
+      }]
+    };
+  }
+
+  async getOnPageTasksReady() {
+    const response = await this.makeAPICall('/on_page/tasks_ready', []);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Ready Crawl Tasks:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageSummary(args) {
+    const { id } = args;
+
+    const postData = [{
+      id
+    }];
+
+    const response = await this.makeAPICall('/on_page/summary', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `OnPage SEO Summary:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPagePages(args) {
+    const { id, limit = 100, offset = 0, filters } = args;
+
+    const postData = [{
+      id,
+      limit,
+      offset,
+      ...(filters && { filters })
+    }];
+
+    const response = await this.makeAPICall('/on_page/pages', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Crawled Pages:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageResources(args) {
+    const { id, limit = 100, filters } = args;
+
+    const postData = [{
+      id,
+      limit,
+      ...(filters && { filters })
+    }];
+
+    const response = await this.makeAPICall('/on_page/resources', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Website Resources:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageLinks(args) {
+    const { id, limit = 100, filters } = args;
+
+    const postData = [{
+      id,
+      limit,
+      ...(filters && { filters })
+    }];
+
+    const response = await this.makeAPICall('/on_page/links', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Website Links:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageRedirectChains(args) {
+    const { id, limit = 100 } = args;
+
+    const postData = [{
+      id,
+      limit
+    }];
+
+    const response = await this.makeAPICall('/on_page/redirect_chains', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Redirect Chains:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageNonIndexable(args) {
+    const { id, limit = 100 } = args;
+
+    const postData = [{
+      id,
+      limit
+    }];
+
+    const response = await this.makeAPICall('/on_page/non_indexable', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Non-Indexable Pages:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageDuplicateTags(args) {
+    const { id, limit = 100 } = args;
+
+    const postData = [{
+      id,
+      limit
+    }];
+
+    const response = await this.makeAPICall('/on_page/duplicate_tags', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Duplicate Tags:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageDuplicateContent(args) {
+    const { id, url, limit = 100 } = args;
+
+    const postData = [{
+      id,
+      url,
+      limit
+    }];
+
+    const response = await this.makeAPICall('/on_page/duplicate_content', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Duplicate Content:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageKeywordDensity(args) {
+    const { id, keyword, limit = 100 } = args;
+
+    const postData = [{
+      id,
+      ...(keyword && { keyword }),
+      limit
+    }];
+
+    const response = await this.makeAPICall('/on_page/keyword_density', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Keyword Density Analysis:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageWaterfall(args) {
+    const { id, url } = args;
+
+    const postData = [{
+      id,
+      url
+    }];
+
+    const response = await this.makeAPICall('/on_page/waterfall', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Page Speed Waterfall:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPageRawHTML(args) {
+    const { id, url } = args;
+
+    const postData = [{
+      id,
+      url
+    }];
+
+    const response = await this.makeAPICall('/on_page/raw_html', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Raw HTML:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async getOnPagePagesByResource(args) {
+    const { id, resource_url, limit = 100 } = args;
+
+    const postData = [{
+      id,
+      resource_url,
+      limit
+    }];
+
+    const response = await this.makeAPICall('/on_page/pages_by_resource', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Pages Using Resource:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
+  async forceStopOnPageTask(args) {
+    const { id } = args;
+
+    const postData = [{
+      id
+    }];
+
+    const response = await this.makeAPICall('/on_page/force_stop', postData);
+
+    return {
+      content: [{
+        type: "text",
+        text: `Crawl Task Stopped:\n${SafeJSON.stringify(response)}`
+      }]
+    };
+  }
+
   // Additional SERP API Tools Implementation
   async getSerpGoogleMaps(args) {
     const { keyword, location_name, language_name = "English" } = args;
-    
+
     const postData = [{
       keyword,
       ...(location_name && { location_name }),
@@ -1217,7 +1853,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/serp/google/maps/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1228,7 +1864,7 @@ class DataForSEOServer {
 
   async getSerpGoogleNews(args) {
     const { keyword, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       keyword,
       location_code,
@@ -1236,7 +1872,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/serp/google/news/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1247,7 +1883,7 @@ class DataForSEOServer {
 
   async getSerpGoogleImages(args) {
     const { keyword, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       keyword,
       location_code,
@@ -1255,7 +1891,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/serp/google/images/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1266,7 +1902,7 @@ class DataForSEOServer {
 
   async getSerpGoogleJobs(args) {
     const { keyword, location_name, language_name = "English" } = args;
-    
+
     const postData = [{
       keyword,
       ...(location_name && { location_name }),
@@ -1274,7 +1910,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/serp/google/jobs/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1286,7 +1922,7 @@ class DataForSEOServer {
   // Content Analysis API Tools Implementation
   async getContentAnalysisSummary(args) {
     const { url, keyword, enable_javascript = true } = args;
-    
+
     const postData = [{
       url,
       keyword,
@@ -1294,7 +1930,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/content_analysis/summary/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1305,7 +1941,7 @@ class DataForSEOServer {
 
   async getContentAnalysisPhraseTrends(args) {
     const { url, keyword, location_code = 2840, language_name = "English" } = args;
-    
+
     const postData = [{
       url,
       keyword,
@@ -1314,7 +1950,7 @@ class DataForSEOServer {
     }];
 
     const response = await this.makeAPICall('/content_analysis/phrase_trends/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1326,14 +1962,14 @@ class DataForSEOServer {
   // Domain Analytics API Tools Implementation
   async getDomainTechnologies(args) {
     const { target, limit = 100 } = args;
-    
+
     const postData = [{
       target,
       limit
     }];
 
     const response = await this.makeAPICall('/domain_analytics/technologies/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1344,13 +1980,13 @@ class DataForSEOServer {
 
   async getDomainWhoisOverview(args) {
     const { targets } = args;
-    
+
     const postData = [{
       targets
     }];
 
     const response = await this.makeAPICall('/domain_analytics/whois/overview/live', postData);
-    
+
     return {
       content: [{
         type: "text",
@@ -1473,7 +2109,7 @@ class DataForSEOServer {
     return {
       content: [{
         type: "text",
-        text: `Filtered Low-Rating Reviews (CID: ${cid}, ≤${max_rating} stars, last ${days_back} days):\n${SafeJSON.stringify(filteredResults)}`
+        text: `Filtered Low-Rating Reviews (CID: ${cid}, d${max_rating} stars, last ${days_back} days):\n${SafeJSON.stringify(filteredResults)}`
       }]
     };
   }

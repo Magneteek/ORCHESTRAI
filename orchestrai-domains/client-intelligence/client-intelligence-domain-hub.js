@@ -269,7 +269,7 @@ class ClientIntelligenceDomainHub extends EventEmitter {
 
   async setupAPIEndpoints() {
     console.log('⚡ Starting client intelligence coordination services...');
-    
+
     // Client creation endpoint
     this.orchestrator.app.post('/client/create', async (req, res) => {
       try {
@@ -279,7 +279,7 @@ class ClientIntelligenceDomainHub extends EventEmitter {
         res.status(500).json({ error: error.message });
       }
     });
-    
+
     // Client context endpoint
     this.orchestrator.app.get('/client/:clientId/context', async (req, res) => {
       try {
@@ -289,7 +289,32 @@ class ClientIntelligenceDomainHub extends EventEmitter {
         res.status(404).json({ error: error.message });
       }
     });
-    
+
+    // Generate HTML report from JSON intelligence data
+    this.orchestrator.app.post('/client/:clientId/generate-html-report', async (req, res) => {
+      try {
+        const result = await this.generateHTMLIntelligenceReport({
+          clientId: req.params.clientId,
+          jsonReportPath: req.body.jsonReportPath,
+          reportType: req.body.reportType || 'comprehensive',
+          outputPath: req.body.outputPath
+        });
+        res.json(result);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    // Batch generate HTML reports for all JSON reports in client folder
+    this.orchestrator.app.post('/client/:clientId/generate-all-html-reports', async (req, res) => {
+      try {
+        const results = await this.generateAllHTMLReports(req.params.clientId);
+        res.json(results);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
     // Client intelligence status endpoint
     this.orchestrator.app.get('/client/status', (req, res) => {
       res.json({
@@ -303,8 +328,10 @@ class ClientIntelligenceDomainHub extends EventEmitter {
         timestamp: Date.now()
       });
     });
-    
+
     console.log('✅ Client intelligence coordination services started');
+    console.log('   → HTML Report Generation: POST /client/:clientId/generate-html-report');
+    console.log('   → Batch HTML Generation: POST /client/:clientId/generate-all-html-reports');
   }
 
   // Client Intelligence Methods (Following SEO Pattern)
@@ -480,20 +507,75 @@ Execute this task using your specialized ${agentSpec.specialization} capabilitie
         status: 'delegated_to_claude_code'
       };
 
-      // Simulate Claude Code execution with structured response
-      const result = await this.simulateClaudeCodeExecution(agentType, taskDelegation, task);
+      // Return delegation instructions for orchestrai-master-coordinator to execute via Task tool
+      // This replaces the previous simulation with real Claude Code agent invocation
+      const delegation = {
+        // Delegation metadata
+        requiresClaudeCodeExecution: true,
+        delegationType: 'task-tool',
+        delegationId: `deleg-${agentType}-${Date.now()}`,
 
-      // Update performance metrics
-      const processingTime = Date.now() - startTime;
-      agent.metrics.avgProcessingTime = 
-        (agent.metrics.avgProcessingTime * (agent.metrics.tasksHandled - 1) + processingTime) / 
-        agent.metrics.tasksHandled;
-      
-      agent.metrics.successRate = 
-        (agent.metrics.successRate * (agent.metrics.tasksHandled - 1) + 1) / 
-        agent.metrics.tasksHandled;
+        // Agent information
+        agentType: agentSpec.claudeCodeAgent,
+        agentSpecialization: agentSpec.specialization,
+        agentName: agentSpec.name,
 
-      return result;
+        // Task information
+        taskPrompt: enhancedPrompt,
+        taskContext: taskContext,
+        taskType: task.type || 'client-intelligence',
+
+        // Infrastructure status
+        infrastructureComplete: true,
+        infrastructureResults: {
+          clientId: task.clientId,
+          domain: 'client-intelligence',
+          memoryInitialized: true,
+          filesystemReady: true
+        },
+
+        // Expected deliverables
+        expectedDeliverables: taskContext.deliverables,
+        estimatedDuration: this.estimateAgentDuration(agentSpec),
+
+        // Coordination instructions for orchestrai-master-coordinator
+        coordinationInstructions: `
+ORCHESTRAI Client Intelligence Domain Hub has prepared this task.
+
+Infrastructure Status: ✅ Complete
+- Client folder structure created
+- Crystalline memory initialized
+- Context files staged
+
+Next Step: Invoke Claude Code Agent
+- Agent: ${agentSpec.claudeCodeAgent}
+- Specialization: ${agentSpec.specialization}
+- Use Task tool with the prepared taskPrompt
+
+After agent execution completes, results will be integrated into ORCHESTRAI system.
+        `.trim(),
+
+        // Execution metadata
+        preparedAt: new Date().toISOString(),
+        preparedBy: 'client-intelligence-domain-hub',
+        nodeJSProcessingTime: Date.now() - startTime
+      };
+
+      // Track delegation metrics
+      agent.metrics.delegationsCreated = (agent.metrics.delegationsCreated || 0) + 1;
+      agent.metrics.lastDelegation = delegation.delegationId;
+
+      // Store delegation in crystalline memory for tracking
+      await this.crystallineMemory.storeMemory(
+        `delegation-${delegation.delegationId}`,
+        delegation
+      );
+
+      console.log(`✅ Delegation prepared: ${delegation.delegationId}`);
+      console.log(`   Agent: ${agentSpec.claudeCodeAgent}`);
+      console.log(`   Awaiting orchestrai-master-coordinator execution via Task tool`);
+
+      return delegation;
 
     } catch (error) {
       console.error(`❌ Client Intelligence delegation failed for ${agentType}:`, error);
@@ -501,11 +583,40 @@ Execute this task using your specialized ${agentSpec.specialization} capabilitie
     }
   }
 
+  /**
+   * Estimate agent execution duration based on agent type and specialization
+   */
+  estimateAgentDuration(agentSpec) {
+    const durationEstimates = {
+      'client-project-orchestrator': 60000,          // 1 minute
+      'client-icp-analyst': 120000,                  // 2 minutes
+      'client-branding-intelligence': 90000,         // 1.5 minutes
+      'client-business-context-analyzer': 120000,    // 2 minutes
+      'client-market-intelligence-synthesizer': 180000, // 3 minutes
+      'client-context-integration-coordinator': 90000   // 1.5 minutes
+    };
+
+    return durationEstimates[agentSpec.id] || 120000; // Default 2 minutes
+  }
+
+  /**
+   * DEPRECATED: simulateClaudeCodeExecution
+   *
+   * This method is kept for backwards compatibility and testing only.
+   * Production code should use the delegation pattern via orchestrai-master-coordinator.
+   *
+   * @deprecated Use delegateToClaudeCodeAgent which returns delegation instructions
+   */
   async simulateClaudeCodeExecution(agentType, taskDelegation, task) {
+    console.warn('⚠️  WARNING: Using deprecated simulateClaudeCodeExecution method');
+    console.warn('   This is a fallback simulation and should not be used in production');
+    console.warn('   Use orchestrai-master-coordinator with Task tool for real agent execution');
+
     // Simulate Claude Code agent execution with realistic responses
     const responses = {
       'client-project-orchestrator': {
         success: true,
+        simulationWarning: 'This is a simulated response - use real Claude Code agents for production',
         projectSetup: {
           clientId: task.clientData?.clientName?.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now().toString(36),
           folderStructure: 'complete',
@@ -522,6 +633,7 @@ Execute this task using your specialized ${agentSpec.specialization} capabilitie
       },
       'client-context-integration-coordinator': {
         success: true,
+        simulationWarning: 'This is a simulated response - use real Claude Code agents for production',
         contextProfile: {
           integrated: true,
           branding: 'available',
@@ -537,6 +649,7 @@ Execute this task using your specialized ${agentSpec.specialization} capabilitie
 
     return responses[agentType] || {
       success: true,
+      simulationWarning: 'This is a simulated response - use real Claude Code agents for production',
       message: `Task completed by ${agentType}`,
       delegation: taskDelegation
     };
@@ -544,9 +657,161 @@ Execute this task using your specialized ${agentSpec.specialization} capabilitie
 
   updateMetrics() {
     this.clientMetrics.lastUpdated = new Date().toISOString();
-    
+
     // Store updated metrics in crystalline memory
     this.crystallineMemory.storeMemory('client-intelligence-metrics', this.clientMetrics);
+  }
+
+  // HTML Report Generation Methods
+  async generateHTMLIntelligenceReport(config) {
+    try {
+      console.log(`\n📊 Generating HTML intelligence report for client: ${config.clientId}`);
+      console.log(`   Report Type: ${config.reportType}`);
+      console.log(`   Source: ${config.jsonReportPath}`);
+
+      // Initialize HTML report pipeline
+      const IntelligenceHTMLPipeline = require('./pipelines/intelligence-html-report-pipeline');
+      const pipeline = new IntelligenceHTMLPipeline(this.orchestrator, this);
+
+      // Execute pipeline
+      const result = await pipeline.executePipeline({
+        jsonReportPath: config.jsonReportPath,
+        reportType: config.reportType,
+        clientId: config.clientId,
+        outputPath: config.outputPath
+      });
+
+      if (result.success) {
+        console.log(`✅ HTML report generated successfully`);
+        console.log(`   Output: ${result.htmlPath}`);
+
+        // Update metrics
+        this.clientMetrics.htmlReportsGenerated = (this.clientMetrics.htmlReportsGenerated || 0) + 1;
+        this.updateMetrics();
+      } else {
+        console.error(`❌ HTML report generation failed: ${result.error}`);
+      }
+
+      return result;
+
+    } catch (error) {
+      console.error(`❌ HTML report generation error:`, error);
+      throw error;
+    }
+  }
+
+  async generateAllHTMLReports(clientId) {
+    const fs = require('fs').promises;
+    const path = require('path');
+
+    try {
+      console.log(`\n📊 Batch HTML report generation for client: ${clientId}`);
+
+      // Find all JSON intelligence reports in client folder
+      const clientPath = this.getClientProjectPath(clientId);
+      const intelligencePath = path.join(clientPath, 'client-intelligence');
+
+      const jsonReports = await this.findJSONIntelligenceReports(intelligencePath);
+
+      console.log(`   Found ${jsonReports.length} JSON intelligence reports`);
+
+      const results = [];
+
+      for (const jsonReport of jsonReports) {
+        const reportType = this.detectReportType(jsonReport.path);
+
+        console.log(`\n   Processing: ${jsonReport.name} (${reportType})`);
+
+        const result = await this.generateHTMLIntelligenceReport({
+          clientId: clientId,
+          jsonReportPath: jsonReport.path,
+          reportType: reportType
+        });
+
+        results.push({
+          sourceFile: jsonReport.name,
+          reportType: reportType,
+          success: result.success,
+          htmlPath: result.htmlPath,
+          error: result.error
+        });
+      }
+
+      const successful = results.filter(r => r.success).length;
+      console.log(`\n✅ Batch processing complete: ${successful}/${results.length} reports generated`);
+
+      return {
+        clientId: clientId,
+        totalReports: results.length,
+        successful: successful,
+        failed: results.length - successful,
+        results: results
+      };
+
+    } catch (error) {
+      console.error(`❌ Batch HTML generation error:`, error);
+      throw error;
+    }
+  }
+
+  async findJSONIntelligenceReports(intelligencePath) {
+    const fs = require('fs').promises;
+    const path = require('path');
+
+    const jsonReports = [];
+
+    async function scanDirectory(dirPath) {
+      try {
+        const entries = await fs.readdir(dirPath, { withFileTypes: true });
+
+        for (const entry of entries) {
+          const fullPath = path.join(dirPath, entry.name);
+
+          if (entry.isDirectory()) {
+            await scanDirectory(fullPath);
+          } else if (entry.isFile() && entry.name.endsWith('.json')) {
+            // Check if it looks like an intelligence report
+            if (
+              entry.name.includes('psychographic') ||
+              entry.name.includes('icp') ||
+              entry.name.includes('market-intelligence') ||
+              entry.name.includes('intelligence')
+            ) {
+              jsonReports.push({
+                name: entry.name,
+                path: fullPath
+              });
+            }
+          }
+        }
+      } catch (error) {
+        // Directory might not exist or not accessible
+        console.warn(`Warning: Could not scan directory ${dirPath}:`, error.message);
+      }
+    }
+
+    await scanDirectory(intelligencePath);
+
+    return jsonReports;
+  }
+
+  detectReportType(filePath) {
+    const filename = filePath.toLowerCase();
+
+    if (filename.includes('psychographic')) {
+      return 'psychographic';
+    } else if (filename.includes('icp') || filename.includes('persona')) {
+      return 'icp';
+    } else if (filename.includes('market')) {
+      return 'market-intelligence';
+    } else {
+      return 'comprehensive';
+    }
+  }
+
+  getClientProjectPath(clientId) {
+    const path = require('path');
+    return path.join(process.cwd(), 'projects', clientId);
   }
 
   // Status and Health Methods

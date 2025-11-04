@@ -156,20 +156,154 @@ class IntegratedContentPipeline {
   }
 
   /**
-   * GATE 1: Content Creation
-   * Triggers content-writer-specialist agent with comprehensive requirements
+   * GATE 1: Content Creation / Revision
+   * First attempt: content-writer-specialist creates article from outline
+   * Revision cycles: content-structure-corrector fixes validation failures
    */
   async gate1_createContent(articleSpec, isRevision = false) {
-    console.log(`GATE 1: ${isRevision ? 'Content Revision' : 'Content Creation'}`);
+    console.log(`GATE 1: ${isRevision ? 'Content Structural Correction' : 'Initial Content Creation'}`);
 
-    // In actual implementation, this would use Task tool to launch agent
-    // For now, returning mock structure
-    return {
-      success: true,
-      agentUsed: 'content-writer-specialist',
-      mode: isRevision ? 'revision' : 'creation',
-      timestamp: Date.now()
-    };
+    if (!isRevision) {
+      // INITIAL CREATION: Use content-writer-specialist
+      console.log(`   Agent: content-writer-specialist`);
+      console.log(`   Outline: ${articleSpec.outlinePath}`);
+      console.log(`   Output: ${articleSpec.outputPath}`);
+
+      // Note: In Claude Code environment, Task tool is called by the orchestrating agent
+      // This pipeline is executed FROM Claude Code, so we return instructions for manual execution
+      // or integration with orchestration layer that has Task tool access
+
+      return {
+        success: true,
+        agentUsed: 'content-writer-specialist',
+        mode: 'creation',
+        requiresManualExecution: true,
+        instructions: {
+          agent: 'content-writer-specialist',
+          prompt: this.buildWriterPrompt(articleSpec),
+          outlinePath: articleSpec.outlinePath,
+          outputPath: articleSpec.outputPath
+        },
+        timestamp: Date.now()
+      };
+    } else {
+      // REVISION CYCLE: Use content-structure-corrector
+      console.log(`   Agent: content-structure-corrector (via general-purpose)`);
+      console.log(`   Article: ${articleSpec.outputPath}`);
+      console.log(`   Applying revision instructions...`);
+
+      // Save validation report for corrector agent
+      const validationReportPath = articleSpec.outputPath.replace('.md', '-validation-report.json');
+      if (articleSpec.validationReport) {
+        try {
+          // Create a clean, serializable version of the validation report
+          const cleanReport = {
+            aiDetection: articleSpec.validationReport.aiDetection || {},
+            qualityMetrics: articleSpec.validationReport.qualityMetrics || {},
+            issues: articleSpec.validationReport.issues || [],
+            timestamp: Date.now()
+          };
+
+          fs.writeFileSync(
+            validationReportPath,
+            JSON.stringify(cleanReport, null, 2),
+            'utf-8'
+          );
+        } catch (error) {
+          console.log(`   Warning: Could not save validation report - ${error.message}`);
+          // Continue anyway - corrector can work from revision instructions
+        }
+      }
+
+      return {
+        success: true,
+        agentUsed: 'content-structure-corrector',
+        mode: 'revision',
+        requiresManualExecution: true,
+        instructions: {
+          agent: 'general-purpose', // content-structure-corrector not registered yet
+          prompt: this.buildCorrectorPrompt(articleSpec, validationReportPath),
+          articlePath: articleSpec.outputPath,
+          validationReportPath: validationReportPath,
+          revisionInstructions: articleSpec.revisionInstructions
+        },
+        timestamp: Date.now()
+      };
+    }
+  }
+
+  /**
+   * Build prompt for content-writer-specialist agent
+   */
+  buildWriterPrompt(articleSpec) {
+    return `Write complete article following the approved outline with 100% language purity and natural flow.
+
+**ARTICLE TITLE:** ${articleSpec.title}
+
+**OUTLINE PATH:** ${articleSpec.outlinePath}
+
+**OUTPUT PATH:** ${articleSpec.outputPath}
+
+**TARGET WORD COUNT:** ${articleSpec.targetWordCount}
+
+**CRITICAL REQUIREMENTS:**
+1. 100% ${articleSpec.language || 'target language'} - ZERO contamination
+2. Natural conversational expert-friend tone
+3. Paragraph distribution: 40% short / 40% medium / 20% long
+4. Maximum 16-20 bulleted lists total
+5. Bold text: <15 instances (emphasis only)
+6. Maximum 4-6 tables (comparison/data only)
+7. Follow all outline Content Requirements as flowing paragraphs
+8. Integrate Engagement Elements naturally
+
+**FORBIDDEN AI PHRASES:**
+${(articleSpec.forbiddenPhrases || [
+  'Picture yourself', 'Let\'s be honest', 'Discover', 'Unlock', 'Dive into'
+]).join(', ')}
+
+Read the outline completely and write the full article following ALL requirements.`;
+  }
+
+  /**
+   * Build prompt for content-structure-corrector agent
+   */
+  buildCorrectorPrompt(articleSpec, validationReportPath) {
+    const issues = articleSpec.revisionInstructions?.qualityIssues || [];
+    const fixes = articleSpec.revisionInstructions?.specificFixes || [];
+
+    return `You are acting as a content-structure-corrector. Fix structural issues while preserving writing quality.
+
+**ARTICLE TO CORRECT:** ${articleSpec.outputPath}
+
+**VALIDATION REPORT:** ${validationReportPath}
+
+**IDENTIFIED ISSUES:**
+${issues.map(issue => `- ${issue}`).join('\n')}
+
+**REQUIRED CORRECTIONS:**
+${fixes.map(fix => `
+**${fix.category}:**
+- Action: ${fix.action}
+- Details: ${fix.details}
+`).join('\n')}
+
+**CRITICAL PRESERVATION:**
+- Maintain 100% language purity (NO foreign words)
+- Preserve natural conversational tone
+- Keep all essential information
+- Maintain smooth paragraph transitions
+
+**APPROACH:**
+1. Read article and validation report completely
+2. Use Edit tool for surgical corrections (NOT Write tool)
+3. Apply corrections in phases:
+   - Convert excessive tables → paragraphs
+   - Rebalance paragraph distribution
+   - Condense to target length
+   - Optimize keyword density
+4. Save corrected version to same path (overwrite)
+
+Execute systematic corrections now.`;
   }
 
   /**
