@@ -154,9 +154,13 @@
    ```
 
 3. **Verify Environment Variable**:
-   The server needs to be started with explicit DATABASE_URL:
+   The server needs DATABASE_URL set in your .env file:
    ```bash
-   DATABASE_URL="postgresql://postgres.drrbipxkekdhibxaeubx:GQcamPe3KaQdhKCO@aws-1-eu-west-1.pooler.supabase.com:5432/postgres" npm run dev
+   # Add to .env file:
+   DATABASE_URL="postgresql://user:password@host:5432/database"
+
+   # Then start normally:
+   npm run dev
    ```
 
 ## Success Indicators

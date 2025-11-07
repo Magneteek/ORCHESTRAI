@@ -9,8 +9,16 @@ export LOG_LEVEL="error"
 export DISABLE_CONSOLE_OUTPUT="true"
 
 # N8N API Configuration (enables workflow management features)
-export N8N_API_URL="https://aia.magneteek.com"
-export N8N_API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiNmQ3MDViNi1lNWZkLTQ0NzgtODBjYS0yY2QzZDhiZmMyN2UiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzYwMDE4OTA1LCJleHAiOjE3Njc3NDA0MDB9.NAD_rjVV-5gntaVm50z4AbX9GqpVwrQTM0lc1U7biLg"
+# These should be set in your .env file
+if [ -z "$N8N_API_URL" ]; then
+  echo "Warning: N8N_API_URL not set in environment"
+  export N8N_API_URL="https://aia.magneteek.com"
+fi
+
+if [ -z "$N8N_API_KEY" ]; then
+  echo "Error: N8N_API_KEY must be set in your .env file"
+  exit 1
+fi
 
 # Optional: Webhook security mode (recommended for local development)
 # export WEBHOOK_SECURITY_MODE="moderate"

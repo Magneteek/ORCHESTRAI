@@ -1,10 +1,13 @@
 // Test Supabase database connection
 const { PrismaClient } = require('@prisma/client');
+require('dotenv').config();
 
+// Use DATABASE_URL from environment variables
+// This should be set in your .env file
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: "postgresql://postgres.drrbipxkekdhibxaeubx:GQcamPe3KaQdhKCO@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+      url: process.env.DATABASE_URL || "postgresql://localhost:5432/facebook_ads_manager"
     }
   }
 });

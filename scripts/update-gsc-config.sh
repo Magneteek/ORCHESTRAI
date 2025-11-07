@@ -30,8 +30,15 @@ echo "Updating MCP configuration..."
 # Create backup
 cp "$MCP_CONFIG" "$MCP_CONFIG.backup"
 
+# Check if N8N_API_KEY is set
+if [ -z "$N8N_API_KEY" ]; then
+  echo "❌ N8N_API_KEY environment variable is not set"
+  echo "Please add it to your .env file and source it before running this script"
+  exit 1
+fi
+
 # Update the configuration with proper JSON handling
-cat > "$MCP_CONFIG" <<'EOF'
+cat > "$MCP_CONFIG" <<EOF
 {
   "mcpServers": {
     "n8n-mcp": {
@@ -42,7 +49,7 @@ cat > "$MCP_CONFIG" <<'EOF'
         "LOG_LEVEL": "error",
         "DISABLE_CONSOLE_OUTPUT": "true",
         "N8N_API_URL": "https://aia.magneteek.com",
-        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiNmQ3MDViNi1lNWZkLTQ0NzgtODBjYS0yY2QzZDhiZmMyN2UiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzYwMDE4OTA1LCJleHAiOjE3Njc3NDA0MDB9.NAD_rjVV-5gntaVm50z4AbX9GqpVwrQTM0lc1U7biLg"
+        "N8N_API_KEY": "$N8N_API_KEY"
       }
     },
     "gsc": {
