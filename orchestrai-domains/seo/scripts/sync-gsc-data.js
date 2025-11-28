@@ -23,6 +23,9 @@
  * @version 1.0.0
  */
 
+// Load environment variables
+require('dotenv').config({ path: require('path').join(__dirname, '../../../.env') });
+
 const { Pool } = require('pg');
 const path = require('path');
 const fs = require('fs').promises;

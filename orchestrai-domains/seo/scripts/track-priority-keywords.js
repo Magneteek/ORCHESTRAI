@@ -23,6 +23,9 @@
  * @version 1.0.0
  */
 
+// Load environment variables
+require('dotenv').config({ path: require('path').join(__dirname, '../../../.env') });
+
 const SERPTracker = require('../lib/serp-tracker');
 const path = require('path');
 

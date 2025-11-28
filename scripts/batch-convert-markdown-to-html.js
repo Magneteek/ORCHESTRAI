@@ -132,16 +132,49 @@ function batchConvert(inputDir, outputDir) {
     console.log(`Created output directory: ${outputDir}\n`);
   }
 
-  // Find all markdown files
-  const files = fs.readdirSync(inputDir)
-    .filter(file => file.endsWith('.md') && file.includes('artikel'))
+  // Find all markdown files (exclude metadata/guides/outlines)
+  const allFiles = fs.readdirSync(inputDir);
+
+  const files = allFiles
+    .filter(file => {
+      // Must be markdown
+      if (!file.endsWith('.md')) return false;
+
+      // Exclude metadata files (UPPERCASE prefix or "nasmehpg-" prefix)
+      if (file.match(/^[A-Z]/) || file.startsWith('nasmehpg-')) return false;
+
+      // Exclude outline files (any file containing "outline" or "OUTLINE")
+      if (file.toLowerCase().includes('outline')) return false;
+
+      // Exclude specific document types
+      const excludePatterns = ['GUIDE', 'REPORT', 'ANALYSIS', 'SCHEMA', 'MAP', 'DRAFT', 'ENHANCED', 'REWRITTEN', 'ORCHESTRATED'];
+      if (excludePatterns.some(pattern => file.toUpperCase().includes(pattern))) return false;
+
+      // Include articles containing "2025" anywhere in filename
+      return file.includes('2025');
+    })
+    // Prefer FINAL versions over base versions (deduplicate)
+    .filter(file => {
+      // If this file already ends with -FINAL.md, keep it
+      if (file.endsWith('-FINAL.md')) return true;
+
+      // For base files, check if a FINAL version exists
+      const finalVersion = file.replace('.md', '-FINAL.md');
+      const hasFinalVersion = allFiles.includes(finalVersion);
+
+      // If FINAL version exists, skip this base version
+      if (hasFinalVersion) return false;
+
+      return true;
+    })
     .map(file => ({
       input: path.join(inputDir, file),
       output: path.join(outputDir, file.replace('.md', '-WORDPRESS.html'))
     }));
 
   if (files.length === 0) {
-    console.log('❌ No markdown files found matching pattern "*artikel*.md"\n');
+    console.log('❌ No publishable article files found matching pattern "*-2025.md"\n');
+    console.log('   Looked for files ending with "-2025.md" (excluding outlines, reports, guides)\n');
     return;
   }
 

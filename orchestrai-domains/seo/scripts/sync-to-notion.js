@@ -23,6 +23,9 @@
  * @version 1.0.0
  */
 
+// Load environment variables
+require('dotenv').config({ path: require('path').join(__dirname, '../../../.env') });
+
 const { Client } = require('@notionhq/client');
 const { Pool } = require('pg');
 const path = require('path');
