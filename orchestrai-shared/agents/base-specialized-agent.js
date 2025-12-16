@@ -11,22 +11,44 @@
 
 const EventEmitter = require('events');
 const { v4: uuidv4 } = require('uuid');
+const logger = require('../logging/logger');
+const { AgentConfigSchema, TaskSpecSchema, validate } = require('../validation/schemas');
+const { AgentError, ValidationError } = require('../errors/typed-errors');
 
 class BaseSpecializedAgent extends EventEmitter {
   constructor(config = {}) {
     super();
 
-    this.agentType = config.agentType || 'base-specialized-agent';
+    // Validate configuration (allow partial validation for flexibility)
+    try {
+      // Only validate if name and domain are provided (base config)
+      if (config.name && config.domain) {
+        config = AgentConfigSchema.parse(config);
+      }
+    } catch (error) {
+      throw new ValidationError(
+        'Invalid agent configuration',
+        error.errors || [{ message: error.message }],
+        { config }
+      );
+    }
+
+    this.agentType = config.name || config.agentType || 'base-specialized-agent';
     this.agentId = config.agentId || `${this.agentType}-${uuidv4()}`;
     this.domain = config.domain || 'general';
+
+    // Create agent-specific logger
+    this.logger = logger.forAgent(this.agentType, this.domain);
 
     // Agent metadata
     this.metadata = {
       version: config.version || '1.0.0',
       capabilities: config.capabilities || [],
       requiredTools: config.requiredTools || [],
-      estimatedDuration: config.estimatedDuration || 30000, // 30 seconds default
-      qualityTarget: config.qualityTarget || 0.95
+      estimatedDuration: config.estimatedDuration || config.timeout || 30000,
+      qualityTarget: config.qualityTarget || 0.95,
+      retries: config.retries || 3,
+      priority: config.priority || 'normal'
     };
 
     // Performance tracking
@@ -43,7 +65,11 @@ class BaseSpecializedAgent extends EventEmitter {
     this.currentContext = null;
     this.isExecuting = false;
 
-    console.log(`🤖 ${this.agentType} initialized (${this.domain} domain)`);
+    this.logger.info('Agent initialized', {
+      agentId: this.agentId,
+      domain: this.domain,
+      capabilities: this.metadata.capabilities
+    });
   }
 
   /**
@@ -54,19 +80,36 @@ class BaseSpecializedAgent extends EventEmitter {
    */
   async execute(task, context = {}) {
     if (this.isExecuting) {
-      throw new Error(`${this.agentType} is already executing a task`);
+      throw new AgentError(
+        'Agent already executing a task',
+        {
+          agentName: this.agentType,
+          domain: this.domain,
+          currentTask: this.currentContext?.task?.type
+        }
+      );
     }
 
+    const executionId = uuidv4();
     this.isExecuting = true;
     this.currentContext = {
       task,
       context,
       startTime: Date.now(),
-      executionId: uuidv4()
+      executionId
     };
 
+    const timer = this.logger.time('Task execution', {
+      taskType: task.type || 'unknown',
+      executionId
+    });
+
     try {
-      console.log(`🚀 ${this.agentType} starting task: ${task.type || 'unknown'}`);
+      this.logger.info('Task started', {
+        taskType: task.type || 'unknown',
+        taskId: task.taskId,
+        executionId
+      });
 
       // Validate task
       await this.validateTask(task);

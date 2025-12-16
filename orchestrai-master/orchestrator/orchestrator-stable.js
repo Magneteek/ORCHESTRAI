@@ -8,6 +8,9 @@ const Redis = require('redis');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 
+// Centralized logging
+const logger = require('../../orchestrai-shared/logging/logger').forDomain('orchestrator');
+
 // Core Dependencies
 const CrystallineMemoryManager = require('../crystalline-memory/memory-manager');
 const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
@@ -97,10 +100,12 @@ class StableOrchestraiMaster extends EventEmitter {
    * Sequential system initialization with proper error handling
    */
   async initializeSystem() {
-    console.log('🧠 ═══════════════════════════════════════════════════');
-    console.log('   ORCHESTRAI Stable Master Orchestrator');
-    console.log('   Sequential Initialization • Error Isolation • Graceful Degradation');  
-    console.log('🧠 ═══════════════════════════════════════════════════');
+    logger.info('ORCHESTRAI Stable Master Orchestrator starting', {
+      component: 'initialization',
+      phase: 'startup',
+      features: ['Sequential Initialization', 'Error Isolation', 'Graceful Degradation'],
+      port: this.port
+    });
     
     try {
       // Phase 1: Core Infrastructure
@@ -124,15 +129,27 @@ class StableOrchestraiMaster extends EventEmitter {
       // Phase 5: Health monitoring
       this.startHealthMonitoring();
       
-      console.log('✅ ORCHESTRAI Stable Master Orchestrator fully operational');
-      console.log(`🚀 Main Orchestrator: http://localhost:${this.port}`);
-      console.log(`🔌 WebSocket Server: ws://localhost:${this.port}/ws`);
+      logger.info('ORCHESTRAI fully operational', {
+        component: 'initialization',
+        phase: 'complete',
+        endpoints: {
+          http: `http://localhost:${this.port}`,
+          websocket: `ws://localhost:${this.port}/ws`
+        },
+        activeDomains: this.domains.size,
+        activeAgents: this.agents.size
+      });
       
       this.systemMetrics.initializationProgress = 100;
       this.emit('system-ready');
       
     } catch (error) {
-      console.error('❌ Critical system initialization failure:', error);
+      logger.fatal('Critical system initialization failure', {
+        component: 'initialization',
+        error: error.message,
+        stack: error.stack,
+        initializationState: this.initializationState
+      });
       this.initializationState.errors.push({
         phase: 'system',
         error: error.message,
