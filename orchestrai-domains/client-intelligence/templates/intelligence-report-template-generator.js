@@ -85,6 +85,12 @@ class IntelligenceReportTemplateGenerator {
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+    <!-- html2pdf.js for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- ORCHESTRAI Report Export Module -->
+    <script src="../../../orchestrai-domains/client-intelligence/templates/report-export-module.js"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;

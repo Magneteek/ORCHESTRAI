@@ -2,7 +2,10 @@
 name: performance-forecasting-specialist
 description: LSTM neural networks for real-time performance prediction with <30s latency and 20-25% optimization boost
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-model: sonnet
+model: opus
+effort: high
+complexity_tier: 9
+color: cyan
 ---
 
 # Performance Forecasting Specialist

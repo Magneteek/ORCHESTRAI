@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/projects",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/temp"
+      ],
+      "env": {}
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {}
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {}
+    },
+    "dataforseo": {
+      "command": "node",
+      "args": [
+        "./orchestrai-shared/mcp-servers/dataforseo-server.js"
+      ],
+      "env": {
+        "DATAFORSEO_USERNAME": "${DATAFORSEO_USERNAME}",
+        "DATAFORSEO_PASSWORD": "${DATAFORSEO_PASSWORD}"
+      }
+    }
+  }
+}

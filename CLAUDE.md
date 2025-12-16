@@ -6,6 +6,266 @@ ORCHESTRAI is a cutting-edge self-iterating multi-agent orchestration system imp
 
 ---
 
+## 🚀 System Capabilities at a Glance
+
+### Core Competencies
+ORCHESTRAI is a complete **zero-to-launch product ecosystem** capable of:
+
+1. **Strategic Planning & Business Intelligence**
+   - ICP psychographic analysis (12 segment types)
+   - Financial modeling with 3-year projections
+   - Competitive intelligence and market analysis
+   - Strategic planning (Scaling Up OPSP framework)
+
+2. **Full-Stack Product Development**
+   - Frontend: Next.js 15, React, TypeScript, ShadCN UI
+   - Backend: Node.js, Express, Prisma ORM, PostgreSQL
+   - API: RESTful/GraphQL with OpenAPI documentation
+   - Design Systems: Complete component libraries
+
+3. **Quality Assurance & Testing**
+   - E2E testing (Playwright, 90%+ coverage)
+   - Security auditing (OWASP Top 10)
+   - Performance optimization (Core Web Vitals)
+   - Accessibility validation (WCAG 2.1 AA)
+
+4. **DevOps & Deployment**
+   - CI/CD pipelines (GitHub Actions)
+   - Container orchestration (Docker, Kubernetes)
+   - Production deployment (Vercel, Railway, K8s)
+   - Monitoring and observability
+
+5. **Content & Go-to-Market**
+   - Multi-language content (EN, ES, NL, DE, SL)
+   - SEO research and optimization (100+ keywords)
+   - Email marketing automation
+   - Multi-channel advertising (Google, Meta, LinkedIn)
+
+### Strongest Task: Zero-to-Launch Complete Product Ecosystem
+**Duration**: 6-10 hours autonomous execution
+**Agents**: 40-50 specialized agents (12 Opus-tier, 28-38 Sonnet-tier)
+**Pipelines**: 8-12 pipelines executed in parallel
+**Deliverables**: 100+ production-ready files
+**Value**: $125K-$185K professional service equivalent
+**Output**: Complete product from strategy through deployment to market launch
+
+### System Architecture Summary
+- **103 Total Agents**: 89 specialized + 12 Opus-tier strategic + 2 coordination
+- **19 Production Pipelines**: Across 10+ domains
+- **6+ MCP Servers**: Real-world data integration (DataForSEO, Memory, Notion, GSC, Ref.tools, MagicUI)
+- **5 Claude Plugins**: Official plugins for extended functionality (frontend-design, playwright, hookify, agent-sdk-dev, plugin-dev)
+- **Crystalline Memory**: Persistent knowledge graphs with geometric traversal
+- **Quality Gates**: Automated validation at each stage
+
+---
+
+## 📚 Quick Navigation
+
+### By Use Case
+- **SaaS Product Launch** → [Common Workflows](#common-workflows) (Zero-to-Launch)
+- **Website Development** → [Web Development Domain](orchestrai-domains/webdev/CLAUDE.md)
+- **Creative Frontend Design** → [Frontend Plugin Integration](FRONTEND-PLUGIN-INTEGRATION-GUIDE.md) 🆕
+- **Content Creation** → [Content Creation Guide](CONTENT-CREATION-GUIDE.md)
+- **API Development** → [API Domain](orchestrai-domains/api/CLAUDE.md)
+- **Strategic Planning** → [Strategic Planning Domain](orchestrai-domains/strategic-planning/CLAUDE.md)
+
+### By Domain (Complete List)
+- [Client Intelligence](orchestrai-domains/client-intelligence/CLAUDE.md) - ICP analysis, brand intelligence
+- [Web Development](orchestrai-domains/webdev/CLAUDE.md) - Full-stack development, design systems
+- [API Development](orchestrai-domains/api/CLAUDE.md) - RESTful/GraphQL API design
+- [Content Creation](orchestrai-domains/content/CLAUDE.md) - Multi-language content pipelines
+- [SEO](orchestrai-domains/seo/CLAUDE.md) - Keyword research, technical SEO, topical authority
+- [DevOps](orchestrai-domains/devops/CLAUDE.md) - CI/CD, containerization, deployment
+- [Strategic Planning](orchestrai-domains/strategic-planning/CLAUDE.md) - Financial modeling, OPSP framework
+- [Email Marketing](orchestrai-domains/email-marketing/CLAUDE.md) - Drip campaigns, automation
+- [Advertising](orchestrai-domains/advertising-enhanced/CLAUDE.md) - Multi-channel ad campaigns
+- [Local SEO](orchestrai-domains/local-seo/CLAUDE.md) - Google Business Profile optimization
+
+### By Pipeline Type
+- **Development**: design-development-pipeline.js (240 min), api-development-pipeline.js (390 min)
+- **Strategy**: strategic-planning-pipeline.js (90 min), comprehensive-intelligence-aggregator.js (90 min)
+- **Content**: multilanguage-content-pipeline.js (180 min), healthcare-content-pipeline.js (200 min)
+- **Quality**: comprehensive-testing-pipeline.js (180 min), cicd-pipeline.js (60 min)
+- **Marketing**: seo-research-pipeline.js (120 min), advertising-campaign-pipeline.js (150 min)
+
+---
+
+## Common Workflows
+
+### Workflow 1: SaaS Product Launch (6-10 hours)
+**Complete end-to-end product ecosystem from strategy to market**
+
+```yaml
+orchestrai-master-coordinator
+  ↓
+Phase 1: Strategic Foundation (90 min)
+  Parallel Execution (Opus-tier orchestration):
+    - strategic-plan-synthesizer (Opus) → Market analysis, OPSP framework
+    - financial-modeling-specialist (Opus) → Revenue projections, pricing
+    - client-icp-analyst → Psychographic profiling
+    - seo-competitor-analysis → Competitive landscape
+
+  Deliverables:
+    - Strategic plan (Scaling Up OPSP format)
+    - Financial models (3-year projections)
+    - ICP profiles with psychographics
+    - Competitive analysis report
+
+  ↓
+Phase 2: Product Development (240-390 min)
+  Parallel Pipeline Execution:
+    - design-development-pipeline → Frontend (Next.js + ShadCN UI)
+    - api-development-pipeline → Backend (Node.js + Prisma + PostgreSQL)
+
+  Agents in parallel:
+    - frontend-architect-specialist → Application architecture
+    - backend-development-specialist → API implementation
+    - ui-component-developer → Component library
+    - api-architect → OpenAPI specification
+
+  Deliverables:
+    - Production Next.js application (60+ components)
+    - RESTful API (20+ endpoints, documented)
+    - PostgreSQL database (optimized schema)
+    - Design system (30+ reusable components)
+
+  ↓
+Phase 3: Quality & Deployment (180 min)
+  Parallel Pipeline Execution:
+    - comprehensive-testing-pipeline → E2E + unit + security
+    - cicd-pipeline → GitHub Actions + deployment
+
+  Quality gates (blocking):
+    - E2E test coverage ≥ 85%
+    - Security: Zero OWASP vulnerabilities
+    - Performance: Lighthouse ≥ 90 all metrics
+    - Accessibility: WCAG 2.1 AA compliant
+
+  Deliverables:
+    - Comprehensive test suite (90%+ coverage)
+    - CI/CD pipeline configuration
+    - Production deployment (Vercel/K8s)
+    - Monitoring and alerting setup
+
+  ↓
+Phase 4: Go-to-Market (180 min)
+  Parallel Pipeline Execution:
+    - multilanguage-content-pipeline → Blog posts, landing pages
+    - seo-research-pipeline → Keyword research (100+ keywords)
+    - advertising-campaign-pipeline → Multi-channel campaigns
+
+  Deliverables:
+    - 20-30 optimized blog posts (multi-language)
+    - Complete SEO strategy
+    - Email nurture sequences
+    - Advertising campaigns (Google, Meta, LinkedIn)
+
+Total Output: 100+ production-ready files
+Total Value: $125K-$185K professional service equivalent
+Time to Market: 6-10 hours vs 8-12 weeks traditional
+```
+
+### Workflow 2: Landing Page Development (2-4 hours)
+**Static-first approach for marketing websites**
+
+```yaml
+Task tool → wireframe-creation-specialist → Information Architecture
+  ↓
+Task tool → design-system-architect → Design Tokens + Components
+  ↓
+Task tool → ui-component-developer → Static HTML Implementation
+  ↓
+Integration:
+  - Tailwind CSS styling
+  - MagicUI components (animations, interactions)
+  - D3.js visualizations (if needed)
+  - Paper.js canvas effects (if needed)
+  ↓
+Task tool → accessibility-agent → WCAG 2.1 AA validation
+  ↓
+Task tool → seo-technical-analysis → Performance optimization
+
+Deliverables:
+  - Production-ready static HTML
+  - Tailwind CSS configuration
+  - Interactive components
+  - 90+ Lighthouse scores
+  - Zero accessibility violations
+```
+
+### Workflow 3: API Development Only (6-8 hours)
+**RESTful/GraphQL API with full documentation**
+
+```yaml
+api-development-pipeline (390 min):
+  Stage 1: API Design (70 min)
+    - OpenAPI 3.0 specification
+    - RESTful endpoint design
+    - Authentication strategy (JWT/OAuth)
+
+  Stage 2: Authentication (60 min)
+    - JWT/OAuth 2.0 implementation
+    - RBAC (role-based access control)
+    - Security validation (OWASP)
+
+  Stage 3: Implementation (95 min)
+    - Endpoint implementation
+    - Database integration (Prisma ORM)
+    - Resilience patterns (circuit breakers, retry logic)
+
+  Stage 4: Testing (75 min)
+    - Integration tests
+    - Contract testing (Pact)
+    - Load testing (k6)
+
+  Stage 5: Documentation (50 min)
+    - Interactive API docs (Swagger UI)
+    - Client SDK generation (TypeScript, Python)
+    - Postman collection
+
+  Stage 6: Deployment (40 min)
+    - API gateway configuration
+    - Monitoring and observability
+
+Deliverables:
+  - Production API with 20+ endpoints
+  - Complete OpenAPI documentation
+  - Client SDKs (3+ languages)
+  - 85%+ test coverage
+  - Monitoring dashboards
+```
+
+### Workflow 4: Content Marketing Campaign (3-5 hours)
+**Multi-language content with SEO optimization**
+
+```yaml
+Parallel Execution:
+  - seo-keyword-research → 100+ keywords analyzed
+  - client-icp-analyst → Psychographic data for targeting
+  ↓
+content-outline-architect → Content structure planning
+  ↓
+Parallel Content Creation (5-10 articles simultaneously):
+  - content-writer-specialist → EN articles
+  - multi-language-content-adapter → ES, NL, DE, SL translations
+  ↓
+Quality Assurance (parallel):
+  - content-ai-phrase-detector → AI detection (<30%)
+  - content-quality-validator → Readability, completeness
+  - seo-content-optimization → On-page optimization
+  ↓
+seo-topical-authority → Topic clustering, internal linking
+
+Deliverables:
+  - 20-30 optimized articles (multi-language)
+  - Keyword targeting strategy
+  - Internal linking structure
+  - Topic cluster architecture
+  - Publishing schedule
+```
+
+---
+
 ## Architecture Principles
 
 ### Crystalline Memory System
@@ -138,28 +398,138 @@ All work for a single client MUST remain within the same project structure:
 
 ---
 
-## Domain Agents
+## Domain Agents & Pipelines
 
-### Web Development Domain
-- **Wireframe Designer**: Creates layouts using global templates
-- **UX Designer**: Designs interfaces with brand consistency
-- **Frontend Developer**: Builds React components with TypeScript
-- **Backend Developer**: Creates APIs and database schemas
-- **QA Agent**: Tests and validates all deliverables
+### 🌐 Web Development Domain (25+ agents)
+**Full-stack development from design to deployment**
 
-### Content & Research Domain
-- **Multi-Language Writer**: Creates content in EN, ES, NL, DE, SL
-- **SEO Specialist**: Keyword research and optimization
-- **Research Agent**: Psychographic and semantic analysis
-- **Content Strategist**: Plans and coordinates content workflows
+**Key Agents**:
+- **Design**: `wireframe-creation-specialist`, `design-system-architect`, `ui-component-developer`
+- **Frontend**: `frontend-architect-specialist`, `responsive-layout-optimizer`
+- **Backend**: `backend-development-specialist`, `api-architect`, `api-integration-specialist`
+- **Testing**: `e2e-test-automator`, `unit-test-generator`, `accessibility-agent`, `security-testing-specialist`
+- **DevOps**: `devops-deployment-specialist`, `kubernetes-deployment-expert`, `docker-container-specialist`
 
-### System Domains
-- **Main Orchestrator**: Geometric coordination and task delegation
-- **Memory Coordinator**: Crystalline memory management
-- **Pipeline Manager**: Shared workflow optimization
-- **Maintenance Agent**: System health and optimization
+**Pipelines**:
+- `design-development-pipeline.js` (240 min) - Wireframes → Design system → Frontend
+- `api-development-pipeline.js` (390 min) - API design → Implementation → Testing → Deployment
+- `cicd-pipeline.js` (60 min) - GitHub Actions, Docker, deployment automation
 
-**See [.claude/agents/](.claude/agents/) for complete list of 89 specialized agents.**
+**Deliverables**: Production Next.js apps, RESTful APIs, PostgreSQL databases, design systems
+
+---
+
+### 📊 Business Intelligence Domain (6 agents, 2 Opus-tier)
+**Strategic planning and market intelligence**
+
+**Key Agents**:
+- **Strategic** (Opus): `strategic-plan-synthesizer`, `financial-modeling-specialist`
+- **Analysis**: `client-icp-analyst`, `client-branding-intelligence`, `client-business-context-analyzer`
+- **Coordination**: `client-project-orchestrator`, `client-context-integration-coordinator`
+
+**Pipelines**:
+- `comprehensive-intelligence-aggregator.js` (90 min) - Complete client intelligence
+- `intelligence-html-report-pipeline.js` (30 min) - HTML report generation
+
+**Deliverables**: Strategic plans (OPSP), financial models, ICP profiles, brand analysis
+
+---
+
+### ✍️ Content & SEO Domain (20+ agents)
+**Multi-language content creation and SEO optimization**
+
+**Key Agents**:
+- **Content Creation**: `content-writer-specialist`, `multi-language-content-adapter`, `healthcare-content-specialist`
+- **SEO Research**: `seo-keyword-research`, `seo-competitor-analysis`, `seo-topical-authority`
+- **Content Optimization**: `content-outline-architect`, `content-ai-phrase-detector`, `content-quality-validator`
+- **Technical SEO**: `seo-technical-analysis`, `seo-content-optimization`, `seo-entity-optimization`
+
+**Pipelines**:
+- `multilanguage-content-pipeline.js` (180 min) - Content creation in 5 languages
+- `healthcare-content-pipeline.js` (200 min) - Medical content with compliance
+- `seo-research-pipeline.js` (120 min) - Keyword research, competitor analysis
+
+**Deliverables**: Blog posts (EN, ES, NL, DE, SL), SEO strategies, content calendars
+
+---
+
+### 📱 Marketing & Advertising Domain (10+ agents)
+**Multi-channel advertising and email marketing**
+
+**Key Agents**:
+- **Advertising**: `google-ads-specialist`, `meta-ads-specialist`, `linkedin-ads-specialist`, `reddit-ads-specialist`
+- **Email Marketing**: `email-marketing-automator`, `nurture-email-copywriter`, `cold-email-copywriter`
+- **Copy Optimization**: `ad-copy-variation-generator`, `direct-response-copywriter`
+
+**Pipelines**:
+- `advertising-campaign-pipeline.js` (150 min) - Multi-channel campaign creation
+- `email-marketing-pipeline.js` (120 min) - Drip sequences, automation
+
+**Deliverables**: Ad campaigns (Google, Meta, LinkedIn), email sequences, copy variations
+
+---
+
+### 🎯 SEO & Local Business Domain (12+ agents)
+**Search optimization and local market dominance**
+
+**Key Agents**:
+- **Keyword Research**: `seo-keyword-research`, `seo-semantic-clustering`, `seo-query-networks`
+- **Technical SEO**: `seo-technical-analysis`, `seo-ai-overviews`, `seo-serp-analysis`
+- **Local SEO**: `seo-local-seo`, `reviews-intelligence-specialist`
+- **Authority Building**: `seo-topical-authority`, `backlink-strategy-architect`
+
+**Pipelines**:
+- `seo-research-pipeline.js` (120 min) - Complete keyword research
+- `technical-seo-audit-pipeline.js` (150 min) - Technical SEO analysis
+- `local-seo-pipeline.js` (90 min) - Google Business Profile optimization
+
+**Deliverables**: Keyword strategies, technical audits, local SEO optimization
+
+---
+
+### 🧪 Quality Assurance Domain (10+ agents)
+**Comprehensive testing and validation**
+
+**Key Agents**:
+- **E2E Testing**: `e2e-test-automator`, `functional-testing-specialist`
+- **Performance**: `performance-testing-expert`, `performance-monitoring-agent`
+- **Security**: `security-testing-specialist`, `security-compliance-agent`
+- **Accessibility**: `accessibility-agent`, `accessibility-validator`
+- **Quality Control**: `content-quality-validator`, `testing-report-generator`
+
+**Pipelines**:
+- `comprehensive-testing-pipeline.js` (180 min) - E2E + unit + security + accessibility
+
+**Deliverables**: Test suites (90%+ coverage), security audits, performance reports
+
+---
+
+### 🤖 Orchestration & System Agents (12 agents, 12 Opus-tier)
+**Strategic coordination and system management**
+
+**Opus-Tier Agents** (Advanced reasoning, complex multi-domain tasks):
+- `orchestrai-master-coordinator` - Master system orchestration
+- `strategic-plan-synthesizer` - Business strategy synthesis
+- `financial-modeling-specialist` - Financial projections
+- `client-project-orchestrator` - Client workflow coordination
+- `simultaneous-orchestrator` - Parallel agent execution
+- `vaibe-builder-orchestrator` - Proven simultaneous patterns
+- `ai-project-predictor` - ML timeline forecasting
+- `intelligent-risk-assessor` - AI-powered risk analysis
+- `performance-forecasting-specialist` - LSTM performance prediction
+- `advanced-performance-analyzer` - Pattern recognition ML
+- `semantic-analysis-engine` - NLP and semantic understanding
+- `crystalline-memory-optimizer` - Memory performance optimization
+
+**All Opus agents use**:
+- Model: `claude-opus-4.5`
+- Effort: `high` (thoroughness optimization)
+- Complexity Tier: `9-10`
+- Color: `cyan` (visual identification)
+
+---
+
+**Complete Agent List**: See [.claude/agents/](.claude/agents/) for all 103 specialized agents (89 specialized + 12 Opus-tier + 2 coordination)
 
 ---
 
@@ -490,12 +860,19 @@ The ORCHESTRAI system provides comprehensive workflow tracking and analytics thr
 
 ## Additional Documentation
 
+### Core System Guides
 - **[UNIVERSAL-AGENT-DELEGATION-PATTERN.md](UNIVERSAL-AGENT-DELEGATION-PATTERN.md)** - Complete guide to domain-agnostic agent invocation
 - **[CONTENT-CREATION-GUIDE.md](CONTENT-CREATION-GUIDE.md)** - Detailed content creation workflow, quality checklists, and prompting strategies
 - **[CLAUDE-CODE-HOOKS.md](CLAUDE-CODE-HOOKS.md)** - Hook configuration and workflow analytics
 - **[tests/hybrid-delegation-test-workflow.md](tests/hybrid-delegation-test-workflow.md)** - Testing guide for hybrid delegation system
 - **[HYBRID-DELEGATION-QUICK-START.md](HYBRID-DELEGATION-QUICK-START.md)** - Quick start guide for orchestrai-master-coordinator
 - **[ORCHESTRAI-IMPLEMENTATION-PLAN.md](ORCHESTRAI-IMPLEMENTATION-PLAN.md)** - Complete implementation roadmap
+
+### Plugin Integration Guides 🆕
+- **[FRONTEND-PLUGIN-INTEGRATION-GUIDE.md](FRONTEND-PLUGIN-INTEGRATION-GUIDE.md)** - How to use frontend-design skill with ORCHESTRAI agents
+- **[AGENT-SDK-PLUGIN-GUIDE.md](AGENT-SDK-PLUGIN-GUIDE.md)** - Complete Agent SDK plugin guide with strategic integration analysis
+- **[PLUGIN-BENEFITS-ANALYSIS.md](PLUGIN-BENEFITS-ANALYSIS.md)** - Financial impact analysis and implementation roadmap ($180K-$265K/year opportunity)
+- **[INSTALLED-PLUGINS-REFERENCE.md](INSTALLED-PLUGINS-REFERENCE.md)** - Complete reference for all 5 installed Claude plugins
 
 ---
 

@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-const { Pool } = require('pg');
+const { getPoolManager } = require('../../../orchestrai-shared/database/pg-pool-manager');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs').promises;
@@ -47,16 +47,11 @@ class SERPTracker {
       const configData = await fs.readFile(configPath, 'utf8');
       this.config = JSON.parse(configData).trackingConfig;
 
-      // Initialize PostgreSQL connection pool
-      this.db = new Pool({
-        user: process.env.POSTGRES_USER || 'postgres',
-        host: process.env.POSTGRES_HOST || 'localhost',
-        database: process.env.POSTGRES_DATABASE || 'orchestrai_serp',
-        password: process.env.POSTGRES_PASSWORD || '',
-        port: process.env.POSTGRES_PORT || 5432,
-        max: 20,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 2000,
+      // Initialize PostgreSQL connection pool via centralized pool manager
+      const poolManager = getPoolManager();
+      this.db = poolManager.getPool('serp-tracker', {
+        database: process.env.POSTGRES_DATABASE || 'orchestrai_serp'
+        // Other config (user, host, password, port) handled by pool manager from env
       });
 
       // Test database connection
@@ -640,14 +635,14 @@ class SERPTracker {
 
   /**
    * Cleanup resources
+   * Note: Database pool is managed by centralized pool manager and will
+   * be closed automatically on application shutdown. We don't close it here
+   * to allow other modules to continue using the shared pool.
    */
   async close() {
-    if (this.db) {
-      await this.db.end();
-      console.log('✅ Database connection closed');
-    }
-
+    // Clear cache only - pool is shared and managed centrally
     this.cache.clear();
+    console.log('✅ SERP Tracker cache cleared');
   }
 }
 

@@ -107,12 +107,14 @@ class StableOrchestraiMaster extends EventEmitter {
       await this.initializeRedis();
       await this.initializeMCPManager();
       
-      // Phase 2: Main Orchestrator Agent  
+      // Phase 2: Main Orchestrator Agent
       await this.initializeMainOrchestratorAgent();
-      
-      // Phase 2.5: Multilingual Content System
-      await this.initializeMultilingualSystem();
-      
+
+      // Phase 2.5: Multilingual Content System (TEMPORARILY DISABLED - causing initialization hang)
+      console.log('⚠️  Phase 2.5: Multilingual Content System SKIPPED (temporary)');
+      this.initializationState.multilingualSystem = 'skipped';
+      // await this.initializeMultilingualSystem();
+
       // Phase 3: Domain Management
       await this.initializeDomainManager();
       
@@ -302,7 +304,13 @@ class StableOrchestraiMaster extends EventEmitter {
       
       // Initialize all systems (multilingual system is optional)
       try {
-        await this.multilingualSystem.initialize();
+        // Add timeout protection (30 seconds max)
+        const multilingualInitPromise = this.multilingualSystem.initialize();
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Multilingual system initialization timeout (30s)')), 30000);
+        });
+
+        await Promise.race([multilingualInitPromise, timeoutPromise]);
         console.log('✅ Multilingual system initialized successfully');
       } catch (error) {
         console.error('⚠️ Multilingual system initialization failed (non-critical):', error.message);

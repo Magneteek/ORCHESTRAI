@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligence Reports - Component Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/design-system.css">
+    <style>
+        .component-section {
+            margin-bottom: var(--space-16);
+            padding-bottom: var(--space-16);
+            border-bottom: 2px solid var(--border-light);
+        }
+        .component-demo {
+            background-color: var(--bg-secondary);
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            margin: var(--space-6) 0;
+        }
+        .code-block {
+            background-color: var(--text-primary);
+            color: #10b981;
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            font-family: 'Courier New', monospace;
+            font-size: var(--font-sm);
+            overflow-x: auto;
+            margin: var(--space-6) 0;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Component Library</h1>
+            <p class="subtitle">Intelligence Reports Design System</p>
+            <div class="hero-badge">NO GRADIENTS - Solid & Translucent Colors Only</div>
+        </div>
+    </section>
+
+    <div style="background-color: var(--bg-secondary); padding: var(--space-20) 0;">
+        <div class="container">
+
+            <!-- METRIC CARDS -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Metric Cards</h2>
+
+                <h3 style="margin-top: var(--space-8);">Solid Purple Background</h3>
+                <div class="component-demo">
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">84.2%</div>
+                            <div class="metric-label">Strategic Coherence</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">36K</div>
+                            <div class="metric-label">Monthly Search Volume</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">3</div>
+                            <div class="metric-label">ICP Segments</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">9.2/10</div>
+                            <div class="metric-label">Market Opportunity</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="metric-grid"&gt;
+    &lt;div class="metric-card"&gt;
+        &lt;div class="metric-value"&gt;84.2%&lt;/div&gt;
+        &lt;div class="metric-label"&gt;Strategic Coherence&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+                </div>
+
+                <h3 style="margin-top: var(--space-12);">White with Purple Border (Alternative)</h3>
+                <div class="component-demo">
+                    <div class="metric-grid">
+                        <div class="metric-card-alt">
+                            <div class="metric-value">55</div>
+                            <div class="metric-label">Keywords Analyzed</div>
+                        </div>
+                        <div class="metric-card-alt">
+                            <div class="metric-value">9</div>
+                            <div class="metric-label">Semantic Clusters</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="metric-grid"&gt;
+    &lt;div class="metric-card-alt"&gt;
+        &lt;div class="metric-value"&gt;55&lt;/div&gt;
+        &lt;div class="metric-label"&gt;Keywords Analyzed&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </div>
+
+            <!-- ICP CARDS -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">ICP Summary Cards</h2>
+
+                <div class="component-demo">
+                    <div class="icp-grid">
+                        <div class="icp-card">
+                            <div class="icp-icon">B2B</div>
+                            <h3 class="icp-title">Basketball Clubs</h3>
+                            <div class="icp-meta">
+                                <span class="icp-revenue-weight">40% Revenue Weight</span>
+                                <span style="color: var(--text-tertiary);"> • 87.3% Relevance</span>
+                            </div>
+                            <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">Semi-pro and amateur basketball clubs seeking affordable halftime engagement with measurable ROI.</p>
+                            <div class="icp-stats">
+                                <div class="icp-stats-grid">
+                                    <div class="icp-stat"><strong>LTV:</strong> $30,000</div>
+                                    <div class="icp-stat"><strong>CAC:</strong> $2,000</div>
+                                    <div class="icp-stat"><strong>Payback:</strong> 3-4 mo</div>
+                                    <div class="icp-stat"><strong>Churn:</strong> 5%</div>
+                                </div>
+                            </div>
+                            <a href="#" class="btn btn-primary" style="display: block; margin-top: var(--space-6);">View Complete ICP →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="icp-card"&gt;
+    &lt;div class="icp-icon"&gt;B2B&lt;/div&gt;
+    &lt;h3 class="icp-title"&gt;Basketball Clubs&lt;/h3&gt;
+    &lt;div class="icp-meta"&gt;
+        &lt;span class="icp-revenue-weight"&gt;40% Revenue Weight&lt;/span&gt;
+        &lt;span&gt; • 87.3% Relevance&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;p&gt;Description...&lt;/p&gt;
+    &lt;div class="icp-stats"&gt;
+        &lt;div class="icp-stats-grid"&gt;
+            &lt;div class="icp-stat"&gt;&lt;strong&gt;LTV:&lt;/strong&gt; $30,000&lt;/div&gt;
+            &lt;div class="icp-stat"&gt;&lt;strong&gt;CAC:&lt;/strong&gt; $2,000&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;View Complete ICP →&lt;/a&gt;
+&lt;/div&gt;
+                </div>
+            </div>
+
+            <!-- FEATURE CARDS -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Feature Cards</h2>
+
+                <div class="component-demo">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4 class="feature-card-title">Creator Cold Start Solution</h4>
+                            <p class="feature-card-content">Activate 100+ creators by Q1 2026 through grants program and early bonuses to solve supply-side marketplace challenge.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4 class="feature-card-title">Basketball Niche Dominance</h4>
+                            <p class="feature-card-content">Achieve 200 clubs Year 1 before horizontal expansion. Own halftime activation category with zero competition.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="feature-grid"&gt;
+    &lt;div class="feature-card"&gt;
+        &lt;h4 class="feature-card-title"&gt;Title&lt;/h4&gt;
+        &lt;p class="feature-card-content"&gt;Content...&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </div>
+
+            <!-- INFO BOXES -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Info Boxes</h2>
+
+                <div class="component-demo">
+                    <div class="info-box">
+                        <h3 class="info-box-title">🎯 Strategic Insight</h3>
+                        <div class="info-box-content">
+                            <strong>Halftime Activation Niche:</strong> ZERO direct competition. Validated use case creates immediate category ownership opportunity with 30-60 day ranking timeline for multiple #1 positions.
+                        </div>
+                    </div>
+
+                    <div class="warning-box" style="margin-top: var(--space-6);">
+                        <h3 style="font-size: var(--font-xl); font-weight: var(--font-bold); color: var(--warning-text); margin-bottom: var(--space-3);">⚠️ Warning</h3>
+                        <div style="color: var(--warning-text); font-weight: var(--font-medium);">
+                            This is a warning message with solid background colors.
+                        </div>
+                    </div>
+
+                    <div class="danger-box" style="margin-top: var(--space-6);">
+                        <h3 style="font-size: var(--font-xl); font-weight: var(--font-bold); color: var(--danger-text); margin-bottom: var(--space-3);">🚨 Critical</h3>
+                        <div style="color: var(--danger-text); font-weight: var(--font-medium);">
+                            This is a danger/critical message.
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="info-box"&gt;
+    &lt;h3 class="info-box-title"&gt;🎯 Strategic Insight&lt;/h3&gt;
+    &lt;div class="info-box-content"&gt;Content...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="warning-box"&gt;...&lt;/div&gt;
+&lt;div class="danger-box"&gt;...&lt;/div&gt;
+                </div>
+            </div>
+
+            <!-- BADGES -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Status Badges</h2>
+
+                <div class="component-demo">
+                    <div style="display: flex; flex-wrap: wrap; gap: var(--space-4);">
+                        <span class="badge badge-success">Success / Completed</span>
+                        <span class="badge badge-warning">Warning / In Progress</span>
+                        <span class="badge badge-danger">Danger / Blocked</span>
+                        <span class="badge badge-info">Info / Pending</span>
+                        <span class="badge badge-purple">Purple / Featured</span>
+                        <span class="badge badge-outline badge-purple">Outline Style</span>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;span class="badge badge-success"&gt;Success&lt;/span&gt;
+&lt;span class="badge badge-warning"&gt;Warning&lt;/span&gt;
+&lt;span class="badge badge-danger"&gt;Danger&lt;/span&gt;
+&lt;span class="badge badge-info"&gt;Info&lt;/span&gt;
+&lt;span class="badge badge-purple"&gt;Purple&lt;/span&gt;
+&lt;span class="badge badge-outline badge-purple"&gt;Outline&lt;/span&gt;
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Buttons</h2>
+
+                <div class="component-demo">
+                    <div style="display: flex; flex-wrap: wrap; gap: var(--space-4);">
+                        <a href="#" class="btn btn-primary">Primary Button</a>
+                        <a href="#" class="btn btn-secondary">Secondary Button</a>
+                        <a href="#" class="btn btn-white">White Button</a>
+                        <a href="#" class="btn btn-primary btn-lg">Large Button</a>
+                        <a href="#" class="btn btn-primary btn-sm">Small Button</a>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;a href="#" class="btn btn-primary"&gt;Primary&lt;/a&gt;
+&lt;a href="#" class="btn btn-secondary"&gt;Secondary&lt;/a&gt;
+&lt;a href="#" class="btn btn-white"&gt;White&lt;/a&gt;
+&lt;a href="#" class="btn btn-primary btn-lg"&gt;Large&lt;/a&gt;
+&lt;a href="#" class="btn btn-primary btn-sm"&gt;Small&lt;/a&gt;
+                </div>
+            </div>
+
+            <!-- TABLES -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Data Tables</h2>
+
+                <div class="component-demo">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Keyword</th>
+                                    <th>Volume</th>
+                                    <th>Difficulty</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>sports highlight platform</strong></td>
+                                    <td>90/mo</td>
+                                    <td>12</td>
+                                    <td><span class="badge badge-success">Easy</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>halftime entertainment</strong></td>
+                                    <td>150/mo</td>
+                                    <td>10</td>
+                                    <td><span class="badge badge-success">Easy</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>basketball challenges</strong></td>
+                                    <td>320/mo</td>
+                                    <td>25</td>
+                                    <td><span class="badge badge-warning">Medium</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="table-container"&gt;
+    &lt;table&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Column 1&lt;/th&gt;
+                &lt;th&gt;Column 2&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Data 1&lt;/td&gt;
+                &lt;td&gt;Data 2&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+                </div>
+            </div>
+
+            <!-- NAVIGATION -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Sticky Navigation</h2>
+
+                <div class="component-demo">
+                    <div class="sticky-nav" style="position: relative;">
+                        <nav>
+                            <a href="#" class="active">Overview</a>
+                            <a href="#">Demographics</a>
+                            <a href="#">Psychographics</a>
+                            <a href="#">Pain Points</a>
+                            <a href="#">Value Proposition</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="sticky-nav"&gt;
+    &lt;nav&gt;
+        &lt;a href="#overview" class="active"&gt;Overview&lt;/a&gt;
+        &lt;a href="#demographics"&gt;Demographics&lt;/a&gt;
+    &lt;/nav&gt;
+&lt;/div&gt;
+                </div>
+            </div>
+
+            <!-- HERO SECTION -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Hero Section</h2>
+
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+                    Solid purple background with pattern overlay (NO GRADIENTS)
+                </p>
+                <div class="code-block">
+&lt;section class="hero"&gt;
+    &lt;div class="hero-content"&gt;
+        &lt;h1&gt;Client Name&lt;/h1&gt;
+        &lt;p class="subtitle"&gt;Tagline&lt;/p&gt;
+        &lt;div class="hero-badge"&gt;Badge Text&lt;/div&gt;
+        &lt;a href="#" class="btn btn-primary btn-lg"&gt;CTA&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/section&gt;
+                </div>
+            </div>
+
+            <!-- SECTION CARDS -->
+            <div class="component-section">
+                <h2 style="font-size: var(--font-4xl); font-weight: var(--font-bold); margin-bottom: var(--space-8);">Section Cards</h2>
+
+                <div class="component-demo">
+                    <div class="section">
+                        <div class="section-header">
+                            <span class="section-icon">📊</span>
+                            <h2 class="section-title">Section Title</h2>
+                        </div>
+                        <p style="color: var(--text-secondary);">Section content goes here...</p>
+                    </div>
+                </div>
+                <div class="code-block">
+&lt;div class="section"&gt;
+    &lt;div class="section-header"&gt;
+        &lt;span class="section-icon"&gt;📊&lt;/span&gt;
+        &lt;h2 class="section-title"&gt;Section Title&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;!-- Content --&gt;
+&lt;/div&gt;
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>ORCHESTRAI Intelligence Reports Component Library - NO GRADIENTS</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -17,6 +17,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const EventEmitter = require('events');
+const ClientIntelligenceReport = require('../../../orchestrai-system/templates/html-reports/ClientIntelligenceReport');
 
 class IntelligenceHTMLReportPipeline extends EventEmitter {
   constructor(orchestrator, clientIntelligenceHub) {
@@ -436,10 +437,10 @@ class IntelligenceHTMLReportPipeline extends EventEmitter {
   }
 
   /**
-   * STAGE 4: Delegate HTML generation to frontend agents
+   * STAGE 4: Generate HTML using new template system
    */
   async stage4_generateHTML(reportSpec, config) {
-    console.log(`STAGE 4: Delegating HTML generation to frontend agents...`);
+    console.log(`STAGE 4: Generating HTML using new template system...`);
 
     // Determine output path
     const clientProjectPath = this.getClientProjectPath(config.clientId);
@@ -515,17 +516,64 @@ Execute this task using your frontend development expertise.`;
   }
 
   /**
-   * Generate HTML template using sophisticated template generator
+   * Generate HTML template using new ClientIntelligenceReport template system
    */
   async generateHTMLTemplate(reportSpec) {
-    const TemplateGenerator = require('../templates/intelligence-report-template-generator');
-    const generator = new TemplateGenerator();
+    // Initialize new template system
+    const reportTemplate = new ClientIntelligenceReport();
 
-    // Load original JSON data for template generation
+    // Load original JSON data
     const jsonData = await this.loadOriginalJSONData(reportSpec);
 
-    // Generate HTML using sophisticated template
-    const htmlContent = generator.generate(reportSpec, jsonData);
+    // Prepare data for template
+    const reportData = {
+      header: {
+        title: reportSpec.title,
+        subtitle: reportSpec.metadata.client,
+        metadata: {
+          reportDate: reportSpec.metadata.reportDate,
+          reportType: reportSpec.metadata.reportType,
+          generatedAt: reportSpec.metadata.generatedAt
+        }
+      },
+      // EOS Framework data
+      eos: jsonData.eos || null,
+      // ICP and Personas
+      icp: jsonData.icp || null,
+      personas: jsonData.personas || [],
+      // Psychographic research
+      psychographic: jsonData.psychographic || null,
+      // Market intelligence
+      marketAnalysis: jsonData.marketAnalysis || [],
+      competitiveLandscape: jsonData.competitiveLandscape || null,
+      // Strategy recommendations
+      contentStrategy: jsonData.contentStrategy || null,
+      seoStrategy: jsonData.seoStrategy || null,
+      webStrategy: jsonData.webStrategy || null,
+      // Executive summary
+      executiveSummary: jsonData.executiveSummary || null,
+      // Complete data for reference
+      completeData: jsonData
+    };
+
+    // Prepare report configuration
+    const reportConfig = {
+      clientName: reportSpec.metadata.client,
+      reportType: reportSpec.metadata.reportType,
+      title: reportSpec.title,
+      reportDate: reportSpec.metadata.reportDate,
+      // Build sections from reportSpec
+      sections: reportSpec.sections
+        .filter(s => s.id !== 'header' && s.id !== 'raw-data') // Exclude header and raw data
+        .map(s => ({
+          id: s.id,
+          title: s.title,
+          navTitle: s.title.replace(/\s*-\s*/g, ' ') // Clean up title for nav
+        }))
+    };
+
+    // Generate HTML using template
+    const htmlContent = reportTemplate.generate(reportData, reportConfig);
 
     return htmlContent;
   }

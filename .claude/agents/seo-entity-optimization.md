@@ -1,7 +1,7 @@
 ---
 name: seo-entity-optimization
 description: Entity SEO and knowledge graph optimization specialist. Use proactively for entity optimization, schema markup, and knowledge graph integration.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors
 model: sonnet
 ---
 

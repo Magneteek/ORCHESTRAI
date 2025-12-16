@@ -101,3 +101,21 @@ Orchestrai-frontend/dist/
 /tools/
 /Copy/
 /applications/
+
+# Backup files (use git history instead of manual backups)
+*.BACKUP.js
+*-backup.js
+*-transformed.js
+*.js.backup
+*.backup
+*.bak
+*.old
+*-old.js
+*.orig
+~*
+.*.swp
+.*.swo
+
+# Build cache files
+*.pack.old
+*.pack.gz.old

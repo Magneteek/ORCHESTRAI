@@ -1,7 +1,7 @@
 ---
 name: seo-content-optimization
 description: Advanced content optimization and on-page SEO specialist. Use proactively for content analysis, optimization recommendations, and on-page SEO improvements.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__competitor_domains
 model: sonnet
 ---
 

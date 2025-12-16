@@ -66,20 +66,26 @@ This guide documents the mandatory content creation workflow for ORCHESTRAI. Thi
 
 ### Phase 5: Content Flow Review & Optimization (MANDATORY QA GATES)
 
-1. **AI DETECTION VALIDATION (MANDATORY GATE)**: Run content-ai-phrase-detector on all articles
+1. **LANGUAGE VALIDATION (MANDATORY GATE #1)**: Run language-validation-specialist on all articles FIRST
+   - **Threshold**: Language purity must be 100% or automatic rejection
+   - **Character Encoding**: Detect Cyrillic, Greek, or other non-Latin contamination
+   - **Cross-Contamination**: Flag ANY foreign language words (English, Italian, etc.)
+   - **Zero Tolerance**: Even a single foreign word blocks publication
+   - **Common Issues**: Cyrillic characters (Важно), Italian verbs (Utilizzaš), English words
+2. **AI DETECTION VALIDATION (MANDATORY GATE #2)**: Run content-ai-phrase-detector on all articles
    - **Threshold**: AI detection risk must be <30% or automatic revision required
    - **Target**: Achieve 15-25% (human-level detection range)
    - **Common Issues**: Picture yourself, Let's be honest, repetitive patterns, weak intensifiers
-2. **Natural Flow Audit**: Review entire article for conversational flow and natural transitions
-3. **Quality Assurance Coordinator**: Apply content-quality-validator for comprehensive checks
+3. **Natural Flow Audit**: Review entire article for conversational flow and natural transitions
+4. **Quality Assurance Coordinator**: Apply content-quality-validator for comprehensive checks
    - Paragraph distribution validation (40/40/20)
    - Readability assessment
    - Engagement element verification
-4. **SEO Optimization**: Final keyword placement within natural language flow
-5. **Memory Integration**: Update crystalline memory with new content relationships
-6. **Internal Linking**: Implement planned internal linking architecture
-7. **Final Validation**: Ensure all psychographic, SEO, and natural writing requirements are met
-8. **STOP POINT**: Content ONLY marked complete after passing all QA gates including AI detection <30%
+5. **SEO Optimization**: Final keyword placement within natural language flow
+6. **Memory Integration**: Update crystalline memory with new content relationships
+7. **Internal Linking**: Implement planned internal linking architecture
+8. **Final Validation**: Ensure all psychographic, SEO, and natural writing requirements are met
+9. **STOP POINT**: Content ONLY marked complete after passing all QA gates including language purity 100% AND AI detection <30%
 
 ### Phase 6: Iterative Revision Process (WHEN NEEDED)
 
@@ -140,7 +146,10 @@ This guide documents the mandatory content creation workflow for ORCHESTRAI. Thi
 
 **Complete this checklist before marking ANY content as "done":**
 
-□ **LANGUAGE CONSISTENCY**: Pure target language throughout, no mixing or English words
+□ **LANGUAGE PURITY**: 100% target language - ZERO foreign words (run language-validation-specialist)
+□ **CHARACTER ENCODING**: No Cyrillic, Greek, or non-Latin characters detected
+□ **CROSS-CONTAMINATION**: No English, Italian, Spanish, or other language mixing
+□ **AI DETECTION**: <30% AI detection risk (run content-ai-phrase-detector)
 □ All Content Requirements covered in paragraph form (not lists)
 □ Paragraph distribution: 40% short, 40% medium, 20% long (±5% tolerance)
 □ Content variety: Tables, boxes, engagement elements included

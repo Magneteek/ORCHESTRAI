@@ -6,8 +6,8 @@
         "./orchestrai-shared/mcp-servers/dataforseo-server.js"
       ],
       "env": {
-        "DATAFORSEO_USERNAME": "${DATAFORSEO_USERNAME}",
-        "DATAFORSEO_PASSWORD": "${DATAFORSEO_PASSWORD}"
+        "DATAFORSEO_USERNAME": "kristjan@krisbal.com",
+        "DATAFORSEO_PASSWORD": "8f885b01151a9cd8"
       }
     },
     "sequential-thinking": {
@@ -48,7 +48,7 @@
         "@notionhq/notion-mcp-server"
       ],
       "env": {
-        "NOTION_TOKEN": "${NOTION_TOKEN}"
+        "NOTION_TOKEN": "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"
       }
     },
     "shadcn-ui": {

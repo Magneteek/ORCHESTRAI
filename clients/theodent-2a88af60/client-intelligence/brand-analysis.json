@@ -1,0 +1,168 @@
+{
+  "brandIntelligence": {
+    "analysisDate": "2025-12-10",
+    "clientId": "2a88af60-dd95-463a-9448-57eca9ea96a8",
+    "brandName": "Theodent",
+    "company": "Theo Corporation",
+    "headquarters": "United States (Louisiana)",
+    "contactInfo": {
+      "phone": "+1.504.264.5050",
+      "email": "info@theo-corp.com",
+      "website": "https://shoptheodent.com"
+    }
+  },
+  "uniqueValueProposition": {
+    "coreTechnology": "Rennou",
+    "activeIngredient": "Theobromine (derived from cacao/chocolate)",
+    "mechanism": "Enamel remineralization through theobromine-based technology",
+    "keyDifferentiator": "Fluoride-free formula using chocolate-derived compound proven more effective than fluoride",
+    "scientificClaims": [
+      "Theobromine remineralizes and hardens tooth enamel at greater rate than fluoride",
+      "Unit crystal size quadruples to approximately 2 microns when exposed to theobromine",
+      "142 times less concentration than fluoride produces twice the protective effect",
+      "Clinically proven to strengthen and repair tooth enamel"
+    ],
+    "patentedFormula": true,
+    "researchBacking": {
+      "leadResearcher": "Dr. Ben Amaechi",
+      "institution": "UT Health Science Center at San Antonio",
+      "publication": "Caries Research journal",
+      "studyType": "Peer-reviewed clinical study"
+    }
+  },
+  "brandPositioning": {
+    "segment": "Ultra-premium / Luxury oral care",
+    "pricePosition": "Highest tier (up to $99.99 per tube for Theodent 300)",
+    "targetMarket": "Health-conscious consumers, fluoride-free seekers, premium buyers",
+    "brandPromise": "Superior enamel remineralization without fluoride toxicity concerns",
+    "keyMessaging": [
+      "Leader in innovative enamel remineralization technology",
+      "Recommended by dentists for superior effectiveness",
+      "Non-toxic, safe if swallowed",
+      "Premium ingredients for superior oral care experience"
+    ]
+  },
+  "productPortfolio": {
+    "theodent300": {
+      "name": "Theodent 300",
+      "description": "Clinical strength luxury formula",
+      "retailPrice": {
+        "USD": 99.99,
+        "EUR": 97.25
+      },
+      "size": "3.4 oz (96.4g)",
+      "flavor": "Whitening Crystal Mint / Diamond Mint",
+      "positioning": "Ultra-premium clinical strength"
+    },
+    "theodentClassic": {
+      "name": "Theodent Classic",
+      "description": "Standard adult formula with Rennou technology",
+      "retailPrice": {
+        "USD": 14.99,
+        "EUR": "~15-18 (estimated)"
+      },
+      "size": "3.4 oz (96.4g)",
+      "flavor": "Spearmint",
+      "positioning": "Premium mainstream"
+    },
+    "theodentKids": {
+      "name": "Theodent Kids",
+      "description": "Children's fluoride-free formula",
+      "retailPrice": {
+        "USD": 11.99,
+        "EUR": "~12-15 (estimated)"
+      },
+      "size": "3.4 oz (96.4g)",
+      "flavor": "Chocolate Chip",
+      "positioning": "Premium children's oral care",
+      "uniqueFeature": "Chocolate flavor appeals to children, safe if swallowed"
+    }
+  },
+  "brandReputation": {
+    "overallSentiment": "Positive",
+    "customerReviewHighlights": [
+      "Desensitized incredibly sensitive teeth",
+      "Significantly whitened teeth",
+      "Clean feeling similar to dental cleaning",
+      "Worth the premium price for effectiveness"
+    ],
+    "scientificCredibility": "High - peer-reviewed research backing",
+    "dentistEndorsement": "Recommended by dentists",
+    "mediaRecognition": [
+      "Featured in Medscape",
+      "Published in British Dental Journal (Nature)",
+      "Covered by Perio Implant Advisory"
+    ]
+  },
+  "competitiveAdvantages": {
+    "primaryDifferentiators": [
+      "Only theobromine-based toothpaste on market",
+      "Patented Rennou technology not replicable",
+      "Fluoride-free with clinical effectiveness claims",
+      "Safe if swallowed (no poison control warning required)",
+      "Unique chocolate-derived formulation story"
+    ],
+    "barriers": [
+      "Very high price point limits market accessibility",
+      "Limited brand awareness outside niche markets",
+      "Premium positioning requires educated consumers",
+      "Research primarily from 2013 - limited recent studies"
+    ]
+  },
+  "internationalPresence": {
+    "currentDistribution": {
+      "primaryMarket": "United States",
+      "internationalRetailers": [
+        "Amazon.com (primary)",
+        "Smile-Store.de (Germany)",
+        "Landys Chemist (UK)",
+        "BIOVEA (Europe)",
+        "GoSupps.com (International)",
+        "Living Earth Beauty (Natural beauty retailers)"
+      ],
+      "wholesaleProgram": "Available - requires direct application",
+      "europePresence": "Limited - primarily through specialty retailers"
+    },
+    "spainCurrentAvailability": {
+      "amazonEs": "Not readily available",
+      "pharmacies": "Not currently distributed",
+      "onlineRetailers": "Limited to international shipping options",
+      "marketGap": "SIGNIFICANT - no dedicated Spanish distributor identified"
+    }
+  },
+  "swotAnalysis": {
+    "strengths": [
+      "Patented unique technology with scientific backing",
+      "Strong differentiation in premium fluoride-free segment",
+      "Positive customer reviews and loyalty",
+      "Complete product line (adults, premium, kids)"
+    ],
+    "weaknesses": [
+      "Very high price point barrier",
+      "Limited brand awareness in Europe",
+      "Research is somewhat dated (2013)",
+      "Small company resources vs major competitors"
+    ],
+    "opportunities": [
+      "Growing fluoride-free market demand",
+      "Spanish market lacks premium fluoride-free options",
+      "Health-conscious consumer trend aligns with positioning",
+      "First-mover advantage in Spanish market"
+    ],
+    "threats": [
+      "Established premium competitors (Regenerate, Marvis)",
+      "Major brands entering fluoride-free segment",
+      "Regulatory complexity for new market entry",
+      "Economic sensitivity in premium segment"
+    ]
+  },
+  "sources": [
+    "https://shoptheodent.com/pages/technology",
+    "https://www.medscape.com/viewarticle/814085",
+    "https://www.nature.com/articles/sj.bdj.2013.499",
+    "https://www.prnewswire.com/news-releases/dental-research--theobromine-the-chocolate-based-active-ingredient--in-theodent-toothpaste-works-better-than-fluoride-to-strengthen-teeth-205374281.html",
+    "https://www.amazon.com/THEODENT-CLASSIC-Rennou%C2%AE-Fluoride-Free-Strengthens/dp/B008GY3X74",
+    "https://intothegloss.com/2014/06/chocolate-toothpaste",
+    "https://www.landyschemist.com/theodent"
+  ]
+}

@@ -14,6 +14,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const pLimit = require('p-limit');
 
 class ComprehensiveIntelligenceAggregator {
   constructor(clientIntelligencePath) {
@@ -27,6 +28,11 @@ class ComprehensiveIntelligenceAggregator {
       marketAnalysis: [],
       clientProfile: null
     };
+
+    // CRASH PREVENTION: Limit concurrent file operations to prevent
+    // file descriptor exhaustion and SQLite contention in VS Code
+    this.fileLimit = pLimit(5); // Max 5 concurrent file operations
+    this.readLimit = pLimit(3); // Max 3 concurrent file reads
   }
 
   /**
@@ -77,7 +83,8 @@ class ComprehensiveIntelligenceAggregator {
         return;
       }
 
-      const eosContent = await fs.readFile(eosFiles[0], 'utf8');
+      // CRASH PREVENTION: Rate-limited file read
+      const eosContent = await this.readLimit(() => fs.readFile(eosFiles[0], 'utf8'));
       this.data.eos = this.parseEOSMarkdown(eosContent);
 
       console.log('   ✓ EOS data loaded');
@@ -163,7 +170,8 @@ class ComprehensiveIntelligenceAggregator {
         return;
       }
 
-      const icpContent = await fs.readFile(icpFiles[0], 'utf8');
+      // CRASH PREVENTION: Rate-limited file read
+      const icpContent = await this.readLimit(() => fs.readFile(icpFiles[0], 'utf8'));
       this.data.icp = this.parseICPMarkdown(icpContent);
 
       console.log('   ✓ ICP data loaded');
@@ -268,7 +276,8 @@ class ComprehensiveIntelligenceAggregator {
         return;
       }
 
-      const personaContent = await fs.readFile(personaFiles[0], 'utf8');
+      // CRASH PREVENTION: Rate-limited file read
+      const personaContent = await this.readLimit(() => fs.readFile(personaFiles[0], 'utf8'));
       this.data.personas = this.parsePersonasMarkdown(personaContent);
 
       console.log(`   ✓ Personas loaded: ${this.data.personas.length} personas`);
@@ -325,7 +334,8 @@ class ComprehensiveIntelligenceAggregator {
         return;
       }
 
-      const psychoContent = await fs.readFile(psychoFiles[0], 'utf8');
+      // CRASH PREVENTION: Rate-limited file read
+      const psychoContent = await this.readLimit(() => fs.readFile(psychoFiles[0], 'utf8'));
       this.data.psychographic = JSON.parse(psychoContent);
 
       // Add user journey keyword mapping
@@ -426,18 +436,25 @@ class ComprehensiveIntelligenceAggregator {
       console.log('Loading market analysis...');
       const marketFiles = await this.findFiles('market-analysis/*.json');
 
-      for (const file of marketFiles) {
-        try {
-          const content = await fs.readFile(file, 'utf8');
-          const data = JSON.parse(content);
-          this.data.marketAnalysis.push({
-            filename: path.basename(file),
-            data: data
-          });
-        } catch (e) {
-          console.log(`   ⚠️  Could not load ${path.basename(file)}`);
-        }
-      }
+      // CRASH PREVENTION: Rate-limited parallel file reads
+      const loadPromises = marketFiles.map(file =>
+        this.readLimit(async () => {
+          try {
+            const content = await fs.readFile(file, 'utf8');
+            const data = JSON.parse(content);
+            return {
+              filename: path.basename(file),
+              data: data
+            };
+          } catch (e) {
+            console.log(`   ⚠️  Could not load ${path.basename(file)}`);
+            return null;
+          }
+        })
+      );
+
+      const results = await Promise.all(loadPromises);
+      this.data.marketAnalysis = results.filter(r => r !== null);
 
       if (this.data.marketAnalysis.length > 0) {
         console.log(`   ✓ Market analysis loaded: ${this.data.marketAnalysis.length} files`);
@@ -462,7 +479,8 @@ class ComprehensiveIntelligenceAggregator {
         return;
       }
 
-      const profileContent = await fs.readFile(profileFiles[0], 'utf8');
+      // CRASH PREVENTION: Rate-limited file read
+      const profileContent = await this.readLimit(() => fs.readFile(profileFiles[0], 'utf8'));
       this.data.clientProfile = JSON.parse(profileContent);
 
       console.log('   ✓ Client profile loaded');
@@ -473,50 +491,53 @@ class ComprehensiveIntelligenceAggregator {
 
   /**
    * Find files matching patterns
+   * CRASH PREVENTION: Rate-limited to prevent file descriptor exhaustion
    */
   async findFiles(...patterns) {
-    const files = [];
+    // CRASH PREVENTION: Process patterns with concurrency limit
+    const patternPromises = patterns.map(pattern =>
+      this.fileLimit(async () => {
+        const isRecursive = pattern.includes('/');
 
-    for (const pattern of patterns) {
-      const isRecursive = pattern.includes('/');
+        if (isRecursive) {
+          // Handle directory patterns like "market-analysis/*.json"
+          const [dir, filePattern] = pattern.split('/');
+          const dirPath = path.join(this.intelligencePath, dir);
 
-      if (isRecursive) {
-        // Handle directory patterns like "market-analysis/*.json"
-        const [dir, filePattern] = pattern.split('/');
-        const dirPath = path.join(this.intelligencePath, dir);
+          try {
+            const dirFiles = await fs.readdir(dirPath);
+            // IMPORTANT: Escape dots FIRST, then replace * with .*
+            const regex = new RegExp(filePattern.replace(/\./g, '\\.').replace(/\*/g, '.*'));
 
-        try {
-          const dirFiles = await fs.readdir(dirPath);
-          // IMPORTANT: Escape dots FIRST, then replace * with .*
-          const regex = new RegExp(filePattern.replace(/\./g, '\\.').replace(/\*/g, '.*'));
-
-          for (const file of dirFiles) {
-            if (regex.test(file)) {
-              files.push(path.join(dirPath, file));
-            }
+            return dirFiles
+              .filter(file => regex.test(file))
+              .map(file => path.join(dirPath, file));
+          } catch (e) {
+            // Directory doesn't exist
+            return [];
           }
-        } catch (e) {
-          // Directory doesn't exist
-        }
-      } else {
-        // Handle file patterns like "*.md"
-        try {
-          const allFiles = await fs.readdir(this.intelligencePath);
-          // IMPORTANT: Escape dots FIRST, then replace * with .* (case-insensitive)
-          const regex = new RegExp(pattern.replace(/\./g, '\\.').replace(/\*/g, '.*'), 'i');
+        } else {
+          // Handle file patterns like "*.md"
+          try {
+            const allFiles = await fs.readdir(this.intelligencePath);
+            // IMPORTANT: Escape dots FIRST, then replace * with .* (case-insensitive)
+            const regex = new RegExp(pattern.replace(/\./g, '\\.').replace(/\*/g, '.*'), 'i');
 
-          for (const file of allFiles) {
-            if (regex.test(file)) {
-              files.push(path.join(this.intelligencePath, file));
-            }
+            return allFiles
+              .filter(file => regex.test(file))
+              .map(file => path.join(this.intelligencePath, file));
+          } catch (e) {
+            // Directory doesn't exist
+            return [];
           }
-        } catch (e) {
-          // Directory doesn't exist
         }
-      }
-    }
+      })
+    );
 
-    return [...new Set(files)]; // Remove duplicates
+    const results = await Promise.all(patternPromises);
+    const allFiles = results.flat();
+
+    return [...new Set(allFiles)]; // Remove duplicates
   }
 
   /**

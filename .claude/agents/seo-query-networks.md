@@ -1,7 +1,7 @@
 ---
 name: seo-query-networks
 description: Advanced semantic query network analysis and relationship mapping specialist. Use proactively for query network optimization and semantic relationship analysis.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors
 model: sonnet
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: seo-serp-analysis
 description: SERP feature analysis and search result optimization specialist. Use proactively for SERP feature targeting and search result optimization.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__serp_competitors, mcp__dataforseo__search_intent
 model: sonnet
 ---
 

@@ -1,0 +1,260 @@
+{
+  "competitiveIntelligence": {
+    "analysisDate": "2025-12-10",
+    "clientId": "2a88af60-dd95-463a-9448-57eca9ea96a8",
+    "market": "Spain Premium Oral Care",
+    "focusCategory": "Premium / Fluoride-Free Toothpaste"
+  },
+  "marketStructure": {
+    "dominantPlayers": {
+      "combinedShare": "60%+",
+      "companies": ["Colgate-Palmolive", "Procter & Gamble"]
+    },
+    "totalBrandsCompeting": "200+",
+    "competitiveIntensity": "HIGH",
+    "pricingPressure": "Aggressive pricing strategies common"
+  },
+  "directCompetitors": {
+    "regenerate": {
+      "brand": "Regenerate Enamel Science",
+      "parent": "Unilever",
+      "positioning": "Premium enamel repair technology",
+      "pricePoint": {
+        "spain": "8.84-9.00 EUR per 75ml",
+        "pricePerMl": "0.12 EUR"
+      },
+      "keyTechnology": "NR-5 enamel regeneration",
+      "availability": {
+        "pharmacies": "Wide distribution",
+        "amazonEs": "Available",
+        "onlinePharmacies": "Strong presence"
+      },
+      "strengths": [
+        "Unilever distribution power",
+        "Clinical enamel science positioning",
+        "Strong marketing budget",
+        "Established pharmacy relationships"
+      ],
+      "weaknesses": [
+        "Contains fluoride",
+        "Premium but not ultra-premium",
+        "Less differentiated technology story"
+      ],
+      "marketShare": "Growing in premium segment",
+      "threatLevel": "HIGH - direct competitor in enamel repair space"
+    },
+    "marvis": {
+      "brand": "Marvis",
+      "parent": "Ludovico Martelli (Italian)",
+      "positioning": "Luxury lifestyle toothpaste",
+      "pricePoint": {
+        "spain": "6.99-7.00 EUR per 85ml",
+        "pricePerMl": "0.08 EUR"
+      },
+      "keyDifferentiator": "Unique flavors, luxury branding, Italian heritage",
+      "availability": {
+        "pharmacies": "Selective distribution",
+        "amazonEs": "Available",
+        "specialtyRetailers": "Premium beauty stores"
+      },
+      "strengths": [
+        "Strong luxury brand positioning",
+        "Unique flavor portfolio",
+        "European heritage credibility",
+        "Instagram-worthy packaging"
+      ],
+      "weaknesses": [
+        "Contains fluoride",
+        "Less clinical focus",
+        "Limited health benefits messaging"
+      ],
+      "marketShare": "Niche premium segment",
+      "threatLevel": "MODERATE - different positioning (lifestyle vs clinical)"
+    },
+    "biorepair": {
+      "brand": "BioRepair",
+      "parent": "Coswell SpA (Italian)",
+      "positioning": "Biomimetic enamel repair",
+      "pricePoint": {
+        "spain": "4.85-5.00 EUR per 75ml",
+        "pricePerMl": "0.07 EUR"
+      },
+      "keyTechnology": "microRepair hydroxyapatite particles",
+      "availability": {
+        "pharmacies": "Good distribution",
+        "amazonEs": "Available",
+        "onlinePharmacies": "Available"
+      },
+      "strengths": [
+        "Affordable premium positioning",
+        "Solid scientific backing",
+        "Italian quality perception",
+        "Multiple product variants"
+      ],
+      "weaknesses": [
+        "Contains fluoride in some variants",
+        "Less premium perception than Regenerate",
+        "Weaker brand awareness in Spain"
+      ],
+      "marketShare": "Growing in mid-premium segment",
+      "threatLevel": "MODERATE - similar technology angle but different price tier"
+    }
+  },
+  "indirectCompetitors": {
+    "sensodyne": {
+      "brand": "Sensodyne",
+      "parent": "Haleon (formerly GSK)",
+      "positioning": "Sensitivity specialist",
+      "pricePoint": "4-7 EUR per tube",
+      "newLaunch2024": "Sensodyne Repair & Defend+ Enzymes",
+      "strengths": [
+        "Dominant sensitivity category leader",
+        "Massive distribution",
+        "Strong dentist recommendations"
+      ],
+      "threatLevel": "MODERATE - different primary benefit focus"
+    },
+    "vitisPharmaceutica": {
+      "brand": "Vitis (Dentaid)",
+      "parent": "Dentaid (Spanish)",
+      "positioning": "Professional dental care",
+      "characteristics": "Local Spanish brand, pharmacy focus",
+      "pricePoint": "5-8 EUR range",
+      "strengths": [
+        "Spanish local brand loyalty",
+        "Strong pharmacy relationships",
+        "Professional endorsement focus"
+      ],
+      "threatLevel": "MODERATE - strong local presence"
+    },
+    "bexident": {
+      "brand": "Bexident",
+      "positioning": "Natural/organic oral care",
+      "characteristics": "Plant-based ingredients, biodegradable packaging",
+      "strengths": [
+        "Natural positioning",
+        "Sustainability focus",
+        "Growing eco-conscious segment"
+      ],
+      "threatLevel": "LOW-MODERATE - different technology approach"
+    },
+    "weleda": {
+      "brand": "Weleda",
+      "positioning": "Natural/organic oral care",
+      "characteristics": "Plant-based, chemical-free",
+      "fluorideFree": true,
+      "pricePoint": "5-7 EUR",
+      "strengths": [
+        "Strong natural brand recognition",
+        "Fluoride-free options",
+        "Loyal customer base"
+      ],
+      "threatLevel": "MODERATE - competes in fluoride-free space"
+    }
+  },
+  "pricePositioningAnalysis": {
+    "marketPriceRanges": {
+      "massMarket": {
+        "range": "1-3 EUR",
+        "examples": ["Colgate Total", "Oral-B standard"]
+      },
+      "midRange": {
+        "range": "3-6 EUR",
+        "examples": ["Sensodyne", "Parodontax"]
+      },
+      "premium": {
+        "range": "6-12 EUR",
+        "examples": ["Regenerate", "Marvis", "BioRepair"]
+      },
+      "ultraPremium": {
+        "range": "15+ EUR",
+        "examples": ["Currently limited options"]
+      },
+      "luxury": {
+        "range": "50-100 EUR",
+        "examples": ["Theodent 300 would be unique at this level"]
+      }
+    },
+    "theodentPricing": {
+      "theodentClassic": {
+        "projectedSpainPrice": "15-18 EUR",
+        "positioning": "Premium tier",
+        "priceRatio": "~2x Regenerate"
+      },
+      "theodent300": {
+        "projectedSpainPrice": "95-100 EUR",
+        "positioning": "Ultra-luxury tier",
+        "priceRatio": "~11x Regenerate",
+        "uniqueness": "No direct competitor at this price point"
+      },
+      "theodentKids": {
+        "projectedSpainPrice": "12-15 EUR",
+        "positioning": "Premium kids segment",
+        "uniqueAdvantage": "Chocolate flavor + safe if swallowed"
+      }
+    }
+  },
+  "competitiveGaps": {
+    "identifiedOpportunities": [
+      {
+        "gap": "Premium fluoride-free with clinical backing",
+        "currentOptions": "Limited - mainly natural brands without clinical claims",
+        "theodentFit": "EXCELLENT"
+      },
+      {
+        "gap": "Ultra-luxury oral care segment",
+        "currentOptions": "Virtually nonexistent in Spain",
+        "theodentFit": "EXCELLENT for Theodent 300"
+      },
+      {
+        "gap": "Premium kids toothpaste with safety focus",
+        "currentOptions": "Limited differentiation in kids segment",
+        "theodentFit": "GOOD - chocolate flavor and safe-to-swallow unique"
+      },
+      {
+        "gap": "Cacao/theobromine-based oral care",
+        "currentOptions": "None",
+        "theodentFit": "UNIQUE - no competition"
+      }
+    ]
+  },
+  "competitorStrategies": {
+    "marketEntry": {
+      "regenerate": "Leveraged Unilever distribution + heavy marketing investment",
+      "marvis": "Premium positioning through lifestyle marketing + selective distribution",
+      "biorepair": "Value premium positioning + pharmacy focus"
+    },
+    "keyTactics": [
+      "Dentist endorsement programs",
+      "Pharmacy exclusive launches",
+      "Clinical study marketing",
+      "Influencer partnerships (especially Marvis)",
+      "E-commerce optimization"
+    ]
+  },
+  "competitivePositioningRecommendation": {
+    "differentiation": "Science-backed, fluoride-free, unique cacao-derived technology",
+    "targetNiche": "Health-conscious premium buyers seeking fluoride alternatives",
+    "avoidDirectCompetition": "Do not compete on price with Regenerate/BioRepair",
+    "emphasize": [
+      "Unique theobromine technology (no competitors)",
+      "Clinical research backing",
+      "Safe if swallowed (especially for kids)",
+      "Premium/luxury positioning"
+    ],
+    "channels": [
+      "Pharmacy partnerships (professional credibility)",
+      "Premium health stores (natural positioning)",
+      "E-commerce (niche targeting)",
+      "Dental professional relationships"
+    ]
+  },
+  "sources": [
+    "https://www.expertmarketresearch.com/reports/spain-oral-care-market",
+    "https://www.accio.com/business/best-toothpaste-in-europe",
+    "https://www.promofarma.com/en/regenerate-toothpaste-75ml/p-395116",
+    "https://www.amazon.es/Pastas-dientes-Marvis-Cuidado-bucal/s",
+    "https://www.promofarma.com/en/biorepair-peribioma-toothpaste/p-280411",
+    "https://www.unilever.com/news/news-search/2025/the-premium-product-launches-powering-unilevers-growth-in-oral-care/"
+  ]
+}

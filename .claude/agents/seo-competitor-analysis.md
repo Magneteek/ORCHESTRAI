@@ -1,7 +1,7 @@
 ---
 name: seo-competitor-analysis
 description: Advanced competitor SEO analysis and competitive intelligence specialist. Use proactively for competitor research, gap analysis, and competitive strategy development.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__competitor_domains, mcp__dataforseo__domain_keywords
 model: sonnet
 ---
 

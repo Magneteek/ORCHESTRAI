@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Strategy - {{CLIENT_NAME}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/design-system.css">
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>SEO Strategy 2025</h1>
+            <p class="subtitle">{{CLIENT_NAME}} - Comprehensive Keyword & Content Intelligence</p>
+            <div class="hero-badge">{{KEYWORDS_ANALYZED}} Keywords Analyzed</div>
+            <a href="{{BACK_TO_HUB_URL}}" class="btn btn-white btn-lg no-print" style="margin-top: var(--space-8);">← Back to Hub</a>
+        </div>
+    </section>
+
+    <div style="background-color: var(--bg-secondary); padding: var(--space-20) 0;">
+        <div class="container">
+
+            <!-- SEO Score Dashboard -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h2 class="section-title">SEO Intelligence Dashboard</h2>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric-card-alt">
+                        <div class="metric-value">{{TOTAL_KEYWORDS}}</div>
+                        <div class="metric-label">Keywords Analyzed</div>
+                    </div>
+                    <div class="metric-card-alt">
+                        <div class="metric-value">{{TOTAL_VOLUME}}</div>
+                        <div class="metric-label">Monthly Search Volume</div>
+                    </div>
+                    <div class="metric-card-alt">
+                        <div class="metric-value">{{SEMANTIC_CLUSTERS}}</div>
+                        <div class="metric-label">Semantic Clusters</div>
+                    </div>
+                    <div class="metric-card-alt">
+                        <div class="metric-value">{{HUB_KEYWORDS}}</div>
+                        <div class="metric-label">Hub Keywords</div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: var(--space-8);">
+                    <h3 class="info-box-title">🎯 Strategic Opportunity</h3>
+                    <div class="info-box-content">
+                        {{STRATEGIC_OPPORTUNITY}}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Win Keywords -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">⚡</span>
+                    <h2 class="section-title">Quick Win Keywords</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Volume</th>
+                                <th>Difficulty</th>
+                                <th>CPC</th>
+                                <th>Priority</th>
+                                <th>Timeline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{QUICK_WIN_KEYWORDS}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Content Pillars -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🏛️</span>
+                    <h2 class="section-title">Content Pillars</h2>
+                </div>
+
+                {{CONTENT_PILLARS}}
+                <!-- Example:
+                <div class="feature-card" style="margin-bottom: var(--space-8);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-4);">
+                        <h3 class="feature-card-title">Sports Gamification Platform</h3>
+                        <span class="badge badge-purple">12,890/mo volume</span>
+                    </div>
+                    <p class="feature-card-content">Core topic cluster description...</p>
+                    <div style="margin-top: var(--space-6);">
+                        <h4 style="font-size: var(--font-sm); font-weight: var(--font-semibold); color: var(--text-primary); margin-bottom: var(--space-3);">Supporting Keywords:</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+                            <span class="badge badge-outline badge-info">keyword 1 (500)</span>
+                            <span class="badge badge-outline badge-info">keyword 2 (320)</span>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </section>
+
+            <!-- Semantic Clusters -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🔗</span>
+                    <h2 class="section-title">Semantic Clusters</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cluster Name</th>
+                                <th>Hub Keyword</th>
+                                <th>Total Volume</th>
+                                <th>Keywords</th>
+                                <th>Avg Difficulty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{SEMANTIC_CLUSTERS_TABLE}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Keyword Difficulty Analysis -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📈</span>
+                    <h2 class="section-title">Keyword Difficulty Distribution</h2>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Easy (0-30)</h4>
+                        <div class="metric-value" style="color: var(--success);">{{EASY_KEYWORDS}}</div>
+                        <p class="feature-card-content">Quick wins, target in first 30 days</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Medium (31-60)</h4>
+                        <div class="metric-value" style="color: var(--warning);">{{MEDIUM_KEYWORDS}}</div>
+                        <p class="feature-card-content">3-6 month ranking timeline</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Hard (61+)</h4>
+                        <div class="metric-value" style="color: var(--danger);">{{HARD_KEYWORDS}}</div>
+                        <p class="feature-card-content">6-12 month investment required</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Traffic Projections -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📉</span>
+                    <h2 class="section-title">Traffic Projections</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timeline</th>
+                                <th>Keywords Ranking</th>
+                                <th>Avg Position</th>
+                                <th>Monthly Traffic</th>
+                                <th>Monthly Leads</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{TRAFFIC_PROJECTIONS}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Implementation Timeline -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🗓️</span>
+                    <h2 class="section-title">Implementation Timeline</h2>
+                </div>
+
+                {{IMPLEMENTATION_TIMELINE}}
+                <!-- Example:
+                <div style="position: relative; padding-left: var(--space-8); border-left: 4px solid var(--primary-purple); margin-bottom: var(--space-8);">
+                    <div style="position: absolute; left: -12px; top: 0; width: 24px; height: 24px; background-color: var(--primary-purple); border-radius: 50%;"></div>
+                    <h3>Month 1-2: Foundation</h3>
+                    <ul style="margin-left: var(--space-5); color: var(--text-secondary);">
+                        <li>Technical SEO audit</li>
+                        <li>Publish 5 quick-win articles</li>
+                    </ul>
+                </div>
+                -->
+            </section>
+
+            <!-- Content Calendar -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📅</span>
+                    <h2 class="section-title">Content Calendar</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Topic</th>
+                                <th>Primary Keyword</th>
+                                <th>Word Count</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{CONTENT_CALENDAR}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Backlink Strategy -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🔗</span>
+                    <h2 class="section-title">Backlink Acquisition Strategy</h2>
+                </div>
+
+                <div class="feature-grid">
+                    {{BACKLINK_STRATEGY}}
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="footer no-print">
+        <div class="container">
+            <div style="text-align: center;">
+                <a href="{{BACK_TO_HUB_URL}}" class="btn btn-white btn-lg">← Return to Intelligence Hub</a>
+            </div>
+            <div class="footer-bottom">
+                <p>{{CLIENT_NAME}} - SEO Strategy 2025 | Generated by ORCHESTRAI</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,5 +1,9 @@
 /**
- * Comprehensive Testing Pipeline
+ * Comprehensive Testing Pipeline - Executable Implementation (OPTIMIZED)
+ *
+ * OPTIMIZATION (Dec 2025): Parallel execution for independent testing stages
+ * - Stages 4-6 now execute in parallel (67% faster: 30min vs 90min)
+ * - Overall pipeline: ~150min (was 210min) = 29% improvement
  *
  * Complete testing strategy from unit to E2E, functional, visual regression,
  * and performance testing with consolidated reporting.
@@ -8,12 +12,10 @@
  * 1. Unit Testing Setup (30 min)
  * 2. Integration Testing (35 min)
  * 3. End-to-End Testing (40 min)
- * 4. Functional Testing (30 min)
- * 5. Visual Regression Testing (30 min)
- * 6. Performance & Load Testing (30 min)
+ * 4-6. [PARALLEL] Functional + Visual + Performance Testing (30 min)
  * 7. Test Reporting & Quality Gates (15 min)
  *
- * Total Duration: ~210 minutes
+ * Total Duration: ~150 minutes (optimized from 210 minutes)
  */
 
 const EventEmitter = require('events');
@@ -122,36 +124,39 @@ class ComprehensiveTestingPipeline extends EventEmitter {
         throw new Error('BLOCKING: Critical user flows failing across browsers');
       }
 
-      // Stage 4: Functional Testing
+      // Stages 4-6: PARALLEL EXECUTION (all independent)
+      // Optimization: 67% faster than sequential execution (30min vs 90min)
+      console.log('🚀 Executing stages 4-6 in parallel (Functional + Visual + Performance)...');
+
+      // Emit start events for all parallel stages
       this.emit('stage-started', { executionId, stage: 'functional_testing' });
-      const functionalResults = await this.executeFunctionalTesting(execution, projectSpec);
+      this.emit('stage-started', { executionId, stage: 'visual_regression' });
+      this.emit('stage-started', { executionId, stage: 'performance_testing' });
+
+      const [functionalResults, visualResults, performanceResults] = await Promise.all([
+        this.executeFunctionalTesting(execution, projectSpec),
+        this.executeVisualRegressionTesting(execution, projectSpec),
+        this.executePerformanceTesting(execution, projectSpec)
+      ]);
+
+      // Store results
       execution.stageResults.functional_testing = functionalResults;
+      execution.stageResults.visual_regression = visualResults;
+      execution.stageResults.performance_testing = performanceResults;
+
+      // Emit completion events
       this.emit('stage-completed', {
         executionId,
         stage: 'functional_testing',
         duration: functionalResults.duration,
         success: functionalResults.success
       });
-
-      // Stage 5: Visual Regression Testing
-      this.emit('stage-started', { executionId, stage: 'visual_regression' });
-      const visualResults = await this.executeVisualRegressionTesting(execution, projectSpec);
-      execution.stageResults.visual_regression = visualResults;
       this.emit('stage-completed', {
         executionId,
         stage: 'visual_regression',
         duration: visualResults.duration,
         success: visualResults.success
       });
-
-      // Quality Gate: Visual Regression (non-blocking)
-      const visualGate = await this.validateVisualRegression(visualResults);
-      execution.qualityGates.push(visualGate);
-
-      // Stage 6: Performance & Load Testing
-      this.emit('stage-started', { executionId, stage: 'performance_testing' });
-      const performanceResults = await this.executePerformanceTesting(execution, projectSpec);
-      execution.stageResults.performance_testing = performanceResults;
       this.emit('stage-completed', {
         executionId,
         stage: 'performance_testing',
@@ -159,7 +164,10 @@ class ComprehensiveTestingPipeline extends EventEmitter {
         success: performanceResults.success
       });
 
-      // Quality Gate: Performance Testing (non-blocking)
+      // Quality Gates (executed after parallel stages complete)
+      const visualGate = await this.validateVisualRegression(visualResults);
+      execution.qualityGates.push(visualGate);
+
       const performanceGate = await this.validatePerformanceTesting(performanceResults);
       execution.qualityGates.push(performanceGate);
 

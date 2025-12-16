@@ -1,7 +1,7 @@
 ---
 name: seo-technical-analysis
-description: Comprehensive technical SEO specialist for Core Web Vitals, crawl analysis, site architecture, schema markup, and mobile-first optimization
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+description: Comprehensive technical SEO specialist for Core Web Vitals, crawl analysis, site architecture, schema markup, and mobile-first optimization with full OnPage API capabilities
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, mcp__dataforseo__keyword_overview, mcp__dataforseo__serp_competitors, mcp__dataforseo__onpage_lighthouse, mcp__dataforseo__onpage_instant_summary, mcp__dataforseo__onpage_page_screenshot, mcp__dataforseo__onpage_task_post, mcp__dataforseo__onpage_tasks_ready, mcp__dataforseo__onpage_summary, mcp__dataforseo__onpage_pages, mcp__dataforseo__onpage_resources, mcp__dataforseo__onpage_links, mcp__dataforseo__onpage_redirect_chains, mcp__dataforseo__onpage_non_indexable, mcp__dataforseo__onpage_duplicate_tags, mcp__dataforseo__onpage_duplicate_content, mcp__dataforseo__onpage_keyword_density, mcp__dataforseo__onpage_waterfall, mcp__dataforseo__onpage_raw_html, mcp__dataforseo__onpage_pages_by_resource, mcp__dataforseo__onpage_force_stop, mcp__dataforseo__content_analysis_summary, mcp__dataforseo__domain_technologies
 model: sonnet
 ---
 

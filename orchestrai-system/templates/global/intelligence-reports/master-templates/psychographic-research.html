@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychographic Research - {{CLIENT_NAME}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/design-system.css">
+</head>
+<body>
+
+    <!-- Hero (NO GRADIENTS - Solid Purple) -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Psychographic Research</h1>
+            <p class="subtitle">{{CLIENT_NAME}} - Deep Behavioral Analysis</p>
+            <div class="hero-badge">Comprehensive Psychographic Profiles 2025</div>
+            <a href="{{BACK_TO_HUB_URL}}" class="btn btn-white btn-lg no-print" style="margin-top: var(--space-8);">← Back to Hub</a>
+        </div>
+    </section>
+
+    <div style="background-color: var(--bg-secondary); padding: var(--space-20) 0;">
+        <div class="container">
+
+            <!-- Overview -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🧠</span>
+                    <h2 class="section-title">Research Overview</h2>
+                </div>
+                <div class="metric-grid">
+                    {{RESEARCH_METRICS}}
+                </div>
+                <p style="color: var(--text-secondary); font-size: var(--font-lg); margin-top: var(--space-8);">
+                    {{RESEARCH_OVERVIEW}}
+                </p>
+            </section>
+
+            <!-- Core Values Comparison -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">💎</span>
+                    <h2 class="section-title">Core Values Matrix</h2>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ICP Segment</th>
+                                <th>Primary Values</th>
+                                <th>Secondary Values</th>
+                                <th>Anti-Values</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{CORE_VALUES_MATRIX}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Emotional Triggers -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🎯</span>
+                    <h2 class="section-title">Emotional Triggers by ICP</h2>
+                </div>
+                {{EMOTIONAL_TRIGGERS}}
+            </section>
+
+            <!-- Decision-Making Frameworks -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🧭</span>
+                    <h2 class="section-title">Decision-Making Frameworks</h2>
+                </div>
+                <div class="feature-grid">
+                    {{DECISION_FRAMEWORKS}}
+                </div>
+            </section>
+
+            <!-- Communication Preferences -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">💬</span>
+                    <h2 class="section-title">Communication Preferences</h2>
+                </div>
+                {{COMMUNICATION_PREFERENCES}}
+            </section>
+
+            <!-- Persona Profiles -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">👤</span>
+                    <h2 class="section-title">Detailed Persona Profiles</h2>
+                </div>
+                {{PERSONA_PROFILES}}
+            </section>
+
+            <!-- Cross-Segment Opportunities -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🔗</span>
+                    <h2 class="section-title">Cross-Segment Opportunities</h2>
+                </div>
+                <div class="info-box">
+                    <h3 class="info-box-title">Strategic Insights</h3>
+                    <div class="info-box-content">
+                        {{CROSS_SEGMENT_INSIGHTS}}
+                    </div>
+                </div>
+                <div class="feature-grid" style="margin-top: var(--space-8);">
+                    {{CROSS_SEGMENT_OPPORTUNITIES}}
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="footer no-print">
+        <div class="container">
+            <div style="text-align: center;">
+                <a href="{{BACK_TO_HUB_URL}}" class="btn btn-white btn-lg">← Return to Intelligence Hub</a>
+            </div>
+            <div class="footer-bottom">
+                <p>{{CLIENT_NAME}} - Psychographic Research 2025 | Generated by ORCHESTRAI</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

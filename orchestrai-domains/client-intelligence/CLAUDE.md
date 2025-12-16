@@ -150,18 +150,32 @@ All client intelligence deliverables are saved to:
 /projects/[client-uuid]/
 ├── client-intelligence/
 │   ├── icp-analysis.json              # Psychographic profiles
+│   ├── icp-24-section-framework.json  # 24-section copywriting framework (MANDATORY)
 │   ├── brand-profile.json             # Brand identity analysis
 │   ├── business-context.json          # Business model analysis
 │   ├── market-intelligence.json       # Competitive landscape
 │   ├── comprehensive-analysis.json    # Integrated intelligence
 │   └── assets/                        # Logos, brand assets
 ├── deliverables/
+│   ├── client-intelligence/          # Comprehensive HTML reports
 │   ├── seo/                          # SEO research referencing ICP
 │   ├── content/                      # Content based on psychographics
 │   └── research/                     # Additional research
 ├── project-metadata.json
 └── crystalline-memory-index.json
 ```
+
+### CRITICAL: 24-Section ICP Framework is MANDATORY
+
+**Every client intelligence project MUST include the 24-section copywriting framework.**
+
+This framework provides:
+- Named avatar personas with emotional depth
+- Complete customer psychology (24 sections per segment)
+- Conversion-focused messaging insights
+- High-converting copywriting intelligence
+
+**See [24-SECTION-FRAMEWORK-GUIDE.md](24-SECTION-FRAMEWORK-GUIDE.md) for complete documentation.**
 
 ### CRITICAL: Project Coherence Rule
 **All work for a single client MUST remain in their existing project folder.**

@@ -46,13 +46,18 @@ class SimultaneousStreamOrchestrator extends EventEmitter {
     };
 
     // Configuration
+    // CRASH PREVENTION: Reduced from 12 to 3 to prevent resource exhaustion
+    // When running file-heavy intelligence pipelines with 7,015+ files + 9 MCP servers
+    // Original: 12 streams × 9 MCP servers = 108 concurrent DNS requests → CRASH
+    // Fixed: 3 streams × 9 MCP servers = 27 concurrent DNS requests → STABLE
     this.config = {
-      maxParallelStreams: 12, // VAIBE validated up to 12 simultaneous agents
+      maxParallelStreams: 3, // CRASH FIX: Reduced from 12 (was causing SQLite+DNS+GC crash)
       defaultQualityThreshold: 95,
       streamTimeout: 3600000, // 1 hour per stream
       enableRealTimeMonitoring: true,
       enableCrystallineMemory: true,
-      coordinationMode: 'websocket' // 'websocket' | 'redis-only'
+      coordinationMode: 'websocket', // 'websocket' | 'redis-only'
+      recommendBatching: true // Encourage batched execution for large workloads
     };
 
     console.log('🎯 Simultaneous Stream Orchestrator initialized');
@@ -321,7 +326,9 @@ class SimultaneousStreamOrchestrator extends EventEmitter {
     // Ensure stream count doesn't exceed maximum
     if (optimized.streams && optimized.streams.length > this.config.maxParallelStreams) {
       console.warn(`   ⚠️  Stream count (${optimized.streams.length}) exceeds maximum (${this.config.maxParallelStreams})`);
-      console.warn(`   ⚙️  Streams will be executed in batches`);
+      console.warn(`   ⚙️  Streams will be executed in batches of ${this.config.maxParallelStreams}`);
+      console.warn(`   🛡️  CRASH PREVENTION: Batching prevents resource exhaustion`);
+      console.warn(`   📊 Estimated batches: ${Math.ceil(optimized.streams.length / this.config.maxParallelStreams)}`);
       optimized.batchExecution = true;
       optimized.batchSize = this.config.maxParallelStreams;
     }

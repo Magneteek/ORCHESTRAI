@@ -1,0 +1,100 @@
+{
+  "projectId": "YOUR-PROJECT-UUID-HERE",
+  "clientName": "Client Business Name",
+  "website": "https://www.clientwebsite.com",
+  "industry": "E-commerce / SaaS / B2B Services",
+  "auditDate": "2025-12-09",
+  "markets": ["United States", "European Union", "Global"],
+
+  "currentMetrics": {
+    "rankingKeywords": 24,
+    "monthlyTraffic": 31,
+    "domainAuthority": 28,
+    "technicalScore": 91,
+    "organicValue": 28,
+    "topRankings": 0
+  },
+
+  "targetMetrics": {
+    "rankingKeywords": 500,
+    "monthlyTraffic": 1150,
+    "domainAuthority": 45,
+    "technicalScore": 99,
+    "organicValue": 1450,
+    "topRankings": 25
+  },
+
+  "technicalSEO": {
+    "overallScore": 91,
+    "categories": {
+      "performance": 95,
+      "accessibility": 88,
+      "bestPractices": 92,
+      "seo": 90
+    },
+    "criticalIssues": [],
+    "warnings": [],
+    "recommendations": []
+  },
+
+  "keywords": {
+    "totalResearched": 567,
+    "niches": [
+      {
+        "name": "Primary Product Category",
+        "keywords": 139,
+        "searchVolume": 12500,
+        "averageCPC": 2.35
+      },
+      {
+        "name": "Secondary Product Category",
+        "keywords": 121,
+        "searchVolume": 8200,
+        "averageCPC": 1.85
+      }
+    ],
+    "opportunities": []
+  },
+
+  "competitive": {
+    "mainCompetitors": [
+      {
+        "name": "Competitor 1",
+        "domain": "competitor1.com",
+        "domainAuthority": 65,
+        "rankingKeywords": 1200
+      }
+    ],
+    "marketShare": "5%",
+    "competitiveLandscape": "Moderate Competition"
+  },
+
+  "roi": {
+    "year1Investment": "12,000-18,000",
+    "roi24Month": "197%",
+    "breakEvenMonth": 8,
+    "projectedRevenue": {
+      "month6": 8500,
+      "month12": 24000,
+      "month24": 52000
+    }
+  },
+
+  "executiveSummary": "This comprehensive SEO audit reveals significant growth opportunities to transform organic visibility into category-defining authority.",
+
+  "chartData": {
+    "trafficGrowth": [31, 210, 520, 850, 1150],
+    "rankingDistribution": {
+      "top3": 0,
+      "top10": 5,
+      "top20": 12,
+      "top50": 7
+    },
+    "revenueProjections": [
+      { "month": "Month 3", "value": 2500 },
+      { "month": "Month 6", "value": 8500 },
+      { "month": "Month 9", "value": 16000 },
+      { "month": "Month 12", "value": 24000 }
+    ]
+  }
+}

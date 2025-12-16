@@ -1,0 +1,74 @@
+{
+  "mcpServers": {
+    "dataforseo": {
+      "command": "node",
+      "args": [
+        "./orchestrai-shared/mcp-servers/dataforseo-server.js"
+      ],
+      "env": {
+        "DATAFORSEO_USERNAME": "${DATAFORSEO_USERNAME}",
+        "DATAFORSEO_PASSWORD": "${DATAFORSEO_PASSWORD}"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {}
+    },
+    "ref-tools": {
+      "command": "npx",
+      "args": [
+        "ref-tools-mcp"
+      ],
+      "env": {}
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {}
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/projects",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates",
+        "/Users/kris/CLAUDEtools/ORCHESTRAI/temp"
+      ],
+      "env": {}
+    },
+    "notion": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@notionhq/notion-mcp-server"
+      ],
+      "env": {
+        "NOTION_TOKEN": "${NOTION_TOKEN}"
+      }
+    },
+    "shadcn-ui": {
+      "command": "npx",
+      "args": [
+        "@jpisnice/shadcn-ui-mcp-server"
+      ],
+      "env": {
+        "GITHUB_API_KEY": "${GITHUB_API_KEY}"
+      }
+    },
+    "n8n": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--sse",
+        "https://aia.magneteek.com/mcp/8a194d83-d742-4c48-92b7-cef49b890f00/sse"
+      ],
+      "env": {}
+    }
+  }
+}

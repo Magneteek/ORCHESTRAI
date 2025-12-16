@@ -41,7 +41,7 @@ class Settings(BaseSettings):
 
     # Monitoring
     PROMETHEUS_ENABLED: bool = True
-    METRICS_PORT: int = 8000
+    METRICS_PORT: int = 8000  # ORCHESTRAI ML Service port (VAIBE-SEMANTIC uses 8001)
 
     # Integration
     ORCHESTRAI_NODE_URL: str = "http://localhost:5501"

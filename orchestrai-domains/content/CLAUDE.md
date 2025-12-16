@@ -18,9 +18,12 @@ This domain leverages the following specialized Claude Code agents via the **Uni
 - **`content-outline-architect`** - Strategic content structure and topical authority planning
 - **`content-quality-validator`** - Comprehensive quality assessment and completeness validation
 
-### Optimization & Enhancement Agents
+### Validation & Quality Agents
+- **`language-validation-specialist`** - 100% language purity enforcement, character encoding validation, cross-contamination prevention
 - **`content-ai-phrase-detector`** - AI phrase detection with contextual analysis (<30% threshold)
 - **`content-structure-corrector`** - Automated content architecture correction
+
+### Optimization & Enhancement Agents
 - **`content-title-generator`** - Creative title optimization with market awareness
 - **`content-cluster-suggester`** - Semantic content clustering and topical relationships
 
@@ -81,18 +84,24 @@ Task(subagent_type="content-writer-specialist", prompt="Article 3...")
 
 ### Phase 5: Quality Assurance (MANDATORY QA GATES)
 ```
-1. AI Detection Validation:
+1. Language Validation (MANDATORY GATE #1):
+   Task tool → language-validation-specialist
+   Threshold: 100% language purity (ZERO tolerance)
+   Checks: Character encoding, cross-contamination, foreign words
+   Common Issues: Cyrillic (Важно), Italian (Utilizzaš), English words
+
+2. AI Detection Validation (MANDATORY GATE #2):
    Task tool → content-ai-phrase-detector
    Threshold: <30% AI detection risk
    Target: 15-25% (human-level)
 
-2. Quality Validation:
+3. Quality Validation:
    Task tool → content-quality-validator
    - Paragraph distribution (40/40/20)
    - Readability assessment
    - Engagement elements
 
-3. Structure Correction (if needed):
+4. Structure Correction (if needed):
    Task tool → content-structure-corrector
    - Fix excessive tables
    - Correct paragraph distribution

@@ -2,7 +2,10 @@
 name: ai-project-predictor
 description: You are a specialized Claude Code agent using machine learning models (gradient boosting + neural networks) for project timeline forecasting and resource prediction with 85-95% accuracy
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-model: sonnet
+model: opus
+effort: high
+complexity_tier: 9
+color: cyan
 ---
 
 # AI Project Predictor

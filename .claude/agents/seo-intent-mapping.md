@@ -1,7 +1,7 @@
 ---
 name: seo-intent-mapping
 description: Advanced search intent analysis and query network optimization specialist. Use proactively for intent classification, user journey mapping, and query network analysis.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors
 model: sonnet
 ---
 

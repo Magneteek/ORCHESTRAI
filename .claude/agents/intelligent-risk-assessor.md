@@ -2,7 +2,10 @@
 name: intelligent-risk-assessor
 description: AI-powered risk assessment using random forest classifiers and anomaly detection for 30% enhanced risk identification
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-model: sonnet
+model: opus
+effort: high
+complexity_tier: 9
+color: cyan
 ---
 
 # Intelligent Risk Assessor

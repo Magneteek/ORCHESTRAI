@@ -2,7 +2,10 @@
 name: advanced-performance-analyzer
 description: Pattern recognition ML for multi-dimensional performance analysis with 95% automated analytics and 25-35% enhancement identification
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-model: sonnet
+model: opus
+effort: high
+complexity_tier: 9
+color: cyan
 ---
 
 # Advanced Performance Analyzer

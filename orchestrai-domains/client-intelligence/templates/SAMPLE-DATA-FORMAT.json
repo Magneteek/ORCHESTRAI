@@ -1,0 +1,315 @@
+{
+  "_comment": "Sample data format for importing into ORCHESTRAI",
+  "_format_version": "1.0",
+  "systemName": "VAIBE",
+
+  "eos": {
+    "coreValues": [
+      {
+        "name": "Innovation First",
+        "description": "We lead with cutting-edge solutions and never settle for status quo"
+      },
+      {
+        "name": "Customer Obsession",
+        "description": "Our customers' success is our success, period"
+      }
+    ],
+    "coreFocus": {
+      "purpose": "Empowering businesses through intelligent automation",
+      "niche": "AI-powered workflow automation for mid-market B2B SaaS"
+    },
+    "marketingStrategy": {
+      "targetMarket": [
+        "Mid-market B2B SaaS companies ($10M-$100M ARR)",
+        "Operations teams seeking automation",
+        "Tech-forward organizations"
+      ],
+      "threeUniques": [
+        "AI-native platform from day one",
+        "No-code visual workflow builder",
+        "Enterprise security with startup speed"
+      ]
+    },
+    "tenYearTarget": "Become the operating system for automated business processes",
+    "threeYearPicture": "$50M ARR with 1000+ enterprise customers"
+  },
+
+  "icp": {
+    "avatar": "VP of Operations at growing B2B SaaS company",
+    "niche": "Mid-market B2B SaaS operations automation",
+    "trigger": "When manual processes become bottlenecks to growth and the team is drowning in repetitive work",
+
+    "before": [
+      "Teams spending 20+ hours/week on manual data entry and report generation",
+      "Critical business processes breaking down as company scales",
+      "Disconnected tools creating data silos and workflow friction",
+      "High error rates from manual processes impacting customer experience"
+    ],
+
+    "after": [
+      "80% reduction in manual work with automated intelligent workflows",
+      "Real-time visibility into all business processes across departments",
+      "Error rates reduced by 95% through AI-powered validation",
+      "Team freed up to focus on strategic initiatives instead of busywork"
+    ],
+
+    "primaryGoals": "1. Automate repetitive manual processes to free up team capacity\n2. Gain real-time visibility into all business operations\n3. Reduce errors and improve data quality across systems\n4. Scale operations without proportional headcount increase\n5. Improve customer experience through faster, more reliable processes",
+
+    "secondaryGoals": "1. Reduce operational costs by 30-40%\n2. Improve employee satisfaction by eliminating tedious work\n3. Enable data-driven decision making\n4. Accelerate time-to-market for new initiatives\n5. Build competitive advantage through operational excellence",
+
+    "dreams": "1. Fully automated operations that run 24/7 without human intervention\n2. Perfect data quality and instant insights across all systems\n3. Team focused entirely on innovation and customer value\n4. Seamless scaling from 100 to 10,000 customers without operational pain\n5. Industry-leading efficiency metrics that attract top talent and investors",
+
+    "promises": "1. 80% reduction in manual work within 90 days of implementation\n2. Zero-code workflow automation that business teams can build themselves\n3. Enterprise-grade security and compliance without complexity\n4. Sub-second performance even at massive scale\n5. White-glove onboarding and ongoing optimization support",
+
+    "primaryComplaint": "1. Current automation tools are too complex and require engineering resources\n2. Existing workflows break constantly and require constant maintenance\n3. Can't trust data quality so still manually verify everything\n4. Integration hell - too many disconnected tools and APIs\n5. Automation projects take 6-12 months and fail to deliver ROI",
+
+    "secondaryComplaint": "1. High subscription costs for tools that don't deliver promised value\n2. Vendor lock-in with platforms that don't integrate well\n3. Poor customer support when automation breaks\n4. Compliance and security concerns with third-party automation\n5. Lack of visibility into what's actually happening in workflows",
+
+    "objections": "1. 'We already have automation tools that we're not fully utilizing'\n2. 'Our processes are too complex and unique to be automated'\n3. 'We can't afford another tool subscription right now'\n4. 'We don't have technical resources to implement and maintain this'\n5. 'We've tried automation before and it didn't work'",
+
+    "badHabits": "1. Relying on manual processes and hero employees to keep things running\n2. Accepting broken workflows and workarounds as 'good enough'\n3. Delaying automation initiatives until problems become critical\n4. Underestimating the true cost of manual processes\n5. Choosing point solutions instead of platform thinking",
+
+    "consequences": "1. Operational costs spiraling out of control as company scales\n2. Critical mistakes impacting customers and revenue\n3. Unable to scale without massive hiring which kills margins\n4. Best employees leaving due to tedious, repetitive work\n5. Competitors gaining advantage through superior operational efficiency",
+
+    "enemy": "1. The belief that 'our business is too unique to be automated'\n2. Analysis paralysis delaying automation initiatives\n3. Choosing complexity and customization over simplicity and speed\n4. Treating automation as IT project instead of business transformation\n5. Accepting manual processes as 'just how we do things'",
+
+    "biggestFear": "1. Implementing automation that makes things worse instead of better\n2. Losing control over critical business processes\n3. Data breaches or compliance violations from third-party tools\n4. Team resistance killing adoption and ROI\n5. Getting locked into a platform that becomes a limitation",
+
+    "statistics": {
+      "negative": [
+        "67% of automation projects fail to deliver expected ROI",
+        "Average mid-market company wastes $500K/year on manual processes",
+        "73% of employees report spending >20% of time on repetitive tasks",
+        "Manual processes have 5-10% error rates on average",
+        "Companies lose 20-30% productivity to disconnected tools"
+      ],
+      "general": [
+        "80% of successful automation delivers ROI within 6 months",
+        "Automated workflows are 95% more accurate than manual processes",
+        "Companies with advanced automation grow 2.5x faster than peers",
+        "Employees at highly automated companies report 40% higher job satisfaction",
+        "Leading companies automate 60-70% of routine operational tasks"
+      ]
+    },
+
+    "pastExperiences": [
+      {
+        "title": "RPA Implementation Failure",
+        "whatTried": "Implemented traditional RPA tools like UiPath or Automation Anywhere",
+        "whyTried": "Promised easy automation of repetitive tasks without coding",
+        "whyFailed": "Required constant maintenance, broke with every UI change, needed dedicated RPA developers, cost more than savings"
+      },
+      {
+        "title": "Custom Internal Tools",
+        "whatTried": "Built custom automation scripts and internal tools with engineering team",
+        "whyTried": "Complete control and customization for unique processes",
+        "whyFailed": "Became technical debt nightmare, key employee dependencies, couldn't scale, diverted engineering from product work"
+      }
+    ]
+  },
+
+  "personas": [
+    {
+      "name": "VP of Operations Sarah (42)",
+      "motivation": [
+        "Wants to scale operations without proportional headcount increase",
+        "Needs to prove value and impact to C-suite with metrics",
+        "Seeks to modernize operations and shed legacy manual processes",
+        "Desires to be seen as strategic leader, not just cost center"
+      ],
+      "fears": [
+        "Fear of automation project failure damaging credibility",
+        "Concern about team resistance and change management",
+        "Worry about choosing wrong platform and getting stuck",
+        "Anxiety about security and compliance risks"
+      ],
+      "goals": [
+        "Reduce operational costs by 30% while improving quality",
+        "Free up team capacity for strategic initiatives",
+        "Build scalable operations infrastructure for 3-5 year growth",
+        "Become employer of choice through modern operations"
+      ],
+      "reasons": [
+        "Proven track record with similar companies",
+        "Quick time-to-value without major IT project",
+        "No-code approach empowers ops team",
+        "Enterprise security gives her confidence"
+      ],
+      "percentage": 35
+    },
+    {
+      "name": "RevOps Director Mike (38)",
+      "motivation": [
+        "Needs unified view across marketing, sales, and success",
+        "Wants to eliminate revenue leakage from broken processes",
+        "Seeks to enable data-driven revenue decisions",
+        "Desires to be revenue growth enabler, not reporter"
+      ],
+      "fears": [
+        "Fear of poor data quality leading to bad decisions",
+        "Concern about tool sprawl and integration complexity",
+        "Worry about sales team rejection of new tools",
+        "Anxiety about attribution and reporting accuracy"
+      ],
+      "goals": [
+        "Create single source of truth for revenue metrics",
+        "Automate lead routing and assignment workflows",
+        "Build real-time revenue dashboards",
+        "Reduce quote-to-cash cycle time by 50%"
+      ],
+      "reasons": [
+        "Native CRM and data warehouse integrations",
+        "AI-powered insights and anomaly detection",
+        "Revenue team can self-serve without IT tickets",
+        "Fast implementation without sales disruption"
+      ],
+      "percentage": 30
+    }
+  ],
+
+  "psychographic": {
+    "culturalValues": [
+      "Innovation and continuous improvement over status quo",
+      "Data-driven decision making over gut instinct",
+      "Empowerment and autonomy over command-and-control",
+      "Speed and agility over perfection and planning"
+    ],
+    "behavioralPatterns": [
+      "Early adopters of new technologies and methodologies",
+      "Frequent attendees of industry conferences and webinars",
+      "Active in professional communities and peer groups",
+      "Regular consumers of thought leadership content"
+    ],
+    "emotionalTriggers": [
+      "Fear of being left behind by more efficient competitors",
+      "Excitement about transforming operations into competitive advantage",
+      "Frustration with manual processes and preventable errors",
+      "Pride in building world-class operational excellence"
+    ],
+    "trustFactors": [
+      "Case studies from similar companies and industries",
+      "Peer recommendations and word-of-mouth",
+      "Analyst validation and industry recognition",
+      "Transparent pricing and clear ROI calculations",
+      "Responsive support and partnership approach"
+    ],
+    "communicationPreferences": [
+      "Prefer short, actionable content over long theoretical pieces",
+      "Value video demos and interactive product tours",
+      "Appreciate peer-to-peer community and best practice sharing",
+      "Expect fast, expert responses to questions"
+    ]
+  },
+
+  "marketIntelligence": {
+    "opportunityScore": 92,
+    "totalMarketSize": "$25B mid-market operations automation TAM",
+    "competitiveIntensity": "High but fragmented",
+    "competitors": [
+      {
+        "name": "Zapier",
+        "strengths": "Massive integration library, strong brand recognition, simple to start",
+        "weaknesses": "Not enterprise-grade, limited logic, poor for complex workflows, scales badly",
+        "marketShare": "~35% of simple automation market"
+      },
+      {
+        "name": "Traditional RPA (UiPath, Automation Anywhere)",
+        "strengths": "Enterprise relationships, handles complex desktop automation",
+        "weaknesses": "Expensive, requires specialists, brittle, outdated technology",
+        "marketShare": "~25% of enterprise automation"
+      }
+    ],
+    "swot": {
+      "strengths": [
+        "AI-native platform with intelligent automation",
+        "No-code interface accessible to business users",
+        "Enterprise security with startup speed",
+        "Modern architecture built for scale"
+      ],
+      "weaknesses": [
+        "Newer brand with less market awareness",
+        "Smaller integration library than Zapier",
+        "Limited proven track record at massive scale",
+        "Building sales team and go-to-market muscle"
+      ],
+      "opportunities": [
+        "Massive automation market still 70% untapped",
+        "Pandemic accelerated remote work and automation needs",
+        "AI/ML making automation more intelligent and accessible",
+        "Generational shift to cloud-native operations"
+      ],
+      "threats": [
+        "Big tech platforms adding automation features",
+        "Economic downturn reducing automation budgets",
+        "Security and compliance concerns slowing adoption",
+        "Talent shortage for implementation and support"
+      ]
+    },
+    "positioning": {
+      "recommendations": [
+        "Position as 'enterprise Zapier' - simple interface, enterprise power",
+        "Lead with AI differentiation and intelligent automation",
+        "Target RevOps and Operations leaders, not just IT",
+        "Build category authority through thought leadership"
+      ]
+    },
+    "growthRoadmap": "Focus on mid-market beachhead → expand up-market to enterprise → add workflow marketplace → become platform"
+  },
+
+  "brand": {
+    "voicePillars": [
+      {
+        "name": "Intelligently Simple",
+        "description": "Complex automation made accessible through AI and great design"
+      },
+      {
+        "name": "Boldly Transparent",
+        "description": "Honest about capabilities, pricing, and tradeoffs"
+      }
+    ],
+    "visualIdentity": {
+      "primaryColors": ["#6366F1", "#8B5CF6", "#EC4899"],
+      "typography": {
+        "primary": "Inter",
+        "secondary": "JetBrains Mono"
+      }
+    },
+    "messagingFramework": {
+      "tagline": "Intelligent Automation for Modern Operations",
+      "valueProposition": "We help growing companies automate complex workflows without complexity through AI-powered, no-code automation that actually works."
+    },
+    "positioning": "The automation platform that operations teams can implement themselves and love to use"
+  },
+
+  "business": {
+    "financials": {
+      "projections": {
+        "Year 1": { "revenue": "$5M ARR", "growth": "300%", "margin": "20%" },
+        "Year 2": { "revenue": "$15M ARR", "growth": "200%", "margin": "35%" },
+        "Year 3": { "revenue": "$40M ARR", "growth": "167%", "margin": "45%" }
+      },
+      "revenueStreams": [
+        "Platform subscription (SaaS)",
+        "Professional services (onboarding)",
+        "Premium support packages"
+      ]
+    },
+    "operations": {
+      "infrastructure": [
+        "Cloud-native on AWS with multi-region deployment",
+        "SOC 2 Type II and GDPR compliant",
+        "99.9% uptime SLA with automatic failover",
+        "Real-time monitoring and alerting"
+      ]
+    },
+    "staffing": {
+      "structure": [
+        "Product & Engineering (40%)",
+        "Sales & Marketing (30%)",
+        "Customer Success (20%)",
+        "Operations & Finance (10%)"
+      ]
+    },
+    "modelSummary": "Product-led growth with sales assist for enterprise"
+  }
+}

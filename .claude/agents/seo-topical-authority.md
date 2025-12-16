@@ -1,7 +1,7 @@
 ---
 name: seo-topical-authority
 description: Topical authority development specialist implementing Koray Tugberk Gubur's authority frameworks. Use proactively for domain expertise establishment.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent
 model: sonnet
 ---
 

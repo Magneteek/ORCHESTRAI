@@ -1,0 +1,58 @@
+{
+  "clientId": "2a88af60-dd95-463a-9448-57eca9ea96a8",
+  "clientName": "Theodent",
+  "folderName": "theodent-2a88af60",
+  "industry": "oral_care",
+  "projectType": "business_opportunity_research",
+  "created": "2025-12-10T07:46:48.490Z",
+  "lastUpdated": "2025-12-10T08:00:00.000Z",
+  "status": "analysis_complete",
+  "contextFiles": [
+    "brand-analysis.json",
+    "market-analysis-spain.json",
+    "competitive-intelligence.json",
+    "icp-profiles-spain.json",
+    "financial-viability.json",
+    "go-no-go-recommendation.json"
+  ],
+  "domains": {
+    "content": {
+      "active": false,
+      "lastActivity": null
+    },
+    "seo": {
+      "active": false,
+      "lastActivity": null
+    },
+    "web": {
+      "active": false,
+      "lastActivity": null
+    },
+    "research": {
+      "active": true,
+      "lastActivity": "2025-12-10T08:00:00.000Z"
+    }
+  },
+  "metrics": {
+    "totalProjects": 1,
+    "completedDeliverables": 6,
+    "contextUpdates": 1
+  },
+  "analysisCompleted": {
+    "date": "2025-12-10",
+    "recommendation": "CONDITIONAL GO",
+    "confidenceLevel": "65%",
+    "decisionScore": 6.8,
+    "estimatedInvestment": {
+      "min": 45000,
+      "max": 85000,
+      "currency": "EUR"
+    },
+    "breakEvenTimeline": "18-24 months (moderate scenario)",
+    "nextSteps": [
+      "Contact Theodent wholesale department for pricing",
+      "Engage Spanish regulatory consultant",
+      "Research EU Responsible Person requirements"
+    ]
+  }
+}

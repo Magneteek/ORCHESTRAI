@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EOS Framework - {{CLIENT_NAME}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/design-system.css">
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>EOS Strategic Framework</h1>
+            <p class="subtitle">{{CLIENT_NAME}} - Vision/Traction Organizer</p>
+            <div class="hero-badge">Entrepreneurial Operating System 2025</div>
+            <a href="{{BACK_TO_HUB_URL}}" class="btn btn-white btn-lg no-print" style="margin-top: var(--space-8);">← Back to Hub</a>
+        </div>
+    </section>
+
+    <div style="background-color: var(--bg-secondary); padding: var(--space-20) 0;">
+        <div class="container">
+
+            <!-- Vision Section -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🎯</span>
+                    <h2 class="section-title">Vision</h2>
+                </div>
+
+                <h3>Core Values</h3>
+                <div class="feature-grid">
+                    {{CORE_VALUES}}
+                </div>
+
+                <h3 style="margin-top: var(--space-12);">Core Focus</h3>
+                <div class="info-box">
+                    <h4 class="info-box-title">Purpose</h4>
+                    <div class="info-box-content">{{PURPOSE}}</div>
+                </div>
+                <div class="feature-grid" style="margin-top: var(--space-6);">
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Niche</h4>
+                        <p class="feature-card-content">{{NICHE}}</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-12);">10-Year Target</h3>
+                <div class="metric-grid">
+                    {{TEN_YEAR_TARGETS}}
+                </div>
+
+                <h3 style="margin-top: var(--space-12);">Marketing Strategy</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Target Market</h4>
+                        <p class="feature-card-content">{{TARGET_MARKET}}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">3 Uniques</h4>
+                        {{THREE_UNIQUES}}
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Proven Process</h4>
+                        <p class="feature-card-content">{{PROVEN_PROCESS}}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4 class="feature-card-title">Guarantee</h4>
+                        <p class="feature-card-content">{{GUARANTEE}}</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3-Year Picture -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📅</span>
+                    <h2 class="section-title">3-Year Picture</h2>
+                </div>
+                <div class="metric-grid">
+                    {{THREE_YEAR_METRICS}}
+                </div>
+                <div style="margin-top: var(--space-8);">
+                    {{THREE_YEAR_DESCRIPTION}}
+                </div>
+            </section>
+
+            <!-- 1-Year Plan -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h2 class="section-title">1-Year Plan</h2>
+                </div>
+
+                <h3>Annual Goals</h3>
+                <div class="metric-grid">
+                    {{ONE_YEAR_GOALS}}
+                </div>
+
+                <h3 style="margin-top: var(--space-12);">Key Initiatives</h3>
+                <div class="feature-grid">
+                    {{KEY_INITIATIVES}}
+                </div>
+            </section>
+
+            <!-- Quarterly Rocks -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">🪨</span>
+                    <h2 class="section-title">Quarterly Rocks (90-Day Priorities)</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rock</th>
+                                <th>Owner</th>
+                                <th>Target Date</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{QUARTERLY_ROCKS}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Issues List -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">⚠️</span>
+                    <h2 class="section-title">Issues List</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Priority</th>
+                                <th>Issue</th>
+                                <th>Impact</th>
+                                <th>Owner</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ISSUES_LIST}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Weekly Scorecard -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">📈</span>
+                    <h2 class="section-title">Weekly Scorecard</h2>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Measurable</th>
+                                <th>Who</th>
+                                <th>Goal</th>
+                                <th>Week 1</th>
+                                <th>Week 2</th>
+                                <th>Week 3</th>
+                                <th>Week 4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{WEEKLY_SCORECARD}}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Accountability Chart -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-icon">👥</span>
+                    <h2 class="section-title">Accountability Chart</h2>
+                </div>
+                {{ACCOUNTABILITY_CHART}}
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="footer no-print">
+        <div class="container">
+            <div style="text-align: center;">
+                <a href="{{BACK_TO_HUB_URL}}" class="btn btn-white btn-lg">← Return to Intelligence Hub</a>
+            </div>
+            <div class="footer-bottom">
+                <p>{{CLIENT_NAME}} - EOS Framework 2025 | Generated by ORCHESTRAI</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

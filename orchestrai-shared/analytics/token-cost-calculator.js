@@ -13,12 +13,20 @@ class TokenCostCalculator {
       'gpt-3.5-turbo-16k': { input: 0.003, output: 0.004 },
       'text-davinci-003': { input: 0.02, output: 0.02 },
       
-      // Claude Models (Anthropic)
+      // Claude Models (Anthropic) - Updated December 2025
       'claude-3-opus': { input: 0.015, output: 0.075 },
       'claude-3-sonnet': { input: 0.003, output: 0.015 },
       'claude-3-haiku': { input: 0.00025, output: 0.00125 },
       'claude-3.5-sonnet': { input: 0.003, output: 0.015 },
+
+      // Claude 4.5 Series (Latest - November/December 2025)
+      'claude-opus-4.5': { input: 0.005, output: 0.025 },
+      'claude-sonnet-4.5': { input: 0.003, output: 0.015 },
+      'claude-haiku-4.5': { input: 0.0001, output: 0.0005 },
+
+      // Legacy naming (will be normalized)
       'claude-sonnet-4': { input: 0.003, output: 0.015 },
+      'claude-opus-4': { input: 0.005, output: 0.025 },
       
       // Groq Models (Fast inference)
       'llama3-8b-8192': { input: 0.0001, output: 0.0001 },
@@ -151,7 +159,20 @@ class TokenCostCalculator {
       'claude-3-opus-20240229': 'claude-3-opus',
       'claude-3-sonnet-20240229': 'claude-3-sonnet',
       'claude-3-haiku-20240307': 'claude-3-haiku',
-      'claude-3-5-sonnet-20240620': 'claude-3.5-sonnet'
+      'claude-3-5-sonnet-20240620': 'claude-3.5-sonnet',
+
+      // Claude 4.5 Series model IDs
+      'claude-opus-4-5-20251101': 'claude-opus-4.5',
+      'claude-sonnet-4-5-20250929': 'claude-sonnet-4.5',
+      'claude-haiku-4-5-20251024': 'claude-haiku-4.5',
+
+      // Short-hand variations
+      'opus': 'claude-opus-4.5',
+      'sonnet': 'claude-sonnet-4.5',
+      'haiku': 'claude-haiku-4.5',
+      'opus-4.5': 'claude-opus-4.5',
+      'sonnet-4.5': 'claude-sonnet-4.5',
+      'haiku-4.5': 'claude-haiku-4.5'
     };
     
     return mappings[normalized] || normalized;
@@ -223,8 +244,18 @@ class TokenCostCalculator {
           recommendations.push({
             type: 'cost_optimization',
             model,
-            suggestion: 'Claude 3.5 Sonnet offers similar performance at 5x lower cost',
-            potentialSaving: cost.totalCost * 0.80
+            suggestion: 'Claude Opus 4.5 is 3x cheaper than Claude 3 Opus with better performance',
+            potentialSaving: cost.totalCost * 0.67
+          });
+        }
+
+        // Recommend Opus 4.5 for complex strategic tasks
+        if (model.includes('sonnet') && cost.totalTokens > 50000) {
+          recommendations.push({
+            type: 'quality_optimization',
+            model,
+            suggestion: 'For complex strategic tasks >50K tokens, consider Opus 4.5 for 15-25% quality improvement',
+            benefit: 'Better reasoning and autonomous task completion'
           });
         }
       }

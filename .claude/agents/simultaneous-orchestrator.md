@@ -2,7 +2,10 @@
 name: simultaneous-orchestrator
 description: coordinating parallel execution of multiple agent streams with real-time state management and conflict resolution
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-model: sonnet
+model: opus
+effort: high
+complexity_tier: 9
+color: cyan
 ---
 
 # Simultaneous Orchestrator

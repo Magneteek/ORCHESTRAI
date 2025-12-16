@@ -1,0 +1,357 @@
+{
+  "financialViability": {
+    "analysisDate": "2025-12-10",
+    "clientId": "2a88af60-dd95-463a-9448-57eca9ea96a8",
+    "opportunityType": "Official Reseller - Spain Market",
+    "analysisHorizon": "3 Years"
+  },
+  "businessModelStructure": {
+    "modelType": "Exclusive/Semi-Exclusive Distribution",
+    "structure": {
+      "importerRole": "Import products from US manufacturer",
+      "distributor": "Distribute to retail channels in Spain",
+      "responsiblePerson": "Serve as EU Responsible Person for regulatory compliance",
+      "marketingPartner": "Execute localized marketing strategy"
+    },
+    "valueChain": [
+      "Theodent (Manufacturer) -> Spanish Distributor (You) -> Retail Channels -> End Consumer"
+    ],
+    "territoryRights": "Spain (potential expansion to Portugal/LATAM Spanish markets)"
+  },
+  "initialInvestmentEstimate": {
+    "total": {
+      "minimum": 45000,
+      "maximum": 85000,
+      "currency": "EUR",
+      "confidence": "MODERATE - based on industry benchmarks"
+    },
+    "breakdown": {
+      "regulatoryCompliance": {
+        "amount": {
+          "min": 8000,
+          "max": 15000
+        },
+        "items": [
+          "AEMPS registration and notification fees",
+          "Product Information File (PIF) preparation",
+          "Spanish labeling compliance",
+          "CPNP registration",
+          "Legal/regulatory consulting fees"
+        ]
+      },
+      "initialInventory": {
+        "amount": {
+          "min": 15000,
+          "max": 30000
+        },
+        "items": [
+          "Initial order of Theodent products (estimated 500-1000 units)",
+          "All three product lines (Classic, 300, Kids)",
+          "Safety stock buffer"
+        ],
+        "notes": "Wholesale pricing TBD - assumed 40-50% discount from retail"
+      },
+      "warehouseAndLogistics": {
+        "amount": {
+          "min": 5000,
+          "max": 10000
+        },
+        "items": [
+          "3PL setup fees",
+          "Initial warehouse prepaid rent",
+          "Fulfillment integration",
+          "Import duties/VAT deposit"
+        ]
+      },
+      "legalAndCompany": {
+        "amount": {
+          "min": 3000,
+          "max": 6000
+        },
+        "items": [
+          "Distribution agreement legal review",
+          "Company registration (if new entity)",
+          "Insurance (product liability)",
+          "Trademark verification"
+        ]
+      },
+      "marketingLaunch": {
+        "amount": {
+          "min": 10000,
+          "max": 18000
+        },
+        "items": [
+          "Website localization/Spanish site",
+          "Initial marketing materials",
+          "PR launch activities",
+          "Trade show participation (optional)"
+        ]
+      },
+      "workingCapital": {
+        "amount": {
+          "min": 4000,
+          "max": 6000
+        },
+        "items": [
+          "Operating expenses buffer (3 months)",
+          "Unexpected costs contingency"
+        ]
+      }
+    }
+  },
+  "ongoingCosts": {
+    "monthly": {
+      "fixed": {
+        "warehouseAndLogistics": {
+          "amount": "500-1000",
+          "notes": "3PL storage and handling"
+        },
+        "softwareAndTools": {
+          "amount": "200-400",
+          "notes": "Inventory management, ecommerce platforms"
+        },
+        "insurance": {
+          "amount": "150-300",
+          "notes": "Product liability insurance"
+        },
+        "accounting": {
+          "amount": "200-400",
+          "notes": "Bookkeeping and tax compliance"
+        }
+      },
+      "variable": {
+        "fulfillment": {
+          "percentage": "5-9%",
+          "basis": "of selling price"
+        },
+        "marketingOngoing": {
+          "percentage": "15-25%",
+          "basis": "of revenue (year 1-2)"
+        },
+        "paymentProcessing": {
+          "percentage": "2-3%",
+          "basis": "of transactions"
+        }
+      },
+      "estimatedMonthlyFixed": {
+        "min": 1050,
+        "max": 2100,
+        "currency": "EUR"
+      }
+    }
+  },
+  "revenueProjections": {
+    "assumptions": {
+      "wholesaleCost": "50% of retail (assumed)",
+      "retailPriceSpain": {
+        "theodentClassic": 17.99,
+        "theodent300": 99.99,
+        "theodentKids": 13.99
+      },
+      "channelMix": {
+        "directEcommerce": "40%",
+        "pharmacyWholesale": "35%",
+        "retailPartnerships": "25%"
+      },
+      "grossMargin": {
+        "directSales": "50%",
+        "wholesaleToRetail": "25-30%",
+        "blendedEstimate": "35-40%"
+      }
+    },
+    "scenarios": {
+      "conservative": {
+        "year1": {
+          "unitsSold": 2500,
+          "revenue": 42000,
+          "grossProfit": 14700,
+          "netBeforeMarketing": -5300,
+          "notes": "Slow market penetration, limited awareness"
+        },
+        "year2": {
+          "unitsSold": 5000,
+          "revenue": 85000,
+          "grossProfit": 29750,
+          "netBeforeMarketing": 5750,
+          "notes": "Building momentum, pharmacy distribution starting"
+        },
+        "year3": {
+          "unitsSold": 8500,
+          "revenue": 145000,
+          "grossProfit": 50750,
+          "netBeforeMarketing": 25750,
+          "notes": "Established presence, word of mouth"
+        }
+      },
+      "moderate": {
+        "year1": {
+          "unitsSold": 4000,
+          "revenue": 68000,
+          "grossProfit": 23800,
+          "netBeforeMarketing": 3800,
+          "notes": "Successful pharmacy partnerships, PR coverage"
+        },
+        "year2": {
+          "unitsSold": 9000,
+          "revenue": 153000,
+          "grossProfit": 53550,
+          "netBeforeMarketing": 28550,
+          "notes": "Growing brand awareness, online traction"
+        },
+        "year3": {
+          "unitsSold": 15000,
+          "revenue": 255000,
+          "grossProfit": 89250,
+          "netBeforeMarketing": 64250,
+          "notes": "Strong market position, potential expansion"
+        }
+      },
+      "optimistic": {
+        "year1": {
+          "unitsSold": 6000,
+          "revenue": 102000,
+          "grossProfit": 35700,
+          "netBeforeMarketing": 15700,
+          "notes": "Strong launch, viral social media, key partnerships"
+        },
+        "year2": {
+          "unitsSold": 14000,
+          "revenue": 238000,
+          "grossProfit": 83300,
+          "netBeforeMarketing": 58300,
+          "notes": "Rapid growth, multiple channel success"
+        },
+        "year3": {
+          "unitsSold": 25000,
+          "revenue": 425000,
+          "grossProfit": 148750,
+          "netBeforeMarketing": 123750,
+          "notes": "Market leader in premium fluoride-free segment"
+        }
+      }
+    }
+  },
+  "breakEvenAnalysis": {
+    "initialInvestmentToRecover": 65000,
+    "monthlyFixedCosts": 1500,
+    "averageGrossMarginPerUnit": 6.00,
+    "breakEvenUnits": {
+      "toRecoverInvestment": 10833,
+      "monthlyToBreakEven": 250
+    },
+    "timeToBreakEven": {
+      "conservative": "30-36 months",
+      "moderate": "18-24 months",
+      "optimistic": "12-15 months"
+    }
+  },
+  "profitMarginAnalysis": {
+    "productLevelMargins": {
+      "theodentClassic": {
+        "retailPrice": 17.99,
+        "estimatedCost": 9.00,
+        "grossMargin": "50%",
+        "contribution": "8.99 EUR per unit"
+      },
+      "theodent300": {
+        "retailPrice": 99.99,
+        "estimatedCost": 50.00,
+        "grossMargin": "50%",
+        "contribution": "49.99 EUR per unit"
+      },
+      "theodentKids": {
+        "retailPrice": 13.99,
+        "estimatedCost": 7.00,
+        "grossMargin": "50%",
+        "contribution": "6.99 EUR per unit"
+      }
+    },
+    "channelMargins": {
+      "directEcommerce": {
+        "grossMargin": "50%",
+        "afterFulfillment": "41-45%"
+      },
+      "pharmacyWholesale": {
+        "grossMargin": "25-30%",
+        "notes": "Lower margin but higher volume potential"
+      },
+      "amazonEurope": {
+        "grossMargin": "35-40%",
+        "notes": "After Amazon fees"
+      }
+    }
+  },
+  "riskAdjustedReturns": {
+    "investmentScenarios": {
+      "conservative": {
+        "totalInvestment": 65000,
+        "year3CumulativeProfit": -10000,
+        "roi": "-15%",
+        "assessment": "Unprofitable without adjustments"
+      },
+      "moderate": {
+        "totalInvestment": 65000,
+        "year3CumulativeProfit": 45000,
+        "roi": "69%",
+        "assessment": "Acceptable return, sustainable growth"
+      },
+      "optimistic": {
+        "totalInvestment": 65000,
+        "year3CumulativeProfit": 130000,
+        "roi": "200%",
+        "assessment": "Excellent return, strong business case"
+      }
+    },
+    "probabilityWeightedROI": {
+      "conservativeWeight": "30%",
+      "moderateWeight": "50%",
+      "optimisticWeight": "20%",
+      "expectedROI": "52%",
+      "expectedYear3Profit": 35000
+    }
+  },
+  "fundingOptions": {
+    "selfFunded": {
+      "description": "Bootstrap with personal/business capital",
+      "pros": ["Full control", "No equity dilution", "Flexible timeline"],
+      "cons": ["Higher personal risk", "Limited scale capacity"],
+      "recommended": "For initial 65K EUR investment"
+    },
+    "bankLoan": {
+      "description": "Traditional business loan or line of credit",
+      "typicalTerms": "5-8% interest, 3-5 year term",
+      "pros": ["No equity dilution", "Builds credit history"],
+      "cons": ["Requires collateral/guarantees", "Fixed repayment schedule"]
+    },
+    "distributorFinancing": {
+      "description": "Negotiate favorable payment terms with Theodent",
+      "options": ["Extended payment terms", "Consignment arrangement", "Revenue share"],
+      "pros": ["Reduces upfront capital needs", "Aligned incentives"],
+      "cons": ["May require exclusivity commitment", "Dependent on manufacturer terms"]
+    }
+  },
+  "financialViabilityScore": {
+    "overall": 6.5,
+    "scale": "1-10",
+    "breakdown": {
+      "marketOpportunity": 7.5,
+      "marginPotential": 7.0,
+      "investmentRisk": 6.0,
+      "scalability": 6.5,
+      "breakEvenTimeline": 6.0
+    },
+    "interpretation": "Moderately attractive opportunity with manageable risk profile",
+    "keyDeterminants": [
+      "Wholesale pricing from Theodent (critical unknown)",
+      "Pharmacy channel penetration success",
+      "Marketing effectiveness in niche segment",
+      "Regulatory compliance costs"
+    ]
+  },
+  "sources": [
+    "https://www.flatoutfulfillment.com/post/unveiling-the-makeup-of-cosmetic-product-costs-a-comprehensive-overview",
+    "https://www.expertmarketresearch.com/reports/spain-oral-care-market",
+    "https://www.mariscal-abogados.com/requirements-for-manufacturing-and-importing-cosmetic-products-in-spain/",
+    "https://spainbox.com/mailboxes/duty-and-taxes-to-import-to-spain-from-outside-european-union"
+  ]
+}

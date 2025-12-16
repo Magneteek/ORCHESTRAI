@@ -1,7 +1,7 @@
 ---
 name: seo-local-seo
 description: Local SEO optimization and Google Business Profile specialist. Use proactively for local search optimization and geographic targeting.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__business_data_search, mcp__dataforseo__business_data_info
 model: sonnet
 ---
 

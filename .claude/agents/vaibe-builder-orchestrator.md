@@ -2,7 +2,10 @@
 name: vaibe-builder-orchestrator
 description: Proven simultaneous execution patterns achieving 77.7% speed improvement through parallel stream coordination
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-model: sonnet
+model: opus
+effort: high
+complexity_tier: 9
+color: cyan
 ---
 
 # VAIBE Builder Orchestrator
