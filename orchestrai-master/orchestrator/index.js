@@ -7,7 +7,8 @@ const http = require('http');
 const Redis = require('redis');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
-const CrystallineMemoryManager = require('../crystalline-memory/memory-manager');
+// Legacy compatibility adapter for new 3-layer memory architecture
+const LegacyMemoryAdapter = require('../../orchestrai-shared/memory/adapters/legacy-memory-adapter');
 const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
 const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
 const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
@@ -86,13 +87,18 @@ class OrchestraiMaster extends EventEmitter {
       this.redis.on('connect', () => {
         console.log('✅ Redis connected for crystalline memory');
         this.systemMetrics.redisStatus = 'Connected';
-        
-        this.crystallineMemory = new CrystallineMemoryManager(this.redis);
-        console.log('🧠 Crystalline Memory Manager initialized');
-        
+
+        // Initialize MCP Manager first (needed for memory system)
         this.mcpManager = new MCPManager();
         console.log('🔌 MCP Manager initialized');
-        
+
+        this.crystallineMemory = new LegacyMemoryAdapter(this.redis, {
+          namespace: 'orchestrai',
+          maxRadius: 15,
+          mcpManager: this.mcpManager
+        });
+        console.log('🧠 Crystalline Memory initialized (new 3-layer architecture)');
+
         this.usageTracker = new UsageTracker(this.redis);
         console.log('📊 Usage Tracker initialized');
         

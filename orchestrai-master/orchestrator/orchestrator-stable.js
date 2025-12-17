@@ -12,7 +12,8 @@ const path = require('path');
 const logger = require('../../orchestrai-shared/logging/logger').forDomain('orchestrator');
 
 // Core Dependencies
-const CrystallineMemoryManager = require('../crystalline-memory/memory-manager');
+// Legacy compatibility adapter for new 3-layer memory architecture
+const LegacyMemoryAdapter = require('../../orchestrai-shared/memory/adapters/legacy-memory-adapter');
 const MCPManager = require('../../orchestrai-shared/mcp-servers/mcp-manager');
 const UsageTracker = require('../../orchestrai-shared/analytics/usage-tracker');
 const ClaudeCodeHooksManager = require('../../orchestrai-shared/claude-code/hooks-manager');
@@ -193,11 +194,15 @@ class StableOrchestraiMaster extends EventEmitter {
 
       await this.redis.connect();
       
-      this.crystallineMemory = new CrystallineMemoryManager(this.redis);
+      this.crystallineMemory = new LegacyMemoryAdapter(this.redis, {
+        namespace: 'orchestrai',
+        maxRadius: 15,
+        mcpManager: this.mcpManager
+      });
       this.usageTracker = new UsageTracker(this.redis);
-      
+
       this.initializationState.redis = 'success';
-      console.log('✅ Redis and Crystalline Memory initialized');
+      console.log('✅ Redis and Crystalline Memory initialized (new 3-layer architecture)');
       
     } catch (error) {
       console.log('⚠️  Redis not available, using in-memory fallback');
@@ -205,7 +210,11 @@ class StableOrchestraiMaster extends EventEmitter {
       this.initializationState.redis = 'fallback';
       
       // Initialize fallback memory manager
-      this.crystallineMemory = new CrystallineMemoryManager(null);
+      this.crystallineMemory = new LegacyMemoryAdapter(null, {
+        namespace: 'orchestrai',
+        maxRadius: 15,
+        mcpManager: this.mcpManager
+      });
       this.usageTracker = new UsageTracker(null);
     }
   }

@@ -7,7 +7,7 @@
 
 const { ContentCreationWorkflowEnforcer, WorkflowViolationError } = require('./content-creation-workflow-enforcer');
 const { workflowEnforcementConfig } = require('./workflow-enforcement-config');
-const { CrystallineMemoryManager } = require('../crystalline-memory/memory-manager');
+// CrystallineMemoryManager import removed - using new 3-layer memory architecture
 const { GeometricOrchestrator } = require('./geometric-orchestrator');
 
 class EnhancedOrchestrator extends GeometricOrchestrator {
