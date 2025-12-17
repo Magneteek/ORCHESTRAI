@@ -115,12 +115,17 @@ class HexagonalLatticeStore extends MemoryRepository {
         }
       };
 
-      const nodeId = await this.lattice.createNode(
-        coordinates.q,
-        coordinates.r,
-        memoryData,
-        'memory'
-      );
+      const node = this.lattice.createNode({
+        q: coordinates.q,
+        r: coordinates.r,
+        s: coordinates.s,
+        layer: 'task', // Valid layers: 'core', 'domain', 'task'
+        domain: memoryData.domain,
+        type: memoryData.type,
+        data: memoryData
+      });
+
+      const nodeId = node.nodeId;
 
       if (!nodeId) {
         throw new OrchestRAIError(
@@ -239,29 +244,41 @@ class HexagonalLatticeStore extends MemoryRepository {
       }
 
       // Fallback to lattice search
-      const searchData = {
-        content: validated.searchTerm || validated.query,
-        domain: validated.domain,
-        type: validated.type,
-        tags: validated.tags
-      };
+      const searchTerm = (validated.searchTerm || validated.query || '').toLowerCase();
+      const allResults = [];
 
       const allPools = validated.domain
         ? [validated.domain]
         : Array.from(this.memoryPools.keys());
 
-      const allResults = [];
-
       for (const domain of allPools) {
         const nodeIds = this.memoryPools.get(domain) || [];
 
         for (const nodeId of nodeIds) {
-          const candidates = await this.lattice.findOptimalPath(
-            nodeId,
-            searchData,
-            validated.maxResults
-          );
-          allResults.push(...candidates);
+          const node = this.lattice.getNode(nodeId);
+          if (!node) continue;
+
+          // Simple similarity scoring based on content matching
+          const content = (node.data?.content || '').toLowerCase();
+          const observations = (node.data?.observations || []).join(' ').toLowerCase();
+          const combined = `${content} ${observations}`;
+
+          // Calculate simple similarity score
+          let similarity = 0;
+          if (searchTerm && combined.includes(searchTerm)) {
+            similarity = 0.8; // Base score for matching
+
+            // Exact match gets higher score
+            if (content === searchTerm) similarity = 1.0;
+          }
+
+          // Filter by domain and type if specified
+          const domainMatch = !validated.domain || node.data?.domain === validated.domain;
+          const typeMatch = !validated.type || node.data?.type === validated.type;
+
+          if (similarity > 0 && domainMatch && typeMatch) {
+            allResults.push({ node, similarity });
+          }
         }
       }
 
@@ -297,13 +314,13 @@ class HexagonalLatticeStore extends MemoryRepository {
 
       return {
         entities: topResults.map(r => ({
-          nodeId: r.node.id,
-          name: r.node.data.content,
-          type: r.node.data.type,
-          domain: r.node.data.domain,
-          observations: r.node.data.observations || [],
+          nodeId: r.node.nodeId,
+          name: r.node.data?.content || r.node.data?.name || 'unknown',
+          type: r.node.data?.type || 'memory',
+          domain: r.node.data?.domain || 'global',
+          observations: r.node.data?.observations || [],
           similarity: r.similarity,
-          metadata: r.node.data.metadata,
+          metadata: r.node.data?.metadata || {},
           coordinates: { q: r.node.q, r: r.node.r }
         })),
         relationships: [],
