@@ -17,169 +17,137 @@
  * 6. Deployment & Documentation - Production deployment and docs (50 min)
  *
  * Total Duration: ~200 minutes (optimized from 240 minutes)
+ *
+ * MIGRATION: Phase 3.3.2 - Extends BasePipeline (Template Method Pattern)
  */
 
-const EventEmitter = require('events');
+const BasePipeline = require('../../../orchestrai-shared/pipelines/base-pipeline');
 const path = require('path');
 const fs = require('fs').promises;
 
-class DesignDevelopmentPipeline extends EventEmitter {
+class DesignDevelopmentPipeline extends BasePipeline {
   constructor(
     coordinationPatterns,
     dynamicAgentSelection,
     crystallineMemory,
     redis = null
   ) {
-    super();
-
-    this.coordinationPatterns = coordinationPatterns;
-    this.dynamicAgentSelection = dynamicAgentSelection;
-    this.crystallineMemory = crystallineMemory;
-    this.redis = redis;
-
-    // Pipeline metadata
-    this.pipelineId = 'design-development';
-    this.pipelineName = 'Design Development Pipeline';
-    this.version = '1.0.0';
-
-    // Stage configuration
-    this.stages = [
-      'wireframe_architecture',
-      'design_system',
-      'frontend_development',
-      'qa_testing',
-      'performance_optimization',
-      'deployment_documentation'
-    ];
-
-    // Required agents
-    this.requiredAgents = {
-      'wireframe_architecture': 'wireframe-creation-specialist',
-      'design_system': 'general-purpose', // Design system specialist
-      'frontend_development': 'general-purpose', // Frontend developer
-      'qa_testing': 'general-purpose', // QA specialist
-      'performance_optimization': 'seo-technical-analysis',
-      'deployment_documentation': 'general-purpose'
-    };
+    super(
+      {
+        coordinationPatterns,
+        dynamicAgentSelection,
+        crystallineMemory,
+        redis
+      },
+      {
+        pipelineId: 'design-development',
+        pipelineName: 'Design Development Pipeline',
+        version: '2.0.0',
+        stages: [
+          'wireframe_architecture',
+          'design_system',
+          'frontend_development',
+          'qa_testing',
+          'performance_optimization',
+          'deployment_documentation'
+        ],
+        requiredAgents: {
+          'wireframe_architecture': 'wireframe-creation-specialist',
+          'design_system': 'general-purpose',
+          'frontend_development': 'general-purpose',
+          'qa_testing': 'general-purpose',
+          'performance_optimization': 'seo-technical-analysis',
+          'deployment_documentation': 'general-purpose'
+        }
+      }
+    );
 
     console.log('🎨 Design Development Pipeline initialized');
   }
 
   /**
-   * Execute complete design development pipeline
+   * Override executeStages for parallel QA + Performance optimization
+   * Stages 4-5 run in parallel (50% faster: ~40min vs 80min)
    */
-  async execute(projectSpec, options = {}) {
-    const executionId = `exec-${Date.now()}`;
-    const startTime = Date.now();
+  async executeStages(execution, projectSpec) {
+    // Stages 1-3: Sequential execution
+    const sequentialStages = ['wireframe_architecture', 'design_system', 'frontend_development'];
 
-    console.log(`\n🚀 Starting Design Development Pipeline Execution: ${executionId}`);
-    console.log(`   Client: ${projectSpec.clientName}`);
-    console.log(`   Project Type: ${projectSpec.projectType || 'Web Application'}`);
-    console.log(`   Framework: ${projectSpec.framework || 'Next.js'}`);
+    for (const stageName of sequentialStages) {
+      execution.currentStage = stageName;
+      this.emitStageStarted(execution, stageName);
 
-    const execution = {
-      executionId,
-      pipelineId: this.pipelineId,
-      projectSpec,
-      options,
-      startTime,
-      currentStage: null,
-      stageResults: {},
-      deliverablePaths: {},
-      performance: {
-        stageTimings: {},
-        agentPerformance: {}
-      }
-    };
+      const result = await this.executeStageImpl(stageName, execution, projectSpec);
+      execution.stageResults[stageName] = result;
 
-    try {
-      // Stage 1: Wireframe & Information Architecture
-      execution.currentStage = 'wireframe_architecture';
-      this.emit('stage-started', { executionId, stage: 'wireframe_architecture' });
-      const wireframeData = await this.executeWireframeArchitecture(execution, projectSpec);
-      execution.stageResults.wireframe_architecture = wireframeData;
-      this.emit('stage-completed', { executionId, stage: 'wireframe_architecture', result: wireframeData });
+      this.emitStageCompleted(execution, stageName, result);
+    }
 
-      // Stage 2: Design System Creation
-      execution.currentStage = 'design_system';
-      this.emit('stage-started', { executionId, stage: 'design_system' });
-      const designSystemData = await this.executeDesignSystem(execution, wireframeData);
-      execution.stageResults.design_system = designSystemData;
-      this.emit('stage-completed', { executionId, stage: 'design_system', result: designSystemData });
+    // Stages 4-5: PARALLEL EXECUTION (QA + Performance)
+    // Optimization: Both depend only on frontendData, can run simultaneously
+    // 50% faster than sequential execution (~40min vs 80min)
+    console.log('🚀 Executing QA testing + performance optimization in parallel...');
 
-      // Stage 3: Frontend Development
-      execution.currentStage = 'frontend_development';
-      this.emit('stage-started', { executionId, stage: 'frontend_development' });
-      const frontendData = await this.executeFrontendDevelopment(execution, designSystemData, wireframeData);
-      execution.stageResults.frontend_development = frontendData;
-      this.emit('stage-completed', { executionId, stage: 'frontend_development', result: frontendData });
+    const frontendData = execution.stageResults.frontend_development;
 
-      // Stages 4-5: PARALLEL EXECUTION (QA + Performance)
-      // Optimization: Both depend only on frontendData, can run simultaneously
-      // 50% faster than sequential execution (~40min vs 80min)
-      console.log('🚀 Executing QA testing + performance optimization in parallel...');
+    this.emitStageStarted(execution, 'qa_testing');
+    this.emitStageStarted(execution, 'performance_optimization');
 
-      this.emit('stage-started', { executionId, stage: 'qa_testing' });
-      this.emit('stage-started', { executionId, stage: 'performance_optimization' });
+    const [qaData, performanceData] = await Promise.all([
+      this.executeStageImpl('qa_testing', execution, projectSpec, { frontendData }),
+      this.executeStageImpl('performance_optimization', execution, projectSpec, { frontendData })
+    ]);
 
-      const [qaData, performanceData] = await Promise.all([
-        this.executeQATesting(execution, frontendData),
-        this.executePerformanceOptimization(execution, frontendData, null) // null for qaData as it's not needed
-      ]);
+    execution.stageResults.qa_testing = qaData;
+    execution.stageResults.performance_optimization = performanceData;
 
-      execution.stageResults.qa_testing = qaData;
-      execution.stageResults.performance_optimization = performanceData;
+    this.emitStageCompleted(execution, 'qa_testing', qaData);
+    this.emitStageCompleted(execution, 'performance_optimization', performanceData);
 
-      this.emit('stage-completed', { executionId, stage: 'qa_testing', result: qaData });
-      this.emit('stage-completed', { executionId, stage: 'performance_optimization', result: performanceData });
+    // Stage 6: Deployment & Documentation (sequential after parallel)
+    execution.currentStage = 'deployment_documentation';
+    this.emitStageStarted(execution, 'deployment_documentation');
 
-      // Stage 6: Deployment & Documentation
-      execution.currentStage = 'deployment_documentation';
-      this.emit('stage-started', { executionId, stage: 'deployment_documentation' });
-      const deploymentData = await this.executeDeploymentDocumentation(execution, performanceData);
-      execution.stageResults.deployment_documentation = deploymentData;
-      this.emit('stage-completed', { executionId, stage: 'deployment_documentation', result: deploymentData });
+    const deploymentData = await this.executeStageImpl('deployment_documentation', execution, projectSpec);
+    execution.stageResults.deployment_documentation = deploymentData;
 
-      // Calculate execution metrics
-      const duration = Date.now() - startTime;
-      execution.duration = duration;
-      execution.status = 'completed';
+    this.emitStageCompleted(execution, 'deployment_documentation', deploymentData);
 
-      console.log(`\n✅ Design Development Pipeline Completed: ${executionId}`);
-      console.log(`   Duration: ${Math.round(duration / 1000 / 60)} minutes`);
-      console.log(`   Deliverables: ${Object.keys(execution.deliverablePaths).length}`);
+    console.log(`\n✅ Design Development Pipeline Completed`);
+    console.log(`   Deliverables: ${Object.keys(execution.deliverablePaths).length}`);
+  }
 
-      this.emit('pipeline-completed', {
-        executionId,
-        duration,
-        results: execution.stageResults,
-        deliverables: execution.deliverablePaths
-      });
+  /**
+   * Route stage execution to appropriate stage method
+   */
+  async executeStageImpl(stageName, execution, projectSpec, additionalContext = {}) {
+    switch (stageName) {
+      case 'wireframe_architecture':
+        return await this.executeWireframeArchitecture(execution, projectSpec);
 
-      return {
-        success: true,
-        executionId,
-        duration,
-        results: execution.stageResults,
-        deliverablePaths: execution.deliverablePaths,
-        performance: execution.performance
-      };
+      case 'design_system':
+        const wireframeData = execution.stageResults.wireframe_architecture;
+        return await this.executeDesignSystem(execution, wireframeData);
 
-    } catch (error) {
-      console.error(`\n❌ Design Development Pipeline Failed: ${executionId}`);
-      console.error(`   Stage: ${execution.currentStage}`);
-      console.error(`   Error:`, error.message);
+      case 'frontend_development':
+        const designSystemData = execution.stageResults.design_system;
+        const wireframes = execution.stageResults.wireframe_architecture;
+        return await this.executeFrontendDevelopment(execution, designSystemData, wireframes);
 
-      execution.status = 'failed';
-      execution.error = error;
+      case 'qa_testing':
+        const frontendDataQA = additionalContext.frontendData || execution.stageResults.frontend_development;
+        return await this.executeQATesting(execution, frontendDataQA);
 
-      this.emit('pipeline-failed', {
-        executionId,
-        stage: execution.currentStage,
-        error: error.message
-      });
+      case 'performance_optimization':
+        const frontendDataPerf = additionalContext.frontendData || execution.stageResults.frontend_development;
+        return await this.executePerformanceOptimization(execution, frontendDataPerf, null);
 
-      throw error;
+      case 'deployment_documentation':
+        const performanceData = execution.stageResults.performance_optimization;
+        return await this.executeDeploymentDocumentation(execution, performanceData);
+
+      default:
+        throw new Error(`Unknown stage: ${stageName}`);
     }
   }
 
@@ -224,10 +192,12 @@ class DesignDevelopmentPipeline extends EventEmitter {
     });
 
     // Save wireframe deliverables
-    const deliverablePath = await this.saveWireframeDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'wireframe_architecture',
       wireframeResult,
-      projectSpec
+      'design/wireframes',
+      'wireframes-ia.json'
     );
 
     execution.deliverablePaths.wireframes = deliverablePath;
@@ -283,10 +253,12 @@ class DesignDevelopmentPipeline extends EventEmitter {
     });
 
     // Save design system deliverables
-    const deliverablePath = await this.saveDesignSystemDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'design_system',
       designSystemResult,
-      execution.projectSpec
+      'design/design-system',
+      'design-system.json'
     );
 
     execution.deliverablePaths.designSystem = deliverablePath;
@@ -344,10 +316,12 @@ class DesignDevelopmentPipeline extends EventEmitter {
     });
 
     // Save frontend development deliverables
-    const deliverablePath = await this.saveFrontendDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'frontend_development',
       frontendResult,
-      execution.projectSpec
+      'development',
+      'frontend-implementation.json'
     );
 
     execution.deliverablePaths.frontend = deliverablePath;
@@ -404,10 +378,12 @@ class DesignDevelopmentPipeline extends EventEmitter {
     });
 
     // Save QA testing deliverables
-    const deliverablePath = await this.saveQADeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'qa_testing',
       qaResult,
-      execution.projectSpec
+      'qa',
+      'qa-testing-report.json'
     );
 
     execution.deliverablePaths.qa = deliverablePath;
@@ -465,10 +441,12 @@ class DesignDevelopmentPipeline extends EventEmitter {
     });
 
     // Save performance optimization deliverables
-    const deliverablePath = await this.savePerformanceDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'performance_optimization',
       performanceResult,
-      execution.projectSpec
+      'performance',
+      'performance-optimization.json'
     );
 
     execution.deliverablePaths.performance = deliverablePath;
@@ -523,10 +501,12 @@ class DesignDevelopmentPipeline extends EventEmitter {
     });
 
     // Save deployment documentation deliverables
-    const deliverablePath = await this.saveDeploymentDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'deployment_documentation',
       deploymentResult,
-      execution.projectSpec
+      'deployment',
+      'deployment-documentation.json'
     );
 
     // Store deployment configuration in crystalline memory
@@ -872,133 +852,9 @@ Provide complete deployment and documentation package.`;
   }
 
   /**
-   * Deliverable Savers
+   * Deliverable saving now handled by BasePipeline.saveStageDeliverables()
+   * All 6 previous deliverable saver methods eliminated (129 lines)
    */
-  async saveWireframeDeliverables(execution, wireframeResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/design/wireframes'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const wireframeFile = path.join(deliverablePath, 'wireframes-ia.json');
-    await fs.writeFile(
-      wireframeFile,
-      JSON.stringify(wireframeResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Wireframes saved: ${wireframeFile}`);
-    return deliverablePath;
-  }
-
-  async saveDesignSystemDeliverables(execution, designSystemResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/design/design-system'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const designSystemFile = path.join(deliverablePath, 'design-system.json');
-    await fs.writeFile(
-      designSystemFile,
-      JSON.stringify(designSystemResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Design system saved: ${designSystemFile}`);
-    return deliverablePath;
-  }
-
-  async saveFrontendDeliverables(execution, frontendResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/development'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const frontendFile = path.join(deliverablePath, 'frontend-implementation.json');
-    await fs.writeFile(
-      frontendFile,
-      JSON.stringify(frontendResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Frontend code saved: ${frontendFile}`);
-    return deliverablePath;
-  }
-
-  async saveQADeliverables(execution, qaResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/qa'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const qaFile = path.join(deliverablePath, 'qa-testing-report.json');
-    await fs.writeFile(
-      qaFile,
-      JSON.stringify(qaResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 QA report saved: ${qaFile}`);
-    return deliverablePath;
-  }
-
-  async savePerformanceDeliverables(execution, performanceResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/performance'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const performanceFile = path.join(deliverablePath, 'performance-optimization.json');
-    await fs.writeFile(
-      performanceFile,
-      JSON.stringify(performanceResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Performance report saved: ${performanceFile}`);
-    return deliverablePath;
-  }
-
-  async saveDeploymentDeliverables(execution, deploymentResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/deployment'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const deploymentFile = path.join(deliverablePath, 'deployment-documentation.json');
-    await fs.writeFile(
-      deploymentFile,
-      JSON.stringify(deploymentResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Deployment docs saved: ${deploymentFile}`);
-    return deliverablePath;
-  }
 
   /**
    * Store deployment configuration in crystalline memory

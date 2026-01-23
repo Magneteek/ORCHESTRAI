@@ -1,0 +1,53 @@
+{
+  "name": "memory",
+  "description": "Memory MCP server for persistent knowledge graphs and context management",
+  "required": true,
+  "configuration": {
+    "typescript": {
+      ".mcp.json": {
+        "memory": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-memory"],
+          "env": {}
+        }
+      },
+      ".env.example": [
+        "# Memory Server Configuration (optional)",
+        "# MEMORY_STORAGE_PATH=./memory-store"
+      ],
+      "dependencies": {}
+    },
+    "python": {
+      ".mcp.json": {
+        "memory": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-memory"],
+          "env": {}
+        }
+      },
+      ".env.example": [
+        "# Memory Server Configuration (optional)",
+        "# MEMORY_STORAGE_PATH=./memory-store"
+      ],
+      "requirements": []
+    }
+  },
+  "tools": [
+    "create_entities",
+    "create_relations",
+    "add_observations",
+    "delete_entities",
+    "delete_observations",
+    "delete_relations",
+    "read_graph",
+    "search_nodes",
+    "open_nodes"
+  ],
+  "use_cases": [
+    "Brand voice consistency",
+    "Customer data persistence",
+    "Content history tracking",
+    "Context accumulation across sessions"
+  ],
+  "documentation_url": "https://modelcontextprotocol.io/docs/server-memory"
+}

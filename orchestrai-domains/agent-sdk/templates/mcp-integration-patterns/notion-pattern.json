@@ -1,0 +1,53 @@
+{
+  "name": "notion",
+  "description": "Notion MCP server for workspace integration and content management",
+  "required": false,
+  "configuration": {
+    "typescript": {
+      ".mcp.json": {
+        "notion": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-notion"],
+          "env": {
+            "NOTION_API_KEY": "${NOTION_API_KEY}"
+          }
+        }
+      },
+      ".env.example": [
+        "# Notion API Credentials (optional)",
+        "NOTION_API_KEY=your_notion_api_key"
+      ],
+      "dependencies": {}
+    },
+    "python": {
+      ".mcp.json": {
+        "notion": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-notion"],
+          "env": {
+            "NOTION_API_KEY": "${NOTION_API_KEY}"
+          }
+        }
+      },
+      ".env.example": [
+        "# Notion API Credentials (optional)",
+        "NOTION_API_KEY=your_notion_api_key"
+      ],
+      "requirements": []
+    }
+  },
+  "tools": [
+    "API-post-database-query",
+    "API-post-page",
+    "API-patch-page",
+    "API-retrieve-a-page",
+    "API-post-search"
+  ],
+  "use_cases": [
+    "Content calendar management",
+    "CRM integration",
+    "Campaign tracking",
+    "Team collaboration"
+  ],
+  "documentation_url": "https://developers.notion.com/"
+}

@@ -26,12 +26,13 @@ const UnifiedArticleOrchestrator = require('../../orchestrai-system/unified-orch
 const ClaudeCodeExecutionBridge = require('../../orchestrai-system/unified-orchestration/claude-code-execution-bridge');
 const MultilingualContentOrchestrator = require('../../orchestrai-system/multilingual/multilingual-content-orchestrator-fixed');
 
-// Domain Hubs  
+// Domain Hubs
 const SEODomainHub = require('../../orchestrai-domains/seo/seo-domain-hub');
 const QualityDomainHub = require('../../orchestrai-domains/quality/quality-domain-hub');
 const ContentEnhancedDomainHub = require('../../orchestrai-domains/content-enhanced/content-domain-hub');
 const ClientIntelligenceDomainHub = require('../../orchestrai-domains/client-intelligence/client-intelligence-domain-hub');
 const WebQualityDomainRegistry = require('../../orchestrai-domains/web-quality/web-quality-domain-registry');
+const AgentSDKDomainHub = require('../../orchestrai-domains/agent-sdk/agent-sdk-domain-hub');
 const MasterCoordinatorInterface = require('../../orchestrai-shared/api/master-coordinator-interface');
 
 /**
@@ -484,6 +485,18 @@ class StableOrchestraiMaster extends EventEmitter {
         ),
         critical: false,
         isRegistry: true
+      },
+      {
+        name: 'agent-sdk',
+        displayName: 'Agent SDK Domain Hub',
+        factory: () => new AgentSDKDomainHub(
+          this,
+          this.mcpManager,
+          this.crystallineMemory,
+          this.domainAgentManager?.templateEngine,
+          this.domainAgentManager?.projectManager
+        ),
+        critical: false
       }
     ];
 

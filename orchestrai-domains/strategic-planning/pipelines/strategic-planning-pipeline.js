@@ -23,8 +23,7 @@
  * - Financial Modeling - Unit Economics, Scenario Planning, Power of One
  */
 
-const EventEmitter = require('events');
-const { v4: uuidv4 } = require('uuid');
+const BasePipeline = require('../../../orchestrai-shared/pipelines/base-pipeline');
 const path = require('path');
 const fs = require('fs').promises;
 
@@ -33,14 +32,31 @@ function createLimiter(concurrency) {
   return (fn) => fn(); // Pass-through for now, can be enhanced later
 }
 
-class StrategicPlanningPipeline extends EventEmitter {
+class StrategicPlanningPipeline extends BasePipeline {
   constructor(coordinationPatterns, crystallineMemory, mcpManager) {
-    super();
-    this.coordinationPatterns = coordinationPatterns;
-    this.crystallineMemory = crystallineMemory;
+    super(
+      { coordinationPatterns, dynamicAgentSelection: null, crystallineMemory, redis: null },
+      {
+        pipelineId: 'strategic-planning',
+        pipelineName: 'Strategic Planning Pipeline',
+        version: '2.0.0',
+        stages: [
+          'intelligence_aggregation',
+          'strategic_plan_synthesis',
+          'financial_modeling',
+          'coherence_validation',
+          'executive_package_assembly'
+        ],
+        requiredAgents: {
+          'strategic_plan_synthesis': 'strategic-plan-synthesizer',
+          'financial_modeling': 'financial-modeling-specialist',
+          'coherence_validation': 'general-purpose',
+          'executive_package_assembly': 'general-purpose'
+        }
+      }
+    );
+
     this.mcpManager = mcpManager;
-    this.pipelineId = 'strategic-planning';
-    this.pipelineName = 'Strategic Planning Pipeline';
 
     // CRASH PREVENTION: Limit concurrent operations
     // Note: Using simple pass-through for now (can add proper rate limiting later)
@@ -49,153 +65,109 @@ class StrategicPlanningPipeline extends EventEmitter {
   }
 
   /**
-   * Execute the complete strategic planning pipeline
+   * Custom executeStages with quality gate validation
+   * @override
    */
-  async execute(projectSpec, options = {}) {
-    const executionId = uuidv4();
-    const startTime = Date.now();
-
-    const execution = {
-      executionId,
-      pipelineId: this.pipelineId,
-      projectId: projectSpec.projectId || projectSpec.clientId,
-      projectPath: projectSpec.projectPath,
-      clientName: projectSpec.clientName,
-      startTime,
-      stages: {},
-      stageResults: {},
-      errors: [],
-      metrics: {
-        tokenUsage: 0,
-        agentExecutions: 0,
-        qualityGatesPassed: 0,
-        qualityGatesFailed: 0,
-        strategicCoherenceScore: 0
-      }
+  async executeStages(execution, projectSpec) {
+    // Initialize strategic planning-specific data
+    execution.projectId = projectSpec.projectId || projectSpec.clientId;
+    execution.projectPath = projectSpec.projectPath;
+    execution.clientName = projectSpec.clientName;
+    execution.errors = [];
+    execution.metrics = {
+      tokenUsage: 0,
+      agentExecutions: 0,
+      qualityGatesPassed: 0,
+      qualityGatesFailed: 0,
+      strategicCoherenceScore: 0
     };
 
-    try {
-      this.emit('pipeline-started', {
-        executionId,
-        pipelineId: this.pipelineId,
-        projectId: execution.projectId,
-        clientName: execution.clientName
+    // Stage 1: Intelligence Aggregation with completeness gate
+    execution.currentStage = 'intelligence_aggregation';
+    this.emitStageStarted(execution, 'intelligence_aggregation');
+    const intelligenceResults = await this.executeStageImpl('intelligence_aggregation', execution, projectSpec);
+    execution.stageResults.intelligence_aggregation = intelligenceResults;
+    this.emitStageCompleted(execution, 'intelligence_aggregation', intelligenceResults);
+
+    // Quality Gate 1: Minimum 60% intelligence completeness (BLOCKING)
+    if (intelligenceResults.completeness < 60) {
+      throw new Error(`Insufficient intelligence data: ${intelligenceResults.completeness}% (minimum 60% required)`);
+    }
+
+    // Stages 2-3: Strategic planning and financial modeling
+    for (const stageName of ['strategic_plan_synthesis', 'financial_modeling']) {
+      execution.currentStage = stageName;
+      this.emitStageStarted(execution, stageName);
+
+      const result = await this.executeStageImpl(stageName, execution, projectSpec);
+      execution.stageResults[stageName] = result;
+
+      this.emitStageCompleted(execution, stageName, result);
+    }
+
+    // Stage 4: Coherence validation
+    execution.currentStage = 'coherence_validation';
+    this.emitStageStarted(execution, 'coherence_validation');
+    const validationResults = await this.executeStageImpl('coherence_validation', execution, projectSpec);
+    execution.stageResults.coherence_validation = validationResults;
+    execution.metrics.strategicCoherenceScore = validationResults.coherenceScore;
+    this.emitStageCompleted(execution, 'coherence_validation', validationResults);
+
+    // Quality Gate 2: Minimum 70% coherence score (NON-BLOCKING, warning only)
+    if (validationResults.coherenceScore < 70) {
+      this.emit('quality-warning', {
+        executionId: execution.executionId,
+        warning: `Low strategic coherence: ${validationResults.coherenceScore}% (target: 70%+)`,
+        gaps: validationResults.gaps
       });
+    }
 
-      // Stage 1: Intelligence Aggregation & Validation
-      this.emit('stage-started', { executionId, stage: 'intelligence_aggregation' });
-      const intelligenceResults = await this.executeIntelligenceAggregation(execution, projectSpec);
-      execution.stageResults.intelligence_aggregation = intelligenceResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'intelligence_aggregation',
-        duration: intelligenceResults.duration,
-        completeness: intelligenceResults.completeness
-      });
+    // Stage 5: Executive package assembly
+    execution.currentStage = 'executive_package_assembly';
+    this.emitStageStarted(execution, 'executive_package_assembly');
+    const packageResults = await this.executeStageImpl('executive_package_assembly', execution, projectSpec);
+    execution.stageResults.executive_package_assembly = packageResults;
+    this.emitStageCompleted(execution, 'executive_package_assembly', packageResults);
+  }
 
-      // Quality Gate: Minimum 60% intelligence completeness required
-      if (intelligenceResults.completeness < 60) {
-        throw new Error(`Insufficient intelligence data: ${intelligenceResults.completeness}% (minimum 60% required)`);
-      }
+  /**
+   * Build strategic planning-specific success result
+   * @override
+   */
+  buildSuccessResult(execution) {
+    return {
+      success: true,
+      executionId: execution.executionId,
+      projectId: execution.projectId,
+      duration: execution.duration,
+      results: execution.stageResults,
+      deliverablePaths: this.getDeliverablePaths(execution),
+      metrics: execution.metrics,
+      strategicCoherenceScore: execution.metrics.strategicCoherenceScore
+    };
+  }
 
-      // Stage 2: Strategic Plan Synthesis
-      this.emit('stage-started', { executionId, stage: 'strategic_plan_synthesis' });
-      const strategicPlanResults = await this.executeStrategicPlanSynthesis(execution, projectSpec, intelligenceResults);
-      execution.stageResults.strategic_plan_synthesis = strategicPlanResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'strategic_plan_synthesis',
-        duration: strategicPlanResults.duration
-      });
+  /**
+   * Route to stage-specific execution methods
+   * @override
+   */
+  async executeStageImpl(stageName, execution, projectSpec) {
+    const intelligenceResults = execution.stageResults.intelligence_aggregation;
+    const strategicPlanResults = execution.stageResults.strategic_plan_synthesis;
 
-      // Stage 3: Financial Modeling & Projections
-      this.emit('stage-started', { executionId, stage: 'financial_modeling' });
-      const financialResults = await this.executeFinancialModeling(execution, projectSpec, strategicPlanResults);
-      execution.stageResults.financial_modeling = financialResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'financial_modeling',
-        duration: financialResults.duration
-      });
-
-      // Stage 4: Strategic Coherence Validation
-      this.emit('stage-started', { executionId, stage: 'coherence_validation' });
-      const validationResults = await this.executeCoherenceValidation(execution, projectSpec);
-      execution.stageResults.coherence_validation = validationResults;
-      execution.metrics.strategicCoherenceScore = validationResults.coherenceScore;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'coherence_validation',
-        duration: validationResults.duration,
-        coherenceScore: validationResults.coherenceScore
-      });
-
-      // Quality Gate: Minimum 70% coherence score required
-      if (validationResults.coherenceScore < 70) {
-        this.emit('quality-warning', {
-          executionId,
-          warning: `Low strategic coherence: ${validationResults.coherenceScore}% (target: 70%+)`,
-          gaps: validationResults.gaps
-        });
-      }
-
-      // Stage 5: Executive Package Assembly
-      this.emit('stage-started', { executionId, stage: 'executive_package' });
-      const packageResults = await this.assembleExecutivePackage(execution, projectSpec);
-      execution.stageResults.executive_package = packageResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'executive_package',
-        duration: packageResults.duration
-      });
-
-      // Store learnings in crystalline memory
-      await this.storePipelineLearnings(execution);
-
-      const totalDuration = Date.now() - startTime;
-
-      this.emit('pipeline-completed', {
-        executionId,
-        success: true,
-        duration: totalDuration,
-        metrics: execution.metrics
-      });
-
-      return {
-        success: true,
-        executionId,
-        projectId: execution.projectId,
-        duration: totalDuration,
-        results: execution.stageResults,
-        deliverablePaths: this.getDeliverablePaths(execution),
-        metrics: execution.metrics,
-        strategicCoherenceScore: execution.metrics.strategicCoherenceScore
-      };
-
-    } catch (error) {
-      const errorDuration = Date.now() - startTime;
-
-      this.emit('pipeline-failed', {
-        executionId,
-        error: error.message,
-        duration: errorDuration
-      });
-
-      execution.errors.push({
-        timestamp: Date.now(),
-        error: error.message,
-        stack: error.stack
-      });
-
-      return {
-        success: false,
-        executionId,
-        projectId: execution.projectId,
-        error: error.message,
-        duration: errorDuration,
-        partialResults: execution.stageResults,
-        errors: execution.errors
-      };
+    switch (stageName) {
+      case 'intelligence_aggregation':
+        return await this.executeIntelligenceAggregation(execution, projectSpec);
+      case 'strategic_plan_synthesis':
+        return await this.executeStrategicPlanSynthesis(execution, projectSpec, intelligenceResults);
+      case 'financial_modeling':
+        return await this.executeFinancialModeling(execution, projectSpec, strategicPlanResults);
+      case 'coherence_validation':
+        return await this.executeCoherenceValidation(execution, projectSpec);
+      case 'executive_package_assembly':
+        return await this.assembleExecutivePackage(execution, projectSpec);
+      default:
+        throw new Error(`Unknown stage: ${stageName}`);
     }
   }
 

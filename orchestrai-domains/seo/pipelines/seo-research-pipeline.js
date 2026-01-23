@@ -18,21 +18,38 @@
  * Total Duration: ~100 minutes (optimized from 120 minutes)
  */
 
-const EventEmitter = require('events');
-const { v4: uuidv4 } = require('uuid');
+const BasePipeline = require('../../../orchestrai-shared/pipelines/base-pipeline');
 const path = require('path');
 const fs = require('fs').promises;
 
-class SEOResearchPipeline extends EventEmitter {
+class SEOResearchPipeline extends BasePipeline {
   constructor(coordinationPatterns, crystallineMemory, mcpManager) {
-    super();
+    super(
+      { coordinationPatterns, dynamicAgentSelection: null, crystallineMemory, redis: null },
+      {
+        pipelineId: 'seo-research',
+        pipelineName: 'SEO Research Pipeline',
+        version: '2.0.0',
+        stages: [
+          'keyword_discovery',
+          'search_intent_analysis',
+          'competitor_analysis',
+          'semantic_clustering',
+          'strategy_generation',
+          'memory_integration'
+        ],
+        requiredAgents: {
+          'keyword_discovery': 'seo-keyword-research',
+          'search_intent_analysis': 'seo-intent-mapping',
+          'competitor_analysis': 'seo-competitor-analysis',
+          'semantic_clustering': 'seo-semantic-clustering',
+          'strategy_generation': 'seo-topical-authority',
+          'memory_integration': 'general-purpose'
+        }
+      }
+    );
 
-    this.coordinationPatterns = coordinationPatterns;
-    this.crystallineMemory = crystallineMemory;
     this.mcpManager = mcpManager;
-
-    this.pipelineId = 'seo-research';
-    this.pipelineName = 'SEO Research Pipeline';
 
     // Pipeline state
     this.activeExecutions = new Map();
@@ -50,123 +67,91 @@ class SEOResearchPipeline extends EventEmitter {
   }
 
   /**
-   * Execute complete SEO research pipeline
+   * Override executeStages for parallel execution of stages 2-3
+   * Optimization: 44% faster than sequential (25min vs 45min)
    */
-  async execute(projectSpec, options = {}) {
-    const executionId = uuidv4();
-    const startTime = Date.now();
+  async executeStages(execution, projectSpec) {
+    // Validate project specification
+    this.validateProjectSpec(projectSpec);
 
-    try {
-      console.log(`🚀 Starting SEO Research Pipeline: ${executionId}`);
+    // Add project-specific data to execution
+    execution.projectUuid = projectSpec.projectUuid;
+    execution.clientName = projectSpec.clientName;
+    execution.targetMarket = projectSpec.targetMarket || 'Netherlands';
+    execution.language = projectSpec.language || 'Dutch';
 
-      // Validate project specification
-      this.validateProjectSpec(projectSpec);
+    this.activeExecutions.set(execution.executionId, execution);
 
-      // Initialize execution state
-      const execution = {
-        executionId,
-        pipelineId: this.pipelineId,
-        projectUuid: projectSpec.projectUuid,
-        clientName: projectSpec.clientName,
-        targetMarket: projectSpec.targetMarket || 'Netherlands',
-        language: projectSpec.language || 'Dutch',
-        startTime,
-        currentStage: null,
-        stageResults: {},
-        status: 'executing'
-      };
+    // Stage 1: Keyword Discovery
+    const keywordData = await this.executeStageImpl('keyword_discovery', execution, projectSpec);
+    execution.stageResults.keyword_discovery = keywordData;
 
-      this.activeExecutions.set(executionId, execution);
+    // Stages 2-3: PARALLEL EXECUTION (44% faster: 25min vs 45min)
+    console.log('🚀 Executing stages 2-3 in parallel...');
+    const [intentData, competitorData] = await Promise.all([
+      this.executeStageImpl('search_intent_analysis', execution, projectSpec, { keywordData }),
+      this.executeStageImpl('competitor_analysis', execution, projectSpec, { keywordData })
+    ]);
+    execution.stageResults.search_intent_analysis = intentData;
+    execution.stageResults.competitor_analysis = competitorData;
 
-      // Stage 1: Keyword Discovery & Analysis
-      execution.currentStage = 'keyword_discovery';
-      const keywordData = await this.executeKeywordDiscovery(execution, projectSpec);
-      execution.stageResults.keyword_discovery = keywordData;
+    // Stage 4: Semantic Clustering
+    const semanticData = await this.executeStageImpl('semantic_clustering', execution, projectSpec, { keywordData, intentData });
+    execution.stageResults.semantic_clustering = semanticData;
 
-      // Stages 2 & 3: PARALLEL EXECUTION (both depend only on keywordData)
-      // Optimization: 44% faster than sequential execution (25min vs 45min)
-      console.log('🚀 Executing stages 2-3 in parallel...');
-      execution.currentStage = 'parallel_analysis';
+    // Stage 5: Strategy Generation
+    const strategyData = await this.executeStageImpl('strategy_generation', execution, projectSpec, { semanticData, competitorData });
+    execution.stageResults.strategy_generation = strategyData;
 
-      const [intentData, competitorData] = await Promise.all([
-        this.executeSearchIntentAnalysis(execution, keywordData),
-        this.executeCompetitorAnalysis(execution, keywordData)
-      ]);
+    // Stage 6: Memory Integration
+    const memoryData = await this.executeStageImpl('memory_integration', execution, projectSpec);
+    execution.stageResults.memory_integration = memoryData;
 
-      execution.stageResults.search_intent_analysis = intentData;
-      execution.stageResults.competitor_analysis = competitorData;
+    // Update metrics and history
+    this.updateMetrics(execution, true);
+    this.executionHistory.push({
+      executionId: execution.executionId,
+      projectUuid: execution.projectUuid,
+      clientName: execution.clientName,
+      duration: execution.duration,
+      success: true,
+      completedAt: Date.now()
+    });
 
-      // Stage 4: Semantic Clustering
-      execution.currentStage = 'semantic_clustering';
-      const semanticData = await this.executeSemanticClustering(execution, keywordData, intentData);
-      execution.stageResults.semantic_clustering = semanticData;
+    this.activeExecutions.delete(execution.executionId);
+  }
 
-      // Stage 5: Strategy Generation
-      execution.currentStage = 'strategy_generation';
-      const strategyData = await this.executeStrategyGeneration(execution, semanticData, competitorData);
-      execution.stageResults.strategy_generation = strategyData;
+  /**
+   * Route to domain-specific stage implementations
+   */
+  async executeStageImpl(stageName, execution, projectSpec, additionalContext = {}) {
+    switch (stageName) {
+      case 'keyword_discovery':
+        return await this.executeKeywordDiscovery(execution, projectSpec);
 
-      // Stage 6: Memory Integration
-      execution.currentStage = 'memory_integration';
-      const memoryData = await this.executeMemoryIntegration(execution);
-      execution.stageResults.memory_integration = memoryData;
+      case 'search_intent_analysis':
+        const keywordData1 = additionalContext.keywordData || execution.stageResults.keyword_discovery;
+        return await this.executeSearchIntentAnalysis(execution, keywordData1);
 
-      // Complete execution
-      const duration = Date.now() - startTime;
-      execution.status = 'completed';
-      execution.duration = duration;
-      execution.completedAt = Date.now();
+      case 'competitor_analysis':
+        const keywordData2 = additionalContext.keywordData || execution.stageResults.keyword_discovery;
+        return await this.executeCompetitorAnalysis(execution, keywordData2);
 
-      // Update metrics
-      this.updateMetrics(execution, true);
+      case 'semantic_clustering':
+        const keywordData3 = additionalContext.keywordData || execution.stageResults.keyword_discovery;
+        const intentData = additionalContext.intentData || execution.stageResults.search_intent_analysis;
+        return await this.executeSemanticClustering(execution, keywordData3, intentData);
 
-      // Store in history
-      this.executionHistory.push({
-        executionId,
-        projectUuid: execution.projectUuid,
-        clientName: execution.clientName,
-        duration,
-        success: true,
-        completedAt: Date.now()
-      });
+      case 'strategy_generation':
+        const semanticData = additionalContext.semanticData || execution.stageResults.semantic_clustering;
+        const competitorData = additionalContext.competitorData || execution.stageResults.competitor_analysis;
+        return await this.executeStrategyGeneration(execution, semanticData, competitorData);
 
-      this.activeExecutions.delete(executionId);
+      case 'memory_integration':
+        return await this.executeMemoryIntegration(execution);
 
-      console.log(`✅ SEO Research Pipeline completed: ${executionId} (${duration}ms)`);
-
-      this.emit('pipeline-completed', {
-        executionId,
-        success: true,
-        duration,
-        results: execution.stageResults
-      });
-
-      return {
-        success: true,
-        executionId,
-        duration,
-        results: execution.stageResults,
-        deliverablePaths: this.getDeliverablePaths(execution)
-      };
-
-    } catch (error) {
-      console.error(`❌ SEO Research Pipeline failed: ${executionId}`, error);
-
-      const execution = this.activeExecutions.get(executionId);
-      if (execution) {
-        execution.status = 'failed';
-        execution.error = error.message;
-        this.updateMetrics(execution, false);
-        this.activeExecutions.delete(executionId);
-      }
-
-      this.emit('pipeline-failed', {
-        executionId,
-        error: error.message,
-        stage: execution?.currentStage
-      });
-
-      throw error;
+      default:
+        throw new Error(`Unknown stage: ${stageName}`);
     }
   }
 
@@ -222,7 +207,13 @@ class SEOResearchPipeline extends EventEmitter {
       );
 
       // Save keyword data
-      const outputPath = await this.saveKeywordData(execution, allKeywords);
+      const outputPath = await this.saveStageDeliverables(
+        execution,
+        'keyword_discovery',
+        { keywords: allKeywords },
+        'seo/keyword-research',
+        'keywords.json'
+      );
 
       const result = {
         success: true,
@@ -276,10 +267,13 @@ class SEOResearchPipeline extends EventEmitter {
       const journeyMapping = this.mapKeywordsToUserJourney(keywords, intentAnalysis);
 
       // Save intent analysis
-      const outputPath = await this.saveIntentAnalysis(execution, {
-        intentAnalysis,
-        journeyMapping
-      });
+      const outputPath = await this.saveStageDeliverables(
+        execution,
+        'search_intent_analysis',
+        { intentAnalysis, journeyMapping },
+        'seo/search-intent',
+        'intent-analysis.json'
+      );
 
       const result = {
         success: true,
@@ -342,10 +336,13 @@ class SEOResearchPipeline extends EventEmitter {
       const contentGaps = this.identifyContentGaps(competitorData, execution.clientName);
 
       // Save competitor analysis
-      const outputPath = await this.saveCompetitorAnalysis(execution, {
-        competitorData,
-        contentGaps
-      });
+      const outputPath = await this.saveStageDeliverables(
+        execution,
+        'competitor_analysis',
+        { competitorData, contentGaps },
+        'seo/competitor-analysis',
+        'competitor-analysis.json'
+      );
 
       const result = {
         success: true,
@@ -395,11 +392,13 @@ class SEOResearchPipeline extends EventEmitter {
       const linkingArchitecture = this.planInternalLinking(clusters, topicArchitecture);
 
       // Save semantic clustering
-      const outputPath = await this.saveSemanticClustering(execution, {
-        clusters,
-        topicArchitecture,
-        linkingArchitecture
-      });
+      const outputPath = await this.saveStageDeliverables(
+        execution,
+        'semantic_clustering',
+        { clusters, topicArchitecture, linkingArchitecture },
+        'seo/semantic-clustering',
+        'clusters.json'
+      );
 
       const result = {
         success: true,
@@ -459,11 +458,13 @@ class SEOResearchPipeline extends EventEmitter {
       );
 
       // Save strategy
-      const outputPath = await this.saveSEOStrategy(execution, {
-        contentCalendar,
-        priorityMatrix,
-        roadmap
-      });
+      const outputPath = await this.saveStageDeliverables(
+        execution,
+        'strategy_generation',
+        { contentCalendar, priorityMatrix, roadmap },
+        'seo/strategy',
+        'seo-strategy.json'
+      );
 
       const result = {
         success: true,
@@ -1029,71 +1030,6 @@ class SEOResearchPipeline extends EventEmitter {
       semanticClusters: `${basePath}/semantic-clusters/clusters-${execution.executionId}.json`,
       contentStrategy: `${basePath}/content-strategy/strategy-${execution.executionId}.json`
     };
-  }
-
-  /**
-   * Helper: Save keyword data
-   */
-  async saveKeywordData(execution, keywords) {
-    const outputPath = this.getDeliverablePaths(execution).keywordResearch;
-    const outputDir = path.dirname(outputPath);
-
-    await fs.mkdir(outputDir, { recursive: true });
-    await fs.writeFile(outputPath, JSON.stringify(keywords, null, 2));
-
-    return outputPath;
-  }
-
-  /**
-   * Helper: Save intent analysis
-   */
-  async saveIntentAnalysis(execution, data) {
-    const outputPath = this.getDeliverablePaths(execution).intentAnalysis;
-    const outputDir = path.dirname(outputPath);
-
-    await fs.mkdir(outputDir, { recursive: true });
-    await fs.writeFile(outputPath, JSON.stringify(data, null, 2));
-
-    return outputPath;
-  }
-
-  /**
-   * Helper: Save competitor analysis
-   */
-  async saveCompetitorAnalysis(execution, data) {
-    const outputPath = this.getDeliverablePaths(execution).competitorAnalysis;
-    const outputDir = path.dirname(outputPath);
-
-    await fs.mkdir(outputDir, { recursive: true });
-    await fs.writeFile(outputPath, JSON.stringify(data, null, 2));
-
-    return outputPath;
-  }
-
-  /**
-   * Helper: Save semantic clustering
-   */
-  async saveSemanticClustering(execution, data) {
-    const outputPath = this.getDeliverablePaths(execution).semanticClusters;
-    const outputDir = path.dirname(outputPath);
-
-    await fs.mkdir(outputDir, { recursive: true });
-    await fs.writeFile(outputPath, JSON.stringify(data, null, 2));
-
-    return outputPath;
-  }
-
-  /**
-   * Helper: Save SEO strategy
-   */
-  async saveSEOStrategy(execution, data) {
-    const outputPath = this.getDeliverablePaths(execution).contentStrategy;
-    const outputDir = path.dirname(outputPath);
-
-    await fs.mkdir(outputDir, { recursive: true });
-    await fs.writeFile(outputPath, JSON.stringify(data, null, 2));
-
-    return outputPath;
   }
 
   /**

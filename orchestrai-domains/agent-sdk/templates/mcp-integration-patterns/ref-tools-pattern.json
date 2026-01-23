@@ -1,0 +1,40 @@
+{
+  "name": "ref-tools",
+  "description": "Reference Tools MCP server for documentation search and technical references",
+  "required": false,
+  "configuration": {
+    "typescript": {
+      ".mcp.json": {
+        "ref-tools": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-ref-tools"],
+          "env": {}
+        }
+      },
+      ".env.example": [],
+      "dependencies": {}
+    },
+    "python": {
+      ".mcp.json": {
+        "ref-tools": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-ref-tools"],
+          "env": {}
+        }
+      },
+      ".env.example": [],
+      "requirements": []
+    }
+  },
+  "tools": [
+    "ref_search_documentation",
+    "ref_read_url"
+  ],
+  "use_cases": [
+    "Medical literature search (healthcare content)",
+    "Technical documentation lookup",
+    "API reference retrieval",
+    "Scientific research access"
+  ],
+  "documentation_url": "https://modelcontextprotocol.io/docs/server-ref-tools"
+}

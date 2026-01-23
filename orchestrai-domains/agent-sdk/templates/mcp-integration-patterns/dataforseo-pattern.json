@@ -1,0 +1,59 @@
+{
+  "name": "dataforseo",
+  "description": "DataForSEO MCP server for SEO data, keyword research, and competitor analysis",
+  "required": true,
+  "configuration": {
+    "typescript": {
+      ".mcp.json": {
+        "dataforseo": {
+          "command": "node",
+          "args": ["path/to/dataforseo-mcp-server.js"],
+          "env": {
+            "DATAFORSEO_API_KEY": "${DATAFORSEO_API_KEY}",
+            "DATAFORSEO_API_SECRET": "${DATAFORSEO_API_SECRET}"
+          }
+        }
+      },
+      ".env.example": [
+        "# DataForSEO API Credentials",
+        "DATAFORSEO_API_KEY=your_dataforseo_api_key",
+        "DATAFORSEO_API_SECRET=your_dataforseo_api_secret"
+      ],
+      "dependencies": {}
+    },
+    "python": {
+      ".mcp.json": {
+        "dataforseo": {
+          "command": "python",
+          "args": ["-m", "dataforseo_mcp_server"],
+          "env": {
+            "DATAFORSEO_API_KEY": "${DATAFORSEO_API_KEY}",
+            "DATAFORSEO_API_SECRET": "${DATAFORSEO_API_SECRET}"
+          }
+        }
+      },
+      ".env.example": [
+        "# DataForSEO API Credentials",
+        "DATAFORSEO_API_KEY=your_dataforseo_api_key",
+        "DATAFORSEO_API_SECRET=your_dataforseo_api_secret"
+      ],
+      "requirements": []
+    }
+  },
+  "tools": [
+    "keyword_overview",
+    "related_keywords",
+    "search_intent",
+    "serp_competitors",
+    "domain_keywords",
+    "competitor_domains",
+    "domain_intersection"
+  ],
+  "use_cases": [
+    "SEO keyword research",
+    "Competitor analysis",
+    "Content optimization",
+    "Market research"
+  ],
+  "documentation_url": "https://dataforseo.com/apis"
+}

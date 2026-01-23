@@ -23,164 +23,88 @@
  * 6. Performance Tracking Integration - Analytics setup (25 min)
  *
  * Total Duration: ~120 minutes (optimized from 150 minutes)
+ *
+ * MIGRATION: Phase 3.3.4 (1/4) - Extends BasePipeline (Template Method Pattern)
  */
 
-const EventEmitter = require('events');
+const BasePipeline = require('../../../orchestrai-shared/pipelines/base-pipeline');
 const path = require('path');
 const fs = require('fs').promises;
 
-class AdvertisingCampaignPipeline extends EventEmitter {
+class AdvertisingCampaignPipeline extends BasePipeline {
   constructor(
     coordinationPatterns,
     dynamicAgentSelection,
     crystallineMemory,
     redis = null
   ) {
-    super();
-
-    this.coordinationPatterns = coordinationPatterns;
-    this.dynamicAgentSelection = dynamicAgentSelection;
-    this.crystallineMemory = crystallineMemory;
-    this.redis = redis;
-
-    // Pipeline metadata
-    this.pipelineId = 'advertising-campaign';
-    this.pipelineName = 'Advertising Campaign Pipeline';
-    this.version = '1.0.0';
-
-    // Stage configuration
-    this.stages = [
-      'offer_creation',
-      'platform_strategy',
-      'creative_framework',
-      'copy_variations',
-      'performance_setup',
-      'tracking_integration'
-    ];
-
-    // Required agents
-    this.requiredAgents = {
-      'offer_creation': 'offer-creation-specialist',
-      'platform_strategy': ['google-ads-specialist', 'meta-ads-specialist', 'linkedin-ads-specialist'],
-      'creative_framework': 'direct-response-copywriter',
-      'copy_variations': 'ad-copy-variation-generator',
-      'performance_setup': 'google-ads-specialist', // Lead platform specialist
-      'tracking_integration': 'general-purpose'
-    };
+    super(
+      {
+        coordinationPatterns,
+        dynamicAgentSelection,
+        crystallineMemory,
+        redis
+      },
+      {
+        pipelineId: 'advertising-campaign',
+        pipelineName: 'Advertising Campaign Pipeline',
+        version: '2.0.0',
+        stages: [
+          'offer_creation',
+          'platform_strategy',
+          'creative_framework',
+          'copy_variations',
+          'performance_setup',
+          'tracking_integration'
+        ],
+        requiredAgents: {
+          'offer_creation': 'offer-creation-specialist',
+          'platform_strategy': ['google-ads-specialist', 'meta-ads-specialist', 'linkedin-ads-specialist'],
+          'creative_framework': 'direct-response-copywriter',
+          'copy_variations': 'ad-copy-variation-generator',
+          'performance_setup': 'google-ads-specialist',
+          'tracking_integration': 'general-purpose'
+        }
+      }
+    );
 
     console.log('🚀 Advertising Campaign Pipeline initialized');
   }
 
   /**
-   * Execute complete advertising campaign pipeline
+   * Route to domain-specific stage implementations
+   * Template Method Pattern: executeStageImpl() is called by BasePipeline.execute()
    */
-  async execute(projectSpec, options = {}) {
-    const executionId = `exec-${Date.now()}`;
-    const startTime = Date.now();
+  async executeStageImpl(stageName, execution, projectSpec, additionalContext = {}) {
+    switch (stageName) {
+      case 'offer_creation':
+        return await this.executeOfferCreation(execution, projectSpec);
 
-    console.log(`\n🎯 Starting Advertising Campaign Pipeline Execution: ${executionId}`);
-    console.log(`   Client: ${projectSpec.clientName}`);
-    console.log(`   Platforms: ${projectSpec.platforms?.join(', ') || 'All'}`);
-    console.log(`   Target Market: ${projectSpec.targetMarket || 'United States'}`);
+      case 'platform_strategy':
+        const offerData = execution.stageResults.offer_creation;
+        return await this.executePlatformStrategy(execution, offerData, projectSpec);
 
-    const execution = {
-      executionId,
-      pipelineId: this.pipelineId,
-      projectSpec,
-      options,
-      startTime,
-      currentStage: null,
-      stageResults: {},
-      deliverablePaths: {},
-      performance: {
-        stageTimings: {},
-        agentPerformance: {}
-      }
-    };
+      case 'creative_framework':
+        const offerData2 = execution.stageResults.offer_creation;
+        const platformData = execution.stageResults.platform_strategy;
+        return await this.executeCreativeFramework(execution, offerData2, platformData);
 
-    try {
-      // Stage 1: Offer Creation (Hormozi $100M Offers)
-      execution.currentStage = 'offer_creation';
-      this.emit('stage-started', { executionId, stage: 'offer_creation' });
-      const offerData = await this.executeOfferCreation(execution, projectSpec);
-      execution.stageResults.offer_creation = offerData;
-      this.emit('stage-completed', { executionId, stage: 'offer_creation', result: offerData });
+      case 'copy_variations':
+        const creativeData = execution.stageResults.creative_framework;
+        const platformData2 = execution.stageResults.platform_strategy;
+        return await this.executeCopyVariations(execution, creativeData, platformData2);
 
-      // Stage 2: Platform Strategy (Multi-platform optimization)
-      execution.currentStage = 'platform_strategy';
-      this.emit('stage-started', { executionId, stage: 'platform_strategy' });
-      const platformData = await this.executePlatformStrategy(execution, offerData, projectSpec);
-      execution.stageResults.platform_strategy = platformData;
-      this.emit('stage-completed', { executionId, stage: 'platform_strategy', result: platformData });
+      case 'performance_setup':
+        const copyData = execution.stageResults.copy_variations;
+        const platformData3 = execution.stageResults.platform_strategy;
+        return await this.executePerformanceSetup(execution, copyData, platformData3);
 
-      // Stage 3: Creative Framework Development (AIDA, PAS, PASTOR)
-      execution.currentStage = 'creative_framework';
-      this.emit('stage-started', { executionId, stage: 'creative_framework' });
-      const creativeData = await this.executeCreativeFramework(execution, offerData, platformData);
-      execution.stageResults.creative_framework = creativeData;
-      this.emit('stage-completed', { executionId, stage: 'creative_framework', result: creativeData });
+      case 'tracking_integration':
+        const setupData = execution.stageResults.performance_setup;
+        return await this.executeTrackingIntegration(execution, setupData);
 
-      // Stage 4: Copy Variation Generation (A/B testing variations)
-      execution.currentStage = 'copy_variations';
-      this.emit('stage-started', { executionId, stage: 'copy_variations' });
-      const copyData = await this.executeCopyVariations(execution, creativeData, platformData);
-      execution.stageResults.copy_variations = copyData;
-      this.emit('stage-completed', { executionId, stage: 'copy_variations', result: copyData });
-
-      // Stage 5: Performance Setup & Launch
-      execution.currentStage = 'performance_setup';
-      this.emit('stage-started', { executionId, stage: 'performance_setup' });
-      const setupData = await this.executePerformanceSetup(execution, copyData, platformData);
-      execution.stageResults.performance_setup = setupData;
-      this.emit('stage-completed', { executionId, stage: 'performance_setup', result: setupData });
-
-      // Stage 6: Tracking Integration (Analytics & attribution)
-      execution.currentStage = 'tracking_integration';
-      this.emit('stage-started', { executionId, stage: 'tracking_integration' });
-      const trackingData = await this.executeTrackingIntegration(execution, setupData);
-      execution.stageResults.tracking_integration = trackingData;
-      this.emit('stage-completed', { executionId, stage: 'tracking_integration', result: trackingData });
-
-      // Calculate execution metrics
-      const duration = Date.now() - startTime;
-      execution.duration = duration;
-      execution.status = 'completed';
-
-      console.log(`\n✅ Advertising Campaign Pipeline Completed: ${executionId}`);
-      console.log(`   Duration: ${Math.round(duration / 1000 / 60)} minutes`);
-      console.log(`   Deliverables: ${Object.keys(execution.deliverablePaths).length}`);
-
-      this.emit('pipeline-completed', {
-        executionId,
-        duration,
-        results: execution.stageResults,
-        deliverables: execution.deliverablePaths
-      });
-
-      return {
-        success: true,
-        executionId,
-        duration,
-        results: execution.stageResults,
-        deliverablePaths: execution.deliverablePaths,
-        performance: execution.performance
-      };
-
-    } catch (error) {
-      console.error(`\n❌ Advertising Campaign Pipeline Failed: ${executionId}`);
-      console.error(`   Stage: ${execution.currentStage}`);
-      console.error(`   Error:`, error.message);
-
-      execution.status = 'failed';
-      execution.error = error;
-
-      this.emit('pipeline-failed', {
-        executionId,
-        stage: execution.currentStage,
-        error: error.message
-      });
-
-      throw error;
+      default:
+        throw new Error(`Unknown stage: ${stageName}`);
     }
   }
 
@@ -225,10 +149,12 @@ class AdvertisingCampaignPipeline extends EventEmitter {
     });
 
     // Save offer deliverables
-    const deliverablePath = await this.saveOfferDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'offer_creation',
       offerResult,
-      projectSpec
+      'advertising/offers',
+      'grand-slam-offer.json'
     );
 
     execution.deliverablePaths.offer = deliverablePath;
@@ -301,22 +227,31 @@ class AdvertisingCampaignPipeline extends EventEmitter {
       platformStrategies[platform] = strategy;
     }
 
-    // Save platform strategy deliverables
-    const deliverablePath = await this.savePlatformStrategyDeliverables(
-      execution,
-      platformStrategies,
-      projectSpec
+    // Save platform strategy deliverables (one file per platform)
+    const baseDeliverablePath = path.join(
+      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
+      projectSpec.projectUuid || 'default-project',
+      'deliverables/advertising/platform-strategy'
     );
+    await fs.mkdir(baseDeliverablePath, { recursive: true });
 
-    execution.deliverablePaths.platformStrategy = deliverablePath;
+    for (const [platform, strategy] of Object.entries(platformStrategies)) {
+      const platformFile = path.join(
+        baseDeliverablePath,
+        `${platform.toLowerCase().replace(' ', '-')}-strategy.json`
+      );
+      await fs.writeFile(platformFile, JSON.stringify(strategy, null, 2), 'utf-8');
+    }
+
+    console.log(`   💾 platform_strategy saved: ${baseDeliverablePath}`);
+    execution.deliverablePaths.platformStrategy = baseDeliverablePath;
     execution.performance.stageTimings.platform_strategy = Date.now() - stageStart;
 
     console.log(`   ✅ Platform strategies created for ${platforms.length} platforms`);
-    console.log(`   Saved to: ${deliverablePath}`);
 
     return {
       platforms: platformStrategies,
-      deliverablePath,
+      deliverablePath: baseDeliverablePath,
       stageDuration: Date.now() - stageStart
     };
   }
@@ -381,21 +316,29 @@ class AdvertisingCampaignPipeline extends EventEmitter {
       creativeFrameworks[framework] = result;
     });
 
-    // Save creative framework deliverables
-    const deliverablePath = await this.saveCreativeFrameworkDeliverables(
-      execution,
-      creativeFrameworks,
-      execution.projectSpec
+    // Save creative framework deliverables (one file per framework)
+    const baseDeliverablePath = path.join(
+      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
+      execution.projectSpec.projectUuid || 'default-project',
+      'deliverables/advertising/creative-frameworks'
     );
+    await fs.mkdir(baseDeliverablePath, { recursive: true });
 
-    execution.deliverablePaths.creativeFrameworks = deliverablePath;
+    for (const [framework, content] of Object.entries(creativeFrameworks)) {
+      const frameworkFile = path.join(
+        baseDeliverablePath,
+        `${framework.toLowerCase()}-framework.json`
+      );
+      await fs.writeFile(frameworkFile, JSON.stringify(content, null, 2), 'utf-8');
+    }
+
+    console.log(`   💾 creative_framework saved: ${baseDeliverablePath}`);
+    execution.deliverablePaths.creativeFrameworks = baseDeliverablePath;
     execution.performance.stageTimings.creative_framework = Date.now() - stageStart;
-
-    console.log(`   Saved to: ${deliverablePath}`);
 
     return {
       frameworks: creativeFrameworks,
-      deliverablePath,
+      deliverablePath: baseDeliverablePath,
       stageDuration: Date.now() - stageStart
     };
   }
@@ -460,22 +403,30 @@ class AdvertisingCampaignPipeline extends EventEmitter {
       copyVariations[platform] = result;
     });
 
-    // Save copy variation deliverables
-    const deliverablePath = await this.saveCopyVariationDeliverables(
-      execution,
-      copyVariations,
-      execution.projectSpec
+    // Save copy variation deliverables (one file per platform)
+    const baseDeliverablePath = path.join(
+      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
+      execution.projectSpec.projectUuid || 'default-project',
+      'deliverables/advertising/copy-variations'
     );
+    await fs.mkdir(baseDeliverablePath, { recursive: true });
 
-    execution.deliverablePaths.copyVariations = deliverablePath;
+    for (const [platform, variations] of Object.entries(copyVariations)) {
+      const variationFile = path.join(
+        baseDeliverablePath,
+        `${platform.toLowerCase().replace(' ', '-')}-variations.json`
+      );
+      await fs.writeFile(variationFile, JSON.stringify(variations, null, 2), 'utf-8');
+    }
+
+    console.log(`   💾 copy_variations saved: ${baseDeliverablePath}`);
+    execution.deliverablePaths.copyVariations = baseDeliverablePath;
     execution.performance.stageTimings.copy_variations = Date.now() - stageStart;
-
-    console.log(`   Saved to: ${deliverablePath}`);
 
     return {
       variations: copyVariations,
       totalVariations: Object.values(copyVariations).reduce((sum, v) => sum + v.variationCount, 0),
-      deliverablePath,
+      deliverablePath: baseDeliverablePath,
       stageDuration: Date.now() - stageStart
     };
   }
@@ -540,21 +491,29 @@ class AdvertisingCampaignPipeline extends EventEmitter {
       campaignSetup[platform] = result;
     });
 
-    // Save performance setup deliverables
-    const deliverablePath = await this.savePerformanceSetupDeliverables(
-      execution,
-      campaignSetup,
-      execution.projectSpec
+    // Save performance setup deliverables (one file per platform)
+    const baseDeliverablePath = path.join(
+      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
+      execution.projectSpec.projectUuid || 'default-project',
+      'deliverables/advertising/campaign-setup'
     );
+    await fs.mkdir(baseDeliverablePath, { recursive: true });
 
-    execution.deliverablePaths.performanceSetup = deliverablePath;
+    for (const [platform, setup] of Object.entries(campaignSetup)) {
+      const setupFile = path.join(
+        baseDeliverablePath,
+        `${platform.toLowerCase().replace(' ', '-')}-setup.json`
+      );
+      await fs.writeFile(setupFile, JSON.stringify(setup, null, 2), 'utf-8');
+    }
+
+    console.log(`   💾 performance_setup saved: ${baseDeliverablePath}`);
+    execution.deliverablePaths.performanceSetup = baseDeliverablePath;
     execution.performance.stageTimings.performance_setup = Date.now() - stageStart;
-
-    console.log(`   Saved to: ${deliverablePath}`);
 
     return {
       campaignSetup,
-      deliverablePath,
+      deliverablePath: baseDeliverablePath,
       stageDuration: Date.now() - stageStart
     };
   }
@@ -594,10 +553,12 @@ class AdvertisingCampaignPipeline extends EventEmitter {
     });
 
     // Save tracking integration deliverables
-    const deliverablePath = await this.saveTrackingIntegrationDeliverables(
+    const deliverablePath = await this.saveStageDeliverables(
       execution,
+      'tracking_integration',
       trackingResult,
-      execution.projectSpec
+      'advertising/tracking',
+      'tracking-configuration.json'
     );
 
     // Store tracking configuration in crystalline memory
@@ -901,155 +862,6 @@ ${JSON.stringify(campaignSetup, null, 2)}
    - Stakeholder access levels
 
 Provide complete implementation guide with code snippets where applicable.`;
-  }
-
-  /**
-   * Deliverable Savers
-   */
-  async saveOfferDeliverables(execution, offerResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/advertising/offers'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const offerFile = path.join(deliverablePath, 'grand-slam-offer.json');
-    await fs.writeFile(
-      offerFile,
-      JSON.stringify(offerResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Offer saved: ${offerFile}`);
-    return deliverablePath;
-  }
-
-  async savePlatformStrategyDeliverables(execution, platformStrategies, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/advertising/platform-strategy'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    for (const [platform, strategy] of Object.entries(platformStrategies)) {
-      const platformFile = path.join(
-        deliverablePath,
-        `${platform.toLowerCase().replace(' ', '-')}-strategy.json`
-      );
-      await fs.writeFile(
-        platformFile,
-        JSON.stringify(strategy, null, 2),
-        'utf-8'
-      );
-    }
-
-    console.log(`   💾 Platform strategies saved: ${deliverablePath}`);
-    return deliverablePath;
-  }
-
-  async saveCreativeFrameworkDeliverables(execution, creativeFrameworks, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/advertising/creative-frameworks'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    for (const [framework, content] of Object.entries(creativeFrameworks)) {
-      const frameworkFile = path.join(
-        deliverablePath,
-        `${framework.toLowerCase()}-framework.json`
-      );
-      await fs.writeFile(
-        frameworkFile,
-        JSON.stringify(content, null, 2),
-        'utf-8'
-      );
-    }
-
-    console.log(`   💾 Creative frameworks saved: ${deliverablePath}`);
-    return deliverablePath;
-  }
-
-  async saveCopyVariationDeliverables(execution, copyVariations, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/advertising/copy-variations'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    for (const [platform, variations] of Object.entries(copyVariations)) {
-      const variationFile = path.join(
-        deliverablePath,
-        `${platform.toLowerCase().replace(' ', '-')}-variations.json`
-      );
-      await fs.writeFile(
-        variationFile,
-        JSON.stringify(variations, null, 2),
-        'utf-8'
-      );
-    }
-
-    console.log(`   💾 Copy variations saved: ${deliverablePath}`);
-    return deliverablePath;
-  }
-
-  async savePerformanceSetupDeliverables(execution, campaignSetup, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/advertising/campaign-setup'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    for (const [platform, setup] of Object.entries(campaignSetup)) {
-      const setupFile = path.join(
-        deliverablePath,
-        `${platform.toLowerCase().replace(' ', '-')}-setup.json`
-      );
-      await fs.writeFile(
-        setupFile,
-        JSON.stringify(setup, null, 2),
-        'utf-8'
-      );
-    }
-
-    console.log(`   💾 Campaign setup saved: ${deliverablePath}`);
-    return deliverablePath;
-  }
-
-  async saveTrackingIntegrationDeliverables(execution, trackingResult, projectSpec) {
-    const projectUuid = projectSpec.projectUuid || 'default-project';
-    const deliverablePath = path.join(
-      '/Users/kris/CLAUDEtools/ORCHESTRAI/projects',
-      projectUuid,
-      'deliverables/advertising/tracking'
-    );
-
-    await fs.mkdir(deliverablePath, { recursive: true });
-
-    const trackingFile = path.join(deliverablePath, 'tracking-configuration.json');
-    await fs.writeFile(
-      trackingFile,
-      JSON.stringify(trackingResult, null, 2),
-      'utf-8'
-    );
-
-    console.log(`   💾 Tracking configuration saved: ${trackingFile}`);
-    return deliverablePath;
   }
 
   /**

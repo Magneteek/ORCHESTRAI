@@ -14,6 +14,8 @@ The Local SEO Domain provides comprehensive local search optimization, Google Bu
 - **`seo-local-seo`** - Local SEO optimization and Google Business Profile management
 - **`seo-keyword-research`** - Local keyword research with geographic modifiers
 - **`seo-serp-analysis`** - Local pack analysis and competitor tracking
+- **`gbp-content-transformer`** - 🆕 Google Business Profile content transformation and creation
+- **`reviews-intelligence-specialist`** - Google reviews analysis and reputation intelligence
 
 **See [../../.claude/agents/](../../.claude/agents/) and [../seo/CLAUDE.md](../seo/CLAUDE.md) for complete agent definitions.**
 
@@ -37,6 +39,118 @@ Optimization Areas:
 - Photo optimization (exterior, interior, team, products)
 - Post creation strategy
 ```
+
+---
+
+## GBP Content Creation System 🆕
+
+### GBP Post Types & Specifications
+
+```
+Post Type          | Optimal Range | Frequency  | Best For
+-------------------|--------------|------------|---------------------------
+What's New         | 300-500 chars| 1-2/week   | Updates, announcements
+Events             | 400-600 chars| 1-2/month  | Open houses, workshops
+Offers             | 250-400 chars| 2-3/month  | Promotions, discounts
+Products           | 300-500 chars| As needed  | Service showcases
+
+Universal Limit: 100-1500 characters (strict enforcement)
+```
+
+### Transformation Patterns
+
+**Pattern 1: Blog Article → What's New Post**
+```
+SOURCE (2500 words): Comprehensive dental implant guide
+↓ Transform
+TARGET (400 chars): "New painless dental implant technology now available at Amsterdam Dental Clinic! Our advanced implant system reduces healing time by 40% and eliminates traditional surgery discomfort. Perfect for busy professionals in Zuid who need quick recovery. Free consultation this month—call 020-1234567 to schedule your smile transformation!"
+
+Extraction Process:
+1. Core value proposition (1 sentence, 20-30 words)
+2. 3 key benefits (15-20 words each)
+3. Local context (15-20 words)
+4. Compelling CTA (15-20 words)
+```
+
+**Pattern 2: Landing Page → Offer Post**
+```
+SOURCE (1200 words): Teeth whitening landing page with pricing
+↓ Transform
+TARGET (320 chars): "Flash Sale: Professional teeth whitening €199 (normally €349)! Get Hollywood-white teeth in 60 minutes with our LED technology. Perfect for Amsterdam professionals with upcoming events. Valid for appointments booked by March 31st. Only 10 spots left this month! Call 020-1234567 now to claim your bright smile!"
+
+Extraction Process:
+1. Offer headline with value (15-20 words)
+2. Offer details + validity (40-60 words)
+3. Urgency/scarcity (12-18 words)
+4. Location benefit (12-18 words)
+5. Strong CTA (15-20 words)
+```
+
+**Pattern 3: Review Insights → Product Post**
+```
+SOURCE: Customer reviews mentioning anxiety about dental procedures
+↓ Transform
+TARGET (380 chars): "Anxiety-free dentistry for nervous patients in Amsterdam. Our gentle sedation options let you relax completely during procedures. Dr. Van der Berg specializes in calming anxious patients—over 500 stress-free treatments completed. Perfect if you've been avoiding dental work due to fear. Book a comfort consultation: 020-1234567. Zuid location, easy parking!"
+
+Extraction Process:
+1. Identify most-asked service from reviews
+2. Address common concerns (2-3 points)
+3. Explain benefits clearly
+4. Social proof element
+5. Clear next step CTA
+```
+
+### Multi-Language GBP Content 🌐
+
+**Language Support**: EN, ES, NL, DE, SL (via multi-language-content-adapter)
+
+**Dutch (NL) - Amsterdam Market**:
+```
+INCORRECT (too promotional):
+"Experience our amazing revolutionary dental care!"
+
+CORRECT (direct, practical):
+"Nieuwe tandimplantaat technologie. 40% sneller herstel. Gratis consult beschikbaar."
+(New dental implant technology. 40% faster recovery. Free consultation available.)
+```
+
+**German (DE) - Systematic Approach**:
+```
+INCORRECT (too casual):
+"Check out our cool new service!"
+
+CORRECT (thorough, quality-focused):
+"Präzise Zahnimplantat-Behandlung mit zertifizierter Technologie. Über 500 erfolgreiche Behandlungen. Kostenlose Erstberatung."
+(Precise dental implant treatment with certified technology. Over 500 successful treatments. Free initial consultation.)
+```
+
+### Quality Gates (Mandatory)
+
+```
+Gate 1: Character Limit Compliance ✅ BLOCKING
+- Threshold: 100-1500 characters (ZERO tolerance)
+- Status: Must pass to proceed
+
+Gate 2: AI Detection Risk ✅ BLOCKING
+- Threshold: <30% AI detection (target: 15-25%)
+- Integration: content-ai-phrase-detector agent
+- Status: Must pass to proceed
+
+Gate 3: Language Purity ✅ BLOCKING (Multi-Language)
+- Threshold: 100% target language (ZERO contamination)
+- Integration: language-validation-specialist
+- Status: Must pass for NL, ES, DE, SL posts
+
+Gate 4: Mobile Readability ⚠️ WARNING
+- Threshold: <15 word sentences, <3 sentence paragraphs
+- Status: Advisory only (non-blocking)
+
+Gate 5: Local SEO Integration ⚠️ WARNING
+- Threshold: Location keyword in first 100 characters
+- Status: Advisory only (non-blocking)
+```
+
+---
 
 **Use When**: Setting up or optimizing local business presence
 
@@ -82,6 +196,83 @@ Search Intent Mapping:
 ```
 
 **Use When**: Targeting specific geographic markets
+
+### 4. GBP Content Transformation 🆕
+
+**Direct Agent Invocation**
+
+```
+Task tool → gbp-content-transformer → GBP Posts
+
+Transformation Workflows:
+1. Blog-to-GBP: Transform 2000+ word articles into 300-500 char posts
+2. Landing Page-to-Offer: Extract promotions into compelling GBP offers
+3. Review Insights-to-Product: Turn customer feedback into service showcases
+4. Original Content: Create fresh GBP posts (What's New, Events, Offers, Products)
+
+Quality Gates (BLOCKING):
+- Character limit: 100-1500 chars (strict compliance)
+- AI detection: <30% risk
+- Language purity: 100% (multi-language)
+- Mobile readability: <15 word sentences (warning)
+```
+
+**Use When**: Repurposing existing content or creating GBP posts for weekly schedule
+
+**Example Invocation**:
+```javascript
+Task(
+  subagent_type="gbp-content-transformer",
+  prompt=`Transform blog article into 3 GBP posts:
+    Source: /projects/uuid/deliverables/content/dental-implants-guide.md
+    Create: 1 What's New, 1 Offer, 1 Product
+    Language: Dutch (100% purity)
+    Target: Anxious patients considering implants`
+)
+```
+
+### 5. Full Local SEO Pipeline with GBP Content 🆕
+
+**Pipeline Invocation**
+
+```javascript
+local-seo-pipeline.execute({
+  projectSpec: {
+    businessName: "Amsterdam Dental Clinic",
+    location: "Amsterdam, Netherlands",
+    industry: "dental_services",
+    language: "Dutch",
+    existingContent: [
+      "dental-implants-guide.md",
+      "teeth-whitening.md"
+    ]
+  },
+  options: {
+    includeGBPContent: true,  // Enable Stage 6
+    postFrequency: "weekly",
+    postTypes: ["whats_new", "offers", "events", "products"]
+  }
+})
+```
+
+**Pipeline Stages** (115 min total):
+1. GBP Audit & Optimization (20 min)
+2. Local Citation Building (25 min)
+3. Review Management with DataForSEO (15 min)
+4. Local Content Creation (20 min)
+5. Local Link Building (10 min)
+6. **GBP Post Generation (25 min)** ← NEW
+   - Scan existing content
+   - Transform 2-3 blogs → 6-9 GBP posts
+   - Generate 3-4 original posts
+   - Quality validation (all gates)
+   - Create posting calendar
+
+**Deliverables**:
+- Complete local SEO optimization
+- 9-13 GBP posts ready for scheduling
+- 4-week posting calendar
+- Quality validation reports
 
 ---
 
@@ -325,8 +516,19 @@ Task(
 │           │   ├── amsterdam.md
 │           │   ├── rotterdam.md
 │           │   └── utrecht.md
-│           └── schema-markup/
-│               └── localbusiness-schema.json
+│           ├── schema-markup/
+│           │   └── localbusiness-schema.json
+│           └── gbp-posts/  🆕
+│               ├── transformed/
+│               │   ├── whatsnew-dental-implants.json
+│               │   ├── offer-teeth-whitening.json
+│               │   └── product-anxiety-free-dentistry.json
+│               ├── original/
+│               │   ├── event-open-house.json
+│               │   ├── whatsnew-new-hygienist.json
+│               │   └── offer-holiday-special.json
+│               ├── posting-calendar.json
+│               └── transformation-report.md
 ```
 
 ---

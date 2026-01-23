@@ -14,184 +14,130 @@
  * Total Duration: ~185 minutes
  */
 
-const EventEmitter = require('events');
-const { v4: uuidv4 } = require('uuid');
+const BasePipeline = require('../../../orchestrai-shared/pipelines/base-pipeline');
 const path = require('path');
 const fs = require('fs').promises;
 
-class CICDPipeline extends EventEmitter {
+class CICDPipeline extends BasePipeline {
   constructor(coordinationPatterns, crystallineMemory, mcpManager) {
-    super();
-    this.coordinationPatterns = coordinationPatterns;
-    this.crystallineMemory = crystallineMemory;
+    super(
+      { coordinationPatterns, dynamicAgentSelection: null, crystallineMemory, redis: null },
+      {
+        pipelineId: 'cicd-pipeline',
+        pipelineName: 'CI/CD Pipeline',
+        version: '2.0.0',
+        stages: [
+          'pipeline_architecture',
+          'build_automation',
+          'quality_gates',
+          'deployment_automation',
+          'monitoring_observability'
+        ],
+        requiredAgents: {
+          'pipeline_architecture': 'cicd-pipeline-architect',
+          'build_automation': 'devops-deployment-specialist',
+          'quality_gates': 'security-testing-specialist',
+          'deployment_automation': 'deployment-orchestration-agent',
+          'monitoring_observability': 'performance-monitoring-agent'
+        }
+      }
+    );
+
     this.mcpManager = mcpManager;
-    this.pipelineId = 'cicd-pipeline';
-    this.pipelineName = 'CI/CD Pipeline';
   }
 
   /**
-   * Execute the complete CI/CD pipeline setup
+   * Custom executeStages with integrated quality gate validation
+   * @override
    */
-  async execute(projectSpec, options = {}) {
-    const executionId = uuidv4();
-    const startTime = Date.now();
-
-    const execution = {
-      executionId,
-      pipelineId: this.pipelineId,
-      projectId: projectSpec.projectId || projectSpec.projectUuid,
-      projectPath: projectSpec.projectPath,
-      cicdPlatform: projectSpec.cicdPlatform || 'github-actions',
-      startTime,
-      stages: {},
-      stageResults: {},
-      errors: [],
-      qualityGates: [],
-      metrics: {
-        tokenUsage: 0,
-        agentExecutions: 0,
-        qualityGatesPassed: 0,
-        qualityGatesFailed: 0,
-        deploymentsConfigured: 0
-      }
+  async executeStages(execution, projectSpec) {
+    // Initialize CI/CD-specific data
+    execution.projectId = projectSpec.projectId || projectSpec.projectUuid;
+    execution.projectPath = projectSpec.projectPath;
+    execution.cicdPlatform = projectSpec.cicdPlatform || 'github-actions';
+    execution.qualityGates = [];
+    execution.metrics = {
+      tokenUsage: 0,
+      agentExecutions: 0,
+      qualityGatesPassed: 0,
+      qualityGatesFailed: 0,
+      deploymentsConfigured: 0
     };
 
-    try {
-      this.emit('pipeline-started', {
-        executionId,
-        pipelineId: this.pipelineId,
-        projectId: execution.projectId,
-        projectPath: execution.projectPath,
-        cicdPlatform: execution.cicdPlatform
-      });
+    // Quality gate validators for each stage
+    const qualityGateValidators = {
+      'pipeline_architecture': { validator: this.validatePipelineArchitecture.bind(this), blocking: true },
+      'build_automation': { validator: this.validateBuildAutomation.bind(this), blocking: true },
+      'quality_gates': { validator: this.validateQualityGatesConfig.bind(this), blocking: true },
+      'deployment_automation': { validator: this.validateDeploymentAutomation.bind(this), blocking: true },
+      'monitoring_observability': { validator: this.validateMonitoring.bind(this), blocking: false }
+    };
 
-      // Stage 1: CI/CD Pipeline Architecture Design
-      this.emit('stage-started', { executionId, stage: 'pipeline_architecture' });
-      const archResults = await this.executePipelineArchitecture(execution, projectSpec);
-      execution.stageResults.pipeline_architecture = archResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'pipeline_architecture',
-        duration: archResults.duration
-      });
+    // Execute each stage with quality gate validation
+    for (const stageName of this.stages) {
+      execution.currentStage = stageName;
+      this.emitStageStarted(execution, stageName);
 
-      // Quality Gate: Pipeline Architecture
-      const archGate = await this.validatePipelineArchitecture(archResults);
-      execution.qualityGates.push(archGate);
-      if (!archGate.passed && archGate.blocking) {
-        throw new Error('BLOCKING: Pipeline architecture incomplete');
+      const result = await this.executeStageImpl(stageName, execution, projectSpec);
+      execution.stageResults[stageName] = result;
+
+      this.emitStageCompleted(execution, stageName, result);
+
+      // Run quality gate validator if exists
+      const gateConfig = qualityGateValidators[stageName];
+      if (gateConfig) {
+        const gate = await gateConfig.validator(result);
+        execution.qualityGates.push(gate);
+
+        // Enforce blocking gates
+        if (!gate.passed && gateConfig.blocking) {
+          throw new Error(`BLOCKING: ${gate.message || `Quality gate failed for ${stageName}`}`);
+        }
       }
+    }
 
-      // Stage 2: Build Automation & Optimization
-      this.emit('stage-started', { executionId, stage: 'build_automation' });
-      const buildResults = await this.executeBuildAutomation(execution, projectSpec);
-      execution.stageResults.build_automation = buildResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'build_automation',
-        duration: buildResults.duration
-      });
+    // Calculate final quality gate metrics
+    execution.metrics.qualityGatesPassed = execution.qualityGates.filter(g => g.passed).length;
+    execution.metrics.qualityGatesFailed = execution.qualityGates.filter(g => !g.passed).length;
+  }
 
-      // Quality Gate: Build Automation
-      const buildGate = await this.validateBuildAutomation(buildResults);
-      execution.qualityGates.push(buildGate);
-      if (!buildGate.passed && buildGate.blocking) {
-        throw new Error('BLOCKING: Build automation not optimized');
-      }
+  /**
+   * Build CI/CD-specific success result
+   * @override
+   */
+  buildSuccessResult(execution) {
+    return {
+      success: true,
+      executionId: execution.executionId,
+      projectId: execution.projectId,
+      projectPath: execution.projectPath,
+      duration: execution.duration,
+      results: execution.stageResults,
+      deliverablePaths: this.getDeliverablePaths(execution),
+      qualityGates: execution.qualityGates,
+      metrics: execution.metrics,
+      cicdSummary: this.generateCICDSummary(execution)
+    };
+  }
 
-      // Stage 3: Quality Gates & Testing Integration
-      this.emit('stage-started', { executionId, stage: 'quality_gates' });
-      const qualityResults = await this.executeQualityGates(execution, projectSpec);
-      execution.stageResults.quality_gates = qualityResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'quality_gates',
-        duration: qualityResults.duration
-      });
-
-      // Quality Gate: Quality Gates Configuration
-      const qualityGate = await this.validateQualityGatesConfig(qualityResults);
-      execution.qualityGates.push(qualityGate);
-      if (!qualityGate.passed && qualityGate.blocking) {
-        throw new Error('BLOCKING: Quality gates missing proper thresholds');
-      }
-
-      // Stage 4: Deployment Automation
-      this.emit('stage-started', { executionId, stage: 'deployment_automation' });
-      const deployResults = await this.executeDeploymentAutomation(execution, projectSpec);
-      execution.stageResults.deployment_automation = deployResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'deployment_automation',
-        duration: deployResults.duration
-      });
-
-      // Quality Gate: Deployment Automation
-      const deployGate = await this.validateDeploymentAutomation(deployResults);
-      execution.qualityGates.push(deployGate);
-      if (!deployGate.passed && deployGate.blocking) {
-        throw new Error('BLOCKING: Deployment strategy missing rollback procedures');
-      }
-
-      // Stage 5: Monitoring & Observability
-      this.emit('stage-started', { executionId, stage: 'monitoring_observability' });
-      const monitoringResults = await this.executeMonitoringObservability(execution, projectSpec);
-      execution.stageResults.monitoring_observability = monitoringResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'monitoring_observability',
-        duration: monitoringResults.duration
-      });
-
-      // Quality Gate: Monitoring (non-blocking)
-      const monitoringGate = await this.validateMonitoring(monitoringResults);
-      execution.qualityGates.push(monitoringGate);
-
-      // Calculate final metrics
-      execution.metrics.qualityGatesPassed = execution.qualityGates.filter(g => g.passed).length;
-      execution.metrics.qualityGatesFailed = execution.qualityGates.filter(g => !g.passed).length;
-
-      // Store learnings in crystalline memory
-      await this.storePipelineLearnings(execution);
-
-      const totalDuration = Date.now() - startTime;
-
-      this.emit('pipeline-completed', {
-        executionId,
-        success: true,
-        duration: totalDuration,
-        metrics: execution.metrics
-      });
-
-      return {
-        success: true,
-        executionId,
-        projectId: execution.projectId,
-        projectPath: execution.projectPath,
-        duration: totalDuration,
-        results: execution.stageResults,
-        deliverablePaths: this.getDeliverablePaths(execution),
-        qualityGates: execution.qualityGates,
-        metrics: execution.metrics,
-        cicdSummary: this.generateCICDSummary(execution)
-      };
-
-    } catch (error) {
-      const errorDuration = Date.now() - startTime;
-
-      this.emit('pipeline-failed', {
-        executionId,
-        error: error.message,
-        duration: errorDuration
-      });
-
-      return {
-        success: false,
-        executionId,
-        error: error.message,
-        duration: errorDuration,
-        partialResults: execution.stageResults
-      };
+  /**
+   * Route to stage-specific execution methods
+   * @override
+   */
+  async executeStageImpl(stageName, execution, projectSpec) {
+    switch (stageName) {
+      case 'pipeline_architecture':
+        return await this.executePipelineArchitecture(execution, projectSpec);
+      case 'build_automation':
+        return await this.executeBuildAutomation(execution, projectSpec);
+      case 'quality_gates':
+        return await this.executeQualityGates(execution, projectSpec);
+      case 'deployment_automation':
+        return await this.executeDeploymentAutomation(execution, projectSpec);
+      case 'monitoring_observability':
+        return await this.executeMonitoringObservability(execution, projectSpec);
+      default:
+        throw new Error(`Unknown stage: ${stageName}`);
     }
   }
 

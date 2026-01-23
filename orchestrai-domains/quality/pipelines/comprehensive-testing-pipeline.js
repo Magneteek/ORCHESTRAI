@@ -16,230 +16,193 @@
  * 7. Test Reporting & Quality Gates (15 min)
  *
  * Total Duration: ~150 minutes (optimized from 210 minutes)
+ *
+ * MIGRATION: Phase 3.3.3 - Extends BasePipeline (Template Method Pattern)
  */
 
-const EventEmitter = require('events');
+const BasePipeline = require('../../../orchestrai-shared/pipelines/base-pipeline');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs').promises;
 
-class ComprehensiveTestingPipeline extends EventEmitter {
+class ComprehensiveTestingPipeline extends BasePipeline {
   constructor(coordinationPatterns, crystallineMemory, mcpManager) {
-    super();
-    this.coordinationPatterns = coordinationPatterns;
-    this.crystallineMemory = crystallineMemory;
+    super(
+      {
+        coordinationPatterns,
+        dynamicAgentSelection: null,
+        crystallineMemory,
+        redis: null
+      },
+      {
+        pipelineId: 'comprehensive-testing',
+        pipelineName: 'Comprehensive Testing Pipeline',
+        version: '2.0.0',
+        stages: [
+          'unit_testing',
+          'integration_testing',
+          'e2e_testing',
+          'functional_testing',
+          'visual_regression',
+          'performance_testing',
+          'test_reporting'
+        ],
+        requiredAgents: {
+          'unit_testing': 'unit-test-generator',
+          'integration_testing': 'integration-test-specialist',
+          'e2e_testing': 'e2e-test-automator',
+          'functional_testing': 'functional-testing-specialist',
+          'visual_regression': 'visual-regression-tester',
+          'performance_testing': 'performance-testing-expert',
+          'test_reporting': 'testing-report-generator'
+        }
+      }
+    );
+
     this.mcpManager = mcpManager;
-    this.pipelineId = 'comprehensive-testing';
-    this.pipelineName = 'Comprehensive Testing Pipeline';
   }
 
   /**
-   * Execute the complete comprehensive testing pipeline
+   * Override executeStages for parallel testing stages 4-6 with quality gate integration
+   * Stages 4-6 run in parallel (67% faster: 30min vs 90min)
    */
-  async execute(projectSpec, options = {}) {
-    const executionId = uuidv4();
-    const startTime = Date.now();
-
-    const execution = {
-      executionId,
-      pipelineId: this.pipelineId,
-      projectId: projectSpec.projectId || projectSpec.projectUuid,
-      projectPath: projectSpec.projectPath,
-      startTime,
-      stages: {},
-      stageResults: {},
-      errors: [],
-      qualityGates: [],
-      metrics: {
-        tokenUsage: 0,
-        agentExecutions: 0,
-        qualityGatesPassed: 0,
-        qualityGatesFailed: 0,
-        totalTests: 0,
-        passedTests: 0,
-        failedTests: 0,
-        coverage: 0
-      }
+  async executeStages(execution, projectSpec) {
+    // Initialize testing metrics
+    execution.qualityGates = [];
+    execution.metrics = {
+      tokenUsage: 0,
+      agentExecutions: 0,
+      qualityGatesPassed: 0,
+      qualityGatesFailed: 0,
+      totalTests: 0,
+      passedTests: 0,
+      failedTests: 0,
+      coverage: 0
     };
 
-    try {
-      this.emit('pipeline-started', {
-        executionId,
-        pipelineId: this.pipelineId,
-        projectId: execution.projectId,
-        projectPath: execution.projectPath
-      });
+    // Stages 1-3: Sequential with integrated quality gates
+    const sequentialStages = ['unit_testing', 'integration_testing', 'e2e_testing'];
+    const gateValidators = {
+      'unit_testing': this.validateUnitTesting.bind(this),
+      'integration_testing': this.validateIntegrationTesting.bind(this),
+      'e2e_testing': this.validateE2ETesting.bind(this)
+    };
 
-      // Stage 1: Unit Testing Setup
-      this.emit('stage-started', { executionId, stage: 'unit_testing' });
-      const unitResults = await this.executeUnitTesting(execution, projectSpec);
-      execution.stageResults.unit_testing = unitResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'unit_testing',
-        duration: unitResults.duration,
-        success: unitResults.success
-      });
+    for (const stageName of sequentialStages) {
+      execution.currentStage = stageName;
+      this.emitStageStarted(execution, stageName);
 
-      // Quality Gate: Unit Testing
-      const unitGate = await this.validateUnitTesting(unitResults);
-      execution.qualityGates.push(unitGate);
-      if (!unitGate.passed && unitGate.blocking) {
-        throw new Error('BLOCKING: Unit test coverage below 80%');
+      const result = await this.executeStageImpl(stageName, execution, projectSpec);
+      execution.stageResults[stageName] = result;
+
+      this.emitStageCompleted(execution, stageName, result);
+
+      // Quality gate validation
+      const gate = await gateValidators[stageName](result);
+      execution.qualityGates.push(gate);
+
+      if (!gate.passed && gate.blocking) {
+        throw new Error(`BLOCKING: ${gate.condition} failed`);
       }
-
-      // Stage 2: Integration Testing
-      this.emit('stage-started', { executionId, stage: 'integration_testing' });
-      const integrationResults = await this.executeIntegrationTesting(execution, projectSpec);
-      execution.stageResults.integration_testing = integrationResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'integration_testing',
-        duration: integrationResults.duration,
-        success: integrationResults.success
-      });
-
-      // Quality Gate: Integration Testing
-      const integrationGate = await this.validateIntegrationTesting(integrationResults);
-      execution.qualityGates.push(integrationGate);
-      if (!integrationGate.passed && integrationGate.blocking) {
-        throw new Error('BLOCKING: Critical API endpoints missing integration tests');
-      }
-
-      // Stage 3: End-to-End Testing
-      this.emit('stage-started', { executionId, stage: 'e2e_testing' });
-      const e2eResults = await this.executeE2ETesting(execution, projectSpec);
-      execution.stageResults.e2e_testing = e2eResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'e2e_testing',
-        duration: e2eResults.duration,
-        success: e2eResults.success
-      });
-
-      // Quality Gate: E2E Testing
-      const e2eGate = await this.validateE2ETesting(e2eResults);
-      execution.qualityGates.push(e2eGate);
-      if (!e2eGate.passed && e2eGate.blocking) {
-        throw new Error('BLOCKING: Critical user flows failing across browsers');
-      }
-
-      // Stages 4-6: PARALLEL EXECUTION (all independent)
-      // Optimization: 67% faster than sequential execution (30min vs 90min)
-      console.log('🚀 Executing stages 4-6 in parallel (Functional + Visual + Performance)...');
-
-      // Emit start events for all parallel stages
-      this.emit('stage-started', { executionId, stage: 'functional_testing' });
-      this.emit('stage-started', { executionId, stage: 'visual_regression' });
-      this.emit('stage-started', { executionId, stage: 'performance_testing' });
-
-      const [functionalResults, visualResults, performanceResults] = await Promise.all([
-        this.executeFunctionalTesting(execution, projectSpec),
-        this.executeVisualRegressionTesting(execution, projectSpec),
-        this.executePerformanceTesting(execution, projectSpec)
-      ]);
-
-      // Store results
-      execution.stageResults.functional_testing = functionalResults;
-      execution.stageResults.visual_regression = visualResults;
-      execution.stageResults.performance_testing = performanceResults;
-
-      // Emit completion events
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'functional_testing',
-        duration: functionalResults.duration,
-        success: functionalResults.success
-      });
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'visual_regression',
-        duration: visualResults.duration,
-        success: visualResults.success
-      });
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'performance_testing',
-        duration: performanceResults.duration,
-        success: performanceResults.success
-      });
-
-      // Quality Gates (executed after parallel stages complete)
-      const visualGate = await this.validateVisualRegression(visualResults);
-      execution.qualityGates.push(visualGate);
-
-      const performanceGate = await this.validatePerformanceTesting(performanceResults);
-      execution.qualityGates.push(performanceGate);
-
-      // Stage 7: Test Reporting & Quality Gates
-      this.emit('stage-started', { executionId, stage: 'test_reporting' });
-      const reportResults = await this.executeTestReporting(execution, projectSpec);
-      execution.stageResults.test_reporting = reportResults;
-      this.emit('stage-completed', {
-        executionId,
-        stage: 'test_reporting',
-        duration: reportResults.duration,
-        success: reportResults.success
-      });
-
-      // Calculate final metrics
-      execution.metrics.qualityGatesPassed = execution.qualityGates.filter(g => g.passed).length;
-      execution.metrics.qualityGatesFailed = execution.qualityGates.filter(g => !g.passed).length;
-      execution.metrics.coverage = this.calculateOverallCoverage(execution);
-
-      // Store learnings in crystalline memory
-      await this.storePipelineLearnings(execution);
-
-      const totalDuration = Date.now() - startTime;
-
-      this.emit('pipeline-completed', {
-        executionId,
-        success: true,
-        duration: totalDuration,
-        metrics: execution.metrics,
-        qualityGatesPassed: execution.metrics.qualityGatesPassed,
-        qualityGatesFailed: execution.metrics.qualityGatesFailed
-      });
-
-      return {
-        success: true,
-        executionId,
-        projectId: execution.projectId,
-        projectPath: execution.projectPath,
-        duration: totalDuration,
-        results: execution.stageResults,
-        deliverablePaths: this.getDeliverablePaths(execution),
-        qualityGates: execution.qualityGates,
-        metrics: execution.metrics,
-        testSummary: this.generateTestSummary(execution)
-      };
-
-    } catch (error) {
-      const errorDuration = Date.now() - startTime;
-
-      this.emit('pipeline-failed', {
-        executionId,
-        error: error.message,
-        duration: errorDuration
-      });
-
-      execution.errors.push({
-        timestamp: Date.now(),
-        error: error.message,
-        stack: error.stack
-      });
-
-      return {
-        success: false,
-        executionId,
-        projectId: execution.projectId,
-        error: error.message,
-        duration: errorDuration,
-        partialResults: execution.stageResults,
-        qualityGates: execution.qualityGates,
-        metrics: execution.metrics
-      };
     }
+
+    // Stages 4-6: PARALLEL EXECUTION (all independent)
+    // Optimization: 67% faster than sequential execution (30min vs 90min)
+    console.log('🚀 Executing stages 4-6 in parallel (Functional + Visual + Performance)...');
+
+    const parallelStages = ['functional_testing', 'visual_regression', 'performance_testing'];
+
+    // Emit start events for all parallel stages
+    parallelStages.forEach(stage => this.emitStageStarted(execution, stage));
+
+    const [functionalResults, visualResults, performanceResults] = await Promise.all([
+      this.executeStageImpl('functional_testing', execution, projectSpec),
+      this.executeStageImpl('visual_regression', execution, projectSpec),
+      this.executeStageImpl('performance_testing', execution, projectSpec)
+    ]);
+
+    // Store results and emit completion events
+    execution.stageResults.functional_testing = functionalResults;
+    execution.stageResults.visual_regression = visualResults;
+    execution.stageResults.performance_testing = performanceResults;
+
+    this.emitStageCompleted(execution, 'functional_testing', functionalResults);
+    this.emitStageCompleted(execution, 'visual_regression', visualResults);
+    this.emitStageCompleted(execution, 'performance_testing', performanceResults);
+
+    // Quality gates for parallel stages (non-blocking)
+    const visualGate = await this.validateVisualRegression(visualResults);
+    const performanceGate = await this.validatePerformanceTesting(performanceResults);
+    execution.qualityGates.push(visualGate, performanceGate);
+
+    // Stage 7: Test Reporting (sequential after parallel)
+    execution.currentStage = 'test_reporting';
+    this.emitStageStarted(execution, 'test_reporting');
+
+    const reportResults = await this.executeStageImpl('test_reporting', execution, projectSpec);
+    execution.stageResults.test_reporting = reportResults;
+
+    this.emitStageCompleted(execution, 'test_reporting', reportResults);
+
+    // Calculate final metrics
+    execution.metrics.qualityGatesPassed = execution.qualityGates.filter(g => g.passed).length;
+    execution.metrics.qualityGatesFailed = execution.qualityGates.filter(g => !g.passed).length;
+    execution.metrics.coverage = this.calculateOverallCoverage(execution);
+
+    console.log(`\n✅ Comprehensive Testing Pipeline Completed`);
+    console.log(`   Quality Gates Passed: ${execution.metrics.qualityGatesPassed}`);
+    console.log(`   Quality Gates Failed: ${execution.metrics.qualityGatesFailed}`);
+    console.log(`   Total Tests: ${execution.metrics.totalTests}`);
+    console.log(`   Overall Coverage: ${execution.metrics.coverage}%`);
+  }
+
+  /**
+   * Route stage execution to appropriate stage method
+   */
+  async executeStageImpl(stageName, execution, projectSpec, additionalContext = {}) {
+    switch (stageName) {
+      case 'unit_testing':
+        return await this.executeUnitTesting(execution, projectSpec);
+
+      case 'integration_testing':
+        return await this.executeIntegrationTesting(execution, projectSpec);
+
+      case 'e2e_testing':
+        return await this.executeE2ETesting(execution, projectSpec);
+
+      case 'functional_testing':
+        return await this.executeFunctionalTesting(execution, projectSpec);
+
+      case 'visual_regression':
+        return await this.executeVisualRegressionTesting(execution, projectSpec);
+
+      case 'performance_testing':
+        return await this.executePerformanceTesting(execution, projectSpec);
+
+      case 'test_reporting':
+        return await this.executeTestReporting(execution, projectSpec);
+
+      default:
+        throw new Error(`Unknown stage: ${stageName}`);
+    }
+  }
+
+  /**
+   * Override buildSuccessResult to include test-specific summary
+   */
+  buildSuccessResult(execution) {
+    return {
+      success: true,
+      executionId: execution.executionId,
+      projectId: execution.projectId || execution.projectSpec?.projectId,
+      projectPath: execution.projectSpec?.projectPath,
+      duration: execution.duration,
+      results: execution.stageResults,
+      deliverablePaths: this.getDeliverablePaths(execution),
+      qualityGates: execution.qualityGates || [],
+      metrics: execution.metrics || {},
+      testSummary: this.generateTestSummary(execution)
+    };
   }
 
   /**

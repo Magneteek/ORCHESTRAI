@@ -36,7 +36,7 @@ class DataForSEOServer {
 
     // Validate API credentials
     if (!this.apiConfig.username || !this.apiConfig.password) {
-      console.error('  DataForSEO credentials not found in environment variables');
+      console.error('ï¿½ DataForSEO credentials not found in environment variables');
       console.error('   Please set DATAFORSEO_USERNAME and DATAFORSEO_PASSWORD');
     }
 
@@ -1222,7 +1222,7 @@ class DataForSEOServer {
     if (this.cache.has(cacheKey)) {
       const cached = this.cache.get(cacheKey);
       if (Date.now() - cached.timestamp < this.cacheTimeout) {
-        console.log(`=Ë Using cached data for ${endpoint}`);
+        console.log(`=ï¿½ Using cached data for ${endpoint}`);
         return cached.data;
       }
       this.cache.delete(cacheKey);
@@ -1852,7 +1852,7 @@ class DataForSEOServer {
       language_name
     }];
 
-    const response = await this.makeAPICall('/serp/google/maps/live', postData);
+    const response = await this.makeAPICall('/serp/google/maps/live/advanced', postData);
 
     return {
       content: [{

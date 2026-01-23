@@ -1,0 +1,52 @@
+{
+  "name": "filesystem",
+  "description": "Filesystem MCP server for local file operations and template access",
+  "required": false,
+  "configuration": {
+    "typescript": {
+      ".mcp.json": {
+        "filesystem": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-filesystem", "./templates", "./output"],
+          "env": {}
+        }
+      },
+      ".env.example": [
+        "# Filesystem Server Configuration (optional)",
+        "# ALLOWED_DIRECTORIES=./templates,./output"
+      ],
+      "dependencies": {}
+    },
+    "python": {
+      ".mcp.json": {
+        "filesystem": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-filesystem", "./templates", "./output"],
+          "env": {}
+        }
+      },
+      ".env.example": [
+        "# Filesystem Server Configuration (optional)",
+        "# ALLOWED_DIRECTORIES=./templates,./output"
+      ],
+      "requirements": []
+    }
+  },
+  "tools": [
+    "read_text_file",
+    "write_file",
+    "edit_file",
+    "list_directory",
+    "create_directory",
+    "move_file",
+    "search_files",
+    "get_file_info"
+  ],
+  "use_cases": [
+    "Local content template management",
+    "Output file generation",
+    "Template-based content creation",
+    "Local file processing"
+  ],
+  "documentation_url": "https://modelcontextprotocol.io/docs/server-filesystem"
+}

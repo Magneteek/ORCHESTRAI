@@ -1,0 +1,39 @@
+{
+  "name": "sequential-thinking",
+  "description": "Sequential Thinking MCP server for advanced problem-solving and planning",
+  "required": true,
+  "configuration": {
+    "typescript": {
+      ".mcp.json": {
+        "sequential-thinking": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+          "env": {}
+        }
+      },
+      ".env.example": [],
+      "dependencies": {}
+    },
+    "python": {
+      ".mcp.json": {
+        "sequential-thinking": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+          "env": {}
+        }
+      },
+      ".env.example": [],
+      "requirements": []
+    }
+  },
+  "tools": [
+    "sequentialthinking"
+  ],
+  "use_cases": [
+    "Complex problem decomposition",
+    "Strategic planning",
+    "Multi-step reasoning",
+    "Content outline creation"
+  ],
+  "documentation_url": "https://modelcontextprotocol.io/docs/server-sequential-thinking"
+}
