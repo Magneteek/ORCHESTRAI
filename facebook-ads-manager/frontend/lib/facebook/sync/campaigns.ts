@@ -1,6 +1,6 @@
 /**
  * Campaigns Sync
- * Sync Facebook ad campaigns
+ * Sync Facebook ad campaigns from API and persist to database
  */
 
 import { FacebookClient } from '../client';
@@ -12,16 +12,17 @@ import {
   SyncResult,
 } from '@/types/facebook';
 import { FacebookErrorLogger } from '../errors';
+import { prisma } from '@/lib/db/prisma';
 
 export class CampaignsSync {
   constructor(private client: FacebookClient) {}
 
   /**
-   * Sync campaigns for ad account
+   * Sync campaigns for ad account from Facebook API and save to database
    */
   async syncCampaigns(
     adAccountId: string,
-    options?: SyncOptions & { status?: CampaignStatus }
+    options?: SyncOptions & { status?: CampaignStatus; dbAdAccountId?: string }
   ): Promise<SyncResult<FacebookCampaign>> {
     const cacheKey = `campaigns:${adAccountId}`;
     const ttl = 600; // 10 minutes
@@ -134,6 +135,60 @@ export class CampaignsSync {
         })
       );
 
+      // Persist to database if dbAdAccountId provided
+      if (options?.dbAdAccountId) {
+        FacebookErrorLogger.info('Persisting campaigns to database', {
+          adAccountId,
+          dbAdAccountId: options.dbAdAccountId,
+          count: campaigns.length,
+        });
+
+        try {
+          await Promise.all(
+            campaigns.map((campaign) =>
+              prisma.campaign.upsert({
+                where: {
+                  adAccountId_campaignId: {
+                    adAccountId: options.dbAdAccountId!,
+                    campaignId: campaign.id,
+                  },
+                },
+                update: {
+                  name: campaign.name,
+                  objective: campaign.objective,
+                  status: campaign.status,
+                  dailyBudget: campaign.dailyBudget,
+                  lifetimeBudget: campaign.lifetimeBudget,
+                  startTime: campaign.startTime ? new Date(campaign.startTime) : null,
+                  stopTime: campaign.stopTime ? new Date(campaign.stopTime) : null,
+                },
+                create: {
+                  adAccountId: options.dbAdAccountId!,
+                  campaignId: campaign.id,
+                  name: campaign.name,
+                  objective: campaign.objective,
+                  status: campaign.status,
+                  dailyBudget: campaign.dailyBudget,
+                  lifetimeBudget: campaign.lifetimeBudget,
+                  startTime: campaign.startTime ? new Date(campaign.startTime) : null,
+                  stopTime: campaign.stopTime ? new Date(campaign.stopTime) : null,
+                },
+              })
+            )
+          );
+
+          FacebookErrorLogger.info('Successfully persisted campaigns to database', {
+            adAccountId,
+            count: campaigns.length,
+          });
+        } catch (dbError: any) {
+          FacebookErrorLogger.log(dbError, {
+            operation: 'persist_campaigns',
+            adAccountId,
+          });
+          // Don't fail the sync if DB write fails - data is still in cache
+        }
+      }
 
       // Cache the results
       await this.client

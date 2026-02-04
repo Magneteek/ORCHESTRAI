@@ -83,13 +83,13 @@ export interface OrganizationResponse {
 
 export interface InviteUserRequest {
   email: string;
-  role: 'admin' | 'manager' | 'member';
+  role: 'ADMIN' | 'USER';
 }
 
 export interface UpdateUserRequest {
   name?: string;
   email?: string;
-  role?: 'admin' | 'manager' | 'member';
+  role?: 'ADMIN' | 'USER';
 }
 
 export interface UserResponse {

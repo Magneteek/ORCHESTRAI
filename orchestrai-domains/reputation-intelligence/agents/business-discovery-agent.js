@@ -2,9 +2,11 @@
  * Business Discovery Agent
  * Leverages DataForSEO integration to find businesses with negative reviews
  * Filters by rating thresholds and geographic criteria
+ * Phase 2: Database integration for persistent caching
  */
 
 const { EventEmitter } = require('events');
+const db = require('../database/db-client');
 
 class BusinessDiscoveryAgent extends EventEmitter {
     constructor() {
@@ -13,11 +15,16 @@ class BusinessDiscoveryAgent extends EventEmitter {
         this.isInitialized = false;
         this.config = null;
         this.dataForSeoClient = null;
+        this.db = db;
     }
 
     async initialize(config) {
         try {
             this.config = config;
+
+            // Connect to database for persistent caching
+            await this.db.connect();
+            console.log(`🗄️  Database connected for business discovery`);
 
             // Import DataForSEO functions from existing MCP integration
             this.dataForSeoClient = {
@@ -166,6 +173,40 @@ class BusinessDiscoveryAgent extends EventEmitter {
 
         for (const business of businesses) {
             try {
+                // Check if business exists in cache (database)
+                const cachedBusiness = await this.db.getBusinessById(business.cid);
+
+                if (cachedBusiness && !this.isCacheExpired(cachedBusiness.cache_expires_at)) {
+                    console.log(`📦 Using cached data for: ${cachedBusiness.name}`);
+
+                    // Return cached business with enriched format
+                    enrichedBusinesses.push({
+                        id: cachedBusiness.id,
+                        name: cachedBusiness.name,
+                        address: cachedBusiness.address,
+                        category: cachedBusiness.category,
+                        phone: cachedBusiness.phone,
+                        website: cachedBusiness.website,
+                        placeId: cachedBusiness.place_id,
+                        coordinates: {
+                            latitude: cachedBusiness.latitude,
+                            longitude: cachedBusiness.longitude
+                        },
+                        rating: {
+                            overall: cachedBusiness.overall_rating,
+                            totalReviews: cachedBusiness.total_reviews,
+                            distribution: cachedBusiness.rating_distribution
+                        },
+                        discoveredAt: cachedBusiness.discovered_at,
+                        isMonitored: cachedBusiness.is_monitored,
+                        negativeReviewPercentage: this.calculateNegativePercentage(cachedBusiness.rating_distribution),
+                        riskScore: this.calculateRiskScore(business),
+                        fromCache: true
+                    });
+                    continue;
+                }
+
+                // Not in cache or expired - enrich from scratch
                 const enrichedBusiness = {
                     // Core business information
                     id: business.cid,
@@ -195,9 +236,29 @@ class BusinessDiscoveryAgent extends EventEmitter {
 
                     // Calculated metrics
                     negativeReviewPercentage: this.calculateNegativePercentage(business.rating_distribution),
-                    riskScore: this.calculateRiskScore(business)
+                    riskScore: this.calculateRiskScore(business),
+                    fromCache: false
                 };
 
+                // Upsert to database for future caching
+                await this.db.upsertBusiness({
+                    id: enrichedBusiness.id,
+                    name: enrichedBusiness.name,
+                    place_id: enrichedBusiness.placeId,
+                    address: enrichedBusiness.address,
+                    city: this.extractCity(enrichedBusiness.address),
+                    country: this.extractCountry(enrichedBusiness.address),
+                    category: enrichedBusiness.category,
+                    phone: enrichedBusiness.phone,
+                    website: enrichedBusiness.website,
+                    latitude: enrichedBusiness.coordinates.latitude,
+                    longitude: enrichedBusiness.coordinates.longitude,
+                    overall_rating: enrichedBusiness.rating.overall,
+                    total_reviews: enrichedBusiness.rating.totalReviews,
+                    rating_distribution: enrichedBusiness.rating.distribution
+                });
+
+                console.log(`✅ Cached business: ${enrichedBusiness.name}`);
                 enrichedBusinesses.push(enrichedBusiness);
 
             } catch (error) {
@@ -215,6 +276,25 @@ class BusinessDiscoveryAgent extends EventEmitter {
         }
 
         return enrichedBusinesses;
+    }
+
+    isCacheExpired(cacheExpiresAt) {
+        if (!cacheExpiresAt) return true;
+        return new Date(cacheExpiresAt) < new Date();
+    }
+
+    extractCity(address) {
+        if (!address) return null;
+        // Simple extraction - assumes format "Street, City, Country"
+        const parts = address.split(',');
+        return parts.length >= 2 ? parts[parts.length - 2].trim() : null;
+    }
+
+    extractCountry(address) {
+        if (!address) return null;
+        // Simple extraction - assumes format "Street, City, Country"
+        const parts = address.split(',');
+        return parts.length >= 1 ? parts[parts.length - 1].trim() : null;
     }
 
     calculateNegativePercentage(distribution) {
@@ -271,7 +351,12 @@ class BusinessDiscoveryAgent extends EventEmitter {
 
     async updateBusinessMonitoringStatus(businessId, isMonitored) {
         try {
-            // This would update the business monitoring status in the database
+            // Update the business monitoring status in database
+            await this.db.query(
+                'UPDATE businesses SET is_monitored = $1, updated_at = NOW() WHERE id = $2',
+                [isMonitored, businessId]
+            );
+
             console.log(`📝 Updated monitoring status for business ${businessId}: ${isMonitored}`);
 
             this.emit('business-monitoring-updated', {
@@ -289,6 +374,7 @@ class BusinessDiscoveryAgent extends EventEmitter {
 
     async shutdown() {
         console.log(`🔄 Shutting down Business Discovery Agent...`);
+        await this.db.disconnect();
         this.isInitialized = false;
     }
 }

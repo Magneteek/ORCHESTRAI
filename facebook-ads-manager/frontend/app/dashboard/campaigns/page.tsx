@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Search, Filter, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
@@ -10,7 +10,9 @@ import { Card } from '@/components/ui/card';
 import { CampaignTable } from '@/components/campaigns/campaign-table';
 import { CampaignFilters } from '@/components/campaigns/campaign-filters';
 import { CampaignStats } from '@/components/campaigns/campaign-stats';
+import { SyncButton } from '@/components/dashboard/sync-button';
 import { apiClient } from '@/lib/helpers/api-client';
+import { useAdAccount } from '@/lib/hooks/use-ad-account';
 import type { FacebookCampaign } from '@/types/facebook';
 
 interface CampaignsResponse {
@@ -21,6 +23,7 @@ interface CampaignsResponse {
 }
 
 export default function CampaignsPage() {
+  const { selectedAccountId } = useAdAccount();
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -29,6 +32,13 @@ export default function CampaignsPage() {
   });
   const [page, setPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
+
+  // Sync selected ad account from context into filters
+  useEffect(() => {
+    if (selectedAccountId) {
+      setFilters((prev) => ({ ...prev, adAccountId: selectedAccountId }));
+    }
+  }, [selectedAccountId]);
 
   // Fetch campaigns with search and filters
   const { data, isLoading, error, refetch } = useQuery<CampaignsResponse>({
@@ -46,6 +56,7 @@ export default function CampaignsPage() {
       return apiClient.get<CampaignsResponse>(`/api/campaigns?${params}`);
     },
     staleTime: 30000, // 30 seconds
+    enabled: !!filters.adAccountId, // Only fetch when an ad account is selected
   });
 
   const campaigns = data?.data || [];
@@ -102,6 +113,11 @@ export default function CampaignsPage() {
               </span>
             )}
           </Button>
+
+          {/* Sync */}
+          {selectedAccountId && (
+            <SyncButton adAccountId={selectedAccountId} onSuccess={() => refetch()} />
+          )}
 
           {/* Refresh */}
           <Button

@@ -1,0 +1,167 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e8]: Ads Manager
+        - navigation [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Overview and key metrics" [ref=e12] [cursor=pointer]:
+                - /url: /dashboard
+                - img [ref=e13]
+                - generic [ref=e18]: Dashboard
+            - listitem [ref=e19]:
+              - link "Manage your campaigns" [ref=e20] [cursor=pointer]:
+                - /url: /dashboard/campaigns
+                - img [ref=e21]
+                - generic [ref=e25]: Campaigns
+            - listitem [ref=e26]:
+              - link "Configure targeting and budgets" [ref=e27] [cursor=pointer]:
+                - /url: /dashboard/ad-sets
+                - img [ref=e28]
+                - generic [ref=e33]: Ad Sets
+            - listitem [ref=e34]:
+              - link "Creative and ad management" [ref=e35] [cursor=pointer]:
+                - /url: /dashboard/ads
+                - img [ref=e36]
+                - generic [ref=e39]: Ads
+            - listitem [ref=e40]:
+              - link "Performance insights" [ref=e41] [cursor=pointer]:
+                - /url: /dashboard/analytics
+                - img [ref=e42]
+                - generic [ref=e44]: Analytics
+            - listitem [ref=e45]:
+              - link "AI-powered recommendations" [ref=e46] [cursor=pointer]:
+                - /url: /dashboard/optimization
+                - img [ref=e47]
+                - generic [ref=e57]: Optimization
+            - listitem [ref=e58]:
+              - link "Custom reports and exports" [ref=e59] [cursor=pointer]:
+                - /url: /dashboard/reporting
+                - img [ref=e60]
+                - generic [ref=e63]: Reporting
+            - listitem [ref=e64]:
+              - link "Rules and automated actions" [ref=e65] [cursor=pointer]:
+                - /url: /dashboard/automation
+                - img [ref=e66]
+                - generic [ref=e68]: Automation
+            - listitem [ref=e69]:
+              - link "Account and preferences" [ref=e70] [cursor=pointer]:
+                - /url: /dashboard/settings
+                - img [ref=e71]
+                - generic [ref=e74]: Settings
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Need Help?
+          - paragraph [ref=e78]: Check our documentation or contact support
+          - link "Get Support" [ref=e79] [cursor=pointer]:
+            - /url: /dashboard/support
+            - button "Get Support" [ref=e80]
+    - generic [ref=e81]:
+      - banner [ref=e82]:
+        - heading "Dashboard" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - img [ref=e86]
+          - searchbox "Search" [ref=e89]
+        - combobox "Select ad account" [ref=e90] [cursor=pointer]:
+          - generic: Main Account
+          - img [ref=e91]
+        - button "Notifications" [ref=e93] [cursor=pointer]:
+          - img
+          - generic [ref=e94]: Notifications
+        - button "User menu" [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: JD
+          - generic [ref=e98]: John Doe
+          - img
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - link [ref=e102] [cursor=pointer]:
+              - /url: /dashboard/templates
+              - button [ref=e103]:
+                - img
+            - generic [ref=e104]:
+              - heading "Create Ad Template" [level=1] [ref=e105]
+              - paragraph [ref=e106]: Create a reusable template for your Facebook ad campaigns
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - heading "Why create templates?" [level=3] [ref=e109]
+              - paragraph [ref=e110]: Templates help you launch campaigns faster and maintain consistency
+            - list [ref=e112]:
+              - listitem [ref=e113]:
+                - generic [ref=e114]: ✓
+                - generic [ref=e115]:
+                  - text: Save Time
+                  - paragraph [ref=e116]: Reuse proven ad structures instantly
+              - listitem [ref=e117]:
+                - generic [ref=e118]: ✓
+                - generic [ref=e119]:
+                  - text: Maintain Brand
+                  - paragraph [ref=e120]: Ensure consistent messaging
+              - listitem [ref=e121]:
+                - generic [ref=e122]: ✓
+                - generic [ref=e123]:
+                  - text: Share Knowledge
+                  - paragraph [ref=e124]: Make templates public to help others
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "Template Details" [level=3] [ref=e127]
+              - paragraph [ref=e128]: Fill in the information below to create your template
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - generic [ref=e133] [cursor=pointer]:
+                  - generic [ref=e134]: "1"
+                  - paragraph [ref=e135]: Basic Info
+                - generic [ref=e138] [cursor=pointer]:
+                  - generic [ref=e139]: "2"
+                  - paragraph [ref=e140]: Ad Copy
+                - generic [ref=e143] [cursor=pointer]:
+                  - generic [ref=e144]: "3"
+                  - paragraph [ref=e145]: Creative
+                - generic [ref=e148] [cursor=pointer]:
+                  - generic [ref=e149]: "4"
+                  - paragraph [ref=e150]: Targeting
+                - generic [ref=e153] [cursor=pointer]:
+                  - generic [ref=e154]: "5"
+                  - paragraph [ref=e155]: Campaign
+                - generic [ref=e158] [cursor=pointer]:
+                  - generic [ref=e159]: "6"
+                  - paragraph [ref=e160]: Review
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - heading "Basic Info" [level=3] [ref=e163]
+                  - paragraph [ref=e164]: Template name and category
+                - generic [ref=e165]:
+                  - generic [ref=e166]:
+                    - text: Template Name *
+                    - textbox "Template Name *" [ref=e167]:
+                      - /placeholder: e.g., Summer Sale Campaign
+                  - generic [ref=e168]:
+                    - text: Description
+                    - textbox "Description" [ref=e169]:
+                      - /placeholder: Describe what this template is for...
+                  - generic [ref=e170]:
+                    - generic [ref=e171]:
+                      - text: Category *
+                      - combobox [ref=e172] [cursor=pointer]:
+                        - generic: Select category
+                        - img [ref=e173]
+                      - combobox [ref=e175]
+                    - generic [ref=e176]:
+                      - text: Objective *
+                      - combobox [ref=e177] [cursor=pointer]:
+                        - generic: Select objective
+                        - img [ref=e178]
+                      - combobox [ref=e180]
+              - generic [ref=e182]:
+                - button "Cancel" [ref=e183] [cursor=pointer]
+                - button "Next" [ref=e184] [cursor=pointer]:
+                  - text: Next
+                  - img
+  - region "Notifications alt+T"
+  - alert [ref=e185]
+```

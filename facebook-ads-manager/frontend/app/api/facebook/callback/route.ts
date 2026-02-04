@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errorResponse } from '@/lib/utils/api-response';
 import { createFacebookBusinessAccount, createAdAccount } from '@/lib/db/facebook-accounts';
 import { BadRequestError, InternalServerError } from '@/lib/utils/errors';
+import { prisma } from '@/lib/db/prisma';
+import { encrypt } from '@/lib/utils/encryption';
 
 /**
  * GET /api/facebook/callback - Handle Facebook OAuth callback
@@ -62,40 +64,116 @@ export async function GET(request: NextRequest) {
       throw new BadRequestError('No Business Accounts found');
     }
 
-    // Create Facebook Business Account in database
+    // Upsert Facebook Business Account (create or update if already exists)
     const business = businessData.data[0];
-    const facebookAccount = await createFacebookBusinessAccount(organizationId, userId, {
-      businessId: business.id,
-      name: business.name,
-      accessToken,
-      tokenExpiresAt: tokenData.expires_in
-        ? new Date(Date.now() + tokenData.expires_in * 1000)
-        : undefined,
+    const encryptedToken = encrypt(accessToken);
+
+    const facebookAccount = await prisma.facebookBusinessAccount.upsert({
+      where: {
+        organizationId_businessId: {
+          organizationId,
+          businessId: business.id,
+        },
+      },
+      update: {
+        name: business.name,
+        accessTokenEncrypted: encryptedToken,
+        tokenExpiresAt: tokenData.expires_in
+          ? new Date(Date.now() + tokenData.expires_in * 1000)
+          : null,
+        isActive: true,
+        lastSyncAt: new Date(),
+      },
+      create: {
+        organizationId,
+        businessId: business.id,
+        name: business.name,
+        accessTokenEncrypted: encryptedToken,
+        tokenExpiresAt: tokenData.expires_in
+          ? new Date(Date.now() + tokenData.expires_in * 1000)
+          : null,
+      },
     });
 
     // Get Ad Accounts for the business
+    console.log('🔍 Fetching ad accounts for business:', business.id);
     const adAccountsUrl = new URL(
-      `https://graph.facebook.com/v18.0/${business.id}/adaccounts`
+      `https://graph.facebook.com/v18.0/${business.id}/owned_ad_accounts`
     );
     adAccountsUrl.searchParams.set('access_token', accessToken);
     adAccountsUrl.searchParams.set('fields', 'id,name,currency,timezone_name,account_status');
 
+    console.log('📡 Ad accounts URL:', adAccountsUrl.toString().replace(accessToken, 'REDACTED'));
     const adAccountsResponse = await fetch(adAccountsUrl.toString());
     const adAccountsData = await adAccountsResponse.json();
 
-    // Create Ad Accounts in database
+    console.log('✅ Ad accounts response status:', adAccountsResponse.status);
+    console.log('📊 Ad accounts response data:', JSON.stringify(adAccountsData, null, 2));
+
+    // Collect all ad accounts from multiple sources
+    const allAccounts: any[] = [];
+
+    // 1. Business owned ad accounts
     if (adAccountsResponse.ok && adAccountsData.data) {
+      console.log(`✅ Found ${adAccountsData.data.length} business-owned ad accounts`);
+      allAccounts.push(...adAccountsData.data);
+    } else {
+      console.warn('⚠️ No business ad accounts found');
+    }
+
+    // 2. Get user's personal ad accounts
+    console.log('🔍 Fetching user\'s personal ad accounts...');
+    const userAccountsUrl = new URL('https://graph.facebook.com/v18.0/me/adaccounts');
+    userAccountsUrl.searchParams.set('access_token', accessToken);
+    userAccountsUrl.searchParams.set('fields', 'id,name,currency,timezone_name,account_status');
+
+    const userAccountsResponse = await fetch(userAccountsUrl.toString());
+    const userAccountsData = await userAccountsResponse.json();
+
+    if (userAccountsResponse.ok && userAccountsData.data) {
+      console.log(`✅ Found ${userAccountsData.data.length} user personal ad accounts`);
+      // Merge with business accounts, avoiding duplicates
+      const existingIds = new Set(allAccounts.map(a => a.id));
+      const newAccounts = userAccountsData.data.filter((a: any) => !existingIds.has(a.id));
+      allAccounts.push(...newAccounts);
+      console.log(`➕ Added ${newAccounts.length} additional accounts (${existingIds.size} were duplicates)`);
+    }
+
+    console.log(`💾 Importing ${allAccounts.length} total ad accounts...`);
+
+    // Upsert all ad accounts in database
+    if (allAccounts.length > 0) {
       await Promise.all(
-        adAccountsData.data.map((account: any) =>
-          createAdAccount(facebookAccount.id, userId, {
-            accountId: account.id,
-            name: account.name,
-            currency: account.currency,
-            timezone: account.timezone_name,
-            accountStatus: account.account_status === 1 ? 'ACTIVE' : 'INACTIVE',
-          })
-        )
+        allAccounts.map((account: any) => {
+          console.log('  → Upserting account:', account.id, account.name);
+          return prisma.adAccount.upsert({
+            where: {
+              facebookBusinessAccountId_accountId: {
+                facebookBusinessAccountId: facebookAccount.id,
+                accountId: account.id,
+              },
+            },
+            update: {
+              name: account.name,
+              currency: account.currency,
+              timezone: account.timezone_name,
+              accountStatus: account.account_status === 1 ? 'ACTIVE' : 'INACTIVE',
+              lastSyncAt: new Date(),
+            },
+            create: {
+              facebookBusinessAccountId: facebookAccount.id,
+              accountId: account.id,
+              name: account.name,
+              currency: account.currency,
+              timezone: account.timezone_name,
+              accountStatus: account.account_status === 1 ? 'ACTIVE' : 'INACTIVE',
+            },
+          });
+        })
       );
+      console.log(`✅ Successfully imported ${allAccounts.length} ad accounts`);
+    } else {
+      console.warn('⚠️ No ad accounts found from any source');
     }
 
     // Redirect to success page

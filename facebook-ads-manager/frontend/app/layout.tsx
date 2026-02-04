@@ -4,6 +4,7 @@ import "./globals.css";
 import { SkipLink } from "@/components/accessibility/skip-link";
 import { Toaster } from "sonner";
 import { WebVitalsReporter } from "@/components/performance/web-vitals-reporter";
+import { Providers } from "./providers";
 
 // Force dynamic rendering to prevent Html import error in error pages
 export const dynamic = 'force-dynamic';
@@ -59,10 +60,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <WebVitalsReporter />
-        <SkipLink />
-        {children}
-        <Toaster position="top-right" richColors />
+        <Providers>
+          <WebVitalsReporter />
+          <SkipLink />
+          {children}
+          <Toaster position="top-right" richColors />
+        </Providers>
       </body>
     </html>
   );

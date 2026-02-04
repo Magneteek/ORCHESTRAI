@@ -8,28 +8,32 @@
       "env": {
         "DATAFORSEO_USERNAME": "kristjan@krisbal.com",
         "DATAFORSEO_PASSWORD": "8f885b01151a9cd8"
-      }
+      },
+      "serverInstructions": "SEO research and competitive intelligence platform. Use for: keyword research (search volume, difficulty, CPC, trends), SERP analysis (rankings, SERP features, top competitors), backlink analysis (referring domains, anchor text, link quality), domain metrics (authority scores, organic traffic estimates, keyword rankings), competitor analysis (keyword gaps, content gaps, ranking opportunities), local SEO (business listings, reviews, GBP data). Load when user mentions: SEO, keyword, SERP, backlink, domain authority, ranking, search volume, competitor, organic traffic, keyword research, SERP features, local SEO, Google Business Profile."
     },
     "sequential-thinking": {
       "command": "npx",
       "args": [
         "@modelcontextprotocol/server-sequential-thinking"
       ],
-      "env": {}
+      "env": {},
+      "serverInstructions": "Advanced multi-step reasoning and structured problem decomposition. Use for: complex problem breakdown, step-by-step analysis, planning multi-phase workflows, reasoning chains, strategic planning, decision trees, systematic thinking. Load when user mentions: think through, plan, reason, analyze step-by-step, decompose, workflow, complex problem, strategic, systematic approach."
     },
     "ref-tools": {
       "command": "npx",
       "args": [
         "ref-tools-mcp"
       ],
-      "env": {}
+      "env": {},
+      "serverInstructions": "Reference documentation and technical guides for development frameworks and APIs. Use for: API documentation lookup, framework references, best practices, technical specifications, code examples, implementation guides, library documentation. Load when user mentions: documentation, reference, API docs, guide, specification, example, best practice, framework docs, technical reference."
     },
     "memory": {
       "command": "npx",
       "args": [
         "@modelcontextprotocol/server-memory"
       ],
-      "env": {}
+      "env": {},
+      "serverInstructions": "Persistent memory and knowledge graph system for cross-session context. Use for: storing insights and learnings, creating entity relationships, recalling previous context, building knowledge graphs, remembering user preferences, maintaining project history, cross-session continuity. Load when user mentions: remember, recall, store, memory, knowledge graph, context, entity, relationship, persist, save, previous session."
     },
     "filesystem": {
       "command": "npx",
@@ -39,7 +43,8 @@
         "/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-system/templates",
         "/Users/kris/CLAUDEtools/ORCHESTRAI/temp"
       ],
-      "env": {}
+      "env": {},
+      "serverInstructions": "File system operations for ORCHESTRAI project directories (projects, templates, temp). Use for: reading project files, writing deliverables, managing client project structure, accessing templates, creating reports, organizing outputs, directory operations within allowed paths. Load when user mentions: file, read, write, directory, folder, project, deliverable, template, output, client project."
     },
     "notion": {
       "command": "npx",
@@ -49,7 +54,8 @@
       ],
       "env": {
         "NOTION_TOKEN": "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"
-      }
+      },
+      "serverInstructions": "Notion workspace integration for project management and documentation. Use for: reading Notion pages and databases, creating documentation, managing project wikis, syncing deliverables to Notion, accessing shared knowledge bases, updating project status, collaborative documentation. Load when user mentions: Notion, documentation, project management, database, page, workspace, knowledge base, wiki, collaborative docs."
     },
     "shadcn-ui": {
       "command": "npx",
@@ -58,7 +64,8 @@
       ],
       "env": {
         "GITHUB_API_KEY": "${GITHUB_API_KEY}"
-      }
+      },
+      "serverInstructions": "ShadCN UI component library integration. Use for: accessing ShadCN component templates, UI component code, React component patterns, Tailwind CSS components, accessible UI components, design system components. Load when user mentions: ShadCN, UI component, React component, Tailwind component, design system, accessible component, component library."
     },
     "n8n": {
       "command": "npx",
@@ -68,7 +75,8 @@
         "--sse",
         "https://aia.magneteek.com/mcp/8a194d83-d742-4c48-92b7-cef49b890f00/sse"
       ],
-      "env": {}
+      "env": {},
+      "serverInstructions": "n8n workflow automation platform integration. Use for: workflow automation, API integrations, data transformations, automated processes, webhook handling, scheduled tasks, integration workflows. Load when user mentions: n8n, workflow, automation, integrate, webhook, scheduled task, process automation, workflow builder."
     }
   }
 }

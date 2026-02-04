@@ -7,6 +7,7 @@ import { prisma } from '@/lib/db/prisma';
 import { ZodError } from 'zod';
 import { ValidationError } from '@/lib/utils/errors';
 import bcrypt from 'bcryptjs';
+import { UserRole } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
           email: data.email,
           password: hashedPassword,
           name: data.name,
-          role: 'admin',
+          role: UserRole.ADMIN,
           organizationId: organization.id,
         },
         select: {

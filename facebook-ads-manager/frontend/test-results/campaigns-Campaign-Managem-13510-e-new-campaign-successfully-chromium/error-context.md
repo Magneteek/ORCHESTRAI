@@ -1,0 +1,147 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e8]: Ads Manager
+        - navigation [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Overview and key metrics" [ref=e12] [cursor=pointer]:
+                - /url: /dashboard
+                - img [ref=e13]
+                - generic [ref=e18]: Dashboard
+            - listitem [ref=e19]:
+              - link "Manage your campaigns" [ref=e20] [cursor=pointer]:
+                - /url: /dashboard/campaigns
+                - img [ref=e21]
+                - generic [ref=e25]: Campaigns
+            - listitem [ref=e26]:
+              - link "Configure targeting and budgets" [ref=e27] [cursor=pointer]:
+                - /url: /dashboard/ad-sets
+                - img [ref=e28]
+                - generic [ref=e33]: Ad Sets
+            - listitem [ref=e34]:
+              - link "Creative and ad management" [ref=e35] [cursor=pointer]:
+                - /url: /dashboard/ads
+                - img [ref=e36]
+                - generic [ref=e39]: Ads
+            - listitem [ref=e40]:
+              - link "Performance insights" [ref=e41] [cursor=pointer]:
+                - /url: /dashboard/analytics
+                - img [ref=e42]
+                - generic [ref=e44]: Analytics
+            - listitem [ref=e45]:
+              - link "AI-powered recommendations" [ref=e46] [cursor=pointer]:
+                - /url: /dashboard/optimization
+                - img [ref=e47]
+                - generic [ref=e57]: Optimization
+            - listitem [ref=e58]:
+              - link "Custom reports and exports" [ref=e59] [cursor=pointer]:
+                - /url: /dashboard/reporting
+                - img [ref=e60]
+                - generic [ref=e63]: Reporting
+            - listitem [ref=e64]:
+              - link "Rules and automated actions" [ref=e65] [cursor=pointer]:
+                - /url: /dashboard/automation
+                - img [ref=e66]
+                - generic [ref=e68]: Automation
+            - listitem [ref=e69]:
+              - link "Account and preferences" [ref=e70] [cursor=pointer]:
+                - /url: /dashboard/settings
+                - img [ref=e71]
+                - generic [ref=e74]: Settings
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Need Help?
+          - paragraph [ref=e78]: Check our documentation or contact support
+          - link "Get Support" [ref=e79] [cursor=pointer]:
+            - /url: /dashboard/support
+            - button "Get Support" [ref=e80]
+    - generic [ref=e81]:
+      - banner [ref=e82]:
+        - heading "Dashboard" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - img [ref=e86]
+          - searchbox "Search" [ref=e89]
+        - combobox "Select ad account" [ref=e90] [cursor=pointer]:
+          - generic: Main Account
+          - img [ref=e91]
+        - button "Notifications" [ref=e93] [cursor=pointer]:
+          - img
+          - generic [ref=e94]: Notifications
+        - button "User menu" [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: JD
+          - generic [ref=e98]: John Doe
+          - img
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - button "Back" [ref=e102] [cursor=pointer]:
+              - img
+              - text: Back
+            - heading "Create Campaign" [level=1] [ref=e103]
+            - paragraph [ref=e104]: Follow the steps to create a new ad campaign
+          - generic [ref=e105]:
+            - generic [ref=e107]:
+              - img [ref=e109]
+              - generic [ref=e113]: Objective
+            - generic [ref=e116]:
+              - img [ref=e118]
+              - generic [ref=e120]: Budget
+            - generic [ref=e123]:
+              - img [ref=e125]
+              - generic [ref=e127]: Schedule
+            - generic [ref=e130]:
+              - img [ref=e132]
+              - generic [ref=e135]: Review
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - heading "Campaign Objective" [level=2] [ref=e140]
+                - paragraph [ref=e141]: What do you want to achieve with this campaign?
+              - generic [ref=e142]:
+                - text: Campaign Name
+                - textbox "Campaign Name" [active] [ref=e143]:
+                  - /placeholder: e.g., Holiday Sale 2024
+                  - text: Test Campaign 1769551092316
+              - generic [ref=e144]:
+                - text: Ad Account
+                - combobox "Ad Account" [ref=e145] [cursor=pointer]:
+                  - generic: Select ad account
+                  - img [ref=e146]
+                - combobox [ref=e148]
+              - generic [ref=e149]:
+                - text: Objective
+                - generic [ref=e150]:
+                  - button "Traffic Send people to your website or app" [ref=e151] [cursor=pointer]:
+                    - generic [ref=e152]: Traffic
+                    - generic [ref=e153]: Send people to your website or app
+                  - button "Awareness Increase brand awareness" [ref=e154] [cursor=pointer]:
+                    - generic [ref=e155]: Awareness
+                    - generic [ref=e156]: Increase brand awareness
+                  - button "Engagement Get more engagement on your posts" [ref=e157] [cursor=pointer]:
+                    - generic [ref=e158]: Engagement
+                    - generic [ref=e159]: Get more engagement on your posts
+                  - button "Leads Collect leads for your business" [ref=e160] [cursor=pointer]:
+                    - generic [ref=e161]: Leads
+                    - generic [ref=e162]: Collect leads for your business
+                  - button "App Promotion Get more app installs or engagement" [ref=e163] [cursor=pointer]:
+                    - generic [ref=e164]: App Promotion
+                    - generic [ref=e165]: Get more app installs or engagement
+                  - button "Sales Drive online or in-store sales" [ref=e166] [cursor=pointer]:
+                    - generic [ref=e167]: Sales
+                    - generic [ref=e168]: Drive online or in-store sales
+            - generic [ref=e169]:
+              - button "Previous" [disabled]:
+                - img
+                - text: Previous
+              - button "Next" [ref=e170] [cursor=pointer]:
+                - text: Next
+                - img
+  - region "Notifications alt+T"
+  - alert [ref=e171]
+```

@@ -20,7 +20,7 @@ export default function RegisterPage() {
 
     const formData = new FormData(e.currentTarget);
     const password = formData.get('password') as string;
-    const confirmPassword = formData.get('confirm-password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -128,10 +128,10 @@ export default function RegisterPage() {
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
-                id="confirm-password"
-                name="confirm-password"
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
                 placeholder="••••••••"
                 required

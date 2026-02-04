@@ -26,7 +26,7 @@ Facebook Ads Manager is a multi-tenant SaaS platform that revolutionizes how age
 
 ### 🚀 **Ad Campaign Management**
 - Create, clone, modify, and launch campaigns with one click
-- Template-based campaign creation for rapid deployment
+- Template-based campaign creation for rapid deployment (4-step wizard)
 - Bulk operations across multiple ad sets
 - Real-time campaign status monitoring
 
@@ -36,14 +36,20 @@ Facebook Ads Manager is a multi-tenant SaaS platform that revolutionizes how age
 - **Copy Optimization** - AI-powered ad copy recommendations
 - **Audience Insights** - Demographic and geographic performance analysis
 
-### 📝 **Template Marketplace**
-- Create and store reusable ad templates (copy, creative, targeting, structure)
-- Public template marketplace with performance leaderboards
+### 📝 **Dynamic Template System**
+- Create reusable ad templates with dynamic fields
+- Global templates available to all users
+- Organization-specific templates for custom needs
+- Template marketplace with performance leaderboards
+- Dynamic field builder with validation
 - Template versioning and forking
 - Aggregated performance metrics across all users
 
-### 📈 **Real-Time Analytics**
-- Live metrics dashboard with WebSocket updates
+### 📈 **Cross-Account Analytics**
+- Admin dashboard with organization-wide insights
+- Template performance tracking across multiple accounts
+- Per-account performance breakdown
+- Live metrics dashboard with real-time updates
 - D3.js-powered data visualizations
 - Historical trend analysis
 - Custom date range reporting
@@ -52,7 +58,8 @@ Facebook Ads Manager is a multi-tenant SaaS platform that revolutionizes how age
 ### 🔐 **Enterprise Security**
 - Multi-tenant data isolation with PostgreSQL RLS
 - Encrypted access token storage
-- Role-based access control (Admin, Manager, Member)
+- Role-based access control (ADMIN, USER)
+- Permission-based feature access
 - SOC 2 compliant infrastructure (planned)
 
 ---
@@ -96,6 +103,13 @@ Multi-tenant PostgreSQL schema with:
 ---
 
 ## 🚀 Getting Started
+
+### **Quick Links**
+
+- **User Guide** - [Complete guide for launching campaigns](/docs/USER-GUIDE.md)
+- **Admin Guide** - [Template management and analytics](/docs/ADMIN-GUIDE.md)
+- **Quick Start** - [Fast reference guide](/docs/QUICK-START.md)
+- **API Documentation** - [Technical API reference](/docs/API.md)
 
 ### **Prerequisites**
 
@@ -155,41 +169,71 @@ npm run dev
 
 ## 📖 Usage
 
-### **Connecting Facebook Accounts**
+### **For Users - Launching Campaigns**
 
-1. Navigate to **Settings > Integrations**
-2. Click "Connect Facebook Business Manager"
-3. Authorize the OAuth flow
-4. Select Business Manager accounts to connect
-5. Grant necessary permissions
+#### 4-Step Campaign Launch Wizard:
 
-### **Creating Ad Templates**
+1. **Select Template**
+   - Browse template marketplace
+   - Filter by category (General Dentist, Orthodontist, B2B)
+   - View performance metrics (ROAS, usage count)
+   - Preview template before selecting
 
-1. Go to **Templates > Create New**
-2. Configure:
-   - Ad copy (headline, primary text, CTA)
+2. **Fill Dynamic Fields**
+   - Enter your practice name
+   - Add offer price and details
+   - Provide location and contact info
+   - System validates all required fields
+
+3. **Configure Targeting & Budget**
+   - Set campaign name
+   - Choose location targeting (radius, cities)
+   - Select age range
+   - Set daily or lifetime budget
+   - Optional: Configure ad scheduling
+
+4. **Preview & Launch**
+   - Review ad creative across placements
+   - Verify all dynamic fields filled correctly
+   - Check targeting and budget summary
+   - Launch campaign
+
+Campaign goes live within 15-30 minutes after Facebook approval.
+
+See detailed instructions in [User Guide](/docs/USER-GUIDE.md)
+
+---
+
+### **For Admins - Managing Templates**
+
+#### Creating Global Templates:
+
+1. Navigate to **Template Management**
+2. Click **Create Global Template**
+3. Configure template:
+   - Basic info (name, description, category)
+   - Ad copy with `{{placeholder}}` syntax
+   - Dynamic field definitions (name, type, validation)
    - Creative specifications
-   - Targeting (demographics, interests, locations)
-   - Campaign structure (budget, bidding, placements)
-3. Set visibility (Private or Public)
-4. Save template
+   - Default targeting and budget
+4. Mark as featured (optional)
+5. Save template
 
-### **Launching Campaigns**
+#### Viewing Analytics:
 
-**From Template:**
-1. Browse **Template Marketplace**
-2. Select high-performing template
-3. Click "Use Template"
-4. Customize parameters
-5. Select target ad account
-6. Launch campaign
+1. Navigate to **Analytics Dashboard**
+2. View key metrics:
+   - Total templates
+   - Active campaigns
+   - Total spend
+   - Average ROAS
+3. Review template performance table
+4. Click template row to expand per-account breakdown
+5. Filter by date range and category
 
-**From Scratch:**
-1. Navigate to **Campaigns > Create New**
-2. Configure campaign objectives and structure
-3. Set budget and schedule
-4. Create ad sets and ads
-5. Launch campaign
+See detailed instructions in [Admin Guide](/docs/ADMIN-GUIDE.md)
+
+---
 
 ### **AI Analysis**
 
@@ -233,6 +277,50 @@ Performance aggregation runs as a daily cron job:
 // lib/queue/jobs/template-aggregation.ts
 // Aggregates performance metrics across all accounts using templates
 ```
+
+---
+
+## 📚 Documentation
+
+### **User Documentation**
+
+- **[User Guide](/docs/USER-GUIDE.md)** - Complete guide for USER role
+  - Getting started
+  - 4-step campaign launch wizard
+  - Managing campaigns
+  - Understanding analytics
+  - Tips & best practices
+  - Troubleshooting
+
+- **[Admin Guide](/docs/ADMIN-GUIDE.md)** - Complete guide for ADMIN role
+  - Template management
+  - Dynamic fields system
+  - Cross-account analytics
+  - User management
+  - Organization settings
+  - Best practices
+
+- **[Quick Start Guide](/docs/QUICK-START.md)** - Fast reference
+  - Common tasks in 5 minutes or less
+  - Quick troubleshooting
+  - Keyboard shortcuts
+  - Benchmarks at a glance
+
+### **Developer Documentation**
+
+- **[API Documentation](/docs/API.md)** - Technical reference
+  - Authentication
+  - All API endpoints
+  - Request/response types
+  - Rate limiting
+  - Error handling
+  - Code examples
+
+### **Additional Resources**
+
+- **Video Tutorials** - https://videos.yourcompany.com
+- **Knowledge Base** - https://help.yourcompany.com
+- **Support** - support@yourcompany.com
 
 ---
 

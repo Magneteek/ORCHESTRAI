@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
-import { successResponse, errorResponse, createdResponse } from '@/lib/utils/api-response';
+import { successResponse, errorResponse, createdResponse, paginatedResponse } from '@/lib/utils/api-response';
 import { requireAuth } from '@/lib/auth/session';
 import { getCampaignWithDetails } from '@/lib/db/campaigns';
 import { createAdSetInDb } from '@/lib/db/campaigns';
-import { createAdSetSchema } from '@/lib/utils/campaign-validation';
+import { createAdSetSchema, adSetQuerySchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
 import { ValidationError, BadRequestError, NotFoundError } from '@/lib/utils/errors';
 import { getFacebookAPI } from '@/lib/facebook';
@@ -15,26 +15,100 @@ const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 
 /**
  * GET /api/ad-sets
- * List ad sets for a campaign
+ * List ad sets for a campaign or ad account
  *
  * Query params:
- * - campaignId: string (required)
+ * - adAccountId: string (optional - filter by ad account)
+ * - campaignId: string (optional - filter by campaign)
+ * - search: string (optional - search by name)
+ * - status: string (optional - filter by status)
+ * - page: number (default: 1)
+ * - limit: number (default: 20)
  */
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth();
     const { searchParams } = new URL(request.url);
-    const campaignId = searchParams.get('campaignId');
 
-    if (!campaignId) {
-      throw new BadRequestError('campaignId query parameter is required');
+    // Validate query parameters (convert null to undefined for Zod)
+    const queryParams = adSetQuerySchema.parse({
+      adAccountId: searchParams.get('adAccountId') ?? undefined,
+      campaignId: searchParams.get('campaignId') ?? undefined,
+      search: searchParams.get('search') ?? undefined,
+      status: searchParams.get('status') ?? undefined,
+      page: searchParams.get('page') ?? undefined,
+      limit: searchParams.get('limit') ?? undefined,
+    });
+
+    // Build where clause for Prisma query
+    const whereClause: any = {};
+
+    if (queryParams.campaignId) {
+      whereClause.campaignId = queryParams.campaignId;
     }
 
-    // Get campaign with ad sets
-    const campaign = await getCampaignWithDetails(campaignId, user.id, user.organizationId);
+    if (queryParams.adAccountId) {
+      whereClause.campaign = {
+        adAccountId: queryParams.adAccountId,
+      };
+    }
+
+    if (queryParams.search) {
+      whereClause.name = {
+        contains: queryParams.search,
+        mode: 'insensitive',
+      };
+    }
+
+    if (queryParams.status) {
+      whereClause.status = queryParams.status;
+    }
+
+    // Add organization check
+    whereClause.campaign = {
+      ...whereClause.campaign,
+      adAccount: {
+        facebookBusinessAccount: {
+          organization: {
+            users: {
+              some: {
+                id: user.id,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    // Get total count
+    const total = await prisma.adSet.count({ where: whereClause });
+
+    // Get ad sets with pagination
+    const adSets = await prisma.adSet.findMany({
+      where: whereClause,
+      include: {
+        ads: {
+          select: {
+            id: true,
+          },
+        },
+        campaign: {
+          select: {
+            id: true,
+            name: true,
+            campaignId: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (queryParams.page - 1) * queryParams.limit,
+      take: queryParams.limit,
+    });
 
     // Transform ad sets
-    const adSets = campaign.adSets.map(adSet => ({
+    const transformedAdSets = adSets.map(adSet => ({
       id: adSet.id,
       adSetId: adSet.adSetId,
       name: adSet.name,
@@ -49,14 +123,21 @@ export async function GET(request: NextRequest) {
       createdAt: adSet.createdAt,
       updatedAt: adSet.updatedAt,
       adCount: adSet.ads?.length || 0,
+      campaign: adSet.campaign,
     }));
 
-    return successResponse({
-      campaignId: campaign.id,
-      campaignName: campaign.name,
-      adSets,
+    return paginatedResponse(transformedAdSets, {
+      page: queryParams.page,
+      limit: queryParams.limit,
+      total,
     });
   } catch (error) {
+    if (error instanceof ZodError) {
+      return errorResponse(
+        new ValidationError('Invalid query parameters', error.errors),
+        422
+      );
+    }
     return errorResponse(error as Error);
   }
 }

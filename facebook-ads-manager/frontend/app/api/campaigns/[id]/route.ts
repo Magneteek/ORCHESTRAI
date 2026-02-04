@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server';
 import { successResponse, errorResponse, noContentResponse } from '@/lib/utils/api-response';
-import { requireAuth } from '@/lib/auth/session';
+import { requireAuth } from '@/lib/auth/api-protection';
+import { hasPermission, UserRole } from '@/lib/auth/permissions';
 import { getCampaignWithDetails, updateCampaignInDb, deleteCampaignFromDb } from '@/lib/db/campaigns';
 import { updateCampaignSchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
-import { ValidationError, NotFoundError, BadRequestError } from '@/lib/utils/errors';
+import { ValidationError, NotFoundError, BadRequestError, ForbiddenError } from '@/lib/utils/errors';
 import { getFacebookAPI } from '@/lib/facebook';
 import { prisma } from '@/lib/db/prisma';
 import Redis from 'ioredis';
@@ -21,11 +22,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requireAuth();
+    const session = await requireAuth(request);
     const { id } = await params;
 
     // Get campaign with full details
-    const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
+    const campaign = await getCampaignWithDetails(id, session.user.id, session.user.organizationId);
 
     // Get Facebook access token
     const adAccount = await prisma.adAccount.findUnique({
@@ -113,7 +114,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requireAuth();
+    const session = await requireAuth(request);
     const { id } = await params;
     const body = await request.json();
 
@@ -121,7 +122,7 @@ export async function PATCH(
     const data = updateCampaignSchema.parse(body);
 
     // Get campaign to verify ownership
-    const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
+    const campaign = await getCampaignWithDetails(id, session.user.id, session.user.organizationId);
 
     // Get Facebook access token
     const adAccount = await prisma.adAccount.findUnique({
@@ -213,17 +214,24 @@ export async function PATCH(
 /**
  * DELETE /api/campaigns/[id]
  * Archive/delete campaign
+ * Only admins can delete campaigns
  */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requireAuth();
+    const session = await requireAuth(request);
+    const userRole = session.user.role as UserRole;
     const { id } = await params;
 
+    // Check if user has permission to delete campaigns
+    if (!hasPermission(userRole, 'canDeleteCampaign')) {
+      throw new ForbiddenError('Only administrators can delete campaigns');
+    }
+
     // Get campaign to verify ownership
-    const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
+    const campaign = await getCampaignWithDetails(id, session.user.id, session.user.organizationId);
 
     // Get Facebook access token
     const adAccount = await prisma.adAccount.findUnique({

@@ -40,6 +40,15 @@ export const campaignQuerySchema = z.object({
 
 // ============ AD SET VALIDATION ============
 
+export const adSetQuerySchema = z.object({
+  adAccountId: z.string().optional(),
+  campaignId: z.string().optional(),
+  search: z.string().optional(),
+  status: z.string().optional(),
+  page: z.string().optional().transform(val => val ? parseInt(val, 10) : 1),
+  limit: z.string().optional().transform(val => val ? parseInt(val, 10) : 20),
+});
+
 export const createAdSetSchema = z.object({
   campaignId: z.string().min(1, 'Campaign ID is required'),
   name: z.string().min(1, 'Ad set name is required').max(255),
@@ -67,6 +76,16 @@ export const updateAdSetSchema = z.object({
 });
 
 // ============ AD VALIDATION ============
+
+export const adQuerySchema = z.object({
+  adAccountId: z.string().optional(),
+  campaignId: z.string().optional(),
+  adSetId: z.string().optional(),
+  search: z.string().optional(),
+  status: z.string().optional(),
+  page: z.string().optional().transform(val => val ? parseInt(val, 10) : 1),
+  limit: z.string().optional().transform(val => val ? parseInt(val, 10) : 20),
+});
 
 export const createAdSchema = z.object({
   adSetId: z.string().min(1, 'Ad set ID is required'),
@@ -110,8 +129,10 @@ export const uploadImageSchema = z.object({
 export type CreateCampaignInput = z.infer<typeof createCampaignSchema>;
 export type UpdateCampaignInput = z.infer<typeof updateCampaignSchema>;
 export type CampaignQueryInput = z.infer<typeof campaignQuerySchema>;
+export type AdSetQueryInput = z.infer<typeof adSetQuerySchema>;
 export type CreateAdSetInput = z.infer<typeof createAdSetSchema>;
 export type UpdateAdSetInput = z.infer<typeof updateAdSetSchema>;
+export type AdQueryInput = z.infer<typeof adQuerySchema>;
 export type CreateAdInput = z.infer<typeof createAdSchema>;
 export type UpdateAdInput = z.infer<typeof updateAdSchema>;
 export type UploadImageInput = z.infer<typeof uploadImageSchema>;

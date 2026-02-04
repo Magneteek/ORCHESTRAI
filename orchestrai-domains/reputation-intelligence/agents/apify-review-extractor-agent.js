@@ -2,10 +2,12 @@
  * Apify Review Extractor Agent
  * Integrates with Apify's Google Maps Reviews Scraper for comprehensive review extraction
  * Bypasses Google's 5-review API limitation
+ * Phase 2: Database integration for caching and cost tracking
  */
 
 const { EventEmitter } = require('events');
 const https = require('https');
+const db = require('../database/db-client');
 
 class ApifyReviewExtractorAgent extends EventEmitter {
     constructor() {
@@ -16,12 +18,19 @@ class ApifyReviewExtractorAgent extends EventEmitter {
         this.baseUrl = 'https://api.apify.com/v2';
         this.actorId = 'compass/google-maps-reviews-scraper';
         this.actorMapsId = 'compass/crawler-google-places';
+        this.db = db;
+        this.workflowId = null;
     }
 
-    async initialize(config) {
+    async initialize(config, workflowId = null) {
         try {
             this.config = config;
             this.apiToken = process.env.APIFY_API_TOKEN;
+            this.workflowId = workflowId;
+
+            // Connect to database for caching and cost tracking
+            await this.db.connect();
+            console.log(`🗄️  Database connected for review extraction`);
 
             if (!this.apiToken) {
                 console.log('⚠️ No Apify API token found, using mock data mode');
@@ -80,19 +89,59 @@ class ApifyReviewExtractorAgent extends EventEmitter {
 
     async findGoogleMapsData(business) {
         try {
+            // PHASE 2: Check database cache FIRST (60-90% cost savings!)
+            const cachedBusiness = await this.db.getBusinessById(business.id);
+
+            if (cachedBusiness && !this.isCacheExpired(cachedBusiness.cache_expires_at)) {
+                console.log(`📦 Using cached Google Maps data for: ${cachedBusiness.name}`);
+
+                return {
+                    placeId: cachedBusiness.place_id,
+                    url: `https://maps.google.com/?cid=${cachedBusiness.id}`,
+                    name: cachedBusiness.name,
+                    rating: cachedBusiness.overall_rating,
+                    reviewsCount: cachedBusiness.total_reviews,
+                    address: cachedBusiness.address,
+                    phone: cachedBusiness.phone,
+                    website: cachedBusiness.website,
+                    cid: cachedBusiness.id,
+                    fromCache: true
+                };
+            }
+
+            // Not in cache or expired - run Apify actor
+            console.log(`🔍 Cache miss for ${business.name} - running Google Maps scraper`);
+
             if (!this.apiToken) {
                 return this.generateMockGoogleMapsData(business);
             }
 
             const input = {
-                searchQuery: business.searchQuery || `${business.name} ${business.address} ${business.city}`,
+                searchQuery: business.searchQuery || `${business.name} ${business.address}`,
                 maxItems: 1,
                 language: 'nl',
                 country: 'NL'
             };
 
+            const startTime = Date.now();
             const runId = await this.runApifyActor(this.actorMapsId, input);
-            const results = await this.getApifyResults(runId);
+            const results = await this.getApifyResults(runId, this.actorMapsId);
+            const duration = Date.now() - startTime;
+
+            // Track API cost for Google Maps scraper ($0.01 per business)
+            await this.db.trackApiCost({
+                workflow_execution_id: this.workflowId,
+                api_service: 'apify_google_maps_scraper',
+                endpoint: this.actorMapsId,
+                cost_amount: 0.01,
+                requests_count: 1,
+                response_time_ms: duration,
+                metadata: {
+                    businessId: business.id,
+                    businessName: business.name,
+                    runId: runId
+                }
+            });
 
             if (results && results.length > 0) {
                 const result = results[0];
@@ -105,7 +154,8 @@ class ApifyReviewExtractorAgent extends EventEmitter {
                     address: result.address,
                     phone: result.phone,
                     website: result.website,
-                    cid: result.cid
+                    cid: result.cid,
+                    fromCache: false
                 };
             }
 
@@ -117,8 +167,42 @@ class ApifyReviewExtractorAgent extends EventEmitter {
         }
     }
 
+    isCacheExpired(cacheExpiresAt) {
+        if (!cacheExpiresAt) return true;
+        return new Date(cacheExpiresAt) < new Date();
+    }
+
     async extractBusinessReviews(googleMapsData, criteria) {
         try {
+            // PHASE 2: Check if we already have recent reviews in database
+            const existingReviews = await this.db.getReviewsByBusinessId(googleMapsData.cid);
+
+            if (existingReviews && existingReviews.length > 0 && !googleMapsData.fromCache) {
+                console.log(`📦 Found ${existingReviews.length} cached reviews for: ${googleMapsData.name}`);
+
+                // Return cached reviews in expected format
+                return existingReviews.map(review => ({
+                    id: review.id,
+                    businessId: review.business_id,
+                    businessName: googleMapsData.name,
+                    reviewerName: review.reviewer_name,
+                    rating: review.rating,
+                    text: review.text,
+                    date: new Date(review.review_date),
+                    source: review.source,
+                    language: review.language,
+                    url: review.url,
+                    likesCount: review.likes_count,
+                    reviewerTotalReviews: review.reviewer_total_reviews,
+                    businessResponse: review.business_response,
+                    extractedAt: review.extracted_at,
+                    fromCache: true
+                }));
+            }
+
+            // Not in cache - run Apify reviews scraper
+            console.log(`🔍 Extracting fresh reviews for ${googleMapsData.name}`);
+
             if (!this.apiToken) {
                 return this.generateMockBusinessReviews(googleMapsData, criteria);
             }
@@ -130,10 +214,54 @@ class ApifyReviewExtractorAgent extends EventEmitter {
                 sort: 'newest'
             };
 
+            const startTime = Date.now();
             const runId = await this.runApifyActor(this.actorId, input);
-            const results = await this.getApifyResults(runId);
+            const results = await this.getApifyResults(runId, this.actorId);
+            const duration = Date.now() - startTime;
 
-            return this.formatReviews(results, googleMapsData);
+            // Track API cost for Reviews scraper ($0.001 per business)
+            await this.db.trackApiCost({
+                workflow_execution_id: this.workflowId,
+                api_service: 'apify_reviews_scraper',
+                endpoint: this.actorId,
+                cost_amount: 0.001,
+                requests_count: 1,
+                response_time_ms: duration,
+                metadata: {
+                    businessId: googleMapsData.cid,
+                    businessName: googleMapsData.name,
+                    runId: runId,
+                    reviewsCount: results?.length || 0
+                }
+            });
+
+            const formattedReviews = this.formatReviews(results, googleMapsData);
+
+            // Store reviews in database for future caching
+            for (const review of formattedReviews) {
+                try {
+                    await this.db.createReview({
+                        business_id: googleMapsData.cid,
+                        reviewer_name: review.reviewerName,
+                        rating: review.rating,
+                        text: review.text,
+                        review_date: review.date,
+                        source: review.source,
+                        language: review.language,
+                        url: review.url,
+                        likes_count: review.likesCount,
+                        reviewer_total_reviews: review.reviewerTotalReviews,
+                        business_response: review.businessResponse,
+                        is_qualifying: review.rating <= 3 // 1-3 stars are qualifying negative reviews
+                    });
+                } catch (err) {
+                    console.error(`⚠️ Failed to store review ${review.id}:`, err.message);
+                }
+            }
+
+            console.log(`✅ Stored ${formattedReviews.length} reviews in database`);
+
+            return formattedReviews;
 
         } catch (error) {
             console.error(`❌ Error extracting reviews for ${googleMapsData.name}:`, error);
@@ -185,15 +313,17 @@ class ApifyReviewExtractorAgent extends EventEmitter {
         });
     }
 
-    async getApifyResults(runId) {
+    async getApifyResults(runId, actorId = null) {
+        const actor = actorId || this.actorId;
+
         // Wait for run to complete and get results
-        await this.waitForRunCompletion(runId);
+        await this.waitForRunCompletion(runId, actor);
 
         return new Promise((resolve, reject) => {
             const options = {
                 hostname: 'api.apify.com',
                 port: 443,
-                path: `/v2/acts/${this.actorId}/runs/${runId}/dataset/items?token=${this.apiToken}`,
+                path: `/v2/acts/${actor}/runs/${runId}/dataset/items?token=${this.apiToken}`,
                 method: 'GET'
             };
 
@@ -222,12 +352,12 @@ class ApifyReviewExtractorAgent extends EventEmitter {
         });
     }
 
-    async waitForRunCompletion(runId, maxWaitTime = 60000) {
+    async waitForRunCompletion(runId, actorId, maxWaitTime = 60000) {
         const startTime = Date.now();
         const checkInterval = 3000; // Check every 3 seconds
 
         while (Date.now() - startTime < maxWaitTime) {
-            const status = await this.getRunStatus(runId);
+            const status = await this.getRunStatus(runId, actorId);
 
             if (status === 'SUCCEEDED') {
                 return true;
@@ -241,12 +371,12 @@ class ApifyReviewExtractorAgent extends EventEmitter {
         throw new Error(`Apify run timeout after ${maxWaitTime}ms: ${runId}`);
     }
 
-    async getRunStatus(runId) {
+    async getRunStatus(runId, actorId) {
         return new Promise((resolve, reject) => {
             const options = {
                 hostname: 'api.apify.com',
                 port: 443,
-                path: `/v2/acts/${this.actorId}/runs/${runId}?token=${this.apiToken}`,
+                path: `/v2/acts/${actorId}/runs/${runId}?token=${this.apiToken}`,
                 method: 'GET'
             };
 
@@ -435,6 +565,7 @@ class ApifyReviewExtractorAgent extends EventEmitter {
 
     async shutdown() {
         console.log(`🔄 Shutting down Apify Review Extractor Agent...`);
+        await this.db.disconnect();
         this.isInitialized = false;
     }
 }

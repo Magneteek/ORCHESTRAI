@@ -1,0 +1,198 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e8]: Ads Manager
+        - navigation [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Overview and key metrics" [ref=e12] [cursor=pointer]:
+                - /url: /dashboard
+                - img [ref=e13]
+                - generic [ref=e18]: Dashboard
+            - listitem [ref=e19]:
+              - link "Manage your campaigns" [ref=e20] [cursor=pointer]:
+                - /url: /dashboard/campaigns
+                - img [ref=e21]
+                - generic [ref=e25]: Campaigns
+            - listitem [ref=e26]:
+              - link "Configure targeting and budgets" [ref=e27] [cursor=pointer]:
+                - /url: /dashboard/ad-sets
+                - img [ref=e28]
+                - generic [ref=e33]: Ad Sets
+            - listitem [ref=e34]:
+              - link "Creative and ad management" [ref=e35] [cursor=pointer]:
+                - /url: /dashboard/ads
+                - img [ref=e36]
+                - generic [ref=e39]: Ads
+            - listitem [ref=e40]:
+              - link "Performance insights" [ref=e41] [cursor=pointer]:
+                - /url: /dashboard/analytics
+                - img [ref=e42]
+                - generic [ref=e44]: Analytics
+            - listitem [ref=e45]:
+              - link "AI-powered recommendations" [ref=e46] [cursor=pointer]:
+                - /url: /dashboard/optimization
+                - img [ref=e47]
+                - generic [ref=e57]: Optimization
+            - listitem [ref=e58]:
+              - link "Custom reports and exports" [ref=e59] [cursor=pointer]:
+                - /url: /dashboard/reporting
+                - img [ref=e60]
+                - generic [ref=e63]: Reporting
+            - listitem [ref=e64]:
+              - link "Rules and automated actions" [ref=e65] [cursor=pointer]:
+                - /url: /dashboard/automation
+                - img [ref=e66]
+                - generic [ref=e68]: Automation
+            - listitem [ref=e69]:
+              - link "Account and preferences" [ref=e70] [cursor=pointer]:
+                - /url: /dashboard/settings
+                - img [ref=e71]
+                - generic [ref=e74]: Settings
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Need Help?
+          - paragraph [ref=e78]: Check our documentation or contact support
+          - link "Get Support" [ref=e79] [cursor=pointer]:
+            - /url: /dashboard/support
+            - button "Get Support" [ref=e80]
+    - generic [ref=e81]:
+      - banner [ref=e82]:
+        - heading "Dashboard" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - img [ref=e86]
+          - searchbox "Search" [ref=e89]
+        - combobox "Select ad account" [ref=e90] [cursor=pointer]:
+          - generic: Main Account
+          - img [ref=e91]
+        - button "Notifications" [ref=e93] [cursor=pointer]:
+          - img
+          - generic [ref=e94]: Notifications
+        - button "User menu" [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: JD
+          - generic [ref=e98]: John Doe
+          - img
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "Welcome back!" [level=2] [ref=e102]
+            - paragraph [ref=e103]: Here is an overview of your advertising performance
+          - generic [ref=e104]:
+            - tablist [ref=e105]:
+              - tab "Today" [ref=e106] [cursor=pointer]
+              - tab "Last 7 Days" [selected] [ref=e107] [cursor=pointer]
+              - tab "Last 30 Days" [ref=e108] [cursor=pointer]
+              - tab "Custom Range" [ref=e109] [cursor=pointer]
+            - tabpanel "Last 7 Days" [ref=e110]:
+              - generic [ref=e111]:
+                - generic [ref=e112]:
+                  - generic [ref=e113]:
+                    - heading "Total Spend" [level=3] [ref=e114]
+                    - img [ref=e115]
+                  - generic [ref=e117]:
+                    - generic [ref=e118]: $12,543.00
+                    - generic [ref=e119]:
+                      - img [ref=e120]
+                      - generic [ref=e122]: "-8.5% from last period"
+                - generic [ref=e123]:
+                  - generic [ref=e124]:
+                    - heading "Impressions" [level=3] [ref=e125]
+                    - img [ref=e126]
+                  - generic [ref=e129]:
+                    - generic [ref=e130]: 1,234,567
+                    - generic [ref=e131]:
+                      - img [ref=e132]
+                      - generic [ref=e134]: +12.3% from last period
+                - generic [ref=e135]:
+                  - generic [ref=e136]:
+                    - heading "Clicks" [level=3] [ref=e137]
+                    - img [ref=e138]
+                  - generic [ref=e144]:
+                    - generic [ref=e145]: 24,567
+                    - generic [ref=e146]:
+                      - img [ref=e147]
+                      - generic [ref=e149]: +5.2% from last period
+                - generic [ref=e150]:
+                  - generic [ref=e151]:
+                    - heading "ROAS" [level=3] [ref=e152]
+                    - img [ref=e153]
+                  - generic [ref=e156]:
+                    - generic [ref=e157]: 4.25x
+                    - generic [ref=e158]:
+                      - img [ref=e159]
+                      - generic [ref=e161]: +18.7% from last period
+              - generic [ref=e162]:
+                - generic [ref=e163]:
+                  - generic [ref=e164]:
+                    - heading "Campaign Performance" [level=3] [ref=e165]
+                    - paragraph [ref=e166]: Your top performing campaigns this week
+                  - generic [ref=e168]:
+                    - generic [ref=e169]:
+                      - generic [ref=e170]:
+                        - paragraph [ref=e171]: Summer Sale 2025
+                        - generic [ref=e172]:
+                          - generic [ref=e173]: active
+                          - generic [ref=e174]: "Spend: $3,245"
+                      - generic [ref=e175]:
+                        - paragraph [ref=e176]: 5.2x
+                        - paragraph [ref=e177]: ROAS
+                    - generic [ref=e178]:
+                      - generic [ref=e179]:
+                        - paragraph [ref=e180]: Product Launch Q1
+                        - generic [ref=e181]:
+                          - generic [ref=e182]: active
+                          - generic [ref=e183]: "Spend: $2,890"
+                      - generic [ref=e184]:
+                        - paragraph [ref=e185]: 4.8x
+                        - paragraph [ref=e186]: ROAS
+                    - generic [ref=e187]:
+                      - generic [ref=e188]:
+                        - paragraph [ref=e189]: Brand Awareness
+                        - generic [ref=e190]:
+                          - generic [ref=e191]: active
+                          - generic [ref=e192]: "Spend: $2,150"
+                      - generic [ref=e193]:
+                        - paragraph [ref=e194]: 3.9x
+                        - paragraph [ref=e195]: ROAS
+                    - generic [ref=e196]:
+                      - generic [ref=e197]:
+                        - paragraph [ref=e198]: Retargeting Campaign
+                        - generic [ref=e199]:
+                          - generic [ref=e200]: paused
+                          - generic [ref=e201]: "Spend: $1,890"
+                      - generic [ref=e202]:
+                        - paragraph [ref=e203]: 6.1x
+                        - paragraph [ref=e204]: ROAS
+                - generic [ref=e205]:
+                  - generic [ref=e206]:
+                    - heading "AI Recommendations" [level=3] [ref=e207]
+                    - paragraph [ref=e208]: Optimization suggestions for your campaigns
+                  - generic [ref=e210]:
+                    - generic [ref=e212]:
+                      - generic [ref=e213]:
+                        - paragraph [ref=e214]: Increase Budget
+                        - paragraph [ref=e215]: Summer Sale campaign showing strong ROAS
+                      - generic [ref=e216]: high
+                    - generic [ref=e218]:
+                      - generic [ref=e219]:
+                        - paragraph [ref=e220]: Pause Underperforming Ad
+                        - paragraph [ref=e221]: "Ad #1234 has low CTR and high CPC"
+                      - generic [ref=e222]: medium
+                    - generic [ref=e224]:
+                      - generic [ref=e225]:
+                        - paragraph [ref=e226]: Adjust Targeting
+                        - paragraph [ref=e227]: Expand age range for better reach
+                      - generic [ref=e228]: medium
+                    - generic [ref=e230]:
+                      - generic [ref=e231]:
+                        - paragraph [ref=e232]: Update Creative
+                        - paragraph [ref=e233]: Test new ad variations
+                      - generic [ref=e234]: low
+  - region "Notifications alt+T"
+  - alert [ref=e235]
+```

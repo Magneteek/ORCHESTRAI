@@ -42,12 +42,12 @@ export const updateOrganizationSchema = z.object({
 export const updateUserSchema = z.object({
   name: z.string().min(2).max(100).optional(),
   email: z.string().email().optional(),
-  role: z.enum(['admin', 'manager', 'member']).optional(),
+  role: z.enum(['ADMIN', 'USER']).optional(),
 });
 
 export const inviteUserSchema = z.object({
   email: z.string().email(),
-  role: z.enum(['admin', 'manager', 'member']).default('member'),
+  role: z.enum(['ADMIN', 'USER']).default('USER'),
 });
 
 // ============ FACEBOOK INTEGRATION ============
@@ -119,6 +119,7 @@ export const createTemplateSchema = z.object({
   category: z.string().min(1),
   objective: z.string().min(1),
   visibility: z.enum(['private', 'public']).default('private'),
+  isGlobal: z.boolean().optional().default(false),
   adCopy: adCopySchema,
   creativeSpecs: creativeSpecsSchema,
   targetingConfig: targetingConfigSchema,

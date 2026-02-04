@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { successResponse, errorResponse, noContentResponse } from '@/lib/utils/api-response';
-import { requireAuth, requirePermission } from '@/lib/auth/session';
+import { requireAuth } from '@/lib/auth/api-protection';
+import { hasPermission, UserRole } from '@/lib/auth/permissions';
 import {
   getTemplateById,
   updateTemplate,
@@ -9,7 +10,7 @@ import {
 } from '@/lib/db/templates';
 import { updateTemplateSchema } from '@/lib/utils/validation';
 import { ZodError } from 'zod';
-import { ValidationError } from '@/lib/utils/errors';
+import { ValidationError, ForbiddenError } from '@/lib/utils/errors';
 
 
 /**
@@ -20,10 +21,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requireAuth();
+    const session = await requireAuth(request);
     const { id } = await params;
 
-    const template = await getTemplateById(id, user.id);
+    const template = await getTemplateById(id, session.user.id);
 
     return successResponse(template);
   } catch (error) {
@@ -39,15 +40,29 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requirePermission('canManageTemplates');
+    const session = await requireAuth(request);
+    const userRole = session.user.role as UserRole;
     const { id } = await params;
 
     const body = await request.json();
     const data = updateTemplateSchema.parse(body);
 
-    const template = await updateTemplate(id, user.id, data);
+    // Fetch template to check permissions
+    const template = await getTemplateById(id, session.user.id);
 
-    return successResponse(template, {
+    // Check if user is trying to edit a global template
+    if (template.isGlobal && !hasPermission(userRole, 'canEditGlobalTemplate')) {
+      throw new ForbiddenError('Only administrators can edit global templates');
+    }
+
+    // Check if user can edit this specific template
+    if (!hasPermission(userRole, 'canEditTemplate', template, session.user.id)) {
+      throw new ForbiddenError('You do not have permission to edit this template');
+    }
+
+    const updatedTemplate = await updateTemplate(id, session.user.id, data);
+
+    return successResponse(updatedTemplate, {
       message: 'Template updated successfully',
     });
   } catch (error) {
@@ -70,10 +85,22 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requirePermission('canManageTemplates');
+    const session = await requireAuth(request);
+    const userRole = session.user.role as UserRole;
     const { id } = await params;
 
-    await deleteTemplate(id, user.id);
+    // Fetch template to check permissions
+    const template = await getTemplateById(id, session.user.id);
+
+    // Check if user can delete this template
+    if (!hasPermission(userRole, 'canDeleteTemplate', template)) {
+      throw new ForbiddenError(
+        'You do not have permission to delete this template. ' +
+        (template.isGlobal ? 'Only administrators can delete global templates.' : '')
+      );
+    }
+
+    await deleteTemplate(id, session.user.id);
 
     return noContentResponse();
   } catch (error) {

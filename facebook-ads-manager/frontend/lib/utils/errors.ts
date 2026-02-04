@@ -117,3 +117,20 @@ export class FacebookApiError extends ApiError {
     this.name = 'FacebookApiError';
   }
 }
+
+/**
+ * Handle API errors and return appropriate response
+ */
+export function handleApiError(error: unknown) {
+  const { errorResponse } = require('./api-response');
+
+  if (error instanceof ApiError) {
+    return errorResponse(error);
+  }
+
+  if (error instanceof Error) {
+    return errorResponse(error);
+  }
+
+  return errorResponse(new InternalServerError('An unexpected error occurred'));
+}

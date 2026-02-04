@@ -1,21 +1,16 @@
 /**
  * Analytics Export API Route
  * Export analytics data as CSV or PDF
+ * Admin-only feature
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth';
+import { requireAdmin } from '@/lib/auth/api-protection';
 
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Unauthorized', code: 'UNAUTHORIZED' } },
-        { status: 401 }
-      );
-    }
+    // Require admin privileges for data export
+    await requireAdmin(request);
 
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams;

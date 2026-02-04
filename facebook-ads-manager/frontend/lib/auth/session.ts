@@ -1,7 +1,7 @@
 import { auth } from './auth';
 import { UnauthorizedError, ForbiddenError } from '../utils/errors';
-import type { SessionUser, UserRole, RolePermissions } from '@/types/database';
-import { ROLE_PERMISSIONS } from '@/types/database';
+import type { SessionUser, RolePermissions } from '@/types/database';
+import { UserRole, ROLE_PERMISSIONS } from '@/types/database';
 
 /**
  * Get the current session
@@ -42,14 +42,15 @@ export async function requireRole(role: UserRole | UserRole[]): Promise<SessionU
  * Require admin role
  */
 export async function requireAdmin(): Promise<SessionUser> {
-  return requireRole('admin');
+  return requireRole(UserRole.ADMIN);
 }
 
 /**
  * Require manager or admin role
+ * Note: The old 'manager' role has been consolidated into ADMIN
  */
 export async function requireManager(): Promise<SessionUser> {
-  return requireRole(['admin', 'manager']);
+  return requireRole(UserRole.ADMIN);
 }
 
 /**

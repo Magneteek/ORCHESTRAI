@@ -3,6 +3,7 @@ import { verifyUserPassword } from '@/lib/db/users';
 import { loginSchema } from '@/lib/utils/validation';
 import type { SessionUser } from '@/types/database';
 import type { NextAuthConfig } from 'next-auth';
+import { UserRole } from '@prisma/client';
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -41,16 +42,16 @@ export const authConfig: NextAuthConfig = {
       // Add custom fields to token on sign in
       if (user && user.id) {
         token.id = user.id;
-        token.role = (user as SessionUser).role;
+        token.role = (user as SessionUser).role as UserRole;
         token.organizationId = (user as SessionUser).organizationId;
       }
       return token;
     },
     async session({ session, token }) {
-      // Add custom fields to session
+      // Add custom fields to session with proper types
       if (session.user && token) {
         session.user.id = token.id as string;
-        session.user.role = token.role as string;
+        session.user.role = token.role as UserRole;
         session.user.organizationId = token.organizationId as string;
       }
       return session;

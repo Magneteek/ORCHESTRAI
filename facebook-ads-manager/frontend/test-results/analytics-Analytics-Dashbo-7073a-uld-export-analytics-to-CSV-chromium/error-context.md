@@ -1,0 +1,152 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e8]: Ads Manager
+        - navigation [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Overview and key metrics" [ref=e12] [cursor=pointer]:
+                - /url: /dashboard
+                - img [ref=e13]
+                - generic [ref=e18]: Dashboard
+            - listitem [ref=e19]:
+              - link "Manage your campaigns" [ref=e20] [cursor=pointer]:
+                - /url: /dashboard/campaigns
+                - img [ref=e21]
+                - generic [ref=e25]: Campaigns
+            - listitem [ref=e26]:
+              - link "Configure targeting and budgets" [ref=e27] [cursor=pointer]:
+                - /url: /dashboard/ad-sets
+                - img [ref=e28]
+                - generic [ref=e33]: Ad Sets
+            - listitem [ref=e34]:
+              - link "Creative and ad management" [ref=e35] [cursor=pointer]:
+                - /url: /dashboard/ads
+                - img [ref=e36]
+                - generic [ref=e39]: Ads
+            - listitem [ref=e40]:
+              - link "Performance insights" [ref=e41] [cursor=pointer]:
+                - /url: /dashboard/analytics
+                - img [ref=e42]
+                - generic [ref=e44]: Analytics
+            - listitem [ref=e45]:
+              - link "AI-powered recommendations" [ref=e46] [cursor=pointer]:
+                - /url: /dashboard/optimization
+                - img [ref=e47]
+                - generic [ref=e57]: Optimization
+            - listitem [ref=e58]:
+              - link "Custom reports and exports" [ref=e59] [cursor=pointer]:
+                - /url: /dashboard/reporting
+                - img [ref=e60]
+                - generic [ref=e63]: Reporting
+            - listitem [ref=e64]:
+              - link "Rules and automated actions" [ref=e65] [cursor=pointer]:
+                - /url: /dashboard/automation
+                - img [ref=e66]
+                - generic [ref=e68]: Automation
+            - listitem [ref=e69]:
+              - link "Account and preferences" [ref=e70] [cursor=pointer]:
+                - /url: /dashboard/settings
+                - img [ref=e71]
+                - generic [ref=e74]: Settings
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Need Help?
+          - paragraph [ref=e78]: Check our documentation or contact support
+          - link "Get Support" [ref=e79] [cursor=pointer]:
+            - /url: /dashboard/support
+            - button "Get Support" [ref=e80]
+    - generic [ref=e81]:
+      - banner [ref=e82]:
+        - heading "Dashboard" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - img [ref=e86]
+          - searchbox "Search" [ref=e89]
+        - combobox "Select ad account" [ref=e90] [cursor=pointer]:
+          - generic: Main Account
+          - img [ref=e91]
+        - button "Notifications" [ref=e93] [cursor=pointer]:
+          - img
+          - generic [ref=e94]: Notifications
+        - button "User menu" [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: JD
+          - generic [ref=e98]: John Doe
+          - img
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Analytics Dashboard" [level=1] [ref=e103]
+              - paragraph [ref=e104]: Track your campaign performance and insights
+            - generic [ref=e105]:
+              - button "Refresh data" [ref=e106] [cursor=pointer]:
+                - img
+              - generic [ref=e107]:
+                - combobox [ref=e108] [cursor=pointer]:
+                  - generic: CSV
+                  - img [ref=e109]
+                - button "Export" [disabled]:
+                  - img
+                  - text: Export
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - img [ref=e114]
+              - combobox [ref=e116] [cursor=pointer]:
+                - generic: Last 30 days
+                - img [ref=e117]
+              - generic [ref=e119]: Dec 28, 2025 - Jan 27, 2026
+              - button "Custom" [ref=e120] [cursor=pointer]
+            - button "Compare" [ref=e122] [cursor=pointer]:
+              - img
+              - text: Compare
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - generic [ref=e125]:
+                - heading "Total Spend" [level=3] [ref=e126]
+                - img [ref=e127]
+              - generic [ref=e131]: $0.00
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - heading "Impressions" [level=3] [ref=e134]
+                - img [ref=e135]
+              - generic [ref=e140]: "0"
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - heading "Clicks" [level=3] [ref=e143]
+                - img [ref=e144]
+              - generic [ref=e149]: "0"
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - heading "Conversions" [level=3] [ref=e152]
+                - img [ref=e153]
+              - generic [ref=e160]: "0"
+          - generic [ref=e161]:
+            - tablist [ref=e162]:
+              - tab "Overview" [selected] [ref=e163] [cursor=pointer]
+              - tab "Engagement" [ref=e164] [cursor=pointer]
+              - tab "Conversions" [ref=e165] [cursor=pointer]
+              - tab "ROI & Costs" [ref=e166] [cursor=pointer]
+            - tabpanel "Overview" [ref=e167]:
+              - generic [ref=e168]:
+                - heading "Performance Over Time" [level=3] [ref=e169]
+                - generic [ref=e171]:
+                  - paragraph [ref=e172]: No data available for the selected period
+                  - paragraph [ref=e173]: Try adjusting your date range
+              - generic [ref=e174]:
+                - generic [ref=e175]:
+                  - generic [ref=e176]: CTR
+                  - generic [ref=e177]: 0.00%
+                - generic [ref=e178]:
+                  - generic [ref=e179]: CPC
+                  - generic [ref=e180]: $0.00
+                - generic [ref=e181]:
+                  - generic [ref=e182]: CPM
+                  - generic [ref=e183]: $0.00
+  - region "Notifications alt+T"
+  - alert [ref=e184]
+```

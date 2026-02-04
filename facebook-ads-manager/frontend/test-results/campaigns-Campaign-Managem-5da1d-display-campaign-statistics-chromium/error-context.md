@@ -1,0 +1,131 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e8]: Ads Manager
+        - navigation [ref=e9]:
+          - list [ref=e10]:
+            - listitem [ref=e11]:
+              - link "Overview and key metrics" [ref=e12] [cursor=pointer]:
+                - /url: /dashboard
+                - img [ref=e13]
+                - generic [ref=e18]: Dashboard
+            - listitem [ref=e19]:
+              - link "Manage your campaigns" [ref=e20] [cursor=pointer]:
+                - /url: /dashboard/campaigns
+                - img [ref=e21]
+                - generic [ref=e25]: Campaigns
+            - listitem [ref=e26]:
+              - link "Configure targeting and budgets" [ref=e27] [cursor=pointer]:
+                - /url: /dashboard/ad-sets
+                - img [ref=e28]
+                - generic [ref=e33]: Ad Sets
+            - listitem [ref=e34]:
+              - link "Creative and ad management" [ref=e35] [cursor=pointer]:
+                - /url: /dashboard/ads
+                - img [ref=e36]
+                - generic [ref=e39]: Ads
+            - listitem [ref=e40]:
+              - link "Performance insights" [ref=e41] [cursor=pointer]:
+                - /url: /dashboard/analytics
+                - img [ref=e42]
+                - generic [ref=e44]: Analytics
+            - listitem [ref=e45]:
+              - link "AI-powered recommendations" [ref=e46] [cursor=pointer]:
+                - /url: /dashboard/optimization
+                - img [ref=e47]
+                - generic [ref=e57]: Optimization
+            - listitem [ref=e58]:
+              - link "Custom reports and exports" [ref=e59] [cursor=pointer]:
+                - /url: /dashboard/reporting
+                - img [ref=e60]
+                - generic [ref=e63]: Reporting
+            - listitem [ref=e64]:
+              - link "Rules and automated actions" [ref=e65] [cursor=pointer]:
+                - /url: /dashboard/automation
+                - img [ref=e66]
+                - generic [ref=e68]: Automation
+            - listitem [ref=e69]:
+              - link "Account and preferences" [ref=e70] [cursor=pointer]:
+                - /url: /dashboard/settings
+                - img [ref=e71]
+                - generic [ref=e74]: Settings
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Need Help?
+          - paragraph [ref=e78]: Check our documentation or contact support
+          - link "Get Support" [ref=e79] [cursor=pointer]:
+            - /url: /dashboard/support
+            - button "Get Support" [ref=e80]
+    - generic [ref=e81]:
+      - banner [ref=e82]:
+        - heading "Dashboard" [level=1] [ref=e84]
+        - generic [ref=e85]:
+          - img [ref=e86]
+          - searchbox "Search" [ref=e89]
+        - combobox "Select ad account" [ref=e90] [cursor=pointer]:
+          - generic: Main Account
+          - img [ref=e91]
+        - button "Notifications" [ref=e93] [cursor=pointer]:
+          - img
+          - generic [ref=e94]: Notifications
+        - button "User menu" [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: JD
+          - generic [ref=e98]: John Doe
+          - img
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Campaigns" [level=1] [ref=e103]
+              - paragraph [ref=e104]: Manage your Facebook ad campaigns
+            - link "Create Campaign" [ref=e105] [cursor=pointer]:
+              - /url: /dashboard/campaigns/new
+              - button "Create Campaign" [ref=e106]:
+                - img
+                - text: Create Campaign
+          - generic [ref=e107]:
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - paragraph [ref=e111]: Total Spend
+                - paragraph [ref=e113]: $0.00
+              - img [ref=e115]
+            - generic [ref=e118]:
+              - generic [ref=e119]:
+                - paragraph [ref=e120]: Avg. ROAS
+                - paragraph [ref=e122]: "0.00"
+              - img [ref=e124]
+            - generic [ref=e128]:
+              - generic [ref=e129]:
+                - paragraph [ref=e130]: Avg. CTR
+                - paragraph [ref=e132]: 0.00%
+              - img [ref=e134]
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - paragraph [ref=e140]: Total Conversions
+                - paragraph [ref=e142]: "0"
+              - img [ref=e144]
+          - generic [ref=e149]:
+            - generic [ref=e150]:
+              - img [ref=e151]
+              - textbox "Search campaigns..." [ref=e154]
+            - button "Filters" [ref=e155] [cursor=pointer]:
+              - img
+              - text: Filters
+            - button [ref=e156] [cursor=pointer]:
+              - img
+          - generic [ref=e159]:
+            - heading "No campaigns found" [level=3] [ref=e160]
+            - paragraph [ref=e161]: Get started by creating your first campaign
+            - link "Create Campaign" [ref=e162] [cursor=pointer]:
+              - /url: /dashboard/campaigns/new
+              - button "Create Campaign" [ref=e163]:
+                - img
+                - text: Create Campaign
+  - region "Notifications alt+T"
+  - alert [ref=e164]
+```

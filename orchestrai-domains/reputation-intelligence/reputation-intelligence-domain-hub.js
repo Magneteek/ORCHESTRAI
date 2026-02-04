@@ -1,6 +1,7 @@
 /**
  * ORCHESTRAI Reputation Intelligence Domain Hub
  * Advanced Google Business Profile negative review monitoring and analysis system
+ * Phase 2: Database integration for persistent storage and cost tracking
  *
  * Features:
  * - Business discovery with rating-based filtering
@@ -8,10 +9,14 @@
  * - Real-time negative review monitoring (1-3 stars, <14 days)
  * - Sentiment analysis and trend detection
  * - Automated alerts and export capabilities
+ * - Persistent PostgreSQL storage
+ * - API cost tracking
+ * - Workflow execution history
  */
 
 const { EventEmitter } = require('events');
 const path = require('path');
+const db = require('./database/db-client');
 
 class ReputationIntelligenceDomainHub extends EventEmitter {
     constructor() {
@@ -20,6 +25,8 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
         this.agents = new Map();
         this.isActive = false;
         this.monitoringTasks = new Map();
+        this.db = db;
+        this.currentWorkflowId = null;
         this.config = {
             maxConcurrentScrapes: 5,
             reviewAnalysisDepth: 100,
@@ -47,7 +54,11 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
         try {
             console.log(`🔍 Initializing Reputation Intelligence Domain Hub...`);
 
-            // Initialize all agents
+            // PHASE 2: Connect to database
+            await this.db.connect();
+            console.log(`🗄️  Database connected for domain hub`);
+
+            // Initialize all agents (pass workflowId during startMonitoring)
             for (const [name, agent] of this.agents) {
                 await agent.initialize(this.config);
                 console.log(`✅ Agent ${name} initialized`);
@@ -72,18 +83,12 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
             console.log(`📊 Found ${businesses.length} businesses for monitoring`);
             this.emit('businesses-discovered', businesses);
 
-            // Trigger contact enrichment for discovered businesses
-            const enrichmentAgent = this.agents.get('contact-enrichment');
-            if (enrichmentAgent && enrichmentAgent.isInitialized) {
-                const enrichedBusinesses = await enrichmentAgent.enrichBusinesses(businesses);
-                this.emit('businesses-enriched', enrichedBusinesses);
+            // PHASE 1: Extract reviews FIRST (before enrichment)
+            console.log(`🔍 Phase 1: Extracting reviews for ${businesses.length} businesses...`);
+            await this.agents.get('review-scraper').processBusinesses(businesses);
 
-                // Trigger review scraping with enriched data
-                await this.agents.get('review-scraper').processBusinesses(enrichedBusinesses);
-            } else {
-                // Fallback to review scraping without enrichment
-                await this.agents.get('review-scraper').processBusinesses(businesses);
-            }
+            // Note: Enrichment happens AFTER reviews are analyzed
+            // See 'negative-reviews-found' event handler below
         });
 
         // Contact enrichment events
@@ -105,10 +110,37 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
 
         // Review scraping events
         this.agents.get('review-scraper').on('negative-reviews-found', async (reviews) => {
-            console.log(`⚠️ Found ${reviews.length} negative reviews`);
+            console.log(`⚠️ Found ${reviews.length} qualifying negative reviews`);
             this.emit('negative-reviews-detected', reviews);
 
-            // Trigger sentiment analysis
+            // PHASE 2: Conditional enrichment (ONLY for businesses with qualifying reviews)
+            const uniqueBusinessIds = [...new Set(reviews.map(r => r.businessId))];
+            console.log(`💼 Phase 2: Conditional enrichment for ${uniqueBusinessIds.length}/${this.currentBusinessCount || '?'} businesses`);
+
+            // Get businesses that need enrichment
+            const enrichmentAgent = this.agents.get('contact-enrichment');
+            if (enrichmentAgent && enrichmentAgent.isInitialized && uniqueBusinessIds.length > 0) {
+                const savingsPercent = this.currentBusinessCount > 0
+                    ? ((this.currentBusinessCount - uniqueBusinessIds.length) / this.currentBusinessCount * 100).toFixed(0)
+                    : 0;
+
+                console.log(`   Enriching ONLY businesses with qualifying reviews (saving ${savingsPercent}% on Apollo.io credits)`);
+
+                this.emit('enrichment-needed', { businessIds: uniqueBusinessIds, reviewCount: reviews.length });
+
+                // PHASE 2: Fetch businesses from database and enrich them
+                const businessesToEnrich = await this.db.getBusinessesByIds(uniqueBusinessIds);
+                if (businessesToEnrich && businessesToEnrich.length > 0) {
+                    console.log(`   Retrieved ${businessesToEnrich.length} businesses from database for enrichment`);
+                    await enrichmentAgent.enrichBusinesses(businessesToEnrich);
+                } else {
+                    console.log(`   ⚠️ No businesses found in database for enrichment`);
+                }
+            } else {
+                console.log(`   Skipping enrichment (${enrichmentAgent ? 'no qualifying businesses' : 'enrichment not initialized'})`);
+            }
+
+            // PHASE 3: Sentiment analysis
             await this.agents.get('sentiment-analyzer').analyzeReviews(reviews);
         });
 
@@ -135,23 +167,53 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
         try {
             console.log(`🔍 Starting reputation monitoring for:`, searchCriteria);
 
+            // PHASE 2: Create workflow execution record
+            const workflow = await this.db.createWorkflowExecution({
+                workflow_type: 'reputation_monitoring',
+                status: 'running',
+                input_parameters: searchCriteria
+            });
+
+            this.currentWorkflowId = workflow.id;
+            console.log(`📝 Workflow execution created: ${workflow.id}`);
+
             const monitoringId = `monitor_${Date.now()}`;
             this.monitoringTasks.set(monitoringId, {
                 criteria: searchCriteria,
                 startTime: new Date(),
-                status: 'active'
+                status: 'active',
+                workflowId: workflow.id
             });
 
             // Start business discovery
+            this.currentBusinessCount = searchCriteria.limit || 50; // Store for percentage calculation
             const discoveryResult = await this.agents.get('business-discovery').searchBusinesses(searchCriteria);
+
+            // Update workflow status
+            await this.db.updateWorkflowExecution(workflow.id, {
+                status: 'running',
+                metadata: {
+                    businessesFound: discoveryResult.total
+                }
+            });
 
             return {
                 success: true,
                 monitoringId,
+                workflowId: workflow.id,
                 initialResults: discoveryResult
             };
         } catch (error) {
             console.error(`❌ Failed to start monitoring:`, error);
+
+            // Update workflow as failed
+            if (this.currentWorkflowId) {
+                await this.db.updateWorkflowExecution(this.currentWorkflowId, {
+                    status: 'failed',
+                    error_message: error.message
+                });
+            }
+
             throw error;
         }
     }
@@ -189,25 +251,39 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
 
     /**
      * Get enriched business data with decision-maker contacts
-     * @param {string} businessId - Business ID or domain
+     * PHASE 2: Query from database instead of in-memory cache
+     * @param {string} businessId - Business ID
      * @returns {Promise<Object>} Enriched business data
      */
     async getEnrichedBusinessData(businessId) {
         try {
-            const enrichmentAgent = this.agents.get('contact-enrichment');
-
-            if (!enrichmentAgent || !enrichmentAgent.isInitialized) {
-                throw new Error('Contact enrichment agent not available');
+            // PHASE 2: Query database for enrichment data
+            const business = await this.db.getBusinessById(businessId);
+            if (!business) {
+                throw new Error(`Business ${businessId} not found`);
             }
 
-            // Find business in cache or fetch
-            const enrichedBusiness = enrichmentAgent.enrichmentCache.get(businessId);
-
-            if (!enrichedBusiness) {
-                throw new Error(`Business ${businessId} not found in enrichment cache`);
+            const enrichment = await this.db.getEnrichmentByBusinessId(businessId);
+            if (!enrichment) {
+                return {
+                    ...business,
+                    enrichment: {
+                        status: 'not_enriched',
+                        message: 'No enrichment data available for this business'
+                    }
+                };
             }
 
-            return enrichedBusiness;
+            return {
+                ...business,
+                organizationData: enrichment.organization_data,
+                decisionMakers: enrichment.decision_makers,
+                enrichment: {
+                    status: 'success',
+                    qualityScore: enrichment.quality_score,
+                    enrichedAt: enrichment.enriched_at
+                }
+            };
         } catch (error) {
             console.error(`❌ Failed to get enriched business data:`, error);
             throw error;
@@ -216,9 +292,10 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
 
     /**
      * Get enrichment statistics across all businesses
-     * @returns {Object} Enrichment statistics
+     * PHASE 2: Now async to query database
+     * @returns {Promise<Object>} Enrichment statistics
      */
-    getEnrichmentStats() {
+    async getEnrichmentStats() {
         const enrichmentAgent = this.agents.get('contact-enrichment');
 
         if (!enrichmentAgent || !enrichmentAgent.isInitialized) {
@@ -228,9 +305,11 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
             };
         }
 
+        const stats = await enrichmentAgent.getEnrichmentStats();
+
         return {
             enabled: true,
-            ...enrichmentAgent.getEnrichmentStats()
+            ...stats
         };
     }
 
@@ -278,6 +357,14 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
         try {
             console.log(`🔄 Shutting down Reputation Intelligence Domain Hub...`);
 
+            // Update workflow status if active
+            if (this.currentWorkflowId) {
+                await this.db.updateWorkflowExecution(this.currentWorkflowId, {
+                    status: 'completed',
+                    completed_at: new Date()
+                });
+            }
+
             // Stop all monitoring tasks
             for (const [id, _] of this.monitoringTasks) {
                 await this.stopMonitoring(id);
@@ -290,6 +377,10 @@ class ReputationIntelligenceDomainHub extends EventEmitter {
                 }
                 console.log(`✅ Agent ${name} shutdown`);
             }
+
+            // PHASE 2: Disconnect from database
+            await this.db.disconnect();
+            console.log(`🗄️  Database disconnected`);
 
             this.isActive = false;
             console.log(`✅ Reputation Intelligence Domain Hub shutdown complete`);

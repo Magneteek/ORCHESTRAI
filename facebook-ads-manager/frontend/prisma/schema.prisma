@@ -28,12 +28,17 @@ model Organization {
   @@map("organizations")
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 model User {
   id             String   @id @default(uuid())
   email          String   @unique
   name           String?
   password       String? // Hashed, null if OAuth only
-  role           String   @default("member") // admin, manager, member
+  role           UserRole @default(USER) // Simplified: ADMIN (admin/manager) or USER (member)
   organizationId String
   emailVerified  DateTime?
   image          String?
@@ -153,6 +158,12 @@ model AdTemplate {
   targetingConfig   Json     // { interests, demographics, behaviors, locations }
   campaignStructure Json     // { budget, bidStrategy, placements, schedule }
 
+  // Dynamic Fields Support
+  dynamicFields     Json?    // Schema: { fields: [{ name, type, required, defaultValue, placeholder }] }
+  fieldSchema       Json?    // JSON Schema for validation
+  isGlobal          Boolean  @default(false) // Available to all organizations
+  requiresApproval  Boolean  @default(false) // Future feature flag
+
   // Performance Tracking
   timesUsed         Int      @default(0)
   isPublic          Boolean  @default(false)
@@ -163,9 +174,11 @@ model AdTemplate {
   performanceAggregate   TemplatePerformanceAggregate?
   campaigns              Campaign[]
   ads                    Ad[]
+  templateLaunches       TemplateLaunch[]
 
   @@index([organizationId])
   @@index([visibility, category])
+  @@index([isGlobal])
   @@map("ad_templates")
 }
 
@@ -193,6 +206,24 @@ model TemplatePerformanceAggregate {
   @@map("template_performance_aggregate")
 }
 
+model TemplateLaunch {
+  id          String   @id @default(uuid())
+  templateId  String
+  campaignId  String
+  adAccountId String
+  userId      String
+  fieldValues Json     // Resolved dynamic field values
+  createdAt   DateTime @default(now())
+
+  template AdTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  campaign Campaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([templateId])
+  @@index([campaignId])
+  @@index([userId])
+  @@map("template_launches")
+}
+
 // ============ FACEBOOK AD STRUCTURE ============
 
 model Campaign {
@@ -213,9 +244,10 @@ model Campaign {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  adAccount AdAccount @relation(fields: [adAccountId], references: [id], onDelete: Cascade)
-  template  AdTemplate? @relation(fields: [templateId], references: [id])
-  adSets    AdSet[]
+  adAccount        AdAccount        @relation(fields: [adAccountId], references: [id], onDelete: Cascade)
+  template         AdTemplate?      @relation(fields: [templateId], references: [id])
+  adSets           AdSet[]
+  templateLaunches TemplateLaunch[]
 
   @@unique([adAccountId, campaignId])
   @@index([adAccountId])

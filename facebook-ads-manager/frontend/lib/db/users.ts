@@ -1,5 +1,6 @@
 import { prisma } from './prisma';
 import { NotFoundError, ConflictError, ForbiddenError } from '../utils/errors';
+import { UserRole } from '@prisma/client';
 import type { User, Prisma } from '@prisma/client';
 import type { SafeUser } from '@/types/database';
 import bcrypt from 'bcryptjs';
@@ -112,7 +113,7 @@ export async function updateUser(
   // Users can update themselves, or admins can update users in their org
   const canUpdate =
     userId === requestingUserId ||
-    (requestingUser.role === 'admin' && requestingUser.organizationId === user.organizationId);
+    (requestingUser.role === UserRole.ADMIN && requestingUser.organizationId === user.organizationId);
 
   if (!canUpdate) {
     throw new ForbiddenError('You do not have permission to update this user');
@@ -155,7 +156,7 @@ export async function deleteUser(userId: string, requestingUserId: string): Prom
 
   // Only admins can delete users in their org
   const canDelete =
-    requestingUser.role === 'admin' && requestingUser.organizationId === user.organizationId;
+    requestingUser.role === UserRole.ADMIN && requestingUser.organizationId === user.organizationId;
 
   if (!canDelete) {
     throw new ForbiddenError('You do not have permission to delete this user');

@@ -1,6 +1,7 @@
 /**
  * Contact Enrichment Agent
  * Uses Apollo.io API to enrich business data with decision-maker contact information
+ * Phase 2: Database integration for persistent storage and cost tracking
  *
  * Features:
  * - Organization enrichment (company details, tech stack, employee count)
@@ -8,10 +9,13 @@
  * - Bulk enrichment capabilities
  * - Enrichment quality scoring
  * - Integration with business discovery workflow
+ * - Persistent database storage
+ * - Apollo.io cost tracking
  */
 
 const { EventEmitter } = require('events');
 const ApolloClient = require('../lib/apollo-client');
+const db = require('../database/db-client');
 
 class ContactEnrichmentAgent extends EventEmitter {
     constructor() {
@@ -19,8 +23,9 @@ class ContactEnrichmentAgent extends EventEmitter {
         this.name = 'contact-enrichment';
         this.isInitialized = false;
         this.apolloClient = null;
-        this.enrichmentCache = new Map();
+        this.db = db;
         this.config = null;
+        this.workflowId = null;
 
         // Decision-maker persona configurations
         this.decisionMakerProfiles = {
@@ -47,9 +52,14 @@ class ContactEnrichmentAgent extends EventEmitter {
         };
     }
 
-    async initialize(config) {
+    async initialize(config, workflowId = null) {
         try {
             this.config = config;
+            this.workflowId = workflowId;
+
+            // Connect to database for persistent storage
+            await this.db.connect();
+            console.log(`🗄️  Database connected for enrichment storage`);
 
             // Initialize Apollo.io client
             const apolloApiKey = process.env.APOLLO_API_KEY;
@@ -100,11 +110,26 @@ class ContactEnrichmentAgent extends EventEmitter {
 
             console.log(`🔍 Enriching business: ${business.name}`);
 
-            // Check cache first
-            const cacheKey = business.id || business.website;
-            if (this.enrichmentCache.has(cacheKey)) {
+            // PHASE 2: Check database cache first
+            const cachedEnrichment = await this.db.getEnrichmentByBusinessId(business.id);
+            if (cachedEnrichment) {
                 console.log(`📦 Using cached enrichment for ${business.name}`);
-                return this.enrichmentCache.get(cacheKey);
+
+                return {
+                    ...business,
+                    organizationData: cachedEnrichment.organization_data,
+                    decisionMakers: cachedEnrichment.decision_makers,
+                    decisionMakerCount: cachedEnrichment.decision_makers?.length || 0,
+                    enrichment: {
+                        status: 'success',
+                        qualityScore: cachedEnrichment.quality_score,
+                        hasOrganizationData: !!cachedEnrichment.organization_data,
+                        hasDecisionMakers: cachedEnrichment.decision_makers?.length > 0,
+                        decisionMakerCount: cachedEnrichment.decision_makers?.length || 0,
+                        completedAt: cachedEnrichment.enriched_at,
+                        fromCache: true
+                    }
+                };
             }
 
             const enrichedBusiness = {
@@ -164,22 +189,49 @@ class ContactEnrichmentAgent extends EventEmitter {
             }
 
             // Calculate enrichment quality score
+            const qualityScore = this.calculateEnrichmentQuality(enrichedBusiness);
+
             enrichedBusiness.enrichment = {
                 status: 'success',
-                qualityScore: this.calculateEnrichmentQuality(enrichedBusiness),
+                qualityScore: qualityScore,
                 hasOrganizationData: !!orgEnrichment.success,
                 hasDecisionMakers: decisionMakers.success && decisionMakers.contacts.length > 0,
                 decisionMakerCount: decisionMakers.contacts?.length || 0,
                 completedAt: new Date()
             };
 
-            // Cache the result
-            this.enrichmentCache.set(cacheKey, enrichedBusiness);
+            // PHASE 2: Store in database for persistence
+            const enrichmentData = await this.db.createEnrichment({
+                business_id: business.id,
+                organization_data: enrichedBusiness.organizationData || null,
+                decision_makers: enrichedBusiness.decisionMakers || [],
+                quality_score: qualityScore,
+                metadata: {
+                    category: this.categorizeBusiness(business),
+                    domain: domain
+                }
+            });
+
+            // Track Apollo.io cost (approximate - varies by plan)
+            const estimatedCost = 0.20; // Base cost for org + people search
+            await this.db.trackApiCost({
+                workflow_execution_id: this.workflowId,
+                api_service: 'apollo_enrichment',
+                endpoint: 'organization_enrichment',
+                cost_amount: estimatedCost,
+                requests_count: 1,
+                metadata: {
+                    businessId: business.id,
+                    businessName: business.name,
+                    decisionMakersFound: enrichedBusiness.decisionMakers?.length || 0,
+                    qualityScore: qualityScore
+                }
+            });
 
             // Emit enrichment event
             this.emit('business-enriched', enrichedBusiness);
 
-            console.log(`✅ Enriched ${business.name}: ${enrichedBusiness.decisionMakers?.length || 0} decision makers found`);
+            console.log(`✅ Enriched ${business.name}: ${enrichedBusiness.decisionMakers?.length || 0} decision makers found (quality: ${qualityScore})`);
 
             return enrichedBusiness;
 
@@ -343,33 +395,28 @@ class ContactEnrichmentAgent extends EventEmitter {
     }
 
     /**
-     * Get enrichment statistics
-     * @returns {Object} Enrichment statistics
+     * Get enrichment statistics from database
+     * @returns {Promise<Object>} Enrichment statistics
      */
-    getEnrichmentStats() {
-        const cached = Array.from(this.enrichmentCache.values());
+    async getEnrichmentStats() {
+        const stats = await this.db.query(`
+            SELECT
+                COUNT(*) as total_enriched,
+                AVG(quality_score) as average_quality_score,
+                SUM((decision_makers::jsonb ? 'length')::int) as decision_makers_found
+            FROM contact_enrichments
+        `);
 
         return {
-            totalEnriched: cached.length,
-            successful: cached.filter(b => b.enrichment.status === 'success').length,
-            failed: cached.filter(b => b.enrichment.status === 'failed').length,
-            averageQualityScore: cached.reduce((sum, b) => sum + (b.enrichment.qualityScore || 0), 0) / (cached.length || 1),
-            decisionMakersFound: cached.reduce((sum, b) => sum + (b.decisionMakers?.length || 0), 0)
+            totalEnriched: parseInt(stats.rows[0]?.total_enriched || 0),
+            averageQualityScore: parseFloat(stats.rows[0]?.average_quality_score || 0),
+            decisionMakersFound: parseInt(stats.rows[0]?.decision_makers_found || 0)
         };
-    }
-
-    /**
-     * Clear enrichment cache
-     */
-    clearCache() {
-        const size = this.enrichmentCache.size;
-        this.enrichmentCache.clear();
-        console.log(`🗑️ Cleared enrichment cache: ${size} entries removed`);
     }
 
     async shutdown() {
         console.log(`🔄 Shutting down Contact Enrichment Agent...`);
-        this.clearCache();
+        await this.db.disconnect();
         this.isInitialized = false;
     }
 }

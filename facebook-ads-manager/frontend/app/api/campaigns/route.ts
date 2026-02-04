@@ -31,16 +31,16 @@ export async function GET(request: NextRequest) {
     const user = await requireAuth();
     const { searchParams } = new URL(request.url);
 
-    // Validate query parameters
+    // Validate query parameters (convert null to undefined for Zod)
     const queryParams = campaignQuerySchema.parse({
-      page: searchParams.get('page'),
-      limit: searchParams.get('limit'),
-      search: searchParams.get('search'),
-      status: searchParams.get('status'),
-      objective: searchParams.get('objective'),
-      adAccountId: searchParams.get('adAccountId'),
-      sortBy: searchParams.get('sortBy'),
-      sortOrder: searchParams.get('sortOrder'),
+      page: searchParams.get('page') ?? undefined,
+      limit: searchParams.get('limit') ?? undefined,
+      search: searchParams.get('search') ?? undefined,
+      status: searchParams.get('status') ?? undefined,
+      objective: searchParams.get('objective') ?? undefined,
+      adAccountId: searchParams.get('adAccountId') ?? undefined,
+      sortBy: searchParams.get('sortBy') ?? undefined,
+      sortOrder: searchParams.get('sortOrder') ?? undefined,
     });
 
     if (!queryParams.adAccountId) {

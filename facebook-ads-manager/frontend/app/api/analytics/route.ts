@@ -8,6 +8,7 @@ import { auth } from '@/lib/auth/auth';
 import { prisma } from '@/lib/db/prisma';
 import { FacebookClient } from '@/lib/facebook/client';
 import { InsightsSync } from '@/lib/facebook/sync/insights';
+import { decrypt } from '@/lib/utils/encryption';
 import Redis from 'ioredis';
 import type {
   AnalyticsData,
@@ -36,6 +37,12 @@ export async function GET(request: NextRequest) {
     const to = searchParams.get('to');
     const accountIds = searchParams.get('accountIds')?.split(',');
     const campaignIds = searchParams.get('campaignIds')?.split(',');
+
+    console.log('📊 Analytics API called:');
+    console.log('   User:', session.user.id);
+    console.log('   Date range:', from, 'to', to);
+    console.log('   Account IDs:', accountIds);
+    console.log('   Campaign IDs:', campaignIds);
 
     if (!from || !to) {
       return NextResponse.json(
@@ -76,14 +83,21 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        ...(accountIds && { accountId: { in: accountIds } }),
+        // Filter by database ID (UUID) instead of Facebook account ID
+        ...(accountIds && { id: { in: accountIds } }),
       },
       include: {
         facebookBusinessAccount: true,
       },
     });
 
+    console.log(`📊 Found ${adAccounts.length} ad accounts for user`);
+    adAccounts.forEach(acc => {
+      console.log(`   - ${acc.name} (${acc.accountId})`);
+    });
+
     if (adAccounts.length === 0) {
+      console.warn('⚠️  No ad accounts found for user');
       return NextResponse.json(
         { success: false, error: { message: 'No ad accounts found', code: 'NO_AD_ACCOUNTS' } },
         { status: 404 }
@@ -98,11 +112,14 @@ export async function GET(request: NextRequest) {
       try {
         if (!account.facebookBusinessAccount?.accessTokenEncrypted) continue;
 
+        // Decrypt the access token
+        const accessToken = decrypt(account.facebookBusinessAccount.accessTokenEncrypted);
+
         const clientConfig = {
           appId: process.env.FACEBOOK_APP_ID || '',
           appSecret: process.env.FACEBOOK_APP_SECRET || '',
           apiVersion: process.env.FACEBOOK_API_VERSION || 'v18.0',
-          accessToken: account.facebookBusinessAccount.accessTokenEncrypted,
+          accessToken,
         };
 
         const client = new FacebookClient(clientConfig, redis);

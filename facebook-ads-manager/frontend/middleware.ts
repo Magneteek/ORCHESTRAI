@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-const publicRoutes = ['/', '/auth/signin', '/auth/signup', '/auth/register', '/auth/error'];
+const publicRoutes = ['/auth/signin', '/auth/signup', '/auth/register', '/auth/error'];
 const authRoutes = ['/auth/signin', '/auth/signup', '/auth/register'];
+
+// Home page needs exact match, not startsWith
+const isHomePage = (pathname: string) => pathname === '/';
 
 // Security headers
 const SECURITY_HEADERS = {
@@ -33,31 +36,15 @@ const CSP_HEADER = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if route is public
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  // Get token
+  // Get token first
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  // Redirect authenticated users away from auth pages
-  if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-
-  // Redirect unauthenticated users to signin
-  if (!isPublicRoute && !token) {
-    const signInUrl = new URL('/auth/signin', request.url);
-    signInUrl.searchParams.set('callbackUrl', pathname);
-    return NextResponse.redirect(signInUrl);
-  }
-
-  // API routes protection
+  // API routes protection — check FIRST before page redirects
   if (pathname.startsWith('/api')) {
-    // Allow public API routes
+    // Allow public API routes (NextAuth + register)
     if (pathname.startsWith('/api/auth')) {
       return NextResponse.next();
     }
@@ -82,19 +69,38 @@ export async function middleware(request: NextRequest) {
     requestHeaders.set('x-user-role', token.role as string);
     requestHeaders.set('x-organization-id', token.organizationId as string);
 
-    // Create response with security headers
     const response = NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
+      request: { headers: requestHeaders },
     });
-
-    // Add security headers to API responses
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('Cache-Control', 'no-store, max-age=0');
-
     return response;
+  }
+
+  // Check if route is public (auth pages only)
+  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+
+  // Root page: redirect to dashboard (authenticated) or signin (not authenticated)
+  if (isHomePage(pathname)) {
+    if (token) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    } else {
+      return NextResponse.redirect(new URL('/auth/signin', request.url));
+    }
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (isAuthRoute && token) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  // Redirect unauthenticated users to signin
+  if (!isPublicRoute && !token) {
+    const signInUrl = new URL('/auth/signin', request.url);
+    signInUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(signInUrl);
   }
 
   // Create response with security headers for pages

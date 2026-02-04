@@ -46,7 +46,7 @@ export interface SessionUser {
   id: string;
   email: string;
   name: string | null;
-  role: string;
+  role: string; // UserRole values: 'ADMIN' | 'USER'
   organizationId: string;
   image: string | null;
 }
@@ -172,7 +172,9 @@ export interface AnomalyDetails {
 
 // ============ ROLE PERMISSIONS ============
 
-export type UserRole = 'admin' | 'manager' | 'member';
+// Re-export UserRole from Prisma for backward compatibility
+export { UserRole } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 
 export interface RolePermissions {
   canManageOrganization: boolean;
@@ -184,7 +186,7 @@ export interface RolePermissions {
 }
 
 export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
-  admin: {
+  ADMIN: {
     canManageOrganization: true,
     canManageUsers: true,
     canManageTemplates: true,
@@ -192,20 +194,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
     canLaunchCampaigns: true,
     canViewAnalytics: true,
   },
-  manager: {
-    canManageOrganization: false,
-    canManageUsers: false,
-    canManageTemplates: true,
-    canConnectFacebook: true,
-    canLaunchCampaigns: true,
-    canViewAnalytics: true,
-  },
-  member: {
+  USER: {
     canManageOrganization: false,
     canManageUsers: false,
     canManageTemplates: false,
     canConnectFacebook: false,
-    canLaunchCampaigns: false,
+    canLaunchCampaigns: true,
     canViewAnalytics: true,
   },
 };
