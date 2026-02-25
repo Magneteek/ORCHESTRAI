@@ -102,6 +102,9 @@ Orchestrai-frontend/dist/
 /Copy/
 /applications/
 
+# Agent backups (deprecated agents kept locally for reference only)
+.claude/agents-backup-*/
+
 # Backup files (use git history instead of manual backups)
 *.BACKUP.js
 *-backup.js

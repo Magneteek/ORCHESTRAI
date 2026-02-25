@@ -10,6 +10,7 @@ import logging
 
 from app.config import settings
 from app.api.v1 import router as api_v1_router
+from app.api.routes.embed import router as embed_router
 from app.utils.logging_config import setup_logging
 
 # Setup logging
@@ -37,6 +38,9 @@ app.add_middleware(
 # Include API routes
 app.include_router(api_v1_router, prefix=settings.API_PREFIX)
 
+# Embedding endpoint — top-level (POST /embed, GET /embed/health)
+app.include_router(embed_router)
+
 # Prometheus metrics endpoint
 if settings.PROMETHEUS_ENABLED:
     metrics_app = make_asgi_app()
@@ -51,8 +55,16 @@ async def startup_event():
     logger.info(f"   API Prefix: {settings.API_PREFIX}")
     logger.info(f"   Model Storage: {settings.MODEL_STORAGE_PATH}")
 
-    # Initialize model registry
-    # This will be implemented when we add models
+    # Load sentence-transformers embedding model (singleton, loads once)
+    try:
+        from app.services import embedding_service
+        embedding_service.load_model("all-MiniLM-L6-v2")
+    except Exception as e:
+        logger.warning(
+            f"⚠️  Embedding model failed to load: {e}. "
+            "POST /embed will return 503 until the model is available."
+        )
+
     logger.info("✅ ML Service initialized successfully")
 
 

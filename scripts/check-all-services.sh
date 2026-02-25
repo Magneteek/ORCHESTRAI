@@ -1,117 +1,122 @@
 #!/bin/bash
+#
+# ORCHESTRAI — System Health Check
+# Shows the status of all services.
+#
+# Usage:
+#   npm run system:status-all
+#   ./scripts/check-all-services.sh
+#
 
-##
-# ORCHESTRAI System Health Check
-# Checks the status of all required services for simultaneous execution
-##
-
-echo "═══════════════════════════════════════════════════════════"
-echo "🔍 ORCHESTRAI System Health Check"
-echo "═══════════════════════════════════════════════════════════"
-echo ""
-
-# Color codes
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+RED='\033[0;31m'
+BOLD='\033[1m'
+NC='\033[0m'
 
-# Check Redis
-echo "📊 Checking Redis..."
-if redis-cli ping > /dev/null 2>&1; then
-    echo -e "   ${GREEN}✅ Redis is running${NC}"
-    REDIS_STATUS="running"
-else
-    echo -e "   ${RED}❌ Redis is NOT running${NC}"
-    echo "      Start with: npm run redis"
-    REDIS_STATUS="stopped"
-fi
-echo ""
+port_in_use() { lsof -i ":$1" -sTCP:LISTEN -t >/dev/null 2>&1; }
 
-# Check Hooks Server (port 5501)
-echo "🪝 Checking Hooks Server..."
-if lsof -i :5501 -sTCP:LISTEN > /dev/null 2>&1; then
-    PID=$(lsof -i :5501 -sTCP:LISTEN -t)
-    echo -e "   ${GREEN}✅ Hooks Server is running${NC} (PID: $PID, Port: 5501)"
-    HOOKS_STATUS="running"
-else
-    echo -e "   ${YELLOW}⚠️  Hooks Server is NOT running${NC}"
-    echo "      Start with: npm run hooks:server"
-    HOOKS_STATUS="stopped"
-fi
-echo ""
-
-# Check Simultaneous Execution Server (port 8080)
-echo "⚡ Checking Simultaneous Execution Server..."
-if lsof -i :8080 -sTCP:LISTEN > /dev/null 2>&1; then
-    PID=$(lsof -i :8080 -sTCP:LISTEN -t)
-    echo -e "   ${GREEN}✅ Simultaneous Execution Server is running${NC} (PID: $PID, Port: 8080)"
-    SIMULTANEOUS_STATUS="running"
-else
-    echo -e "   ${YELLOW}⚠️  Simultaneous Execution Server is NOT running${NC}"
-    echo "      Start with: npm run simultaneous:start"
-    SIMULTANEOUS_STATUS="stopped"
-fi
-echo ""
-
-# Check Frontend (port 3000)
-echo "🎨 Checking Frontend..."
-if lsof -i :3000 -sTCP:LISTEN > /dev/null 2>&1; then
-    PID=$(lsof -i :3000 -sTCP:LISTEN -t)
-    echo -e "   ${GREEN}✅ Frontend is running${NC} (PID: $PID, Port: 3000)"
-    FRONTEND_STATUS="running"
-else
-    echo -e "   ${YELLOW}⚠️  Frontend is NOT running${NC}"
-    echo "      Start with: npm run dev"
-    FRONTEND_STATUS="stopped"
-fi
-echo ""
-
-# Summary
-echo "═══════════════════════════════════════════════════════════"
-echo "📋 Summary"
-echo "═══════════════════════════════════════════════════════════"
-
-if [ "$REDIS_STATUS" = "running" ]; then
-    echo -e "${GREEN}✅${NC} Redis (Core)"
-else
-    echo -e "${RED}❌${NC} Redis (Core) - REQUIRED for simultaneous execution"
-fi
-
-if [ "$HOOKS_STATUS" = "running" ]; then
-    echo -e "${GREEN}✅${NC} Hooks Server (Optional)"
-else
-    echo -e "${YELLOW}⚠️${NC}  Hooks Server (Optional) - Provides workflow tracking"
-fi
-
-if [ "$SIMULTANEOUS_STATUS" = "running" ]; then
-    echo -e "${GREEN}✅${NC} Simultaneous Execution Server (Core)"
-else
-    echo -e "${RED}❌${NC} Simultaneous Execution Server (Core) - REQUIRED for parallel execution"
-fi
-
-if [ "$FRONTEND_STATUS" = "running" ]; then
-    echo -e "${GREEN}✅${NC} Frontend (Optional)"
-else
-    echo -e "${YELLOW}⚠️${NC}  Frontend (Optional) - Dashboard and monitoring UI"
-fi
+status_line() {
+  local name=$1 port=$2 tier=$3
+  if port_in_use "$port"; then
+    echo -e "   ${GREEN}✅${NC} $name (port $port)"
+  elif [ "$tier" = "required" ]; then
+    echo -e "   ${RED}❌${NC} $name (port $port) — REQUIRED"
+  elif [ "$tier" = "recommended" ]; then
+    echo -e "   ${YELLOW}⚠️ ${NC} $name (port $port) — recommended"
+  else
+    echo -e "   ${YELLOW}○${NC}  $name (port $port) — optional"
+  fi
+}
 
 echo ""
+echo -e "${BOLD}🔍 ORCHESTRAI System Status${NC}"
+echo "══════════════════════════════════════════════════════"
+echo ""
 
-# Overall status
-if [ "$REDIS_STATUS" = "running" ] && [ "$SIMULTANEOUS_STATUS" = "running" ]; then
-    echo -e "${GREEN}🎉 System Status: READY for parallel execution${NC}"
-    exit 0
-elif [ "$REDIS_STATUS" = "running" ] && [ "$SIMULTANEOUS_STATUS" = "stopped" ]; then
-    echo -e "${YELLOW}⚠️  System Status: PARTIAL - Start simultaneous execution server${NC}"
-    echo ""
-    echo "   Quick Start: npm run simultaneous:start"
-    exit 1
+# ── Core Services ─────────────────────────────────────────────────────────────
+echo -e "${BOLD}Core Services${NC}"
+
+REDIS_CLI=$(command -v redis-cli 2>/dev/null || echo /opt/homebrew/bin/redis-cli)
+redis_ok() { [ -n "$REDIS_CLI" ] && "$REDIS_CLI" -h 127.0.0.1 ping >/dev/null 2>&1; }
+
+# Redis — special check (uses homebrew path on macOS)
+if redis_ok || port_in_use 6379; then
+  echo -e "   ${GREEN}✅${NC} Redis (port 6379)"
 else
-    echo -e "${RED}❌ System Status: NOT READY - Missing required services${NC}"
-    echo ""
-    echo "   Quick Start:"
-    echo "   1. npm run redis"
-    echo "   2. npm run simultaneous:start"
-    exit 1
+  echo -e "   ${RED}❌${NC} Redis (port 6379) — REQUIRED"
+fi
+
+status_line "PostgreSQL+pgvector" 5433 required
+status_line "Hooks Server"   5501 required
+
+# ── AI / ML Services ──────────────────────────────────────────────────────────
+echo ""
+echo -e "${BOLD}AI / ML Services${NC}"
+status_line "ML Service (/embed)" 8000 required
+status_line "VAIBE-SEMANTIC"      8001 optional
+
+# ── Execution Services ────────────────────────────────────────────────────────
+echo ""
+echo -e "${BOLD}Execution Services${NC}"
+status_line "Simultaneous Exec"  8080 recommended
+status_line "Trigger System"     5502 optional
+
+# ── Frontend ──────────────────────────────────────────────────────────────────
+echo ""
+echo -e "${BOLD}Frontend${NC}"
+status_line "Next.js Dashboard"  3000 optional
+
+# ── Semantic Skill Search ─────────────────────────────────────────────────────
+echo ""
+echo -e "${BOLD}Semantic Skill Search${NC}"
+if port_in_use 8000; then
+  embed_status=$(curl -s --max-time 3 http://localhost:8000/embed/health 2>/dev/null)
+  if echo "$embed_status" | grep -q '"status":"ready"'; then
+    printf "   ${GREEN}✅${NC} %-30s\n" "/embed endpoint ready"
+    dim=$(echo "$embed_status" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('dimensions','?'))" 2>/dev/null)
+    printf "   ${GREEN}   ${NC} Model: all-MiniLM-L6-v2 (%s dims)\n" "$dim"
+  else
+    printf "   ${YELLOW}⚠️ ${NC} %-30s\n" "ML Service running but /embed not ready yet"
+  fi
+else
+  printf "   ${RED}❌${NC} %-30s\n" "/embed not available (ML Service down)"
+fi
+
+if port_in_use 5433; then
+  # Quick check for skill_embeddings table via docker exec
+  count=$(docker exec orchestrai-postgres psql -U postgres -d orchestrai_serp -tAc \
+    "SELECT COUNT(*) FROM skill_embeddings;" 2>/dev/null | tr -d '[:space:]' || echo "?")
+  if [ "$count" = "?" ] || [ -z "$count" ]; then
+    printf "   ${YELLOW}⚠️ ${NC} %-30s\n" "DB up but skills not indexed yet"
+    printf "       Run: npm run skills:index\n"
+  else
+    printf "   ${GREEN}✅${NC} skill_embeddings: %s skills indexed\n" "$count"
+  fi
+fi
+
+# ── Summary ───────────────────────────────────────────────────────────────────
+echo ""
+echo "══════════════════════════════════════════════════════"
+echo -e "${BOLD}Commands${NC}"
+echo "   Start all:   npm run system:start-all"
+echo "   Stop all:    npm run system:stop-all"
+echo "   Index skills: npm run skills:index"
+echo "   ML docs:     http://localhost:8000/docs"
+echo ""
+
+# Overall readiness
+MISSING=0
+port_in_use 5433 || MISSING=$((MISSING+1))
+port_in_use 5501 || MISSING=$((MISSING+1))
+port_in_use 8000 || MISSING=$((MISSING+1))
+redis_ok || port_in_use 6379 || MISSING=$((MISSING+1))
+
+if [ $MISSING -eq 0 ]; then
+  echo -e "${GREEN}${BOLD}🎉 System READY — all required services running${NC}"
+  exit 0
+else
+  echo -e "${YELLOW}${BOLD}⚠️  System PARTIAL — $MISSING required service(s) not running${NC}"
+  echo "   Run: npm run system:start-all"
+  exit 1
 fi

@@ -1,7 +1,7 @@
 ---
 name: orchestrai-master-coordinator
 description: Master coordination agent for ORCHESTRAI system - intelligently delegates between Node.js infrastructure and Claude Code specialists with OPTIMAL PARALLEL EXECUTION. Use proactively for complex multi-domain tasks requiring system-level coordination.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, Skill
 model: opus
 effort: high
 complexity_tier: 10
@@ -95,6 +95,182 @@ This is 60-70% SLOWER - DO NOT DO THIS
 - ❌ Sequential workflows (research → strategy → execution)
 - ❌ Tasks requiring approval gates between stages
 
+## Semantic Skill Discovery (February 2026)
+
+ORCHESTRAI has **161 skills** across 17 domains in `.claude/skills/`. You must use semantic search to find the right skill before delegating — do NOT guess skill names from memory, as 40+ skills live in the `shared:` domain and would otherwise be missed.
+
+### How to Search
+
+```bash
+# Find the best skill for a task (returns top 5 ranked by semantic similarity)
+node /Users/kris/CLAUDEtools/ORCHESTRAI/scripts/search-skills.js "<task description>" --top 5
+
+# Restrict to a specific domain
+node /Users/kris/CLAUDEtools/ORCHESTRAI/scripts/search-skills.js "<task description>" --domain seo --top 3
+```
+
+Available domains: `seo`, `content`, `quality`, `devops`, `webdev`, `advertising`, `shared`, `client-intelligence`, `commands`
+
+### When to Search
+
+- **Always** before delegating to a skill you have not used in this session
+- **Always** for tasks touching `shared:` skills (healthcare, dental, multilang, local-maps, etc.)
+- **Always** for novel task types not covered by the standard examples below
+- **Skip** only for the 12 named strategic agents (`orchestrai-master-coordinator`, `strategic-plan-synthesizer`, etc.) — those use `Task`, not `Skill`
+
+### How to Invoke the Result
+
+After reading search output, invoke the top-ranked skill:
+
+```
+# Primary method — 161 skills in .claude/skills/
+Skill(skill="domain:skill-name")
+
+# Strategic agents only (12 Opus orchestrators)
+Task(subagent_type="agent-name")
+```
+
+### Example Discovery Workflow
+
+```
+Task: "Write dental implant content adapted for Dutch patients"
+
+1. Run search:
+   node scripts/search-skills.js "dental implant content Dutch patients" --top 5
+
+2. Read results:
+   45%  shared:healthcare-multilang-adapter   → Skill(skill="shared:healthcare-multilang-adapter")
+   32%  content:dutch-ai-phrase-detector      → Skill(skill="content:dutch-ai-phrase-detector")
+   31%  shared:medical-disclaimer-generator   → Skill(skill="shared:medical-disclaimer-generator")
+   31%  content:healthcare-content-specialist → Skill(skill="content:healthcare-content-specialist")
+
+3. Delegate in parallel using the top results:
+   Skill(skill="shared:healthcare-multilang-adapter")
+   Skill(skill="content:healthcare-content-specialist")
+```
+
+---
+
+## Agent Session Transparency (February 2026)
+
+**AUTOMATIC SESSION CAPTURE: Every agent invocation is now transparently captured for full visibility and recoverability.**
+
+### What Happens Automatically
+
+When you invoke ANY agent via the Task tool, the system automatically:
+
+1. **Generates Unique Session ID** - Format: `ses-YYYY-MM-DD-random`
+2. **Captures Full Context** - Prompt, parameters, project context, timestamps
+3. **Records Execution** - All tool calls, reasoning steps, outputs
+4. **Links Deliverables** - Bidirectional linking between sessions and files
+5. **Tracks Metrics** - Tokens, cost, duration, success/failure
+6. **Enables Recovery** - Resume from any point, fork to explore alternatives
+
+### Session Output Example
+
+```
+🔍 Session: ses-2026-02-12-a7f3b9
+   Agent: content-writer-specialist
+   View: node orchestrai-session-manager/cli/session-viewer.js view ses-2026-02-12-a7f3b9
+
+[Agent executes...]
+
+✅ Session completed: ses-2026-02-12-a7f3b9
+   Duration: 185.2s
+   Cost: $0.45
+   Deliverables: 1
+   View: node orchestrai-session-manager/cli/session-viewer.js view ses-2026-02-12-a7f3b9
+```
+
+### Why This Matters
+
+**No Black Box Execution:**
+- See exactly what every agent did and why
+- Understand reasoning at each step
+- Full audit trail for compliance
+
+**Easy Debugging:**
+- Replay failed sessions to understand issues
+- See tool calls and their results
+- Track down problems quickly
+
+**Seamless Handoff:**
+- Resume sessions from where they left off
+- Fork sessions to explore alternatives
+- No context loss when intervention needed
+
+**Team Knowledge:**
+- Study successful sessions to learn patterns
+- Share approaches across team
+- Continuous improvement from historical data
+
+### Viewing Sessions
+
+**View recent sessions:**
+```bash
+node orchestrai-session-manager/cli/session-viewer.js list
+```
+
+**View specific session:**
+```bash
+node orchestrai-session-manager/cli/session-viewer.js view ses-2026-02-12-abc123
+```
+
+**Find session that created a file:**
+```bash
+node orchestrai-session-manager/cli/session-viewer.js find-by-file /projects/client-123/article.md
+```
+
+**View session transcript:**
+```bash
+node orchestrai-session-manager/cli/session-viewer.js transcript ses-2026-02-12-abc123
+```
+
+**View statistics:**
+```bash
+node orchestrai-session-manager/cli/session-viewer.js stats
+```
+
+### Integration with Your Workflow
+
+Session capture is **completely automatic** - you don't need to do anything special. Just invoke agents normally via Task tool and sessions are captured transparently.
+
+**For users/teams:**
+- Sessions provide full visibility into agent work
+- Easy to review what happened and why
+- Can resume or fork sessions if needed
+- Full compliance and audit trail
+
+**For debugging:**
+- When something goes wrong, view the session to see exactly what happened
+- Replay sessions to understand failures
+- No more "black box" frustration
+
+### Advanced Features
+
+**Resume Sessions:**
+- Continue from where an agent left off
+- Useful when requirements change mid-execution
+- Maintains full context from original session
+
+**Fork Sessions:**
+- Explore alternative approaches from a specific point
+- Compare different strategies
+- Learn what works best
+
+**Session Analytics:**
+- Track agent performance over time
+- Identify patterns in successful vs failed sessions
+- Optimize workflows based on data
+
+### Important Notes
+
+1. **Automatic Capture** - Sessions are captured by Claude Code hooks, no manual intervention needed
+2. **Storage Location** - `/Users/kris/CLAUDEtools/ORCHESTRAI/sessions/{year}/{month}/{sessionId}/`
+3. **Privacy** - Sessions capture everything agents see, ensure sensitive data is handled appropriately
+4. **Retention** - Sessions kept for 180 days (completed), 90 days (failed), configurable
+5. **Performance** - Session capture adds minimal overhead (<1% execution time)
+
 ## Core Responsibilities
 
 **Intelligent Task Analysis:**
@@ -160,10 +336,13 @@ This is 60-70% SLOWER - DO NOT DO THIS
 ```javascript
 1. Receive user request
 2. Analyze complexity, domain, and requirements
-3. Identify optimal execution strategy
-4. **Identify opportunities for parallel execution** (NEW)
-5. Create coordination plan
-6. Initialize required systems/agents
+3. Run semantic skill search: node scripts/search-skills.js "<task>" --top 5
+   → Read ranked results to identify the correct skills to invoke
+   → Use domain filter (--domain seo/content/quality/etc.) for targeted tasks
+4. Identify optimal execution strategy (Skill / Task / Node.js / Hybrid)
+5. Identify opportunities for parallel execution (CRITICAL)
+6. Create coordination plan with discovered skill IDs
+7. Initialize required skills/agents
 ```
 
 ### Phase 2: Intelligent Delegation (OPTIMIZED)
@@ -175,23 +354,37 @@ This is 60-70% SLOWER - DO NOT DO THIS
 - Handle results integration and user communication
 ```
 
-**For Claude Code Tasks (SINGLE AGENT):**
+**For Skill-Based Tasks (161 skills — PRIMARY METHOD):**
 ```javascript
-- Use Task tool to delegate to appropriate specialist
-- Provide context and coordination requirements
-- Manage execution monitoring
+- First run: node scripts/search-skills.js "<task>" --top 5
+- Read ranked results to identify skill ID (e.g., "seo:seo-keyword-research")
+- Invoke with Skill tool: Skill(skill="domain:skill-name")
+- For single task: one Skill() call
+- For parallel tasks: multiple Skill() calls in ONE message
 ```
 
-**For Claude Code Tasks (MULTIPLE AGENTS) - PARALLEL EXECUTION:**
+**For Strategic Agent Tasks (12 Opus agents — COMPLEX ONLY):**
 ```javascript
-CRITICAL: When invoking 2+ independent agents:
+- Use Task tool ONLY for the 12 strategic orchestrators:
+  orchestrai-master-coordinator, strategic-plan-synthesizer,
+  financial-modeling-specialist, client-project-orchestrator,
+  simultaneous-orchestrator, vaibe-builder-orchestrator,
+  ai-project-predictor, intelligent-risk-assessor,
+  performance-forecasting-specialist, advanced-performance-analyzer,
+  semantic-analysis-engine, crystalline-memory-optimizer
+- All other delegation goes through Skill tool
+```
 
-1. Identify all agents needed upfront
+**For Parallel Skill Execution (CRITICAL):**
+```javascript
+CRITICAL: When invoking 2+ independent skills:
+
+1. Run search to identify all needed skill IDs
 2. Write ONE message explaining the parallel execution plan
-3. Launch ALL Task tool calls in that SAME message
+3. Launch ALL Skill() calls in that SAME message
 4. Claude Code handles parallel execution automatically
 
-DO NOT invoke agents sequentially if they can run in parallel!
+DO NOT invoke skills sequentially if they can run in parallel!
 This is 60-70% slower and wastes time unnecessarily.
 
 Example parallel execution scenarios:

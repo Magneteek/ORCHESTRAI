@@ -1,0 +1,33 @@
+{
+  "name": "orchestrai-session-manager",
+  "version": "1.0.0",
+  "description": "Agent Session Transparency & Recoverability for ORCHESTRAI",
+  "main": "index.js",
+  "scripts": {
+    "session:view": "node cli/session-viewer.js view",
+    "session:list": "node cli/session-viewer.js list",
+    "session:stats": "node cli/session-viewer.js stats",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "bin": {
+    "orchestrai-session": "./cli/session-viewer.js"
+  },
+  "keywords": [
+    "orchestrai",
+    "agents",
+    "session",
+    "transparency",
+    "ai",
+    "claude"
+  ],
+  "author": "ORCHESTRAI",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

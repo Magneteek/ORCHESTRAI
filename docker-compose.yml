@@ -1,0 +1,92 @@
+services:
+  # PostgreSQL + pgvector — for semantic skill search (skill_embeddings table)
+  orchestrai-postgres:
+    image: pgvector/pgvector:pg16
+    container_name: orchestrai-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: orchestrai123
+      POSTGRES_DB: orchestrai_serp
+    volumes:
+      - orchestrai-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d orchestrai_serp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - orchestrai-network
+
+  # Trigger System (Phase 2)
+  trigger-system:
+    build:
+      context: ./orchestrai-trigger-system
+      dockerfile: Dockerfile
+    container_name: orchestrai-triggers
+    restart: unless-stopped
+    ports:
+      - "5502:5502"
+    environment:
+      - NODE_ENV=production
+      - TRIGGER_PORT=5502
+      - MAX_CONCURRENT=5
+    volumes:
+      - ./sessions:/app/sessions
+      - ./logs:/app/logs
+    networks:
+      - orchestrai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5502/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Future: Infrastructure Server (Phase 3+)
+  # infrastructure:
+  #   build:
+  #     context: ./orchestrai-infrastructure
+  #     dockerfile: Dockerfile
+  #   container_name: orchestrai-infrastructure
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5501:5501"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - INFRA_PORT=5501
+  #   volumes:
+  #     - ./data:/app/data
+  #     - ./logs:/app/logs
+  #   networks:
+  #     - orchestrai-network
+
+  # Future: Team Dashboard (Phase 3)
+  # dashboard:
+  #   build:
+  #     context: ./orchestrai-dashboard
+  #     dockerfile: Dockerfile
+  #   container_name: orchestrai-dashboard
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5503:5503"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DASHBOARD_PORT=5503
+  #   depends_on:
+  #     - trigger-system
+  #     - infrastructure
+  #   networks:
+  #     - orchestrai-network
+
+networks:
+  orchestrai-network:
+    driver: bridge
+
+volumes:
+  sessions:
+  logs:
+  orchestrai-pgdata:

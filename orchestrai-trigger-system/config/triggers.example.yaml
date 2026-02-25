@@ -1,0 +1,174 @@
+# Example Trigger Configurations
+# Copy this file to triggers.yaml and customize
+
+triggers:
+  # GitHub: Auto-review PRs
+  - id: github-pr-review
+    name: "Auto Review Pull Requests"
+    type: github
+    event: "github.pull_request.opened"
+    enabled: true
+
+    # Condition: Only PRs to main branch
+    condition: "data.pullRequest.base.ref === 'main'"
+
+    # Agent to invoke
+    agent: code-review-specialist
+
+    # Prompt template
+    promptTemplate: |
+      Review this pull request:
+
+      Repository: {{event.data.repository.fullName}}
+      PR #{{event.data.pullRequest.number}}: {{event.data.pullRequest.title}}
+      Author: {{event.data.pullRequest.author}}
+
+      Changes: {{event.data.pullRequest.url}}
+
+      Please provide a thorough code review focusing on:
+      1. Code quality and best practices
+      2. Security vulnerabilities
+      3. Performance implications
+      4. Test coverage
+
+    # Parameter extraction from event
+    parameterExtraction:
+      repository: "data.repository.fullName"
+      prNumber: "data.pullRequest.number"
+      prUrl: "data.pullRequest.url"
+
+    priority: high
+
+  # GitHub: Issue triage
+  - id: github-issue-triage
+    name: "Auto Triage New Issues"
+    type: github
+    event: "github.issues.opened"
+    enabled: true
+
+    agent: issue-triage-specialist
+
+    promptTemplate: |
+      Triage this new issue:
+
+      Issue #{{event.data.issue.number}}: {{event.data.issue.title}}
+      Body: {{event.data.issue.body}}
+      Author: {{event.data.issue.author}}
+
+      Please:
+      1. Suggest appropriate labels
+      2. Estimate complexity
+      3. Recommend assignment
+
+    priority: normal
+
+  # Cron: Daily SEO audit
+  - id: daily-seo-audit
+    name: "Daily SEO Audit"
+    type: cron
+    schedule: "daily at 6:00"
+    timezone: "America/New_York"
+    enabled: true
+
+    agent: seo-technical-analysis
+
+    parameters:
+      domain: "client-website.com"
+      checks:
+        - "lighthouse"
+        - "mobile-usability"
+        - "structured-data"
+        - "page-speed"
+
+    promptTemplate: |
+      Run comprehensive SEO technical audit for {{parameters.domain}}.
+
+      Include:
+      - Lighthouse scores
+      - Mobile usability
+      - Structured data validation
+      - Page speed metrics
+
+      Generate report and flag any critical issues.
+
+    priority: normal
+
+  # Cron: Weekly competitor analysis
+  - id: weekly-competitor-analysis
+    name: "Weekly Competitor Analysis"
+    type: cron
+    schedule: "weekly"
+    timezone: "America/New_York"
+    enabled: true
+
+    agent: seo-competitor-analysis
+
+    parameters:
+      domain: "client-website.com"
+      competitors:
+        - "competitor1.com"
+        - "competitor2.com"
+        - "competitor3.com"
+
+    promptTemplate: |
+      Analyze competitors for {{parameters.domain}}.
+
+      Competitors to analyze:
+      {{#each parameters.competitors}}
+      - {{this}}
+      {{/each}}
+
+      Focus on:
+      1. Ranking changes
+      2. New content strategies
+      3. Backlink profiles
+      4. Technical improvements
+
+    priority: low
+
+  # Filesystem: Auto-process uploaded files
+  - id: process-uploaded-content
+    name: "Process Uploaded Content"
+    type: filesystem
+    path: "/projects/*/uploads"
+    events:
+      - add
+    enabled: true
+
+    # Condition: Only process markdown files
+    condition: "data.ext === '.md'"
+
+    agent: content-outline-compliance-auditor
+
+    promptTemplate: |
+      New content file uploaded: {{event.data.path}}
+
+      Please:
+      1. Validate markdown structure
+      2. Check for required sections
+      3. Verify meta data
+      4. Flag any issues
+
+    priority: normal
+
+  # Webhook: Process form submissions
+  - id: contact-form-submission
+    name: "Process Contact Form"
+    type: webhook
+    event: "webhook.contact-form"
+    enabled: true
+
+    agent: client-icp-analyst
+
+    promptTemplate: |
+      New contact form submission:
+
+      {{event.data.payload}}
+
+      Please:
+      1. Analyze fit with ICP
+      2. Extract key information
+      3. Suggest next steps
+      4. Draft initial response
+
+    priority: high
