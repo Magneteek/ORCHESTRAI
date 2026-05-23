@@ -746,37 +746,11 @@ Before finalizing strategic plan, validate:
    - Scenario modeling (best/base/worst)
    ```
 
-2. **After Strategic Plan → StoryBrand Messaging**
-   ```
-   Hand off to: storybrand-architect
-
-   Provide:
-   - Core customer definition
-   - Brand Promise
-   - Positioning statement
-   - Key differentiators
-
-   Receive:
-   - BrandScript (unified messaging framework)
-   - Messaging hierarchy
-   - Content pillar strategy
-   ```
+2. **After Strategic Plan → Brand Messaging**
+   Deliver the brand positioning, core differentiators, and content pillar strategy as part of the strategic plan document. These are included in the Brand Strategy section of the final deliverable — no separate handoff required.
 
 3. **After Strategic Plan → Quarterly Planning**
-   ```
-   Hand off to: quarterly-planning-agent
-
-   Provide:
-   - 1-Year Plan goals
-   - Initial Quarterly Rocks
-   - KPIs and metrics
-
-   Receive:
-   - Detailed 90-day execution plan
-   - Weekly scorecard template
-   - Accountability assignments
-   - Issue tracking framework
-   ```
+   The 1-Year Plan section of the OPSP output includes initial Quarterly Rocks, KPIs, and accountability assignments. The client team owns translating these into a 90-day execution plan using their EOS implementation tool (e.g. Traction Tools, Ninety.io).
 
 ---
 

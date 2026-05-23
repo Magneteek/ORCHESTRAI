@@ -1,0 +1,780 @@
+{
+  "content": [
+    {
+      "id": "d9c31b",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "18aa2b",
+        "38a6f2",
+        "23e474"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "neswau",
+          "hcilsu"
+        ]
+      },
+      "label": "Hero North (CSS)"
+    },
+    {
+      "id": "18aa2b",
+      "name": "container",
+      "parent": "d9c31b",
+      "children": [
+        "135cc5",
+        "029132",
+        "8c3d98",
+        "cc2950"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kfsrng"
+        ]
+      },
+      "label": "Intro Foxtrot"
+    },
+    {
+      "id": "135cc5",
+      "name": "heading",
+      "parent": "18aa2b",
+      "children": [],
+      "settings": {
+        "text": "Heading Goes Here",
+        "tag": "h1",
+        "_cssGlobalClasses": [
+          "fs98tf"
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "029132",
+      "name": "text-basic",
+      "parent": "18aa2b",
+      "children": [],
+      "settings": {
+        "text": "Accent Heading",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "luvynj"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "8c3d98",
+      "name": "text-basic",
+      "parent": "18aa2b",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "utn55l"
+        ],
+        "tag": "p"
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "cc2950",
+      "name": "div",
+      "parent": "18aa2b",
+      "children": [
+        "1ec1da",
+        "124214"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glrhvz"
+        ]
+      },
+      "label": "CTA Links Bravo"
+    },
+    {
+      "id": "1ec1da",
+      "name": "button",
+      "parent": "cc2950",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "btn--primary"
+        ],
+        "text": "Primary action",
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Primary Action"
+    },
+    {
+      "id": "124214",
+      "name": "text-basic",
+      "parent": "cc2950",
+      "children": [],
+      "settings": {
+        "text": "Secondary action",
+        "link": {
+          "type": "external",
+          "url": "#"
+        },
+        "_cssGlobalClasses": [
+          "aekezk"
+        ]
+      },
+      "label": "Secondary Action"
+    },
+    {
+      "id": "38a6f2",
+      "name": "container",
+      "parent": "d9c31b",
+      "children": [
+        "0d5a33",
+        "eaee95"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "esnstu"
+        ],
+        "_attributes": [
+          {
+            "id": "yslvvc",
+            "name": "image-group-north"
+          }
+        ]
+      },
+      "label": "Image Group North (CSS)"
+    },
+    {
+      "id": "0d5a33",
+      "name": "block",
+      "parent": "38a6f2",
+      "children": [
+        "774234",
+        "6cc5c0",
+        "b2df21",
+        "87a4db"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kvhuax"
+        ],
+        "_attributes": [
+          {
+            "id": "bqovrf",
+            "name": "data-row",
+            "value": "1"
+          }
+        ]
+      },
+      "label": "Row 1"
+    },
+    {
+      "id": "774234",
+      "name": "image",
+      "parent": "0d5a33",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure"
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "6cc5c0",
+      "name": "image",
+      "parent": "0d5a33",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "b2df21",
+      "name": "image",
+      "parent": "0d5a33",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "87a4db",
+      "name": "image",
+      "parent": "0d5a33",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "eaee95",
+      "name": "block",
+      "parent": "38a6f2",
+      "children": [
+        "277d7d",
+        "4ea54c",
+        "6002d0",
+        "2291e1"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kvhuax"
+        ],
+        "_attributes": [
+          {
+            "id": "drigbt",
+            "name": "data-row",
+            "value": "2"
+          }
+        ]
+      },
+      "label": "Row 2"
+    },
+    {
+      "id": "277d7d",
+      "name": "image",
+      "parent": "eaee95",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "4ea54c",
+      "name": "image",
+      "parent": "eaee95",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "6002d0",
+      "name": "image",
+      "parent": "eaee95",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "2291e1",
+      "name": "image",
+      "parent": "eaee95",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "g5zxjf"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": [],
+      "label": "Image"
+    },
+    {
+      "id": "23e474",
+      "name": "container",
+      "parent": "d9c31b",
+      "children": [
+        "683ee5",
+        "d1a7ff"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "eefduo"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "683ee5",
+      "name": "text-basic",
+      "parent": "23e474",
+      "children": [],
+      "settings": {
+        "text": "<b>This is just placeholder text.</b> Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "faicht",
+          "kddjfd"
+        ]
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "d1a7ff",
+      "name": "block",
+      "parent": "23e474",
+      "children": [
+        "ec6769",
+        "830c20",
+        "677fae"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "qgwqhr"
+        ]
+      },
+      "label": "Stat Grid"
+    },
+    {
+      "id": "ec6769",
+      "name": "block",
+      "parent": "d1a7ff",
+      "children": [
+        "010629",
+        "2c5239"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ylzfjl"
+        ],
+        "tag": "custom",
+        "customTag": "p"
+      },
+      "label": "Stat Card"
+    },
+    {
+      "id": "010629",
+      "name": "text-basic",
+      "parent": "ec6769",
+      "children": [],
+      "settings": {
+        "text": "170,000+",
+        "_cssGlobalClasses": [
+          "mfgprt"
+        ],
+        "tag": "span"
+      },
+      "label": "Stat"
+    },
+    {
+      "id": "2c5239",
+      "name": "text-basic",
+      "parent": "ec6769",
+      "children": [],
+      "settings": {
+        "text": "stat description",
+        "_cssGlobalClasses": [
+          "rqyvvx"
+        ],
+        "tag": "span"
+      },
+      "label": "Stat Description"
+    },
+    {
+      "id": "830c20",
+      "name": "block",
+      "parent": "d1a7ff",
+      "children": [
+        "5bcc3e",
+        "42629c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ylzfjl"
+        ],
+        "tag": "custom",
+        "customTag": "p"
+      },
+      "label": "Stat Card"
+    },
+    {
+      "id": "5bcc3e",
+      "name": "text-basic",
+      "parent": "830c20",
+      "children": [],
+      "settings": {
+        "text": "170,000+",
+        "_cssGlobalClasses": [
+          "mfgprt"
+        ],
+        "tag": "span"
+      },
+      "label": "Stat"
+    },
+    {
+      "id": "42629c",
+      "name": "text-basic",
+      "parent": "830c20",
+      "children": [],
+      "settings": {
+        "text": "stat description",
+        "_cssGlobalClasses": [
+          "rqyvvx"
+        ],
+        "tag": "span"
+      },
+      "label": "Stat Description"
+    },
+    {
+      "id": "677fae",
+      "name": "block",
+      "parent": "d1a7ff",
+      "children": [
+        "482631",
+        "66e138"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ylzfjl"
+        ],
+        "tag": "custom",
+        "customTag": "p"
+      },
+      "label": "Stat Card"
+    },
+    {
+      "id": "482631",
+      "name": "text-basic",
+      "parent": "677fae",
+      "children": [],
+      "settings": {
+        "text": "170,000+",
+        "_cssGlobalClasses": [
+          "mfgprt"
+        ],
+        "tag": "span"
+      },
+      "label": "Stat"
+    },
+    {
+      "id": "66e138",
+      "name": "text-basic",
+      "parent": "677fae",
+      "children": [],
+      "settings": {
+        "text": "stat description",
+        "_cssGlobalClasses": [
+          "rqyvvx"
+        ],
+        "tag": "span"
+      },
+      "label": "Stat Description"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "hcilsu",
+      "name": "hero-north",
+      "settings": {
+        "_gridGap": "var(--container-gap)",
+        "_overflow": "hidden",
+        "_cssCustom": "/* Pseudo Background Styling */\n\n.hero-north [image-group-north] {\n  position: relative; \n  isolation: isolate;\n}\n.hero-north [image-group-north]::before {\n  content: '';\n  width: 100%;\n  height: 200vh;\n  background-color: var(--bg-ultra-dark);\n  position: absolute;\n  z-index: -1;\n  inset-block-start: 35%;\n}",
+        "_padding": {
+          "top": "var(--section-space-l)",
+          "bottom": "var(--section-space-l)"
+        }
+      },
+      "modified": 1736806526,
+      "user_id": 9,
+      "_exists": false
+    },
+    {
+      "id": "kfsrng",
+      "name": "intro-foxtrot",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_typography:mobile_landscape": {
+          "text-align": "left"
+        },
+        "_alignItems:mobile_landscape": "flex-start"
+      },
+      "_exists": false
+    },
+    {
+      "id": "fs98tf",
+      "name": "intro-foxtrot__heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "luvynj",
+      "name": "intro-foxtrot__accent-heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "utn55l",
+      "name": "intro-foxtrot__lede",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "glrhvz",
+      "name": "fr-cta-links-bravo",
+      "settings": {
+        "_display": "flex",
+        "_flexWrap": "wrap",
+        "_alignItems": "center",
+        "_rowGap": "var(--content-gap)",
+        "_columnGap": "var(--content-gap)",
+        "_direction:mobile_portrait": "column",
+        "_width:mobile_portrait": "100%",
+        "_cssCustom:mobile_portrait": ".fr-cta-links-bravo > * {\n\twidth: 100% !important;\n}",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_margin": {
+          "top": "var(--space-s)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "aekezk",
+      "name": "fr-cta-links-bravo__link",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "esnstu",
+      "name": "image-group-north",
+      "settings": {
+        "_width": "100%",
+        "_gridItemColumnSpan": "full",
+        "_cssCustom": ".image-group-north {\n  --gap: var(--space-xs);\n}\n\n/* Rows */\n.image-group-north__row[data-row=\"1\"] {\n  grid-template-columns: .75fr 1.5fr 1fr .5fr;\n  align-items: end;\n}\n.image-group-north__row[data-row=\"2\"] {\n  grid-template-columns: .5fr 1fr 1.5fr .75fr;\n}\n\n/* Aspect Ratios */\n\n[data-row=\"1\"] {\n  \n  .image-group-north__image:first-child,\n  .image-group-north__image:last-child {\n    --aspect-ratio: 1/1;\n  }\n\n  .image-group-north__image:nth-child(2) {\n    --aspect-ratio: 16/9;\n  }\n  .image-group-north__image:nth-child(3) {\n    --aspect-ratio: 6/4;\n  }\n  \n}\n\n[data-row=\"2\"] {\n  \n  .image-group-north__image:first-child,\n  .image-group-north__image:last-child {\n    --aspect-ratio: 1/1;\n  }\n\n  .image-group-north__image:nth-child(2) {\n    --aspect-ratio: 6/4;\n  }\n  .image-group-north__image:nth-child(3) {\n    --aspect-ratio: 16/9;\n  }\n  \n}\n\n/* Overflow */\n\n.image-group-north__row {\n  --offset: 2em;\n  max-width: calc(100% + var(--offset));\n  width: calc(100% + var(--offset));\n  translate: calc(var(--offset) / 2 * -1) 0;\n}",
+        "_rowGap": "var(--gap)",
+        "_overflow": "clip-x"
+      },
+      "_exists": false
+    },
+    {
+      "id": "kvhuax",
+      "name": "image-group-north__row",
+      "settings": {
+        "_display": "grid",
+        "_gridGap": "var(--gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "g5zxjf",
+      "name": "image-group-north__image",
+      "settings": {
+        "_aspectRatio": "var(--aspect-ratio)",
+        "_objectFit": "cover",
+        "_border": {
+          "radius": {
+            "top": "var(--radius)",
+            "right": "var(--radius)",
+            "bottom": "var(--radius)",
+            "left": "var(--radius)"
+          }
+        },
+        "_width": "100%"
+      },
+      "_exists": false
+    },
+    {
+      "id": "eefduo",
+      "name": "hero-north__inner",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center",
+          "color": {
+            "raw": "var(--text-light)"
+          }
+        },
+        "_typography:mobile_landscape": {
+          "text-align": "left"
+        },
+        "_alignItems:mobile_landscape": "flex-start",
+        "_rowGap": "var(--content-gap)",
+        "_cssCustom": ".hero-north__inner {\n  isolation: isolate;\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "faicht",
+      "name": "hero-north__lede",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "qgwqhr",
+      "name": "hero-north__stat-grid",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-3)",
+        "_gridGap": "var(--grid-gap)",
+        "_gridTemplateColumns:mobile_landscape": "var(--grid-1)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "ylzfjl",
+      "name": "hero-north__stat-card",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center",
+          "line-height": "1"
+        },
+        "_typography:mobile_landscape": {
+          "text-align": "left"
+        },
+        "_alignItems:mobile_landscape": "flex-start",
+        "_rowGap": ".5em"
+      },
+      "_exists": false
+    },
+    {
+      "id": "mfgprt",
+      "name": "hero-north__stat-card-stat",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-xxl)",
+          "font-weight": "700"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "rqyvvx",
+      "name": "hero-north__stat-card-description",
+      "settings": {
+        "_margin": {
+          "top": "0 !important",
+          "right": "0 !important",
+          "bottom": "0 !important",
+          "left": "0 !important"
+        },
+        "_typography": {
+          "color": {
+            "raw": "var(--text-light-muted)"
+          },
+          "text-transform": "uppercase",
+          "font-size": "var(--text-s)"
+        }
+      },
+      "_exists": false
+    }
+  ]
+}

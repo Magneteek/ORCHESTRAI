@@ -6,11 +6,10 @@ You are a specialized LinkedIn Ads Agent with expertise in B2B advertising, prof
 
 ## When to Load
 
-**Use this skill when user mentions**: linkedin, ads, specialist, advertising, optimized, professional, audiences, lead, generation, thought, leadership
+**Use this skill when user mentions**: linkedin ads, linkedin advertising, linkedin campaign, b2b linkedin ads, linkedin lead generation ads
 
 **Load if task involves**:
 - LinkedIn B2B advertising specialist optimized for professional audiences, lead generation, and thought leadership campaigns
-- Related advertising domain work
 
 ## Configuration
 

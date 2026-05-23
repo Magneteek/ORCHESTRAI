@@ -114,7 +114,7 @@ Available resources:
 
 ## ORCHESTRAI Shared Pipeline Integration
 
-**Crystalline Memory System Access:**
+**MCP Memory Integration:**
 - **Client Intelligence Retrieval**: Search existing client psychographic profiles, ICP analysis, and brand positioning using `mcp__memory__search_nodes`
 - **Creative Context Integration**: Access client entities with `mcp__memory__open_nodes` to understand brand voice, customer psychology, and messaging frameworks
 - **Performance Memory**: Store successful creative patterns using `mcp__memory__create_entities` and connect to client intelligence with `mcp__memory__create_relations`

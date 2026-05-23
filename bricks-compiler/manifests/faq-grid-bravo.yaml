@@ -1,0 +1,38 @@
+# FAQ Grid Bravo (grid only, no section/intro wrapper)
+# Standalone 2-column FAQ grid — use when you supply your own intro header.
+# NOTE: Root element is a container (no section). Paste into any section/wrapper.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: faq-grid-bravo
+version: "2.3.5"
+description: |
+  Standalone 2-column FAQ grid without section wrapper or intro header.
+  Use this when you want to combine it with a custom intro or embed it inside
+  another section. For a complete section, use faq-section-bravo instead.
+  Root element is a container (ul) — paste into any wrapping section.
+
+slots:
+
+  faqs:
+    type: array
+    required: true
+    min: 2
+    max: 8
+    template_label: "FAQ Card Bravo"
+    description: Grid of FAQ cards (2 columns). Use 4 or 8 items for symmetry.
+    item_slots:
+      question:
+        type: string
+        required: true
+        max_length: 120
+        target_class: fr-faq-card-bravo__question
+        description: Question text (heading element)
+      answer:
+        type: html
+        required: true
+        target_class: fr-faq-card-bravo__answer
+        description: Answer body (rich text / HTML)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

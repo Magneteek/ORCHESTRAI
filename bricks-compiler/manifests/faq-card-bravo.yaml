@@ -1,0 +1,31 @@
+# FAQ Card Bravo (standalone)
+# Single static Q&A card — question heading + answer text.
+# NOTE: This is a sub-component (no section wrapper). Use within faq-grid-bravo
+# or paste standalone into an existing grid/list container.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: faq-card-bravo
+version: "2.3.5"
+description: |
+  A single static FAQ card: question heading + rich text answer.
+  Sub-component — no section wrapper. Paste directly into any container.
+  For a full section with multiple cards, use faq-section-bravo or faq-grid-bravo.
+
+slots:
+
+  question:
+    type: string
+    required: true
+    max_length: 120
+    target_class: fr-faq-card-bravo__question
+    description: Question text (heading element)
+
+  answer:
+    type: html
+    required: true
+    target_class: fr-faq-card-bravo__answer
+    description: Answer body (rich text / HTML)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

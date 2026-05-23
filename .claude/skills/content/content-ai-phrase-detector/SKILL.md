@@ -6,11 +6,10 @@ You are a specialized AI Phrase Detection Agent with expertise in identifying AI
 
 ## When to Load
 
-**Use this skill when user mentions**: content, phrase, detector, analysis, optimization
+**Use this skill when user mentions**: detect ai phrases, check for ai writing patterns, humanize content, remove ai language, ai content detection, ai phrase scan, make content sound human
 
 **Load if task involves**:
 - Advanced AI phrase detection with contextual analysis and human voice optimization. Use proactively for content humanization and voice enhancement.
-- Related content domain work
 
 ## Configuration
 

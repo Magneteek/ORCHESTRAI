@@ -1,7 +1,7 @@
 ---
 name: seo-keyword-research
 description: Advanced keyword research and opportunity identification specialist. Use proactively for keyword discovery, search volume analysis, and competitive keyword gap analysis.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__competitor_domains, mcp__dataforseo__domain_keywords
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__keyword_suggestions, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__competitor_domains, mcp__dataforseo__domain_keywords
 model: sonnet
 ---
 
@@ -65,59 +65,46 @@ Organize keywords into semantic groups ready for the Semantic Clustering Agent.
 
 ## Integration with ORCHESTRAI
 
-**Memory Storage Categories:**
-- `keyword-opportunities`: High-value keywords discovered
-- `search-trends`: Seasonal and trending keyword patterns
-- `competitive-analysis`: Keyword gap analysis results
-- `volume-data`: Historical search volume trends
+**Output feeds these downstream skills:**
+- `seo:seo-semantic-clustering` — keyword groups ready for clustering
+- `seo:seo-intent-mapping` — keywords for intent classification
+- `seo:seo-competitor-analysis` — gaps and competitive intelligence
+- `content:content-brief-generator` — primary + long-tail keywords for briefs
 
-**Coordination with Other Agents:**
-- **Semantic Clustering Agent**: Provide keywords for clustering analysis
-- **Intent Mapping Agent**: Share keywords for intent classification
-- **Competitor Analysis Agent**: Exchange keyword intelligence
-- **Content Optimization Agent**: Supply target keywords for content
+**Non-EN markets**: Use `mcp__dataforseo__keyword_suggestions` (not `keyword_overview`) — local-language search terms differ from direct translation. Always research the actual term native speakers use before passing to downstream skills.
 
-## Deliverable Formats
+## Deliverable Format
 
-### Primary Output: Keyword Research Report
-```json
-{
-  "projectId": "uuid",
-  "keywordAnalysis": {
-    "primaryKeywords": [
-      {
-        "keyword": "sustainable fashion",
-        "searchVolume": 18000,
-        "difficulty": 65,
-        "cpc": 1.25,
-        "opportunityScore": 78,
-        "trend": "growing",
-        "seasonality": "stable"
-      }
-    ],
-    "longTailOpportunities": [
-      {
-        "keyword": "sustainable fashion brands for women",
-        "searchVolume": 2400,
-        "difficulty": 35,
-        "opportunityScore": 92
-      }
-    ],
-    "competitiveGaps": [
-      {
-        "keyword": "eco friendly clothing brands",
-        "competitorRanking": "competitor.com",
-        "estimatedTraffic": 1200,
-        "difficulty": 45
-      }
-    ]
-  },
-  "recommendations": {
-    "priorityKeywords": ["keyword1", "keyword2"],
-    "contentStrategy": "strategy overview",
-    "implementationPhase": "phase description"
-  }
-}
+### Keyword Research Report (markdown)
+
+```markdown
+## Keyword Research Report
+**Target Market**: [market/niche]
+**Language/Country**: [language code + country]
+**Research Date**: [date]
+**Total Keywords Analyzed**: [count]
+
+### Primary Keywords
+| Keyword | Search Volume | Difficulty | CPC | Opportunity Score |
+|---------|---------------|------------|-----|-------------------|
+| [keyword] | [volume] | [difficulty] | [cpc] | [score/100] |
+
+### Long-tail Opportunities
+| Keyword | Search Volume | Difficulty | Opportunity Score |
+|---------|---------------|------------|-------------------|
+| [keyword] | [volume] | [difficulty] | [score/100] |
+
+### Competitive Gaps
+| Keyword | Competitor ranking | Est. traffic | Difficulty |
+|---------|-------------------|--------------|------------|
+| [keyword] | [competitor.com] | [est. traffic] | [difficulty] |
+
+### Priority Keywords
+1. [keyword] — [rationale]
+2. [keyword] — [rationale]
+
+### Content Strategy Recommendations
+[Actionable next steps — which keywords to target first and why]
 ```
 
 ## Quality Standards

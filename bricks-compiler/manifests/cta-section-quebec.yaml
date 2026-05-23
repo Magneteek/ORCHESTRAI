@@ -1,0 +1,67 @@
+# CTA Section Quebec
+# Dark overlay CTA: heading + accent + lede + CTA left; feature image right; full bg image.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: cta-section-quebec
+version: "2.3.5"
+description: |
+  Dark-background CTA (text appears white). Full-section background image with dark overlay.
+  Two-column layout: left column (3/5 width) has H2 heading, accent label, lede, CTA button
+  (neutral-light/white style). Right column (2/5 width) has a feature image that overflows
+  the section bounds vertically. Use for dramatic final CTA or lead generation.
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: cta-section-quebec__heading
+    description: H2 heading (left column, white text on dark bg)
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: cta-section-quebec__accent-heading
+    description: Small accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: cta-section-quebec__lede
+    description: Short intro/lede paragraph
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: cta-section-quebec__button
+    description: CTA button label (renders as white/neutral-light button)
+
+  cta_link:
+    type: link
+    required: false
+    target_class: cta-section-quebec__button
+    description: "CTA button URL: { url: '...', type?: 'external' }"
+
+  # ── Images ────────────────────────────────────────────────────────────────
+
+  media:
+    type: media
+    required: false
+    target_class: cta-section-quebec__media
+    description: Feature image (right column, overflows section top/bottom)
+
+  bg_image:
+    type: media
+    required: false
+    target_class: fr-background-alpha__image
+    description: Full-section background image (sits behind dark overlay)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

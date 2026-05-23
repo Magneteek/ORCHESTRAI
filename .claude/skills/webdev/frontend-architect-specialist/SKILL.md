@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: frontend, architect, specialist
+**Use this skill when user mentions**: frontend architecture, ui system design, frontend structure, react architecture, nextjs architecture, component architecture planning
 
 **Load if task involves**:
-- architecting scalable, performant React/Next.js applications with TypeScript, focusing on enterprise-grade structure and best practices
-- Related webdev domain work
+- Designing the architecture and structure of a frontend application — component hierarchy, state management approach, data flow
 
 ## Configuration
 

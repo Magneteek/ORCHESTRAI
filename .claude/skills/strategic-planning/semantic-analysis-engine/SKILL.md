@@ -2,21 +2,23 @@
 
 ## Overview
 
-Advanced NLP and semantic understanding for content analysis.
+Semantic analysis of content and keyword sets: topic clustering, entity extraction, content gap analysis, keyword semantic grouping, and thematic analysis.
 
 ## When to Load
 
-**Use this skill when user mentions**: semantic, analysis, engine, understanding
+**Use this skill when user mentions**: semantic analysis, topic clustering, content analysis, entity extraction, semantic grouping, content gaps, thematic analysis, keyword clustering
 
 **Load if task involves**:
-- NLP and semantic understanding
-- Related strategic-planning domain work
+- Grouping keywords or articles by semantic theme
+- Finding content gaps in an existing content set
+- Extracting entities and relationships from text
+- Assessing whether two pieces of content are too similar
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 3000
 
 ## Tools Required
 
@@ -30,9 +32,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~305 characters
-- This overview: ~61 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/semantic-analysis-engine.md*
+*Rewritten 2026-04-17 — removed fake tokenization/word-embedding claims, focused on real LLM semantic capabilities*

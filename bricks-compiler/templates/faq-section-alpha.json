@@ -1,0 +1,1007 @@
+{
+  "content": [
+    {
+      "id": "3a9b17",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "445fa4"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "cyspam"
+        ]
+      },
+      "label": "FAQ Section Alpha"
+    },
+    {
+      "id": "445fa4",
+      "name": "container",
+      "parent": "3a9b17",
+      "children": [
+        "06b5be",
+        "1871e9"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ebicef"
+        ]
+      },
+      "label": "FAQ Grid Alpha"
+    },
+    {
+      "id": "06b5be",
+      "name": "block",
+      "parent": "445fa4",
+      "children": [
+        "6bbb5e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vuelmk"
+        ]
+      },
+      "label": "Left"
+    },
+    {
+      "id": "6bbb5e",
+      "name": "block",
+      "parent": "06b5be",
+      "children": [
+        "f0dbf6",
+        "92323e",
+        "6d706c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "eqgpav"
+        ]
+      },
+      "label": "Sticky"
+    },
+    {
+      "id": "f0dbf6",
+      "name": "heading",
+      "parent": "6bbb5e",
+      "children": [],
+      "settings": {
+        "text": "Frequently asked questions",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "skqvou"
+        ]
+      }
+    },
+    {
+      "id": "92323e",
+      "name": "text-basic",
+      "parent": "6bbb5e",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "bpvrjb"
+        ]
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "6d706c",
+      "name": "button",
+      "parent": "6bbb5e",
+      "children": [],
+      "settings": {
+        "text": "Contact us",
+        "_cssGlobalClasses": [
+          "btn--primary"
+        ]
+      }
+    },
+    {
+      "id": "1871e9",
+      "name": "block",
+      "parent": "445fa4",
+      "children": [
+        "1f1884"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lzqcxn"
+        ]
+      },
+      "label": "Right"
+    },
+    {
+      "id": "1f1884",
+      "name": "fr-accordion",
+      "parent": "1871e9",
+      "children": [
+        "6c7dff",
+        "af1bf2",
+        "6e06de",
+        "8b55c2",
+        "277b00"
+      ],
+      "settings": {
+        "closePreviousItem": true,
+        "showDuration": 300,
+        "tag": "ul",
+        "iconActiveTransformTest": {
+          "rotateZ": "180"
+        },
+        "_cssGlobalClasses": [
+          "qvacsc"
+        ],
+        "firstItemOpened": true,
+        "scrollToHash": true,
+        "addFaqSchema": true,
+        "scrollToHeading": true
+      }
+    },
+    {
+      "id": "6c7dff",
+      "name": "block",
+      "parent": "1f1884",
+      "children": [
+        "bea1ac",
+        "1408f7"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "bea1ac",
+      "name": "div",
+      "parent": "6c7dff",
+      "children": [
+        "951821",
+        "02225b"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "951821",
+      "name": "heading",
+      "parent": "bea1ac",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "02225b",
+      "name": "div",
+      "parent": "bea1ac",
+      "children": [
+        "e3179e"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "e3179e",
+      "name": "icon",
+      "parent": "02225b",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "1408f7",
+      "name": "div",
+      "parent": "6c7dff",
+      "children": [
+        "e4b4bc"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        },
+        "_cssGlobalClasses": [
+          "gbsxaf"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "e4b4bc",
+      "name": "block",
+      "parent": "1408f7",
+      "children": [
+        "22295f"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "uadmmf"
+        ]
+      },
+      "label": "Answer Wrapper"
+    },
+    {
+      "id": "22295f",
+      "name": "text",
+      "parent": "e4b4bc",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>",
+        "_cssGlobalClasses": [
+          "ycnvsy"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "af1bf2",
+      "name": "block",
+      "parent": "1f1884",
+      "children": [
+        "c26a78",
+        "db7b69"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "c26a78",
+      "name": "div",
+      "parent": "af1bf2",
+      "children": [
+        "a78779",
+        "503bda"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "a78779",
+      "name": "heading",
+      "parent": "c26a78",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "503bda",
+      "name": "div",
+      "parent": "c26a78",
+      "children": [
+        "876bd0"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "876bd0",
+      "name": "icon",
+      "parent": "503bda",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "db7b69",
+      "name": "div",
+      "parent": "af1bf2",
+      "children": [
+        "e96594"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        },
+        "_cssGlobalClasses": [
+          "gbsxaf"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "e96594",
+      "name": "block",
+      "parent": "db7b69",
+      "children": [
+        "f73704"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "uadmmf"
+        ]
+      },
+      "label": "Answer Wrapper"
+    },
+    {
+      "id": "f73704",
+      "name": "text",
+      "parent": "e96594",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>",
+        "_cssGlobalClasses": [
+          "ycnvsy"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "6e06de",
+      "name": "block",
+      "parent": "1f1884",
+      "children": [
+        "7eb925",
+        "50dd9f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "7eb925",
+      "name": "div",
+      "parent": "6e06de",
+      "children": [
+        "5945e0",
+        "bb3a5a"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "5945e0",
+      "name": "heading",
+      "parent": "7eb925",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "bb3a5a",
+      "name": "div",
+      "parent": "7eb925",
+      "children": [
+        "47781d"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "47781d",
+      "name": "icon",
+      "parent": "bb3a5a",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "50dd9f",
+      "name": "div",
+      "parent": "6e06de",
+      "children": [
+        "9d8c96"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        },
+        "_cssGlobalClasses": [
+          "gbsxaf"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "9d8c96",
+      "name": "block",
+      "parent": "50dd9f",
+      "children": [
+        "41bb60"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "uadmmf"
+        ]
+      },
+      "label": "Answer Wrapper"
+    },
+    {
+      "id": "41bb60",
+      "name": "text",
+      "parent": "9d8c96",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>",
+        "_cssGlobalClasses": [
+          "ycnvsy"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "8b55c2",
+      "name": "block",
+      "parent": "1f1884",
+      "children": [
+        "e25225",
+        "35da2b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "e25225",
+      "name": "div",
+      "parent": "8b55c2",
+      "children": [
+        "ff3fba",
+        "2a230e"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "ff3fba",
+      "name": "heading",
+      "parent": "e25225",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "2a230e",
+      "name": "div",
+      "parent": "e25225",
+      "children": [
+        "330ecf"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "330ecf",
+      "name": "icon",
+      "parent": "2a230e",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "35da2b",
+      "name": "div",
+      "parent": "8b55c2",
+      "children": [
+        "f7eeec"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        },
+        "_cssGlobalClasses": [
+          "gbsxaf"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "f7eeec",
+      "name": "block",
+      "parent": "35da2b",
+      "children": [
+        "8c63d6"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "uadmmf"
+        ]
+      },
+      "label": "Answer Wrapper"
+    },
+    {
+      "id": "8c63d6",
+      "name": "text",
+      "parent": "f7eeec",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>",
+        "_cssGlobalClasses": [
+          "ycnvsy"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "277b00",
+      "name": "block",
+      "parent": "1f1884",
+      "children": [
+        "fd3f9c",
+        "e0ef02"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "fd3f9c",
+      "name": "div",
+      "parent": "277b00",
+      "children": [
+        "335ac8",
+        "92aea9"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "335ac8",
+      "name": "heading",
+      "parent": "fd3f9c",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "92aea9",
+      "name": "div",
+      "parent": "fd3f9c",
+      "children": [
+        "dd524a"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "dd524a",
+      "name": "icon",
+      "parent": "92aea9",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "e0ef02",
+      "name": "div",
+      "parent": "277b00",
+      "children": [
+        "fa252f"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        },
+        "_cssGlobalClasses": [
+          "gbsxaf"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "fa252f",
+      "name": "block",
+      "parent": "e0ef02",
+      "children": [
+        "4d7573"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "uadmmf"
+        ]
+      },
+      "label": "Answer Wrapper"
+    },
+    {
+      "id": "4d7573",
+      "name": "text",
+      "parent": "fa252f",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>",
+        "_cssGlobalClasses": [
+          "ycnvsy"
+        ]
+      },
+      "label": "Answer"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "cyspam",
+      "name": "fr-faq-section-alpha",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "ebicef",
+      "name": "fr-faq-grid-alpha",
+      "settings": {
+        "_display": "grid",
+        "_gridGap": "var(--space-xxl)",
+        "_gridTemplateColumns": "var(--grid-2-3)",
+        "_gridTemplateRows": "var(--grid-1)",
+        "_alignItemsGrid": "stretch",
+        "_gridTemplateColumns:tablet_portrait": "var(--grid-1)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "vuelmk",
+      "name": "fr-faq-section-alpha__left",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "eqgpav",
+      "name": "fr-faq-section-alpha__sticky",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_position": "sticky",
+        "_top": "var(--header-height)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "skqvou",
+      "name": "fr-faq-section-alpha__heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "bpvrjb",
+      "name": "fr-faq-section-alpha__lede",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "lzqcxn",
+      "name": "fr-faq-section-alpha__right",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "qvacsc",
+      "name": "fr-faq-accordion-alpha",
+      "settings": {
+        "headPadding": {
+          "top": ".5em",
+          "bottom": ".5em",
+          "right": "1em",
+          "left": "1em"
+        },
+        "iconActiveTransformTest": {
+          "rotateZ": "180"
+        },
+        "bodyPadding": {
+          "top": "1em",
+          "right": "1em",
+          "bottom": "1em",
+          "left": "1em"
+        },
+        "headBackgroundColor": {
+          "raw": "var(--bg-light)"
+        },
+        "headFont": {
+          "color": {
+            "raw": "var(--text-dark)"
+          }
+        },
+        "iconActiveTransform": {
+          "rotateZ": "180"
+        },
+        "iconDefaultSize": "2em",
+        "itemGap": "0"
+      },
+      "_exists": false
+    },
+    {
+      "id": "awqzzs",
+      "name": "fr-faq-accordion-alpha__item",
+      "settings": {
+        "_rowGap": "0"
+      },
+      "_exists": false
+    },
+    {
+      "id": "xxbjxz",
+      "name": "fr-faq-accordion-alpha__header",
+      "settings": {
+        "_justifyContent": "space-between",
+        "_alignSelf": "center"
+      },
+      "_exists": false
+    },
+    {
+      "id": "binpwn",
+      "name": "fr-faq-accordion-alpha__question",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "unupdr",
+      "name": "fr-faq-accordion-alpha__icon-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "udwneg",
+      "name": "fr-faq-accordion-alpha__icon",
+      "settings": {
+        "_cssTransition": "transform 0.2s ease-in-out"
+      },
+      "_exists": false
+    },
+    {
+      "id": "gbsxaf",
+      "name": "faq-accordion-alpha__body",
+      "settings": {
+        "_width": "100%"
+      },
+      "_exists": false
+    },
+    {
+      "id": "uadmmf",
+      "name": "fr-faq-accordion-alpha__answer-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "ycnvsy",
+      "name": "fr-faq-accordion-alpha__answer",
+      "settings": [],
+      "_exists": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "page_title": "Zobozdravstvo Križnar — Storitve",
+  "slug": "zobozdravstvene-storitve",
+  "source_url": "https://zobozdravstvo-kriznar.si",
+  "sections": [
+    {
+      "component": "feature-section-foxtrot",
+      "slots": {
+        "heading": "Zobozdravstvene storitve za vso družino",
+        "accent_heading": "Naše storitve",
+        "lede": "V naši ambulanti nudimo celostno zobozdravstveno oskrbo — od preventivnih pregledov do estetske stomatologije in protetike.",
+        "features": [
+          {
+            "icon": { "url": "https://zobozdravstvo-kriznar.si/icons/preventiva.svg" },
+            "heading": "Preventivni pregledi",
+            "text": "Redni pregledi in čiščenje zob za dolgoročno zdravje vašega zobovja."
+          },
+          {
+            "icon": { "url": "https://zobozdravstvo-kriznar.si/icons/implantati.svg" },
+            "heading": "Zobni vsadki",
+            "text": "Trajne rešitve za manjkajoče zobe z najsodobnejšimi titanijevimi vsadki."
+          },
+          {
+            "icon": { "url": "https://zobozdravstvo-kriznar.si/icons/protetika.svg" },
+            "heading": "Protetika in krone",
+            "text": "Fiksne in snemne proteze, krone in mostički po meri — naravni videz in udobje."
+          },
+          {
+            "icon": { "url": "https://zobozdravstvo-kriznar.si/icons/estetika.svg" },
+            "heading": "Estetska stomatologija",
+            "text": "Beljenje zob, luskice in estetske zalivke za sijoč nasmeh."
+          }
+        ],
+        "primary_cta_text": "Naroči se na pregled",
+        "primary_cta_link": { "url": "https://zobozdravstvo-kriznar.si/narocanje", "type": "external" },
+        "secondary_cta_text": "Vse storitve",
+        "secondary_cta_link": { "url": "https://zobozdravstvo-kriznar.si/storitve", "type": "external" }
+      }
+    }
+  ]
+}

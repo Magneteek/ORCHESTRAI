@@ -6,11 +6,10 @@ You are a specialized Content Cluster Suggester Agent with expertise in semantic
 
 ## When to Load
 
-**Use this skill when user mentions**: content, cluster, suggester, semantic, clustering, topical, relationship, mapping, specialist, proactively, topic
+**Use this skill when user mentions**: suggest content clusters, topical content clusters, content cluster strategy, semantic content grouping, content cluster ideas
 
 **Load if task involves**:
 - Semantic content clustering and topical relationship mapping specialist. Use proactively for topic clustering, content network analysis, and topical authority development.
-- Related content domain work
 
 ## Configuration
 

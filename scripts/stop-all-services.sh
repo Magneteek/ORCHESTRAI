@@ -1,76 +1,47 @@
 #!/bin/bash
 #
-# ORCHESTRAI — Master Stop Script
-# Gracefully stops all ORCHESTRAI services.
+# ORCHESTRAI — Stop All Services
+#
+# Stops all containers. Data volumes are preserved.
 #
 # Usage:
-#   npm run system:stop-all
 #   ./scripts/stop-all-services.sh
+#   npm run system:stop-all
 #
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+ML_DIR="$ROOT_DIR/orchestrai-ml-service"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-RED='\033[0;31m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-stop_port() {
-  local port=$1 name=$2
-  if lsof -i ":$port" -sTCP:LISTEN -t >/dev/null 2>&1; then
-    local pid
-    pid=$(lsof -i ":$port" -sTCP:LISTEN -t | head -1)
-    echo -e "   ${YELLOW}Stopping $name (PID: $pid)...${NC}"
-    kill -TERM "$pid" 2>/dev/null
-    for i in $(seq 1 8); do
-      kill -0 "$pid" 2>/dev/null || break
-      sleep 1
-    done
-    if kill -0 "$pid" 2>/dev/null; then
-      kill -KILL "$pid" 2>/dev/null
-      echo -e "   ${YELLOW}Force-killed $name${NC}"
-    else
-      echo -e "   ${GREEN}✅ $name stopped${NC}"
-    fi
+stop_container() {
+  local name=$1
+  if docker inspect "$name" &>/dev/null; then
+    echo -e "   ${YELLOW}Stopping $name...${NC}"
+    docker stop "$name" &>/dev/null && echo -e "   ${GREEN}✅  $name stopped${NC}" || true
   else
-    echo -e "   ✓ $name not running"
+    echo "   ✓  $name not running"
   fi
 }
 
 echo ""
 echo -e "${BOLD}🛑 Stopping ORCHESTRAI services...${NC}"
-echo "──────────────────────────────────────────────────────"
+echo "$(printf '─%.0s' {1..56})"
+echo ""
 
-stop_port 3000 "Frontend"
-stop_port 5502 "Trigger System"
-stop_port 8080 "Simultaneous Execution Server"
-stop_port 8000 "ML Service"
-stop_port 5501 "Hooks Server"
-
-REDIS_CLI=$(command -v redis-cli 2>/dev/null \
-  || ls /opt/homebrew/bin/redis-cli 2>/dev/null \
-  || ls /usr/local/bin/redis-cli 2>/dev/null \
-  || echo "")
-redis_ping() { [ -n "$REDIS_CLI" ] && "$REDIS_CLI" -h 127.0.0.1 ping >/dev/null 2>&1; }
+# Stop in reverse dependency order
+stop_container "orchestrai-triggers"
+stop_container "orchestrai-ml-service"
+stop_container "orchestrai-redis"
+stop_container "orchestrai-ml-postgres"
+stop_container "orchestrai-postgres"
 
 echo ""
-echo "   Stopping Redis..."
-if redis_ping; then
-  "$REDIS_CLI" shutdown nosave >/dev/null 2>&1 || true
-  sleep 2
-  redis_ping \
-    && echo -e "   ${RED}❌ Redis still running${NC}" \
-    || echo -e "   ${GREEN}✅ Redis stopped${NC}"
-else
-  echo "   ✓ Redis not running"
-fi
-
-# Clean PID files
-rm -f "$ROOT_DIR/logs/"*.pid 2>/dev/null
-
-echo ""
-echo -e "${GREEN}${BOLD}✅ All ORCHESTRAI services stopped${NC}"
-echo -e "   Restart: ${BOLD}npm run system:start-all${NC}"
+echo -e "${GREEN}${BOLD}✅  All ORCHESTRAI services stopped${NC}"
+echo -e "   Data volumes are preserved — indexes will not need re-building."
+echo -e "   Restart: ${BOLD}./scripts/start-all-services.sh${NC}"
 echo ""

@@ -6,11 +6,10 @@ You are a **Financial Modeling Specialist** with expertise in creating comprehen
 
 ## When to Load
 
-**Use this skill when user mentions**: financial, modeling, specialist, creates, comprehensive, models, including, cash, flow, projections, unit, economics
+**Use this skill when user mentions**: financial model, cash flow projection, unit economics model, revenue projection model, build financial model
 
 **Load if task involves**:
 - Creates comprehensive financial models including cash flow projections, unit economics, revenue scenarios, and pricing strategies using Scaling Up CAS and financial forecasting methodologies
-- Related strategic-planning domain work
 
 ## Configuration
 

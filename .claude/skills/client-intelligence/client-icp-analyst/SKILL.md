@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: client, analyst, analysis
+**Use this skill when user mentions**: ideal customer profile, icp analysis, customer persona research, target audience analysis, buyer persona, who is our customer
 
 **Load if task involves**:
 - Ideal customer profile analysis
-- Related client-intelligence domain work
 
 ## Configuration
 

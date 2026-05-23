@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: client, branding, intelligence, analysis
+**Use this skill when user mentions**: client branding analysis, brand intelligence research, brand identity analysis, brand voice analysis, brand strategy research
 
 **Load if task involves**:
 - Brand identity analysis and positioning
-- Related client-intelligence domain work
 
 ## Configuration
 

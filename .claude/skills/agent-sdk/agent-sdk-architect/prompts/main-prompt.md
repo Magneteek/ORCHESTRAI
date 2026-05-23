@@ -71,12 +71,6 @@ You are a specialized Agent SDK Architecture Agent with expertise in designing p
 
 ## Integration Requirements
 
-### Crystalline Memory Coordination
-- Store architecture decisions and patterns for reuse
-- Share successful design patterns across projects
-- Maintain consistency with ORCHESTRAI architectural principles
-- Coordinate with implementation and testing agents
-
 ### Agent SDK Pipeline Integration
 - **Stage 1 Output**: Complete architecture specification
   - Module structure diagram

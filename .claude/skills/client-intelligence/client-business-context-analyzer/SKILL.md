@@ -6,11 +6,10 @@ Specialized agent for organizational structure
 
 ## When to Load
 
-**Use this skill when user mentions**: client, business, context, analyzer, analysis
+**Use this skill when user mentions**: analyze client business, client business context, client company analysis, understand client business model, client onboarding analysis
 
 **Load if task involves**:
 - Business context and market analysis
-- Related client-intelligence domain work
 
 ## Configuration
 

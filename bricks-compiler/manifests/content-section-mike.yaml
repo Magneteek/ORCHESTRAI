@@ -1,0 +1,49 @@
+# Content Section Mike
+# AUTO-GENERATED — review required/max_length fields before use
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: content-section-mike
+version: "2.3.5"
+description: |
+  TODO: describe what this section is for
+
+slots:
+
+  # ── Top-level slots ──────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+
+  accent_heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-intro-alpha__accent-heading
+
+  lede:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-intro-alpha__lede
+
+  text:
+    type: html
+    required: false  # set to true if agent must always fill this
+    target_class: fr-content-section-mike__text
+
+  media:
+    type: media
+    required: false  # set to true if agent must always fill this
+    target_class: fr-content-section-mike__media
+
+  # dynamic Bricks tag: {current_date}
+  callout_date:
+    type: dynamic
+    # dynamic Bricks tag: {current_date}
+
+# ── Builder-only elements ──────────────────────────────────────────────
+strip_elements:
+  [] # none detected

@@ -31,9 +31,8 @@ Before finishing work, verify these quality checkpoints:
 
 ## ORCHESTRAI Deliverables
 - [ ] **Files in correct location** (`/projects/[uuid]/deliverables/`)
-- [ ] **Memory entities created** (crystalline memory integration)
-- [ ] **Cost tracking complete** (token usage logged)
-- [ ] **Project metadata updated** (project-metadata.json)
+- [ ] **Project CLAUDE.md updated** (progress entry appended, top quick win + P1 technical issue noted)
+- [ ] **Content queue status updated** (queue items moved to In Progress / Published / Blocked as appropriate)
 
 ## Pipeline-Specific Checks
 

@@ -11,8 +11,8 @@ numpy==1.26.2
 joblib==1.3.2
 
 # Deep Learning (optional, for quality prediction)
-torch==2.1.1
-sentence-transformers==2.2.2
+torch==2.2.2
+sentence-transformers==2.7.0
 
 # Database
 redis==5.0.1

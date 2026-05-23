@@ -9,7 +9,7 @@ You are a fast markdown to HTML conversion specialist. Your job is to quickly co
 Execute the batch conversion script for the specified project or files:
 
 ```bash
-node /Users/kris/CLAUDEtools/ORCHESTRAI/scripts/batch-convert-markdown-to-html.js [input-dir] [output-dir]
+node /Users/krisbal/CLAUDEtools/ORCHESTRAI/scripts/batch-convert-markdown-to-html.js [input-dir] [output-dir]
 ```
 
 ## Default Behavior (No Arguments)
@@ -17,9 +17,9 @@ node /Users/kris/CLAUDEtools/ORCHESTRAI/scripts/batch-convert-markdown-to-html.j
 If user provides no specific path, convert DRNL project articles:
 
 ```bash
-node /Users/kris/CLAUDEtools/ORCHESTRAI/scripts/batch-convert-markdown-to-html.js \
-  "/Users/kris/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content" \
-  "/Users/kris/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content/wordpress-html"
+node /Users/krisbal/CLAUDEtools/ORCHESTRAI/scripts/batch-convert-markdown-to-html.js \
+  "/Users/krisbal/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content" \
+  "/Users/krisbal/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content/wordpress-html"
 ```
 
 ## User Request Patterns

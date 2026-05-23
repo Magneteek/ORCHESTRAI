@@ -1,0 +1,369 @@
+{
+  "content": [
+    {
+      "id": "bedc65",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "ead47a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "urqfld"
+        ]
+      },
+      "label": "CTA Section Tango"
+    },
+    {
+      "id": "ead47a",
+      "name": "container",
+      "parent": "bedc65",
+      "children": [
+        "bcc31f",
+        "80dd61"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "nveyzh"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "bcc31f",
+      "name": "block",
+      "parent": "ead47a",
+      "children": [
+        "417499"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "garepj"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "417499",
+      "name": "div",
+      "parent": "bcc31f",
+      "children": [
+        "1c3b23",
+        "c57dbc",
+        "adabac"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vqlwpj"
+        ]
+      },
+      "label": "Image Group Tango (CSS)"
+    },
+    {
+      "id": "1c3b23",
+      "name": "div",
+      "parent": "417499",
+      "children": [
+        "893793"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0n8mdk"
+        ]
+      },
+      "label": "Image Wrapper"
+    },
+    {
+      "id": "893793",
+      "name": "image",
+      "parent": "1c3b23",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "26nn4v"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "label": "Image",
+      "themeStyles": []
+    },
+    {
+      "id": "c57dbc",
+      "name": "div",
+      "parent": "417499",
+      "children": [
+        "61d375"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0n8mdk"
+        ]
+      },
+      "label": "Image Wrapper"
+    },
+    {
+      "id": "61d375",
+      "name": "image",
+      "parent": "c57dbc",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "26nn4v"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "label": "Image",
+      "themeStyles": []
+    },
+    {
+      "id": "adabac",
+      "name": "div",
+      "parent": "417499",
+      "children": [
+        "ecf05b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0n8mdk"
+        ]
+      },
+      "label": "Image Wrapper"
+    },
+    {
+      "id": "ecf05b",
+      "name": "image",
+      "parent": "adabac",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "26nn4v"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "label": "Image",
+      "themeStyles": []
+    },
+    {
+      "id": "80dd61",
+      "name": "block",
+      "parent": "ead47a",
+      "children": [
+        "e77aa2",
+        "00c3f3",
+        "88a13f",
+        "99d8d8"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "otfxco"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "e77aa2",
+      "name": "heading",
+      "parent": "80dd61",
+      "children": [],
+      "settings": {
+        "text": "A heading that should convince the visitor to buy",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "pzayky"
+        ]
+      }
+    },
+    {
+      "id": "00c3f3",
+      "name": "text-basic",
+      "parent": "80dd61",
+      "children": [],
+      "settings": {
+        "text": "accent heading",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "slgawo"
+        ]
+      }
+    },
+    {
+      "id": "88a13f",
+      "name": "text",
+      "parent": "80dd61",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "quupnv"
+        ]
+      }
+    },
+    {
+      "id": "99d8d8",
+      "name": "button",
+      "parent": "80dd61",
+      "children": [],
+      "settings": {
+        "text": "Call to action",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--primary",
+          "hnknio"
+        ]
+      }
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "urqfld",
+      "name": "cta-section-tango",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "nveyzh",
+      "name": "cta-section-tango__inner",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-3-2)",
+        "_gridGap": "calc(var(--grid-gap) * 2)",
+        "_gridTemplateColumns:tablet_portrait": "var(--grid-1)",
+        "_gridGap:tablet_portrait": "var(--content-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "garepj",
+      "name": "cta-section-tango__media-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "vqlwpj",
+      "name": "image-group-tango",
+      "settings": {
+        "_display": "grid",
+        "_flexWrap": "nowrap",
+        "_gridGap": "var(--content-gap)",
+        "_gridTemplateColumns": "var(--grid-2)",
+        "_gridTemplateRows": "var(--grid-1)",
+        "_cssCustom": "/* Set min height to avoid layout shifts */\n.image-group-tango {\n  min-height: 675px;\n}\n\n/* Shape the 1st image */\n.image-group-tango > *:first-child {\n  grid-column: 1/-1;\n  width: 90%;\n}\n\n/* Shape the 2nd image */\n.image-group-tango > *:nth-child(2) {\n  width: 100%;\n  aspect-ratio: 16/9;\n}\n\n/* Shape the 3rd image */\n.image-group-tango > *:nth-child(3) {\n  width: 100%;  \n  aspect-ratio: 5/3.5;\n}",
+        "_justifyItemsGrid": "flex-end",
+        "_justifyItemsGrid:tablet_portrait": "flex-start",
+        "_gridGap:mobile_landscape": "var(--space-xs)",
+        "_width:tablet_portrait": "100%"
+      },
+      "modified": 1741951293,
+      "user_id": 26,
+      "_exists": false
+    },
+    {
+      "id": "0n8mdk",
+      "name": "image-group-tango__image-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "26nn4v",
+      "name": "image-group-tango__image",
+      "settings": {
+        "_width": "100%",
+        "_aspectRatio": "16/9",
+        "_objectFit": "cover",
+        "_height": "100%",
+        "_border": {
+          "radius": {
+            "top": "var(--radius)",
+            "right": "var(--radius)",
+            "bottom": "var(--radius)",
+            "left": "var(--radius)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "otfxco",
+      "name": "cta-section-tango__content-wrapper",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_justifyContent": "center"
+      },
+      "_exists": false
+    },
+    {
+      "id": "pzayky",
+      "name": "cta-section-tango__heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "slgawo",
+      "name": "cta-section-tango__accent-heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "quupnv",
+      "name": "cta-section-tango__text",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "hnknio",
+      "name": "cta-section-tango__cta",
+      "settings": [],
+      "_exists": false
+    }
+  ]
+}

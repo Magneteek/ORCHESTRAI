@@ -1,0 +1,65 @@
+# Feature Section Boston
+# AUTO-GENERATED — review required/max_length fields before use
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: feature-section-boston
+version: "2.3.5"
+description: |
+  TODO: describe what this section is for
+
+slots:
+
+  # ── Top-level slots ──────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+
+  # ── Tabs ─────────────────────────────────────────────────────────
+
+  tabs:
+    type: compound_array
+    required: false
+    min: 2
+    max: 6
+    nav_template: "Navigation Item"
+    content_template: "Tabs Item Wrapper"
+    item_slots:
+      label:
+        type: string
+        required: false
+        max_length: 30
+        target_label: "Tab"
+        # Tab navigation label
+      paragraph:
+        type: string
+        required: false  # set to true if agent must always fill this
+        max_length: 200
+        target_class: feature-section-boston__paragraph
+
+      # Button label
+      cta_text:
+        type: string
+        required: false  # set to true if agent must always fill this
+        max_length: 200
+        target_label: "CTA"
+
+      # Button URL — inserted even if absent in template
+      cta_link:
+        type: link
+        required: false  # set to true if agent must always fill this
+        target_label: "CTA"
+        # Value: { url: "https://...", type?: "external" } or plain URL string
+        # Inserted into settings.link even if absent in template
+
+      media:
+        type: media
+        required: false  # set to true if agent must always fill this
+        target_class: feature-section-boston__media
+
+
+# ── Builder-only elements ──────────────────────────────────────────────
+strip_elements:
+  [] # none detected

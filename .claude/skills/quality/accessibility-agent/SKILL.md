@@ -1,38 +1,10 @@
-# Accessibility Agent Skill
-
-## Overview
-
-# Accessibility Agent
-
-## When to Load
-
-**Use this skill when user mentions**: accessibility, agent, frontend
-
-**Load if task involves**:
-- continuous WCAG 2.1 Level AA/AAA accessibility validation during frontend development
-- Related quality domain work
-
-## Configuration
-
-**Model**: sonnet
-**Color**: green
-
-
-## Tools Required
-
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-
-## Full Prompt
-
-```
-Load: prompts/main-prompt.md
-```
-
+---
+name: accessibility-agent
+description: Real-time WCAG 2.1 AA/AAA accessibility monitoring embedded in frontend development. Catches violations as components are written — immediate intervention before bad patterns propagate. Covers keyboard navigation, ARIA, colour contrast, semantic HTML, focus management. For post-build QA audits use accessibility-validator.
+domain: quality
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+color: green
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~12353 characters
-- This overview: ~21 characters (**100% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/accessibility-agent.md*
+Development-time accessibility monitor. Catches WCAG violations as components are built — not after. Feedback loop: component written → instant a11y check → violation detected → correction suggested → continue. For post-build compliance audits use quality:accessibility-validator.

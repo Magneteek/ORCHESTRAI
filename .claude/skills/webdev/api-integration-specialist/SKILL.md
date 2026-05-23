@@ -6,11 +6,10 @@ Enterprise API integration specialist implementing production-ready HTTP clients
 
 ## When to Load
 
-**Use this skill when user mentions**: api, integration, specialist, production, ready, rest, graphql, with, retry, logic, circuit, breakers
+**Use this skill when user mentions**: api integration, rest api integration, graphql integration, production api setup, api with retry logic
 
 **Load if task involves**:
 - Production-ready REST/GraphQL API integration with retry logic, circuit breakers, and comprehensive error handling
-- Related webdev domain work
 
 ## Configuration
 

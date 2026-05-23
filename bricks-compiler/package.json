@@ -1,0 +1,19 @@
+{
+  "name": "bricks-compiler",
+  "version": "1.0.0",
+  "description": "Compile Frames+ACSS section templates into Bricks Builder clipboard JSON",
+  "main": "index.js",
+  "bin": {
+    "bricks-compile": "./cli.js"
+  },
+  "scripts": {
+    "test": "node test/test-basic.js",
+    "compile": "node cli.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

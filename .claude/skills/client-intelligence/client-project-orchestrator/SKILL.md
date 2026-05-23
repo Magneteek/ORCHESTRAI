@@ -2,15 +2,16 @@
 
 ## Overview
 
-You are the **Client Project Orchestrator**, the strategic coordination hub of the ORCHESTRAI Client Intelligence System. You manage client project lifecycles, coordinate multi-domain deliverable creation, and ensure all client work maintains strategic alignment while optimizing cross-domain workflo
+Manages full client project engagements: kicking off new projects, planning multi-domain work (SEO + content + webdev + QA), invoking the right skills in the right order, and keeping project CLAUDE.md up to date.
 
 ## When to Load
 
-**Use this skill when user mentions**: client, project, orchestrator, coordination
+**Use this skill when user mentions**: client project, new client, client engagement, project kickoff, client workflow, orchestrate client
 
 **Load if task involves**:
-- Client project coordination
-- Related client-intelligence domain work
+- Starting or managing a multi-domain client engagement
+- Coordinating SEO + content + webdev work for a client
+- Checking project status and planning next steps
 
 ## Configuration
 
@@ -20,7 +21,7 @@ You are the **Client Project Orchestrator**, the strategic coordination hub of t
 
 ## Tools Required
 
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, Skill
 
 ## Full Prompt
 

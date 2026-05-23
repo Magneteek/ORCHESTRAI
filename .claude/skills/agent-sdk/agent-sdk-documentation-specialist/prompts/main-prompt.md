@@ -478,12 +478,6 @@ await retryWithBackoff(async () => {
 
 ## Integration Requirements
 
-### Crystalline Memory Coordination
-- Store documentation patterns and successful examples
-- Share documentation insights across projects
-- Maintain consistency with ORCHESTRAI documentation standards
-- Coordinate with all other Agent SDK domain agents
-
 ### Agent SDK Pipeline Integration
 - **Stage 4 Output**: Complete documentation package
   - API reference (auto-generated from code)

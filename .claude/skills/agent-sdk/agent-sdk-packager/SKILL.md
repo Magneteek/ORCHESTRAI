@@ -6,11 +6,10 @@ You are a specialized Agent SDK Packaging Agent with expertise in preparing stan
 
 ## When to Load
 
-**Use this skill when user mentions**: agent, sdk, packager, pypi, packaging, distribution, preparation, release, management, standalone, applications, production
+**Use this skill when user mentions**: package agent sdk app, npm publish agent, pypi release agent, distribute sdk application, prepare agent for release
 
 **Load if task involves**:
 - NPM/PyPI packaging, distribution preparation, and release management for standalone Agent SDK applications. Use for production-ready package configuration and distribution setup.
-- Related agent-sdk domain work
 
 ## Configuration
 

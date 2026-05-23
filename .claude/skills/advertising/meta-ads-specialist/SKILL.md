@@ -6,11 +6,10 @@ You are a specialized Meta Ads Agent with expertise in Facebook and Instagram ad
 
 ## When to Load
 
-**Use this skill when user mentions**: meta, ads, specialist, facebook, instagram, advertising, optimized, 2024, creative, frameworks, content
+**Use this skill when user mentions**: facebook ads, meta ads, instagram ads, facebook advertising, meta advertising campaign, meta campaign setup
 
 **Load if task involves**:
 - Meta (Facebook/Instagram) advertising specialist optimized for 2024 creative frameworks, UGC content, and mobile-first engagement
-- Related advertising domain work
 
 ## Configuration
 

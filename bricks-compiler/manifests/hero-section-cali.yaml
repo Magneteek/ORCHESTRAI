@@ -1,0 +1,75 @@
+# Hero Section Cali
+# Dark-bg hero: centered text overlay on an animated mosaic image background.
+# Background images come from a WP query loop (HappyFiles folder) — NOT fillable slots.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: hero-section-cali
+version: "2.3.5"
+description: |
+  Full-width dark hero. Centered content column: accent label, H1 heading,
+  lede paragraph, primary + secondary CTA buttons. Behind the content, a
+  mosaic of images tiles in via a WP query loop — images are NOT slot-filled
+  (configure the loop query in the template; images come from WP media library).
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: intro-foxtrot__heading
+    description: H1 hero heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: intro-foxtrot__accent-heading
+    description: Small accent label above the main heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: intro-foxtrot__lede
+    description: Subheading / intro paragraph below the heading
+
+  # ── CTAs ──────────────────────────────────────────────────────────────────
+
+  primary_cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--primary
+    description: Primary button label
+
+  primary_cta_link:
+    type: link
+    required: false
+    target_class: btn--primary
+    description: "Primary button URL: { url: '...', type?: 'external' }"
+
+  secondary_cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--outline
+    description: Secondary (outline) button label
+
+  secondary_cta_link:
+    type: link
+    required: false
+    target_class: btn--outline
+    description: "Secondary button URL: { url: '...', type?: 'external' }"
+
+# ── Notes on background images ─────────────────────────────────────────────
+# The mosaic background uses Bricks query loop with {post_id} dynamic tag.
+# To configure: set the query post_type to 'attachment' filtered by
+# HappyFiles folder 284 (or another folder of your choice) inside the template.
+# No image slots are needed in the page spec.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  - name: fr-notes

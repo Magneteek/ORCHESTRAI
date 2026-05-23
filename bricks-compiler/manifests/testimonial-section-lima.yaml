@@ -1,0 +1,57 @@
+# Testimonial Section Lima
+# Light-bg section: heading + platform badge row + floating callout quote grid (no authors).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: testimonial-section-lima
+version: "2.3.5"
+description: |
+  Light-background section creating a dense "wall of proof" effect. Top row: H2
+  heading left, two platform rating badges (e.g. Google 4.8, Yelp 4.8) right.
+  Below: a flex-wrap grid of 14 pill-shaped testimonial cards, each containing just
+  a short bold callout quote (no author attribution). On mobile, only the first 6
+  cards are shown. Ideal for aggregating many short review excerpts.
+  NOTE: The two platform badges (icon + score + platform name) are not individually
+  slot-fillable — the badge rating numbers and platform labels share ambiguous CSS
+  classes. Edit badge content manually in Bricks after pasting.
+
+slots:
+
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_label: "Heading"
+    description: H2 section heading (e.g. "Your social proof heading goes here")
+    # The heading element has no CSS class; targeted by its label "Heading".
+
+  # NOTE: The Badge Group Alpha contains two "Badge Alpha (CSS)" elements.
+  # Each badge has: icon (SVG), rating number text, and platform label text.
+  # Badge 1 (Google) rating uses class 'zrjdai' (site-level, not in globalClasses).
+  # Badge 2 (Yelp) label uses class 'fr-badge-alpha__label'.
+  # These cannot be reliably targeted across sites — edit badge values manually.
+
+  # ── Callout quotes (array) ────────────────────────────────────────────────
+
+  callouts:
+    type: array
+    required: false
+    min: 4
+    max: 14
+    template_label: "Testimonial Card Lima"
+    description: |
+      Flex-wrap grid of floating pill cards. Each card contains only a short
+      callout quote — no author, no avatar. 14 cards in template; mobile shows
+      first 6 only. Keep quotes short (2–15 words each) for best visual effect.
+    item_slots:
+      text:
+        type: string
+        required: true
+        max_length: 100
+        target_class: fr-testimonial-card-lima__callout
+        description: Short testimonial excerpt or quote fragment
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

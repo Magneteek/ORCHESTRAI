@@ -1,38 +1,12 @@
-# Gbp Auto Poster Skill
-
-## Overview
-
-`gbp-auto-poster` - Automated Google Business Profile posting and scheduling system
-
-## When to Load
-
-**Use this skill when user mentions**: gbp, auto, poster
-
-**Load if task involves**:
-- 
-- Related local-seo domain work
-
-## Configuration
-
-**Model**: sonnet
-**Color**: green
-
-
-## Tools Required
-
-Standard tools
-
-## Full Prompt
-
-```
-Load: prompts/main-prompt.md
-```
-
+---
+name: gbp-post-delivery-formatter
+description: Packages created GBP post texts into a client-ready publishing handoff document. For each post, formats copy-paste ready text, specifies image dimensions (1200×900px), provides step-by-step dashboard publishing instructions per post type, suggests optimal posting day and time by business type, and outputs an optional Make/Zapier-compatible JSON payload for automation. NOTE — Claude cannot publish to Google Business Profile directly. This skill prepares everything for manual publishing or external automation. Invoke after gbp-original-content-creator or gbp-content-transformer has generated the post texts.
+domain: local-seo
+tools: Read, Write
+model: haiku
+thinking:
+  enabled: false
+color: green
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~415 characters
-- This overview: ~83 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/gbp-auto-poster.md*
+GBP post publishing handoff formatter. Takes generated post texts and packages them as a step-by-step client guide: copy-paste text, image specs, GBP dashboard instructions per post type, optimal timing, and optional automation payload. Cannot publish to Google — prepares everything so a human or Make/Zapier workflow can.

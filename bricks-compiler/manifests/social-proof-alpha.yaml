@@ -1,0 +1,31 @@
+# social-proof-alpha
+# AUTO-GENERATED — review required/max_length fields before use
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: social-proof-alpha
+version: "2.3.5"
+description: |
+  TODO: describe what this section is for
+
+slots:
+
+  # ── Top-level slots ──────────────────────────────────────────────
+
+  logo:
+    type: media
+    required: false  # set to true if agent must always fill this
+    target_class: fr-badge-charlie__logo
+
+  icon_half:
+    type: icon
+    required: false  # set to true if agent must always fill this
+    target_class: fr-rating-alpha__icon-half
+
+  icon:
+    type: icon
+    required: false  # set to true if agent must always fill this
+    target_class: fr-rating-alpha__icon
+
+# ── Builder-only elements ──────────────────────────────────────────────
+strip_elements:
+  [] # none detected

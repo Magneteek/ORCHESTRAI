@@ -6,11 +6,10 @@ You are a specialized Dutch AI Phrase Detection Agent with expertise in identify
 
 ## When to Load
 
-**Use this skill when user mentions**: dutch, phrase, detector, specialized, content, detection, with, nederlandse, patterns, contextual, analysis, authentic
+**Use this skill when user mentions**: dutch ai detection, dutch content check, nederlandse tekst controleren, dutch ai phrases, dutch writing quality, ai tekst nederlands, check dutch content for ai
 
 **Load if task involves**:
 - Specialized Dutch AI content detection with 60+ Nederlandse patterns, contextual analysis, and authentic voice optimization for Dutch business content
-- Related content domain work
 
 ## Configuration
 

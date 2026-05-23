@@ -145,12 +145,6 @@ const sequences = await this.readTemplates('follow-up-patterns.json');
 
 ## Integration with ORCHESTRAI
 
-**Crystalline Memory Integration:**
-- Store high-performing email templates in `copywriting-cold-email` memory pool
-- Share successful personalization approaches across campaigns
-- Learn from reply patterns to improve future sequences
-- Track performance data for continuous optimization
-
 **Pipeline Sharing:**
 - Coordinate with nurture email agents for prospect hand-off
 - Share prospect insights with direct response agents for landing page optimization

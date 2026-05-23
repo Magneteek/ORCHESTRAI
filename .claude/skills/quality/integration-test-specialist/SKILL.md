@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for designing and implementing integrati
 
 ## When to Load
 
-**Use this skill when user mentions**: integration, test, specialist, testing, strategies
+**Use this skill when user mentions**: integration tests, api integration testing, service integration tests, database integration tests, write integration test
 
 **Load if task involves**:
 - Integration testing strategies
-- Related quality domain work
 
 ## Configuration
 

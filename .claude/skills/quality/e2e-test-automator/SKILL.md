@@ -6,11 +6,10 @@ Specialized agent for maintainability
 
 ## When to Load
 
-**Use this skill when user mentions**: test, automator
+**Use this skill when user mentions**: e2e tests, end-to-end tests, playwright tests, cypress tests, user flow testing, browser automation tests, write e2e
 
 **Load if task involves**:
 - Comprehensive end-to-end testing with Playwright and Cypress, including page object models, authentication state, and CI/CD integration
-- Related quality domain work
 
 ## Configuration
 

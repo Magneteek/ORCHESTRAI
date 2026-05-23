@@ -1,0 +1,67 @@
+# FAQ Section Bravo
+# Full intro header above + 2-column static FAQ grid below.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: faq-section-bravo
+version: "2.3.5"
+description: |
+  FAQ section with a full-width intro row (H2 heading, lede left, CTA button right)
+  above a 2-column grid of static Q&A cards (question heading + answer text per card).
+  Best for 4 or 8 items (fills the grid evenly). No accordion — all answers visible at once.
+
+slots:
+
+  # ── Intro header ──────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-charlie__heading
+    description: H2 section heading (left of intro row)
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-charlie__lede
+    description: Intro paragraph below the heading
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--primary
+    description: CTA button label (right of intro row)
+
+  cta_link:
+    type: link
+    required: false
+    target_class: btn--primary
+    description: "CTA button URL: { url: '...', type?: 'external' }"
+
+  # ── FAQ items (array) ─────────────────────────────────────────────────────
+
+  faqs:
+    type: array
+    required: true
+    min: 2
+    max: 8
+    template_label: "FAQ Card Bravo"
+    description: Grid of FAQ cards (2 columns). Use 4 or 8 items for symmetry.
+    item_slots:
+      question:
+        type: string
+        required: true
+        max_length: 120
+        target_class: fr-faq-card-bravo__question
+        description: Question text (heading)
+      answer:
+        type: html
+        required: true
+        target_class: fr-faq-card-bravo__answer
+        description: Answer body (supports rich text / HTML)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

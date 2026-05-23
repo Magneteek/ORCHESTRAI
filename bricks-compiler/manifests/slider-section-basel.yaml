@@ -1,0 +1,40 @@
+# Slider Section Basel
+# Left column: heading + lede + CTA.  Right column: Splide carousel fed by a WP query loop.
+# AUTO-GENERATED skeleton, manually corrected
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: slider-section-basel
+version: "2.3.5"
+description: |
+  Split section: static content column (heading/lede/CTA) on the left, auto-playing
+  Splide slider on the right populated dynamically from a WP post query.
+  Slide content (title, body, image) is filled via Bricks dynamic tags — not editable
+  via page-spec slots.
+
+slots:
+
+  # ── Content column ─────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: false
+    max_length: 80
+    target_class: slider-section-basel__heading
+    description: H2 heading in the left content column
+
+  lede:
+    type: html
+    required: false
+    target_class: slider-section-basel__lede
+    description: Body paragraph(s) below the heading
+
+  # NOTE: The slider (right column) uses Bricks query loop and dynamic tags:
+  #   Slide heading  → {post_title}
+  #   Slide body     → {post_content}
+  #   Slide image    → {featured_image}
+  # To configure which posts appear, set the query post_type in the template
+  # (currently: locations). No slide slots needed in the page spec.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

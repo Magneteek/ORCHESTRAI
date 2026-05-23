@@ -1,0 +1,1263 @@
+{
+  "content": [
+    {
+      "id": "839460",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "6d0f89"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "eojspa"
+        ]
+      },
+      "label": "Testimonial Section Mike"
+    },
+    {
+      "id": "6d0f89",
+      "name": "container",
+      "parent": "839460",
+      "children": [
+        "702af2",
+        "e8d995"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ck3r05"
+        ]
+      },
+      "label": "Testimonial Container Mike (CSS)"
+    },
+    {
+      "id": "702af2",
+      "name": "block",
+      "parent": "6d0f89",
+      "children": [
+        "114641",
+        "c4bd3c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ambjon"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "114641",
+      "name": "heading",
+      "parent": "702af2",
+      "children": [],
+      "settings": {
+        "text": "What our customers are saying about us",
+        "_cssGlobalClasses": [
+          "dmyxiu"
+        ],
+        "tag": "h2"
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "c4bd3c",
+      "name": "button",
+      "parent": "702af2",
+      "children": [],
+      "settings": {
+        "text": "See All Reviews",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--primary"
+        ]
+      }
+    },
+    {
+      "id": "e8d995",
+      "name": "block",
+      "parent": "6d0f89",
+      "children": [
+        "092df9",
+        "b7ff25",
+        "4465ba",
+        "5245fa",
+        "a0ea26",
+        "4a7df5"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "icgu2n"
+        ],
+        "tag": "ul"
+      },
+      "label": "Masonry"
+    },
+    {
+      "id": "092df9",
+      "name": "block",
+      "parent": "e8d995",
+      "children": [
+        "5731fa",
+        "b93cbf"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glzt5e"
+        ],
+        "tag": "li"
+      },
+      "label": "Testimonial Card Mike"
+    },
+    {
+      "id": "5731fa",
+      "name": "block",
+      "parent": "092df9",
+      "children": [
+        "933950",
+        "c53dfb"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lfwgf4"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "933950",
+      "name": "div",
+      "parent": "5731fa",
+      "children": [
+        "908313",
+        "f1ee0c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5v2bdu"
+        ]
+      },
+      "label": "User"
+    },
+    {
+      "id": "908313",
+      "name": "image",
+      "parent": "933950",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "sigfgk"
+        ]
+      },
+      "themeStyles": [],
+      "label": "User Thumbnail"
+    },
+    {
+      "id": "f1ee0c",
+      "name": "block",
+      "parent": "933950",
+      "children": [
+        "0dbd84",
+        "14fcf7"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "obml75"
+        ]
+      },
+      "label": "User Content"
+    },
+    {
+      "id": "0dbd84",
+      "name": "text-basic",
+      "parent": "f1ee0c",
+      "children": [],
+      "settings": {
+        "text": "James Dean",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fic82f"
+        ]
+      },
+      "label": "User Name"
+    },
+    {
+      "id": "14fcf7",
+      "name": "text-basic",
+      "parent": "f1ee0c",
+      "children": [],
+      "settings": {
+        "text": "Customer",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "gneqbb"
+        ]
+      },
+      "label": "User Title"
+    },
+    {
+      "id": "c53dfb",
+      "name": "icon",
+      "parent": "5731fa",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "width": "var(--icon-size)",
+          "height": "var(--icon-size)"
+        },
+        "_cssGlobalClasses": [
+          "zb0t0j"
+        ]
+      },
+      "label": "Social Icon",
+      "themeStyles": []
+    },
+    {
+      "id": "b93cbf",
+      "name": "block",
+      "parent": "092df9",
+      "children": [
+        "4e7509"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pzf44y"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "4e7509",
+      "name": "text-basic",
+      "parent": "b93cbf",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "2bhtu4"
+        ]
+      },
+      "label": "Testimonial"
+    },
+    {
+      "id": "b7ff25",
+      "name": "block",
+      "parent": "e8d995",
+      "children": [
+        "1a6166",
+        "9d7fe3"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glzt5e"
+        ],
+        "tag": "li"
+      },
+      "label": "Testimonial Card Mike"
+    },
+    {
+      "id": "1a6166",
+      "name": "block",
+      "parent": "b7ff25",
+      "children": [
+        "1cfd7b",
+        "6c9696"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lfwgf4"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "1cfd7b",
+      "name": "div",
+      "parent": "1a6166",
+      "children": [
+        "8f5307",
+        "4b2e6a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5v2bdu"
+        ]
+      },
+      "label": "User"
+    },
+    {
+      "id": "8f5307",
+      "name": "image",
+      "parent": "1cfd7b",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "sigfgk"
+        ],
+        "image": {
+          "url": "https://bricks.getframes.io/wp-content/uploads/Placeholder-Man.jpeg",
+          "external": true,
+          "filename": "Placeholder-Man.jpeg"
+        }
+      },
+      "themeStyles": [],
+      "label": "User Thumbnail"
+    },
+    {
+      "id": "4b2e6a",
+      "name": "block",
+      "parent": "1cfd7b",
+      "children": [
+        "25958b",
+        "4555c1"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "obml75"
+        ]
+      },
+      "label": "User Content"
+    },
+    {
+      "id": "25958b",
+      "name": "text-basic",
+      "parent": "4b2e6a",
+      "children": [],
+      "settings": {
+        "text": "James Dean",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fic82f"
+        ]
+      },
+      "label": "User Name"
+    },
+    {
+      "id": "4555c1",
+      "name": "text-basic",
+      "parent": "4b2e6a",
+      "children": [],
+      "settings": {
+        "text": "Customer",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "gneqbb"
+        ]
+      },
+      "label": "User Title"
+    },
+    {
+      "id": "6c9696",
+      "name": "icon",
+      "parent": "1a6166",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "width": "var(--icon-size)",
+          "height": "var(--icon-size)"
+        },
+        "_cssGlobalClasses": [
+          "zb0t0j"
+        ]
+      },
+      "label": "Social Icon",
+      "themeStyles": []
+    },
+    {
+      "id": "9d7fe3",
+      "name": "block",
+      "parent": "b7ff25",
+      "children": [
+        "209d1a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pzf44y"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "209d1a",
+      "name": "text-basic",
+      "parent": "9d7fe3",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "2bhtu4"
+        ],
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet.",
+        "tag": "p"
+      },
+      "label": "Testimonial"
+    },
+    {
+      "id": "4465ba",
+      "name": "block",
+      "parent": "e8d995",
+      "children": [
+        "8b88be",
+        "d1a5dc"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glzt5e"
+        ],
+        "tag": "li"
+      },
+      "label": "Testimonial Card Mike"
+    },
+    {
+      "id": "8b88be",
+      "name": "block",
+      "parent": "4465ba",
+      "children": [
+        "339fef",
+        "4f8848"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lfwgf4"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "339fef",
+      "name": "div",
+      "parent": "8b88be",
+      "children": [
+        "684d1c",
+        "b0bea6"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5v2bdu"
+        ]
+      },
+      "label": "User"
+    },
+    {
+      "id": "684d1c",
+      "name": "image",
+      "parent": "339fef",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "sigfgk"
+        ]
+      },
+      "themeStyles": [],
+      "label": "User Thumbnail"
+    },
+    {
+      "id": "b0bea6",
+      "name": "block",
+      "parent": "339fef",
+      "children": [
+        "9e2551",
+        "27e77b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "obml75"
+        ]
+      },
+      "label": "User Content"
+    },
+    {
+      "id": "9e2551",
+      "name": "text-basic",
+      "parent": "b0bea6",
+      "children": [],
+      "settings": {
+        "text": "James Dean",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fic82f"
+        ]
+      },
+      "label": "User Name"
+    },
+    {
+      "id": "27e77b",
+      "name": "text-basic",
+      "parent": "b0bea6",
+      "children": [],
+      "settings": {
+        "text": "Customer",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "gneqbb"
+        ]
+      },
+      "label": "User Title"
+    },
+    {
+      "id": "4f8848",
+      "name": "icon",
+      "parent": "8b88be",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "width": "var(--icon-size)",
+          "height": "var(--icon-size)"
+        },
+        "_cssGlobalClasses": [
+          "zb0t0j"
+        ]
+      },
+      "label": "Social Icon",
+      "themeStyles": []
+    },
+    {
+      "id": "d1a5dc",
+      "name": "block",
+      "parent": "4465ba",
+      "children": [
+        "2d31ef"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pzf44y"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "2d31ef",
+      "name": "text-basic",
+      "parent": "d1a5dc",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "2bhtu4"
+        ]
+      },
+      "label": "Testimonial"
+    },
+    {
+      "id": "5245fa",
+      "name": "block",
+      "parent": "e8d995",
+      "children": [
+        "b600ff",
+        "8d42dc"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glzt5e"
+        ],
+        "tag": "li"
+      },
+      "label": "Testimonial Card Mike"
+    },
+    {
+      "id": "b600ff",
+      "name": "block",
+      "parent": "5245fa",
+      "children": [
+        "6bbe0c",
+        "561a3a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lfwgf4"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "6bbe0c",
+      "name": "div",
+      "parent": "b600ff",
+      "children": [
+        "66995d",
+        "0432aa"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5v2bdu"
+        ]
+      },
+      "label": "User"
+    },
+    {
+      "id": "66995d",
+      "name": "image",
+      "parent": "6bbe0c",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "sigfgk"
+        ],
+        "image": {
+          "url": "https://bricks.getframes.io/wp-content/uploads/Placeholder-Man.jpeg",
+          "external": true,
+          "filename": "Placeholder-Man.jpeg"
+        }
+      },
+      "themeStyles": [],
+      "label": "User Thumbnail"
+    },
+    {
+      "id": "0432aa",
+      "name": "block",
+      "parent": "6bbe0c",
+      "children": [
+        "262138",
+        "51bd7e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "obml75"
+        ]
+      },
+      "label": "User Content"
+    },
+    {
+      "id": "262138",
+      "name": "text-basic",
+      "parent": "0432aa",
+      "children": [],
+      "settings": {
+        "text": "James Dean",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fic82f"
+        ]
+      },
+      "label": "User Name"
+    },
+    {
+      "id": "51bd7e",
+      "name": "text-basic",
+      "parent": "0432aa",
+      "children": [],
+      "settings": {
+        "text": "Customer",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "gneqbb"
+        ]
+      },
+      "label": "User Title"
+    },
+    {
+      "id": "561a3a",
+      "name": "icon",
+      "parent": "b600ff",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "width": "var(--icon-size)",
+          "height": "var(--icon-size)"
+        },
+        "_cssGlobalClasses": [
+          "zb0t0j"
+        ]
+      },
+      "label": "Social Icon",
+      "themeStyles": []
+    },
+    {
+      "id": "8d42dc",
+      "name": "block",
+      "parent": "5245fa",
+      "children": [
+        "565253"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pzf44y"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "565253",
+      "name": "text-basic",
+      "parent": "8d42dc",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "2bhtu4"
+        ]
+      },
+      "label": "Testimonial"
+    },
+    {
+      "id": "a0ea26",
+      "name": "block",
+      "parent": "e8d995",
+      "children": [
+        "24c202",
+        "a19777"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glzt5e"
+        ],
+        "tag": "li"
+      },
+      "label": "Testimonial Card Mike"
+    },
+    {
+      "id": "24c202",
+      "name": "block",
+      "parent": "a0ea26",
+      "children": [
+        "8dbf3f",
+        "72ec3b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lfwgf4"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "8dbf3f",
+      "name": "div",
+      "parent": "24c202",
+      "children": [
+        "93ac33",
+        "96d415"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5v2bdu"
+        ]
+      },
+      "label": "User"
+    },
+    {
+      "id": "93ac33",
+      "name": "image",
+      "parent": "8dbf3f",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "sigfgk"
+        ],
+        "image": {
+          "url": "https://bricks.getframes.io/wp-content/uploads/Placeholder-Man.jpeg",
+          "external": true,
+          "filename": "Placeholder-Man.jpeg"
+        }
+      },
+      "themeStyles": [],
+      "label": "User Thumbnail"
+    },
+    {
+      "id": "96d415",
+      "name": "block",
+      "parent": "8dbf3f",
+      "children": [
+        "2ff99f",
+        "3a813d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "obml75"
+        ]
+      },
+      "label": "User Content"
+    },
+    {
+      "id": "2ff99f",
+      "name": "text-basic",
+      "parent": "96d415",
+      "children": [],
+      "settings": {
+        "text": "James Dean",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fic82f"
+        ]
+      },
+      "label": "User Name"
+    },
+    {
+      "id": "3a813d",
+      "name": "text-basic",
+      "parent": "96d415",
+      "children": [],
+      "settings": {
+        "text": "Customer",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "gneqbb"
+        ]
+      },
+      "label": "User Title"
+    },
+    {
+      "id": "72ec3b",
+      "name": "icon",
+      "parent": "24c202",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "width": "var(--icon-size)",
+          "height": "var(--icon-size)"
+        },
+        "_cssGlobalClasses": [
+          "zb0t0j"
+        ]
+      },
+      "label": "Social Icon",
+      "themeStyles": []
+    },
+    {
+      "id": "a19777",
+      "name": "block",
+      "parent": "a0ea26",
+      "children": [
+        "5e55bf"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pzf44y"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "5e55bf",
+      "name": "text-basic",
+      "parent": "a19777",
+      "children": [],
+      "settings": {
+        "text": "Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "2bhtu4"
+        ]
+      },
+      "label": "Testimonial"
+    },
+    {
+      "id": "4a7df5",
+      "name": "block",
+      "parent": "e8d995",
+      "children": [
+        "5ef4a9",
+        "12ef74"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glzt5e"
+        ],
+        "tag": "li"
+      },
+      "label": "Testimonial Card Mike"
+    },
+    {
+      "id": "5ef4a9",
+      "name": "block",
+      "parent": "4a7df5",
+      "children": [
+        "f253b4",
+        "81943c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lfwgf4"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "f253b4",
+      "name": "div",
+      "parent": "5ef4a9",
+      "children": [
+        "f8ef22",
+        "4b5029"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5v2bdu"
+        ]
+      },
+      "label": "User"
+    },
+    {
+      "id": "f8ef22",
+      "name": "image",
+      "parent": "f253b4",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "sigfgk"
+        ],
+        "image": {
+          "url": "https://bricks.getframes.io/wp-content/uploads/Placeholder-Man.jpeg",
+          "external": true,
+          "filename": "Placeholder-Man.jpeg"
+        }
+      },
+      "themeStyles": [],
+      "label": "User Thumbnail"
+    },
+    {
+      "id": "4b5029",
+      "name": "block",
+      "parent": "f253b4",
+      "children": [
+        "798fe6",
+        "850fcf"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "obml75"
+        ]
+      },
+      "label": "User Content"
+    },
+    {
+      "id": "798fe6",
+      "name": "text-basic",
+      "parent": "4b5029",
+      "children": [],
+      "settings": {
+        "text": "James Dean",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fic82f"
+        ]
+      },
+      "label": "User Name"
+    },
+    {
+      "id": "850fcf",
+      "name": "text-basic",
+      "parent": "4b5029",
+      "children": [],
+      "settings": {
+        "text": "Customer",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "gneqbb"
+        ]
+      },
+      "label": "User Title"
+    },
+    {
+      "id": "81943c",
+      "name": "icon",
+      "parent": "5ef4a9",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "width": "var(--icon-size)",
+          "height": "var(--icon-size)"
+        },
+        "_cssGlobalClasses": [
+          "zb0t0j"
+        ]
+      },
+      "label": "Social Icon",
+      "themeStyles": []
+    },
+    {
+      "id": "12ef74",
+      "name": "block",
+      "parent": "4a7df5",
+      "children": [
+        "8d4bd1"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pzf44y"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "8d4bd1",
+      "name": "text-basic",
+      "parent": "12ef74",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "2bhtu4"
+        ]
+      },
+      "label": "Testimonial"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "eojspa",
+      "name": "testimonial-section-mike",
+      "settings": {
+        "_background": {
+          "color": {
+            "raw": "var(--bg-ultra-light)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "ck3r05",
+      "name": "testimonial-container-mike",
+      "settings": {
+        "_cssCustom": ".testimonial-container-mike {\n\t--padding: var(--space-xl);\n  --clip-amount: 120px; /* How much to cut off the bottom */\n \n  /* Concentric Radius */\n\tpadding: var(--padding) var(--padding) 0 var(--padding);\n\tborder-radius: calc(var(--radius) + var(--padding) / 2);\n}\n\n/* \nChange selector below based on which child\nneeds the inner radius.\n*/\n.testimonial-container-mike > * {\n\tborder-radius: var(--radius);\n\toverflow: hidden;\n}\n\n/* End Concentric Radius */",
+        "_overflow": "hidden",
+        "_rowGap": "calc(var(--content-gap) * 1.5)",
+        "_heightMax": "var(--max-height)",
+        "_cssCustom:mobile_landscape": ".testimonial-container-mike {\n  --padding: var(--space-l);\n}",
+        "_cssCustom:mobile_portrait": ".testimonial-container-mike {\n  --padding: var(--space-m);\n}",
+        "_background": {
+          "color": {
+            "raw": "var(--bg-light)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "ambjon",
+      "name": "testimonial-container-mike__header",
+      "settings": {
+        "_direction": "row",
+        "_justifyContent": "space-between",
+        "_columnGap": "var(--space-m)",
+        "_rowGap": "var(--content-gap)",
+        "_alignItems": "center",
+        "_overflow": "visible"
+      },
+      "_exists": false
+    },
+    {
+      "id": "dmyxiu",
+      "name": "testimonial-container-mike__heading",
+      "settings": {
+        "_width": "20ch"
+      },
+      "_exists": false
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "icgu2n",
+      "name": "testimonial-container-mike__masonry",
+      "settings": {
+        "_padding": {
+          "left": "0"
+        },
+        "_cssCustom": "/* Auto-responsive columns */\n.testimonial-container-mike__masonry {\n  list-style: none;\n\t--col-count: 3;\n\t--col-min-width: 250px;\n\t--col-rule-style: solid;\n\t--col-rule-width: 0;\n\t--col-rule-color: var(--black);\n\t--col-gap: var(--space-xs);\n\t--row-gap: var(--space-xs);\n}\n\n.testimonial-container-mike__masonry {\n\tdisplay: block !important;\n\tcolumns: var(--col-count) var(--col-min-width);\n\tcolumn-rule-style: var(--col-rule-style);\n\tcolumn-rule-width: var(--col-rule-width);\n\tcolumn-rule-color: var(--col-rule-color);\n\tgap: var(--col-gap);\n}\n\n.testimonial-container-mike__masonry > * {\n\t\tbreak-inside: avoid;\n\tmargin-block-end: var(--row-gap);\n}",
+        "_margin": {
+          "bottom": "calc(var(--clip-amount) * -1)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "glzt5e",
+      "name": "testimonial-card-mike",
+      "settings": {
+        "_padding": {
+          "top": "var(--space-m)",
+          "right": "var(--space-m)",
+          "bottom": "var(--space-m)",
+          "left": "var(--space-m)"
+        },
+        "_rowGap": "var(--content-gap)",
+        "_background": {
+          "color": {
+            "raw": "var(--white)"
+          }
+        },
+        "_cssCustom": ".testimonial-card-mike {\n  --thumb-size: 50px;\n  border-radius: var(--radius);\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "lfwgf4",
+      "name": "testimonial-card-mike__header",
+      "settings": {
+        "_direction": "row",
+        "_columnGap": "var(--space-s)",
+        "_justifyContent": "space-between"
+      },
+      "_exists": false
+    },
+    {
+      "id": "5v2bdu",
+      "name": "testimonial-card-mike__user",
+      "settings": {
+        "_display": "grid",
+        "_direction": "column",
+        "_gridTemplateColumns": "var(--thumb-size) var(--grid-1)",
+        "_gridGap": "var(--space-xs)",
+        "_alignItemsGrid": "center",
+        "_gridTemplateColumns:mobile_portrait": "var(--grid-1)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "sigfgk",
+      "name": "testimonial-card-mike__user-thumbnail",
+      "settings": {
+        "_border": {
+          "radius": {
+            "top": "var(--radius-circle)",
+            "right": "var(--radius-circle)",
+            "bottom": "var(--radius-circle)",
+            "left": "var(--radius-circle)"
+          }
+        },
+        "_width": "var(--thumb-size)",
+        "_height": "var(--thumb-size)",
+        "_aspectRatio": "1"
+      },
+      "_exists": false
+    },
+    {
+      "id": "obml75",
+      "name": "testimonial-card-mike__user-content",
+      "settings": {
+        "_rowGap": ".25em"
+      },
+      "_exists": false
+    },
+    {
+      "id": "fic82f",
+      "name": "testimonial-card-mike__user-name",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--text-dark)"
+          },
+          "line-height": "1",
+          "font-weight": "700"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "gneqbb",
+      "name": "testimonial-card-mike__user-title",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--text-dark-muted)"
+          },
+          "font-size": "var(--text-s)",
+          "line-height": "1"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "zb0t0j",
+      "name": "testimonial-card-mike__social-icon",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--text-dark-muted)"
+          }
+        },
+        "_cssCustom": ".testimonial-card-mike__social-icon {\n  --icon-size: 24px;\n}"
+      },
+      "modified": 1726324349,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "pzf44y",
+      "name": "testimonial-card-mike__body",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "2bhtu4",
+      "name": "testimonial-card-mike__testimonial",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--text-dark-muted)"
+          }
+        }
+      },
+      "_exists": false
+    }
+  ]
+}

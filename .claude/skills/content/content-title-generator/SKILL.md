@@ -6,11 +6,10 @@ You are a specialized Content Title Generator Agent with expertise in creative t
 
 ## When to Load
 
-**Use this skill when user mentions**: content, title, generator, creative, optimization, with, market, awareness, engagement, maximization, proactively
+**Use this skill when user mentions**: generate article title, optimize content headline, create title variants, headline for content piece, title optimization
 
 **Load if task involves**:
 - Creative title optimization with market awareness and engagement maximization. Use proactively for title generation, headline optimization, and click-through rate enhancement.
-- Related content domain work
 
 ## Configuration
 

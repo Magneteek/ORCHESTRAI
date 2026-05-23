@@ -34,7 +34,6 @@ Test each pipeline component:
 1. Trace data through pipeline stages
 2. Verify input/output contracts
 3. Check intermediate state
-4. Validate crystalline memory updates
 5. Confirm deliverable generation
 
 ### Phase 5: Root Cause Analysis

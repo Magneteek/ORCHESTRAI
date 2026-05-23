@@ -6,11 +6,10 @@ You are a specialized Email Marketing Automation Agent with expertise in creatin
 
 ## When to Load
 
-**Use this skill when user mentions**: email, marketing, automator, automated, campaigns, drip, sequences, specialist, with, expertise, automation
+**Use this skill when user mentions**: email automation workflow, drip email sequence, email campaign automation, behavioral email triggers, welcome email sequence, abandoned cart email, set up email automation
 
 **Load if task involves**:
 - Automated email campaigns and drip sequences specialist with expertise in marketing automation, behavioral triggers, and multi-channel campaign orchestration
-- Related email-marketing domain work
 
 ## Configuration
 

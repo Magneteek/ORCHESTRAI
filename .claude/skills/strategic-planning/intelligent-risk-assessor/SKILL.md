@@ -2,21 +2,22 @@
 
 ## Overview
 
-AI-powered risk assessment using random forest classifiers and anomaly detection for 30% enhanced risk identification.
+Structured project risk assessment: identifies technical, scope, timeline, quality, and external risks with probability/impact scoring and specific mitigation strategies.
 
 ## When to Load
 
-**Use this skill when user mentions**: intelligent, risk, assessor, powered, assessment, using, random, forest, classifiers, anomaly, detection, enhanced
+**Use this skill when user mentions**: risk assessment, project risks, risk analysis, identify risks, what could go wrong, risk register, risk mitigation
 
 **Load if task involves**:
-- AI-powered risk assessment using random forest classifiers and anomaly detection for 30% enhanced risk identification
-- Related strategic-planning domain work
+- Assessing risks before starting a project or phase
+- Producing a risk register with mitigation plans
+- Identifying what could delay or derail a project
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 3000
 
 ## Tools Required
 
@@ -30,9 +31,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~590 characters
-- This overview: ~118 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/intelligent-risk-assessor.md*
+*Rewritten 2026-04-17 — removed fake random-forest/anomaly-detection claims, replaced with structured risk framework*

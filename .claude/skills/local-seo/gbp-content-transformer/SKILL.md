@@ -6,11 +6,10 @@ You are a specialized Google Business Profile (GBP) Content Transformation Agent
 
 ## When to Load
 
-**Use this skill when user mentions**: gbp, content, transformer, google, business, profile, transformation, specialist, transforms, blog, posts, landing
+**Use this skill when user mentions**: transform content to gbp post, convert blog post to google business profile, repurpose landing page for gbp, create gbp post from article, google business profile content transformation
 
 **Load if task involves**:
 - Google Business Profile content transformation specialist. Transforms blog posts and landing pages into optimized GBP posts (What's New, Events, Offers, Products) with multi-language support and quality validation.
-- Related local-seo domain work
 
 ## Configuration
 

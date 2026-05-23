@@ -1,0 +1,75 @@
+# Hero Section Quebec
+# Light-bg hero: heading+lede at top (3/4 width); image+overlay left, CTA sidebar right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: hero-section-quebec
+version: "2.3.5"
+description: |
+  Light-background hero with two zones. Top zone (3/4 width): H1 heading + lede paragraph.
+  Bottom zone splits into: left 3/4 — a large image with a dark overlay and overlay text;
+  right 1/4 — a sidebar CTA box with heading, supporting paragraph and an icon text-link.
+
+slots:
+
+  # ── Top zone ──────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-hero-quebec__heading
+    description: H1 hero heading (top zone, ~3/4 width)
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-hero-quebec__lede
+    description: Intro paragraph below the heading (top zone)
+
+  # ── Bottom left: image with overlay ───────────────────────────────────────
+
+  media:
+    type: media
+    required: false
+    target_class: fr-hero-quebec__media
+    description: Large feature image (bottom-left, takes 3/4 width)
+
+  overlay_text:
+    type: string
+    required: false
+    max_length: 120
+    target_class: fr-hero-quebec__overlay-text
+    description: Short text displayed on the dark overlay of the image
+
+  # ── Bottom right: CTA sidebar ─────────────────────────────────────────────
+
+  sidebar_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-hero-quebec__cta-heading
+    description: Heading inside the CTA sidebar (right column)
+
+  sidebar_text:
+    type: html
+    required: false
+    target_class: fr-hero-quebec__cta-text
+    description: Supporting paragraph(s) inside the CTA sidebar
+
+  sidebar_link_text:
+    type: string
+    required: false
+    max_length: 50
+    target_class: fr-icon-link-alpha
+    description: Label of the icon text-link at the bottom of the sidebar
+
+  sidebar_link_url:
+    type: link
+    required: false
+    target_class: fr-icon-link-alpha
+    description: "URL for the icon text-link: { url: '...', type?: 'external' }"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

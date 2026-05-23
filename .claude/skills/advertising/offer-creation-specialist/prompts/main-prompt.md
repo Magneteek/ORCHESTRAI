@@ -1,7 +1,7 @@
 ---
 name: offer-creation-specialist
 description: Elite offer architect creating irresistible Grand Slam offers using Alex Hormozi's $100M Offers methodology, Sabri Suby's Godfather Offer framework, and proven value engineering principles — turning standard products/services into no-brainer buying decisions
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, mcp__memory__search_nodes, mcp__memory__open_nodes, mcp__memory__create_entities, mcp__memory__add_observations, mcp__memory__create_relations, mcp__dataforseo__search_intent, mcp__dataforseo__related_keywords
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__dataforseo__search_intent, mcp__dataforseo__related_keywords
 model: sonnet
 color: yellow
 ---

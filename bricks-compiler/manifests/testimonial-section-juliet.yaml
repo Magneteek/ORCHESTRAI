@@ -1,0 +1,124 @@
+# Testimonial Section Juliet
+# Light-bg section: 2-col split (content left, auto-scrolling Splide slider right) + logos row.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: testimonial-section-juliet
+version: "2.3.5"
+description: |
+  Light-background section with two rows. Top row: 2-column grid — left column has
+  heading + accent + lede + 2 CTAs; right column has a vertical auto-scrolling Splide
+  slider with testimonial cards (avatar + quote + name) and a "more reviews" link below.
+  Bottom row: centered logo strip with intro text and 5 brand logos.
+  NOTE: The 5 logos in the logo strip all share the same CSS class
+  (fr-logo-group-alpha__logo) — they cannot be individually slot-filled. Replace logos
+  manually in Bricks after pasting.
+
+slots:
+
+  # ── Content column (left) ─────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-testimonial-section-juliet__heading
+    description: H2 heading in the left content column
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-testimonial-section-juliet__accent-heading
+    description: Small uppercase accent label above the heading
+
+  lede:
+    type: html
+    required: false
+    max_length: 400
+    target_class: fr-testimonial-section-juliet__lede
+    description: Lede text below the heading (can include multiple paragraphs)
+
+  primary_cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--primary
+    description: Primary CTA button label
+
+  primary_cta_link:
+    type: link
+    required: false
+    target_class: btn--primary
+    description: "Primary CTA button URL: { url: '...', type?: 'external' }"
+
+  secondary_cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-cta-links-bravo__link
+    description: Secondary CTA text link label
+
+  secondary_cta_link:
+    type: link
+    required: false
+    target_class: fr-cta-links-bravo__link
+    description: "Secondary CTA text link URL: { url: '...', type?: 'external' }"
+
+  # ── Slider (right column) ─────────────────────────────────────────────────
+
+  testimonials:
+    type: array
+    required: false
+    min: 3
+    max: 8
+    template_label: "Testimonial Card Juliet"
+    description: |
+      Vertically auto-scrolling slider cards (right column). Each card: avatar image
+      left, quote text + name right. Slider loops continuously at constant speed.
+    item_slots:
+      avatar:
+        type: media
+        required: false
+        target_class: fr-testimonial-card-juliet__avatar
+        description: Reviewer's headshot (3em square, radius-based crop)
+      text:
+        type: string
+        required: true
+        max_length: 300
+        target_class: fr-testimonial-card-juliet__text
+        description: Testimonial quote text
+      name:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-testimonial-card-juliet__name
+        description: Reviewer's name (displayed smaller below the quote)
+
+  more_reviews_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-testimonial-grid-juliet__more-reviews-link
+    description: '"See all reviews" text link below the slider'
+
+  more_reviews_link:
+    type: link
+    required: false
+    target_class: fr-testimonial-grid-juliet__more-reviews-link
+    description: "URL for the 'more reviews' text link below the slider"
+
+  # ── Logo strip (bottom row) ───────────────────────────────────────────────
+
+  logos_intro:
+    type: string
+    required: false
+    max_length: 120
+    target_class: fr-testimonial-section-juliet__logos-intro
+    description: Short intro text above the logo row (e.g. "Trusted by industry leaders")
+
+  # NOTE: The 5 logos all share class fr-logo-group-alpha__logo.
+  # Individual logo replacement is not slot-fillable — replace manually in Bricks.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

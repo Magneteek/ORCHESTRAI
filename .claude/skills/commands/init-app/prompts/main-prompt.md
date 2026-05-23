@@ -7,7 +7,6 @@
 
 ## Decision Log
 
-All decisions are also tracked in ORCHESTRAI crystalline memory.
 Query: "{{app-name}} architecture decisions"
 ```
 

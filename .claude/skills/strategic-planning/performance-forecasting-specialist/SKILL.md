@@ -2,21 +2,22 @@
 
 ## Overview
 
-LSTM neural networks for real-time performance prediction with <30s latency and 20-25% optimization boost.
+Analyses current performance metrics to forecast trends — predicting where Core Web Vitals, bundle size, and API response times are heading, with proactive optimisation recommendations before problems materialise.
 
 ## When to Load
 
-**Use this skill when user mentions**: performance, forecasting, specialist, lstm, neural, networks, real, time, prediction, with, latency, optimization
+**Use this skill when user mentions**: performance forecast, web vitals trend, performance prediction, performance trajectory, will performance get worse, proactive performance
 
 **Load if task involves**:
-- LSTM neural networks for real-time performance prediction with <30s latency and 20-25% optimization boost
-- Related strategic-planning domain work
+- Predicting future performance based on current metrics
+- Identifying performance trends before they become problems
+- Recommending proactive optimisations based on data
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 3000
 
 ## Tools Required
 
@@ -30,9 +31,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~530 characters
-- This overview: ~106 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/performance-forecasting-specialist.md*
+*Rewritten 2026-04-17 — removed fake LSTM/neural network claims, replaced with data-driven trend analysis*

@@ -24,12 +24,14 @@ services:
   # Trigger System (Phase 2)
   trigger-system:
     build:
-      context: ./orchestrai-trigger-system
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: orchestrai-trigger-system/Dockerfile
     container_name: orchestrai-triggers
     restart: unless-stopped
     ports:
       - "5502:5502"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - TRIGGER_PORT=5502
@@ -87,6 +89,4 @@ networks:
     driver: bridge
 
 volumes:
-  sessions:
-  logs:
   orchestrai-pgdata:

@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for **automated content architecture cor
 
 ## When to Load
 
-**Use this skill when user mentions**: content, structure, corrector, quality
+**Use this skill when user mentions**: fix content structure, correct heading hierarchy, restructure article, fix h1 h2 structure, content formatting issues, too many tables in content, wrong paragraph distribution
 
 **Load if task involves**:
 - Automated content architecture correction agent that fixes structural issues (excessive tables, wrong paragraph distribution, length problems) while preserving writing quality and language purity
-- Related content domain work
 
 ## Configuration
 

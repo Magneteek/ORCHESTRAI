@@ -1,0 +1,955 @@
+{
+  "content": [
+    {
+      "id": "897c3d",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "c7eebe",
+        "6a9e64"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "neswau",
+          "wffzhd",
+          "acss_import_bg--ultra-dark"
+        ]
+      },
+      "label": "Feature Section Iceland"
+    },
+    {
+      "id": "c7eebe",
+      "name": "container",
+      "parent": "897c3d",
+      "children": [
+        "a3b0e0",
+        "000c26"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pdcgtq"
+        ]
+      },
+      "label": "Intro Echo"
+    },
+    {
+      "id": "a3b0e0",
+      "name": "block",
+      "parent": "c7eebe",
+      "children": [
+        "680081",
+        "567cf6"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "cbghev"
+        ]
+      },
+      "label": "Heading Wrapper"
+    },
+    {
+      "id": "680081",
+      "name": "heading",
+      "parent": "a3b0e0",
+      "children": [],
+      "settings": {
+        "text": "Intro heading",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "bkgkvg"
+        ]
+      }
+    },
+    {
+      "id": "567cf6",
+      "name": "text-basic",
+      "parent": "a3b0e0",
+      "children": [],
+      "settings": {
+        "text": "accent heading",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "wbfkbf"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "000c26",
+      "name": "block",
+      "parent": "c7eebe",
+      "children": [
+        "c04acd"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pdtwel"
+        ]
+      },
+      "label": "Lede Wrapper"
+    },
+    {
+      "id": "c04acd",
+      "name": "text-basic",
+      "parent": "000c26",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "wqqaxf"
+        ]
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "6a9e64",
+      "name": "container",
+      "parent": "897c3d",
+      "children": [
+        "747304",
+        "a92d95"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wynpja"
+        ]
+      },
+      "label": "Iceland Slider"
+    },
+    {
+      "id": "747304",
+      "name": "fr-slider",
+      "parent": "6a9e64",
+      "children": [
+        "05df15",
+        "222734",
+        "20242a"
+      ],
+      "settings": {
+        "height": "50vh",
+        "speed": 300,
+        "playButtonIcon": {
+          "library": "themify",
+          "icon": "ti-control-play"
+        },
+        "pauseButtonIcon": {
+          "library": "themify",
+          "icon": "ti-control-pause"
+        },
+        "arrowSize": "var(--space-l)",
+        "arrowDisabled": "0.5",
+        "prevArrowTop": "50%",
+        "prevArrowLeft": "var(--space-xs)",
+        "prevArrowTranslate": "0,-50%",
+        "nextArrow": {
+          "library": "themify",
+          "icon": "ti-arrow-right"
+        },
+        "nextArrowTop": "50%",
+        "nextArrowRight": "var(--space-xs)",
+        "nextArrowTranslate": "0,-50%",
+        "sliderTag": "div",
+        "listTag": "ul",
+        "ariaCarousel": "Carousel",
+        "_cssGlobalClasses": [
+          "sopptj",
+          "h81s2h"
+        ],
+        "gap": "var(--grid-gap)",
+        "fixedHeight": "auto",
+        "type": "loop",
+        "start": "1",
+        "fixedWidth": "var(--slide-width)",
+        "isSync": true,
+        "syncId": "slider-iceland",
+        "gap:tablet_portrait": "var(--content-gap)",
+        "fixedWidth:mobile_portrait": "100%"
+      },
+      "label": "Feature Slider Iceland",
+      "themeStyles": []
+    },
+    {
+      "id": "05df15",
+      "name": "div",
+      "parent": "747304",
+      "children": [
+        "b5fecc"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-slide splide__slide"
+        },
+        "_cssGlobalClasses": [
+          "f0j78d"
+        ]
+      },
+      "label": "Slide"
+    },
+    {
+      "id": "b5fecc",
+      "name": "block",
+      "parent": "05df15",
+      "children": [
+        "de8ed5",
+        "6f83f9"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "6z8tgu"
+        ]
+      },
+      "label": "Feature Card Iceland"
+    },
+    {
+      "id": "de8ed5",
+      "name": "block",
+      "parent": "b5fecc",
+      "children": [
+        "f83dbb",
+        "54fd90"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "65jj1u"
+        ]
+      },
+      "label": "Concent Wrapper"
+    },
+    {
+      "id": "f83dbb",
+      "name": "heading",
+      "parent": "de8ed5",
+      "children": [],
+      "settings": {
+        "text": "This is an example heading",
+        "tag": "h3",
+        "_cssGlobalClasses": [
+          "bd18bh"
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "54fd90",
+      "name": "text-basic",
+      "parent": "de8ed5",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "btqx27"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "6f83f9",
+      "name": "block",
+      "parent": "b5fecc",
+      "children": [
+        "0970ca"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "417upb"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "0970ca",
+      "name": "image",
+      "parent": "6f83f9",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "06mwvn"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "222734",
+      "name": "div",
+      "parent": "747304",
+      "children": [
+        "e73e4d"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-slide splide__slide"
+        },
+        "_cssGlobalClasses": [
+          "f0j78d"
+        ]
+      },
+      "label": "Slide"
+    },
+    {
+      "id": "e73e4d",
+      "name": "block",
+      "parent": "222734",
+      "children": [
+        "180665",
+        "52e223"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "6z8tgu"
+        ]
+      },
+      "label": "Feature Card Iceland"
+    },
+    {
+      "id": "180665",
+      "name": "block",
+      "parent": "e73e4d",
+      "children": [
+        "cec53c",
+        "137154"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "65jj1u"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "cec53c",
+      "name": "heading",
+      "parent": "180665",
+      "children": [],
+      "settings": {
+        "text": "This is an example heading",
+        "tag": "h3",
+        "_cssGlobalClasses": [
+          "bd18bh"
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "137154",
+      "name": "text-basic",
+      "parent": "180665",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "btqx27"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "52e223",
+      "name": "block",
+      "parent": "e73e4d",
+      "children": [
+        "4a3bce"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "417upb"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "4a3bce",
+      "name": "image",
+      "parent": "52e223",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "06mwvn"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "20242a",
+      "name": "div",
+      "parent": "747304",
+      "children": [
+        "2d81dd"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-slide splide__slide"
+        },
+        "_cssGlobalClasses": [
+          "f0j78d"
+        ]
+      },
+      "label": "Slide"
+    },
+    {
+      "id": "2d81dd",
+      "name": "block",
+      "parent": "20242a",
+      "children": [
+        "f7814f",
+        "14c4c8"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "6z8tgu"
+        ]
+      },
+      "label": "Feature Card Iceland"
+    },
+    {
+      "id": "f7814f",
+      "name": "block",
+      "parent": "2d81dd",
+      "children": [
+        "38f8d7",
+        "f59302"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "65jj1u"
+        ]
+      },
+      "label": "Concent Wrapper"
+    },
+    {
+      "id": "38f8d7",
+      "name": "heading",
+      "parent": "f7814f",
+      "children": [],
+      "settings": {
+        "text": "This is an example heading",
+        "tag": "h3",
+        "_cssGlobalClasses": [
+          "bd18bh"
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "f59302",
+      "name": "text-basic",
+      "parent": "f7814f",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "btqx27"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "14c4c8",
+      "name": "block",
+      "parent": "2d81dd",
+      "children": [
+        "2e5527"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "417upb"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "2e5527",
+      "name": "image",
+      "parent": "14c4c8",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "06mwvn"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "a92d95",
+      "name": "div",
+      "parent": "6a9e64",
+      "children": [
+        "65c632",
+        "17716f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ropcrq"
+        ]
+      },
+      "label": "Controls"
+    },
+    {
+      "id": "65c632",
+      "name": "fr-slider",
+      "parent": "a92d95",
+      "children": [
+        "c07100",
+        "e75cb3",
+        "1a17cd"
+      ],
+      "settings": {
+        "height": "50vh",
+        "speed": 300,
+        "playButtonIcon": {
+          "library": "themify",
+          "icon": "ti-control-play"
+        },
+        "pauseButtonIcon": {
+          "library": "themify",
+          "icon": "ti-control-pause"
+        },
+        "arrowSize": "var(--space-l)",
+        "arrowDisabled": "0.5",
+        "prevArrow": {
+          "library": "themify",
+          "icon": "ti-arrow-left"
+        },
+        "prevArrowTop": "50%",
+        "prevArrowLeft": "var(--space-xs)",
+        "prevArrowTranslate": "0,-50%",
+        "nextArrow": {
+          "library": "themify",
+          "icon": "ti-arrow-right"
+        },
+        "nextArrowTop": "50%",
+        "nextArrowRight": "var(--space-xs)",
+        "nextArrowTranslate": "0,-50%",
+        "sliderTag": "nav",
+        "listTag": "ul",
+        "ariaCarousel": "Carousel",
+        "_cssGlobalClasses": [
+          "bilsum"
+        ],
+        "isSync": true,
+        "syncId": "slider-iceland",
+        "isNavigation": true,
+        "fixedWidth": "max-content",
+        "gap": "var(--space-xs)",
+        "type": "slide",
+        "drag": "false",
+        "start": "1"
+      },
+      "label": "Title Slider Iceland",
+      "themeStyles": []
+    },
+    {
+      "id": "c07100",
+      "name": "div",
+      "parent": "65c632",
+      "children": [
+        "6202df"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-slide splide__slide"
+        },
+        "_cssGlobalClasses": [
+          "6n8gsk"
+        ]
+      },
+      "label": "Slide (CSS)"
+    },
+    {
+      "id": "6202df",
+      "name": "heading",
+      "parent": "c07100",
+      "children": [],
+      "settings": {
+        "text": "Slide 1",
+        "_cssGlobalClasses": [
+          "vfxlge"
+        ]
+      },
+      "label": "Title"
+    },
+    {
+      "id": "e75cb3",
+      "name": "div",
+      "parent": "65c632",
+      "children": [
+        "3d6114"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-slide splide__slide"
+        },
+        "_cssGlobalClasses": [
+          "6n8gsk"
+        ]
+      },
+      "label": "Slide (CSS)"
+    },
+    {
+      "id": "3d6114",
+      "name": "heading",
+      "parent": "e75cb3",
+      "children": [],
+      "settings": {
+        "text": "Slide 2",
+        "_cssGlobalClasses": [
+          "vfxlge"
+        ]
+      },
+      "label": "Title"
+    },
+    {
+      "id": "1a17cd",
+      "name": "div",
+      "parent": "65c632",
+      "children": [
+        "7f7453"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-slide splide__slide"
+        },
+        "_cssGlobalClasses": [
+          "6n8gsk"
+        ]
+      },
+      "label": "Slide (CSS)"
+    },
+    {
+      "id": "7f7453",
+      "name": "heading",
+      "parent": "1a17cd",
+      "children": [],
+      "settings": {
+        "text": "Slide 3",
+        "_cssGlobalClasses": [
+          "vfxlge"
+        ]
+      },
+      "label": "Title"
+    },
+    {
+      "id": "17716f",
+      "name": "fr-slider-controls",
+      "parent": "a92d95",
+      "children": [],
+      "settings": {
+        "type": "nextPrev",
+        "progressHeight": ".5rem",
+        "arrows": true,
+        "arrowTypography": {
+          "raw": "var(--text-light)"
+        },
+        "arrowsGap": "var(--space-xs)",
+        "arrowDisabled": "1",
+        "prevArrow": {
+          "library": "themify",
+          "icon": "ti-arrow-left"
+        },
+        "prevArrowAriaLabel": "Previous slide",
+        "nextArrow": {
+          "library": "themify",
+          "icon": "ti-arrow-right"
+        },
+        "nextArrowAriaLabel": "Next slide",
+        "syncId": "slider-iceland",
+        "_cssGlobalClasses": [
+          "tqmyoj"
+        ]
+      },
+      "label": "Slider Navigation",
+      "themeStyles": []
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "wffzhd",
+      "name": "feature-section-iceland",
+      "settings": {
+        "_gridGap": "var(--container-gap)",
+        "_cssCustom": ".feature-section-iceland {\n  background: linear-gradient(var(--neutral-dark) 70%, var(--neutral-ultra-dark) 70%);\n}",
+        "_padding": {
+          "top": "var(--section-space-l)",
+          "bottom": "var(--section-space-l)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "acss_import_bg--ultra-dark",
+      "name": "bg--ultra-dark",
+      "settings": [],
+      "category": "acss",
+      "_categoryData": {
+        "id": "acss",
+        "name": "Automatic.css"
+      }
+    },
+    {
+      "id": "pdcgtq",
+      "name": "fr-intro-echo",
+      "settings": {
+        "_cssCustom:mobile_landscape": ".fr-intro-echo {\n  grid-template-columns: 1fr;\n}",
+        "_gridGap": "var(--grid-gap)",
+        "_gridTemplateColumns": "var(--grid-2-1)",
+        "_gridTemplateRows": "var(--grid-1)",
+        "_display": "grid",
+        "_gridTemplateColumns:mobile_landscape": "var(--grid-1)",
+        "_alignItemsGrid": "center"
+      }
+    },
+    {
+      "id": "cbghev",
+      "name": "fr-intro-echo__heading-wrapper",
+      "settings": {
+        "_rowGap": "calc(var(--content-gap) / 2)"
+      },
+      "modified": 1779452806,
+      "user_id": 1
+    },
+    {
+      "id": "bkgkvg",
+      "name": "fr-intro-echo__heading",
+      "settings": {
+        "_cssCustom": ".fr-intro-echo__heading {\n  text-wrap: balance;\n}"
+      },
+      "modified": 1779452806,
+      "user_id": 1
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "wbfkbf",
+      "name": "fr-intro-echo__accent-heading",
+      "settings": []
+    },
+    {
+      "id": "pdtwel",
+      "name": "fr-intro-echo__lede-wrapper",
+      "settings": {
+        "_rowGap": "var(--content-gap)"
+      },
+      "modified": 1779452806,
+      "user_id": 1
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "wqqaxf",
+      "name": "fr-intro-echo__lede",
+      "settings": []
+    },
+    {
+      "id": "wynpja",
+      "name": "iceland-slider-wrapper",
+      "settings": {
+        "_gridItemColumnSpan": "full",
+        "_rowGap": "var(--content-gap)",
+        "_cssCustom": ".iceland-slider-wrapper {\n  --slide-width: 75vw;\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "sopptj",
+      "name": "feature-slider-iceland",
+      "settings": {
+        "sliderPaddingStart": "calc(100% - var(--slide-width))",
+        "sliderPaddingEnd": "calc(100% - var(--slide-width))",
+        "_cssCustom:tablet_portrait": ".feature-slider-iceland {\n  --slide-width: 80vw;\n}",
+        "_cssCustom:mobile_landscape": ".feature-slider-iceland{\n  --slide-width: 90vw;\n}",
+        "_cssCustom:mobile_portrait": ".feature-slider-iceland {\n  --slide-width: 97%;\n}",
+        "sliderPaddingStart:mobile_portrait": "var(--gutter)",
+        "sliderPaddingEnd:mobile_portrait": "var(--gutter)"
+      },
+      "modified": 1739485665,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "h81s2h",
+      "name": "slider",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "f0j78d",
+      "name": "slider__slide",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "6z8tgu",
+      "name": "feature-card-iceland",
+      "settings": {
+        "_rowGap": "calc(var(--card-gap) * 3)",
+        "_cssCustom": ".feature-card-iceland {\n  background: linear-gradient(45deg, var(--neutral-ultra-dark) 60%, var(--neutral-dark));\n}\n\n/* Concentric Radius */\n/*\nParent element radius..\nRead documentation if you're unsure how this all works.\n*/\n.feature-card-iceland {\n\t--padding: calc(var(--card-padding) * 1.5);\n\tpadding: var(--padding);\n\tborder-radius: calc(var(--radius) + var(--padding) / 2);\n  border: 1.5px solid var(--neutral-light-trans-10);\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "65jj1u",
+      "name": "feature-card-iceland__content-wrapper",
+      "settings": {
+        "_rowGap": "var(--card-gap)",
+        "_width": "40ch"
+      },
+      "modified": 1749465976,
+      "user_id": 9,
+      "_exists": false
+    },
+    {
+      "id": "bd18bh",
+      "name": "feature-card-iceland__heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "btqx27",
+      "name": "feature-card-iceland__accent-heading",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--text-light-muted)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "417upb",
+      "name": "feature-card-iceland__media-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "06mwvn",
+      "name": "feature-card-iceland__media",
+      "settings": {
+        "_width": "100%",
+        "_border": {
+          "radius": {
+            "top": "var(--radius)",
+            "right": "var(--radius)",
+            "bottom": "var(--radius)",
+            "left": "var(--radius)"
+          }
+        },
+        "_aspectRatio": "16/9"
+      },
+      "_exists": false
+    },
+    {
+      "id": "ropcrq",
+      "name": "iceland-slider-controls",
+      "settings": {
+        "_display": "flex",
+        "_justifyContent": "center",
+        "_alignItems": "center",
+        "_alignSelf": "center",
+        "_columnGap": "var(--grid-gap)",
+        "_position": "relative",
+        "_direction": "row",
+        "_direction:mobile_landscape": "column",
+        "_rowGap:mobile_landscape": "var(--content-gap)",
+        "_justifyContent:mobile_landscape": "center"
+      },
+      "modified": 1739485330,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "bilsum",
+      "name": "title-slider-iceland",
+      "settings": {
+        "_alignSelf": "center",
+        "slideTypography": {
+          "color": {
+            "raw": "var(--text-light-muted)"
+          }
+        },
+        "_width": "max-content",
+        "_cssCustom:mobile_landscape": ".title-slider-iceland .splide__list {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  justify-content: center;\n  gap: calc(var(--content-gap) / 2);\n  padding-inline: var(--gutter);\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "6n8gsk",
+      "name": "title-slider-iceland__slide",
+      "settings": {
+        "_cssCustom": ".title-slider-iceland__slide-title {\n  color: var(--white-trans-60);\n  cursor: pointer;\n}\n\n.title-slider-iceland__slide.is-active .title-slider-iceland__slide-title {\n  text-decoration: underline;\n  text-underline-offset: .25em;\n  color: var(--white);\n}\n\n.title-slider-iceland__slide:focus-visible {\n  outline: none;\n  box-shadow: none;\n  \n  .title-slider-iceland__slide-title {\n    color: var(--white);\n    text-decoration: underline;\n  text-underline-offset: .25em;\n  }\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "vfxlge",
+      "name": "title-slider-iceland__slide-title",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--h4)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "tqmyoj",
+      "name": "slider-iceland-navigation",
+      "settings": {
+        "_width": "max-content",
+        "_cssCustom": ".slider-iceland-navigation {\n  --focus-color: var(--white);\n}\n\n.slider-iceland-navigation.fr-slider-custom-navigation {\n  width: var(--max-content) !important;\n}"
+      },
+      "modified": 1739485848,
+      "user_id": 1,
+      "_exists": false
+    }
+  ]
+}

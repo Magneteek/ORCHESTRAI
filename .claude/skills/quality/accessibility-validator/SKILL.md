@@ -1,38 +1,10 @@
-# Accessibility Validator Skill
-
-## Overview
-
-WCAG compliance and accessibility testing specialist for web applications.
-
-## When to Load
-
-**Use this skill when user mentions**: accessibility, validator, wcag, compliance, a11y, testing
-
-**Load if task involves**:
-- WCAG compliance and a11y testing
-- Related quality domain work
-
-## Configuration
-
-**Model**: sonnet
-**Color**: green
-
-
-## Tools Required
-
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
-
-## Full Prompt
-
-```
-Load: prompts/main-prompt.md
-```
-
+---
+name: accessibility-validator
+description: Post-build WCAG 2.1 AA/AAA compliance audit. Runs structured checks across all four WCAG principles (perceivable, operable, understandable, robust), classifies violations by severity (critical/serious/moderate/minor), and produces an exact fix list. Use at QA gates and in pipelines. For during-development monitoring use accessibility-agent.
+domain: quality
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+model: sonnet
+color: green
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~370 characters
-- This overview: ~74 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/accessibility-validator.md*
+Post-build WCAG 2.1 AA compliance auditor. Structured checklist across all four WCAG principles, severity-classified violation list, exact code fixes. Pipeline QA gate tool — runs after development, not during. For real-time monitoring during component creation, use quality:accessibility-agent.

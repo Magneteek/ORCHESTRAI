@@ -1,3 +1,7 @@
+---
+user-invocable: false
+---
+
 # Real Time Handoff Specialist Skill
 
 ## Overview
@@ -6,11 +10,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: real, time, handoff, specialist, phase, transition, speed, improvement, through, optimized, coordination
+**Use this skill when user mentions**: optimize phase handoff, agent handoff coordination, pipeline phase transition, handoff between pipeline stages, phase transition optimization
 
 **Load if task involves**:
 - 40% phase transition speed improvement through optimized handoff coordination and real-time data package transfer
-- Related shared domain work
 
 ## Configuration
 

@@ -1,0 +1,68 @@
+# FAQ Section Alpha
+# Sticky sidebar left (heading/lede/CTA) + collapsing accordion right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: faq-section-alpha
+version: "2.3.5"
+description: |
+  Two-column FAQ section. Left column: sticky sidebar with H2 heading, lede, CTA button.
+  Right column: Bricks fr-accordion with collapsing Q&A items, animated chevron, and
+  auto-generated FAQ schema (JSON-LD). First accordion item opens by default.
+  Best for 5–10 FAQ items. Preferred layout when SEO FAQ schema is required.
+
+slots:
+
+  # ── Sticky sidebar ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 60
+    target_class: fr-faq-section-alpha__heading
+    description: H2 heading in the sticky sidebar (e.g. "Frequently Asked Questions")
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-faq-section-alpha__lede
+    description: Supporting paragraph below the sidebar heading
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--primary
+    description: Sidebar CTA button label (e.g. "Contact us")
+
+  cta_link:
+    type: link
+    required: false
+    target_class: btn--primary
+    description: "CTA button URL: { url: '...', type?: 'external' }"
+
+  # ── Accordion FAQ items (array) ───────────────────────────────────────────
+
+  items:
+    type: array
+    required: true
+    min: 2
+    max: 20
+    template_label: "Item"
+    description: Accordion items shown in the right column. First item opens by default.
+    item_slots:
+      question:
+        type: string
+        required: true
+        max_length: 160
+        target_class: fr-faq-accordion-alpha__question
+        description: Question text (H3 inside accordion header)
+      answer:
+        type: html
+        required: true
+        target_class: fr-faq-accordion-alpha__answer
+        description: Answer body (rich text / HTML, shown when expanded)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

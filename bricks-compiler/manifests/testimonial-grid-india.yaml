@@ -1,0 +1,108 @@
+# Testimonial Grid India
+# Sub-component: 2-col layout — main testimonial list (5 cards) + sticky CTA sidebar.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: testimonial-grid-india
+version: "2.3.5"
+description: |
+  Sub-component (no section wrapper — paste inside an existing section).
+  Two-column grid: left column (2/3 width) is a vertical list of up to 5 testimonial
+  cards; right column (1/3 width) is a sticky CTA card. Each testimonial card has a
+  header row (avatar + name + title left; logo right), followed by 5 static star icons,
+  a bold callout quote, and a main body paragraph. The CTA card has a heading,
+  supporting paragraph, a primary button, and a secondary text link.
+  NOTE: Star ratings are 5 static ionicons icons — not CSS data-attribute driven.
+  They are not slot-fillable; shown as always-5-stars. Replace manually if needed.
+
+slots:
+
+  # ── Testimonial cards (array) ─────────────────────────────────────────────
+
+  testimonials:
+    type: array
+    required: false
+    min: 1
+    max: 5
+    template_label: "Testimonial Card India"
+    description: Vertical list of testimonial cards in the left (main) column
+    item_slots:
+      avatar:
+        type: media
+        required: false
+        target_class: fr-testimonial-card-india__avatar
+        description: Reviewer's headshot (circular crop, 4em square)
+      name:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-testimonial-card-india__profile-name
+        description: Reviewer's full name
+      title:
+        type: string
+        required: false
+        max_length: 80
+        target_class: fr-testimonial-card-india__profile-title
+        description: Reviewer's job title or company
+      logo:
+        type: media
+        required: false
+        target_class: fr-testimonial-card-india__logo
+        description: Client or brand logo (right side of header, width 10em)
+      callout:
+        type: string
+        required: false
+        max_length: 120
+        target_class: fr-testimonial-card-india__callout-text
+        description: Short bold callout quote (displayed at h3 size, font-weight 700)
+      text:
+        type: string
+        required: false
+        max_length: 400
+        target_class: fr-testimonial-card-india__main-text
+        description: Full testimonial body paragraph
+
+  # ── CTA sidebar ───────────────────────────────────────────────────────────
+
+  cta_heading:
+    type: string
+    required: false
+    max_length: 80
+    target_class: fr-cta-card-alpha__heading
+    description: Heading inside the sticky CTA card (right sidebar)
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-cta-card-alpha__text
+    description: Supporting paragraph in the CTA card
+
+  cta_button_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-cta-card-alpha__button
+    description: Primary CTA button label
+
+  cta_button_link:
+    type: link
+    required: false
+    target_class: fr-cta-card-alpha__button
+    description: "Primary CTA button URL: { url: '...', type?: 'external' }"
+
+  cta_link_text:
+    type: string
+    required: false
+    max_length: 50
+    target_class: fr-cta-card-alpha__cta-link
+    description: Secondary text link label below the button
+
+  cta_link_url:
+    type: link
+    required: false
+    target_class: fr-cta-card-alpha__cta-link
+    description: "Secondary text link URL: { url: '...', type?: 'external' }"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

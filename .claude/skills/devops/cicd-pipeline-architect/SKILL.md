@@ -6,11 +6,10 @@ Enterprise-grade CI/CD pipeline specialist implementing automated testing, deplo
 
 ## When to Load
 
-**Use this skill when user mentions**: cicd, pipeline, architect, enterprise, design, github, actions, gitlab, jenkins, with, advanced, workflows
+**Use this skill when user mentions**: set up ci/cd pipeline, github actions workflow, gitlab ci configuration, jenkins pipeline, automated deployment pipeline, build and deploy workflow, cicd automation, continuous integration setup
 
 **Load if task involves**:
 - Enterprise CI/CD pipeline design for GitHub Actions, GitLab CI, and Jenkins with advanced workflows, caching, and deployment strategies
-- Related devops domain work
 
 ## Configuration
 

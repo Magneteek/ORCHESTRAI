@@ -45,7 +45,7 @@ Create appropriate naming:
 Check compliance with:
 - [ ] File organization rules (CLAUDE.md)
 - [ ] Appropriate technology complexity
-- [ ] Crystalline memory integration
+
 - [ ] Universal delegation pattern compatibility
 - [ ] No duplicate functionality with existing agents
 

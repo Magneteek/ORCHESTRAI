@@ -6,11 +6,10 @@ Enterprise Kubernetes specialist implementing production-ready deployments, auto
 
 ## When to Load
 
-**Use this skill when user mentions**: kubernetes, deployment, expert, production, ready, deployments, with, scaling, ingress, secrets, management, advanced
+**Use this skill when user mentions**: kubernetes deployment, k8s setup, kubernetes scaling, kubernetes ingress, kubernetes secrets management, deploy to kubernetes, k8s configuration, horizontal pod autoscaling, kubernetes cluster
 
 **Load if task involves**:
 - Production-ready Kubernetes deployments with scaling, ingress, secrets management, and advanced deployment strategies
-- Related devops domain work
 
 ## Configuration
 

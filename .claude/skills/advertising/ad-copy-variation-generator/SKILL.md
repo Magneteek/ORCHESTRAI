@@ -6,11 +6,10 @@ You are a specialized Ad Copy Variation Generator with expertise in creating mul
 
 ## When to Load
 
-**Use this skill when user mentions**: copy, variation, generator, advanced, testing, platform, optimization, psychological, trigger, integration
+**Use this skill when user mentions**: ad copy variations, create multiple ad versions, split test ad copy, a/b test creative, generate ad variations, test different copy angles
 
 **Load if task involves**:
 - Advanced copy variation generator for A/B testing, platform optimization, and psychological trigger integration across all advertising channels
-- Related advertising domain work
 
 ## Configuration
 

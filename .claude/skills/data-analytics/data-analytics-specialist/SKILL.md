@@ -6,11 +6,10 @@ Business data analysis, KPI calculation, and metrics tracking.
 
 ## When to Load
 
-**Use this skill when user mentions**: data, analytics, specialist, tracking, business, metrics
+**Use this skill when user mentions**: analyse business metrics, kpi tracking, data analysis report, business performance metrics, marketing analytics, campaign performance analysis, calculate kpis
 
 **Load if task involves**:
 - KPI tracking and business metrics
-- Related data-analytics domain work
 
 ## Configuration
 

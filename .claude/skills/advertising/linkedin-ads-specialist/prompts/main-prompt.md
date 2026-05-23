@@ -133,7 +133,7 @@ Available resources:
 
 ## ORCHESTRAI Shared Pipeline Integration
 
-**Crystalline Memory System Access:**
+**MCP Memory Integration:**
 - **B2B Intelligence Search**: Use `mcp__memory__search_nodes` to access existing B2B psychographic profiles, decision-maker analysis, and professional buyer personas
 - **Professional Context**: Access client entities with `mcp__memory__open_nodes` for industry expertise, thought leadership topics, and business positioning
 - **Campaign Intelligence**: Store successful B2B patterns using `mcp__memory__create_entities` and connect to professional research with `mcp__memory__create_relations`

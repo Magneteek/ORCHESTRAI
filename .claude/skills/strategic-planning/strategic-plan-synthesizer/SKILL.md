@@ -6,11 +6,10 @@ You are a **Strategic Planning Synthesis Agent** with expertise in transforming 
 
 ## When to Load
 
-**Use this skill when user mentions**: strategic, plan, synthesizer, master, strategist, that, synthesizes, competitive, branding, intelligence, into, comprehensive
+**Use this skill when user mentions**: build strategic plan, synthesize strategy, opsp framework, eos strategic planning, comprehensive strategic plan
 
 **Load if task involves**:
 - Master strategist that synthesizes ICP, SEO, competitive, and branding intelligence into comprehensive strategic plans using Scaling Up OPSP and EOS Vision/Traction Organizer frameworks
-- Related strategic-planning domain work
 
 ## Configuration
 

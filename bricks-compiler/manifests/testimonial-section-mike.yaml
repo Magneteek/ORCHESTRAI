@@ -1,0 +1,80 @@
+# Testimonial Section Mike
+# Light-bg section with header row + CSS masonry grid of 6 testimonial cards.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: testimonial-section-mike
+version: "2.3.5"
+description: |
+  Light-background section with a rounded-corner inner container. Header row: H2
+  heading left, "See All Reviews" primary CTA button right. Below: a CSS masonry
+  grid (3 columns) of up to 6 testimonial cards. Each card: user thumbnail + name +
+  title + platform social icon in the header; testimonial text body.
+  NOTE: The social icon (platform logo SVG) cannot be slot-filled — it is an SVG
+  icon element. Replace manually per card in Bricks after pasting.
+  The "See All Reviews" button link is exposed as a direct slot.
+
+slots:
+
+  # ── Header ────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: testimonial-container-mike__heading
+    description: H2 heading in the header row (e.g. "What our customers are saying")
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--primary
+    description: See All Reviews button label (fills FIRST btn--primary in section)
+
+  cta_link:
+    type: link
+    required: false
+    target_class: btn--primary
+    description: "See All Reviews button URL: { url: '...', type?: 'external' }"
+
+  # ── Testimonial cards (array) ─────────────────────────────────────────────
+
+  testimonials:
+    type: array
+    required: false
+    min: 1
+    max: 6
+    template_label: "Testimonial Card Mike"
+    description: Masonry grid of testimonial cards (3 columns, auto-height)
+    item_slots:
+      avatar:
+        type: media
+        required: false
+        target_class: testimonial-card-mike__user-thumbnail
+        description: Reviewer's headshot (circular crop, 50px)
+      name:
+        type: string
+        required: true
+        max_length: 60
+        target_class: testimonial-card-mike__user-name
+        description: Reviewer's full name
+      title:
+        type: string
+        required: false
+        max_length: 80
+        target_class: testimonial-card-mike__user-title
+        description: Reviewer's role (e.g. "Customer", "CEO at Acme")
+      text:
+        type: string
+        required: true
+        max_length: 400
+        target_class: testimonial-card-mike__testimonial
+        description: Testimonial body text
+
+# ── Notes ─────────────────────────────────────────────────────────────────
+# Each card has a platform social icon (SVG) in the header.
+# The icon is not slot-fillable — replace manually in Bricks after pasting.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

@@ -390,12 +390,6 @@ echo "✅ Pre-publish validation passed"
 
 ## Integration Requirements
 
-### Crystalline Memory Coordination
-- Store packaging patterns and successful configurations
-- Share release strategies across projects
-- Maintain consistency with ORCHESTRAI packaging standards
-- Coordinate with all other Agent SDK domain agents
-
 ### Agent SDK Pipeline Integration
 - **Stage 6 Output**: Production-ready package configuration
   - package.json or pyproject.toml optimized

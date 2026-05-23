@@ -1,0 +1,91 @@
+# Feature Section Foxtrot
+# 3-column icon+heading+text feature grid with intro header and CTA buttons.
+# Supports 2–6 feature cards.
+
+component: feature-section-foxtrot
+version: "2.3.5"
+description: |
+  Icon-card feature grid. Intro (heading + accent + lede) at top,
+  grid of 2-6 cards (icon + heading + text), CTA buttons at bottom.
+
+slots:
+
+  # ── Intro ──────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: Main section H2
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-accent-heading
+    description: Small uppercase label above heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-lede
+    description: Supporting paragraph below heading
+
+  # ── Feature cards ──────────────────────────────────────────────────────────
+
+  features:
+    type: array
+    required: true
+    min: 2
+    max: 6
+    template_label: "Feature Card Foxtrot"
+    description: List of feature cards
+    item_slots:
+      icon:
+        type: icon
+        target_class: fr-feature-card-foxtrot__icon
+        description: SVG icon — { url, full? }
+      heading:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-feature-card-foxtrot__heading
+        description: Card heading (rendered as heading tag)
+      text:
+        type: string
+        required: true
+        max_length: 180
+        target_label: "Text"
+        description: Card body text
+
+  # ── CTA buttons ────────────────────────────────────────────────────────────
+  # Buttons have no link in the template — compiler inserts settings.link
+
+  primary_cta_text:
+    type: string
+    required: false
+    max_length: 30
+    target_label: "Primary Action"
+
+  primary_cta_link:
+    type: link
+    required: false
+    target_label: "Primary Action"
+
+  secondary_cta_text:
+    type: string
+    required: false
+    max_length: 30
+    target_label: "Secondary Action"
+
+  secondary_cta_link:
+    type: link
+    required: false
+    target_label: "Secondary Action"
+
+# ── Strip builder-only elements ────────────────────────────────────────────────
+strip_elements:
+  - name: fr-notes
+  # code elements are preserved by default (functional JS)

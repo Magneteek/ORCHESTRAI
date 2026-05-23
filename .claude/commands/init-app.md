@@ -379,7 +379,7 @@ yarn-error.log*
  * ORCHESTRAI Memory Integration
  *
  * This module provides helpers to document architectural decisions
- * and component relationships in the ORCHESTRAI crystalline memory system.
+ * and component relationships using the project CLAUDE.md.
  *
  * IMPORTANT: This is for DEVELOPMENT tracking, not application runtime data!
  */
@@ -622,7 +622,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed structure explanat
 
 ## ORCHESTRAI Integration
 
-This application uses ORCHESTRAI's crystalline memory system to track:
+This application tracks state in the project CLAUDE.md:
 - Architecture decisions
 - Component relationships
 - Success/failure patterns
@@ -674,7 +674,7 @@ Query memory: Search for "{{app-name}}" in ORCHESTRAI memory system
 
 Architecture decisions are tracked in:
 1. This document
-2. ORCHESTRAI crystalline memory system
+2. Project CLAUDE.md
 3. \`planning/technical-decisions.md\`
 
 Query ORCHESTRAI memory with: "{{app-name}} architecture decisions"
@@ -859,7 +859,7 @@ mcp__memory__add_observations({
 
 ## Decision Log
 
-All decisions are also tracked in ORCHESTRAI crystalline memory.
+All decisions are tracked in the project CLAUDE.md.
 Query: "{{app-name}} architecture decisions"
 ```
 

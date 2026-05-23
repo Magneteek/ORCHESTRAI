@@ -1,27 +1,20 @@
 #!/bin/bash
 #
-# ORCHESTRAI — Master Startup Script
-# Starts all services needed for full system operation.
+# ORCHESTRAI — Start All Services
+#
+# Starts Docker Desktop if needed, then brings up all containers in order.
+# Safe to run when services are already running (idempotent).
 #
 # Usage:
-#   npm run system:start-all          # Start everything
-#   ./scripts/start-all-services.sh   # Direct call
+#   ./scripts/start-all-services.sh
+#   npm run system:start-all
 #
-# Idempotent: safe to run when services are already up.
-#
+
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-# ── Find redis-cli (Homebrew puts it outside standard PATH on macOS) ──────────
-REDIS_CLI=$(command -v redis-cli 2>/dev/null \
-  || ls /opt/homebrew/bin/redis-cli 2>/dev/null \
-  || ls /usr/local/bin/redis-cli 2>/dev/null \
-  || echo "")
-
-redis_ping() {
-  [ -n "$REDIS_CLI" ] && "$REDIS_CLI" -h 127.0.0.1 ping >/dev/null 2>&1
-}
+ML_DIR="$ROOT_DIR/orchestrai-ml-service"
 
 # ── Colors ────────────────────────────────────────────────────────────────────
 GREEN='\033[0;32m'
@@ -31,253 +24,194 @@ BLUE='\033[0;34m'
 BOLD='\033[1m'
 NC='\033[0m'
 
+ok()      { echo -e "   ${GREEN}✅  $1${NC}"; }
+warn()    { echo -e "   ${YELLOW}⚠️   $1${NC}"; }
+fail()    { echo -e "   ${RED}❌  $1${NC}"; }
+info()    { echo -e "   ${BLUE}ℹ️   $1${NC}"; }
+section() { echo -e "\n${BOLD}$1${NC}\n$(printf '─%.0s' {1..56})"; }
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-port_in_use() { lsof -i ":$1" -sTCP:LISTEN -t >/dev/null 2>&1; }
+docker_healthy() {
+  local name=$1
+  [[ "$(docker inspect --format='{{.State.Health.Status}}' "$name" 2>/dev/null)" == "healthy" ]]
+}
 
-wait_for_port() {
-  local port=$1 name=$2 max=30 waited=0
-  while [ $waited -lt $max ]; do
-    port_in_use "$port" && return 0
-    sleep 1; waited=$((waited + 1))
+docker_running() {
+  local name=$1
+  [[ "$(docker inspect --format='{{.State.Status}}' "$name" 2>/dev/null)" == "running" ]]
+}
+
+wait_healthy() {
+  local name=$1 label=$2 max=${3:-60}
+  local waited=0
+  while [[ $waited -lt $max ]]; do
+    local s
+    s=$(docker inspect --format='{{.State.Health.Status}}' "$name" 2>/dev/null || echo "missing")
+    [[ "$s" == "healthy" ]] && return 0
+    [[ "$s" == "unhealthy" ]] && { fail "$label is unhealthy — run: docker logs $name"; return 1; }
+    printf "\r   ${YELLOW}⏳  Waiting for $label... ${waited}s${NC}"
+    sleep 3; waited=$((waited + 3))
   done
-  echo -e "   ${RED}❌ Timeout waiting for $name on port $port${NC}"
+  fail "Timeout waiting for $label"
   return 1
 }
-
-ok()   { echo -e "   ${GREEN}✅ $1${NC}"; }
-warn() { echo -e "   ${YELLOW}⚠️  $1${NC}"; }
-fail() { echo -e "   ${RED}❌ $1${NC}"; }
-info() { echo -e "   ${BLUE}ℹ️  $1${NC}"; }
-
-section() {
-  echo ""
-  echo -e "${BOLD}$1${NC}"
-  echo "──────────────────────────────────────────────────────"
-}
-
-mkdir -p "$ROOT_DIR/logs"
 
 # ── Banner ────────────────────────────────────────────────────────────────────
 echo ""
 echo -e "${BLUE}${BOLD}╔══════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}${BOLD}║          ORCHESTRAI — Full System Startup            ║${NC}"
+echo -e "${BLUE}${BOLD}║         ORCHESTRAI — Starting All Services           ║${NC}"
 echo -e "${BLUE}${BOLD}╚══════════════════════════════════════════════════════╝${NC}"
-echo ""
 
-# ── 1. Redis ──────────────────────────────────────────────────────────────────
-section "1️⃣  Redis (port 6379)"
+# ── 1. Docker Desktop ─────────────────────────────────────────────────────────
+section "1️⃣  Docker Desktop"
 
-if redis_ping; then
-  ok "Redis already running"
-elif port_in_use 6379; then
-  ok "Redis already running (via another process)"
+if docker info &>/dev/null; then
+  ok "Docker Desktop is running"
 else
-  echo "   Starting Redis..."
-  # Try Homebrew path first, then fall back to system redis-server
-  REDIS_SERVER=$(command -v redis-server 2>/dev/null \
-    || echo /opt/homebrew/bin/redis-server)
-  "$REDIS_SERVER" --daemonize yes >/dev/null 2>&1
-  sleep 2
-  if redis_ping; then
-    ok "Redis started"
+  echo "   Starting Docker Desktop..."
+  open -a Docker
+  echo -e "   ${YELLOW}⏳  Waiting for Docker daemon (up to 60s)...${NC}"
+  waited=0
+  while [[ $waited -lt 60 ]]; do
+    docker info &>/dev/null && break
+    sleep 3; waited=$((waited + 3))
+    printf "\r   ${YELLOW}⏳  Waiting for Docker daemon... ${waited}s${NC}"
+  done
+  echo ""
+  if docker info &>/dev/null; then
+    ok "Docker Desktop started"
   else
-    fail "Redis failed to start — try: brew services start redis"
+    fail "Docker Desktop did not start in time"
+    echo "   Open Docker Desktop manually and re-run this script."
+    exit 1
   fi
 fi
 
-# ── 2. PostgreSQL + pgvector (orchestrai-postgres on port 5433) ───────────────
-section "2️⃣  PostgreSQL + pgvector (port 5433)"
+# ── 2. PostgreSQL + pgvector ──────────────────────────────────────────────────
+section "2️⃣  PostgreSQL + pgvector  (port 5433)"
 
-if port_in_use 5433; then
-  ok "orchestrai-postgres already running"
+cd "$ROOT_DIR"
+if docker_healthy "orchestrai-postgres"; then
+  ok "orchestrai-postgres already healthy"
 else
-  if command -v docker >/dev/null 2>&1; then
-    # Remove any stale stopped container with the same name before starting fresh
-    STALE=$(docker ps -a --filter "name=^/orchestrai-postgres$" --filter "status=exited" --filter "status=created" -q 2>/dev/null)
-    if [ -n "$STALE" ]; then
-      echo "   Removing stale container ($STALE)..."
-      docker rm orchestrai-postgres >/dev/null 2>&1
-    fi
-    echo "   Starting orchestrai-postgres Docker container..."
-    cd "$ROOT_DIR"
-    docker compose up -d orchestrai-postgres 2>&1 | grep -v "Pulling\|Extracting\|Download\|Pull complete\|layer\|fs layer" | sed 's/^/   /'
-    echo -e "   ${YELLOW}⏳ Waiting for PostgreSQL to be ready...${NC}"
-    if wait_for_port 5433 "orchestrai-postgres"; then
-      sleep 3  # Extra time for postgres to fully initialize
-      ok "orchestrai-postgres started"
-      info "DB: orchestrai_serp (postgres:orchestrai123@localhost:5433)"
+  echo "   Starting orchestrai-postgres..."
+  docker compose up -d orchestrai-postgres 2>&1 | grep -v "^\s*$" | sed 's/^/   /'
+  echo ""
+  if wait_healthy "orchestrai-postgres" "PostgreSQL+pgvector" 60; then
+    echo ""
+    ok "orchestrai-postgres ready"
+    info "DB: orchestrai_serp  user: postgres  port: 5433"
+  else
+    echo ""
+    exit 1
+  fi
+fi
+
+# ── 3. ML Service stack (redis + postgres + embedding service) ─────────────────
+section "3️⃣  ML Service  (port 8000)  +  Redis (6379)  +  ML Postgres (5432)"
+
+cd "$ML_DIR"
+
+# Redis
+if docker_healthy "orchestrai-redis"; then
+  ok "orchestrai-redis already healthy"
+else
+  echo "   Starting redis..."
+  docker compose up -d redis 2>&1 | grep -v "^\s*$" | sed 's/^/   /'
+  wait_healthy "orchestrai-redis" "Redis" 30 && echo "" && ok "orchestrai-redis ready"
+fi
+
+# ML Postgres
+if docker_healthy "orchestrai-ml-postgres"; then
+  ok "orchestrai-ml-postgres already healthy"
+else
+  echo "   Starting ml-postgres..."
+  docker compose up -d postgres 2>&1 | grep -v "^\s*$" | sed 's/^/   /'
+  wait_healthy "orchestrai-ml-postgres" "ML Postgres" 30 && echo "" && ok "orchestrai-ml-postgres ready"
+fi
+
+# ML Service
+if docker_healthy "orchestrai-ml-service"; then
+  ok "orchestrai-ml-service already healthy"
+else
+  echo "   Starting ml-service (loads embedding model ~20s)..."
+  docker compose up -d ml-service 2>&1 | grep -v "^\s*$" | sed 's/^/   /'
+  echo ""
+  if wait_healthy "orchestrai-ml-service" "ML Service" 120; then
+    echo ""
+    # Verify /embed endpoint specifically
+    EMBED=$(curl -s http://localhost:8000/embed/health 2>/dev/null || echo "{}")
+    if echo "$EMBED" | grep -q '"loaded":true'; then
+      ok "orchestrai-ml-service ready  (all-MiniLM-L6-v2 loaded)"
     else
-      fail "orchestrai-postgres failed to start"
-      info "Check: docker logs orchestrai-postgres"
-      info "pgvector semantic skill search will be unavailable"
+      warn "ML service running but embedding model not loaded yet"
+      info "Check: docker logs orchestrai-ml-service"
     fi
   else
-    fail "Docker not found — cannot start orchestrai-postgres"
-    info "Install Docker Desktop or start PostgreSQL manually on port 5433"
+    echo ""
+    exit 1
   fi
 fi
 
-# ── 3. Hooks Server ───────────────────────────────────────────────────────────
-section "3️⃣  Hooks Server (port 5501)"
+# ── 4. Trigger System ─────────────────────────────────────────────────────────
+section "4️⃣  Trigger System  (port 5502)"
 
-if port_in_use 5501; then
-  ok "Hooks Server already running"
+cd "$ROOT_DIR"
+if docker_healthy "orchestrai-triggers"; then
+  ok "orchestrai-triggers already healthy"
 else
-  echo "   Starting Hooks Server..."
-  cd "$ROOT_DIR"
-  nohup node orchestrai-shared/claude-code/hooks-server.js \
-    > "$ROOT_DIR/logs/hooks-server.log" 2>&1 &
-  echo $! > "$ROOT_DIR/logs/hooks-server.pid"
-
-  if wait_for_port 5501 "Hooks Server"; then
-    ok "Hooks Server started (PID: $(cat "$ROOT_DIR/logs/hooks-server.pid"))"
-    info "Logs: logs/hooks-server.log"
+  echo "   Starting trigger system..."
+  docker compose up -d trigger-system 2>&1 | grep -v "^\s*$" | sed 's/^/   /'
+  echo ""
+  if wait_healthy "orchestrai-triggers" "Trigger System" 60; then
+    echo ""
+    ok "orchestrai-triggers ready"
+    info "Webhooks: http://localhost:5502/webhooks/*"
+    info "API:      http://localhost:5502/api/triggers"
   else
-    fail "Hooks Server failed — check logs/hooks-server.log"
+    echo ""
+    warn "Trigger system failed (optional — continuing)"
+    info "Check: docker logs orchestrai-triggers"
   fi
 fi
 
-# ── 4. ML Service (sentence-transformers / /embed endpoint) ───────────────────
-section "4️⃣  ML Service — /embed endpoint (port 8000)"
-
-if port_in_use 8000; then
-  ok "ML Service already running"
-else
-  ML_DIR="$ROOT_DIR/orchestrai-ml-service"
-
-  if [ ! -d "$ML_DIR/venv" ]; then
-    echo "   Creating Python venv (first time only)..."
-    python3 -m venv "$ML_DIR/venv"
-    "$ML_DIR/venv/bin/pip" install -q -r "$ML_DIR/requirements.txt"
-    # Install pgvector + sentence-transformers if not already in requirements
-    "$ML_DIR/venv/bin/pip" install -q sentence-transformers pgvector 2>/dev/null || true
-  fi
-
-  echo "   Starting ML Service (loading sentence-transformers model)..."
-  cd "$ML_DIR"
-  nohup "$ML_DIR/venv/bin/python" -m uvicorn app.main:app \
-    --host 0.0.0.0 --port 8000 \
-    > "$ROOT_DIR/logs/ml-service.log" 2>&1 &
-  echo $! > "$ROOT_DIR/logs/ml-service.pid"
-
-  # ML service takes longer to start (model loading)
-  echo -e "   ${YELLOW}⏳ Loading embedding model (~20s)...${NC}"
-  if wait_for_port 8000 "ML Service"; then
-    sleep 3  # Extra time for model to fully initialize
-    ok "ML Service started (PID: $(cat "$ROOT_DIR/logs/ml-service.pid"))"
-    info "Docs: http://localhost:8000/docs"
-    info "Embed: http://localhost:8000/embed/health"
-    info "Logs: logs/ml-service.log"
-  else
-    fail "ML Service failed — check logs/ml-service.log"
-    info "Semantic skill search will be unavailable"
-  fi
-fi
-
-# ── 5. Simultaneous Execution Server ─────────────────────────────────────────
-section "5️⃣  Simultaneous Execution Server (port 8080)"
-
-if port_in_use 8080; then
-  ok "Simultaneous Execution Server already running"
-else
-  echo "   Starting Simultaneous Execution Server..."
-  cd "$ROOT_DIR"
-  nohup node orchestrai-shared/initialization/start-simultaneous-server.js \
-    > "$ROOT_DIR/logs/simultaneous-server.log" 2>&1 &
-  echo $! > "$ROOT_DIR/logs/simultaneous-server.pid"
-
-  if wait_for_port 8080 "Simultaneous Execution Server"; then
-    ok "Simultaneous Execution Server started (PID: $(cat "$ROOT_DIR/logs/simultaneous-server.pid"))"
-    info "WebSocket: ws://localhost:8080"
-    info "Logs: logs/simultaneous-server.log"
-  else
-    fail "Simultaneous Execution Server failed — check logs/simultaneous-server.log"
-  fi
-fi
-
-# ── 6. Trigger System (optional) ─────────────────────────────────────────────
-section "6️⃣  Trigger System (port 5502) — optional"
-
-if port_in_use 5502; then
-  ok "Trigger System already running"
-else
-  TRIGGER_DIR="$ROOT_DIR/orchestrai-trigger-system"
-  if [ -f "$TRIGGER_DIR/server.js" ]; then
-    echo "   Starting Trigger System..."
-    cd "$TRIGGER_DIR"
-    # Install deps if needed
-    [ ! -d "node_modules" ] && npm install --silent
-    nohup node server.js \
-      > "$ROOT_DIR/logs/trigger-system.log" 2>&1 &
-    echo $! > "$ROOT_DIR/logs/trigger-system.pid"
-
-    if wait_for_port 5502 "Trigger System"; then
-      ok "Trigger System started (PID: $(cat "$ROOT_DIR/logs/trigger-system.pid"))"
-      info "Webhooks: http://localhost:5502"
-      info "Logs: logs/trigger-system.log"
-    else
-      warn "Trigger System failed to start (optional — continuing)"
-      info "Check: logs/trigger-system.log"
-    fi
-  else
-    warn "Trigger System not found — skipping (optional)"
-  fi
-fi
-
-# ── 7. Frontend ───────────────────────────────────────────────────────────────
-section "7️⃣  Frontend (port 3000) — optional"
-
-if port_in_use 3000; then
-  ok "Frontend already running — http://localhost:3000"
-else
-  info "Frontend not running. Start with: npm run dev"
-fi
-
-# ── Status Summary ────────────────────────────────────────────────────────────
+# ── Summary ───────────────────────────────────────────────────────────────────
 echo ""
 echo -e "${BLUE}${BOLD}╔══════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}${BOLD}║                   Service Summary                   ║${NC}"
+echo -e "${BLUE}${BOLD}║                    System Status                    ║${NC}"
 echo -e "${BLUE}${BOLD}╚══════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-print_status() {
-  local name=$1 port=$2 required=$3
-  if port_in_use "$port"; then
-    echo -e "   ${GREEN}✅${NC} $name (port $port)"
-  elif [ "$required" = "required" ]; then
-    echo -e "   ${RED}❌${NC} $name (port $port) — REQUIRED"
+print_row() {
+  local name=$1 container=$2 port=$3 role=$4
+  if docker_healthy "$container" 2>/dev/null; then
+    echo -e "   ${GREEN}✅${NC}  $name  ${BLUE}:$port${NC}  — $role"
   else
-    echo -e "   ${YELLOW}⚠️ ${NC} $name (port $port) — optional"
+    echo -e "   ${RED}❌${NC}  $name  ${BLUE}:$port${NC}  — $role"
   fi
 }
 
-redis_ping && echo -e "   ${GREEN}✅${NC} Redis (port 6379)" \
-           || echo -e "   ${RED}❌${NC} Redis (port 6379) — REQUIRED"
-print_status "PostgreSQL+pgvector"       5433 required
-print_status "Hooks Server"             5501 required
-print_status "ML Service (embed)"       8000 required
-print_status "Simultaneous Exec"        8080 recommended
-print_status "Trigger System"           5502 optional
-print_status "Frontend"                 3000 optional
+print_row "orchestrai-postgres" "orchestrai-postgres" "5433" "pgvector skill/project search"
+print_row "orchestrai-redis    " "orchestrai-redis"    "6379" "ML service cache"
+print_row "orchestrai-ml-postgres" "orchestrai-ml-postgres" "5432" "ML model metadata"
+print_row "orchestrai-ml-service" "orchestrai-ml-service"  "8000" "embedding model (all-MiniLM-L6-v2)"
+print_row "orchestrai-triggers " "orchestrai-triggers" "5502" "webhook/cron trigger system"
 
 echo ""
-echo -e "${BOLD}Logs:${NC}    $ROOT_DIR/logs/"
-echo -e "${BOLD}Stop:${NC}    npm run system:stop-all"
-echo -e "${BOLD}Status:${NC}  npm run system:status-all"
+echo -e "   ${BOLD}Stop:${NC}    ./scripts/stop-all-services.sh"
+echo -e "   ${BOLD}Status:${NC}  ./scripts/status-all.sh"
 echo ""
 
-# Check all required services are up
-MISSING=0
-for port in 5433 5501 8000; do
-  port_in_use "$port" 2>/dev/null || MISSING=$((MISSING+1))
+# Exit code based on critical services
+FAILED=0
+for c in orchestrai-postgres orchestrai-ml-service; do
+  docker_healthy "$c" || FAILED=$((FAILED + 1))
 done
-redis_ping || port_in_use 6379 || MISSING=$((MISSING+1))
 
-if [ $MISSING -eq 0 ]; then
-  echo -e "${GREEN}${BOLD}🎉 ORCHESTRAI is fully operational${NC}"
+if [[ $FAILED -eq 0 ]]; then
+  echo -e "${GREEN}${BOLD}   🎉 ORCHESTRAI is fully operational${NC}"
 else
-  echo -e "${YELLOW}${BOLD}⚠️  ORCHESTRAI is partially running ($MISSING required service(s) not started)${NC}"
-  echo "   Review the output above and check the relevant logs."
+  echo -e "${YELLOW}${BOLD}   ⚠️  $FAILED critical service(s) not healthy — check logs above${NC}"
 fi
 echo ""

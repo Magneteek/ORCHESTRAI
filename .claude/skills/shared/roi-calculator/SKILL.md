@@ -6,11 +6,10 @@ ROI calculation and financial metrics analysis.
 
 ## When to Load
 
-**Use this skill when user mentions**: roi, calculator, calculation, financial, analysis
+**Use this skill when user mentions**: calculate roi, roi analysis, return on investment calculation, marketing roi report, roi financial analysis
 
 **Load if task involves**:
 - ROI calculation and financial analysis
-- Related shared domain work
 
 ## Configuration
 

@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: technical, analysis, seo, optimization, api
+**Use this skill when user mentions**: technical seo audit, site crawl, core web vitals, indexation problems, crawlability issues, technical seo issues, site speed seo, on-page technical review, broken links seo, redirect chains
 
 **Load if task involves**:
 - Comprehensive technical SEO specialist for Core Web Vitals, crawl analysis, site architecture, schema markup, and mobile-first optimization with full OnPage API capabilities
-- Related seo domain work
 
 ## Configuration
 

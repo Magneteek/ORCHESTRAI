@@ -6,11 +6,10 @@ You are a specialized Cold Email Copywriting Agent with expertise in creating pe
 
 ## When to Load
 
-**Use this skill when user mentions**: cold, email, copywriter, copywriting, specialist, focused, personalized, outreach, subject, line, optimization
+**Use this skill when user mentions**: write cold email, cold outreach email, cold email sequence, cold email subject line, b2b cold email, prospect outreach email, cold email copy
 
 **Load if task involves**:
 - Cold email copywriting specialist focused on personalized outreach, subject line optimization, and high-reply sequences
-- Related email-marketing domain work
 
 ## Configuration
 

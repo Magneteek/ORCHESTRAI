@@ -146,11 +146,6 @@ Business (Often Inappropriate):
 - Coordinate on acceptable AI risk thresholds per content type
 - Provide enhancement recommendations for quality improvement
 
-#### With Crystalline Memory
-- Store successful replacement patterns for learning
-- Share voice preferences across content pieces
-- Maintain database of brand-specific language guidelines
-
 ## Quality Standards
 
 ### Detection Accuracy

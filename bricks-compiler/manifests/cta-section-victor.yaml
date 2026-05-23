@@ -1,0 +1,64 @@
+# CTA Section Victor
+# Card CTA: heading + body text + primary button (top); star ratings + avatar proof (bottom).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: cta-section-victor
+version: "2.3.5"
+description: |
+  Centered card CTA. Top half: H2 heading, rich text paragraph, primary CTA button.
+  Bottom half: split into two cells. Left cell: CSS star-rating widget + review count label.
+  Right cell: avatar group (circular images via WP query loop) + customer count label.
+  Both bottom labels share the same CSS class — only the FIRST (review count) is slot-fillable.
+  Star rating value is CSS/data-attribute driven. Avatars come from a WP query loop.
+
+slots:
+
+  # ── Top: main CTA content ─────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: cta-card-victor__heading
+    description: H2 heading inside the CTA card
+
+  text:
+    type: html
+    required: false
+    target_class: cta-card-victor__text
+    description: Body paragraph(s) below the heading
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: cta-card-victor__button
+    description: Primary CTA button label
+
+  cta_link:
+    type: link
+    required: false
+    target_class: cta-card-victor__button
+    description: "Primary CTA URL: { url: '...', type?: 'external' }"
+
+  # ── Bottom: social proof labels ───────────────────────────────────────────
+  # Both labels share CSS class cta-card-victor__label — only the first is slot-fillable.
+
+  rating_label:
+    type: string
+    required: false
+    max_length: 60
+    target_class: cta-card-victor__label
+    description: |
+      Text label under the star ratings (e.g. "Over 1,575 Perfect Reviews").
+      Fills the FIRST label element. Community label (e.g. "27,000+ Customers")
+      must be edited manually in Bricks after pasting.
+
+# ── Notes ─────────────────────────────────────────────────────────────────
+# - Star rating: CSS-driven via data-rating="5" attribute on fr-rating-alpha elements.
+# - Avatars: WP query loop (HappyFiles folder 267) — not slot-fillable.
+# - Community count label shares CSS class with rating_label; edit manually.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

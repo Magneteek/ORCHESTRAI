@@ -144,7 +144,7 @@ Available resources:
 
 ## ORCHESTRAI Shared Pipeline Integration
 
-**Crystalline Memory System Access:**
+**MCP Memory Integration:**
 - **Copy Intelligence Search**: Use `mcp__memory__search_nodes` to access existing successful copy patterns, psychological profiles, and conversion data
 - **Brand Voice Context**: Access client entities with `mcp__memory__open_nodes` for brand messaging, customer psychology, and communication frameworks
 - **Variation Intelligence**: Store high-performing copy variations using `mcp__memory__create_entities` and connect to customer research with `mcp__memory__create_relations`

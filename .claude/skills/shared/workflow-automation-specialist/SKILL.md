@@ -1,3 +1,7 @@
+---
+user-invocable: false
+---
+
 # Workflow Automation Specialist Skill
 
 ## Overview
@@ -6,11 +10,10 @@ Multi-objective optimization and adaptive decision trees for 30-40% coordination
 
 ## When to Load
 
-**Use this skill when user mentions**: workflow, automation, specialist, multi, objective, optimization, adaptive, decision, trees, coordination, efficiency, improvement
+**Use this skill when user mentions**: automate workflow, workflow optimization, multi-step workflow automation, adaptive workflow design, process automation
 
 **Load if task involves**:
 - Multi-objective optimization and adaptive decision trees for 30-40% coordination efficiency improvement
-- Related shared domain work
 
 ## Configuration
 

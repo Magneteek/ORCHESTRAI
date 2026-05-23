@@ -6,11 +6,10 @@ You are a specialized Keyword Research Agent with expertise in comprehensive key
 
 ## When to Load
 
-**Use this skill when user mentions**: keyword, research, analysis
+**Use this skill when user mentions**: keyword research, seo keywords, search volume, keyword discovery, keyword analysis
 
 **Load if task involves**:
 - Advanced keyword research and opportunity identification specialist. Use proactively for keyword discovery, search volume analysis, and competitive keyword gap analysis.
-- Related seo domain work
 
 ## Configuration
 

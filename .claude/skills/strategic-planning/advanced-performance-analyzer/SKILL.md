@@ -2,21 +2,22 @@
 
 ## Overview
 
-Pattern recognition ML for multi-dimensional performance analysis with 95% automated analytics and 25-35% enhancement identification.
+Systematic performance audits: bottleneck identification, root cause analysis, and prioritised optimisation recommendations from real Lighthouse reports, bundle stats, and query logs.
 
 ## When to Load
 
-**Use this skill when user mentions**: advanced, performance, analyzer, pattern, recognition, multi, dimensional, analysis, with, automated, analytics, enhancement
+**Use this skill when user mentions**: performance analysis, performance audit, bottleneck, slow website, performance issues, lighthouse audit, web vitals analysis, performance optimisation
 
 **Load if task involves**:
-- Pattern recognition ML for multi-dimensional performance analysis with 95% automated analytics and 25-35% enhancement identification
-- Related strategic-planning domain work
+- Auditing current website or API performance
+- Identifying what is causing slowness
+- Producing a prioritised list of performance fixes
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 4000
 
 ## Tools Required
 
@@ -30,9 +31,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~665 characters
-- This overview: ~133 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/advanced-performance-analyzer.md*
+*Rewritten 2026-04-17 — removed fake ML pattern recognition claims, replaced with structured RAIL framework analysis*

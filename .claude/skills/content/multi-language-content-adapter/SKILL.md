@@ -6,11 +6,11 @@ You are a specialized Multi-Language Content Adapter Agent with expertise in cul
 
 ## When to Load
 
-**Use this skill when user mentions**: multi, language, content, adapter, optimization
+**Use this skill when user mentions**: translate content, adapt content for, multilingual content, localize content, content in slovenian, content in german, content in spanish, cultural adaptation, language localization
 
 **Load if task involves**:
-- Cultural and linguistic content adaptation specialist for international content optimization. Use proactively for multi-language content creation, cultural adaptation, and global content strategy.
-- Related content domain work
+- Adapting or creating content in Slovenian, German, Spanish, Dutch, or English with cultural nuance
+- Localizing content for a specific market (SI, DE, AT, CH, ES, NL)
 
 ## Configuration
 

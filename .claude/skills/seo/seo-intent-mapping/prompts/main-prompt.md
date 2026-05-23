@@ -1,7 +1,7 @@
 ---
 name: seo-intent-mapping
 description: Advanced search intent analysis and query network optimization specialist. Use proactively for intent classification, user journey mapping, and query network analysis.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__keyword_suggestions, mcp__dataforseo__related_keywords, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__top_searches
 model: sonnet
 ---
 
@@ -88,66 +88,44 @@ Initial Query → Refinement → Specification → Decision
 
 ## Integration with ORCHESTRAI
 
-**Memory Storage Categories:**
-- `intent-classifications`: Validated intent mappings for keywords
-- `query-networks`: User journey progression patterns
-- `user-behavior`: Search session analysis and patterns
-- `intent-optimization`: Content recommendations by intent type
+**Output feeds these downstream skills:**
+- `seo:seo-semantic-clustering` — intent labels enrich cluster assignments
+- `seo:seo-topical-authority` — intent distribution informs content type taxonomy
+- `content:content-brief-generator` — intent classification sets content format, length, and CTA strategy
 
-**Coordination with Other Agents:**
-- **Semantic Clustering Agent**: Integrate intent data with semantic clusters
-- **Content Optimization Agent**: Provide intent-specific content recommendations
-- **SERP Analysis Agent**: Cross-reference intent with SERP feature analysis
-- **Keyword Research Agent**: Enhance keyword data with intent classifications
+## Deliverable Format
 
-## Deliverable Formats
+### Intent Mapping Report (markdown)
 
-### Primary Output: Intent Mapping Report
-```json
-{
-  "projectId": "uuid",
-  "intentAnalysis": {
-    "keywordSet": ["keyword1", "keyword2"],
-    "intentClassifications": [
-      {
-        "keyword": "best running shoes",
-        "primaryIntent": "commercial_investigation",
-        "confidence": 0.85,
-        "intentBreakdown": {
-          "informational": 0.20,
-          "navigational": 0.05,
-          "commercial_investigation": 0.65,
-          "transactional": 0.10
-        },
-        "userJourneyStage": "consideration",
-        "contentRecommendations": {
-          "format": "comparison_guide",
-          "length": "2000-3000_words",
-          "elements": ["comparison_table", "expert_reviews", "buying_guide"],
-          "cta_strategy": "soft_commercial"
-        }
-      }
-    ],
-    "queryNetworks": {
-      "progressionPaths": [
-        {
-          "sequence": ["running shoes", "best running shoes", "nike vs adidas running shoes", "buy nike air zoom"],
-          "sessionType": "research_to_purchase",
-          "optimizationOpportunity": "funnel_completion"
-        }
-      ]
-    }
-  },
-  "recommendations": {
-    "contentStrategy": "intent-specific optimization approach",
-    "priorityIntents": ["intent1", "intent2"],
-    "implementationPlan": "phased approach description"
-  }
-}
+```markdown
+## Intent Mapping Report
+**Keyword Set**: [N keywords]
+**Analysis Date**: [date]
+
+### Intent Classification Table
+| Keyword | Primary Intent | Confidence | Journey Stage | Recommended Format |
+|---------|---------------|------------|---------------|-------------------|
+| [keyword] | informational / navigational / commercial / transactional | [0.0–1.0] | awareness / consideration / decision | [article / comparison / landing page / FAQ] |
+
+### Query Progression Paths
+| Entry Query | Refinement | Specification | Decision | Funnel Type |
+|-------------|-----------|---------------|----------|-------------|
+| [query] | [query] | [query] | [query] | research-to-purchase / informational / navigational |
+
+### Intent-Based Content Recommendations
+| Intent Type | Content Format | Recommended Length | Key Elements | CTA Strategy |
+|-------------|---------------|-------------------|--------------|-------------|
+| Informational | [format] | [words] | [list] | [soft/none] |
+| Commercial | [format] | [words] | [comparison table, reviews] | [soft commercial] |
+| Transactional | [format] | [words] | [pricing, trust signals] | [direct] |
+
+### Priority Intents
+1. [intent type + keyword cluster] — [why this is the highest leverage starting point]
+2. [intent type + keyword cluster] — [rationale]
 ```
 
-### Secondary Output: User Journey Visualization
-Generate user journey maps showing intent progression and content optimization opportunities.
+### Secondary Output: User Journey Map
+Narrative description of the query progression path from awareness to decision, showing which content pieces cover each stage and where gaps exist.
 
 ## Quality Standards
 

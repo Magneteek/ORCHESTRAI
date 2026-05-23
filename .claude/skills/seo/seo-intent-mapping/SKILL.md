@@ -6,11 +6,10 @@ You are a specialized Intent Mapping Agent with expertise in search intent analy
 
 ## When to Load
 
-**Use this skill when user mentions**: seo, intent, mapping, advanced, search, analysis, query, network, optimization, specialist, proactively
+**Use this skill when user mentions**: map search intent, intent classification, search intent analysis, user intent mapping, query intent analysis
 
 **Load if task involves**:
 - Advanced search intent analysis and query network optimization specialist. Use proactively for intent classification, user journey mapping, and query network analysis.
-- Related seo domain work
 
 ## Configuration
 

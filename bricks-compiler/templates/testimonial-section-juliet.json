@@ -1,0 +1,1208 @@
+{
+  "content": [
+    {
+      "id": "4fbd40",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "5665d3",
+        "dd38f8"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ylzmzz"
+        ]
+      },
+      "label": "Testimonial Section Juliet"
+    },
+    {
+      "id": "5665d3",
+      "name": "container",
+      "parent": "4fbd40",
+      "children": [
+        "9716f5",
+        "8a1b45"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wkzkbd"
+        ]
+      },
+      "label": "Testimonial Grid Juliet"
+    },
+    {
+      "id": "9716f5",
+      "name": "block",
+      "parent": "5665d3",
+      "children": [
+        "1d2113",
+        "6de006",
+        "0f063f",
+        "afe72b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ikyiwf"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "1d2113",
+      "name": "heading",
+      "parent": "9716f5",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder",
+        "_cssGlobalClasses": [
+          "kmhgfc"
+        ],
+        "tag": "h2"
+      }
+    },
+    {
+      "id": "6de006",
+      "name": "text-basic",
+      "parent": "9716f5",
+      "children": [],
+      "settings": {
+        "text": "Accent heading",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "wkpihe"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "0f063f",
+      "name": "text",
+      "parent": "9716f5",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "whsxtc",
+          "kddjfd"
+        ],
+        "text": "<p>This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.</p><p>Sometimes it\u2019s nice to put in text just to get an idea of how text will fill in a space on your website.</p>"
+      },
+      "label": "Lede Text"
+    },
+    {
+      "id": "afe72b",
+      "name": "div",
+      "parent": "9716f5",
+      "children": [
+        "0b0f5f",
+        "c72e7d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "glrhvz"
+        ]
+      },
+      "label": "CTA Links Bravo"
+    },
+    {
+      "id": "0b0f5f",
+      "name": "button",
+      "parent": "afe72b",
+      "children": [],
+      "settings": {
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--primary"
+        ],
+        "text": "Primary action",
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Primary Action"
+    },
+    {
+      "id": "c72e7d",
+      "name": "text-basic",
+      "parent": "afe72b",
+      "children": [],
+      "settings": {
+        "text": "Secondary action",
+        "link": {
+          "type": "external",
+          "url": "#"
+        },
+        "_cssGlobalClasses": [
+          "aekezk"
+        ]
+      },
+      "label": "Secondary Action"
+    },
+    {
+      "id": "8a1b45",
+      "name": "block",
+      "parent": "5665d3",
+      "children": [
+        "baa99c",
+        "23f26f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lgwboe"
+        ]
+      },
+      "label": "Slider Wrapper"
+    },
+    {
+      "id": "baa99c",
+      "name": "fr-slider",
+      "parent": "8a1b45",
+      "children": [
+        "c88792",
+        "14de2f",
+        "08a998",
+        "195a0f",
+        "ebe1bc",
+        "d850e0"
+      ],
+      "settings": {
+        "height": "40em",
+        "type": "loop",
+        "rewindByDrag": true,
+        "arrowSize": "var(--space-l)",
+        "listTag": "ul",
+        "sliderTag": "div",
+        "ariaCarousel": "Carousel",
+        "direction": "ttb",
+        "gap": "var(--content-gap)",
+        "autoplay": true,
+        "interval": "0",
+        "speed": "50000",
+        "drag": "true",
+        "fixedHeight": "auto",
+        "_cssGlobalClasses": [
+          "rzjqky",
+          "snfvri"
+        ]
+      },
+      "label": "Slider Charlie (Control)"
+    },
+    {
+      "id": "c88792",
+      "name": "block",
+      "parent": "baa99c",
+      "children": [
+        "bb5f55",
+        "c8d84a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lrcmed"
+        ]
+      },
+      "label": "Testimonial Card Juliet"
+    },
+    {
+      "id": "bb5f55",
+      "name": "div",
+      "parent": "c88792",
+      "children": [
+        "fc79e5"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gmdxox"
+        ]
+      },
+      "label": "Media"
+    },
+    {
+      "id": "fc79e5",
+      "name": "image",
+      "parent": "bb5f55",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fkuwdx"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "caption": "none"
+      },
+      "themeStyles": [],
+      "label": "Avatar"
+    },
+    {
+      "id": "c8d84a",
+      "name": "block",
+      "parent": "c88792",
+      "children": [
+        "73dac0",
+        "123b78"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oqsees"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "73dac0",
+      "name": "text-basic",
+      "parent": "c8d84a",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "wzvjig"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "123b78",
+      "name": "text-basic",
+      "parent": "c8d84a",
+      "children": [],
+      "settings": {
+        "text": "Person's Name",
+        "_padding": {
+          "right": "0"
+        },
+        "_cssGlobalClasses": [
+          "aiskjc"
+        ],
+        "tag": "p"
+      },
+      "label": "Name"
+    },
+    {
+      "id": "14de2f",
+      "name": "block",
+      "parent": "baa99c",
+      "children": [
+        "a4006d",
+        "72b03e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lrcmed"
+        ]
+      },
+      "label": "Testimonial Card Juliet"
+    },
+    {
+      "id": "a4006d",
+      "name": "div",
+      "parent": "14de2f",
+      "children": [
+        "e6418d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gmdxox"
+        ]
+      },
+      "label": "Media"
+    },
+    {
+      "id": "e6418d",
+      "name": "image",
+      "parent": "a4006d",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fkuwdx"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "caption": "none"
+      },
+      "themeStyles": [],
+      "label": "Avatar"
+    },
+    {
+      "id": "72b03e",
+      "name": "block",
+      "parent": "14de2f",
+      "children": [
+        "3d54ea",
+        "3d7bb0"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oqsees"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "3d54ea",
+      "name": "text-basic",
+      "parent": "72b03e",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "wzvjig"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "3d7bb0",
+      "name": "text-basic",
+      "parent": "72b03e",
+      "children": [],
+      "settings": {
+        "text": "Person's Name",
+        "_padding": {
+          "right": "0"
+        },
+        "_cssGlobalClasses": [
+          "aiskjc"
+        ],
+        "tag": "p"
+      },
+      "label": "Name"
+    },
+    {
+      "id": "08a998",
+      "name": "block",
+      "parent": "baa99c",
+      "children": [
+        "61b8a6",
+        "6628f1"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lrcmed"
+        ]
+      },
+      "label": "Testimonial Card Juliet"
+    },
+    {
+      "id": "61b8a6",
+      "name": "div",
+      "parent": "08a998",
+      "children": [
+        "3d1f3a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gmdxox"
+        ]
+      },
+      "label": "Media"
+    },
+    {
+      "id": "3d1f3a",
+      "name": "image",
+      "parent": "61b8a6",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fkuwdx"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "caption": "none"
+      },
+      "themeStyles": [],
+      "label": "Avatar"
+    },
+    {
+      "id": "6628f1",
+      "name": "block",
+      "parent": "08a998",
+      "children": [
+        "c14883",
+        "92dd90"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oqsees"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "c14883",
+      "name": "text-basic",
+      "parent": "6628f1",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "wzvjig"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "92dd90",
+      "name": "text-basic",
+      "parent": "6628f1",
+      "children": [],
+      "settings": {
+        "text": "Person's Name",
+        "_padding": {
+          "right": "0"
+        },
+        "_cssGlobalClasses": [
+          "aiskjc"
+        ],
+        "tag": "p"
+      },
+      "label": "Name"
+    },
+    {
+      "id": "195a0f",
+      "name": "block",
+      "parent": "baa99c",
+      "children": [
+        "5307b3",
+        "7f553b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lrcmed"
+        ]
+      },
+      "label": "Testimonial Card Juliet"
+    },
+    {
+      "id": "5307b3",
+      "name": "div",
+      "parent": "195a0f",
+      "children": [
+        "711f9a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gmdxox"
+        ]
+      },
+      "label": "Media"
+    },
+    {
+      "id": "711f9a",
+      "name": "image",
+      "parent": "5307b3",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fkuwdx"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "caption": "none"
+      },
+      "themeStyles": [],
+      "label": "Avatar"
+    },
+    {
+      "id": "7f553b",
+      "name": "block",
+      "parent": "195a0f",
+      "children": [
+        "80c3d1",
+        "3efd87"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oqsees"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "80c3d1",
+      "name": "text-basic",
+      "parent": "7f553b",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "wzvjig"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "3efd87",
+      "name": "text-basic",
+      "parent": "7f553b",
+      "children": [],
+      "settings": {
+        "text": "Person's Name",
+        "_padding": {
+          "right": "0"
+        },
+        "_cssGlobalClasses": [
+          "aiskjc"
+        ],
+        "tag": "p"
+      },
+      "label": "Name"
+    },
+    {
+      "id": "ebe1bc",
+      "name": "block",
+      "parent": "baa99c",
+      "children": [
+        "e6715f",
+        "f3f5ce"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lrcmed"
+        ]
+      },
+      "label": "Testimonial Card Juliet"
+    },
+    {
+      "id": "e6715f",
+      "name": "div",
+      "parent": "ebe1bc",
+      "children": [
+        "aa787e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gmdxox"
+        ]
+      },
+      "label": "Media"
+    },
+    {
+      "id": "aa787e",
+      "name": "image",
+      "parent": "e6715f",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fkuwdx"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "caption": "none"
+      },
+      "themeStyles": [],
+      "label": "Avatar"
+    },
+    {
+      "id": "f3f5ce",
+      "name": "block",
+      "parent": "ebe1bc",
+      "children": [
+        "999d9d",
+        "1c9109"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oqsees"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "999d9d",
+      "name": "text-basic",
+      "parent": "f3f5ce",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "wzvjig"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "1c9109",
+      "name": "text-basic",
+      "parent": "f3f5ce",
+      "children": [],
+      "settings": {
+        "text": "Person's Name",
+        "_padding": {
+          "right": "0"
+        },
+        "_cssGlobalClasses": [
+          "aiskjc"
+        ],
+        "tag": "p"
+      },
+      "label": "Name"
+    },
+    {
+      "id": "d850e0",
+      "name": "block",
+      "parent": "baa99c",
+      "children": [
+        "acb288",
+        "f030d0"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "lrcmed"
+        ]
+      },
+      "label": "Testimonial Card Juliet"
+    },
+    {
+      "id": "acb288",
+      "name": "div",
+      "parent": "d850e0",
+      "children": [
+        "e12e44"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gmdxox"
+        ]
+      },
+      "label": "Media"
+    },
+    {
+      "id": "e12e44",
+      "name": "image",
+      "parent": "acb288",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fkuwdx"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure",
+        "caption": "none"
+      },
+      "themeStyles": [],
+      "label": "Avatar"
+    },
+    {
+      "id": "f030d0",
+      "name": "block",
+      "parent": "d850e0",
+      "children": [
+        "f5bf4a",
+        "696e2b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oqsees"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "f5bf4a",
+      "name": "text-basic",
+      "parent": "f030d0",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don\u2019t be alarmed, this is just here to fill up space since your finalized copy isn\u2019t ready yet. Once we have your content finalized, we\u2019ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "wzvjig"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "696e2b",
+      "name": "text-basic",
+      "parent": "f030d0",
+      "children": [],
+      "settings": {
+        "text": "Person's Name",
+        "_padding": {
+          "right": "0"
+        },
+        "_cssGlobalClasses": [
+          "aiskjc"
+        ],
+        "tag": "p"
+      },
+      "label": "Name"
+    },
+    {
+      "id": "23f26f",
+      "name": "text-basic",
+      "parent": "8a1b45",
+      "children": [],
+      "settings": {
+        "text": "See all reviews",
+        "_cssGlobalClasses": [
+          "fwfwyl"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "More Reviews Link"
+    },
+    {
+      "id": "dd38f8",
+      "name": "container",
+      "parent": "4fbd40",
+      "children": [
+        "46bd1d",
+        "375378"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "cpfqic"
+        ]
+      },
+      "label": "Logos Wrapper"
+    },
+    {
+      "id": "46bd1d",
+      "name": "text-basic",
+      "parent": "dd38f8",
+      "children": [],
+      "settings": {
+        "text": "Sometimes it\u2019s nice to put in filler text.",
+        "_cssGlobalClasses": [
+          "cwzgnq"
+        ],
+        "tag": "p"
+      },
+      "label": "Logos Intro"
+    },
+    {
+      "id": "375378",
+      "name": "block",
+      "parent": "dd38f8",
+      "children": [
+        "01dd97",
+        "c70d74",
+        "658776",
+        "240f9a",
+        "ed144c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vafnmr"
+        ]
+      },
+      "label": "Logos Alpha"
+    },
+    {
+      "id": "01dd97",
+      "name": "image",
+      "parent": "375378",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "_cssGlobalClasses": [
+          "vqtdgc"
+        ],
+        "caption": "none",
+        "tag": "figure"
+      },
+      "label": "Logo",
+      "themeStyles": []
+    },
+    {
+      "id": "c70d74",
+      "name": "image",
+      "parent": "375378",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "_cssGlobalClasses": [
+          "vqtdgc"
+        ],
+        "caption": "none",
+        "tag": "figure"
+      },
+      "label": "Logo"
+    },
+    {
+      "id": "658776",
+      "name": "image",
+      "parent": "375378",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "_cssGlobalClasses": [
+          "vqtdgc"
+        ],
+        "caption": "none",
+        "tag": "figure"
+      },
+      "label": "Logo"
+    },
+    {
+      "id": "240f9a",
+      "name": "image",
+      "parent": "375378",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "_cssGlobalClasses": [
+          "vqtdgc"
+        ],
+        "caption": "none",
+        "tag": "figure"
+      },
+      "label": "Logo"
+    },
+    {
+      "id": "ed144c",
+      "name": "image",
+      "parent": "375378",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "vqtdgc"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "caption": "none"
+      },
+      "label": "Logo"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "ylzmzz",
+      "name": "fr-testimonial-section-juliet",
+      "settings": {
+        "_rowGap": "var(--container-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "wkzkbd",
+      "name": "fr-testimonial-grid-juliet",
+      "settings": {
+        "_cssCustom:mobile_landscape": ".fr-testimonial-grid-juliet {\n  grid-template-columns: repeat(1, minmax(0, 1fr));\n}",
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-2)",
+        "_gridTemplateRows": "var(--grid-1)",
+        "_alignItemsGrid": "stretch",
+        "_gridGap": "calc(var(--grid-gap) * 3)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "ikyiwf",
+      "name": "fr-testimonial-grid-juliet__content",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_justifyContent": "center"
+      },
+      "_exists": false
+    },
+    {
+      "id": "kmhgfc",
+      "name": "fr-testimonial-section-juliet__heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "wkpihe",
+      "name": "fr-testimonial-section-juliet__accent-heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "whsxtc",
+      "name": "fr-testimonial-section-juliet__lede",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "glrhvz",
+      "name": "fr-cta-links-bravo",
+      "settings": {
+        "_display": "flex",
+        "_flexWrap": "wrap",
+        "_alignItems": "center",
+        "_rowGap": "var(--content-gap)",
+        "_columnGap": "var(--content-gap)",
+        "_direction:mobile_portrait": "column",
+        "_width:mobile_portrait": "100%",
+        "_cssCustom:mobile_portrait": ".fr-cta-links-bravo > * {\n\twidth: 100% !important;\n}",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_margin": {
+          "top": "var(--space-s)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "aekezk",
+      "name": "fr-cta-links-bravo__link",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "lgwboe",
+      "name": "fr-testimonial-grid-juliet__slider-wrapper",
+      "settings": {
+        "_position": "relative"
+      },
+      "_exists": false
+    },
+    {
+      "id": "rzjqky",
+      "name": "fr-testimonial-grid-juliet__slider",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "snfvri",
+      "name": "fr-slider-charlie",
+      "settings": {
+        "_cssCustom": ".fr-slider-charlie {\n\t--gradient-bg-color: var(--white); /* Color of fade */\n  --gradient-height: 20%; /* Amount of fade */\n  --min-height: 35em; /* Min height of slider */\n  --fade-display: flex; /* Flex or none */\n}\n\n.fr-slider-charlie::before {\n\tcontent: \"\";\n  width: 100%;\n  height: var(--gradient-height);\n  display: var(--fade-display);\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  background: linear-gradient(var(--gradient-bg-color), transparent 100%);\n}\n\n.fr-slider-charlie::after {\n\tcontent: \"\";\n  width: 100%;\n  height: var(--gradient-height);\n  display: var(--fade-display);\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  z-index: 1;\n  background: linear-gradient(transparent, var(--gradient-bg-color) 100%);\n}\n\n.fr-slider-charlie .splide__track {\n\tmin-height: var(--min-height);\n}",
+        "_position": "relative"
+      },
+      "_exists": false
+    },
+    {
+      "id": "lrcmed",
+      "name": "fr-testimonial-card-juliet",
+      "settings": {
+        "_display": "flex",
+        "_direction": "row",
+        "_columnGap": "var(--fr-card-gap)",
+        "_rowGap": "var(--fr-card-gap)",
+        "_alignItems": "stretch",
+        "_flexWrap:mobile_landscape": "nowrap",
+        "_flexWrap:mobile_portrait": "wrap",
+        "_justifyContent:mobile_portrait": "flex-start",
+        "_overflow": "hidden",
+        "_border": {
+          "radius": {
+            "top": "var(--radius)",
+            "right": "var(--radius)",
+            "bottom": "var(--radius)",
+            "left": "var(--radius)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "gmdxox",
+      "name": "fr-testimonial-card-juliet__media-wrapper",
+      "settings": {
+        "_order": "-1"
+      },
+      "_exists": false
+    },
+    {
+      "id": "fkuwdx",
+      "name": "fr-testimonial-card-juliet__avatar",
+      "settings": {
+        "_border": {
+          "radius": {
+            "top": "var(--fr-card-avatar-radius)",
+            "right": "var(--fr-card-avatar-radius)",
+            "bottom": "var(--fr-card-avatar-radius)",
+            "left": "var(--fr-card-avatar-radius)"
+          }
+        },
+        "_overflow": "hidden",
+        "_width": "3em",
+        "_objectFit": "cover"
+      },
+      "_exists": false
+    },
+    {
+      "id": "oqsees",
+      "name": "fr-testimonial-card-juliet__body",
+      "settings": {
+        "_rowGap": "var(--fr-card-gap)",
+        "_columnGap": "var(--fr-card-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "wzvjig",
+      "name": "fr-testimonial-card-juliet__text",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "aiskjc",
+      "name": "fr-testimonial-card-juliet__name",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-s)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "fwfwyl",
+      "name": "fr-testimonial-grid-juliet__more-reviews-link",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-s)"
+        },
+        "_alignSelf": "flex-end",
+        "_margin": {
+          "top": "calc(var(--content-gap) / 2)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "cpfqic",
+      "name": "fr-testimonial-section-juliet__logos-wrapper",
+      "settings": {
+        "_typography": {
+          "text-align": "center"
+        },
+        "_alignItems": "center",
+        "_rowGap": "var(--content-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "cwzgnq",
+      "name": "fr-testimonial-section-juliet__logos-intro",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "vafnmr",
+      "name": "fr-logo-group-alpha",
+      "settings": {
+        "_direction": "row",
+        "_flexWrap": "wrap",
+        "_justifyContent": "center",
+        "_alignItems": "center",
+        "_columnGap": "var(--content-gap)",
+        "_rowGap": "var(--content-gap)",
+        "_margin": {
+          "left": "auto",
+          "right": "auto"
+        },
+        "_cssCustom": "/* \nSet how many to show on mobile.\nAdd \"1\" to your desired number.\nE.g. to show 6, set the nth selector to \"7\".\n*/\n\n/*\n@media (max-width: 767px) {\n  .fr-logo-group-alpha > *:nth-child(n + 5) {\n    display: none!important;\n\t}\n}\n*/\n\n.fr-logo-group-alpha {\n\tlist-style: none;\n}",
+        "_width": "var(--content-width)",
+        "_padding": {
+          "left": "0"
+        },
+        "_display": "flex"
+      },
+      "_exists": false
+    },
+    {
+      "id": "vqtdgc",
+      "name": "fr-logo-group-alpha__logo",
+      "settings": {
+        "_height": "2em",
+        "_objectFit": "contain",
+        "_width": "auto",
+        "_width:mobile_landscape": "15rem",
+        "_margin:mobile_landscape": {
+          "bottom": "unset"
+        }
+      },
+      "modified": 1760711904,
+      "user_id": 26,
+      "_exists": false
+    }
+  ]
+}

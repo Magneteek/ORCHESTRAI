@@ -1,0 +1,127 @@
+{
+  "page_title": "Google Review Verwijdering — DeleteReviews.nl",
+  "slug": "google-review-verwijdering",
+  "source_url": "https://deletereviews.nl",
+  "_notes": "Sections covered: REVIEW TYPES + PROCESS + NO CURE NO PAY + RESULTS. Templates missing for: service hero, proof bar, pricing, testimonials, FAQ, final CTA.",
+
+  "sections": [
+
+    {
+      "component": "feature-section-foxtrot",
+      "_label": "REVIEW TYPES",
+      "slots": {
+        "accent_heading": "Welke reviews",
+        "heading": "Welke reviews kunnen worden verwijderd?",
+        "lede": "Niet elke negatieve review komt in aanmerking — maar de volgende zes typen wel. Twijfelt u? De gratis analyse geeft u binnen 24 uur uitsluitsel.",
+        "features": [
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/nep-reviews.svg" },
+            "heading": "Nep reviews",
+            "text": "Beoordelingen van personen die aantoonbaar nooit klant bij u zijn geweest."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/concurrenten.svg" },
+            "heading": "Reviews van concurrenten",
+            "text": "Geplaatst met een aantoonbaar zakelijk motief om uw reputatie te schaden."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/ex-werknemers.svg" },
+            "heading": "Reviews van ex-werknemers",
+            "text": "Geplaatst met persoonlijk motief na een arbeidsconflict of ontslag."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/lasterlijk.svg" },
+            "heading": "Lasterlijke inhoud",
+            "text": "Aantoonbaar onjuiste beweringen die uw bedrijfsreputatie schaden (art. 6:162 BW)."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/beleid.svg" },
+            "heading": "Beleidsovertredingen",
+            "text": "Haatdragend taalgebruik, bedreigingen, spam of off-topic inhoud die Google's regels schendt."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/aanval.svg" },
+            "heading": "Gecoördineerde aanvallen",
+            "text": "Meerdere nep-reviews in korte tijd, geplaatst vanuit gelieerde of gekochte accounts."
+          }
+        ],
+        "primary_cta_text": "Vraag gratis analyse aan",
+        "primary_cta_link": { "url": "#analyse", "type": "internal" },
+        "secondary_cta_text": "Meer over nep reviews",
+        "secondary_cta_link": { "url": "https://deletereviews.nl/google-reviews/nepreviews-verwijderen/", "type": "internal" }
+      }
+    },
+
+    {
+      "component": "feature-section-foxtrot",
+      "_label": "PROCESS",
+      "slots": {
+        "accent_heading": "Het proces",
+        "heading": "Hoe werkt het?",
+        "lede": "Drie stappen — van gratis analyse tot bevestigde verwijdering. U betaalt alleen bij stap 3.",
+        "features": [
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-01-analyse.svg" },
+            "heading": "Gratis analyse — binnen 24 uur",
+            "text": "U stuurt ons de link naar de betreffende review. Wij beoordelen of verwijdering haalbaar is en sturen u een helder advies met inschatting van de slagingskans. Geen verplichtingen."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-02-dossier.svg" },
+            "heading": "Juridisch dossier — 7 tot 21 dagen",
+            "text": "Onze specialisten bouwen het juridisch en technisch dossier dat Google accepteert. Reviews jonger dan drie weken worden in veel gevallen binnen 48 uur verwijderd via onze express-procedure."
+          },
+          {
+            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-03-verwijdering.svg" },
+            "heading": "Verwijdering en betaling — alleen bij succes",
+            "text": "U betaalt uitsluitend wanneer de review daadwerkelijk is verwijderd. Wij sturen u een bevestiging met screenshot. Geen resultaat? Geen factuur. Geen discussie."
+          }
+        ],
+        "primary_cta_text": "Start gratis analyse",
+        "primary_cta_link": { "url": "#analyse", "type": "internal" },
+        "secondary_cta_text": "Stap voor stap uitleg",
+        "secondary_cta_link": { "url": "https://deletereviews.nl/google-reviews/stap-voor-stap/", "type": "internal" }
+      }
+    },
+
+    {
+      "component": "content-section-mike",
+      "_label": "NO CURE NO PAY",
+      "slots": {
+        "accent_heading": "No Cure No Pay",
+        "heading": "No Cure No Pay — wat betekent dat?",
+        "lede": "Geen voorschot, geen uurtarief, geen administratiekosten. Ons verdienmodel is volledig gekoppeld aan uw resultaat.",
+        "text": "<p><strong>No Cure No Pay betekent dat u niets betaalt als wij de review niet verwijderd krijgen.</strong> Er is geen voorschot, geen uurtarief en geen administratiekosten. Ons verdienmodel is volledig gekoppeld aan uw resultaat.</p><p>Bij de gratis intake beoordelen wij eerlijk of uw zaak haalbaar is. Wij nemen geen zaken aan waarvan wij vooraf weten dat ze niet slagen — dat is nadelig voor u én voor ons. De 6% zaken waarbij verwijdering niet lukt, betreft vrijwel altijd reviews waarbij Google oordeelt dat de inhoud haar beleidsregels niet schendt.</p>",
+        "media": { "url": "https://deletereviews.nl/wp-content/uploads/ncnp-94-procent-badge.jpg" }
+      }
+    },
+
+    {
+      "component": "content-section-yankee",
+      "_label": "RESULTS",
+      "slots": {
+        "heading": "Na 2.500+ behandelde zaken zijn onze resultaten consistent",
+        "content": "<p>De 6% zaken waarbij verwijdering niet lukt betreft vrijwel altijd reviews waarbij Google oordeelt dat de inhoud haar beleidsregels niet schendt — iets wat wij in de meeste gevallen al tijdens de intake communiceren.</p>",
+        "media": { "url": "https://deletereviews.nl/wp-content/uploads/resultaten-dashboard.jpg" },
+        "stats": [
+          {
+            "value": "94%",
+            "description": "Slagingskans op aangenomen zaken"
+          },
+          {
+            "value": "2.500+",
+            "description": "Succesvol verwijderde reviews"
+          },
+          {
+            "value": "7–14",
+            "description": "Dagen gemiddelde doorlooptijd"
+          },
+          {
+            "value": "48u",
+            "description": "Express bij reviews jonger dan 3 weken"
+          }
+        ]
+      }
+    }
+
+  ]
+}

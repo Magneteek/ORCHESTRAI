@@ -1,0 +1,87 @@
+# Feature Section Victor
+# Intro heading + grid of 2–6 feature cards (heading/description/label/media) + single CTA button
+# AUTO-GENERATED skeleton, manually corrected
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: feature-section-victor
+version: "2.3.5"
+description: |
+  Intro (accent/heading/lede) + responsive card grid. Each card has a heading,
+  short description, an optional label badge, and a background image.
+  Ends with a single CTA button.
+
+slots:
+
+  # ── Section intro ─────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: Main H2 heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small accent text above the main heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 200
+    target_class: fr-intro-alpha__lede
+    description: Subheading / intro paragraph
+
+  # ── Feature cards (array) ──────────────────────────────────────────────────
+
+  cards:
+    type: array
+    required: true
+    min: 2
+    max: 6
+    template_label: "Feature Card Victor (CSS)"
+    description: Grid of feature cards, each with image background
+    item_slots:
+      heading:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-feature-card-victor__heading
+      description:
+        type: string
+        required: false
+        max_length: 160
+        target_class: fr-feature-card-victor__description
+      label:
+        type: string
+        required: false
+        max_length: 30
+        target_class: fr-feature-card-victor__label
+        description: Small badge/label (e.g. "New", "Popular")
+      media:
+        type: media
+        required: true
+        target_class: fr-feature-card-victor__media
+        description: Background image for the card
+
+  # ── Call-to-action ────────────────────────────────────────────────────────
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: btn--neutral-light
+    description: Button label text
+
+  cta_link:
+    type: link
+    required: false
+    target_class: btn--neutral-light
+    description: "Value: { url: '...', type?: 'external' } — inserted into settings.link"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

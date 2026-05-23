@@ -134,7 +134,7 @@ Available resources:
 
 ## ORCHESTRAI Shared Pipeline Integration
 
-**Crystalline Memory System Access:**
+**MCP Memory Integration:**
 - **Search Intelligence Retrieval**: Use `mcp__memory__search_nodes` to access existing keyword research, search intent analysis, and user behavior data
 - **Customer Journey Context**: Access client entities with `mcp__memory__open_nodes` for search behavior patterns, conversion paths, and customer psychology
 - **Campaign Intelligence**: Store successful search strategies using `mcp__memory__create_entities` and connect to keyword research with `mcp__memory__create_relations`

@@ -1,0 +1,81 @@
+# Testimonial Section Oscar
+# Light-bg section: centered intro + 2-col grid of 4 testimonial cards (logo + quote + footer).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: testimonial-section-oscar
+version: "2.3.5"
+description: |
+  Light-background testimonials section. Top zone: centered intro with H2 heading,
+  accent label, and lede paragraph. Below: a 2-column × 2-row grid of testimonial
+  cards. Each card has a client logo at the top, a quote text body, and a footer
+  with the reviewer's name, job title, and circular avatar.
+
+slots:
+
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: H2 section heading (e.g. "Trusted By These Companies")
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small uppercase accent label displayed above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-alpha__lede
+    description: Intro paragraph below the heading
+
+  # ── Testimonial cards (array) ─────────────────────────────────────────────
+
+  testimonials:
+    type: array
+    required: false
+    min: 2
+    max: 4
+    template_label: "Testimonial Card Oscar (CSS)"
+    description: |
+      2-column grid of testimonial cards. Each card: logo at top, quote body,
+      name + title + avatar in footer. Grid is fixed at 2 columns on desktop.
+    item_slots:
+      logo:
+        type: media
+        required: false
+        target_class: testimonial-card-oscar__logo
+        description: Client or brand logo image (shown at top of card, width 150px)
+      text:
+        type: html
+        required: true
+        max_length: 400
+        target_class: testimonial-card-oscar__text
+        description: Testimonial quote text (HTML, rendered as styled paragraph)
+      name:
+        type: string
+        required: true
+        max_length: 60
+        target_class: testimonial-card-oscar__name
+        description: Reviewer's full name
+      title:
+        type: string
+        required: false
+        max_length: 80
+        target_class: testimonial-card-oscar__title
+        description: Reviewer's job title or company
+      avatar:
+        type: media
+        required: false
+        target_class: testimonial-card-oscar__avatar
+        description: Reviewer's headshot (circular crop, displayed at ~75px)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

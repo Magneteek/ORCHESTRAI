@@ -1,0 +1,3922 @@
+{
+  "content": [
+    {
+      "id": "5df38c",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "62424b",
+        "6390d4"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "twvyhz"
+        ]
+      },
+      "label": "Testimonial Section November"
+    },
+    {
+      "id": "62424b",
+      "name": "container",
+      "parent": "5df38c",
+      "children": [
+        "dbd50e",
+        "8d6e4e",
+        "94c82d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dliabf",
+          "xgmzei"
+        ]
+      },
+      "label": "Intro Alpha"
+    },
+    {
+      "id": "dbd50e",
+      "name": "heading",
+      "parent": "62424b",
+      "children": [],
+      "settings": {
+        "text": "Your heading",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "tkbujj"
+        ]
+      }
+    },
+    {
+      "id": "8d6e4e",
+      "name": "text-basic",
+      "parent": "62424b",
+      "children": [],
+      "settings": {
+        "text": "Accent heading",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "blgfqd"
+        ],
+        "tag": "p"
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "94c82d",
+      "name": "text-basic",
+      "parent": "62424b",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "dizast"
+        ],
+        "tag": "p"
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "6390d4",
+      "name": "container",
+      "parent": "5df38c",
+      "children": [
+        "1d6a5a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "guihqe"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "1d6a5a",
+      "name": "fr-tabs",
+      "parent": "6390d4",
+      "children": [
+        "2b69bb",
+        "ca6c66"
+      ],
+      "settings": {
+        "accordionOnDevice": "mobile_portrait",
+        "accordionDuration": 300,
+        "navigationDirection": "row",
+        "animationDuration": 300,
+        "backgroundAnimatedActiveLink": {
+          "raw": "var(--neutral-ultra-light)"
+        },
+        "contentItemPadding": "var(--space-m)",
+        "tag": "div",
+        "_cssGlobalClasses": [
+          "p1d27h"
+        ],
+        "contentItemPadding:mobile_landscape": {
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0"
+        }
+      },
+      "label": "Testimonial Tabs November",
+      "themeStyles": []
+    },
+    {
+      "id": "2b69bb",
+      "name": "block",
+      "parent": "1d6a5a",
+      "children": [
+        "306fe0"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__nav"
+        },
+        "_cssGlobalClasses": [
+          "9zsrdx"
+        ]
+      },
+      "label": "Tabs Navigation"
+    },
+    {
+      "id": "306fe0",
+      "name": "block",
+      "parent": "2b69bb",
+      "children": [
+        "5f2275",
+        "7132db",
+        "8fede1",
+        "a400f0"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "ul",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__list"
+        },
+        "_cssGlobalClasses": [
+          "rsu5f8"
+        ],
+        "_direction": "row"
+      },
+      "label": "Navigation List"
+    },
+    {
+      "id": "5f2275",
+      "name": "div",
+      "parent": "306fe0",
+      "children": [
+        "a93c7e"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "vgkp6e"
+        ]
+      },
+      "label": "Navigation Item"
+    },
+    {
+      "id": "a93c7e",
+      "name": "text-basic",
+      "parent": "5f2275",
+      "children": [],
+      "settings": {
+        "text": "Bathroom Renovation",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link-text"
+        },
+        "_cssGlobalClasses": [
+          "d81utn"
+        ]
+      },
+      "label": "Tab"
+    },
+    {
+      "id": "7132db",
+      "name": "div",
+      "parent": "306fe0",
+      "children": [
+        "e3f390"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "vgkp6e"
+        ]
+      },
+      "label": "Navigation Item"
+    },
+    {
+      "id": "e3f390",
+      "name": "text-basic",
+      "parent": "7132db",
+      "children": [],
+      "settings": {
+        "text": "Custom Basements",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link-text"
+        },
+        "_cssGlobalClasses": [
+          "d81utn"
+        ]
+      },
+      "label": "Tab"
+    },
+    {
+      "id": "8fede1",
+      "name": "div",
+      "parent": "306fe0",
+      "children": [
+        "a5138b"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "vgkp6e"
+        ]
+      },
+      "label": "Navigation Item"
+    },
+    {
+      "id": "a5138b",
+      "name": "text-basic",
+      "parent": "8fede1",
+      "children": [],
+      "settings": {
+        "text": "Decks & Patios",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link-text"
+        },
+        "_cssGlobalClasses": [
+          "d81utn"
+        ]
+      },
+      "label": "Tab"
+    },
+    {
+      "id": "a400f0",
+      "name": "div",
+      "parent": "306fe0",
+      "children": [
+        "77585e"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "vgkp6e"
+        ]
+      },
+      "label": "Navigation Item"
+    },
+    {
+      "id": "77585e",
+      "name": "text-basic",
+      "parent": "a400f0",
+      "children": [],
+      "settings": {
+        "text": "Custom Kitchens",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link-text"
+        },
+        "_cssGlobalClasses": [
+          "d81utn"
+        ]
+      },
+      "label": "Tab"
+    },
+    {
+      "id": "ca6c66",
+      "name": "block",
+      "parent": "1d6a5a",
+      "children": [
+        "e7f06b",
+        "91169b",
+        "42a6b4",
+        "338707"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "slgwa1"
+        ]
+      },
+      "label": "Tabs Content Wrapper"
+    },
+    {
+      "id": "e7f06b",
+      "name": "block",
+      "parent": "ca6c66",
+      "children": [
+        "e52696"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "rxkl0i"
+        ]
+      },
+      "label": "Tabs Item Wrapper"
+    },
+    {
+      "id": "e52696",
+      "name": "block",
+      "parent": "e7f06b",
+      "children": [
+        "40abf7"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "qzuxrk"
+        ]
+      },
+      "label": "Tabs Item"
+    },
+    {
+      "id": "40abf7",
+      "name": "block",
+      "parent": "e52696",
+      "children": [
+        "3ee36e",
+        "a0057e",
+        "464aec"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "uuotpd"
+        ]
+      },
+      "label": "Testimonial Grid November"
+    },
+    {
+      "id": "3ee36e",
+      "name": "block",
+      "parent": "40abf7",
+      "children": [
+        "c88d55",
+        "d9765f",
+        "5a521a",
+        "b45b34"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "c88d55",
+      "name": "div",
+      "parent": "3ee36e",
+      "children": [
+        "08c40f",
+        "410ddd",
+        "01db6d",
+        "ab4fa9",
+        "eeb2bb",
+        "d78199"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "08c40f",
+      "name": "icon",
+      "parent": "c88d55",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "410ddd",
+      "name": "icon",
+      "parent": "c88d55",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "01db6d",
+      "name": "icon",
+      "parent": "c88d55",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "ab4fa9",
+      "name": "icon",
+      "parent": "c88d55",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "eeb2bb",
+      "name": "icon",
+      "parent": "c88d55",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "d78199",
+      "name": "icon",
+      "parent": "c88d55",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "d9765f",
+      "name": "text-basic",
+      "parent": "3ee36e",
+      "children": [],
+      "settings": {
+        "text": "The best bathroom renovation company on the planet!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "5a521a",
+      "name": "text-basic",
+      "parent": "3ee36e",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ],
+        "readMore": "..."
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "b45b34",
+      "name": "text-basic",
+      "parent": "3ee36e",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "a0057e",
+      "name": "block",
+      "parent": "40abf7",
+      "children": [
+        "fa8359",
+        "403464",
+        "33e54a",
+        "c1f33d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "fa8359",
+      "name": "div",
+      "parent": "a0057e",
+      "children": [
+        "3d19c6",
+        "d577e8",
+        "1a8b50",
+        "cffa21",
+        "a7b20e",
+        "74c37a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "3d19c6",
+      "name": "icon",
+      "parent": "fa8359",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "d577e8",
+      "name": "icon",
+      "parent": "fa8359",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "1a8b50",
+      "name": "icon",
+      "parent": "fa8359",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "cffa21",
+      "name": "icon",
+      "parent": "fa8359",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "a7b20e",
+      "name": "icon",
+      "parent": "fa8359",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "74c37a",
+      "name": "icon",
+      "parent": "fa8359",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "403464",
+      "name": "text-basic",
+      "parent": "a0057e",
+      "children": [],
+      "settings": {
+        "text": "The best bathroom renovation company on the planet!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "33e54a",
+      "name": "text-basic",
+      "parent": "a0057e",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "c1f33d",
+      "name": "text-basic",
+      "parent": "a0057e",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "464aec",
+      "name": "block",
+      "parent": "40abf7",
+      "children": [
+        "2bb5fd",
+        "540205",
+        "38f297",
+        "0fbccb"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "2bb5fd",
+      "name": "div",
+      "parent": "464aec",
+      "children": [
+        "9a7a95",
+        "be3cd0",
+        "8f8da8",
+        "b88c3c",
+        "90306c",
+        "08e1cc"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "9a7a95",
+      "name": "icon",
+      "parent": "2bb5fd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "be3cd0",
+      "name": "icon",
+      "parent": "2bb5fd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "8f8da8",
+      "name": "icon",
+      "parent": "2bb5fd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "b88c3c",
+      "name": "icon",
+      "parent": "2bb5fd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "90306c",
+      "name": "icon",
+      "parent": "2bb5fd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "08e1cc",
+      "name": "icon",
+      "parent": "2bb5fd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "540205",
+      "name": "text-basic",
+      "parent": "464aec",
+      "children": [],
+      "settings": {
+        "text": "The best bathroom renovation company on the planet!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "38f297",
+      "name": "text-basic",
+      "parent": "464aec",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "0fbccb",
+      "name": "text-basic",
+      "parent": "464aec",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "91169b",
+      "name": "block",
+      "parent": "ca6c66",
+      "children": [
+        "2127d7"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "rxkl0i"
+        ]
+      },
+      "label": "Tabs Item Wrapper"
+    },
+    {
+      "id": "2127d7",
+      "name": "block",
+      "parent": "91169b",
+      "children": [
+        "6326bb"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "qzuxrk"
+        ]
+      },
+      "label": "Tabs Item"
+    },
+    {
+      "id": "6326bb",
+      "name": "block",
+      "parent": "2127d7",
+      "children": [
+        "02a490",
+        "27b121",
+        "ed7d7d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "uuotpd"
+        ]
+      },
+      "label": "Testimonial Grid November"
+    },
+    {
+      "id": "02a490",
+      "name": "block",
+      "parent": "6326bb",
+      "children": [
+        "6e8631",
+        "b884f5",
+        "57b256",
+        "b31868"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "6e8631",
+      "name": "div",
+      "parent": "02a490",
+      "children": [
+        "778237",
+        "fba9d0",
+        "9ff222",
+        "ff2835",
+        "b476c1",
+        "4652f8"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "778237",
+      "name": "icon",
+      "parent": "6e8631",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "fba9d0",
+      "name": "icon",
+      "parent": "6e8631",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "9ff222",
+      "name": "icon",
+      "parent": "6e8631",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "ff2835",
+      "name": "icon",
+      "parent": "6e8631",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "b476c1",
+      "name": "icon",
+      "parent": "6e8631",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "4652f8",
+      "name": "icon",
+      "parent": "6e8631",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "b884f5",
+      "name": "text-basic",
+      "parent": "02a490",
+      "children": [],
+      "settings": {
+        "text": "We're so happy with our basement renovation!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "57b256",
+      "name": "text-basic",
+      "parent": "02a490",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ],
+        "readMore": "..."
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "b31868",
+      "name": "text-basic",
+      "parent": "02a490",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "27b121",
+      "name": "block",
+      "parent": "6326bb",
+      "children": [
+        "7883b4",
+        "92b0ab",
+        "6e002d",
+        "cd7957"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "7883b4",
+      "name": "div",
+      "parent": "27b121",
+      "children": [
+        "834797",
+        "35d252",
+        "feda20",
+        "c87215",
+        "6c3ef7",
+        "50d6d3"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "834797",
+      "name": "icon",
+      "parent": "7883b4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "35d252",
+      "name": "icon",
+      "parent": "7883b4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "feda20",
+      "name": "icon",
+      "parent": "7883b4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "c87215",
+      "name": "icon",
+      "parent": "7883b4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "6c3ef7",
+      "name": "icon",
+      "parent": "7883b4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "50d6d3",
+      "name": "icon",
+      "parent": "7883b4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "92b0ab",
+      "name": "text-basic",
+      "parent": "27b121",
+      "children": [],
+      "settings": {
+        "text": "We're so happy with our basement renovation!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "6e002d",
+      "name": "text-basic",
+      "parent": "27b121",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "cd7957",
+      "name": "text-basic",
+      "parent": "27b121",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "ed7d7d",
+      "name": "block",
+      "parent": "6326bb",
+      "children": [
+        "31338d",
+        "cd5748",
+        "38e9e2",
+        "5e6d6d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "31338d",
+      "name": "div",
+      "parent": "ed7d7d",
+      "children": [
+        "6b4feb",
+        "2035e3",
+        "5feb65",
+        "1d1d73",
+        "76845e",
+        "c74cdd"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "6b4feb",
+      "name": "icon",
+      "parent": "31338d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "2035e3",
+      "name": "icon",
+      "parent": "31338d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "5feb65",
+      "name": "icon",
+      "parent": "31338d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "1d1d73",
+      "name": "icon",
+      "parent": "31338d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "76845e",
+      "name": "icon",
+      "parent": "31338d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "c74cdd",
+      "name": "icon",
+      "parent": "31338d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "cd5748",
+      "name": "text-basic",
+      "parent": "ed7d7d",
+      "children": [],
+      "settings": {
+        "text": "We're so happy with our basement renovation!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "38e9e2",
+      "name": "text-basic",
+      "parent": "ed7d7d",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "5e6d6d",
+      "name": "text-basic",
+      "parent": "ed7d7d",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "42a6b4",
+      "name": "block",
+      "parent": "ca6c66",
+      "children": [
+        "a57570"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "rxkl0i"
+        ]
+      },
+      "label": "Tabs Item Wrapper"
+    },
+    {
+      "id": "a57570",
+      "name": "block",
+      "parent": "42a6b4",
+      "children": [
+        "488a5a"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "qzuxrk"
+        ]
+      },
+      "label": "Tabs Item"
+    },
+    {
+      "id": "488a5a",
+      "name": "block",
+      "parent": "a57570",
+      "children": [
+        "e4ba88",
+        "f0ffa0",
+        "a62a1b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "uuotpd"
+        ]
+      },
+      "label": "Testimonial Grid November"
+    },
+    {
+      "id": "e4ba88",
+      "name": "block",
+      "parent": "488a5a",
+      "children": [
+        "0b6eb2",
+        "632bec",
+        "b69665",
+        "ae1fed"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "0b6eb2",
+      "name": "div",
+      "parent": "e4ba88",
+      "children": [
+        "9a69ed",
+        "4a0045",
+        "ee4aee",
+        "9d3e78",
+        "1feaf0",
+        "e6116e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "9a69ed",
+      "name": "icon",
+      "parent": "0b6eb2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "4a0045",
+      "name": "icon",
+      "parent": "0b6eb2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "ee4aee",
+      "name": "icon",
+      "parent": "0b6eb2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "9d3e78",
+      "name": "icon",
+      "parent": "0b6eb2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "1feaf0",
+      "name": "icon",
+      "parent": "0b6eb2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "e6116e",
+      "name": "icon",
+      "parent": "0b6eb2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "632bec",
+      "name": "text-basic",
+      "parent": "e4ba88",
+      "children": [],
+      "settings": {
+        "text": "Our new deck is exactly what we dreamed of!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "b69665",
+      "name": "text-basic",
+      "parent": "e4ba88",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ],
+        "readMore": "..."
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "ae1fed",
+      "name": "text-basic",
+      "parent": "e4ba88",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "f0ffa0",
+      "name": "block",
+      "parent": "488a5a",
+      "children": [
+        "1f06fb",
+        "e9b4fa",
+        "417aa2",
+        "1911c1"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "1f06fb",
+      "name": "div",
+      "parent": "f0ffa0",
+      "children": [
+        "58aadf",
+        "ba94cf",
+        "aa70c0",
+        "2f8445",
+        "1fcad4",
+        "0d0747"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "58aadf",
+      "name": "icon",
+      "parent": "1f06fb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "ba94cf",
+      "name": "icon",
+      "parent": "1f06fb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "aa70c0",
+      "name": "icon",
+      "parent": "1f06fb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "2f8445",
+      "name": "icon",
+      "parent": "1f06fb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "1fcad4",
+      "name": "icon",
+      "parent": "1f06fb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "0d0747",
+      "name": "icon",
+      "parent": "1f06fb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "e9b4fa",
+      "name": "text-basic",
+      "parent": "f0ffa0",
+      "children": [],
+      "settings": {
+        "text": "Our new deck is exactly what we dreamed of!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "417aa2",
+      "name": "text-basic",
+      "parent": "f0ffa0",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "1911c1",
+      "name": "text-basic",
+      "parent": "f0ffa0",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "a62a1b",
+      "name": "block",
+      "parent": "488a5a",
+      "children": [
+        "1cbe18",
+        "bba009",
+        "0313e1",
+        "6e6c13"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "1cbe18",
+      "name": "div",
+      "parent": "a62a1b",
+      "children": [
+        "9aa1ab",
+        "4581da",
+        "ffbdb8",
+        "aaa388",
+        "fd892a",
+        "434371"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "9aa1ab",
+      "name": "icon",
+      "parent": "1cbe18",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "4581da",
+      "name": "icon",
+      "parent": "1cbe18",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "ffbdb8",
+      "name": "icon",
+      "parent": "1cbe18",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "aaa388",
+      "name": "icon",
+      "parent": "1cbe18",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "fd892a",
+      "name": "icon",
+      "parent": "1cbe18",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "434371",
+      "name": "icon",
+      "parent": "1cbe18",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "bba009",
+      "name": "text-basic",
+      "parent": "a62a1b",
+      "children": [],
+      "settings": {
+        "text": "Our new deck is exactly what we dreamed of!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "0313e1",
+      "name": "text-basic",
+      "parent": "a62a1b",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "6e6c13",
+      "name": "text-basic",
+      "parent": "a62a1b",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "338707",
+      "name": "block",
+      "parent": "ca6c66",
+      "children": [
+        "715a76"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "rxkl0i"
+        ]
+      },
+      "label": "Tabs Item Wrapper"
+    },
+    {
+      "id": "715a76",
+      "name": "block",
+      "parent": "338707",
+      "children": [
+        "baf4fa"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "qzuxrk"
+        ]
+      },
+      "label": "Tabs Item"
+    },
+    {
+      "id": "baf4fa",
+      "name": "block",
+      "parent": "715a76",
+      "children": [
+        "e2c3a5",
+        "afd606",
+        "ff0d58"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "uuotpd"
+        ]
+      },
+      "label": "Testimonial Grid November"
+    },
+    {
+      "id": "e2c3a5",
+      "name": "block",
+      "parent": "baf4fa",
+      "children": [
+        "8b150d",
+        "baeaae",
+        "6ef806",
+        "524858"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "8b150d",
+      "name": "div",
+      "parent": "e2c3a5",
+      "children": [
+        "8a5a9c",
+        "fc6bfd",
+        "bbbe37",
+        "ee47f3",
+        "55fb57",
+        "64f324"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "8a5a9c",
+      "name": "icon",
+      "parent": "8b150d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "fc6bfd",
+      "name": "icon",
+      "parent": "8b150d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "bbbe37",
+      "name": "icon",
+      "parent": "8b150d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "ee47f3",
+      "name": "icon",
+      "parent": "8b150d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "55fb57",
+      "name": "icon",
+      "parent": "8b150d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "64f324",
+      "name": "icon",
+      "parent": "8b150d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "baeaae",
+      "name": "text-basic",
+      "parent": "e2c3a5",
+      "children": [],
+      "settings": {
+        "text": "Our New Kitchen is Even Better Than We Hoped!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "6ef806",
+      "name": "text-basic",
+      "parent": "e2c3a5",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ],
+        "readMore": "..."
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "524858",
+      "name": "text-basic",
+      "parent": "e2c3a5",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "afd606",
+      "name": "block",
+      "parent": "baf4fa",
+      "children": [
+        "ee4730",
+        "fb9d45",
+        "8aa2f3",
+        "e9c508"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "ee4730",
+      "name": "div",
+      "parent": "afd606",
+      "children": [
+        "bfcdc1",
+        "d63883",
+        "886c6b",
+        "313056",
+        "22900d",
+        "8a0047"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "bfcdc1",
+      "name": "icon",
+      "parent": "ee4730",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "d63883",
+      "name": "icon",
+      "parent": "ee4730",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "886c6b",
+      "name": "icon",
+      "parent": "ee4730",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "313056",
+      "name": "icon",
+      "parent": "ee4730",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "22900d",
+      "name": "icon",
+      "parent": "ee4730",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "8a0047",
+      "name": "icon",
+      "parent": "ee4730",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "fb9d45",
+      "name": "text-basic",
+      "parent": "afd606",
+      "children": [],
+      "settings": {
+        "text": "Our New Kitchen is Even Better Than We Hoped!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "8aa2f3",
+      "name": "text-basic",
+      "parent": "afd606",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "e9c508",
+      "name": "text-basic",
+      "parent": "afd606",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    },
+    {
+      "id": "ff0d58",
+      "name": "block",
+      "parent": "baf4fa",
+      "children": [
+        "cb6a17",
+        "48912c",
+        "6a0e26",
+        "32cff2"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ea2xnh"
+        ]
+      },
+      "label": "Testimonial Card November"
+    },
+    {
+      "id": "cb6a17",
+      "name": "div",
+      "parent": "ff0d58",
+      "children": [
+        "dc2136",
+        "96eb96",
+        "c5d3cc",
+        "706b3c",
+        "a38f37",
+        "771d56"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kndlyw"
+        ],
+        "_attributes": [
+          {
+            "id": "bcpeoi",
+            "name": "data-rating",
+            "value": "4.5"
+          }
+        ],
+        "tag": "custom",
+        "customTag": "span"
+      },
+      "label": "Rating Alpha (CSS + Set Data Attr)"
+    },
+    {
+      "id": "dc2136",
+      "name": "icon",
+      "parent": "cb6a17",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn",
+          "tshuyw"
+        ],
+        "_attributes": [
+          {
+            "id": "puzzqd",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "Half (Don't Delete)",
+      "themeStyles": []
+    },
+    {
+      "id": "96eb96",
+      "name": "icon",
+      "parent": "cb6a17",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "lmhlqg",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "themeStyles": [],
+      "label": "1"
+    },
+    {
+      "id": "c5d3cc",
+      "name": "icon",
+      "parent": "cb6a17",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "willma",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "2",
+      "themeStyles": []
+    },
+    {
+      "id": "706b3c",
+      "name": "icon",
+      "parent": "cb6a17",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "ewtdhf",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "3",
+      "themeStyles": []
+    },
+    {
+      "id": "a38f37",
+      "name": "icon",
+      "parent": "cb6a17",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "norfky",
+            "value": "true",
+            "name": "aria-hidden"
+          }
+        ]
+      },
+      "label": "4",
+      "themeStyles": []
+    },
+    {
+      "id": "771d56",
+      "name": "icon",
+      "parent": "cb6a17",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "lwaybn"
+        ],
+        "_attributes": [
+          {
+            "id": "xmpjot",
+            "name": "aria-hidden",
+            "value": "true"
+          }
+        ]
+      },
+      "label": "5",
+      "themeStyles": []
+    },
+    {
+      "id": "48912c",
+      "name": "text-basic",
+      "parent": "ff0d58",
+      "children": [],
+      "settings": {
+        "text": "Our New Kitchen is Even Better Than We Hoped!",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fm7vei"
+        ]
+      },
+      "label": "Large Callout"
+    },
+    {
+      "id": "6a0e26",
+      "name": "text-basic",
+      "parent": "ff0d58",
+      "children": [],
+      "settings": {
+        "text": "There's really no better product than this one. You should but it immediately.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "39hjkg"
+        ]
+      },
+      "label": "Small Callout"
+    },
+    {
+      "id": "32cff2",
+      "name": "text-basic",
+      "parent": "ff0d58",
+      "children": [],
+      "settings": {
+        "text": "Ben",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "c8cwah"
+        ]
+      },
+      "label": "Name"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "twvyhz",
+      "name": "testimonial-section-november",
+      "settings": {
+        "_rowGap": "var(--content-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "dliabf",
+      "name": "fr-intro",
+      "settings": [],
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "xgmzei",
+      "name": "fr-intro-alpha",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_typography:mobile_landscape": {
+          "text-align": "left"
+        },
+        "_alignItems:mobile_landscape": "flex-start",
+        "_rowGap": "var(--content-gap)"
+      },
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "tkbujj",
+      "name": "fr-intro-alpha__heading",
+      "settings": {
+        "_typography:mobile_landscape": {
+          "font-size": "var(--h1)"
+        }
+      },
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "blgfqd",
+      "name": "fr-intro-alpha__accent-heading",
+      "settings": []
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "dizast",
+      "name": "fr-intro-alpha__lede",
+      "settings": []
+    },
+    {
+      "id": "guihqe",
+      "name": "testimonial-section-november__inner",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "p1d27h",
+      "name": "testimonial-tabs-november",
+      "settings": {
+        "_cssCustom": ".testimonial-tabs-november {\n  gap: var(--content-gap);\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "9zsrdx",
+      "name": "testimonial-tabs-november__tabs-navigation",
+      "settings": {
+        "_overflow": "scroll hidden",
+        "_cssCustom": ".testimonial-tabs-november__tabs-navigation {\n  scrollbar-width: none;\n}\n\n.testimonial-tabs-november__tabs-navigation::-webkit-scrollbar {\n    display: none;\n}"
+      },
+      "modified": 1733268814,
+      "user_id": 9,
+      "_exists": false
+    },
+    {
+      "id": "rsu5f8",
+      "name": "testimonial-tabs-november__navigation-list",
+      "settings": {
+        "_columnGap": "var(--space-s)",
+        "_rowGap": "var(--space-s)",
+        "_flexWrap": "nowrap",
+        "_justifyContent": "center",
+        "_alignItems": "center",
+        "_justifyContent:tablet_portrait": "flex-start"
+      },
+      "_exists": false
+    },
+    {
+      "id": "vgkp6e",
+      "name": "testimonial-tabs-november__btn--navigation-item",
+      "settings": {
+        "_cssCustom": "/* Custom Button Styles\nUse in conjunction with custom .btn-- class\nCustomize the values below to your liking */\n.testimonial-tabs-november__btn--navigation-item.testimonial-tabs-november__btn--navigation-item {\n\t--btn-background: transparent;\n\t--btn-background-hover: var(--primary-hover);\n\t--btn-text-color: var(--text-dark-muted);\n\t--btn-text-color-hover: var(--primary-ultra-light);\n\t--btn-border-color: var(--black-trans-10);\n  --btn-border-color-hover: var(--primary);\n\t--focus-color: var(--primary-light);\n\t--btn-border-width: var(--btn-outline-border-width);\n  max-width: max-content;\n  font-size: var(--text-s);\n  white-space: nowrap;\n}\n\n.testimonial-tabs-november__btn--navigation-item.active {\n  --btn-text-color: var(--primary-ultra-light);\n  --btn-background: var(--primary);\n  --btn-border-color: var(--primary);\n}\n\n/* End Custom Button Styles */\n",
+        "_flexShrink": "0"
+      },
+      "_exists": false
+    },
+    {
+      "id": "d81utn",
+      "name": "testimonial-tabs-november__tab",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "slgwa1",
+      "name": "testimonial-tabs-november__tabs-content-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "rxkl0i",
+      "name": "testimonial-tabs-november__tabs-item-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "qzuxrk",
+      "name": "testimonial-tabs-november__tabs-item",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "uuotpd",
+      "name": "testimonial-grid-november",
+      "settings": {
+        "_display": "grid",
+        "_gridGap": "calc(var(--grid-gap) * 2)",
+        "_gridTemplateColumns": "var(--grid-3)",
+        "_gridTemplateColumns:tablet_portrait": "var(--grid-1)",
+        "_gridGap:tablet_portrait": "var(--content-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "ea2xnh",
+      "name": "testimonial-card-november",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_typography:mobile_landscape": {
+          "text-align": "left"
+        },
+        "_alignItems:mobile_landscape": "flex-start",
+        "_rowGap": "calc(var(--content-gap) / 1.5)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "kndlyw",
+      "name": "fr-rating-alpha",
+      "settings": {
+        "_display": "flex",
+        "_rowGap": ".25em",
+        "_columnGap": ".25em",
+        "_cssCustom": "/* RATINGS WON'T RENDER IN BUILDER */\n\n/* To change the star rating, change the value of the data attribute in the attributes tab on this element. If you want the rating to be generated dynamically, create a \"rating\" custom field for your parent element and then inject the value of that field dynamically into the data attribute value field. */\n\n.fr-rating-alpha {\n\t--icon-size: 1.5em;\n  --icon-fill-color: var(--primary);\n  --icon-stroke-color: var(--primary);\n  --icon-fill-color-hover: var(--primary);  \n  --icon-stroke-color-hover: var(--primary);\n}\n\n.fr-rating-alpha > *:first-child {display: none;} /* Hide half star by default */\n\n[data-rating*=\".\"] > *:first-child {display: flex;} /* Show half star for decimal ratings */\n\n[data-rating*=\".0\"] > *:first-child {display: none !important;} /* Hide half star for .0 ratings */\n\n/* Support for half star rating */\n[data-rating*=\".5\"] > *:first-child {display: flex !important;}\n\n[data-rating=\".5\"] > *:not(:first-child),\n[data-rating=\"0.5\"] > *:not(:first-child) {\n\tdisplay: none;\n}\n\n/* The Rest */\n\n[data-rating^=\"1\"] > *:nth-child(n+3) {\n display: none;\n}\n\n[data-rating^=\"2\"] > *:nth-child(n+4) {\n display: none;\n}\n\n[data-rating^=\"3\"] > *:nth-child(n+5) {\n display: none;\n}\n\n[data-rating^=\"4\"] > *:nth-child(n+6) {\n display: none;\n}\n\n.fr-rating-alpha svg {\n  height: var(--icon-size);\n  width: var(--icon-size);\n  fill: var(--icon-fill-color);\n  color: var(--icon-stroke-color);\n}\n\n.fr-rating-alpha i {\n  color: var(--icon-fill-color);\n  font-size: var(--icon-size);\n}\n\n.fr-rating-alpha svg:hover {\n  fill: var(--icon-fill-color-hover);\n  color: var(--icon-stroke-color-hover);  \n}\n\n.fr-rating-alpha i:hover {\n  color: var(--icon-fill-color-hover);\n}",
+        "_alignItems": "flex-start"
+      },
+      "modified": 1737998108,
+      "user_id": 26,
+      "_exists": false
+    },
+    {
+      "id": "lwaybn",
+      "name": "fr-rating-alpha__icon",
+      "settings": [],
+      "modified": 1726775024,
+      "user_id": 9,
+      "_exists": false
+    },
+    {
+      "id": "tshuyw",
+      "name": "fr-rating-alpha__icon-half",
+      "settings": {
+        "_order": "1"
+      },
+      "_exists": false
+    },
+    {
+      "id": "fm7vei",
+      "name": "testimonial-card-november__large-callout",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-l)",
+          "font-weight": "700"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "39hjkg",
+      "name": "testimonial-card-november__small-callout",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "c8cwah",
+      "name": "testimonial-card-november__name",
+      "settings": {
+        "_margin": {
+          "top": "auto"
+        }
+      },
+      "_exists": false
+    }
+  ]
+}

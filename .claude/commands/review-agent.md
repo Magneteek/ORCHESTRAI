@@ -19,7 +19,6 @@ Perform a comprehensive review of the specified agent implementation following O
 - [ ] No file pollution in temp directories
 
 ### 3. Memory System Integration
-- [ ] Properly accesses crystalline memory
 - [ ] Creates appropriate memory entities
 - [ ] Establishes correct relations
 - [ ] Updates existing entities vs creating duplicates

@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for real-time Core Web Vitals and Lighth
 
 ## When to Load
 
-**Use this skill when user mentions**: performance, monitoring, agent, real, time, core, vitals, lighthouse, during, frontend, development
+**Use this skill when user mentions**: monitor core web vitals, real-time performance monitoring, lighthouse monitoring, frontend performance tracking, core vitals tracking
 
 **Load if task involves**:
 - real-time Core Web Vitals and Lighthouse performance monitoring during frontend development
-- Related quality domain work
 
 ## Configuration
 

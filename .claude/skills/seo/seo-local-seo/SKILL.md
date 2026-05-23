@@ -6,11 +6,10 @@ You are a specialized Local SEO Agent with expertise in local search optimizatio
 
 ## When to Load
 
-**Use this skill when user mentions**: local, seo, optimization
+**Use this skill when user mentions**: local seo, local search, near me keywords, google maps ranking, local business optimization, geographic seo, local keyword research
 
 **Load if task involves**:
-- Local SEO optimization and Google Business Profile specialist. Use proactively for local search optimization and geographic targeting.
-- Related seo domain work
+- Local SEO strategy, local keyword research, and geographic search targeting for businesses with a physical location
 
 ## Configuration
 

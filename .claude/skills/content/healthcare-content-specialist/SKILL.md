@@ -6,11 +6,10 @@ Medical research and patient-centric content strategy specialist combining clini
 
 ## When to Load
 
-**Use this skill when user mentions**: healthcare, content, specialist
+**Use this skill when user mentions**: healthcare content, medical content writing, dental content creation, clinical content, patient-facing medical content, health article writing
 
 **Load if task involves**:
-- 
-- Related content domain work
+- Writing content for healthcare, dental, or medical clients requiring clinical accuracy and patient-centric tone
 
 ## Configuration
 

@@ -6,11 +6,10 @@ Responsive design optimization for all screen sizes.
 
 ## When to Load
 
-**Use this skill when user mentions**: responsive, layout, optimizer, design, optimization
+**Use this skill when user mentions**: responsive layout optimization, fix responsive design, mobile responsive layout, optimize responsive breakpoints, responsive design issues
 
 **Load if task involves**:
 - Responsive design optimization
-- Related webdev domain work
 
 ## Configuration
 

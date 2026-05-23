@@ -1,0 +1,55 @@
+# CTA Section Sierra
+# Light card CTA: heading + rich text + icon link (left); cutout/portrait image (right).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: cta-section-sierra
+version: "2.3.5"
+description: |
+  Light-background CTA card. Left side: H2 heading, rich text body, icon text-link (with
+  arrow icon). Right side: a cutout or portrait image that extends below the card boundary
+  via absolute positioning. Best used with a transparent-background (WebP) cutout image
+  or a tall product/person shot. Card has a border radius and subtle border.
+
+slots:
+
+  # ── Content ───────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: cta-card-sierra__heading
+    description: H2 heading
+
+  text:
+    type: html
+    required: false
+    target_class: cta-card-sierra__text
+    description: Rich text body paragraph(s)
+
+  link_text:
+    type: string
+    required: false
+    max_length: 50
+    target_class: cta-card-sierra__link
+    description: Icon link label (displays with arrow icon, e.g. "Learn more →")
+
+  link_url:
+    type: link
+    required: false
+    target_class: cta-card-sierra__link
+    description: "Icon link URL: { url: '...', type?: 'external' }"
+
+  # ── Image ─────────────────────────────────────────────────────────────────
+
+  media:
+    type: media
+    required: false
+    target_class: cta-card-sierra__media
+    description: |
+      Portrait or cutout image (right side of card, dips below boundary).
+      Best results: tight crop, transparent bg WebP, or tall 9:16 portrait photo.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

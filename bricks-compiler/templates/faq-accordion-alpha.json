@@ -1,0 +1,791 @@
+{
+  "content": [
+    {
+      "id": "9acc54",
+      "name": "fr-accordion",
+      "parent": 0,
+      "children": [
+        "ff0de9",
+        "bb7b02",
+        "7ab262",
+        "1d3e3d",
+        "6bbfdb"
+      ],
+      "settings": {
+        "closePreviousItem": true,
+        "showDuration": 300,
+        "tag": "ul",
+        "iconActiveTransformTest": {
+          "rotateZ": "180"
+        },
+        "_cssGlobalClasses": [
+          "qvacsc"
+        ],
+        "firstItemOpened": true,
+        "scrollToHash": true,
+        "addFaqSchema": true
+      }
+    },
+    {
+      "id": "ff0de9",
+      "name": "block",
+      "parent": "9acc54",
+      "children": [
+        "ea015c",
+        "15cb22"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "ea015c",
+      "name": "div",
+      "parent": "ff0de9",
+      "children": [
+        "0c1bfe",
+        "56751d"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "0c1bfe",
+      "name": "heading",
+      "parent": "ea015c",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "56751d",
+      "name": "div",
+      "parent": "ea015c",
+      "children": [
+        "74e218"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "74e218",
+      "name": "icon",
+      "parent": "56751d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "15cb22",
+      "name": "div",
+      "parent": "ff0de9",
+      "children": [
+        "5e1344"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        },
+        "_cssGlobalClasses": [
+          "gbsxaf"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "5e1344",
+      "name": "block",
+      "parent": "15cb22",
+      "children": [
+        "adba5a"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "uadmmf"
+        ]
+      },
+      "label": "Answer Wrapper"
+    },
+    {
+      "id": "adba5a",
+      "name": "text",
+      "parent": "5e1344",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>",
+        "_cssGlobalClasses": [
+          "ycnvsy"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "bb7b02",
+      "name": "block",
+      "parent": "9acc54",
+      "children": [
+        "2d0791",
+        "6da067"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "2d0791",
+      "name": "div",
+      "parent": "bb7b02",
+      "children": [
+        "85d190",
+        "131a3d"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "85d190",
+      "name": "heading",
+      "parent": "2d0791",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "131a3d",
+      "name": "div",
+      "parent": "2d0791",
+      "children": [
+        "a314ac"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "a314ac",
+      "name": "icon",
+      "parent": "131a3d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "6da067",
+      "name": "div",
+      "parent": "bb7b02",
+      "children": [
+        "ab5e42"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        }
+      },
+      "label": "Body"
+    },
+    {
+      "id": "ab5e42",
+      "name": "block",
+      "parent": "6da067",
+      "children": [
+        "03d903"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        }
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "03d903",
+      "name": "text",
+      "parent": "ab5e42",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>"
+      },
+      "label": "Content"
+    },
+    {
+      "id": "7ab262",
+      "name": "block",
+      "parent": "9acc54",
+      "children": [
+        "1536b0",
+        "4a9a16"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "1536b0",
+      "name": "div",
+      "parent": "7ab262",
+      "children": [
+        "a56435",
+        "f92985"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "a56435",
+      "name": "heading",
+      "parent": "1536b0",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "f92985",
+      "name": "div",
+      "parent": "1536b0",
+      "children": [
+        "b904ba"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "b904ba",
+      "name": "icon",
+      "parent": "f92985",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "4a9a16",
+      "name": "div",
+      "parent": "7ab262",
+      "children": [
+        "9cd4ed"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        }
+      },
+      "label": "Body"
+    },
+    {
+      "id": "9cd4ed",
+      "name": "block",
+      "parent": "4a9a16",
+      "children": [
+        "bb8dca"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        }
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "bb8dca",
+      "name": "text",
+      "parent": "9cd4ed",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>"
+      },
+      "label": "Content"
+    },
+    {
+      "id": "1d3e3d",
+      "name": "block",
+      "parent": "9acc54",
+      "children": [
+        "234a44",
+        "3b2989"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "234a44",
+      "name": "div",
+      "parent": "1d3e3d",
+      "children": [
+        "0a5de4",
+        "d9f7cd"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "0a5de4",
+      "name": "heading",
+      "parent": "234a44",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "d9f7cd",
+      "name": "div",
+      "parent": "234a44",
+      "children": [
+        "bcf589"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "bcf589",
+      "name": "icon",
+      "parent": "d9f7cd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "3b2989",
+      "name": "div",
+      "parent": "1d3e3d",
+      "children": [
+        "280009"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        }
+      },
+      "label": "Body"
+    },
+    {
+      "id": "280009",
+      "name": "block",
+      "parent": "3b2989",
+      "children": [
+        "dc553c"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        }
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "dc553c",
+      "name": "text",
+      "parent": "280009",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>"
+      },
+      "label": "Content"
+    },
+    {
+      "id": "6bbfdb",
+      "name": "block",
+      "parent": "9acc54",
+      "children": [
+        "fd1a98",
+        "ea6f6b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "awqzzs"
+        ],
+        "tag": "li"
+      },
+      "label": "Item"
+    },
+    {
+      "id": "fd1a98",
+      "name": "div",
+      "parent": "6bbfdb",
+      "children": [
+        "0b16eb",
+        "90ba94"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__header"
+        },
+        "_cssGlobalClasses": [
+          "xxbjxz"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "0b16eb",
+      "name": "heading",
+      "parent": "fd1a98",
+      "children": [],
+      "settings": {
+        "tag": "h3",
+        "text": "What's the question?",
+        "_hidden": {
+          "_cssClasses": "fr-accordion__title"
+        },
+        "_cssGlobalClasses": [
+          "binpwn"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "90ba94",
+      "name": "div",
+      "parent": "fd1a98",
+      "children": [
+        "066c06"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon-wrapper"
+        },
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "unupdr"
+        ]
+      },
+      "label": "Icon Wrapper"
+    },
+    {
+      "id": "066c06",
+      "name": "icon",
+      "parent": "90ba94",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_hidden": {
+          "_cssClasses": "fr-accordion__icon"
+        },
+        "_cssGlobalClasses": [
+          "udwneg"
+        ]
+      },
+      "label": "Icon"
+    },
+    {
+      "id": "ea6f6b",
+      "name": "div",
+      "parent": "6bbfdb",
+      "children": [
+        "190cfe"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__body"
+        }
+      },
+      "label": "Body"
+    },
+    {
+      "id": "190cfe",
+      "name": "block",
+      "parent": "ea6f6b",
+      "children": [
+        "b682dd"
+      ],
+      "settings": {
+        "_hidden": {
+          "_cssClasses": "fr-accordion__content-wrapper"
+        }
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "b682dd",
+      "name": "text",
+      "parent": "190cfe",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum dolor ist amte, consectetuer adipiscing eilt. Aenean commodo ligula egget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quak felis, ultricies nec, pellentesque eu, pretium quid, sem.</p>"
+      },
+      "label": "Content"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "qvacsc",
+      "name": "fr-faq-accordion-alpha",
+      "settings": {
+        "headPadding": {
+          "top": ".5em",
+          "bottom": ".5em",
+          "right": "1em",
+          "left": "1em"
+        },
+        "iconActiveTransformTest": {
+          "rotateZ": "180"
+        },
+        "bodyPadding": {
+          "top": "1em",
+          "right": "1em",
+          "bottom": "1em",
+          "left": "1em"
+        },
+        "headBackgroundColor": {
+          "raw": "var(--bg-light)"
+        },
+        "headFont": {
+          "color": {
+            "raw": "var(--text-dark)"
+          }
+        },
+        "iconActiveTransform": {
+          "rotateZ": "180"
+        },
+        "iconDefaultSize": "2em",
+        "itemGap": "0"
+      },
+      "_exists": false
+    },
+    {
+      "id": "awqzzs",
+      "name": "fr-faq-accordion-alpha__item",
+      "settings": {
+        "_rowGap": "0"
+      },
+      "_exists": false
+    },
+    {
+      "id": "xxbjxz",
+      "name": "fr-faq-accordion-alpha__header",
+      "settings": {
+        "_justifyContent": "space-between",
+        "_alignSelf": "center"
+      },
+      "_exists": false
+    },
+    {
+      "id": "binpwn",
+      "name": "fr-faq-accordion-alpha__question",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "unupdr",
+      "name": "fr-faq-accordion-alpha__icon-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "udwneg",
+      "name": "fr-faq-accordion-alpha__icon",
+      "settings": {
+        "_cssTransition": "transform 0.2s ease-in-out"
+      },
+      "_exists": false
+    },
+    {
+      "id": "gbsxaf",
+      "name": "faq-accordion-alpha__body",
+      "settings": {
+        "_width": "100%"
+      },
+      "_exists": false
+    },
+    {
+      "id": "uadmmf",
+      "name": "fr-faq-accordion-alpha__answer-wrapper",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "ycnvsy",
+      "name": "fr-faq-accordion-alpha__answer",
+      "settings": [],
+      "_exists": false
+    }
+  ]
+}

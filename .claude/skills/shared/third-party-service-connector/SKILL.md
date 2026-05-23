@@ -1,3 +1,7 @@
+---
+user-invocable: false
+---
+
 # Third Party Service Connector Skill
 
 ## Overview
@@ -6,11 +10,10 @@ Third-party service integration and SDK management.
 
 ## When to Load
 
-**Use this skill when user mentions**: third, party, service, connector, integration
+**Use this skill when user mentions**: connect third-party service, integrate external api, third-party integration setup, external service connector, api service integration
 
 **Load if task involves**:
 - Third-party SDK integration
-- Related shared domain work
 
 ## Configuration
 

@@ -1,0 +1,112 @@
+{
+  "content": [
+    {
+      "id": "dc5f51",
+      "name": "block",
+      "parent": 0,
+      "children": [
+        "a4c34d",
+        "46baae"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "a4c34d",
+      "name": "block",
+      "parent": "dc5f51",
+      "children": [
+        "253b3b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "253b3b",
+      "name": "heading",
+      "parent": "a4c34d",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "46baae",
+      "name": "block",
+      "parent": "dc5f51",
+      "children": [
+        "0a9553"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "0a9553",
+      "name": "text",
+      "parent": "46baae",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "bvmoej",
+      "name": "fr-faq-card-bravo",
+      "settings": {
+        "_rowGap": "var(--fr-card-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "phqmqc",
+      "name": "fr-faq-card-bravo__header",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "nbtlyj",
+      "name": "fr-faq-card-bravo__question",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "oboavx",
+      "name": "fr-faq-card-bravo__body",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "zwrqph",
+      "name": "fr-faq-card-bravo__answer",
+      "settings": [],
+      "_exists": false
+    }
+  ]
+}

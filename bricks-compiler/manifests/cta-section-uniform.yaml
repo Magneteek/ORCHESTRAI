@@ -1,0 +1,56 @@
+# CTA Section Uniform
+# Dark card CTA: heading + accent + body + text-link (left); 3 tall portrait images (right).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: cta-section-uniform
+version: "2.3.5"
+description: |
+  Dark-background CTA card split into two columns. Left: H3 heading, accent label, body text,
+  text-link CTA. Right: three tall portrait images stacked side by side with slight overlap.
+  Image heights are CSS-controlled (aspect-ratio 9:16). Pair with an image CTA pattern.
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: cta-uniform__heading
+    description: H3 heading (left column)
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: cta-uniform__accent-heading
+    description: Small accent label above the heading
+
+  text:
+    type: html
+    required: false
+    target_class: cta-uniform__text
+    description: Body paragraph(s) below the heading
+
+  link_text:
+    type: string
+    required: false
+    max_length: 50
+    target_class: cta-uniform__link
+    description: Text-link label (no button — plain underlined link)
+
+  link_url:
+    type: link
+    required: false
+    target_class: cta-uniform__link
+    description: "Text-link URL: { url: '...', type?: 'external' }"
+
+# ── Notes on images ───────────────────────────────────────────────────────
+# 3 portrait images (class cta-uniform__image) share the same CSS class.
+# Replace them manually in the Bricks editor after pasting.
+# Recommended: tall portrait photos (9:16 ratio) — people, products, lifestyle.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

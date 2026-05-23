@@ -92,8 +92,8 @@ BEFORE attempting content extraction, verify all required files exist:
    [ ] one-page-strategic-plan.md - Strategic priorities and quarterly rocks
 
    Action required:
-   1. Run strategic planning pipeline first:
-      POST http://localhost:5501/strategic-planning/execute
+   1. Run the strategic planning agent first:
+      Task(subagent_type="strategic-plan-synthesizer", prompt="Generate strategic plan for [client]")
    2. Verify deliverables created in project directory
    3. Then retry HTML report generation
 

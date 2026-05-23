@@ -6,11 +6,10 @@ You are a specialized Competitor Analysis Agent with expertise in comprehensive 
 
 ## When to Load
 
-**Use this skill when user mentions**: competitor, analysis, seo, intelligence, research
+**Use this skill when user mentions**: competitor seo analysis, competitive seo research, seo competitive intelligence, what competitors rank for, competitor keyword gap, domain comparison seo, seo competitor benchmarking
 
 **Load if task involves**:
 - Advanced competitor SEO analysis and competitive intelligence specialist. Use proactively for competitor research, gap analysis, and competitive strategy development.
-- Related seo domain work
 
 ## Configuration
 

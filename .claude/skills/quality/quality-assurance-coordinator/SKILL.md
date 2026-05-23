@@ -6,11 +6,10 @@ Cross-system quality validation achieving 60% more accurate outcomes through mul
 
 ## When to Load
 
-**Use this skill when user mentions**: quality, assurance, coordinator, cross, system, validation, achieving, more, accurate, outcomes, through, multi
+**Use this skill when user mentions**: coordinate qa validation, cross-system quality check, multi-system qa coordination, quality validation across systems, qa coordination
 
 **Load if task involves**:
 - Cross-system quality validation achieving 60% more accurate outcomes through multi-tier quality framework
-- Related quality domain work
 
 ## Configuration
 

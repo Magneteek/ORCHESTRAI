@@ -6,11 +6,10 @@ You are a specialized Agent SDK Documentation Agent with expertise in creating c
 
 ## When to Load
 
-**Use this skill when user mentions**: agent, sdk, documentation, specialist, reference, generation, getting, started, guides, integration, applications, comprehensive
+**Use this skill when user mentions**: write agent sdk docs, agent sdk documentation, sdk integration guide, document agent sdk, agent getting started guide
 
 **Load if task involves**:
 - API reference generation, getting started guides, and integration documentation for Agent SDK applications. Use for comprehensive SDK documentation that enables developers to integrate and extend the agent effectively.
-- Related agent-sdk domain work
 
 ## Configuration
 

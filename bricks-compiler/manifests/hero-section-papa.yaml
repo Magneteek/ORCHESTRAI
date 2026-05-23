@@ -1,0 +1,76 @@
+# Hero Section Papa
+# Light-bg hero: big heading + ordered list (top row), callout+lede+CTA+video (bottom row).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: hero-section-papa
+version: "2.3.5"
+description: |
+  Light-background two-row hero. Top row: large H1 heading on the left, a 2-column
+  ordered list on the right (use HTML <ol> with brief bullet points). Bottom row:
+  short callout text + lede paragraph + CTA button on the left, a YouTube video
+  (auto-playing, muted loop) on the right that extends below the section boundary.
+
+slots:
+
+  # ── Top row ────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-hero-papa__heading
+    description: Large H1 heading (left column of top row)
+
+  list_html:
+    type: html
+    required: false
+    target_class: fr-hero-papa__list
+    description: |
+      Ordered list HTML for the right column of the top row.
+      Example: "<ol><li>First point</li><li>Second point</li></ol>"
+      Renders as 2-column layout automatically via CSS.
+
+  # ── Bottom row ─────────────────────────────────────────────────────────────
+
+  callout:
+    type: string
+    required: false
+    max_length: 120
+    target_class: fr-hero-papa__callout
+    description: Short bold callout text above the lede (highlighted statement)
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-hero-papa__lede
+    description: Paragraph below the callout (bottom-left column)
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-hero-papa__cta
+    description: CTA button label
+
+  cta_link:
+    type: link
+    required: false
+    target_class: fr-hero-papa__cta
+    description: "CTA button URL: { url: '...', type?: 'external' }"
+
+  # ── Video ──────────────────────────────────────────────────────────────────
+
+  video_id:
+    type: insert
+    path: youTubeId
+    required: false
+    target_class: fr-hero-papa__media
+    description: |
+      YouTube video ID only (the part after v= in the URL).
+      Example: "dQw4w9WgXcQ" for https://youtube.com/watch?v=dQw4w9WgXcQ
+      Video is auto-played muted in a loop — no controls shown by default.
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

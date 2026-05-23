@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for validating content structure complia
 
 ## When to Load
 
-**Use this skill when user mentions**: content, outline, compliance, auditor, validating, structure, with, approved, outlines, ensuring, requirements, before
+**Use this skill when user mentions**: audit outline compliance, check outline against requirements, outline compliance validation, verify outline completeness, outline structure audit
 
 **Load if task involves**:
 - validating content structure compliance with approved outlines, ensuring all requirements are met before publication
-- Related content domain work
 
 ## Configuration
 

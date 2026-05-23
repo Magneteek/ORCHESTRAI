@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for designing scalable, maintainable RES
 
 ## When to Load
 
-**Use this skill when user mentions**: architect
+**Use this skill when user mentions**: design api architecture, api system design, rest api design, graphql api architecture, api design patterns, api structure planning
 
 **Load if task involves**:
-- designing scalable, maintainable RESTful and GraphQL APIs with OpenAPI documentation and versioning strategies
-- Related webdev domain work
+- Designing the architecture and structure of REST, GraphQL, or other API systems before implementation
 
 ## Configuration
 

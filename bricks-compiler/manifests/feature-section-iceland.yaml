@@ -1,0 +1,57 @@
+# Feature Section Iceland
+# AUTO-GENERATED — review required/max_length fields before use
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: feature-section-iceland
+version: "2.3.5"
+description: |
+  TODO: describe what this section is for
+
+slots:
+
+  # ── Top-level slots ──────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 80
+    target_class: fr-intro-echo__heading
+
+  accent_heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-intro-echo__accent-heading
+
+  lede:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-intro-echo__lede
+
+  # ── Synced sliders (compound_array) ──────────────────────────────
+  # TODO: This section has 2 synced fr-slider elements
+  # (syncId: slider-iceland)
+  # Manual manifest required — see feature-section-boston.yaml as reference
+  slides:
+    type: compound_array
+    required: false
+    nav_template: "Slide (CSS)"     # title/nav slider slide
+    content_template: "Slide"        # main content slider slide
+    item_slots:
+      title:
+        type: string
+        target_label: "Title"
+      heading:
+        type: string
+        target_label: "Heading"
+      text:
+        type: string
+        target_label: "Accent Heading"  # check label in template
+      image:
+        type: media
+        target_label: "Media"
+
+# ── Builder-only elements ──────────────────────────────────────────────
+strip_elements:
+  [] # none detected

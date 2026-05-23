@@ -1,3 +1,7 @@
+---
+user-invocable: false
+---
+
 # Webhook Manager Skill
 
 ## Overview
@@ -6,11 +10,10 @@ Webhook management and event-driven integrations.
 
 ## When to Load
 
-**Use this skill when user mentions**: webhook, manager, management, events
+**Use this skill when user mentions**: manage webhooks, webhook setup, webhook event handling, configure webhooks, webhook integration management
 
 **Load if task involves**:
 - Webhook management and events
-- Related shared domain work
 
 ## Configuration
 

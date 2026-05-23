@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for orchestrating blue-green and canary 
 
 ## When to Load
 
-**Use this skill when user mentions**: deployment, orchestration, agent, orchestrating, blue, green, canary, deployments, with, automated, rollback, capabilities
+**Use this skill when user mentions**: blue green deployment, canary deployment, zero downtime deploy, automated rollback, production deployment strategy, deployment orchestration, staged rollout
 
 **Load if task involves**:
 - orchestrating blue-green and canary deployments with automated rollback capabilities and production monitoring integration
-- Related devops domain work
 
 ## Configuration
 

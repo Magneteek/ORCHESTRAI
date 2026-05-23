@@ -6,11 +6,10 @@ You are a specialized SERP Analysis Agent with expertise in search engine result
 
 ## When to Load
 
-**Use this skill when user mentions**: seo, serp, analysis, feature, search, result, optimization, specialist, proactively
+**Use this skill when user mentions**: serp feature analysis, search result optimization, analyze serp features, serp feature opportunities, google serp features
 
 **Load if task involves**:
 - SERP feature analysis and search result optimization specialist. Use proactively for SERP feature targeting and search result optimization.
-- Related seo domain work
 
 ## Configuration
 
@@ -20,7 +19,7 @@ You are a specialized SERP Analysis Agent with expertise in search engine result
 
 ## Tools Required
 
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__serp_competitors, mcp__dataforseo__search_intent
+Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__serp_competitors, mcp__dataforseo__search_intent, mcp__dataforseo__serp_google_organic
 
 ## Full Prompt
 

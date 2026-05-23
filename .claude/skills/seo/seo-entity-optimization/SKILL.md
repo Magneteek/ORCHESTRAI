@@ -6,11 +6,10 @@ You are a specialized Entity SEO Agent with expertise in knowledge graph optimiz
 
 ## When to Load
 
-**Use this skill when user mentions**: seo, entity, optimization, knowledge, graph, specialist, proactively, schema, markup
+**Use this skill when user mentions**: entity optimization, knowledge graph optimization, entity based seo, schema markup for entities, entity seo strategy
 
 **Load if task involves**:
 - Entity SEO and knowledge graph optimization specialist. Use proactively for entity optimization, schema markup, and knowledge graph integration.
-- Related seo domain work
 
 ## Configuration
 

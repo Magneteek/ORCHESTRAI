@@ -1,0 +1,527 @@
+{
+  "content": [
+    {
+      "id": "cdfd11",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "bf4cca",
+        "92c594"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "xubstz"
+        ]
+      },
+      "label": "FAQ Section Bravo"
+    },
+    {
+      "id": "bf4cca",
+      "name": "container",
+      "parent": "cdfd11",
+      "children": [
+        "9fb9f1",
+        "2b0940"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ocfpyi"
+        ]
+      },
+      "label": "Intro Charlie"
+    },
+    {
+      "id": "9fb9f1",
+      "name": "block",
+      "parent": "bf4cca",
+      "children": [
+        "9ba603",
+        "f23129"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dyluos"
+        ]
+      },
+      "label": "Left"
+    },
+    {
+      "id": "9ba603",
+      "name": "heading",
+      "parent": "9fb9f1",
+      "children": [],
+      "settings": {
+        "text": "Section heading",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "glrfij"
+        ]
+      }
+    },
+    {
+      "id": "f23129",
+      "name": "text-basic",
+      "parent": "9fb9f1",
+      "children": [],
+      "settings": {
+        "text": "\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "ydlvhj"
+        ],
+        "tag": "p"
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "2b0940",
+      "name": "block",
+      "parent": "bf4cca",
+      "children": [
+        "b3a9ab"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ekdrak"
+        ]
+      },
+      "label": "Sidebar"
+    },
+    {
+      "id": "b3a9ab",
+      "name": "button",
+      "parent": "2b0940",
+      "children": [],
+      "settings": {
+        "text": "Call to action",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--outline",
+          "btn--primary"
+        ]
+      }
+    },
+    {
+      "id": "92c594",
+      "name": "container",
+      "parent": "cdfd11",
+      "children": [
+        "a90522",
+        "aeae9f",
+        "a23159",
+        "140331"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wjefat",
+          "rktisp"
+        ],
+        "tag": "custom",
+        "customTag": "ul"
+      },
+      "label": "FAQ Grid Bravo"
+    },
+    {
+      "id": "a90522",
+      "name": "block",
+      "parent": "92c594",
+      "children": [
+        "997fa3",
+        "0e788f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "997fa3",
+      "name": "block",
+      "parent": "a90522",
+      "children": [
+        "b57148"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "b57148",
+      "name": "heading",
+      "parent": "997fa3",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "0e788f",
+      "name": "block",
+      "parent": "a90522",
+      "children": [
+        "494b5b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "494b5b",
+      "name": "text",
+      "parent": "0e788f",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "aeae9f",
+      "name": "block",
+      "parent": "92c594",
+      "children": [
+        "c1dcd6",
+        "cdf7de"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "c1dcd6",
+      "name": "block",
+      "parent": "aeae9f",
+      "children": [
+        "d09b95"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "d09b95",
+      "name": "heading",
+      "parent": "c1dcd6",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "cdf7de",
+      "name": "block",
+      "parent": "aeae9f",
+      "children": [
+        "96ca74"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "96ca74",
+      "name": "text",
+      "parent": "cdf7de",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "a23159",
+      "name": "block",
+      "parent": "92c594",
+      "children": [
+        "c7b6cd",
+        "70889b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "c7b6cd",
+      "name": "block",
+      "parent": "a23159",
+      "children": [
+        "6c6f62"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "6c6f62",
+      "name": "heading",
+      "parent": "c7b6cd",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "70889b",
+      "name": "block",
+      "parent": "a23159",
+      "children": [
+        "4d48c3"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "4d48c3",
+      "name": "text",
+      "parent": "70889b",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "140331",
+      "name": "block",
+      "parent": "92c594",
+      "children": [
+        "b95f67",
+        "5895a4"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "b95f67",
+      "name": "block",
+      "parent": "140331",
+      "children": [
+        "141512"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "141512",
+      "name": "heading",
+      "parent": "b95f67",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "5895a4",
+      "name": "block",
+      "parent": "140331",
+      "children": [
+        "25d52e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "25d52e",
+      "name": "text",
+      "parent": "5895a4",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "xubstz",
+      "name": "fr-faq-section-bravo",
+      "settings": {
+        "_rowGap": "var(--container-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "ocfpyi",
+      "name": "fr-intro-charlie",
+      "settings": {
+        "_display": "flex",
+        "_gridTemplateColumns:tablet_portrait": "var(--grid-1)",
+        "_direction": "row",
+        "_alignItems": "center",
+        "_rowGap": "var(--content-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "dyluos",
+      "name": "fr-intro-charlie__content-wrapper",
+      "settings": {
+        "_rowGap": "var(--content-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "glrfij",
+      "name": "fr-intro-charlie__heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "ydlvhj",
+      "name": "fr-intro-charlie__lede",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "ekdrak",
+      "name": "fr-intro-charlie__sidebar",
+      "settings": {
+        "_alignItems": "flex-end",
+        "_alignItems:tablet_portrait": "flex-start",
+        "_justifyContent": "center"
+      },
+      "_exists": false
+    },
+    {
+      "id": "btn--outline",
+      "name": "btn--outline",
+      "settings": [],
+      "_mappedId": "acss_import_btn--outline",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "wjefat",
+      "name": "fr-faq-grid-bravo",
+      "settings": {
+        "_cssCustom": ".fr-faq-grid-bravo {\n\tdisplay: grid;\n  grid-template-columns: repeat(2, 1fr);\n  align-items: stretch;\n}",
+        "_gridGap": "calc(var(--grid-gap) * 2)",
+        "_cssCustom:mobile_landscape": ".fr-faq-grid-bravo {\n\tgrid-template-columns: 1fr;\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "bvmoej",
+      "name": "fr-faq-card-bravo",
+      "settings": {
+        "_rowGap": "var(--fr-card-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "phqmqc",
+      "name": "fr-faq-card-bravo__header",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "nbtlyj",
+      "name": "fr-faq-card-bravo__question",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "oboavx",
+      "name": "fr-faq-card-bravo__body",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "zwrqph",
+      "name": "fr-faq-card-bravo__answer",
+      "settings": [],
+      "_exists": false
+    }
+  ]
+}

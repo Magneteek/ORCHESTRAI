@@ -3,7 +3,9 @@ version: '3.8'
 services:
   # Python ML Service
   ml-service:
-    build: .
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
     container_name: orchestrai-ml-service
     ports:
       - "8000:8000"
@@ -47,7 +49,7 @@ services:
   # PostgreSQL for model metadata
   postgres:
     image: postgres:15-alpine
-    container_name: orchestrai-postgres
+    container_name: orchestrai-ml-postgres
     environment:
       - POSTGRES_DB=orchestrai_ml
       - POSTGRES_USER=postgres

@@ -1,0 +1,69 @@
+# FAQ Section Charlie
+# Sidebar layout: sticky heading/lede/CTA left + Q&A card list right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: faq-section-charlie
+version: "2.3.5"
+description: |
+  Two-column FAQ section. Left column: sticky sidebar with H2 heading, lede paragraph,
+  and primary CTA button. Right column: vertical list of static (non-accordion) Q&A cards
+  separated by programmatic dividers. Each card shows a "Question" label + H3 question
+  heading on the left, and a "Response" label + rich text answer on the right.
+  Ideal for 3–8 FAQ items.
+
+slots:
+
+  # ── Sidebar ───────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 60
+    target_class: faq-grid-charlie__heading
+    description: H2 heading in the sticky sidebar (e.g. "FAQ" or "Frequently Asked Questions")
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: faq-grid-charlie__lede
+    description: Supporting paragraph below the sidebar heading
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: faq-grid-charlie__cta
+    description: Sidebar CTA button label (e.g. "Contact us")
+
+  cta_link:
+    type: link
+    required: false
+    target_class: faq-grid-charlie__cta
+    description: "Sidebar CTA URL: { url: '...', type?: 'external' }"
+
+  # ── FAQ items (array) ─────────────────────────────────────────────────────
+
+  faqs:
+    type: array
+    required: true
+    min: 2
+    max: 12
+    template_label: "Faq Card Charlie"
+    description: List of Q&A cards shown in the right column
+    item_slots:
+      question:
+        type: string
+        required: true
+        max_length: 120
+        target_class: faq-card-charlie__question-heading
+        description: Question text (H3)
+      answer:
+        type: html
+        required: true
+        target_class: faq-card-charlie__response-text
+        description: Answer body (supports rich text / HTML)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

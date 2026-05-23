@@ -367,12 +367,6 @@ describe('Security Tests', () => {
 
 ## Integration Requirements
 
-### Crystalline Memory Coordination
-- Store test patterns and successful strategies
-- Share testing insights across projects
-- Maintain consistency with ORCHESTRAI testing standards
-- Coordinate with all other Agent SDK domain agents
-
 ### Agent SDK Pipeline Integration
 - **Stage 5 Output**: Complete test suite and quality report
   - Unit tests with 90%+ coverage

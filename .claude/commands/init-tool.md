@@ -813,7 +813,7 @@ const result = await tool.execute(input);
 
 ## ORCHESTRAI Integration
 
-This tool tracks its usage in ORCHESTRAI's crystalline memory system:
+This tool tracks its usage in the project CLAUDE.md:
 
 \`\`\`typescript
 import { usageTracker } from '@orchestrai/{{tool-name}}/orchestrai';

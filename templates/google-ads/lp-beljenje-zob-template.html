@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!--
+  ============================================================
+  LP TEMPLATE: Beljenje Zob — Profesionalno Beljenje Zob
+  Version: 1.0 | April 2026
+  Use with: Google Ads Campaign Template (beljenje-zob-campaign-template.md)
+
+  PLACEHOLDERS — replace all before deploying:
+  [CLINIC_NAME]       Short clinic name for headlines        → Hiša Lepega Nasmeha
+  [CITY]              City/area name                         → Polhov Gradec
+  [PHONE_DISPLAY]     Phone as displayed                     → 01 82 82 0 82
+  [PHONE_INTL]        International format for tel: link     → +38618282082
+  [PRICE]             Package price                          → 279
+  [PACKAGE_VALUE]     Total value before discount            → 520
+  [SAVINGS]           PACKAGE_VALUE minus PRICE              → 241
+  [PACKAGE_ITEM_1]    What's included line 1                 → Profesionalno beljenje zob (LumiWhite)
+  [PACKAGE_ITEM_2]    What's included line 2                 → Brezplačna dentalna higiena
+  [PACKAGE_ITEM_3]    What's included line 3                 → Theodent premium zobna pasta
+  [ITEM_1_VALUE]      Value of item 1                        → 370
+  [ITEM_2_VALUE]      Value of item 2                        → 90
+  [ITEM_3_VALUE]      Value of item 3                        → 30 (pastes to ~[PACKAGE_VALUE] wait)
+  [REVIEW_COUNT]      Number of Google reviews               → 60
+  [RATING]            Google rating (e.g. 4.9 or 5.0)       → 5.0
+  [YEARS_EXP]         Years of experience                    → 15
+  [DENTIST_NAME]      Name shown in trust section            → Dr. Jana Kovač
+  [ADDRESS]           Full address                           → Podreber 14 D, Polhov Gradec
+  [TERMIN_URL]        Booking/appointment URL                → https://[WEBSITE]/termin/
+  [WEBSITE]           Clinic website domain                  → nasmehpg.si
+  [GTM_ID]            Google Tag Manager container ID        → GTM-XXXXXXX
+  [META_PIXEL_ID]     Meta Pixel ID (remove block if unused) → 1234567890
+  [BRAND_COLOR]       Primary brand hex color                → #1e40af
+  [SCHEMA_LAT]        Clinic latitude                        → 46.0662
+  [SCHEMA_LNG]        Clinic longitude                       → 14.3107
+  ============================================================
+  -->
+
+  <!-- SEO Meta (noindex — paid ads LP, not for organic) -->
+  <title>Beljenje Zob [CITY] | Paket €[PRICE] | [CLINIC_NAME]</title>
+  <meta name="description" content="Profesionalno beljenje zob v [CITY]. Paket €[PRICE] — vključuje [PACKAGE_ITEM_1], [PACKAGE_ITEM_2] in [PACKAGE_ITEM_3]. Vrednost €[PACKAGE_VALUE]. Rezerviraj termin: [PHONE_DISPLAY]." />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Beljenje Zob [CITY] | Paket €[PRICE] | [CLINIC_NAME]" />
+  <meta property="og:description" content="Paket €[PRICE] (vrednost €[PACKAGE_VALUE]) — prihranite €[SAVINGS]. Pokliči za termin." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="sl_SI" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '[BRAND_COLOR]',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','[GTM_ID]');</script>
+
+  <!-- Meta Pixel (remove this block if not running Meta ads) -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','[META_PIXEL_ID]');
+    fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=[META_PIXEL_ID]&ev=PageView&noscript=1"/></noscript>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Dentist",
+        "name": "[CLINIC_NAME]",
+        "url": "https://[WEBSITE]",
+        "telephone": "[PHONE_INTL]",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "[ADDRESS]",
+          "addressCountry": "SI"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "[SCHEMA_LAT]",
+          "longitude": "[SCHEMA_LNG]"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "[RATING]",
+          "reviewCount": "[REVIEW_COUNT]",
+          "bestRating": "5"
+        }
+      },
+      {
+        "@type": "MedicalProcedure",
+        "name": "Profesionalno beljenje zob",
+        "procedureType": "https://schema.org/NoninvasiveProcedure",
+        "provider": { "@type": "Dentist", "name": "[CLINIC_NAME]" }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+
+    /* Fade-in animation */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* FAQ accordion */
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-answer.open { max-height: 400px; }
+    .faq-toggle { cursor: pointer; }
+    .faq-icon { transition: transform 0.3s ease; }
+    .faq-icon.rotated { transform: rotate(45deg); }
+
+    /* Star rating */
+    .stars { color: #f59e0b; }
+
+    /* Sticky mobile bar */
+    @media (min-width: 768px) { #mobile-cta-bar { display: none; } }
+  </style>
+</head>
+<body class="bg-white text-gray-800">
+
+<!-- GTM noscript -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=[GTM_ID]"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- ============================================================
+     STICKY MOBILE CTA BAR
+     Shows at bottom on mobile when someone scrolls past hero
+     ============================================================ -->
+<div id="mobile-cta-bar" class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-blue-700 px-4 py-3 flex gap-3">
+  <a href="tel:[PHONE_INTL]"
+     onclick="dataLayer.push({'event':'phone_click','location':'mobile_bar'})"
+     class="flex-1 bg-blue-700 text-white text-center font-bold py-3 rounded-lg text-sm">
+    Pokliči: [PHONE_DISPLAY]
+  </a>
+  <a href="[TERMIN_URL]"
+     onclick="dataLayer.push({'event':'booking_click','location':'mobile_bar'})"
+     class="flex-1 bg-green-600 text-white text-center font-bold py-3 rounded-lg text-sm">
+    Rezerviraj termin
+  </a>
+</div>
+
+
+<!-- ============================================================
+     SECTION 1: HERO
+     Goal: immediate offer clarity + primary CTA above the fold
+     ============================================================ -->
+<section class="relative overflow-hidden text-white pb-12 pt-16"
+  style="background: linear-gradient(135deg, [BRAND_COLOR] 0%, #3b82f6 60%, #059669 100%);">
+
+  <!-- Decorative circles -->
+  <div class="absolute w-72 h-72 rounded-full opacity-10 bg-white -top-20 -right-20 pointer-events-none"></div>
+  <div class="absolute w-48 h-48 rounded-full opacity-10 bg-white -bottom-10 -left-10 pointer-events-none"></div>
+
+  <div class="relative z-10 max-w-2xl mx-auto px-6 text-center">
+
+    <!-- Trust badges -->
+    <div class="flex flex-wrap justify-center gap-2 mb-6">
+      <span class="bg-white bg-opacity-20 backdrop-blur px-4 py-2 rounded-full text-sm font-medium">✓ [REVIEW_COUNT]+ recenzij</span>
+      <span class="bg-white bg-opacity-20 backdrop-blur px-4 py-2 rounded-full text-sm font-medium">✓ [RATING]★ Google ocena</span>
+      <span class="bg-white bg-opacity-20 backdrop-blur px-4 py-2 rounded-full text-sm font-medium">✓ [YEARS_EXP]+ let izkušenj</span>
+    </div>
+
+    <!-- Headline -->
+    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+      Beli Zobje v <span class="text-yellow-300">1 Obisku</span>
+    </h1>
+    <p class="text-xl text-blue-100 mb-8">
+      Profesionalno beljenje zob pri zobozdravniku v [CITY]
+    </p>
+
+    <!-- Offer box -->
+    <div class="bg-white text-gray-800 rounded-2xl p-8 max-w-md mx-auto shadow-2xl border-4 border-yellow-400 mb-8">
+      <div class="text-red-600 font-extrabold text-3xl mb-2">PRIHRANITE €[SAVINGS]</div>
+      <div class="flex items-center justify-center gap-4 mb-4">
+        <span class="line-through text-gray-400 text-xl">€[PACKAGE_VALUE]</span>
+        <span class="text-green-600 font-extrabold text-4xl">€[PRICE]</span>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-4 text-left text-sm space-y-2 mb-6">
+        <div class="flex justify-between"><span>✓ [PACKAGE_ITEM_1]</span><span class="text-gray-400 line-through">€[ITEM_1_VALUE]</span></div>
+        <div class="flex justify-between text-green-600 font-semibold"><span>✓ [PACKAGE_ITEM_2]</span><span>BREZPLAČNO</span></div>
+        <div class="flex justify-between text-green-600 font-semibold"><span>✓ [PACKAGE_ITEM_3]</span><span>BREZPLAČNO</span></div>
+      </div>
+      <!-- Primary CTA: phone -->
+      <a href="tel:[PHONE_INTL]"
+         onclick="dataLayer.push({'event':'phone_click','location':'hero_box'})"
+         class="block w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl text-lg text-center mb-3 transition">
+        Pokliči: [PHONE_DISPLAY]
+      </a>
+      <!-- Secondary CTA: booking form -->
+      <a href="[TERMIN_URL]"
+         onclick="dataLayer.push({'event':'booking_click','location':'hero_box'})"
+         class="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl text-center transition">
+        Rezerviraj termin online
+      </a>
+    </div>
+
+    <p class="text-blue-200 text-sm">Omejeno število prostih terminov — rezervirajte danes</p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 2: SOCIAL PROOF BAR
+     ============================================================ -->
+<section class="bg-blue-900 text-white py-5">
+  <div class="max-w-3xl mx-auto px-6 flex flex-wrap justify-center gap-8 text-center text-sm font-medium">
+    <div>
+      <div class="text-2xl font-extrabold text-yellow-300">[REVIEW_COUNT]+</div>
+      <div class="text-blue-200">Google recenzij</div>
+    </div>
+    <div>
+      <div class="text-2xl font-extrabold text-yellow-300 stars">[RATING] ★</div>
+      <div class="text-blue-200">povprečna ocena</div>
+    </div>
+    <div>
+      <div class="text-2xl font-extrabold text-yellow-300">[YEARS_EXP]+</div>
+      <div class="text-blue-200">let ordinacije</div>
+    </div>
+    <div>
+      <div class="text-2xl font-extrabold text-yellow-300">EU</div>
+      <div class="text-blue-200">certificirani materiali</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 3: PROBLEM — Why not DIY
+     ============================================================ -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-2xl mx-auto px-6 fade-in">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">
+      Zobni trakovi in domači kompleti ne delajo. Zakaj?
+    </h2>
+    <p class="text-gray-500 text-center mb-10">Večina pacientov porabi €50–150 na domače metode in ostane razočaranih.</p>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl p-6 border border-red-100">
+        <div class="text-red-500 font-bold text-lg mb-3">❌ Domači kompleti</div>
+        <ul class="space-y-2 text-gray-600 text-sm">
+          <li>Nizka koncentracija sredstva — minimalni učinek</li>
+          <li>Splošni kalup — gel pusti med zobe, draži dlesni</li>
+          <li>Ni diagnostike — tveganje pri karizah ali parodontopatiji</li>
+          <li>Rezultati trajajo 1–2 meseca</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-xl p-6 border border-green-100">
+        <div class="text-green-600 font-bold text-lg mb-3">✓ Profesionalno pri zobozdravniku</div>
+        <ul class="space-y-2 text-gray-600 text-sm">
+          <li>Certificirani gel — vidni rezultati po 1–2 tednih</li>
+          <li>Individualni kalup po vašem odtisu — brez razdraženja</li>
+          <li>Pregled pred posegom — varno in primerno za vaše zobe</li>
+          <li>Rezultati trajajo 12–24 mesecev</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 4: HOW IT WORKS (3 steps)
+     ============================================================ -->
+<section class="py-16 bg-white">
+  <div class="max-w-2xl mx-auto px-6 fade-in">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Kako poteka beljenje?</h2>
+    <div class="space-y-8">
+
+      <div class="flex gap-6 items-start">
+        <div class="shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-xl text-white" style="background:[BRAND_COLOR]">1</div>
+        <div>
+          <h3 class="font-bold text-lg text-gray-800 mb-1">Pregled in posvet (~15 min)</h3>
+          <p class="text-gray-600 text-sm">Zobozdravnik pregleda stanje zob in presodi primernost beljenja. Ocenimo začetno barvo in postavimo pričakovana pričakovanja glede rezultatov.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-6 items-start">
+        <div class="shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-xl text-white" style="background:[BRAND_COLOR]">2</div>
+        <div>
+          <h3 class="font-bold text-lg text-gray-800 mb-1"><!-- REPLACE with procedure step 2 for this clinic -->Poseg / Priprava (~45 min)</h3>
+          <p class="text-gray-600 text-sm"><!-- REPLACE: describe the actual whitening method. Examples:
+          Take-home: "Digitalni odtis za individualne beljilne opornice + navodila za domači tretman."
+          In-office: "Aktivacija beljilnega sredstva z LED svetlobo neposredno v ordinaciji."
+          --></p>
+        </div>
+      </div>
+
+      <div class="flex gap-6 items-start">
+        <div class="shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-xl text-white bg-green-600">3</div>
+        <div>
+          <h3 class="font-bold text-lg text-gray-800 mb-1">Rezultati — svetlejši nasmeh</h3>
+          <p class="text-gray-600 text-sm">Zobje svetlejši za 4–6 odtenkov. Rezultati trajajo 12–24 mesecev. Priložena navodila za vzdrževanje.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 5: PACKAGE DETAILS + CTA (mid-page)
+     ============================================================ -->
+<section class="py-16" style="background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);">
+  <div class="max-w-xl mx-auto px-6 fade-in text-center">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">Kar dobite v paketu</h2>
+    <p class="text-gray-500 mb-8">Vrednost €[PACKAGE_VALUE] — samo €[PRICE]</p>
+
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 mb-8 text-left space-y-4">
+      <div class="flex justify-between items-center py-3 border-b border-gray-100">
+        <div>
+          <div class="font-semibold text-gray-800">[PACKAGE_ITEM_1]</div>
+          <div class="text-sm text-gray-500">Profesionalni postopek pri zobozdravniku</div>
+        </div>
+        <div class="text-right">
+          <div class="line-through text-gray-400 text-sm">€[ITEM_1_VALUE]</div>
+        </div>
+      </div>
+      <div class="flex justify-between items-center py-3 border-b border-gray-100">
+        <div>
+          <div class="font-semibold text-gray-800">[PACKAGE_ITEM_2]</div>
+          <div class="text-sm text-gray-500">Vključena v ceno paketa</div>
+        </div>
+        <div class="text-green-600 font-bold">BREZPLAČNO</div>
+      </div>
+      <div class="flex justify-between items-center py-3">
+        <div>
+          <div class="font-semibold text-gray-800">[PACKAGE_ITEM_3]</div>
+          <div class="text-sm text-gray-500">Za vzdrževanje rezultatov</div>
+        </div>
+        <div class="text-green-600 font-bold">BREZPLAČNO</div>
+      </div>
+    </div>
+
+    <div class="bg-blue-700 text-white rounded-2xl p-6 mb-6">
+      <div class="text-sm text-blue-200 mb-1">Skupna vrednost paketa</div>
+      <div class="flex items-center justify-center gap-4 mb-1">
+        <span class="line-through text-blue-300 text-xl">€[PACKAGE_VALUE]</span>
+        <span class="text-4xl font-extrabold">€[PRICE]</span>
+      </div>
+      <div class="text-yellow-300 font-semibold">Prihranite €[SAVINGS]</div>
+    </div>
+
+    <a href="tel:[PHONE_INTL]"
+       onclick="dataLayer.push({'event':'phone_click','location':'package_section'})"
+       class="block w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 rounded-xl text-lg text-center mb-3 transition">
+      Pokliči za termin: [PHONE_DISPLAY]
+    </a>
+    <a href="[TERMIN_URL]"
+       onclick="dataLayer.push({'event':'booking_click','location':'package_section'})"
+       class="block w-full bg-white border-2 border-blue-700 text-blue-700 font-semibold py-3 rounded-xl text-center transition hover:bg-blue-50">
+      Rezerviraj termin online
+    </a>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 6: BEFORE/AFTER PHOTOS
+     Replace placeholder divs with real patient images.
+     Always get written consent before using patient photos.
+     ============================================================ -->
+<section class="py-16 bg-white">
+  <div class="max-w-2xl mx-auto px-6 fade-in">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Pred in po beljenju</h2>
+    <p class="text-gray-500 text-center mb-10">Resnični rezultati naših pacientov</p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- REPLACE: add real before/after photos. Aspect ratio 1:1 recommended. -->
+      <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-gray-200">Foto pred/po 1</div>
+      <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-gray-200">Foto pred/po 2</div>
+      <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-gray-200">Foto pred/po 3</div>
+    </div>
+    <p class="text-center text-xs text-gray-400 mt-4">Individualni rezultati se lahko razlikujejo. Vse fotografije so z dovoljenjem pacientov.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 7: TESTIMONIALS (3 slots)
+     Use real Google review text — copy/paste from clinic GMB.
+     ============================================================ -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-3xl mx-auto px-6 fade-in">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Izkušnje naših pacientov</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Testimonial 1 — REPLACE with real review -->
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="stars text-lg mb-3">★★★★★</div>
+        <p class="text-gray-700 text-sm italic mb-4">"[TESTIMONIAL_1_TEXT]"</p>
+        <div class="font-semibold text-sm text-gray-800">[TESTIMONIAL_1_NAME]</div>
+        <div class="text-xs text-gray-400">Google recenzija</div>
+      </div>
+
+      <!-- Testimonial 2 — REPLACE with real review -->
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="stars text-lg mb-3">★★★★★</div>
+        <p class="text-gray-700 text-sm italic mb-4">"[TESTIMONIAL_2_TEXT]"</p>
+        <div class="font-semibold text-sm text-gray-800">[TESTIMONIAL_2_NAME]</div>
+        <div class="text-xs text-gray-400">Google recenzija</div>
+      </div>
+
+      <!-- Testimonial 3 — REPLACE with real review -->
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="stars text-lg mb-3">★★★★★</div>
+        <p class="text-gray-700 text-sm italic mb-4">"[TESTIMONIAL_3_TEXT]"</p>
+        <div class="font-semibold text-sm text-gray-800">[TESTIMONIAL_3_NAME]</div>
+        <div class="text-xs text-gray-400">Google recenzija</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 8: OBJECTION HANDLING
+     ============================================================ -->
+<section class="py-16 bg-white">
+  <div class="max-w-2xl mx-auto px-6 fade-in">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Pogosta vprašanja pred odločitvijo</h2>
+    <div class="space-y-4" id="faq-list">
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span>Je beljenje varno za sklenino?</span>
+          <span class="faq-icon text-blue-600 text-xl font-bold">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm">
+          Da. Postopek s certificiranimi materiali ne poškoduje sklenine pri pravilni uporabi pod zobozdravniškim nadzorom. Priporočamo pregled pred posegom, da izključimo aktivne kariese ali parodontalne težave.
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span>Ali boli beljenje?</span>
+          <span class="faq-icon text-blue-600 text-xl font-bold">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm">
+          Večina pacientov ne čuti bolečine. Pri občutljivejših zobeh je možna prehodna občutljivost na hladno med postopkom — umiri se v 24–48 urah. Za občutljive zobe prilagodimo protokol.
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span>Kako dolgo trajajo rezultati?</span>
+          <span class="faq-icon text-blue-600 text-xl font-bold">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm">
+          Rezultati pri večini pacientov trajajo 12–24 mesecev, odvisno od prehranjevalnih navad (kava, rdeče vino, cigarete). Priložimo navodila za vzdrževanje, da podaljšate učinek.
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span>Zakaj je cena nižja od konkurence?</span>
+          <span class="faq-icon text-blue-600 text-xl font-bold">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 text-gray-600 text-sm">
+          Paket €[PRICE] vključuje že higieno in pasto, ki bi jih sicer plačali posebej. To je celostna rešitev — ne le beljenje, ampak celoten protokol za dolgotrajen rezultat.
+        </div>
+      </div>
+
+      <!-- Add more FAQ items as needed for this specific clinic/method -->
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 9: FINAL CTA
+     ============================================================ -->
+<section class="py-20 text-white text-center" style="background: linear-gradient(135deg, [BRAND_COLOR] 0%, #1e3a8a 100%);">
+  <div class="max-w-xl mx-auto px-6 fade-in">
+    <div class="text-yellow-300 font-semibold mb-3 text-sm uppercase tracking-wider">Omejeno število terminov</div>
+    <h2 class="text-4xl font-extrabold mb-4">Rezervirajte danes</h2>
+    <p class="text-blue-200 text-lg mb-3">
+      Paket €[PRICE] — vrednost €[PACKAGE_VALUE]
+    </p>
+    <p class="text-blue-200 mb-8">
+      [CLINIC_NAME] · [CITY] · [PHONE_DISPLAY]
+    </p>
+    <a href="tel:[PHONE_INTL]"
+       onclick="dataLayer.push({'event':'phone_click','location':'final_cta'})"
+       class="block max-w-sm mx-auto bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-extrabold py-5 rounded-2xl text-xl mb-4 transition shadow-xl">
+      Pokliči: [PHONE_DISPLAY]
+    </a>
+    <a href="[TERMIN_URL]"
+       onclick="dataLayer.push({'event':'booking_click','location':'final_cta'})"
+       class="block max-w-sm mx-auto bg-white bg-opacity-10 border border-white border-opacity-30 text-white font-semibold py-4 rounded-2xl transition hover:bg-opacity-20">
+      Rezerviraj termin online
+    </a>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER — minimal, no navigation exits
+     ============================================================ -->
+<footer class="bg-gray-900 text-gray-400 text-sm py-8 text-center px-6">
+  <p class="mb-2 font-semibold text-white">[CLINIC_NAME]</p>
+  <p class="mb-1">[ADDRESS]</p>
+  <p class="mb-4">[PHONE_DISPLAY] &nbsp;·&nbsp; <a href="https://[WEBSITE]" class="hover:text-white transition">[WEBSITE]</a></p>
+  <p class="text-xs text-gray-600">
+    Individualni rezultati se lahko razlikujejo.
+    &nbsp;·&nbsp;
+    <a href="https://[WEBSITE]/zasebnost/" class="hover:text-gray-400 transition">Zasebnost</a>
+  </p>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('.faq-icon');
+    answer.classList.toggle('open');
+    icon.classList.toggle('rotated');
+  }
+
+  // Show mobile CTA bar after scrolling past hero
+  const heroSection = document.querySelector('section');
+  const mobileCta = document.getElementById('mobile-cta-bar');
+  window.addEventListener('scroll', () => {
+    mobileCta.style.display = window.scrollY > (heroSection.offsetHeight * 0.8) ? 'flex' : 'none';
+  });
+
+  // Scroll depth tracking (secondary signal only — do NOT use as conversion)
+  const depths = { 25: false, 50: false, 75: false, 100: false };
+  window.addEventListener('scroll', () => {
+    const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+    [25, 50, 75, 100].forEach(d => {
+      if (pct >= d && !depths[d]) {
+        depths[d] = true;
+        dataLayer.push({ event: 'scroll_depth', depth: d });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

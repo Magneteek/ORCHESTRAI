@@ -1,26 +1,27 @@
-# Vaibe Builder Orchestrator Skill
+# VAIBE Builder Orchestrator Skill
 
 ## Overview
 
-Proven simultaneous execution patterns achieving 77.7% speed improvement through parallel stream coordination.
+Plans and coordinates 4-stream parallel full-stack web builds: frontend, backend, content, and DevOps streams with explicit Phase 0 contracts, synchronisation checkpoints, and quality gates.
 
 ## When to Load
 
-**Use this skill when user mentions**: vaibe, builder, orchestrator, proven, simultaneous, execution, patterns, achieving, speed, improvement, through, parallel
+**Use this skill when user mentions**: full stack web build, parallel web development, frontend backend parallel, build website parallel, 4 stream development, web project streams
 
 **Load if task involves**:
-- Proven simultaneous execution patterns achieving 77.7% speed improvement through parallel stream coordination
-- Related strategic-planning domain work
+- Planning a full-stack web build with multiple concurrent streams
+- Coordinating frontend + backend + content + devops work
+- Defining API contracts and integration checkpoints for a web project
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 3000
 
 ## Tools Required
 
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, Skill
 
 ## Full Prompt
 
@@ -30,9 +31,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~550 characters
-- This overview: ~110 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/vaibe-builder-orchestrator.md*
+*Rewritten 2026-04-17 — removed fake Redis/WebSocket/77.7% claims, repurposed as concrete full-stack execution planner*

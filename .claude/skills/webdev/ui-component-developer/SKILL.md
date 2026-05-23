@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for building reusable, accessible React 
 
 ## When to Load
 
-**Use this skill when user mentions**: component, developer, ui
+**Use this skill when user mentions**: develop ui component, build react component, create frontend component, implement ui element, component development
 
 **Load if task involves**:
 - building reusable, accessible React components with Tailwind CSS, ShadCN UI, and responsive design best practices
-- Related webdev domain work
 
 ## Configuration
 

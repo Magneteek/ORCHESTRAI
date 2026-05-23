@@ -6,11 +6,10 @@ Comprehensive visual regression testing specialist implementing screenshot compa
 
 ## When to Load
 
-**Use this skill when user mentions**: visual, regression, tester, screenshot, comparison, pixel, diff, with, responsive, design, validation, automated
+**Use this skill when user mentions**: visual regression test, screenshot comparison test, pixel diff testing, detect visual regressions, ui visual regression
 
 **Load if task involves**:
 - Screenshot comparison and pixel diff with responsive design validation and automated baseline management
-- Related quality domain work
 
 ## Configuration
 

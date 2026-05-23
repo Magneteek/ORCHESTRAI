@@ -12,8 +12,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration
-const DEFAULT_INPUT_DIR = '/Users/kris/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content';
-const DEFAULT_OUTPUT_DIR = '/Users/kris/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content/wordpress-html';
+const DEFAULT_INPUT_DIR = '/Users/krisbal/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content';
+const DEFAULT_OUTPUT_DIR = '/Users/krisbal/CLAUDEtools/ORCHESTRAI/projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content/wordpress-html';
 
 /**
  * Convert markdown to WordPress-ready HTML

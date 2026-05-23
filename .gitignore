@@ -50,6 +50,23 @@ orchestrai-shared/logs/*
 projects/*/temp/
 cache/
 
+# Local machine settings (contains hardcoded paths and one-time permissions)
+settings.local.json
+
+# MCP config — contains live API tokens and machine-specific paths (synced via Syncthing)
+.mcp.json
+
+# Session data
+sessions/
+
+# Playwright MCP runtime state
+.playwright-mcp/
+
+# Root-level screenshots and client design review images
+/*.png
+/*.jpeg
+/*.jpg
+
 # CRITICAL: Never commit client project files to git
 # Only system architecture and templates should be in version control
 projects/quartziq-*/

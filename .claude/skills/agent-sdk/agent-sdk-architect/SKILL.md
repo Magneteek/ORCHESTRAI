@@ -6,11 +6,10 @@ You are a specialized Agent SDK Architecture Agent with expertise in designing p
 
 ## When to Load
 
-**Use this skill when user mentions**: agent, sdk, architect, architecture, design, module, structure, surface, definition, standalone, applications, designing
+**Use this skill when user mentions**: design agent sdk architecture, agent sdk module design, architect standalone agent, plan agent sdk structure, agent architecture design
 
 **Load if task involves**:
 - SDK architecture design, module structure, and API surface definition for standalone Agent SDK applications. Use for designing production-ready agent architectures with clear boundaries and scalable patterns.
-- Related agent-sdk domain work
 
 ## Configuration
 

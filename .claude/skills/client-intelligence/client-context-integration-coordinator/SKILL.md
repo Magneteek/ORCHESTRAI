@@ -6,11 +6,10 @@ You are the **Client Context Integration Coordinator**, the orchestration specia
 
 ## When to Load
 
-**Use this skill when user mentions**: client, context, integration, coordinator, intelligence, coordination
+**Use this skill when user mentions**: coordinate client intelligence, integrate client context, synthesize client intelligence, multi-source client context, client intelligence coordination
 
 **Load if task involves**:
 - Client intelligence coordination
-- Related client-intelligence domain work
 
 ## Configuration
 

@@ -216,12 +216,6 @@ Content Priority Score (0-100):
 - **Seasonal Relevance**: Integrate seasonal and timely content opportunities
 - **Business Priority Alignment**: Prioritize clusters based on business objectives
 
-### Crystalline Memory Coordination
-- Store successful cluster patterns and topic relationships
-- Share semantic insights across related content areas
-- Maintain database of high-performing content cluster architectures
-- Coordinate with content creators on cluster implementation strategies
-
 ### Cross-Domain Integration
 - **Research Coordination**: Work with research agents for competitive and market analysis
 - **Content Creation**: Provide detailed specifications to content writers

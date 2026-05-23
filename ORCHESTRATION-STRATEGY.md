@@ -8,53 +8,50 @@
 
 ## System Architecture
 
-### **Total Capabilities**: 173
+### **Total Capabilities**: 194
 
 ```
 ORCHESTRAI Ecosystem
 │
-├── 🎯 Skills (161) - PRIMARY INVOCATION METHOD
-│   ├── Domain Skills (137)
-│   │   ├── SEO (15 skills)
-│   │   ├── Content (12 skills)
-│   │   ├── WebDev (8 skills)
-│   │   ├── Quality (14 skills)
+├── 🎯 Skills (187) - PRIMARY INVOCATION METHOD
+│   ├── Domain Skills (159)
+│   │   ├── SEO (23 skills)
+│   │   ├── Content (21 skills)
+│   │   ├── WebDev (13 skills)
+│   │   ├── Quality (18 skills)
 │   │   ├── Strategic Planning (12 skills)
 │   │   ├── Client Intelligence (6 skills)
 │   │   ├── DevOps (5 skills)
-│   │   ├── Advertising (5 skills)
-│   │   ├── Email Marketing (3 skills)
-│   │   ├── Conversion Optimization (2 skills)
-│   │   ├── Data Analytics (2 skills)
-│   │   ├── Local SEO (2 skills)
+│   │   ├── Advertising (16 skills)
+│   │   ├── Email Marketing (8 skills)
+│   │   ├── Conversion Optimization (3 skills)
+│   │   ├── Data Analytics (3 skills)
+│   │   ├── Local SEO (9 skills)
 │   │   ├── Agent SDK (5 skills)
-│   │   ├── Reputation Intelligence (2 skills)
-│   │   └── Shared (23 skills - unique, no agent equivalent)
+│   │   ├── Reputation Intelligence (4 skills)
+│   │   ├── Healthcare (6 skills)
+│   │   └── Shared (7 skills - utility/cross-domain)
 │   │
-│   └── Command Skills (24)
+│   └── Command Skills (28)
 │       └── Workflow commands (init-client-project, qa-content, seo-audit, etc.)
 │
-└── 📊 Agents (12) - STRATEGIC ORCHESTRATION ONLY
-    └── Opus-tier strategic orchestrators
+└── 📊 Agents (7) - EXECUTION + STRATEGIC ORCHESTRATION
+    ├── Sonnet execution conductors
+    │   ├── pipeline-conductor        (stateful pipeline execution)
+    │   ├── campaign-conductor        (end-to-end ad campaign execution)
+    │   └── webdev-conductor          (full-stack web build execution)
+    └── Opus strategic orchestrators
         ├── orchestrai-master-coordinator
         ├── strategic-plan-synthesizer
         ├── financial-modeling-specialist
-        ├── client-project-orchestrator
-        ├── simultaneous-orchestrator
-        ├── vaibe-builder-orchestrator
-        ├── ai-project-predictor
-        ├── intelligent-risk-assessor
-        ├── performance-forecasting-specialist
-        ├── advanced-performance-analyzer
-        ├── semantic-analysis-engine
-        └── crystalline-memory-optimizer
+        └── client-project-orchestrator
 ```
 
 ---
 
 ## Invocation Decision Tree
 
-### **Use Skills (161 capabilities)**
+### **Use Skills (185 capabilities)**
 
 **When**:
 - ✅ Single-purpose tasks
@@ -68,57 +65,58 @@ ORCHESTRAI Ecosystem
 "I need keyword research" → Claude auto-loads seo:seo-keyword-research
 
 // Manual invocation
-Skill(skill="seo:seo-keyword-research", args="analyze healthcare keywords")
+Skill(skill="seo", args="seo-keyword-research")
 
 // Command workflows
 Skill(skill="commands:init-client-project", args="Acme Corp")
 ```
 
 **Examples**:
-- `seo:seo-keyword-research` - Keyword analysis
-- `content:content-writer-specialist` - Content creation
-- `webdev:frontend-architect-specialist` - UI architecture
-- `quality:e2e-test-automator` - End-to-end testing
-- `commands:qa-content` - Quality assurance workflow
-- `commands:seo-audit` - Start SEO crawl
+- `Skill(skill="seo", args="seo-keyword-research")` - Keyword analysis
+- `Skill(skill="content", args="content-writer-specialist")` - Content creation
+- `Skill(skill="webdev", args="frontend-architect-specialist")` - UI architecture
+- `Skill(skill="quality", args="e2e-test-automator")` - End-to-end testing
+- `Skill(skill="commands:qa-content")` - Quality assurance workflow
+- `Skill(skill="commands:seo-audit")` - Start SEO crawl
 
 ---
 
-### **Use Agents (12 strategic orchestrators)**
+### **Use Agents (5 strategic agents)**
 
 **When**:
-- ✅ Complex multi-system orchestration
+- ✅ Multi-phase pipeline (120m+) needing checkpointing and retry
 - ✅ Cross-domain strategic planning
 - ✅ Advanced reasoning required (Opus-tier)
-- ✅ Parallel execution coordination
+- ✅ Full client engagement lifecycle management
 - ✅ Financial modeling and forecasting
-- ✅ Risk assessment and prediction
 
 **Invocation**:
 ```javascript
-Task(subagent_type="orchestrai-master-coordinator", prompt="Coordinate SEO + Content + WebDev pipeline")
+// Stateful pipeline execution (Sonnet — execution, not strategy)
+Task(subagent_type="pipeline-conductor", prompt=`
+  pipeline: seo-research-pipeline
+  client: nasmehpg
+  params:
+    domain: nasmehpg.si
+    language: sl
+`)
 
 Task(subagent_type="strategic-plan-synthesizer", prompt="Create comprehensive growth strategy")
 
 Task(subagent_type="financial-modeling-specialist", prompt="Build 3-year revenue model")
+
+Task(subagent_type="client-project-orchestrator", prompt="Manage full client engagement for Acme Corp")
 ```
 
-**The 12 Strategic Agents**:
+**The 5 Strategic Agents**:
 
-| Agent | Purpose | When to Use |
-|-------|---------|-------------|
-| `orchestrai-master-coordinator` | Master coordination for multi-domain tasks | Complex projects requiring multiple specialist skills |
-| `strategic-plan-synthesizer` | Comprehensive strategic planning | Business strategy, growth plans, OPSP frameworks |
-| `financial-modeling-specialist` | Financial models and forecasting | Revenue models, unit economics, pricing strategy |
-| `client-project-orchestrator` | Client project coordination | Full client engagement management |
-| `simultaneous-orchestrator` | Parallel execution coordination | Multiple agents running simultaneously |
-| `vaibe-builder-orchestrator` | Proven simultaneous execution patterns | 77.7% speed improvement through parallel streams |
-| `ai-project-predictor` | ML-based timeline forecasting | Project timeline prediction (85-95% accuracy) |
-| `intelligent-risk-assessor` | AI-powered risk assessment | Risk identification and mitigation planning |
-| `performance-forecasting-specialist` | LSTM neural networks for prediction | Real-time performance prediction |
-| `advanced-performance-analyzer` | Multi-dimensional performance analysis | 95% automated analytics, pattern recognition ML |
-| `semantic-analysis-engine` | NLP and semantic understanding | Deep semantic analysis and relationship mapping |
-| `crystalline-memory-optimizer` | Memory performance optimization | Memory system optimization and tuning |
+| Agent | Model | Purpose | When to Use |
+|-------|-------|---------|-------------|
+| `pipeline-conductor` | Sonnet | Stateful pipeline execution | Long pipelines (120m+), checkpointing, retry on failure |
+| `strategic-plan-synthesizer` | Opus | Comprehensive strategic planning | Business strategy, growth plans, OPSP frameworks |
+| `financial-modeling-specialist` | Opus | Financial models and forecasting | Revenue models, unit economics, pricing strategy |
+| `client-project-orchestrator` | Opus | Client project coordination | Full client engagement management |
+| `orchestrai-master-coordinator` | Opus | Complex task decomposition | Opus-tier reasoning in isolated context (rarely needed — harness handles most orchestration) |
 
 ---
 
@@ -133,16 +131,17 @@ Task(subagent_type="financial-modeling-specialist", prompt="Build 3-year revenue
 - ❌ 25 slash commands (legacy)
 
 **After** (Feb 17, 2026):
-- ✅ 12 strategic agents (Opus-tier orchestrators only)
-- ✅ 161 skills (137 domain + 24 commands)
+- ✅ 7 strategic agents (3 Sonnet conductors + 4 Opus orchestrators)
+- ✅ 185 skills (158 domain + 27 commands)
 - ✅ Zero duplication
 - ✅ Clear orchestration strategy
 
 ### **Consolidation**:
 - **Removed**: 102 duplicate agents (now skills)
-- **Kept**: 12 Opus strategic orchestrators
+- **Culled**: 8 redundant/overlapping agents (Apr 2026)
+- **Kept**: 4 Opus strategic orchestrators
 - **Migrated**: All capabilities to skills-first
-- **Backup**: `.claude/agents-backup-20260217/` (102 removed agents)
+- **Backup**: `.claude/agents-backup-20260217/` (removed agents)
 
 ---
 
@@ -156,7 +155,7 @@ Task(subagent_type="financial-modeling-specialist", prompt="Build 3-year revenue
 // No explicit invocation needed!
 
 // Or manual:
-Skill(skill="seo:seo-keyword-research", args="healthcare industry")
+Skill(skill="seo", args="seo-keyword-research")
 ```
 
 ### **Pattern 2: Workflow Command (Use Skill)**
@@ -203,18 +202,23 @@ Task(subagent_type="financial-modeling-specialist", prompt=`
 `)
 ```
 
-### **Pattern 5: Parallel Execution (Use Agent)**
+### **Pattern 5: Parallel Execution (Use Coordinator)**
 
 ```javascript
-// Coordinate multiple skills simultaneously
-Task(subagent_type="vaibe-builder-orchestrator", prompt=`
+// Coordinate multiple skills simultaneously via master coordinator
+Task(subagent_type="orchestrai-master-coordinator", prompt=`
   Execute in parallel:
-  - seo:seo-keyword-research (10 target keywords)
-  - seo:seo-competitor-analysis (top 5 competitors)
-  - content:content-outline-architect (5 articles)
+  - seo-keyword-research (10 target keywords)
+  - seo-competitor-analysis (top 5 competitors)
+  - content-outline-architect (5 articles)
 
   Coordinate results into unified strategy
 `)
+
+// Or invoke parallel skills directly in one message:
+Skill(skill="seo", args="seo-keyword-research")
+Skill(skill="seo", args="seo-competitor-analysis")
+Skill(skill="content", args="content-outline-architect")
 ```
 
 ---
@@ -225,12 +229,12 @@ Task(subagent_type="vaibe-builder-orchestrator", prompt=`
 
 | You say | Auto-loads |
 |---------|------------|
-| "keyword research" | `seo:seo-keyword-research` |
-| "write blog post" | `content:content-writer-specialist` |
-| "design landing page" | `webdev:frontend-architect-specialist` |
-| "run tests" | `quality:e2e-test-automator` |
-| "check quality" | `commands:qa-content` |
-| "competitor analysis" | `seo:seo-competitor-analysis` |
+| "keyword research" | `Skill(skill="seo", args="seo-keyword-research")` |
+| "write blog post" | `Skill(skill="content", args="content-writer-specialist")` |
+| "design landing page" | `Skill(skill="webdev", args="frontend-architect-specialist")` |
+| "run tests" | `Skill(skill="quality", args="e2e-test-automator")` |
+| "check quality" | `Skill(skill="commands:qa-content")` |
+| "competitor analysis" | `Skill(skill="seo", args="seo-competitor-analysis")` |
 
 **Agents require explicit invocation** (no auto-discovery):
 ```javascript
@@ -259,26 +263,26 @@ Task(subagent_type="orchestrai-master-coordinator", ...)
 ## Token Efficiency
 
 ### **Skills (Progressive Disclosure)**:
-- Metadata at startup: ~4k tokens (161 skills × 25 tokens)
+- Metadata at startup: ~4k tokens (172 skills × 25 tokens)
 - Full prompts on-demand: ~1.2k tokens each
 - **Savings**: 99% (4k vs 193k if all loaded)
 
 ### **Agents (Strategic Only)**:
-- All 12 loaded at startup: ~14k tokens (12 agents × 1.2k tokens)
+- All 7 loaded at startup: ~9k tokens (7 agents × ~1.2k tokens)
 - Always available for complex tasks
 
-**Total startup cost**: ~18k tokens (4k skills + 14k agents)
-**Available for work**: 182k tokens (91% of 200k context)
+**Total startup cost**: ~9k tokens (4k skills + 5k agents)
+**Available for work**: 191k tokens (96% of 200k context)
 
 ---
 
 ## Verification
 
 ```bash
-# Count skills (should be 161)
+# Count skills (should be 172)
 find .claude/skills -type d -depth 2 | wc -l
 
-# Count agents (should be 12)
+# Count agents (should be 7)
 ls .claude/agents/*.md | wc -l
 
 # List strategic agents
@@ -305,7 +309,7 @@ cp -r .claude/agents-backup-20260217 .claude/agents
 
 ## Quick Reference Card
 
-### **When to Use Skills** (161 capabilities)
+### **When to Use Skills** (185 capabilities)
 
 ```
 ✓ Keyword research
@@ -319,11 +323,11 @@ cp -r .claude/agents-backup-20260217 .claude/agents
 ✓ Auto-discovery desired
 ```
 
-**Invocation**: `Skill(skill="domain:name")` or let Claude auto-load
+**Invocation**: `Skill(skill="domain", args="skill-name")` or let Claude auto-load
 
 ---
 
-### **When to Use Agents** (12 orchestrators)
+### **When to Use Agents** (7 orchestrators)
 
 ```
 ✓ Multi-domain coordination
@@ -347,11 +351,11 @@ cp -r .claude/agents-backup-20260217 .claude/agents
 - ✅ Auto-discovery enabled (skills load when relevant)
 - ✅ Zero duplication (102 duplicate agents removed)
 - ✅ Token efficiency (99% savings on skills)
-- ✅ Strategic power (12 Opus orchestrators)
+- ✅ Strategic power (4 Opus orchestrators + 3 Sonnet conductors)
 - ✅ Future-proof (skills-first = Claude Code 2026 best practice)
 
-**Total Capabilities**: 173 (161 skills + 12 agents)
-**Unique Capabilities**: 173 (zero duplication!)
+**Total Capabilities**: 194 (185 skills + 7 agents)
+**Unique Capabilities**: 194 (zero duplication!)
 
 ---
 

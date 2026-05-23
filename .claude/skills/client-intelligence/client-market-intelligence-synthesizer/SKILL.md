@@ -6,11 +6,10 @@ You are the **Client Market Intelligence Synthesizer**, an analytical component 
 
 ## When to Load
 
-**Use this skill when user mentions**: client, market, intelligence, synthesizer, synthesis
+**Use this skill when user mentions**: market intelligence synthesis, synthesize market research, competitive market summary, market analysis report, client market overview
 
 **Load if task involves**:
 - Market intelligence synthesis
-- Related client-intelligence domain work
 
 ## Configuration
 

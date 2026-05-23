@@ -6,11 +6,10 @@ You are a specialized Query Networks Agent with expertise in semantic query anal
 
 ## When to Load
 
-**Use this skill when user mentions**: seo, query, networks, advanced, semantic, network, analysis, relationship, mapping, specialist, proactively
+**Use this skill when user mentions**: query network analysis, semantic network mapping, query relationship mapping, search query networks, keyword semantic network
 
 **Load if task involves**:
 - Advanced semantic query network analysis and relationship mapping specialist. Use proactively for query network optimization and semantic relationship analysis.
-- Related seo domain work
 
 ## Configuration
 

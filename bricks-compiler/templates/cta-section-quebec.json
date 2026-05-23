@@ -1,0 +1,378 @@
+{
+  "content": [
+    {
+      "id": "19ab1b",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "477d51",
+        "ce4c64"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ayu9j7"
+        ]
+      },
+      "label": "CTA Section Quebec"
+    },
+    {
+      "id": "477d51",
+      "name": "container",
+      "parent": "19ab1b",
+      "children": [
+        "7e5c76",
+        "1d1c97"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gijflg"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "7e5c76",
+      "name": "block",
+      "parent": "477d51",
+      "children": [
+        "7f22a5",
+        "cfb016",
+        "89d51f",
+        "98c603"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "d15t5m"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "7f22a5",
+      "name": "heading",
+      "parent": "7e5c76",
+      "children": [],
+      "settings": {
+        "text": "Write a compelling heading that will convert",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "cqyo2q"
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "cfb016",
+      "name": "text-basic",
+      "parent": "7e5c76",
+      "children": [],
+      "settings": {
+        "text": "accent heading",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "28ingf"
+        ],
+        "tag": "p"
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "89d51f",
+      "name": "text-basic",
+      "parent": "7e5c76",
+      "children": [],
+      "settings": {
+        "text": "This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "fke33z"
+        ]
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "98c603",
+      "name": "button",
+      "parent": "7e5c76",
+      "children": [],
+      "settings": {
+        "text": "Call to action",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "lkavco",
+          "x6p1fn"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button"
+    },
+    {
+      "id": "1d1c97",
+      "name": "block",
+      "parent": "477d51",
+      "children": [
+        "f07953"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "rpg0n5"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "f07953",
+      "name": "image",
+      "parent": "1d1c97",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "41nofj"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "ce4c64",
+      "name": "div",
+      "parent": "19ab1b",
+      "children": [
+        "5ff3fe",
+        "b70b2e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wbvnsl"
+        ]
+      },
+      "label": "Background Alpha (Read CSS Tab)"
+    },
+    {
+      "id": "5ff3fe",
+      "name": "image",
+      "parent": "ce4c64",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "usirxg"
+        ],
+        "tag": "figure",
+        "caption": "none",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "b70b2e",
+      "name": "div",
+      "parent": "ce4c64",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "heyndn"
+        ]
+      },
+      "label": "Overlay"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "ayu9j7",
+      "name": "cta-section-quebec",
+      "settings": {
+        "_position": "relative",
+        "_typography": {
+          "color": {
+            "raw": "var(--white)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "gijflg",
+      "name": "cta-section-quebec__inner",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-3-2)",
+        "_gridGap": "var(--grid-gap)",
+        "_width": "var(--width-xl)",
+        "_gridTemplateColumns:mobile_landscape": "var(--grid-1)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "d15t5m",
+      "name": "cta-section-quebec__content-wrapper",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_justifyContent": "center",
+        "_width": "100%",
+        "_widthMax": "45ch"
+      },
+      "_exists": false
+    },
+    {
+      "id": "cqyo2q",
+      "name": "cta-section-quebec__heading",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--white)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "28ingf",
+      "name": "cta-section-quebec__accent-heading",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "fke33z",
+      "name": "cta-section-quebec__lede",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "lkavco",
+      "name": "btn--neutral-light",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "x6p1fn",
+      "name": "cta-section-quebec__button",
+      "settings": {
+        "_margin": {
+          "top": "var(--space-xs)"
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "rpg0n5",
+      "name": "cta-section-quebec__media-wrapper",
+      "settings": {
+        "_position": "relative"
+      },
+      "_exists": false
+    },
+    {
+      "id": "41nofj",
+      "name": "cta-section-quebec__media",
+      "settings": {
+        "_alignSelf": "center",
+        "_cssCustom": ".cta-section-quebec__media {\n  /* Add additional media height */\n  --media-height-offset: 60px;\n  /* No touchey */\n  position: absolute;\n  inset-block-start: 50%;\n  inset-inline-start: 50%;\n  translate: -50% -50%;\n}",
+        "_objectFit": "contain",
+        "_height": "calc(100% + var(--media-height-offset))",
+        "_width": "100%",
+        "_height:mobile_landscape": "auto",
+        "_position:mobile_landscape": "relative"
+      },
+      "_exists": false
+    },
+    {
+      "id": "wbvnsl",
+      "name": "fr-background-alpha",
+      "settings": {
+        "_position": "absolute",
+        "_top": "0",
+        "_right": "0",
+        "_bottom": "0",
+        "_left": "0",
+        "_cssCustom": "/* \n\nTo use this frame correctly, ensure the parent container is set to position relative. It's also advisable to add the following code to the parent container's CSS tab:\n\n.fr-background-alpha {isolation: isolate;}\n\n*/",
+        "_zIndex": "-1"
+      }
+    },
+    {
+      "id": "usirxg",
+      "name": "fr-background-alpha__image",
+      "settings": {
+        "_objectFit": "cover",
+        "_position": "absolute",
+        "_top": "0",
+        "_right": "0",
+        "_bottom": "0",
+        "_left": "0",
+        "_width": "100%",
+        "_zIndex": "-1",
+        "_height": "100%",
+        "_border": {
+          "radius": {
+            "top": "0",
+            "right": "0",
+            "bottom": "0",
+            "left": "0"
+          }
+        },
+        "_margin": {
+          "bottom": "0"
+        },
+        "_cssCustom": ".fr-background-alpha__image img {\n  height: 100%;\n}"
+      },
+      "modified": 1779482078,
+      "user_id": 1
+    },
+    {
+      "id": "heyndn",
+      "name": "fr-background-alpha__overlay",
+      "settings": {
+        "_zIndex": "-1",
+        "_position": "absolute",
+        "_top": "0",
+        "_right": "0",
+        "_bottom": "0",
+        "_left": "0",
+        "_background": {
+          "color": {
+            "raw": "var(--overlay-bg, var(--neutral-ultra-dark-trans-60))"
+          }
+        }
+      },
+      "modified": 1779482078,
+      "user_id": 1
+    }
+  ]
+}

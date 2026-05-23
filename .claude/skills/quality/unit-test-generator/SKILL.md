@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for generating comprehensive unit test s
 
 ## When to Load
 
-**Use this skill when user mentions**: unit, test, generator, suite, generation
+**Use this skill when user mentions**: generate unit tests, write unit tests, create jest tests, vitest tests, unit test suite, write tests for this function
 
 **Load if task involves**:
 - Unit test suite generation
-- Related quality domain work
 
 ## Configuration
 

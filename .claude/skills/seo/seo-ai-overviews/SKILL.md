@@ -6,11 +6,10 @@ You are a specialized AI Overviews Agent with expertise in optimizing content fo
 
 ## When to Load
 
-**Use this skill when user mentions**: seo, overviews, optimization, specialist, google, generated, search, results, proactively, result
+**Use this skill when user mentions**: google ai overviews, ai overview optimization, optimize for ai overviews, appear in ai overviews, google ai generated answers
 
 **Load if task involves**:
 - AI Overviews optimization specialist for Google's SGE and AI-generated search results. Use proactively for AI search result optimization.
-- Related seo domain work
 
 ## Configuration
 
@@ -20,7 +19,7 @@ You are a specialized AI Overviews Agent with expertise in optimizing content fo
 
 ## Tools Required
 
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors
+Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, mcp__dataforseo__keyword_overview, mcp__dataforseo__search_intent, mcp__dataforseo__serp_competitors, mcp__dataforseo__serp_google_organic
 
 ## Full Prompt
 

@@ -871,6 +871,49 @@ class DataForSEOServer {
               required: ["keyword"]
             }
           },
+          // Full Organic SERP (PAA, AI Overview, forums, videos, perspectives)
+          {
+            name: "serp_google_organic",
+            description: "Full live Google organic SERP harvest: PAA tree, AI Overview, featured snippets, local pack, video carousel, forums/discussions, and social perspectives (Reddit, TikTok, Substack). Use for content gap analysis, PAA extraction, SERP feature detection, and competitor landscape mapping.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                keyword: {
+                  type: "string",
+                  description: "Search query. Do not embed location here."
+                },
+                location_name: {
+                  type: "string",
+                  description: "Geo-target location, e.g. 'London,England,United Kingdom' or 'Denver,Colorado,United States'"
+                },
+                location_code: {
+                  type: "number",
+                  description: "DataForSEO location code (alternative to location_name). Default 2840 (US)."
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name, e.g. 'English', 'Slovenian', 'Spanish'",
+                  default: "English"
+                },
+                language_code: {
+                  type: "string",
+                  description: "Language code, e.g. 'en', 'sl', 'es' (alternative to language_name)"
+                },
+                device: {
+                  type: "string",
+                  description: "Device type: 'desktop' or 'mobile'",
+                  default: "desktop",
+                  enum: ["desktop", "mobile"]
+                },
+                depth: {
+                  type: "number",
+                  description: "Number of SERP results to retrieve (10–100). Default 100.",
+                  default: 100
+                }
+              },
+              required: ["keyword"]
+            }
+          },
           // Content Analysis API
           {
             name: "content_analysis_summary",
@@ -1056,6 +1099,56 @@ class DataForSEOServer {
             }
           },
           {
+            name: "kpo_analyzer",
+            description: "Knowledge Panel Optimization (KPO) audit for any business. Searches for the business, pulls its GBP data and live Knowledge Panel from Google, then runs a completeness gap analysis scoring 18 KPO fields. Returns: completeness score (0–100), missing fields list with recommendations, all entity IDs (CID, Place ID, category_ids/gcids), and the raw GBP + KP data. Use for local SEO audits, entity optimization, and GBP completeness checks.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                business_name: {
+                  type: "string",
+                  description: "Full business name as it appears on Google (e.g. 'Zobozdravstvo Križnar d.o.o.')"
+                },
+                location_name: {
+                  type: "string",
+                  description: "Location string (e.g. 'Kranj,Slovenia' or 'New York,New York,United States')"
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name (e.g. 'Slovenian', 'English', 'Spanish')",
+                  default: "English"
+                },
+                location_code: {
+                  type: "number",
+                  description: "DataForSEO location code (e.g. 2703 for Slovenia, 2840 for US). Used for SERP locale."
+                }
+              },
+              required: ["business_name", "location_name"]
+            }
+          },
+          {
+            name: "entity_ids",
+            description: "Extract all available Google entity identifiers for a business or brand: CID (Place CID), Place ID (ChIJ format), feature_id, category_ids/gcids, latitude/longitude. Use before KPO work, entity SEO, or any task requiring Google entity references. Note: Freebase MIDs are not exposed via DataForSEO and require the Google Knowledge Graph Search API.",
+            inputSchema: {
+              type: "object",
+              properties: {
+                business_name: {
+                  type: "string",
+                  description: "Business name to look up"
+                },
+                location_name: {
+                  type: "string",
+                  description: "Location string (e.g. 'Ljubljana,Slovenia')"
+                },
+                language_name: {
+                  type: "string",
+                  description: "Language name",
+                  default: "English"
+                }
+              },
+              required: ["business_name", "location_name"]
+            }
+          },
+          {
             name: "business_data_reviews_filtered",
             description: "Get filtered business reviews by rating (1-3 stars) and date range (last N days) for Netherlands businesses",
             inputSchema: {
@@ -1178,6 +1271,8 @@ class DataForSEOServer {
             return await this.getSerpGoogleImages(args);
           case "serp_google_jobs":
             return await this.getSerpGoogleJobs(args);
+          case "serp_google_organic":
+            return await this.getSerpGoogleOrganic(args);
           // Content Analysis API Tools
           case "content_analysis_summary":
             return await this.getContentAnalysisSummary(args);
@@ -1197,6 +1292,10 @@ class DataForSEOServer {
             return await this.getBusinessDataReviews(args);
           case "business_data_reviews_filtered":
             return await this.getBusinessDataReviewsFiltered(args);
+          case "kpo_analyzer":
+            return await this.getKpoAnalyzer(args);
+          case "entity_ids":
+            return await this.getEntityIds(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -1919,6 +2018,153 @@ class DataForSEOServer {
     };
   }
 
+  async getSerpGoogleOrganic(args) {
+    const {
+      keyword,
+      location_name,
+      location_code,
+      language_name = "English",
+      language_code,
+      device = "desktop",
+      depth = 100
+    } = args;
+
+    const postData = [{
+      keyword,
+      depth,
+      device,
+      ...(location_name ? { location_name } : location_code ? { location_code } : { location_code: 2840 }),
+      ...(language_code ? { language_code } : { language_name })
+    }];
+
+    const response = await this.makeAPICall('/serp/google/organic/live/advanced', postData);
+
+    // Extract and organise by SERP feature type
+    const tasks = response?.tasks || [];
+    const items = tasks[0]?.result?.[0]?.items || [];
+
+    const organic = [];
+    const paaItems = [];
+    const featuredSnippet = [];
+    const aiOverview = [];
+    const localPack = [];
+    const videos = [];
+    const forums = [];
+    const perspectives = [];
+    const knowledgeGraph = [];
+    const other = [];
+
+    for (const item of items) {
+      switch (item.type) {
+        case 'organic':
+          organic.push({ rank: item.rank_absolute, url: item.url, title: item.title, description: item.description });
+          break;
+        case 'people_also_ask':
+          if (item.items) {
+            for (const q of item.items) {
+              const el = q.expanded_element?.[0];
+              const isAiType = el?.type?.includes('ai_overview');
+              paaItems.push({
+                question: q.title,
+                answer: (!isAiType && el?.description) || null,
+                source_url: el?.url || null,
+                source_site: el?.domain || null,
+                ai_powered: isAiType || false
+              });
+            }
+          }
+          break;
+        case 'featured_snippet':
+          featuredSnippet.push({ url: item.url, title: item.title, description: item.description, domain: item.domain });
+          break;
+        case 'ai_overview': {
+          // Text lives in sub-items (ai_overview_element) whose markdown isn't just images
+          const textParts = (item.items || [])
+            .map(i => i.markdown || i.text || '')
+            .filter(t => t && !t.trim().startsWith('!['));
+          // Citations are in top-level references array
+          const citations = (item.references || []).map(r => ({
+            url: r.url, title: r.title, source: r.source, domain: r.domain, snippet: r.text || null
+          }));
+          aiOverview.push({
+            text: textParts.join('\n\n') || item.markdown || null,
+            citations,
+            asynchronous: item.asynchronous_ai_overview || false
+          });
+          break;
+        }
+        case 'local_pack':
+          if (item.items) {
+            for (const biz of item.items) {
+              localPack.push({ name: biz.title, rating: biz.rating?.value, reviews: biz.rating?.votes_count, address: biz.address, phone: biz.phone, url: biz.url });
+            }
+          }
+          break;
+        case 'video':
+          if (item.items) {
+            for (const v of item.items) {
+              videos.push({ title: v.title, url: v.url, source: v.source, timestamp: v.timestamp || null });
+            }
+          }
+          break;
+        case 'discussions_and_forums':
+          if (item.items) {
+            for (const f of item.items) {
+              forums.push({ title: f.title, url: f.url, source: f.source || f.domain, snippet: f.description || null, posts_count: f.posts_count || null, timestamp: f.timestamp || null });
+            }
+          }
+          break;
+        case 'perspectives':
+        case 'perspectives_and_opinions':
+          if (item.items) {
+            for (const p of item.items) {
+              perspectives.push({ title: p.title, url: p.url, source: p.source || p.domain, snippet: p.description, date: p.date || null });
+            }
+          }
+          break;
+        case 'knowledge_graph':
+          knowledgeGraph.push({ title: item.title, description: item.description, url: item.url, attributes: item.items });
+          break;
+        default:
+          other.push({ type: item.type, title: item.title, url: item.url });
+      }
+    }
+
+    const structured = {
+      keyword,
+      location: location_name || location_code || 'us',
+      language: language_code || language_name,
+      total_items: items.length,
+      features_detected: {
+        organic: organic.length > 0,
+        paa: paaItems.length > 0,
+        featured_snippet: featuredSnippet.length > 0,
+        ai_overview: aiOverview.length > 0,
+        local_pack: localPack.length > 0,
+        videos: videos.length > 0,
+        forums: forums.length > 0,
+        perspectives: perspectives.length > 0,
+        knowledge_graph: knowledgeGraph.length > 0
+      },
+      organic: organic.slice(0, 20),
+      people_also_ask: paaItems,
+      featured_snippet: featuredSnippet[0] || null,
+      ai_overview: aiOverview[0] || null,
+      local_pack: localPack,
+      videos,
+      forums,
+      perspectives,
+      knowledge_graph: knowledgeGraph[0] || null
+    };
+
+    return {
+      content: [{
+        type: "text",
+        text: `Full Google SERP Harvest — "${keyword}":\n${SafeJSON.stringify(structured)}`
+      }]
+    };
+  }
+
   // Content Analysis API Tools Implementation
   async getContentAnalysisSummary(args) {
     const { url, keyword, enable_javascript = true } = args;
@@ -2110,6 +2356,188 @@ class DataForSEOServer {
       content: [{
         type: "text",
         text: `Filtered Low-Rating Reviews (CID: ${cid}, d${max_rating} stars, last ${days_back} days):\n${SafeJSON.stringify(filteredResults)}`
+      }]
+    };
+  }
+
+  // Match a business from listings results: title must contain first meaningful word AND
+  // address/city must loosely match location_name (guards against cross-country false matches)
+  _matchBusiness(businesses, business_name, location_name) {
+    const nameWord = business_name.toLowerCase().split(/\s+/)[0];
+    const locWord = (location_name || '').toLowerCase().split(',')[0];
+    return businesses.find(b => {
+      const titleMatch = b.title?.toLowerCase().includes(nameWord);
+      const addrMatch = !locWord || (b.address || '').toLowerCase().includes(locWord) ||
+                        (b.address_info?.city || '').toLowerCase().includes(locWord);
+      return titleMatch && addrMatch;
+    }) || null;
+  }
+
+  async getEntityIds(args) {
+    const { business_name, location_name, language_name = "English" } = args;
+
+    // Run business search and branded SERP in parallel
+    const [searchResp, serpResp] = await Promise.all([
+      this.makeAPICall('/business_data/business_listings/search/live', [{ keyword: business_name, location_name, language_name, limit: 10 }]),
+      this.makeAPICall('/serp/google/organic/live/advanced', [{ keyword: business_name, location_name, language_name, depth: 10 }])
+    ]);
+
+    const businesses = searchResp?.tasks?.[0]?.result?.[0]?.items || [];
+    const gbp = this._matchBusiness(businesses, business_name, location_name);
+
+    const serpItems = serpResp?.tasks?.[0]?.result?.[0]?.items || [];
+    const kpItem = serpItems.find(i => i.type === 'knowledge_graph') || null;
+
+    const cid = gbp?.cid || kpItem?.cid || null;
+
+    const ids = {
+      business_name: gbp?.title || kpItem?.title || business_name,
+      data_sources: { gbp_listings: !!gbp, knowledge_panel: !!kpItem },
+      cid,
+      place_id: gbp?.place_id || null,
+      feature_id: gbp?.feature_id || null,
+      category_ids: gbp?.category_ids || [],
+      additional_categories: gbp?.additional_categories || [],
+      latitude: gbp?.latitude || null,
+      longitude: gbp?.longitude || null,
+      is_claimed: gbp?.is_claimed ?? null,
+      google_maps_url: cid ? `https://www.google.com/maps?cid=${cid}` : null,
+      mid_freebase: null,
+      mid_note: "Freebase MIDs (/m/xxxx) are not exposed by DataForSEO. Retrieve via Google Knowledge Graph Search API: https://kgsearch.googleapis.com/v1/entities:search?query=BUSINESS_NAME&key=YOUR_API_KEY"
+    };
+
+    return {
+      content: [{
+        type: "text",
+        text: `Entity IDs for "${business_name}":\n${SafeJSON.stringify(ids)}`
+      }]
+    };
+  }
+
+  async getKpoAnalyzer(args) {
+    const { business_name, location_name, language_name = "English", location_code } = args;
+
+    // Run both API calls in parallel
+    const [searchResp, serpResp] = await Promise.all([
+      this.makeAPICall('/business_data/business_listings/search/live', [{ keyword: business_name, location_name, language_name, limit: 10 }]),
+      this.makeAPICall('/serp/google/organic/live/advanced', [{
+        keyword: business_name,
+        location_name,
+        language_name,
+        depth: 10,
+        ...(location_code ? { location_code } : {})
+      }])
+    ]);
+
+    const businesses = searchResp?.tasks?.[0]?.result?.[0]?.items || [];
+    const gbp = this._matchBusiness(businesses, business_name, location_name);
+
+    const serpItems = serpResp?.tasks?.[0]?.result?.[0]?.items || [];
+    const kpItem = serpItems.find(i => i.type === 'knowledge_graph') || null;
+    const kpRows = (kpItem?.items || []).filter(i => i.type === 'knowledge_graph_row_item');
+
+    // Parse KP row items by data_attrid
+    const kpFields = {};
+    for (const row of kpRows) {
+      const attr = row.data_attrid || '';
+      if (attr.includes('address'))      kpFields.kp_address = row.text;
+      else if (attr.includes('phone'))   kpFields.kp_phone = row.text;
+      else if (attr.includes('hours'))   kpFields.kp_hours = row.text;
+      else if (attr.includes('email'))   kpFields.kp_email = row.text;
+      else if (attr.includes('web'))     kpFields.kp_website = row.text;
+      else if (attr.includes('people') || attr.includes('founder') || attr.includes('owner'))
+        kpFields.kp_key_people = (kpFields.kp_key_people || []).concat(row.text);
+      else kpFields[`kp_${attr.replace(/[^a-z0-9]/gi,'_').replace(/_+/g,'_')}`] = row.text;
+    }
+
+    // sameAs: collect links from KG link items (social profiles etc.)
+    const kpLinks = (kpItem?.items || []).filter(i => i.type === 'knowledge_graph_list_item' || i.type === 'knowledge_graph_link_item');
+    const sameAsLinks = kpLinks.flatMap(i => (i.links || []).map(l => l.url)).filter(Boolean);
+
+    // KPO gap analysis — 18-field weighted checklist
+    // Fields that can only be scored from GBP listings data are marked gbp_only: true
+    // and scored as 'unknown' (not failed) when listings DB has no coverage for this locale
+    const gbpAvailable = !!gbp;
+    const KPO_FIELDS = [
+      { field: 'entity_name',      label: 'Business name',              weight: 5, check: () => !!(gbp?.title || kpItem?.title) },
+      { field: 'entity_type',      label: 'Entity type / subtitle',     weight: 4, check: () => !!(kpItem?.subtitle || gbp?.category) },
+      { field: 'description',      label: 'GBP description',            weight: 5, check: () => !!(gbp?.description || gbp?.snippet || kpItem?.description), gbp_only: false },
+      { field: 'website',          label: 'Website URL',                weight: 5, check: () => !!(gbp?.url || kpItem?.url) },
+      { field: 'address',          label: 'Address',                    weight: 5, check: () => !!(gbp?.address || kpFields.kp_address) },
+      { field: 'phone',            label: 'Phone number',               weight: 5, check: () => !!(gbp?.phone || kpFields.kp_phone) },
+      { field: 'email',            label: 'Email address',              weight: 3, check: () => !!(gbp?.contact_info?.find?.(c => c.type === 'email') || kpFields.kp_email), gbp_only: true },
+      { field: 'hours',            label: 'Opening hours',              weight: 4, check: () => !!(gbp?.work_time?.work_hours?.timetable || kpFields.kp_hours) },
+      { field: 'logo',             label: 'Logo image',                 weight: 4, check: () => !!(gbp?.logo || kpItem?.logo_url) },
+      { field: 'photos',           label: 'Photos (10+ recommended)',   weight: 3, check: () => (gbp?.total_photos || 0) >= 10, gbp_only: true },
+      { field: 'claimed',          label: 'GBP claimed',                weight: 5, check: () => gbp?.is_claimed === true, gbp_only: true },
+      { field: 'primary_category', label: 'Primary category',           weight: 4, check: () => !!(gbp?.category || (gbp?.category_ids || []).length > 0 || kpItem?.subtitle) },
+      { field: 'add_categories',   label: 'Additional categories',      weight: 2, check: () => (gbp?.additional_categories || []).length > 0, gbp_only: true },
+      { field: 'same_as',          label: 'sameAs / social links',      weight: 3, check: () => (gbp?.local_business_links || sameAsLinks || []).length > 0 },
+      { field: 'key_people',       label: 'Key people listed',          weight: 2, check: () => !!(kpFields.kp_key_people?.length > 0) },
+      { field: 'booking_link',     label: 'Booking / appointment link', weight: 3, check: () => !!(gbp?.local_business_links?.length > 0), gbp_only: true },
+      { field: 'attributes',       label: 'GBP attributes set',         weight: 2, check: () => Object.keys(gbp?.attributes?.available_attributes || {}).length > 0, gbp_only: true },
+      { field: 'geo_coords',       label: 'Geo coordinates',            weight: 1, check: () => !!(gbp?.latitude && gbp?.longitude) }
+    ];
+
+    const totalWeight = KPO_FIELDS.reduce((s, f) => s + f.weight, 0);
+    let earnedWeight = 0;
+    let unknownWeight = 0;
+    const present = [];
+    const missing = [];
+    const unknown = [];
+
+    for (const f of KPO_FIELDS) {
+      const passed = f.check();
+      if (passed) {
+        earnedWeight += f.weight;
+        present.push({ field: f.field, label: f.label });
+      } else if (f.gbp_only && !gbpAvailable) {
+        unknownWeight += f.weight;
+        unknown.push({ field: f.field, label: f.label, note: 'Cannot verify — GBP listings DB has no coverage for this locale. Check manually in Google Business Profile.' });
+      } else {
+        missing.push({ field: f.field, label: f.label, weight: f.weight, priority: f.weight >= 4 ? 'HIGH' : f.weight >= 3 ? 'MEDIUM' : 'LOW' });
+      }
+    }
+
+    const scorableWeight = totalWeight - unknownWeight;
+    const score = scorableWeight > 0 ? Math.round((earnedWeight / scorableWeight) * 100) : 0;
+    const cid = gbp?.cid || kpItem?.cid || null;
+
+    const report = {
+      business: gbp?.title || kpItem?.title || business_name,
+      location: location_name,
+      kpo_score: score,
+      score_label: score >= 85 ? 'Excellent' : score >= 65 ? 'Good' : score >= 45 ? 'Needs Work' : 'Poor',
+      data_coverage: { gbp_listings_found: gbpAvailable, knowledge_panel_detected: !!kpItem },
+      entity_ids: {
+        cid,
+        place_id: gbp?.place_id || null,
+        feature_id: gbp?.feature_id || null,
+        category_ids: gbp?.category_ids || [],
+        google_maps_url: cid ? `https://www.google.com/maps?cid=${cid}` : null
+      },
+      fields_present: present,
+      fields_missing: missing.sort((a, b) => b.weight - a.weight),
+      fields_unknown: unknown,
+      gbp_raw: gbp ? {
+        title: gbp.title, description: gbp.description || gbp.snippet, address: gbp.address,
+        phone: gbp.phone, url: gbp.url, logo: gbp.logo, main_image: gbp.main_image,
+        total_photos: gbp.total_photos, is_claimed: gbp.is_claimed, category: gbp.category,
+        category_ids: gbp.category_ids, additional_categories: gbp.additional_categories,
+        work_time: gbp.work_time, attributes: gbp.attributes, contact_info: gbp.contact_info,
+        local_business_links: gbp.local_business_links, rating: gbp.rating
+      } : null,
+      knowledge_panel_raw: kpItem ? {
+        title: kpItem.title, subtitle: kpItem.subtitle, description: kpItem.description,
+        cid: kpItem.cid, url: kpItem.url, image_url: kpItem.image_url, logo_url: kpItem.logo_url,
+        parsed_fields: kpFields, same_as_links: sameAsLinks
+      } : null
+    };
+
+    return {
+      content: [{
+        type: "text",
+        text: `KPO Analysis — "${business_name}" (Score: ${score}/100 — ${report.score_label}):\n${SafeJSON.stringify(report)}`
       }]
     };
   }

@@ -1,0 +1,355 @@
+{
+  "content": [
+    {
+      "id": "a8a9a1",
+      "name": "container",
+      "parent": 0,
+      "children": [
+        "1f708f",
+        "2b2330",
+        "944248",
+        "e62bdf"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wjefat",
+          "rktisp"
+        ],
+        "tag": "custom",
+        "customTag": "ul"
+      },
+      "label": "FAQ Grid Bravo"
+    },
+    {
+      "id": "1f708f",
+      "name": "block",
+      "parent": "a8a9a1",
+      "children": [
+        "ab6c3e",
+        "90f71e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "ab6c3e",
+      "name": "block",
+      "parent": "1f708f",
+      "children": [
+        "895fec"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "895fec",
+      "name": "heading",
+      "parent": "ab6c3e",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "90f71e",
+      "name": "block",
+      "parent": "1f708f",
+      "children": [
+        "ed486c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "ed486c",
+      "name": "text",
+      "parent": "90f71e",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "2b2330",
+      "name": "block",
+      "parent": "a8a9a1",
+      "children": [
+        "fd33f5",
+        "e4a661"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "fd33f5",
+      "name": "block",
+      "parent": "2b2330",
+      "children": [
+        "baf5a5"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "baf5a5",
+      "name": "heading",
+      "parent": "fd33f5",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "e4a661",
+      "name": "block",
+      "parent": "2b2330",
+      "children": [
+        "1f3d36"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "1f3d36",
+      "name": "text",
+      "parent": "e4a661",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "944248",
+      "name": "block",
+      "parent": "a8a9a1",
+      "children": [
+        "9a699b",
+        "2453f5"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "9a699b",
+      "name": "block",
+      "parent": "944248",
+      "children": [
+        "f31a3a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "f31a3a",
+      "name": "heading",
+      "parent": "9a699b",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "2453f5",
+      "name": "block",
+      "parent": "944248",
+      "children": [
+        "f64fd9"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "f64fd9",
+      "name": "text",
+      "parent": "2453f5",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    },
+    {
+      "id": "e62bdf",
+      "name": "block",
+      "parent": "a8a9a1",
+      "children": [
+        "d03195",
+        "cefc8e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bvmoej"
+        ],
+        "tag": "custom",
+        "customTag": "li"
+      },
+      "label": "FAQ Card Bravo"
+    },
+    {
+      "id": "d03195",
+      "name": "block",
+      "parent": "e62bdf",
+      "children": [
+        "98bf9a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "phqmqc"
+        ]
+      },
+      "label": "Header"
+    },
+    {
+      "id": "98bf9a",
+      "name": "heading",
+      "parent": "d03195",
+      "children": [],
+      "settings": {
+        "text": "This is just a placeholder question, we will replace it once your website copy is finalized",
+        "_cssGlobalClasses": [
+          "nbtlyj"
+        ]
+      },
+      "label": "Question"
+    },
+    {
+      "id": "cefc8e",
+      "name": "block",
+      "parent": "e62bdf",
+      "children": [
+        "d082f8"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oboavx"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "d082f8",
+      "name": "text",
+      "parent": "cefc8e",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content.</p>",
+        "_cssGlobalClasses": [
+          "zwrqph"
+        ]
+      },
+      "label": "Answer"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "wjefat",
+      "name": "fr-faq-grid-bravo",
+      "settings": {
+        "_cssCustom": ".fr-faq-grid-bravo {\n\tdisplay: grid;\n  grid-template-columns: repeat(2, 1fr);\n  align-items: stretch;\n}",
+        "_gridGap": "calc(var(--grid-gap) * 2)",
+        "_cssCustom:mobile_landscape": ".fr-faq-grid-bravo {\n\tgrid-template-columns: 1fr;\n}"
+      },
+      "_exists": false
+    },
+    {
+      "id": "bvmoej",
+      "name": "fr-faq-card-bravo",
+      "settings": {
+        "_rowGap": "var(--fr-card-gap)"
+      },
+      "_exists": false
+    },
+    {
+      "id": "phqmqc",
+      "name": "fr-faq-card-bravo__header",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "nbtlyj",
+      "name": "fr-faq-card-bravo__question",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "oboavx",
+      "name": "fr-faq-card-bravo__body",
+      "settings": [],
+      "_exists": false
+    },
+    {
+      "id": "zwrqph",
+      "name": "fr-faq-card-bravo__answer",
+      "settings": [],
+      "_exists": false
+    }
+  ]
+}

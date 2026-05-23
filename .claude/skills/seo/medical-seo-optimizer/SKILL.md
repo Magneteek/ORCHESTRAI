@@ -6,11 +6,10 @@ Healthcare-specific SEO and YMYL (Your Money Your Life) optimization specialist 
 
 ## When to Load
 
-**Use this skill when user mentions**: medical, seo, optimizer
+**Use this skill when user mentions**: medical seo, healthcare seo, ymyl seo, dental seo, clinic seo, doctor seo, health content seo, ymyl content optimization
 
 **Load if task involves**:
 - 
-- Related seo domain work
 
 ## Configuration
 

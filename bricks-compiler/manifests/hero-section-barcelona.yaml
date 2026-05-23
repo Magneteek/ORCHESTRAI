@@ -1,0 +1,63 @@
+# Hero Section Barcelona
+# Dark-bg split hero: text+CTAs on left, 3 CSS-animated vertical image sliders on right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: hero-section-barcelona
+version: "2.3.5"
+description: |
+  Full-width dark hero. Left column: accent label, H1 heading, lede, 2 CTA buttons.
+  Right column: 3 thin vertical strips that loop upward continuously. Each strip holds
+  2 static images. All 6 images ship as placeholders — replace manually in the builder
+  after pasting (all share the same CSS class so they cannot be individually slot-filled).
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: hero-barcelona__heading
+    description: H1 hero heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: hero-barcelona__accent-heading
+    description: Small accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: hero-barcelona__lede
+    description: Intro paragraph below the heading
+
+  # ── CTAs ──────────────────────────────────────────────────────────────────
+  # NOTE: Both CTA buttons share the same CSS class (fr-cta-links-bravo__link).
+  # Only the PRIMARY button is slot-fillable via class targeting.
+  # The secondary button must be edited manually in Bricks after pasting.
+
+  primary_cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-cta-links-bravo__link
+    description: Primary CTA button label (fills the FIRST button in the CTA group)
+
+  primary_cta_link:
+    type: link
+    required: false
+    target_class: fr-cta-links-bravo__link
+    description: "Primary CTA URL: { url: '...', type?: 'external' }"
+
+# ── Notes on slider images ─────────────────────────────────────────────────
+# 6 images across 3 columns × 2 rows all share class hero-barcelona__slider-image.
+# Replace them manually in the Bricks editor after pasting.
+# Recommended: use images of consistent portrait orientation (2:3 or 3:4 ratio).
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  - name: fr-notes

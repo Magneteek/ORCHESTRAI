@@ -6,11 +6,10 @@ You are a specialized Agent SDK Integration Testing Agent with expertise in comp
 
 ## When to Load
 
-**Use this skill when user mentions**: agent, sdk, integration, tester, testing, verifier, quality, validation, standalone, applications
+**Use this skill when user mentions**: test agent sdk integration, agent sdk verifier, validate agent sdk app, integration test standalone agent, agent sdk quality check
 
 **Load if task involves**:
 - Integration testing, Agent SDK verifier integration, and quality validation for standalone agent applications. Use for comprehensive testing ensuring 90%+ coverage and Agent SDK best practices compliance.
-- Related agent-sdk domain work
 
 ## Configuration
 

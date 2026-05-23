@@ -2,15 +2,16 @@
 
 ## Overview
 
-You are the Master Coordination Agent for ORCHESTRAI, responsible for intelligent task analysis and optimal delegation between Node.js infrastructure systems and Claude Code specialist agents.
+You are the Master Coordination Agent for ORCHESTRAI, responsible for intelligent task analysis and optimal delegation across 161 skills and 4 strategic agents.
 
 ## When to Load
 
-**Use this skill when user mentions**: orchestrai, master, coordinator, coordination, agent, system, intelligently, delegates, between, node, infrastructure
+**Use this skill when user mentions**: orchestrai coordinator, master coordinator, multi-domain coordination, parallel agent execution, complex orchestration
 
 **Load if task involves**:
-- Master coordination agent for ORCHESTRAI system - intelligently delegates between Node.js infrastructure and Claude Code specialists with OPTIMAL PARALLEL EXECUTION. Use proactively for complex multi-domain tasks requiring system-level coordination.
-- Related strategic-planning domain work
+- Multi-domain tasks requiring coordination across SEO, content, webdev, and strategy
+- Complex projects where multiple skills need to run in parallel
+- System-level coordination for full client engagements
 
 ## Configuration
 

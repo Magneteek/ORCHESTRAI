@@ -1,8 +1,80 @@
 # Skills System Integration Issue - Reality Check
 
+---
+
+## ✅ Confirmed Working Pattern (2026-04-22 Update)
+
+After testing and verification, the following patterns are confirmed:
+
+### ✅ Works — domain skills
+```
+Skill(skill="seo", args="seo-keyword-research")
+Skill(skill="content", args="content-writer-specialist")
+Skill(skill="webdev", args="frontend-architect-specialist")
+```
+Pattern: `Skill(skill="<domain>", args="<skill-name>")`
+
+### ✅ Works — commands namespace (colon syntax)
+```
+Skill(skill="commands:init-client-project", args="ClientName")
+Skill(skill="commands:learn")
+```
+Pattern: `Skill(skill="commands:<skill-name>")` — commands/ is the exception that uses colon
+
+### ❌ Broken — was the wrong invocation format
+```
+Skill(skill="seo:seo-keyword-research")       # Broken — do not use
+Skill(skill="content:content-brief-generator") # Broken — do not use
+Skill(skill="content-brief-generator")         # Broken — do not use
+```
+
+**All CLAUDE.md, agent files, and documentation have been updated to use the correct patterns (2026-04-22).**
+
+---
+
+## ⚠️ Original Status (2026-04-21) — Read This First
+
+**The `Skill()` invocation for domain skills does not work and will not work without a deliberate fix.**
+
+### What fails
+```
+Skill(skill="content-brief-generator")       # Unknown skill
+Skill(skill="content:content-brief-generator") # Unknown skill
+```
+
+### Root cause (confirmed)
+Claude Code's `Skill` tool only auto-discovers skills from `.claude/skills/commands/`. Domain subdirectories (`.claude/skills/content/`, `.claude/skills/seo/`, etc.) are not scanned. They're documentation files, not registered invocables.
+
+Adding YAML frontmatter (`---` delimiters, `description:` field) to domain SKILL.md files does NOT fix this — that was the wrong diagnosis. The issue is directory-level, not file-level.
+
+### What does work
+- `/learn`, `Skill(skill="commands:learn")` → works (lives in `.claude/skills/commands/learn/`)
+- `/init-client-project`, `Skill(skill="commands:init-client-project")` → works (same reason)
+- **Workaround for domain skills**: `Read(".claude/skills/content/content-brief-generator/prompts/main-prompt.md")` then execute inline — this is the current approach
+
+### Three fix options when ready
+
+| Option | What to do | Effort | Tradeoff |
+|---|---|---|---|
+| **A** | Move domain skills to `.claude/agents/` | High | Works via `Task(subagent_type="…")`; adds startup token cost for agent metadata |
+| **B** | Move top 5–6 domain skills to `.claude/skills/commands/` | Low | Works via `Skill(skill="commands:…")`; same mechanism as `/learn` |
+| **C** | Keep manual Read workaround | Zero | ~10s overhead per pipeline phase; no architecture changes |
+
+**Recommended when fixing**: Option B for the 5–6 most-used pipeline skills only:
+- `content-brief-generator`
+- `content-production-pipeline`
+- `content-outline-architect`
+- `content-writer-specialist`
+- `content-quality-validator`
+- `slovenian-ai-phrase-detector`
+
+Leave remaining 130+ domain skills as manual reads — they're rarely invoked directly.
+
+---
+
 **Date**: February 4, 2026
 **Issue**: Skills system migrated but not integrated with Claude Code
-**Status**: Requires integration work
+**Status**: Requires integration work (see above for current diagnosis)
 
 ---
 

@@ -156,12 +156,6 @@ const engagementBoosters = await this.readTemplates('engagement-boosters.json');
 
 ## Integration with ORCHESTRAI
 
-**Crystalline Memory Integration:**
-- Store high-engagement content in `copywriting-nurture-sequences` memory pool
-- Share relationship building insights across all copywriting agents
-- Learn from engagement patterns to improve future sequences
-- Track long-term subscriber journey and conversion patterns
-
 **Pipeline Sharing:**
 - Coordinate with cold email agents for prospect transition to nurture
 - Share subscriber insights with direct response agents for conversion optimization

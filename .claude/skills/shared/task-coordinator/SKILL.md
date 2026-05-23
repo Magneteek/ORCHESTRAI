@@ -1,3 +1,7 @@
+---
+user-invocable: false
+---
+
 # Task Coordinator Skill
 
 ## Overview
@@ -6,11 +10,10 @@ UTID generation and comprehensive workflow orchestration with cross-agent coordi
 
 ## When to Load
 
-**Use this skill when user mentions**: task, coordinator, utid, generation, comprehensive, workflow, orchestration, with, cross, agent, coordination, dependency
+**Use this skill when user mentions**: coordinate tasks across agents, cross-agent task management, utid task coordination, workflow task orchestration, multi-agent task tracking
 
 **Load if task involves**:
 - UTID generation and comprehensive workflow orchestration with cross-agent coordination and dependency management
-- Related shared domain work
 
 ## Configuration
 

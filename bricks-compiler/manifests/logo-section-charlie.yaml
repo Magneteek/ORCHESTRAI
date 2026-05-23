@@ -1,0 +1,33 @@
+# Logo Section Charlie
+# AUTO-GENERATED — review required/max_length fields before use
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: logo-section-charlie
+version: "2.3.5"
+description: |
+  TODO: describe what this section is for
+
+slots:
+
+  # ── Top-level slots ──────────────────────────────────────────────
+
+  accent_heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-intro-alpha__accent-heading
+
+  lede:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-intro-alpha__lede
+
+  logo:
+    type: media
+    required: false  # set to true if agent must always fill this
+    target_class: fr-logo-charlie__logo
+
+# ── Builder-only elements ──────────────────────────────────────────────
+strip_elements:
+  [] # none detected

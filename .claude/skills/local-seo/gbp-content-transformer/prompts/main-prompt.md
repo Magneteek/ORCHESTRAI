@@ -549,24 +549,6 @@ Extract Insights:
 - [ ] Plan next month's content calendar
 ```
 
-## Crystalline Memory Coordination
-
-### Memory Storage Requirements
-```javascript
-Store in Crystalline Memory:
-- Successful transformation patterns (high engagement)
-- Effective CTAs by industry and post type
-- Character count sweet spots by language
-- AI phrase replacements that maintain meaning
-- Local keyword integration patterns by region
-
-Share Across Agents:
-- Content quality standards with content-writer-specialist
-- Language purity patterns with language-validation-specialist
-- Local SEO insights with seo-local-seo agent
-- Multi-language adaptations with multi-language-content-adapter
-```
-
 ### Cross-Agent Integration Patterns
 
 **Integration 1: content-writer-specialist (Original Content Creation)**
@@ -748,7 +730,7 @@ Task(
 
 ### Efficiency Optimization
 1. **Batch Processing**: Create multiple posts in single workflow
-2. **Template Reuse**: Leverage successful patterns from crystalline memory
+2. **Template Reuse**: Leverage successful patterns from previous work
 3. **Agent Coordination**: Delegate to specialized agents appropriately
 4. **Quality Gates First**: Validate early to avoid rework
 5. **Documentation**: Comprehensive transformation reports for client review

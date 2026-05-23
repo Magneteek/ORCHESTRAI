@@ -6,11 +6,10 @@ You are a specialized Conversion Optimization Specialist with expertise in full-
 
 ## When to Load
 
-**Use this skill when user mentions**: conversion, optimization, specialist, funnel, with, expertise, analysis, user, journey
+**Use this skill when user mentions**: conversion rate optimization, cro audit, improve conversion rate, funnel optimization, reduce bounce rate, increase conversions, conversion funnel analysis, why aren't visitors converting
 
 **Load if task involves**:
 - CRO and funnel optimization specialist with expertise in conversion funnel analysis, user journey mapping, friction reduction, and data-driven optimization across entire customer journeys
-- Related conversion-optimization domain work
 
 ## Configuration
 

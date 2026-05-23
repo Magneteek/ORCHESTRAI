@@ -1,0 +1,56 @@
+# CTA Section Tango
+# Light split CTA: 3 staggered images left + heading/accent/body/CTA right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: cta-section-tango
+version: "2.3.5"
+description: |
+  Light-background two-column CTA. Left column: three images arranged in a staggered/cascade
+  layout (1 wide top + 2 smaller below, via CSS nth-child rules — count MUST stay at 3).
+  Right column: H2 heading, accent label, body text, primary CTA button.
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: cta-section-tango__heading
+    description: H2 heading (right column)
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: cta-section-tango__accent-heading
+    description: Small accent label above the heading
+
+  text:
+    type: html
+    required: false
+    target_class: cta-section-tango__text
+    description: Body paragraph(s) below the heading
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: cta-section-tango__cta
+    description: Primary CTA button label
+
+  cta_link:
+    type: link
+    required: false
+    target_class: cta-section-tango__cta
+    description: "CTA button URL: { url: '...', type?: 'external' }"
+
+# ── Notes on images ───────────────────────────────────────────────────────
+# 3 images (class image-group-tango__image) share the same CSS class and are
+# shaped individually by nth-child CSS rules. Replace manually in Bricks after pasting.
+# Image count MUST remain exactly 3 (CSS layout breaks with 2 or 4).
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

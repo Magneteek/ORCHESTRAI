@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: security, testing, specialist
+**Use this skill when user mentions**: security testing, penetration testing, vulnerability testing, security code audit, owasp security testing, security scan
 
 **Load if task involves**:
 - Comprehensive OWASP Top 10, SAST/DAST, vulnerability scanning, and penetration testing with automated security audits
-- Related quality domain work
 
 ## Configuration
 

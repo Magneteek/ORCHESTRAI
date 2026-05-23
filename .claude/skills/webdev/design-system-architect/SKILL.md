@@ -6,11 +6,10 @@ Design system creation and component library management.
 
 ## When to Load
 
-**Use this skill when user mentions**: design, system, architect, creation
+**Use this skill when user mentions**: design system, component library, ui design tokens, atomic design, shared ui components, build component library
 
 **Load if task involves**:
 - Design system creation
-- Related webdev domain work
 
 ## Configuration
 

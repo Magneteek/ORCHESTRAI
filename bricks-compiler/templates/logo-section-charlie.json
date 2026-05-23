@@ -1,0 +1,900 @@
+{
+  "content": [
+    {
+      "id": "4bd89e",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "b12204",
+        "b33898"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "xqoeed"
+        ]
+      },
+      "label": "Logo Section Charlie"
+    },
+    {
+      "id": "b12204",
+      "name": "container",
+      "parent": "4bd89e",
+      "children": [
+        "5a10fd",
+        "d78cf6",
+        "369699"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dliabf",
+          "xgmzei"
+        ]
+      },
+      "label": "Intro Alpha"
+    },
+    {
+      "id": "5a10fd",
+      "name": "heading",
+      "parent": "b12204",
+      "children": [],
+      "settings": {
+        "text": "Brands We've Worked With",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "tkbujj"
+        ]
+      }
+    },
+    {
+      "id": "d78cf6",
+      "name": "text-basic",
+      "parent": "b12204",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "blgfqd"
+        ],
+        "text": "Accent heading",
+        "tag": "p"
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "369699",
+      "name": "text-basic",
+      "parent": "b12204",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "dizast"
+        ],
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "tag": "p"
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "b33898",
+      "name": "container",
+      "parent": "4bd89e",
+      "children": [
+        "b98eb7",
+        "800aee",
+        "4543f8",
+        "bb0501",
+        "7cde5d",
+        "399270",
+        "bfb69b",
+        "bfc655",
+        "8b4780",
+        "3bd32e",
+        "e6e42c",
+        "e9e3c4",
+        "a32d98"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wqelri"
+        ],
+        "tag": "ul"
+      },
+      "label": "Logo Grid Charlie"
+    },
+    {
+      "id": "b98eb7",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "bdf621",
+        "dc04aa"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "bdf621",
+      "name": "image",
+      "parent": "b98eb7",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "dc04aa",
+      "name": "text-basic",
+      "parent": "b98eb7",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "text": "Brand Name",
+        "tag": "span"
+      }
+    },
+    {
+      "id": "800aee",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "52ca4f",
+        "875712"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "52ca4f",
+      "name": "image",
+      "parent": "800aee",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "875712",
+      "name": "text-basic",
+      "parent": "800aee",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "tag": "span",
+        "text": "Brand Name"
+      }
+    },
+    {
+      "id": "4543f8",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "6a24cc",
+        "51010d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "6a24cc",
+      "name": "image",
+      "parent": "4543f8",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "51010d",
+      "name": "text-basic",
+      "parent": "4543f8",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "tag": "span",
+        "text": "Brand Name"
+      }
+    },
+    {
+      "id": "bb0501",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "8d7481",
+        "1f7e86"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "8d7481",
+      "name": "image",
+      "parent": "bb0501",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "1f7e86",
+      "name": "text-basic",
+      "parent": "bb0501",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "tag": "span",
+        "text": "Brand Name"
+      }
+    },
+    {
+      "id": "7cde5d",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "d04c1f",
+        "27f50d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "d04c1f",
+      "name": "image",
+      "parent": "7cde5d",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "27f50d",
+      "name": "text-basic",
+      "parent": "7cde5d",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "tag": "span",
+        "text": "Brand Name"
+      }
+    },
+    {
+      "id": "399270",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "3b5743",
+        "73eea6"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "3b5743",
+      "name": "image",
+      "parent": "399270",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "tag": "figure",
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "73eea6",
+      "name": "text-basic",
+      "parent": "399270",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "text": "Brand Name",
+        "tag": "span"
+      }
+    },
+    {
+      "id": "bfb69b",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "8f30d1",
+        "b59e92"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "8f30d1",
+      "name": "image",
+      "parent": "bfb69b",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "b59e92",
+      "name": "text-basic",
+      "parent": "bfb69b",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "text": "Brand Name",
+        "tag": "span"
+      }
+    },
+    {
+      "id": "bfc655",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "91d2aa",
+        "8cee21"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "91d2aa",
+      "name": "image",
+      "parent": "bfc655",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "8cee21",
+      "name": "text-basic",
+      "parent": "bfc655",
+      "children": [],
+      "settings": {
+        "text": "Brand Name",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "bxonru"
+        ]
+      }
+    },
+    {
+      "id": "8b4780",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "e1dae6",
+        "721c29"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "e1dae6",
+      "name": "image",
+      "parent": "8b4780",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "721c29",
+      "name": "text-basic",
+      "parent": "8b4780",
+      "children": [],
+      "settings": {
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "text": "Brand Name"
+      }
+    },
+    {
+      "id": "3bd32e",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "8b8d70",
+        "5216c4"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "8b8d70",
+      "name": "image",
+      "parent": "3bd32e",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "5216c4",
+      "name": "text-basic",
+      "parent": "3bd32e",
+      "children": [],
+      "settings": {
+        "text": "Brand Name",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "bxonru"
+        ]
+      }
+    },
+    {
+      "id": "e6e42c",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "64cc67",
+        "4e14a3"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "64cc67",
+      "name": "image",
+      "parent": "e6e42c",
+      "children": [],
+      "settings": {
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        }
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "4e14a3",
+      "name": "text-basic",
+      "parent": "e6e42c",
+      "children": [],
+      "settings": {
+        "text": "Brand Name",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "bxonru"
+        ]
+      }
+    },
+    {
+      "id": "e9e3c4",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "56c240",
+        "656819"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "56c240",
+      "name": "image",
+      "parent": "e9e3c4",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "656819",
+      "name": "text-basic",
+      "parent": "e9e3c4",
+      "children": [],
+      "settings": {
+        "text": "Brand Name",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "bxonru"
+        ]
+      }
+    },
+    {
+      "id": "a32d98",
+      "name": "block",
+      "parent": "b33898",
+      "children": [
+        "0d51c1",
+        "27a28a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aepzzm"
+        ],
+        "tag": "li"
+      },
+      "label": "Logo Charlie"
+    },
+    {
+      "id": "0d51c1",
+      "name": "image",
+      "parent": "a32d98",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vdbxrd"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure"
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "27a28a",
+      "name": "text-basic",
+      "parent": "a32d98",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bxonru"
+        ],
+        "text": "Brand Name",
+        "tag": "span"
+      }
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "xqoeed",
+      "name": "fr-logo-section-charlie",
+      "settings": {
+        "_rowGap": "var(--container-gap)",
+        "_background": {
+          "color": {
+            "raw": "var(--neutral-ultra-light)"
+          }
+        }
+      },
+      "_exists": false
+    },
+    {
+      "id": "dliabf",
+      "name": "fr-intro",
+      "settings": [],
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "xgmzei",
+      "name": "fr-intro-alpha",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_typography:mobile_landscape": {
+          "text-align": "left"
+        },
+        "_alignItems:mobile_landscape": "flex-start",
+        "_rowGap": "var(--content-gap)"
+      },
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "tkbujj",
+      "name": "fr-intro-alpha__heading",
+      "settings": {
+        "_typography:mobile_landscape": {
+          "font-size": "var(--h1)"
+        }
+      },
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "blgfqd",
+      "name": "fr-intro-alpha__accent-heading",
+      "settings": []
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "dizast",
+      "name": "fr-intro-alpha__lede",
+      "settings": []
+    },
+    {
+      "id": "wqelri",
+      "name": "fr-logo-grid-charlie",
+      "settings": {
+        "_rowGap": "var(--grid-gap)",
+        "_padding": {
+          "left": "0"
+        },
+        "_display": "flex",
+        "_flexWrap": "wrap",
+        "_direction": "row",
+        "_columnGap": "var(--grid-gap)",
+        "_justifyContent": "center",
+        "_alignItems": "stretch"
+      },
+      "modified": 1740453847,
+      "user_id": 26,
+      "_exists": false
+    },
+    {
+      "id": "aepzzm",
+      "name": "fr-logo-charlie",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_rowGap": "calc(var(--content-gap) / 2)",
+        "_padding": {
+          "top": "var(--space-s)",
+          "right": "var(--space-s)",
+          "bottom": "var(--space-s)",
+          "left": "var(--space-s)"
+        },
+        "_background": {
+          "color": {
+            "raw": "var(--white)"
+          }
+        },
+        "_border": {
+          "radius": {
+            "top": "var(--radius-m)",
+            "right": "var(--radius-m)",
+            "bottom": "var(--radius-m)",
+            "left": "var(--radius-m)"
+          }
+        },
+        "_flexBasis": "0",
+        "_cssCustom": ".fr-logo-charlie {\n  --logo-width: 6em;\n  --logo-height: 2em;\n}",
+        "_flexShrink": "0",
+        "_justifyContent": "space-evenly"
+      },
+      "modified": 1740453847,
+      "user_id": 26,
+      "_exists": false
+    },
+    {
+      "id": "vdbxrd",
+      "name": "fr-logo-charlie__logo",
+      "settings": {
+        "_height": "var(--logo-height)",
+        "_width": "var(--logo-width)",
+        "_widthMax": "100%",
+        "_objectFit": "contain"
+      },
+      "modified": 1740453847,
+      "user_id": 26,
+      "_exists": false
+    },
+    {
+      "id": "bxonru",
+      "name": "fr-logo-charlie__label",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1"
+        },
+        "_widthMin": "10ch"
+      },
+      "modified": 1740453847,
+      "user_id": 26,
+      "_exists": false
+    }
+  ]
+}

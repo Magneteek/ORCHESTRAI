@@ -1,0 +1,62 @@
+# CTA Section Indigo
+# Split CTA: CSS image mosaic grid (WP query loop) left + heading + body + icon link right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: cta-section-indigo
+version: "2.3.5"
+description: |
+  Split CTA with social proof image grid. Left column: a dense auto-filling grid of small
+  circular images (logos, headshots, or app icons) fed by a WP query loop. Right column:
+  H2 heading, accent label, body paragraph, icon text-link CTA.
+  Includes a JS code block that auto-calculates grid height — DO NOT STRIP the code element.
+  Image grid uses WP query loop (HappyFiles folder) — not slot-fillable.
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: cta-section-indigo__heading
+    description: H2 heading (right column)
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: cta-section-indigo__accent-heading
+    description: Small accent label above the heading
+
+  content:
+    type: string
+    required: false
+    max_length: 300
+    target_class: cta-section-indigo__content
+    description: Supporting paragraph text (describes what the image grid shows)
+
+  link_text:
+    type: string
+    required: false
+    max_length: 50
+    target_class: cta-section-indigo__icon-link-alpha
+    description: Icon link label (e.g. "Start for free →")
+
+  link_url:
+    type: link
+    required: false
+    target_class: cta-section-indigo__icon-link-alpha
+    description: "Icon link URL: { url: '...', type?: 'external' }"
+
+# ── Notes ─────────────────────────────────────────────────────────────────
+# - Image grid: WP query loop (HappyFiles folder 267). Configure in template;
+#   no image slots needed in page spec. Overfill the folder (50+ images) for
+#   best visual density across screen sizes.
+# - JS code block (cta-section-indigo__height-control): MUST be preserved —
+#   it calculates the grid height dynamically. Sign/activate it on the page.
+# - Activate JS code block: Bricks → Element → Code → check "Execute code".
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected — JS code block must NOT be stripped (functional)

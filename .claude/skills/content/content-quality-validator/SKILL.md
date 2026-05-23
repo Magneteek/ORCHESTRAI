@@ -1,3 +1,7 @@
+---
+description: Score content against a rubric (completeness, keyword integration, engagement, compliance) — produces QA scorecard with pass/fail verdict. Used as Phase 2 gate in content-production-pipeline.
+---
+
 # Content Quality Validator Skill
 
 ## Overview
@@ -6,11 +10,10 @@ You are a specialized Content Quality Validation Agent with expertise in compreh
 
 ## When to Load
 
-**Use this skill when user mentions**: content, quality, validator, advanced, assessment, with, completeness, validation, readability, optimization, proactively
+**Use this skill when user mentions**: validate content quality, content quality check, content completeness validation, check content depth, assess content quality
 
 **Load if task involves**:
 - Advanced content quality assessment with completeness validation and readability optimization. Use proactively for quality assurance and content improvement.
-- Related content domain work
 
 ## Configuration
 

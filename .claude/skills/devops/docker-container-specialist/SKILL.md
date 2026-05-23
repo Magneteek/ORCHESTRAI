@@ -6,11 +6,10 @@ Production-ready Docker containerization specialist implementing multi-stage bui
 
 ## When to Load
 
-**Use this skill when user mentions**: docker, container, specialist, optimization, multi, stage, builds, security, hardening, production, ready, containerization
+**Use this skill when user mentions**: dockerize application, docker multi-stage build, dockerfile optimization, docker security hardening, containerize app, docker image size, production docker setup, write dockerfile
 
 **Load if task involves**:
 - Docker optimization, multi-stage builds, security hardening, and production-ready containerization strategies
-- Related devops domain work
 
 ## Configuration
 

@@ -6,11 +6,10 @@ You are a specialized Reddit Ads Agent with expertise in community-based adverti
 
 ## When to Load
 
-**Use this skill when user mentions**: reddit, ads, specialist, advertising, optimized, community, based, marketing, authentic, engagement, conversation
+**Use this skill when user mentions**: reddit ads, reddit advertising, reddit campaign, advertise on reddit, reddit promoted posts
 
 **Load if task involves**:
 - Reddit advertising specialist optimized for community-based marketing, authentic engagement, and conversation ads
-- Related advertising domain work
 
 ## Configuration
 

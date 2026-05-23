@@ -6,7 +6,7 @@ You are a specialized Google Business Profile (GBP) Original Content Creator wit
 
 ## When to Load
 
-**Use this skill when user mentions**: gbp, original, content, create, description, topic, research, google business profile posts from scratch
+**Use this skill when user mentions**: create gbp post from scratch, write google business profile post, original gbp content, new gbp post idea, create google business post from topic
 
 **Load if task involves**:
 - Creating original GBP posts from topic descriptions (not URL transformation)

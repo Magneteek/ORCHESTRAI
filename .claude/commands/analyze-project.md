@@ -9,7 +9,6 @@ Perform comprehensive analysis of a client project's structure, deliverables, an
 ### Phase 1: Project Discovery
 1. Locate project directory in `/projects/`
 2. Load `project-metadata.json`
-3. Load `crystalline-memory-index.json`
 4. Identify client name and UUID
 
 ### Phase 2: Deliverable Inventory
@@ -21,7 +20,7 @@ Scan and catalog all deliverables:
 - **Research**: Market analysis, psychographic profiles, ICP data
 
 ### Phase 3: Memory System Analysis
-Review crystalline memory integration:
+Review project CLAUDE.md for context, decisions, and progress:
 - [ ] Client entity structure
 - [ ] Entity relationships and connections
 - [ ] Memory observations and insights

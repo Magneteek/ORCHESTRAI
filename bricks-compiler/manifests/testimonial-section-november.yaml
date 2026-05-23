@@ -1,0 +1,70 @@
+# Testimonial Section November
+# Light-bg section: centered intro + fr-tabs widget with 4 category tabs, 3 cards each.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: testimonial-section-november
+version: "2.3.5"
+description: |
+  Light-background testimonials section with a category tab widget. Top zone: centered
+  intro (heading, accent, lede). Below: a tabbed widget (fr-tabs) showing 4 category tabs.
+  Each tab panel contains a 3-column grid of 3 testimonial cards. Each card shows CSS
+  star ratings (driven by data-rating attribute), a large callout quote, a smaller
+  supporting callout, and the reviewer's name.
+  NOTE: Tab labels are slot-fillable via the compound_array. The 3 cards within each
+  tab panel share identical CSS classes — their content must be edited manually in Bricks
+  after pasting.
+
+slots:
+
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: H2 section heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small uppercase accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-alpha__lede
+    description: Intro paragraph below the heading
+
+  # ── Tabs (compound array) ─────────────────────────────────────────────────
+  # NOTE: Each tab panel contains 3 "Testimonial Card November" cards. The 3 cards
+  # within each panel cannot be individually slot-filled — they all share the same
+  # CSS classes (testimonial-card-november__large-callout, __small-callout, __name).
+  # After pasting, edit card content for each tab manually in Bricks.
+  # Star ratings are CSS-driven via data-rating attribute — set manually in Bricks.
+
+  tabs:
+    type: compound_array
+    required: false
+    min: 2
+    max: 6
+    nav_template: "Navigation Item"
+    content_template: "Tabs Item Wrapper"
+    description: |
+      Tab pairs: each item creates one navigation tab + one content panel (3 cards).
+      Only the tab label is slot-fillable here. Card content within each panel
+      must be filled manually in Bricks after pasting.
+    item_slots:
+      tab_label:
+        type: string
+        required: true
+        max_length: 40
+        target_label: "Tab"
+        description: Tab navigation button label (e.g. "Bathroom Renovation")
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

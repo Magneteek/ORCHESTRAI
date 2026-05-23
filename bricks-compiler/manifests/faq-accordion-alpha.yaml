@@ -1,0 +1,40 @@
+# FAQ Accordion Alpha (bare accordion widget)
+# Bricks fr-accordion with collapsing items, chevron icon, FAQ schema.
+# NOTE: Root element is fr-accordion (no section wrapper). Paste into any container.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: faq-accordion-alpha
+version: "2.3.5"
+description: |
+  Bare Bricks fr-accordion widget — collapsing Q&A items with animated chevron icon.
+  First item opens by default. FAQ schema (JSON-LD) is auto-generated.
+  No section wrapper — paste into any container or use within faq-section-alpha
+  for the full sidebar + accordion layout.
+  IMPORTANT: Item 1 is the clone template; all array items will match Item 1 structure
+  (with full CSS classes). Items 2–5 in the raw template have no classes — that is normal.
+
+slots:
+
+  items:
+    type: array
+    required: true
+    min: 2
+    max: 20
+    template_label: "Item"
+    description: Accordion FAQ items. First item opens by default.
+    item_slots:
+      question:
+        type: string
+        required: true
+        max_length: 160
+        target_class: fr-faq-accordion-alpha__question
+        description: Question text (H3 heading inside accordion header)
+      answer:
+        type: html
+        required: true
+        target_class: fr-faq-accordion-alpha__answer
+        description: Answer body (rich text / HTML, shown when item is expanded)
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

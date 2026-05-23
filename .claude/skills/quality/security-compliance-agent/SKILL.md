@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for continuous OWASP Top 10 vulnerabilit
 
 ## When to Load
 
-**Use this skill when user mentions**: security, compliance, agent, continuous, owasp, vulnerability, scanning, best, practice, enforcement, during, development
+**Use this skill when user mentions**: continuous security compliance, owasp vulnerability scanning, security compliance monitoring, automated security scanning, security best practice enforcement
 
 **Load if task involves**:
 - continuous OWASP Top 10 vulnerability scanning and security best practice enforcement during development
-- Related quality domain work
 
 ## Configuration
 

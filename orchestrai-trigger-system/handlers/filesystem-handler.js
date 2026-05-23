@@ -108,6 +108,16 @@ class FilesystemHandler extends EventEmitter {
   }
 
   /**
+   * Handle an externally-dispatched filesystem event (satisfies TriggerEngine handler interface)
+   */
+  async handleEvent(event) {
+    if (this.triggerEngine) {
+      return await this.triggerEngine.processEvent(event);
+    }
+    this.emit('file:event', event);
+  }
+
+  /**
    * Unwatch a path
    */
   async unwatch(watchId) {

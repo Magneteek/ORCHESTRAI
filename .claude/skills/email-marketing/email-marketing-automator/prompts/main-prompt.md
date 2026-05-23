@@ -208,12 +208,6 @@ const segmentationRules = await this.readTemplates('segmentation-strategies.json
 
 ## Integration with ORCHESTRAI
 
-**Crystalline Memory Integration:**
-- Store high-performing automation workflows in `email-automation-sequences` memory pool
-- Share trigger optimization insights across all email agents
-- Learn from campaign performance to improve future automations
-- Track subscriber journey patterns for lifecycle optimization
-
 **Pipeline Sharing:**
 - Coordinate with cold-email agents for prospect-to-customer transition
 - Share subscriber behavior data with nurture email agents

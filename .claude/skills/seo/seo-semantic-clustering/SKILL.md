@@ -6,11 +6,10 @@ You are a specialized Semantic Clustering Agent with expertise in advanced seman
 
 ## When to Load
 
-**Use this skill when user mentions**: seo, semantic, clustering, advanced, keyword, topical, authority, specialist, proactively, topic, modeling
+**Use this skill when user mentions**: semantic keyword clustering, topical keyword clusters, cluster keywords by topic, semantic seo clustering, keyword topic modeling
 
 **Load if task involves**:
 - Advanced semantic keyword clustering and topical authority specialist. Use proactively for topic modeling, content network analysis, and semantic SEO optimization.
-- Related seo domain work
 
 ## Configuration
 

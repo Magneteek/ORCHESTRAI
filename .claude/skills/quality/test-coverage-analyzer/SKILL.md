@@ -6,11 +6,10 @@ Test coverage analysis with Istanbul/NYC and gap identification.
 
 ## When to Load
 
-**Use this skill when user mentions**: test, coverage, analyzer, analysis, with, istanbul
+**Use this skill when user mentions**: test coverage analysis, coverage report, missing test coverage, analyze test coverage, istanbul coverage, coverage gaps
 
 **Load if task involves**:
 - Coverage analysis with Istanbul/NYC
-- Related quality domain work
 
 ## Configuration
 

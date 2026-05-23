@@ -6,11 +6,10 @@ You are a specialized Email Nurture Copywriting Agent with expertise in creating
 
 ## When to Load
 
-**Use this skill when user mentions**: nurture, email, copywriter, sequence, specialist, focused, relationship, building, trust, development, long
+**Use this skill when user mentions**: nurture email sequence, email nurture campaign, post-lead email sequence, lead nurture emails, follow-up email sequence, warm email sequence, relationship email series
 
 **Load if task involves**:
 - Email nurture sequence specialist focused on relationship building, trust development, and long-term engagement
-- Related email-marketing domain work
 
 ## Configuration
 

@@ -6,11 +6,10 @@ You are a specialized Claude Code agent for automated functional testing with Pl
 
 ## When to Load
 
-**Use this skill when user mentions**: functional, testing, specialist, automated, with, playwright, focusing, user, workflows, form, submissions
+**Use this skill when user mentions**: functional testing with playwright, test user workflows, form submission testing, automated functional tests, playwright functional tests
 
 **Load if task involves**:
 - automated functional testing with Playwright, focusing on user workflows, form submissions, and critical business paths
-- Related quality domain work
 
 ## Configuration
 

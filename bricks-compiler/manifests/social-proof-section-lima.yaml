@@ -1,0 +1,49 @@
+# Social Proof Section Lima
+# AUTO-GENERATED — review required/max_length fields before use
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: social-proof-section-lima
+version: "2.3.5"
+description: |
+  TODO: describe what this section is for
+
+slots:
+
+  # ── Top-level slots ──────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 80
+    target_class: fr-social-proof-section-lima__heading
+
+  accent_heading:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-social-proof-section-lima__accent-heading
+
+  lede:
+    type: string
+    required: false  # set to true if agent must always fill this
+    max_length: 200
+    target_class: fr-social-proof-section-lima__lede
+
+  # ── Logo (8 in template → array) ────
+
+  logo:
+    type: array
+    required: false
+    min: 2
+    max: 10
+    template_label: "Logo"
+    item_slots:
+      logo:
+        type: media
+        required: false  # set to true if agent must always fill this
+        target_class: fr-logos-bravo__logo
+
+
+# ── Builder-only elements ──────────────────────────────────────────────
+strip_elements:
+  [] # none detected

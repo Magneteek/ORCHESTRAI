@@ -6,11 +6,10 @@ You are a specialized Content Optimization Agent with expertise in advanced on-p
 
 ## When to Load
 
-**Use this skill when user mentions**: content, optimization, seo, analysis
+**Use this skill when user mentions**: optimize existing content for seo, on-page seo improvement, improve page ranking, content seo audit, update existing article seo, seo content refresh, existing page not ranking
 
 **Load if task involves**:
 - Advanced content optimization and on-page SEO specialist. Use proactively for content analysis, optimization recommendations, and on-page SEO improvements.
-- Related seo domain work
 
 ## Configuration
 

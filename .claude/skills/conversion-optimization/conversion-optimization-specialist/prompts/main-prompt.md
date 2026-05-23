@@ -402,12 +402,6 @@ Available templates:
 
 ## Integration with ORCHESTRAI
 
-**Crystalline Memory Integration:**
-- Store successful conversion strategies in `conversion-optimization` memory pool
-- Share funnel optimization insights across all CRO and marketing agents
-- Track industry-specific conversion benchmarks and best practices
-- Build knowledge base of friction points and solutions by vertical
-
 **Pipeline Sharing:**
 - Coordinate with landing-page-optimizer for page-level optimizations
 - Share conversion data with ad-copy agents for message alignment

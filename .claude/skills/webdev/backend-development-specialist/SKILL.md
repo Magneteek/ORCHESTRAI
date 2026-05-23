@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: backend, development, specialist
+**Use this skill when user mentions**: backend development, server-side development, node.js backend, express api, backend api development, build server logic, rest api backend
 
 **Load if task involves**:
-- building scalable, secure Node.js/TypeScript backend systems with Prisma ORM, PostgreSQL, and RESTful/GraphQL APIs
-- Related webdev domain work
+- Building server-side logic, APIs, or backend services for web applications
 
 ## Configuration
 

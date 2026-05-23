@@ -6,11 +6,10 @@ Real-time data synchronization across systems.
 
 ## When to Load
 
-**Use this skill when user mentions**: data, sync, coordinator, real, time, synchronization
+**Use this skill when user mentions**: sync data between systems, real-time data synchronization, data integration, connect data sources, keep data in sync, data pipeline synchronization
 
 **Load if task involves**:
 - Real-time data synchronization
-- Related data-analytics domain work
 
 ## Configuration
 

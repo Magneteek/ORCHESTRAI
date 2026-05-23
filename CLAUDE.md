@@ -1,58 +1,93 @@
 # ORCHESTRAI System
 
 **Architecture**: Hybrid (Skills-first + Strategic Agents) + Personality Layer (SOUL.md)
-**Skills**: 161 (137 domain + 24 commands) - Auto-discoverable, progressive disclosure
-**Agents**: 12 Opus strategic orchestrators (master coordination, planning, forecasting)
-**Personality**: SOUL.md (consistent voice across all 173 capabilities)
+**Skills**: 187 (159 domain + 28 commands) - Auto-discoverable, progressive disclosure
+**Agents**: 7 strategic agents (3 Sonnet conductors + 4 Opus orchestrators)
+**Personality**: SOUL.md (consistent voice across all 192 capabilities)
 **MCP**: DataForSEO, Memory, Notion, GSC, Ref.tools, Magic, Sanity, Playwright
-**Total**: 173 unique capabilities + 5 plugins + personality-infused outputs
+**Total**: 190 unique capabilities + 5 plugins + personality-infused outputs
+
+## LEARNING SYSTEM (Read This First)
+
+**CRITICAL**: At the start of every session, read `LEARNINGS.md` before doing any significant work. It contains mistakes we've fixed, decisions made, and client preferences. Ignoring it means repeating mistakes.
+
+```
+Read("LEARNINGS.md")  // Always do this first
+```
+
+To capture a new learning: `/learn [description]` or `Skill(skill="commands:learn")`
+
+## PROJECT TRACKING (Required for Client Work)
+
+Every client project has a `CLAUDE.md` at `/projects/[client-name]-[uuid]/CLAUDE.md`.
+
+**When doing client work, agents MUST:**
+1. Read the project `CLAUDE.md` at session start (client context + decisions)
+2. Append a progress entry when work is completed:
+   ```
+   ### [date] — [What was done]
+   - [Deliverable created/updated]
+   - [Decision made]
+   ```
+3. If a client-specific decision or mistake is discovered, add it to the project `CLAUDE.md` AND run `/learn`
+
+**Pattern**:
+```
+// Start of client session
+Read("projects/[client-uuid]/CLAUDE.md")
+
+// End of client session
+Edit("projects/[client-uuid]/CLAUDE.md") // append progress entry
+```
 
 ---
 
 ## Invocation Strategy (Hybrid Architecture)
 
-### **Use Skills First** (161 capabilities) - Primary Method
+### **Use Skills First** (183 capabilities) - Primary Method
 
-**Pattern**: `Skill(skill="domain:skill-name", args="...")`
+**Pattern**: `Skill(skill="domain", args="skill-name")`
+**Commands pattern**: `Skill(skill="commands:skill-name", args="...")` (commands/ namespace uses colon — domain namespaces do not)
 
 **When**: 90% of tasks - single-purpose, auto-discovery, standard workflows
 
 **Examples**:
-- SEO: `Skill(skill="seo:seo-keyword-research")` - Auto-loads when mentioned
-- Content: `Skill(skill="content:content-writer-specialist")` - Content creation
-- WebDev: `Skill(skill="webdev:frontend-architect-specialist")` - UI architecture
-- Quality: `Skill(skill="quality:e2e-test-automator")` - Testing
+- SEO: `Skill(skill="seo", args="seo-keyword-research")`
+- Content: `Skill(skill="content", args="content-writer-specialist")`
+- WebDev: `Skill(skill="webdev", args="frontend-architect-specialist")`
+- Quality: `Skill(skill="quality", args="e2e-test-automator")`
 - Commands: `Skill(skill="commands:init-client-project", args="ClientName")`
 
-**All 161 skills** in `.claude/skills/` with progressive disclosure (~4k tokens at startup).
+**All 185 skills** in `.claude/skills/` with progressive disclosure (~4k tokens at startup).
 
-### **Use Strategic Agents** (12 Opus orchestrators) - Complex Only
+### **Use Strategic Agents** (7 agents: 3 Sonnet conductors + 4 Opus orchestrators)
 
 **Pattern**: `Task(subagent_type="agent-name", prompt="task")`
 
-**When**: Multi-domain coordination, strategic planning, complex orchestration
+**When**: Multi-phase execution, multi-domain coordination, full strategic planning
 
-**The 12 Strategic Agents**:
-- `orchestrai-master-coordinator` - Multi-domain task coordination
+**Sonnet Conductors** (execution — sequence skills, manage state):
+- `pipeline-conductor` - Stateful multi-phase pipeline execution with checkpointing + retry
+- `campaign-conductor` - End-to-end ad campaign: audience research → copy → landing page
+- `webdev-conductor` - Full-stack web build: architecture → parallel streams → QA gates
+
+**Opus Orchestrators** (strategy — complex reasoning, cross-domain planning):
 - `strategic-plan-synthesizer` - Comprehensive strategic planning (OPSP, EOS)
 - `financial-modeling-specialist` - Financial models, unit economics, pricing
 - `client-project-orchestrator` - Full client engagement management
-- `simultaneous-orchestrator` - Parallel execution coordination
-- `vaibe-builder-orchestrator` - Proven parallel execution patterns (77.7% speed boost)
-- `ai-project-predictor` - ML-based timeline forecasting (85-95% accuracy)
-- `intelligent-risk-assessor` - AI-powered risk assessment
-- `performance-forecasting-specialist` - LSTM performance prediction
-- `advanced-performance-analyzer` - Multi-dimensional analysis (95% automation)
-- `semantic-analysis-engine` - NLP and semantic understanding
-- `crystalline-memory-optimizer` - Memory system optimization
+- `orchestrai-master-coordinator` - Complex multi-domain task decomposition (use sparingly)
 
 ### Decision Tree
 
 | Task Type | Use | Example |
 |-----------|-----|---------|
-| Single-purpose task | `Skill(skill="domain:name")` | Keyword research, content QA |
-| Multi-domain strategy | `Task(subagent_type="orchestrai-master-coordinator")` | Full SEO + Content + WebDev plan |
+| Single-purpose task | `Skill(skill="domain", args="skill-name")` | Keyword research, content QA |
+| Multi-phase pipeline (120m+) | `Task(subagent_type="pipeline-conductor")` | seo-research-pipeline, content pipeline |
+| Ad campaign (full build) | `Task(subagent_type="campaign-conductor")` | Google + Meta campaign package |
+| Web project (full build) | `Task(subagent_type="webdev-conductor")` | Static site or full-stack app |
+| Strategic planning | `Task(subagent_type="strategic-plan-synthesizer")` | OPSP, EOS growth plan |
 | Financial modeling | `Task(subagent_type="financial-modeling-specialist")` | 3-year revenue model |
+| Client engagement | `Task(subagent_type="client-project-orchestrator")` | Full client lifecycle |
 | Workflow command | `Skill(skill="commands:name")` | Init project, start SEO audit |
 
 **See**: [ORCHESTRATION-STRATEGY.md](ORCHESTRATION-STRATEGY.md) for complete decision tree
@@ -96,9 +131,8 @@ Default to static HTML. Use frameworks only when dynamic features required.
 ```
 /projects/[uuid]/
 ├── client-intelligence/  # ICP, branding
-├── deliverables/        # Final outputs only
-│   ├── seo/ content/ design/ development/ research/
-└── crystalline-memory-index.json
+└── deliverables/        # Final outputs only
+    └── seo/ content/ design/ development/ research/
 
 /temp/  # Auto-cleanup, safe to delete
 ```
@@ -122,10 +156,21 @@ Default to static HTML. Use frameworks only when dynamic features required.
 | **Content** | 12 agents | [orchestrai-domains/content/CLAUDE.md](orchestrai-domains/content/CLAUDE.md) |
 | **WebDev** | 8 agents | [orchestrai-domains/webdev/CLAUDE.md](orchestrai-domains/webdev/CLAUDE.md) |
 | **Quality** | 14 agents | [orchestrai-domains/quality/CLAUDE.md](orchestrai-domains/quality/CLAUDE.md) |
-| **Strategic** | 12 Opus agents | [orchestrai-domains/strategic-planning/CLAUDE.md](orchestrai-domains/strategic-planning/CLAUDE.md) |
+| **Strategic** | 4 Opus agents | [orchestrai-domains/strategic-planning/CLAUDE.md](orchestrai-domains/strategic-planning/CLAUDE.md) |
 | **Client Intel** | 6 agents | [orchestrai-domains/client-intelligence/CLAUDE.md](orchestrai-domains/client-intelligence/CLAUDE.md) |
 | **DevOps** | 5 agents | [orchestrai-domains/devops/CLAUDE.md](orchestrai-domains/devops/CLAUDE.md) |
 | **Advertising** | 5 agents | [orchestrai-domains/advertising-enhanced/CLAUDE.md](orchestrai-domains/advertising-enhanced/CLAUDE.md) |
+| **Healthcare** | 6 skills | `Skill(skill="healthcare", args="skill-name")` |
+
+---
+
+## Reporting Tools — When to Use Which
+
+| Tool | When | Output |
+|------|------|--------|
+| `commands:client-report` | Full monthly client report — SEO rankings + traffic + local + ads combined, with DataForSEO data pull | Markdown |
+| `commands:ads-report` | Ads-only monthly report from pasted Google/Meta platform data, with period-over-period comparison | HTML + Chart.js |
+| `data-analytics:performance-dashboard-builder` | Multi-source executive dashboard — GA4 + ads + rankings + revenue in one visual view | HTML + Chart.js |
 
 ---
 
@@ -135,8 +180,9 @@ Default to static HTML. Use frameworks only when dynamic features required.
 |----------|------|--------|
 | seo-research-pipeline | 120m | SEO |
 | multilanguage-content-pipeline | 180m | Content |
-| design-development-pipeline | 240m | WebDev |
+| design-production-pipeline | 240m | WebDev |
 | comprehensive-testing-pipeline | 180m | Quality |
+| advertising-audit-pipeline | 60m | Advertising |
 | strategic-planning-pipeline | 90m | Strategy |
 | api-development-pipeline | 390m | API |
 
@@ -151,25 +197,18 @@ Default to static HTML. Use frameworks only when dynamic features required.
 
 ---
 
-## Strategic Orchestrators (12 Opus Agents)
+## Strategic Agents (5 Total)
 
-**Only agents in system** - Use for complex multi-domain coordination
+**Conductor** (Sonnet — execution management):
+- `pipeline-conductor` - Stateful pipeline execution, checkpointing, retry logic
 
-All use `claude-opus-4.5` for advanced reasoning:
-- `orchestrai-master-coordinator` - Multi-system coordination
+**Opus Orchestrators** (complex reasoning only):
 - `strategic-plan-synthesizer` - Strategic planning (OPSP, EOS)
 - `financial-modeling-specialist` - Financial models & forecasting
 - `client-project-orchestrator` - Full client management
-- `simultaneous-orchestrator` - Parallel execution
-- `vaibe-builder-orchestrator` - Proven parallel patterns
-- `ai-project-predictor` - ML timeline forecasting
-- `intelligent-risk-assessor` - AI risk assessment
-- `performance-forecasting-specialist` - LSTM prediction
-- `advanced-performance-analyzer` - Multi-dimensional analysis
-- `semantic-analysis-engine` - NLP & semantics
-- `crystalline-memory-optimizer` - Memory optimization
+- `orchestrai-master-coordinator` - Complex task decomposition (note: Claude Code harness handles most orchestration directly; use this only when you want Opus reasoning in an isolated subagent context). **Requires `orchestrai-postgres` running** for `search-skills.js` — if down, fall back to `Glob(pattern=".claude/skills/[domain]/*")` for manual skill lookup.
 
-**All other capabilities** (161) available as skills. See [ORCHESTRATION-STRATEGY.md](ORCHESTRATION-STRATEGY.md)
+**All other capabilities** (169) available as skills. See [ORCHESTRATION-STRATEGY.md](ORCHESTRATION-STRATEGY.md)
 
 ---
 
@@ -177,25 +216,26 @@ All use `claude-opus-4.5` for advanced reasoning:
 
 **Effective**: February 17, 2026
 
-**Skills System** (161 capabilities):
-- Location: `.claude/skills/` (17 domains)
+**Skills System** (183 capabilities):
+- Location: `.claude/skills/` (17 namespaces: 16 domains + commands)
 - Metadata: ~4k tokens at startup
 - Full prompts: ~1.2k tokens (on-demand)
 - Token savings: 99% (4k vs 193k if all loaded)
 - Auto-discovery: Enabled
 - Progressive disclosure: Active
 
-**Strategic Agents** (12 orchestrators):
+**Strategic Agents** (4 orchestrators):
 - Location: `.claude/agents/` (Opus-tier only)
-- All loaded: ~14k tokens at startup
+- All loaded: ~5k tokens at startup
 - Complex reasoning: Advanced multi-domain coordination
 - Explicit invocation: Required (no auto-discovery)
 
-**Total startup**: ~18k tokens (91% context available for work)
+**Total startup**: ~9k tokens (96% context available for work)
 
 **Consolidation**:
-- Removed: 102 duplicate agents (now skills)
-- Kept: 12 strategic orchestrators
+- Removed: 102 duplicate agents (now skills) — Feb 2026
+- Culled: 8 redundant/overlapping agents — Apr 2026
+- Kept: 7 strategic agents (3 Sonnet conductors + 4 Opus orchestrators)
 - Backup: `.claude/agents-backup-20260217/`
 
 **See**: [ORCHESTRATION-STRATEGY.md](ORCHESTRATION-STRATEGY.md) | [SKILLS-MIGRATION-COMPLETE.md](SKILLS-MIGRATION-COMPLETE.md)
@@ -230,7 +270,7 @@ All use `claude-opus-4.5` for advanced reasoning:
 
 ## Personality Layer (SOUL.md)
 
-**Purpose**: Consistent voice across 173 capabilities (not generic AI)
+**Purpose**: Consistent voice across 189 capabilities (not generic AI)
 
 **Implementation**: Before generating significant outputs (content, strategies, reports), read these files:
 
@@ -246,12 +286,12 @@ Read("SOUL.md")  // Load identity & decision patterns
 Read("STYLE.md") // Load communication style
 
 // Step 2: Then generate output with personality
-Skill(skill="seo:seo-keyword-research")
+Skill(skill="seo", args="seo-keyword-research")
 // Output will reflect SOUL.md values and STYLE.md patterns
 
 // For client work:
 Read("souls/client-healthcare/SOUL.md")  // Load client brand voice
-Skill(skill="content:content-writer-specialist")
+Skill(skill="content", args="content-writer-specialist")
 // Output will match client's brand personality
 ```
 
@@ -284,4 +324,4 @@ Skill(skill="content:content-writer-specialist")
 
 ---
 
-**Context Efficiency**: 47k/200k tokens (24%) at session start. 153k available for work (76%). Agent metadata minimal, full prompts load on-demand.
+**Context Efficiency**: ~10k tokens at session start (SKILL.md metadata only). Full prompts load on-demand. Agent metadata minimal. 190k+ available for work.

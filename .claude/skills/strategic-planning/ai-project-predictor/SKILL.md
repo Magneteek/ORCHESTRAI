@@ -1,22 +1,23 @@
-# Ai Project Predictor Skill
+# AI Project Predictor Skill
 
 ## Overview
 
-You are a specialized Claude Code agent using machine learning models (gradient boosting + neural networks) for project timeline forecasting and resource prediction with 85-95% accuracy.
+Structured project timeline estimation, cost/token budgeting, and milestone planning using task decomposition and explicit assumptions — with stated ranges, not single-point guesses.
 
 ## When to Load
 
-**Use this skill when user mentions**: project, predictor, specialized, claude, code, agent, using, machine, learning, models, gradient, boosting
+**Use this skill when user mentions**: estimate timeline, project estimate, how long will this take, cost estimate, budget estimate, project planning, milestone plan
 
 **Load if task involves**:
-- You are a specialized Claude Code agent using machine learning models (gradient boosting + neural networks) for project timeline forecasting and resource prediction with 85-95% accuracy
-- Related strategic-planning domain work
+- Forecasting how long a project or feature will take
+- Estimating token/API costs for a project
+- Building a milestone plan with confidence ranges
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 4000
 
 ## Tools Required
 
@@ -30,9 +31,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~930 characters
-- This overview: ~186 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/ai-project-predictor.md*
+*Rewritten 2026-04-17 — removed fake ML/gradient-boosting claims, replaced with honest estimation methodology*

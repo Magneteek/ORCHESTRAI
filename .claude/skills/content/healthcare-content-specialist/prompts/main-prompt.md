@@ -218,80 +218,39 @@ Provide:
 6. Visual support recommendations
 ```
 
-**Expected Output Structure:**
-```json
-{
-  "medicalResearch": {
-    "clinicalDefinition": "Dental implant is a surgical procedure...",
-    "procedureSteps": [
-      {
-        "step": 1,
-        "name": "Initial Consultation and Imaging",
-        "duration": "1-2 hours",
-        "description": "Clinical assessment..."
-      },
-      {
-        "step": 2,
-        "name": "Implant Placement Surgery",
-        "duration": "1-2 hours per implant",
-        "description": "Surgical placement of titanium post..."
-      }
-    ],
-    "timeline": {
-      "initialHealing": "7-14 days",
-      "osseointegration": "3-6 months",
-      "crownPlacement": "1-2 weeks after integration",
-      "totalProcess": "4-8 months"
-    },
-    "successRates": {
-      "shortTerm": "98% (5 years)",
-      "longTerm": "95% (10+ years)",
-      "evidenceLevel": "A",
-      "source": "ADA Clinical Guidelines 2024"
-    },
-    "risks": [
-      {
-        "risk": "Infection",
-        "incidence": "1-5%",
-        "severity": "Moderate",
-        "management": "Antibiotics, possible removal"
-      },
-      {
-        "risk": "Nerve damage",
-        "incidence": "<1%",
-        "severity": "Rare but serious",
-        "management": "May be permanent, requires specialist evaluation"
-      }
-    ],
-    "contraindications": [
-      "Uncontrolled diabetes",
-      "Active periodontal disease",
-      "Heavy smoking (relative contraindication)",
-      "Insufficient bone density without grafting",
-      "Recent radiation therapy to jaw area",
-      "Certain medications (bisphosphonates)"
-    ],
-    "medicalTerminology": [
-      {
-        "term": "Osseointegration",
-        "definition": "Process where jawbone grows around and bonds with implant",
-        "patientFriendly": "The bonding process between bone and implant"
-      },
-      {
-        "term": "Abutment",
-        "definition": "Connector piece between implant and crown",
-        "patientFriendly": "The connector that holds the crown to the implant"
-      }
-    ],
-    "visualSupport": [
-      "Cross-section diagram of implant in jawbone",
-      "Step-by-step procedure illustration",
-      "Before/after smile photos (de-identified)",
-      "Timeline infographic"
-    ]
-  }
-}
-```
+**Medical Research Output (markdown):**
+
+**Clinical Definition**: [Plain-language definition of the procedure]
+
+**Procedure Steps**
+| Step | Name | Duration | Description |
+|------|------|----------|-------------|
+| 1 | [name] | [duration] | [description] |
+| 2 | [name] | [duration] | [description] |
+
+**Treatment Timeline**
+| Phase | Duration |
+|-------|----------|
+| Initial healing | [days] |
+| Osseointegration | [months] |
+| Crown placement | [weeks after integration] |
+| Total process | [months] |
+
+**Success Rates**: [short-term %] (5yr) / [long-term %] (10yr+) — Evidence Level [A/B/C] — Source: [guideline/study]
+
+**Risks**
+| Risk | Incidence | Severity | Management |
+|------|-----------|----------|------------|
+| [risk] | [%] | [low/moderate/serious] | [management approach] |
+
+**Contraindications**: [bulleted list]
+
+**Medical Terminology**
+| Term | Clinical Definition | Patient-Friendly Version |
+|------|--------------------|-----------------------|
+| [term] | [definition] | [plain-language version] |
+
+**Visual Support Recommendations**: [bulleted list of diagram/infographic suggestions]
 
 ### Patient Psychographic Analysis
 
@@ -311,83 +270,19 @@ Provide:
 5. Content strategy recommendations
 ```
 
-**Expected Output Structure:**
-```json
-{
-  "patientPsychographics": {
-    "segments": [
-      {
-        "name": "Anxious Pre-Procedure Patient",
-        "percentage": 45,
-        "demographics": {
-          "ageRange": "35-55",
-          "healthLiteracy": "Medium (Grade 7-8)",
-          "educationLevel": "High school to some college"
-        },
-        "primaryConcerns": [
-          "Will it hurt?",
-          "How long is recovery?",
-          "What happens during the procedure?",
-          "Can I eat normally after?"
-        ],
-        "emotionalState": {
-          "primaryEmotion": "Anxiety/Fear",
-          "secondaryEmotion": "Hope for solution",
-          "trustNeeds": "Reassurance, transparency, empathy"
-        },
-        "informationSeeking": "Detailed preparation info, step-by-step explanations",
-        "contentToneNeeds": "Reassuring, empathetic, professional, not minimizing concerns"
-      },
-      {
-        "name": "Cost-Conscious Decider",
-        "percentage": 30,
-        "demographics": {
-          "ageRange": "40-65",
-          "healthLiteracy": "Medium-High (Grade 8-10)",
-          "educationLevel": "College educated"
-        },
-        "primaryConcerns": [
-          "How much does it cost?",
-          "Is it worth it vs. alternatives?",
-          "Insurance coverage?",
-          "How long will it last?"
-        ],
-        "emotionalState": {
-          "primaryEmotion": "Practical/Analytical",
-          "secondaryEmotion": "Skepticism about value",
-          "trustNeeds": "ROI justification, transparent pricing, comparisons"
-        },
-        "informationSeeking": "Cost breakdowns, alternative comparisons, long-term value",
-        "contentToneNeeds": "Transparent, practical, ROI-focused, no hard sell"
-      }
-    ],
-    "contentRequirements": {
-      "overallReadingLevel": "Grade 7-8 (weighted average)",
-      "medicalDepth": {
-        "introduction": "High-level, non-technical",
-        "procedureExplanation": "Moderate clinical detail with analogies",
-        "risksCosts": "Transparent, complete, balanced"
-      },
-      "visualSupportNeeds": [
-        "Procedure step diagrams (for anxious patients)",
-        "Cost comparison tables (for cost-conscious)",
-        "Timeline infographics (for both segments)"
-      },
-      "toneRecommendations": {
-        "overallTone": "Empathetic professional",
-        "introTone": "Reassuring, acknowledging concerns",
-        "medicalInfoTone": "Educational but not intimidating",
-        "riskDisclosureTone": "Honest but contextualized"
-      },
-      "disclaimerRequirements": [
-        "Medical advice disclaimer (not a substitute for consultation)",
-        "Individual results vary disclaimer",
-        "Consult qualified provider recommendation"
-      ]
-    }
-  }
-}
-```
+**Patient Psychographics Output (markdown):**
+
+### Patient Segments
+| Segment | % of Audience | Age Range | Health Literacy | Primary Concerns | Emotional State | Trust Needs | Content Tone |
+|---------|--------------|-----------|----------------|-----------------|-----------------|-------------|-------------|
+| [segment name] | [%] | [range] | [Grade level] | [top concerns] | [primary emotion] | [what builds trust] | [tone guidance] |
+
+### Content Requirements
+- **Reading level**: Grade [N] (weighted average across segments)
+- **Medical depth**: Introduction = [level]; Procedure explanation = [level]; Risks/costs = [level]
+- **Visual support**: [bulleted list of diagram/infographic needs per segment]
+- **Overall tone**: [tone description]
+- **Required disclaimers**: medical advice disclaimer; individual results vary; consult qualified provider
 
 ---
 

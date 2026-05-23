@@ -1,0 +1,411 @@
+{
+  "content": [
+    {
+      "id": "7ea4bc",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "f17ff0",
+        "5834b9"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "3qm9qf"
+        ]
+      },
+      "label": "Hero Victor"
+    },
+    {
+      "id": "f17ff0",
+      "name": "container",
+      "parent": "7ea4bc",
+      "children": [
+        "2de39d",
+        "afa2fc"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "hekpk4"
+        ]
+      },
+      "label": "Main Row"
+    },
+    {
+      "id": "2de39d",
+      "name": "block",
+      "parent": "f17ff0",
+      "children": [
+        "434f86",
+        "459211",
+        "368252"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "2fpo4f"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "434f86",
+      "name": "heading",
+      "parent": "2de39d",
+      "children": [],
+      "settings": {
+        "text": "Write a compelling headline that sells",
+        "_cssGlobalClasses": [
+          "cx7i9q"
+        ],
+        "tag": "h1"
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "459211",
+      "name": "text-basic",
+      "parent": "2de39d",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gi1vh5"
+        ],
+        "tag": "p",
+        "text": "This is just placeholder text. Don’t be alarmed, this is just here to fill up space since your finalized copy isn’t ready yet. Once we have your content finalized, we’ll replace this placeholder text with your real content."
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "368252",
+      "name": "button",
+      "parent": "2de39d",
+      "children": [],
+      "settings": {
+        "text": "Call to action",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "8hz93o",
+          "btn--primary"
+        ]
+      },
+      "label": "Button"
+    },
+    {
+      "id": "afa2fc",
+      "name": "block",
+      "parent": "f17ff0",
+      "children": [
+        "ace1c4"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "n4gaiq"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "ace1c4",
+      "name": "image",
+      "parent": "afa2fc",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "_cssGlobalClasses": [
+          "bxe069"
+        ],
+        "tag": "figure"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "5834b9",
+      "name": "container",
+      "parent": "7ea4bc",
+      "children": [
+        "09f956",
+        "a91951",
+        "e55303"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "mycg6g"
+        ],
+        "tag": "ul"
+      },
+      "label": "Feature Row"
+    },
+    {
+      "id": "09f956",
+      "name": "block",
+      "parent": "5834b9",
+      "children": [
+        "9305b7",
+        "47ddda"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ocw4wi"
+        ],
+        "tag": "li"
+      },
+      "label": "Feature"
+    },
+    {
+      "id": "9305b7",
+      "name": "heading",
+      "parent": "09f956",
+      "children": [],
+      "settings": {
+        "text": "Selling Point 1",
+        "_cssGlobalClasses": [
+          "jl7meg"
+        ],
+        "tag": "h2"
+      },
+      "label": "Feature Heading"
+    },
+    {
+      "id": "47ddda",
+      "name": "text-basic",
+      "parent": "09f956",
+      "children": [],
+      "settings": {
+        "text": "This is your chance to list the three most important things that convince people to convert.",
+        "_cssGlobalClasses": [
+          "nmmug7"
+        ],
+        "tag": "p"
+      },
+      "label": "Feature Description"
+    },
+    {
+      "id": "a91951",
+      "name": "block",
+      "parent": "5834b9",
+      "children": [
+        "da55af",
+        "bd374d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ocw4wi"
+        ],
+        "tag": "li"
+      },
+      "label": "Feature"
+    },
+    {
+      "id": "da55af",
+      "name": "heading",
+      "parent": "a91951",
+      "children": [],
+      "settings": {
+        "text": "Selling Point 2",
+        "_cssGlobalClasses": [
+          "jl7meg"
+        ],
+        "tag": "h2"
+      },
+      "label": "Feature Heading"
+    },
+    {
+      "id": "bd374d",
+      "name": "text-basic",
+      "parent": "a91951",
+      "children": [],
+      "settings": {
+        "text": "This is your chance to list the three most important things that convince people to convert.",
+        "_cssGlobalClasses": [
+          "nmmug7"
+        ],
+        "tag": "p"
+      },
+      "label": "Feature Description"
+    },
+    {
+      "id": "e55303",
+      "name": "block",
+      "parent": "5834b9",
+      "children": [
+        "6ecf68",
+        "05d7d0"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ocw4wi"
+        ],
+        "tag": "li"
+      },
+      "label": "Feature"
+    },
+    {
+      "id": "6ecf68",
+      "name": "heading",
+      "parent": "e55303",
+      "children": [],
+      "settings": {
+        "text": "Selling Point 3",
+        "_cssGlobalClasses": [
+          "jl7meg"
+        ],
+        "tag": "h2"
+      },
+      "label": "Feature Heading"
+    },
+    {
+      "id": "05d7d0",
+      "name": "text-basic",
+      "parent": "e55303",
+      "children": [],
+      "settings": {
+        "text": "This is your chance to list the three most important things that convince people to convert.",
+        "_cssGlobalClasses": [
+          "nmmug7"
+        ],
+        "tag": "p"
+      },
+      "label": "Feature Description"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "3qm9qf",
+      "name": "hero-victor",
+      "settings": {
+        "_rowGap": "var(--container-gap)"
+      }
+    },
+    {
+      "id": "hekpk4",
+      "name": "hero-victor__main-row",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-2)",
+        "_gridGap": "var(--grid-gap)",
+        "_gridTemplateColumns:tablet_portrait": "var(--grid-1)"
+      }
+    },
+    {
+      "id": "2fpo4f",
+      "name": "hero-victor__content-wrapper",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_justifyContent": "center",
+        "_width": "50ch"
+      }
+    },
+    {
+      "id": "cx7i9q",
+      "name": "hero-victor__heading",
+      "settings": []
+    },
+    {
+      "id": "gi1vh5",
+      "name": "hero-victor__lede",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-l)"
+        }
+      }
+    },
+    {
+      "id": "8hz93o",
+      "name": "hero-victor__button",
+      "settings": []
+    },
+    {
+      "id": "btn--primary",
+      "name": "btn--primary",
+      "settings": [],
+      "_mappedId": "acss_import_btn--primary",
+      "modified": 1759255160,
+      "user_id": 1
+    },
+    {
+      "id": "n4gaiq",
+      "name": "hero-victor__media-wrapper",
+      "settings": []
+    },
+    {
+      "id": "bxe069",
+      "name": "hero-victor__media",
+      "settings": {
+        "_border": {
+          "radius": {
+            "top": "var(--radius)",
+            "right": "var(--radius)",
+            "bottom": "var(--radius)",
+            "left": "var(--radius)"
+          }
+        },
+        "_flexGrow": "1",
+        "_objectFit": "cover",
+        "_aspectRatio": "5/4"
+      }
+    },
+    {
+      "id": "mycg6g",
+      "name": "hero-victor__feature-row",
+      "settings": {
+        "_padding": {
+          "left": "0"
+        },
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-3)",
+        "_gridGap": "var(--grid-gap)",
+        "_gridTemplateColumns:mobile_landscape": "var(--grid-1)",
+        "_margin": {
+          "top": "0",
+          "bottom": "0"
+        },
+        "_cssCustom": ".hero-victor__feature-row {\n\tlist-style: none;\n}"
+      },
+      "modified": 1779480730,
+      "user_id": 1
+    },
+    {
+      "id": "ocw4wi",
+      "name": "hero-victor__feature",
+      "settings": {
+        "_rowGap": "calc(var(--content-gap) / 2)",
+        "_padding": {
+          "top": "var(--space-m)"
+        },
+        "_border": {
+          "width": {
+            "top": "1.5"
+          },
+          "style": "solid",
+          "color": {
+            "raw": "var(--neutral-dark)"
+          }
+        }
+      },
+      "modified": 1718740163,
+      "user_id": 1
+    },
+    {
+      "id": "jl7meg",
+      "name": "hero-victor__feature-heading",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--h3)"
+        }
+      }
+    },
+    {
+      "id": "nmmug7",
+      "name": "hero-victor__feature-description",
+      "settings": []
+    }
+  ]
+}

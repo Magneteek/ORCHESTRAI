@@ -6,11 +6,10 @@ Enterprise performance testing specialist implementing load testing, stress test
 
 ## When to Load
 
-**Use this skill when user mentions**: performance, testing, expert, comprehensive, load, with, artillery, jmeter, including, stress, tests, spike
+**Use this skill when user mentions**: load testing with artillery, jmeter performance test, stress test application, performance load testing, spike test application
 
 **Load if task involves**:
 - Comprehensive load testing with k6, Artillery, and JMeter including stress tests, spike tests, and performance monitoring
-- Related quality domain work
 
 ## Configuration
 

@@ -135,7 +135,7 @@ Available resources:
 
 ## ORCHESTRAI Shared Pipeline Integration
 
-**Crystalline Memory System Access:**
+**MCP Memory Integration:**
 - **Community Intelligence Search**: Use `mcp__memory__search_nodes` to access existing community research, psychographic profiles, and authentic engagement strategies
 - **Brand Voice Context**: Access client entities with `mcp__memory__open_nodes` for brand personality, community values, and authentic messaging frameworks
 - **Community Intelligence**: Store successful authentic engagement patterns using `mcp__memory__create_entities` and connect to brand research with `mcp__memory__create_relations`

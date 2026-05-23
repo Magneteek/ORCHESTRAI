@@ -25,6 +25,10 @@ Design system creation and component library management.
 - Breakpoints (mobile, tablet, desktop)
 - Icons and illustrations
 
+## Hard Visual Rules (never violate)
+- **No single-sided borders** — no `border-left/right/top/bottom` as decorative accents. Use full borders, background fills, or shadow instead.
+- **No gradients** — no `linear-gradient`, `radial-gradient`, or Tailwind `gradient-to-*`. Flat solid colours only.
+
 ## Example Design Tokens
 ```css
 --color-primary: #0066CC;

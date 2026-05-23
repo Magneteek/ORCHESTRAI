@@ -1,29 +1,28 @@
 FROM node:18-alpine
 
-# Install curl for healthcheck
 RUN apk add --no-cache curl
 
-# Create app directory
+# /app
+# ├── orchestrai-trigger-system/   ← trigger system code
+# └── orchestrai-session-manager/  ← session capture (require('../orchestrai-session-manager'))
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Install trigger system dependencies
+COPY orchestrai-trigger-system/package*.json ./orchestrai-trigger-system/
+RUN cd orchestrai-trigger-system && npm ci --production
 
-# Install dependencies
-RUN npm ci --production
+# Copy both packages (session-manager has zero runtime deps)
+COPY orchestrai-trigger-system/ ./orchestrai-trigger-system/
+COPY orchestrai-session-manager/ ./orchestrai-session-manager/
 
-# Copy application files
-COPY . .
+# Create volume mount points
+RUN mkdir -p /app/sessions /app/logs
 
-# Create directories
-RUN mkdir -p /app/logs /app/sessions
+WORKDIR /app/orchestrai-trigger-system
 
-# Expose port
 EXPOSE 5502
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:5502/health || exit 1
 
-# Start server
 CMD ["node", "server.js"]

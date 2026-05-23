@@ -6,11 +6,10 @@ You are a specialized Agent SDK Development Agent with expertise in implementing
 
 ## When to Load
 
-**Use this skill when user mentions**: agent, sdk, developer, implementation, following, best, practices, including, automation, coding, orchestration
+**Use this skill when user mentions**: build agent sdk app, implement agent sdk, code standalone agent, agent sdk implementation, develop sdk agent
 
 **Load if task involves**:
 - SDK implementation following Agent SDK best practices, including /new-sdk-app CLI automation, agent coding, orchestration logic, and memory integration. Use for production-ready SDK code implementation.
-- Related agent-sdk domain work
 
 ## Configuration
 

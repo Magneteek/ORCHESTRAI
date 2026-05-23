@@ -1,0 +1,76 @@
+# Hero Section Victor
+# Light-bg split hero: H1+lede+CTA left, image right, 3 selling-point features below.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: hero-section-victor
+version: "2.3.5"
+description: |
+  Light-background hero. Top row: content column left (H1 heading, lede, CTA button)
+  and feature image right. Bottom row: three selling-point features in an unordered list
+  (each with a short heading and description paragraph).
+
+slots:
+
+  # ── Top row: content ──────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: hero-victor__heading
+    description: H1 hero heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: hero-victor__lede
+    description: Intro paragraph below the heading
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: hero-victor__button
+    description: CTA button label
+
+  cta_link:
+    type: link
+    required: false
+    target_class: hero-victor__button
+    description: "CTA button URL: { url: '...', type?: 'external' }"
+
+  # ── Top row: image ────────────────────────────────────────────────────────
+
+  media:
+    type: media
+    required: false
+    target_class: hero-victor__media
+    description: Hero image shown to the right of the heading
+
+  # ── Bottom row: selling points (array) ────────────────────────────────────
+
+  features:
+    type: array
+    required: false
+    min: 3
+    max: 3
+    template_label: "Feature"
+    description: Three selling-point items displayed in a row below the hero split
+    item_slots:
+      heading:
+        type: string
+        required: true
+        max_length: 60
+        target_class: hero-victor__feature-heading
+        description: Short feature heading (e.g. "No Lock-in Contracts")
+      description:
+        type: string
+        required: false
+        max_length: 160
+        target_class: hero-victor__feature-description
+        description: One-sentence explanation of the feature
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

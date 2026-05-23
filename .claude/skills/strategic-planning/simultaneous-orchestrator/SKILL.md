@@ -2,25 +2,26 @@
 
 ## Overview
 
-You are a specialized Claude Code agent for coordinating parallel execution of multiple agent streams with real-time state management and conflict resolution.
+Plans parallel execution of independent tasks: decomposes work into streams, maps dependencies, and produces a batched execution plan showing what can launch simultaneously vs what must wait.
 
 ## When to Load
 
-**Use this skill when user mentions**: simultaneous, orchestrator, coordinating, parallel, execution, multiple, agent, streams, with, real, time, state
+**Use this skill when user mentions**: parallel execution, run in parallel, simultaneous, multiple streams, parallelize, batch execution, execution plan
 
 **Load if task involves**:
-- coordinating parallel execution of multiple agent streams with real-time state management and conflict resolution
-- Related strategic-planning domain work
+- Planning which tasks can run at the same time
+- Decomposing a complex project into parallel batches
+- Optimising a workflow by eliminating unnecessary sequential steps
 
 ## Configuration
 
-**Model**: opus
+**Model**: sonnet
 **Color**: cyan
-
+**Thinking budget**: 3000
 
 ## Tools Required
 
-Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task
+Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, Skill
 
 ## Full Prompt
 
@@ -30,9 +31,4 @@ Load: prompts/main-prompt.md
 
 ---
 
-**Token Efficiency**:
-- Full agent definition: ~790 characters
-- This overview: ~158 characters (**80% reduction**)
-- Loads full content only when needed (progressive disclosure)
-
-*Migrated from .claude/agents/simultaneous-orchestrator.md*
+*Rewritten 2026-04-17 — removed fake Redis/WebSocket/geometric-routing claims, kept real parallelisation methodology*

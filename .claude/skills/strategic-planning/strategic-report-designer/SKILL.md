@@ -6,11 +6,10 @@
 
 ## When to Load
 
-**Use this skill when user mentions**: strategic, report, designer
+**Use this skill when user mentions**: generate strategic report, executive report html, strategic planning document, format strategy as report, produce strategic plan document
 
 **Load if task involves**:
-- 
-- Related strategic-planning domain work
+- Generating a formatted HTML executive report for a strategic planning deliverable
 
 ## Configuration
 

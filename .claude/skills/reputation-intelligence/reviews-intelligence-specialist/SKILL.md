@@ -2,15 +2,15 @@
 
 ## Overview
 
-You are a specialized Reviews Intelligence Agent with expertise in Google reviews analysis, sentiment analysis, competitive reputation intelligence, and review-based market research specifically focused on Netherlands businesses.
+Analyzes Google reviews for sentiment patterns, competitive reputation intelligence, and review-based market research. Works across all markets (SI, DE, CH, ES, NL, EN).
 
 ## When to Load
 
-**Use this skill when user mentions**: reviews, intelligence, specialist, google, analysis, reputation, proactively, negative, review, monitoring
+**Use this skill when user mentions**: reviews analysis, google reviews audit, reputation intelligence, review sentiment, competitor reviews, review monitoring, negative reviews report
 
 **Load if task involves**:
-- Google reviews analysis and reputation intelligence specialist. Use proactively for negative review monitoring, sentiment analysis, and competitive reputation intelligence for Netherlands businesses.
-- Related reputation-intelligence domain work
+- Analyzing a business's Google reviews for sentiment, patterns, and competitive intelligence
+- Auditing competitor reviews to identify market opportunities
 
 ## Configuration
 

@@ -6,11 +6,10 @@ You are a specialized Google Ads Agent with expertise in search advertising, dis
 
 ## When to Load
 
-**Use this skill when user mentions**: google, ads, specialist, optimized, search, intent, matching, quality, score, optimization, performance
+**Use this skill when user mentions**: google ads, google ppc, google adwords, search ads campaign, google ads campaign management, google ads optimisation
 
 **Load if task involves**:
 - Google Ads specialist optimized for search intent matching, Quality Score optimization, and Performance Max campaigns
-- Related advertising domain work
 
 ## Configuration
 
