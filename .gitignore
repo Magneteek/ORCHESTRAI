@@ -139,3 +139,18 @@ Orchestrai-frontend/dist/
 # Build cache files
 *.pack.old
 *.pack.gz.old
+
+# Next.js build output (any app in this repo)
+.next/
+
+# Editor / workspace config
+.obsidian/
+
+# Duplicated env files created by macOS ("Finder" copies) - never commit secrets
+.env *
+*.env *
+.env.*.local
+
+# Pipeline run artifacts (client work product, mirrors the projects/ rule above)
+pipeline-runs/
+*-snapshot.md
