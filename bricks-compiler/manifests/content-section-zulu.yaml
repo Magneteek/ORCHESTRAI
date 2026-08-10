@@ -1,0 +1,79 @@
+# Content Section Zulu
+# 2-column intro row: left has oversized paragraph + h2 accent + body text + icon CTA link.
+# Below: full-width image slider with prev/next controls (4 slides, 4-per-page desktop).
+# Good for: portfolio/case study galleries, team photo carousels, product image rows.
+
+component: content-section-zulu
+version: "2.3.5"
+description: |
+  2-column content top: large pull-quote heading (styled as p) + accent h2, body text,
+  icon text-link CTA. Below: synced image slider (4-up desktop, 2 mobile, prev/next nav).
+
+slots:
+
+  # ── Left column ────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 200
+    target_class: content-section-zulu__heading
+    description: |
+      Large pull-quote paragraph — styled visually as an oversized heading but rendered
+      as <p>. Aim for 2–4 sentences of punchy text.
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: content-section-zulu__accent-heading
+    description: Small uppercase accent label — rendered as h2 (semantic anchor). Keep short.
+
+  main_text:
+    type: html
+    required: false
+    target_class: content-section-zulu__main-text
+    description: Body text paragraphs in the right column
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "65bade"
+    description: Icon link CTA label (e.g. "Lees meer", "Bekijk alle projecten")
+
+  cta_link:
+    type: link
+    required: false
+    target_id: "65bade"
+    description: "URL for the CTA link — { url: '/page/' }"
+
+  # ── Image slider ────────────────────────────────────────────────────────────
+  # 4 fixed slide image slots. Images are shown 4-per-page on desktop, 2 on mobile.
+  # Targeted by element ID (all share the same label "Slide Image").
+
+  slide_1:
+    type: media
+    required: false
+    target_id: "821f73"
+    description: Slider image 1 (aspect ratio 4/3)
+
+  slide_2:
+    type: media
+    required: false
+    target_id: "a8107c"
+    description: Slider image 2
+
+  slide_3:
+    type: media
+    required: false
+    target_id: "7482f8"
+    description: Slider image 3
+
+  slide_4:
+    type: media
+    required: false
+    target_id: "87e5ec"
+    description: Slider image 4
+
+strip_elements: []

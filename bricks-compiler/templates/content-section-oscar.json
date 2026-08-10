@@ -1,0 +1,351 @@
+{
+  "content": [
+    {
+      "id": "c8d478",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "837e01",
+        "448948",
+        "72ff5c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "3jodni"
+        ]
+      },
+      "label": "Content Section Oscar"
+    },
+    {
+      "id": "837e01",
+      "name": "container",
+      "parent": "c8d478",
+      "children": [
+        "0be7ee"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dliabf",
+          "xgmzei"
+        ]
+      },
+      "label": "Intro Alpha"
+    },
+    {
+      "id": "448948",
+      "name": "container",
+      "parent": "c8d478",
+      "children": [
+        "06dacf",
+        "9a0c39"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "tuukwm"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "72ff5c",
+      "name": "container",
+      "parent": "c8d478",
+      "children": [
+        "56c6d5",
+        "2e39be",
+        "32cf42"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oddjai"
+        ]
+      },
+      "label": "Image Group Kilo"
+    },
+    {
+      "id": "0be7ee",
+      "name": "heading",
+      "parent": "837e01",
+      "children": [],
+      "settings": {
+        "text": "A Big Bold Headline Goes Here",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "tkbujj",
+          "sauwyz"
+        ]
+      }
+    },
+    {
+      "id": "06dacf",
+      "name": "block",
+      "parent": "448948",
+      "children": [
+        "705647",
+        "53a353"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "mbxigj"
+        ]
+      },
+      "label": "Left"
+    },
+    {
+      "id": "9a0c39",
+      "name": "block",
+      "parent": "448948",
+      "children": [
+        "4eee5e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "nocrkk"
+        ]
+      },
+      "label": "Right"
+    },
+    {
+      "id": "56c6d5",
+      "name": "div",
+      "parent": "72ff5c",
+      "children": [
+        "a848af"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "22lot6"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "2e39be",
+      "name": "div",
+      "parent": "72ff5c",
+      "children": [
+        "b23e55"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "22lot6"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "32cf42",
+      "name": "div",
+      "parent": "72ff5c",
+      "children": [
+        "6286da"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "22lot6"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "705647",
+      "name": "text-basic",
+      "parent": "06dacf",
+      "children": [],
+      "settings": {
+        "text": "This is a larger marketing headline that introduces the next column.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "sbnwlt"
+        ]
+      },
+      "label": "Marketing Headline"
+    },
+    {
+      "id": "53a353",
+      "name": "div",
+      "parent": "06dacf",
+      "children": [
+        "189b82"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kwdtjx"
+        ]
+      },
+      "label": "Icon Link Alpha Wrapper"
+    },
+    {
+      "id": "4eee5e",
+      "name": "text",
+      "parent": "9a0c39",
+      "children": [],
+      "settings": {
+        "text": "<h3>Point #1</h3><p>Body text.</p>",
+        "_cssGlobalClasses": [
+          "aprwbq"
+        ]
+      }
+    },
+    {
+      "id": "a848af",
+      "name": "image",
+      "parent": "56c6d5",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5scaeg"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure",
+        "caption": "custom",
+        "captionCustom": "Caption this photo"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "b23e55",
+      "name": "image",
+      "parent": "2e39be",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5scaeg"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "caption": "custom",
+        "captionCustom": "Caption this photo"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "6286da",
+      "name": "image",
+      "parent": "32cf42",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "5scaeg"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "caption": "custom",
+        "captionCustom": "Caption this photo"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "189b82",
+      "name": "text-link",
+      "parent": "53a353",
+      "children": [],
+      "settings": {
+        "text": "Text link",
+        "_cssGlobalClasses": [
+          "caehza"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        },
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "height": "var(--icon-size)",
+          "width": "var(--icon-size)",
+          "fill": {
+            "raw": "var(--icon-color)"
+          }
+        }
+      },
+      "label": "Icon Link Alpha (CSS)"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "3jodni",
+      "name": "fr-content-section-oscar"
+    },
+    {
+      "id": "dliabf",
+      "name": "fr-intro"
+    },
+    {
+      "id": "xgmzei",
+      "name": "fr-intro-alpha"
+    },
+    {
+      "id": "tkbujj",
+      "name": "fr-intro-alpha__heading"
+    },
+    {
+      "id": "sauwyz",
+      "name": "fr-content-section-oscar__heading"
+    },
+    {
+      "id": "tuukwm",
+      "name": "fr-content-section-oscar__inner"
+    },
+    {
+      "id": "mbxigj",
+      "name": "fr-content-section-oscar__inner-left"
+    },
+    {
+      "id": "sbnwlt",
+      "name": "fr-content-section-oscar__marketing-headline"
+    },
+    {
+      "id": "kwdtjx",
+      "name": "fr-icon-link-alpha-wrapper"
+    },
+    {
+      "id": "caehza",
+      "name": "fr-icon-link-alpha"
+    },
+    {
+      "id": "nocrkk",
+      "name": "fr-content-section-oscar__inner-right"
+    },
+    {
+      "id": "aprwbq",
+      "name": "fr-content-section-oscar__main-content"
+    },
+    {
+      "id": "oddjai",
+      "name": "fr-image-group-kilo"
+    },
+    {
+      "id": "22lot6",
+      "name": "fr-image-group-kilo__media-wrapper"
+    },
+    {
+      "id": "5scaeg",
+      "name": "fr-image-group-kilo__media"
+    }
+  ]
+}

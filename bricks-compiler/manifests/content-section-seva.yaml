@@ -1,0 +1,197 @@
+# Content Section Seva
+# Dark background section. Large heading + body text top-left (on a 12-col grid,
+# heading spans cols 1–8, content spans cols 7–12 on row 2).
+# Below: auto-scrolling infinite carousel of person cards (photo + name + title).
+# Cards are fixed-width (min(33vw, 220px)) and loop continuously.
+# Best for: client logos, team photos, quick social proof faces.
+
+component: content-section-seva
+version: "2.3.5"
+description: |
+  Dark-bg section with overlapping grid layout. Large H1-scale heading top-left,
+  body text offset right (row 2). Below: breakout auto-scrolling infinite carousel
+  of person cards (photo + name + title). 8 slides in template — compiler fills all 8.
+
+slots:
+
+  # ── Heading + body ─────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 120
+    target_class: content-section-seva__heading
+    description: Large H2 (scaled to ~1.5× --h1). Aim for 2–3 lines. Light text on dark bg.
+
+  content:
+    type: html
+    required: false
+    target_class: content-section-seva__content
+    description: Body text below/right of heading. Larger font-size (--text-l).
+
+  # ── Carousel slides ────────────────────────────────────────────────────────
+  # 8 fixed person card slots. Each card: photo + name + title.
+  # Targeted by element ID because all cards share the same CSS classes.
+  # The slider loops infinitely (autoScroll). All 8 slots should be filled.
+
+  slide_1_image:
+    type: media
+    required: false
+    target_id: "ddef21"
+    description: Person photo 1 (square crop recommended)
+
+  slide_1_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "cc1066"
+    description: Person name 1
+
+  slide_1_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "9e5522"
+    description: Person role/title 1
+
+  slide_2_image:
+    type: media
+    required: false
+    target_id: "cc3792"
+    description: Person photo 2
+
+  slide_2_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "2267cc"
+    description: Person name 2
+
+  slide_2_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "174ab2"
+    description: Person role/title 2
+
+  slide_3_image:
+    type: media
+    required: false
+    target_id: "1e1b1f"
+    description: Person photo 3
+
+  slide_3_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "0b1fcd"
+    description: Person name 3
+
+  slide_3_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "7abd55"
+    description: Person role/title 3
+
+  slide_4_image:
+    type: media
+    required: false
+    target_id: "07a570"
+    description: Person photo 4
+
+  slide_4_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "f10420"
+    description: Person name 4
+
+  slide_4_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "5b653d"
+    description: Person role/title 4
+
+  slide_5_image:
+    type: media
+    required: false
+    target_id: "096b3a"
+    description: Person photo 5
+
+  slide_5_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "46de4e"
+    description: Person name 5
+
+  slide_5_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "c9e070"
+    description: Person role/title 5
+
+  slide_6_image:
+    type: media
+    required: false
+    target_id: "3b9680"
+    description: Person photo 6
+
+  slide_6_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "ab31ec"
+    description: Person name 6
+
+  slide_6_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "b6ed25"
+    description: Person role/title 6
+
+  slide_7_image:
+    type: media
+    required: false
+    target_id: "1300c2"
+    description: Person photo 7
+
+  slide_7_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "9d1aa9"
+    description: Person name 7
+
+  slide_7_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "9896a2"
+    description: Person role/title 7
+
+  slide_8_image:
+    type: media
+    required: false
+    target_id: "71bcde"
+    description: Person photo 8
+
+  slide_8_name:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "eb6a66"
+    description: Person name 8
+
+  slide_8_title:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "e3ed7d"
+    description: Person role/title 8
+
+strip_elements: []

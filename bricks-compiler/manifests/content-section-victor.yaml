@@ -1,0 +1,33 @@
+# Content Section Victor
+# Clean 2-column split: image LEFT (order:-1 puts it first), heading + body text RIGHT.
+# Auto-2 grid — equal columns. Image spans full height of content at 16/7 aspect ratio.
+# Best for: about sections, service descriptions, feature explanations with visual proof.
+
+component: content-section-victor
+version: "2.3.5"
+description: |
+  2-column split: image on the left (visual-first order), H2 heading + rich text body
+  on the right. Equal-width columns, auto-responsive (stacks on mobile).
+
+slots:
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: content-section-victor__heading
+    description: Section H2 heading
+
+  content:
+    type: html
+    required: true
+    target_class: content-section-victor__content
+    description: Body paragraphs on the right side
+
+  media:
+    type: media
+    required: false
+    target_class: content-section-victor__media
+    description: Image on the left (rendered 16/7 aspect ratio, object-fit cover)
+
+strip_elements: []

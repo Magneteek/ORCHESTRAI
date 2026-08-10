@@ -1,0 +1,380 @@
+{
+  "content": [
+    {
+      "id": "8ffaea",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "90e131",
+        "436a77"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vbg0ws",
+          "acss_import_bg--ultra-light"
+        ]
+      },
+      "label": "Content Section Whiskey"
+    },
+    {
+      "id": "90e131",
+      "name": "container",
+      "parent": "8ffaea",
+      "children": [
+        "9e0fba",
+        "9ecfd5",
+        "098f4c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dliabf",
+          "xgmzei"
+        ]
+      },
+      "label": "Intro Alpha"
+    },
+    {
+      "id": "436a77",
+      "name": "block",
+      "parent": "8ffaea",
+      "children": [
+        "dd6623",
+        "725131"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "article",
+        "_cssGlobalClasses": [
+          "dvmkaf"
+        ]
+      },
+      "label": "Letter"
+    },
+    {
+      "id": "9e0fba",
+      "name": "heading",
+      "parent": "90e131",
+      "children": [],
+      "settings": {
+        "text": "Introduce the personal letter",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "tkbujj"
+        ]
+      }
+    },
+    {
+      "id": "9ecfd5",
+      "name": "text-basic",
+      "parent": "90e131",
+      "children": [],
+      "settings": {
+        "text": "Accent heading",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "blgfqd"
+        ],
+        "tag": "p"
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "098f4c",
+      "name": "text-basic",
+      "parent": "90e131",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum dolor sit amet",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "dizast"
+        ],
+        "tag": "p"
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "dd6623",
+      "name": "text",
+      "parent": "436a77",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text.</p>",
+        "_cssGlobalClasses": [
+          "034bam"
+        ]
+      },
+      "label": "Content"
+    },
+    {
+      "id": "725131",
+      "name": "block",
+      "parent": "436a77",
+      "children": [
+        "72af7f",
+        "c0f1c9",
+        "8d278f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "9szq67"
+        ]
+      },
+      "label": "Author"
+    },
+    {
+      "id": "72af7f",
+      "name": "image",
+      "parent": "725131",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true
+        },
+        "_cssGlobalClasses": [
+          "vgedcb"
+        ],
+        "tag": "figure"
+      },
+      "label": "Author Signature",
+      "themeStyles": []
+    },
+    {
+      "id": "c0f1c9",
+      "name": "block",
+      "parent": "725131",
+      "children": [
+        "35cc37"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "uhq2ao"
+        ]
+      },
+      "label": "Author Avatar Wrapper"
+    },
+    {
+      "id": "8d278f",
+      "name": "block",
+      "parent": "725131",
+      "children": [
+        "34ee37",
+        "e1f8b4"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "7e6xgv"
+        ]
+      },
+      "label": "Author Identity"
+    },
+    {
+      "id": "35cc37",
+      "name": "image",
+      "parent": "c0f1c9",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "qi7q3c"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure"
+      },
+      "label": "Author Avatar",
+      "themeStyles": []
+    },
+    {
+      "id": "34ee37",
+      "name": "text-basic",
+      "parent": "8d278f",
+      "children": [],
+      "settings": {
+        "text": "Author Name",
+        "_cssGlobalClasses": [
+          "o3fd34"
+        ],
+        "tag": "p"
+      },
+      "label": "Author Name"
+    },
+    {
+      "id": "e1f8b4",
+      "name": "text-basic",
+      "parent": "8d278f",
+      "children": [],
+      "settings": {
+        "text": "Founder",
+        "_cssGlobalClasses": [
+          "tbw727"
+        ],
+        "tag": "p"
+      },
+      "label": "Author Title"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "acss_import_bg--ultra-light",
+      "name": "bg--ultra-light",
+      "settings": [],
+      "category": "acss",
+      "_categoryData": {
+        "id": "acss",
+        "name": "Automatic.css"
+      }
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "vbg0ws",
+      "name": "content-section-whiskey",
+      "settings": {
+        "_rowGap": "var(--container-gap)"
+      },
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "dliabf",
+      "name": "fr-intro",
+      "settings": {},
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "xgmzei",
+      "name": "fr-intro-alpha",
+      "settings": {
+        "_alignItems": "center",
+        "_typography": {
+          "text-align": "center"
+        },
+        "_rowGap": "var(--content-gap)"
+      },
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "tkbujj",
+      "name": "fr-intro-alpha__heading",
+      "settings": {},
+      "modified": 1779451876,
+      "user_id": 1
+    },
+    {
+      "id": "blgfqd",
+      "name": "fr-intro-alpha__accent-heading",
+      "settings": {}
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": {}
+    },
+    {
+      "id": "dizast",
+      "name": "fr-intro-alpha__lede",
+      "settings": {}
+    },
+    {
+      "id": "dvmkaf",
+      "name": "content-section-whiskey__letter",
+      "settings": {},
+      "modified": 1735401869,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "034bam",
+      "name": "content-section-whiskey__content",
+      "settings": {},
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "9szq67",
+      "name": "content-section-whiskey__author",
+      "settings": {},
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "vgedcb",
+      "name": "content-section-whiskey__author-signature",
+      "settings": {},
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "uhq2ao",
+      "name": "content-section-whiskey__author-avatar-wrapper",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "qi7q3c",
+      "name": "content-section-whiskey__author-avatar",
+      "settings": {},
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "7e6xgv",
+      "name": "content-section-whiskey__author-identity",
+      "settings": {},
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "o3fd34",
+      "name": "content-section-whiskey__author-name",
+      "settings": {
+        "_typography": {
+          "font-weight": "700"
+        }
+      },
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "tbw727",
+      "name": "content-section-whiskey__author-title",
+      "settings": {
+        "_typography": {
+          "font-style": "italic"
+        }
+      },
+      "modified": 1735399775,
+      "user_id": 1,
+      "_exists": false
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+# Contact Section Delta
+# 2-column: map LEFT (edge-to-edge, bleeds to viewport edge), info RIGHT.
+# Similar to Bravo but the map extends to the viewport edge (min-width: 50vw).
+# Good for local service businesses where location is the main trust signal.
+
+component: contact-section-delta
+version: "2.3.5"
+description: |
+  2-column contact section. Left: full-bleed map extending to the viewport edge
+  (min-height 50rem, min-width 50vw). Right: H2 heading + address/phone/email rows.
+
+slots:
+
+  # ── Heading ────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 60
+    target_class: fr-contact-grid-delta__heading
+    description: Section H2 heading (e.g. "Contact Us", "Vind ons")
+
+  # ── Map ─────────────────────────────────────────────────────────────────────
+
+  map_address:
+    type: insert
+    required: false
+    path: "addresses.0.address"
+    target_id: "5bac03"
+    description: Map location string (e.g. "Amsterdam, Netherlands"). Replaces default lat/lng.
+
+  # ── Contact Info ───────────────────────────────────────────────────────────
+  # Three fixed info rows. Targeted by element ID (all share same CSS classes).
+
+  address_text:
+    type: string
+    required: false
+    max_length: 120
+    target_id: "c0d276"
+    description: Address text
+
+  phone_text:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "01016b"
+    description: Phone number display text
+
+  phone_link:
+    type: link
+    required: false
+    target_id: "01016b"
+    description: "Phone tel: link — { url: 'tel:+31616163282' }"
+
+  email_text:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "97bfbd"
+    description: Email address display text
+
+  email_link:
+    type: link
+    required: false
+    target_id: "97bfbd"
+    description: "Email mailto: link — { url: 'mailto:info@example.com' }"
+
+# ── Strip builder-only elements ────────────────────────────────────────────────
+strip_elements: []

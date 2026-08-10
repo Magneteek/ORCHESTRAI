@@ -1,0 +1,99 @@
+# Pricing Section Kilo
+# Split-layout: 2-col intro left + fr-tabs plan sidebar right (3 plans, dark panel).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: pricing-section-kilo
+version: "2.3.5"
+description: |
+  2-column intro (fr-intro-echo): heading+accent left, lede right. Below: a wide
+  fr-tabs component (fr-pricing-tabs-kilo) with a vertical sidebar nav (plan names +
+  icon + optional helper text) and a dark content panel per plan showing heading,
+  price, 8-item feature list, and two CTA buttons (monthly + annual).
+  NOTE: Per-plan feature items are not slot-fillable (nested arrays not supported).
+  Edit the 8 features per plan manually in Bricks after pasting.
+  NOTE: The two CTA buttons per plan ("Select Monthly" / "Select Annual") use site-level
+  class rgn186 and btn--white — not slot-fillable. Update button text/links in Bricks.
+  NOTE: Plan choice icons (SVG) are not slot-fillable.
+
+slots:
+
+  # ── Intro (fr-intro-echo: 2-col split) ───────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-echo__heading
+    description: H2 section heading (left column)
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-echo__accent-heading
+    description: Small accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-echo__lede
+    description: Supporting paragraph (right column)
+
+  # ── Helper text + footer notice ───────────────────────────────────────────
+
+  helper_text:
+    type: string
+    required: false
+    max_length: 160
+    target_class: fr-pricing-tabs-kilo__helper-text
+    description: Guidance text below the plan nav list (desktop only, hidden mobile)
+
+  footer_notice:
+    type: html
+    required: false
+    max_length: 160
+    target_label: "Notice"
+    description: "Small notice below the pricing grid (e.g. \"Need help? <a href='#'>Contact us.</a>\")"
+
+  # ── Pricing plans (compound array: nav label + content panel) ────────────
+
+  plans:
+    type: compound_array
+    required: false
+    min: 2
+    max: 3
+    nav_template: "Plan Choice"
+    content_template: "Plan"
+    description: |
+      Sidebar nav items paired with their content panels (fr-tabs compound array).
+      Each plan: a nav label (shown in sidebar) + heading + price + price term in the panel.
+    item_slots:
+      tab_label:
+        type: string
+        required: true
+        max_length: 40
+        target_class: fr-pricing-tabs-kilo__plan-choice-label
+        description: Plan name shown in the sidebar nav (e.g. "Basic", "Intermediate", "Advanced")
+      plan_heading:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-pricing-tabs-kilo__plan-heading
+        description: H3 heading inside the content panel
+      price:
+        type: string
+        required: true
+        max_length: 20
+        target_class: fr-pricing-tabs-kilo__price
+        description: "Price value shown large (e.g. \"$98\", \"$198\")"
+      price_term:
+        type: string
+        required: false
+        max_length: 10
+        target_class: fr-pricing-tabs-kilo__price-term
+        description: "Price period label (e.g. \"/mo\", \"/yr\")"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

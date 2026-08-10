@@ -1,125 +1,241 @@
 {
-  "page_title": "Google Review Verwijdering — DeleteReviews.nl",
-  "slug": "google-review-verwijdering",
-  "source_url": "https://deletereviews.nl",
-  "_notes": "Sections covered: REVIEW TYPES + PROCESS + NO CURE NO PAY + RESULTS. Templates missing for: service hero, proof bar, pricing, testimonials, FAQ, final CTA.",
+  "page_title": "DeleteReviews.nl — Service Page (Google Review Verwijdering)",
+  "slug": "/google-review-verwijdering/",
+  "source_url": "https://deletereviews.nl/google-review-verwijdering/",
+
+  "_notes": [
+    "Copy source: service-page-google-review-verwijdering-WORDPRESS.html (pipeline) + service-page-DESIGNED.html (visual).",
+    "MANUAL — Hero: Right-side sticky form card must be added in Bricks (Shortcode element with [fluentform id='1'], styled as dark glass card from service-page-DESIGNED.html).",
+    "MANUAL — Process: Mid-page form block ('Klaar voor stap 1?') below the 3-step grid must be built manually in Bricks.",
+    "MANUAL — NCNP: Left-side visual panel (dark navy card with trustpilot-guarantee.svg + 94% stat) must be added manually alongside the content-section-golf text.",
+    "MANUAL — Pricing: Guarantee bar below the two price cards ('Geen resultaat? Geen factuur.') must be added manually in Bricks.",
+    "MANUAL — Results: Dark navy background must be set on the feature section in Bricks. Caveat text ('De 6% zaken waarbij...') must be added as a rich text element manually below the grid.",
+    "MANUAL — Final CTA: Replace the cta-section-sierra media slot with a Shortcode element ([fluentform id='1']) in Bricks.",
+    "Testimonials are marked placeholder in source — replace with real quotes before publishing.",
+    "Proof bar badge: add Google logo image manually in Bricks (badge_logo slot not filled here).",
+    "Review Types: 7 feature cards exceed the template design max of 6 — check grid layout in Bricks and adjust column count if needed."
+  ],
 
   "sections": [
 
     {
-      "component": "feature-section-foxtrot",
-      "_label": "REVIEW TYPES",
+      "component": "hero-section-north",
+      "_source": "svc-hero — H1 + sub + trust items + AIO intro; dark navy bg; form card RIGHT is MANUAL",
       "slots": {
-        "accent_heading": "Welke reviews",
+        "heading": "Google Reviews Verwijderen",
+        "accent_heading": "Nep-reviews verwijderd",
+        "lede": "Neppe of onterechte review verwijderd door specialisten — 94% slagingskans, No Cure No Pay. Gratis analyse binnen 24 uur.",
+        "primary_cta_text": "Start gratis analyse",
+        "primary_cta_link": { "url": "#analyse" },
+        "secondary_cta_text": "Of bel direct: +31 616 163 282",
+        "secondary_cta_link": { "url": "tel:+31616163282" },
+        "bottom_lede": "<p>DeleteReviews.nl verwijdert neppe en onterechte Google-reviews voor bedrijfseigenaren in Nederland. Wij werken uitsluitend op basis van No Cure No Pay: u betaalt alleen als de review daadwerkelijk wordt verwijderd. Met een slagingskans van 94% op aangenomen zaken en meer dan 2.500 behandelde zaken zijn wij de gespecialiseerde keuze voor professionele review verwijdering.</p>",
+        "stats": [
+          { "value": "94%",            "description": "slagingskans bij verwijdering" },
+          { "value": "2.500+",         "description": "succesvol behandelde zaken" },
+          { "value": "No Cure No Pay", "description": "u betaalt alleen bij succes" }
+        ]
+      }
+    },
+
+    {
+      "component": "social-proof-alpha",
+      "_source": "Proof bar — 4 stats from service-page-DESIGNED.html; badge_logo must be added manually",
+      "slots": {
+        "badge_text": "Beoordeeld op",
+        "badge_reviews": "4.9 · 200+ reviews",
+        "stats": [
+          { "value": "94%",    "description": "slagingskans bij verwijdering" },
+          { "value": "2.500+", "description": "succesvol behandelde zaken" },
+          { "value": "7–14",   "description": "dagen gemiddelde doorlooptijd" },
+          { "value": "€0",     "description": "bij geen resultaat — No Cure No Pay" }
+        ]
+      }
+    },
+
+    {
+      "component": "content-section-golf",
+      "_source": "Welke reviews — 7-item list from WP HTML; 7 cards exceeds foxtrot max-6 so using rich-text section; MANUAL: convert to card grid in Bricks if desired",
+      "slots": {
         "heading": "Welke reviews kunnen worden verwijderd?",
-        "lede": "Niet elke negatieve review komt in aanmerking — maar de volgende zes typen wel. Twijfelt u? De gratis analyse geeft u binnen 24 uur uitsluitsel.",
-        "features": [
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/nep-reviews.svg" },
-            "heading": "Nep reviews",
-            "text": "Beoordelingen van personen die aantoonbaar nooit klant bij u zijn geweest."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/concurrenten.svg" },
-            "heading": "Reviews van concurrenten",
-            "text": "Geplaatst met een aantoonbaar zakelijk motief om uw reputatie te schaden."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/ex-werknemers.svg" },
-            "heading": "Reviews van ex-werknemers",
-            "text": "Geplaatst met persoonlijk motief na een arbeidsconflict of ontslag."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/lasterlijk.svg" },
-            "heading": "Lasterlijke inhoud",
-            "text": "Aantoonbaar onjuiste beweringen die uw bedrijfsreputatie schaden (art. 6:162 BW)."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/beleid.svg" },
-            "heading": "Beleidsovertredingen",
-            "text": "Haatdragend taalgebruik, bedreigingen, spam of off-topic inhoud die Google's regels schendt."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/aanval.svg" },
-            "heading": "Gecoördineerde aanvallen",
-            "text": "Meerdere nep-reviews in korte tijd, geplaatst vanuit gelieerde of gekochte accounts."
-          }
-        ],
-        "primary_cta_text": "Vraag gratis analyse aan",
-        "primary_cta_link": { "url": "#analyse", "type": "internal" },
-        "secondary_cta_text": "Meer over nep reviews",
-        "secondary_cta_link": { "url": "https://deletereviews.nl/google-reviews/nepreviews-verwijderen/", "type": "internal" }
+        "content": "<p>Niet elke negatieve review voldoet aan Google's richtlijnen. De volgende typen komen in aanmerking voor professionele verwijdering:</p><ul><li><strong>Nep reviews</strong> — beoordelingen van personen die nooit klant bij u zijn geweest</li><li><strong>Reviews van concurrenten of ex-werknemers</strong> — geplaatst met een aantoonbaar zakelijk of persoonlijk motief</li><li><strong>Lasterlijke inhoud</strong> — aantoonbaar onjuiste beweringen die uw reputatie schaden</li><li><strong>Reviews die Google's beleidsregels schenden</strong> — haatdragend taalgebruik, bedreigingen, spam of off-topic inhoud</li><li><strong>Privacyschendingen</strong> — reviews die vertrouwelijke of persoonsgebonden informatie bevatten</li><li><strong>Ongegronde klachten van niet-klanten</strong> — beoordelaars zonder aantoonbare zakelijke relatie met uw bedrijf</li><li><strong>Gecoördineerde aanvalscampagnes</strong> — meerdere nep-reviews in korte tijd geplaatst vanuit gelieerde accounts</li></ul><p>Twijfelt u of uw review in aanmerking komt? Vraag een <a href=\"#analyse\">gratis analyse aan</a> — binnen 24 uur ontvangt u een eerlijk en onderbouwd advies.</p>"
       }
     },
 
     {
       "component": "feature-section-foxtrot",
-      "_label": "PROCESS",
+      "_source": "Hoe werkt het proces — 3 steps from WP HTML; mid-page form block is MANUAL in Bricks",
       "slots": {
+        "heading": "Hoe werkt het proces?",
         "accent_heading": "Het proces",
-        "heading": "Hoe werkt het?",
         "lede": "Drie stappen — van gratis analyse tot bevestigde verwijdering. U betaalt alleen bij stap 3.",
         "features": [
           {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-01-analyse.svg" },
-            "heading": "Gratis analyse — binnen 24 uur",
-            "text": "U stuurt ons de link naar de betreffende review. Wij beoordelen of verwijdering haalbaar is en sturen u een helder advies met inschatting van de slagingskans. Geen verplichtingen."
+            "heading": "1. Gratis analyse — binnen 24 uur",
+            "text": "U stuurt ons de link naar de betreffende review. Wij beoordelen of de review verwijderbaar is op basis van Google's beleid en de juridische haalbaarheid van uw specifieke situatie. U ontvangt binnen 24 uur een helder advies met een concrete inschatting van de slagingskans. Geen verplichtingen, geen kosten — ook niet als wij adviseren om geen actie te ondernemen."
           },
           {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-02-dossier.svg" },
-            "heading": "Juridisch dossier — 7 tot 21 dagen",
-            "text": "Onze specialisten bouwen het juridisch en technisch dossier dat Google accepteert. Reviews jonger dan drie weken worden in veel gevallen binnen 48 uur verwijderd via onze express-procedure."
+            "heading": "2. Juridische actie — 7 tot 21 dagen",
+            "text": "Zodra u akkoord gaat, ondernemen onze specialisten actie. Dit omvat een formeel verwijderingsverzoek bij Google, aangevuld met juridische onderbouwing waar de situatie dat vereist. Reviews jonger dan drie weken worden in veel gevallen binnen 48 uur verwijderd via onze express-procedure. Bij complexere of oudere reviews werken wij via een uitgebreid bezwaartraject."
           },
           {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-03-verwijdering.svg" },
-            "heading": "Verwijdering en betaling — alleen bij succes",
-            "text": "U betaalt uitsluitend wanneer de review daadwerkelijk is verwijderd. Wij sturen u een bevestiging met screenshot. Geen resultaat? Geen factuur. Geen discussie."
+            "heading": "3. Bevestiging en betaling — alleen bij succes",
+            "text": "U betaalt uitsluitend wanneer de review daadwerkelijk is verwijderd uit uw Google-bedrijfsprofiel. Wij sturen u een bevestiging met screenshot zodra de verwijdering door Google is doorgevoerd. Geen resultaat? Geen factuur. Geen discussie."
           }
         ],
         "primary_cta_text": "Start gratis analyse",
-        "primary_cta_link": { "url": "#analyse", "type": "internal" },
-        "secondary_cta_text": "Stap voor stap uitleg",
-        "secondary_cta_link": { "url": "https://deletereviews.nl/google-reviews/stap-voor-stap/", "type": "internal" }
+        "primary_cta_link": { "url": "#analyse" }
       }
     },
 
     {
-      "component": "content-section-mike",
-      "_label": "NO CURE NO PAY",
+      "component": "content-section-golf",
+      "_source": "No Cure No Pay — H2 + 2 paragraphs + internal links from WP HTML; left visual panel with 94% badge is MANUAL in Bricks",
       "slots": {
-        "accent_heading": "No Cure No Pay",
-        "heading": "No Cure No Pay — wat betekent dat?",
-        "lede": "Geen voorschot, geen uurtarief, geen administratiekosten. Ons verdienmodel is volledig gekoppeld aan uw resultaat.",
-        "text": "<p><strong>No Cure No Pay betekent dat u niets betaalt als wij de review niet verwijderd krijgen.</strong> Er is geen voorschot, geen uurtarief en geen administratiekosten. Ons verdienmodel is volledig gekoppeld aan uw resultaat.</p><p>Bij de gratis intake beoordelen wij eerlijk of uw zaak haalbaar is. Wij nemen geen zaken aan waarvan wij vooraf weten dat ze niet slagen — dat is nadelig voor u én voor ons. De 6% zaken waarbij verwijdering niet lukt, betreft vrijwel altijd reviews waarbij Google oordeelt dat de inhoud haar beleidsregels niet schendt.</p>",
-        "media": { "url": "https://deletereviews.nl/wp-content/uploads/ncnp-94-procent-badge.jpg" }
+        "heading": "No Cure No Pay — Wat betekent dat?",
+        "content": "<p><strong>No Cure No Pay betekent dat u niets betaalt als wij de review niet verwijderd krijgen.</strong> Er is geen voorschot, geen uurtarief en geen administratiekosten. Ons verdienmodel is volledig gekoppeld aan uw resultaat. Dit geeft u zekerheid: wij zijn alleen gemotiveerd om actie te ondernemen in zaken waarvan wij werkelijk geloven dat ze slagen.</p><p>Bij de gratis intake beoordelen wij eerlijk of uw zaak haalbaar is. Wij nemen geen zaken aan waarvan wij vooraf weten dat ze niet slagen — dat is nadelig voor u én voor ons. Zo weet u vooraf precies waar u aan toe bent, zonder verrassingen achteraf. Meer over tarieven en wat daarin is inbegrepen leest u op de pagina <a href=\"/google-reviews/kosten-review-verwijdering/\">kosten review verwijdering</a>. Een uitgebreide toelichting op de No Cure No Pay-afspraak vindt u op onze pagina <a href=\"/google-reviews/no-cure-no-pay-review-verwijdering/\">No Cure No Pay uitleg</a>.</p>"
       }
     },
 
     {
-      "component": "content-section-yankee",
-      "_label": "RESULTS",
+      "component": "pricing-section-lima",
+      "_source": "Eén tarief per verwijdering — sidebar + 2 price cards from service-page-DESIGNED.html (pricing section)",
       "slots": {
-        "heading": "Na 2.500+ behandelde zaken zijn onze resultaten consistent",
-        "content": "<p>De 6% zaken waarbij verwijdering niet lukt betreft vrijwel altijd reviews waarbij Google oordeelt dat de inhoud haar beleidsregels niet schendt — iets wat wij in de meeste gevallen al tijdens de intake communiceren.</p>",
-        "media": { "url": "https://deletereviews.nl/wp-content/uploads/resultaten-dashboard.jpg" },
-        "stats": [
+        "accent_heading": "Wat kost het?",
+        "sidebar_heading": "Eén tarief per verwijdering — alleen bij succes.",
+        "sidebar_lede": "Geen voorschot, geen uurtarief, geen opstartkosten. U betaalt pas nadat de review daadwerkelijk is verwijderd. Het tarief is afhankelijk van de complexiteit van de zaak — de gratis intake geeft u direct uitsluitsel.",
+        "sidebar_link_text": "Meer over kosten & tarieven →",
+        "sidebar_link_url": { "url": "/google-reviews/kosten-review-verwijdering/" },
+        "plans": [
           {
-            "value": "94%",
-            "description": "Slagingskans op aangenomen zaken"
+            "heading": "Standaard verwijdering",
+            "currency": "€",
+            "amount": "295",
+            "period": "alleen bij succes",
+            "description": "Recente reviews (< 3 maanden), enkelvoudige zaak. Express-procedure van toepassing bij reviews jonger dan 3 weken.",
+            "cta_text": "Start gratis analyse",
+            "cta_link": { "url": "#analyse" }
           },
           {
-            "value": "2.500+",
-            "description": "Succesvol verwijderde reviews"
-          },
-          {
-            "value": "7–14",
-            "description": "Dagen gemiddelde doorlooptijd"
-          },
-          {
-            "value": "48u",
-            "description": "Express bij reviews jonger dan 3 weken"
+            "heading": "Complexe of oude review",
+            "currency": "€",
+            "amount": "495",
+            "period": "alleen bij succes",
+            "description": "Reviews ouder dan 3 maanden, gecoördineerde aanvallen, meerdere bezwaarronden of juridische escalatie vereist.",
+            "cta_text": "Start gratis analyse",
+            "cta_link": { "url": "#analyse" }
           }
         ]
+      }
+    },
+
+    {
+      "component": "feature-section-foxtrot",
+      "_source": "Onze resultaten — 4 stat cards from service-page-DESIGNED.html (results section); dark navy bg is MANUAL",
+      "slots": {
+        "heading": "Na 2.500+ behandelde zaken zijn onze resultaten consistent",
+        "accent_heading": "Onze resultaten",
+        "features": [
+          {
+            "heading": "94%",
+            "text": "Slagingskans op aangenomen zaken"
+          },
+          {
+            "heading": "2.500+",
+            "text": "Succesvol verwijderde reviews"
+          },
+          {
+            "heading": "7–14",
+            "text": "Dagen gemiddelde doorlooptijd"
+          },
+          {
+            "heading": "48u",
+            "text": "Express bij reviews jonger dan 3 weken"
+          }
+        ]
+      }
+    },
+
+    {
+      "component": "testimonial-section-mike",
+      "_source": "Wat onze klanten zeggen — 3 testimonials from service-page-DESIGNED.html; NOTE: placeholders, replace before publishing",
+      "slots": {
+        "heading": "Wat onze klanten zeggen",
+        "cta_text": "Bekijk alle reviews",
+        "cta_link": { "url": "/google-review-verwijdering/" },
+        "testimonials": [
+          {
+            "name": "R.V.",
+            "title": "Restauranthouder, Amsterdam",
+            "text": "Na zes weken zelf proberen bij Google had ik er geen vertrouwen meer in. DeleteReviews heeft de review binnen drie weken verwijderd. Hadden ze dit eerder gedaan."
+          },
+          {
+            "name": "M.K.",
+            "title": "Schoonheidsspecialiste, Utrecht",
+            "text": "Eén 1-sterreview van een ex-medewerker had mijn gemiddelde van 4,8 naar 4,2 gebracht. Na de verwijdering stond mijn beoordeling er weer goed bij."
+          },
+          {
+            "name": "J.B.",
+            "title": "Woningmakelaar, Rotterdam",
+            "text": "No Cure No Pay was voor mij de doorslag. Ik had geen risico, en het werkte. Binnen twee weken was de review weg."
+          }
+        ]
+      }
+    },
+
+    {
+      "component": "faq-section-alpha",
+      "_source": "Veelgestelde vragen — 8 items from service-page-google-review-verwijdering-WORDPRESS.html (FAQPage schema verbatim)",
+      "slots": {
+        "heading": "Antwoorden op uw vragen",
+        "lede": "Staat uw vraag er niet bij? Bel ons: +31 616 163 282",
+        "cta_text": "Start gratis analyse",
+        "cta_link": { "url": "#analyse" },
+        "items": [
+          {
+            "question": "Kan ik een Google review zelf verwijderen als bedrijfseigenaar?",
+            "answer": "<p>Als bedrijfseigenaar kunt u een review melden via Google Business Profile, maar Google verwijdert eigenaarsmeldingen zelden zonder aanvullende onderbouwing. U heeft geen directe bevoegdheid om reviews te wissen — dat beslist Google eenzijdig. Onze specialisten dienen formele verwijderingsverzoeken in met juridische motivering en kennen de interne escalatieprocedures van Google, wat de slagingskans aanzienlijk vergroot ten opzichte van een zelfdienst-melding.</p>"
+          },
+          {
+            "question": "Hoe lang duurt het verwijderen van een Google review?",
+            "answer": "<p>De gemiddelde doorlooptijd bedraagt <strong>7 tot 14 dagen</strong>. Reviews jonger dan drie weken worden via onze express-procedure in veel gevallen binnen <strong>48 uur</strong> verwijderd. Oudere reviews of gevallen waarbij Google een eerste verzoek afwijst en wij bezwaar moeten indienen, kunnen tot 21 dagen duren. U wordt gedurende het gehele proces op de hoogte gehouden.</p>"
+          },
+          {
+            "question": "Welke Google reviews kunnen worden verwijderd?",
+            "answer": "<p>Reviews die Google's beleidsregels schenden, komen in aanmerking. Dit betreft onder meer nep-reviews, beoordelingen van niet-klanten, lasterlijke inhoud, haatdragend taalgebruik, privacyschendingen en gecoördineerde aanvalscampagnes. Een eerlijke negatieve beoordeling van een echte klant valt doorgaans buiten het bereik van een verwijderingsverzoek — ook al is de review onterecht of overdreven. Wij beoordelen dit per geval en zijn daarin eerlijk.</p>"
+          },
+          {
+            "question": "Wat kost het verwijderen van een Google review?",
+            "answer": "<p>Wij werken uitsluitend op basis van <strong>No Cure No Pay</strong> — u betaalt alleen bij een succesvol resultaat. Er zijn geen opstartkosten, geen voorschotten en geen uurtarieven. Betaling vindt uitsluitend plaats na bevestigde verwijdering. De exacte tarieven en wat daarin is inbegrepen, leest u op de pagina <a href=\"/google-reviews/kosten-review-verwijdering/\">kosten review verwijdering</a>.</p>"
+          },
+          {
+            "question": "Is het legaal om Google reviews te laten verwijderen?",
+            "answer": "<p>Ja, volledig legaal. Het verwijderen van reviews die aantoonbaar onjuist, lasterlijk of in strijd met Google's eigen beleidsregels zijn, is een beroep op gevestigde rechtsmiddelen op het gebied van onrechtmatige daad, eerlijke mededinging en privacywetgeving. U maakt gebruik van procedures die Google zelf aanbiedt, aangevuld met juridische escalatie waar dat nodig is. Meer over de juridische grondslag leest u op <a href=\"/google-reviews/juridisch-google-review-verwijderen/\">juridisch google review verwijderen</a>.</p>"
+          },
+          {
+            "question": "Hoe weet ik of mijn review verwijderd kan worden?",
+            "answer": "<p>Dat beoordeelt u niet zelf — dat doen wij. Stuur ons de link naar de review en beschrijf kort de situatie. Wij analyseren binnen 24 uur of er voldoende gronden zijn voor een succesvol verwijderingsverzoek. De analyse is gratis en vrijblijvend. Wij geven u een eerlijk advies, ook als de kans op succes laag is of als uw zaak buiten onze criteria valt.</p>"
+          },
+          {
+            "question": "Wat als Google mijn verwijderingsverzoek afwijst?",
+            "answer": "<p>Een eerste afwijzing van Google is geen definitief oordeel. Wij dienen bezwaar in met aanvullende juridische onderbouwing en escaleren via de beschikbare kanalen. In een significant deel van de aanvankelijk afgewezen zaken volgt verwijdering alsnog na heroverweging. Lukt het ook dan niet, dan betaalt u niets — dat is de garantie van No Cure No Pay.</p>"
+          },
+          {
+            "question": "Werkt No Cure No Pay ook voor oude reviews?",
+            "answer": "<p>Ja. De leeftijd van een review bepaalt de te verwachten doorlooptijd, niet de toepasselijkheid van de No Cure No Pay-afspraak. Oudere reviews vereisen soms een langere procedure omdat de express-route niet van toepassing is. Maar de betalingsafspraak blijft ongewijzigd: alleen bij een bevestigde verwijdering ontvangt u een factuur.</p>"
+          }
+        ]
+      }
+    },
+
+    {
+      "component": "cta-section-sierra",
+      "_source": "Start vandaag — final CTA from WP HTML; right-side form card slot replace with [fluentform id='1'] in Bricks",
+      "slots": {
+        "heading": "Start vandaag — gratis en vrijblijvend.",
+        "text": "<p>Elke dag dat een onterechte review online staat kost u klanten. De analyse is gratis, de eerste reactie volgt binnen 24 uur en u betaalt alleen als de review daadwerkelijk wordt verwijderd. Er is geen reden om te wachten.</p><p>Liever direct contact? Bel ons op <a href=\"tel:+31616163282\">+31 616 163 282</a> of stuur een e-mail naar <a href=\"mailto:info@deletereviews.nl\">info@deletereviews.nl</a>. Wij zijn bereikbaar van maandag tot vrijdag, 10:00–16:00.</p><p><em>No Cure No Pay — u betaalt alleen bij een succesvol verwijderde review. Geen resultaat, geen factuur.</em></p>",
+        "link_text": "Start gratis analyse",
+        "link_url": { "url": "#analyse" }
       }
     }
 

@@ -1,0 +1,78 @@
+# Design Config — ACSS Theme Generator
+# ─────────────────────────────────────────────────────────────────────────────
+# Edit this file for each site, then run:
+#   node generate-acss-export.js design-config.yaml acss-base-template.json
+#
+# Output: acss-export-[timestamp].json  →  import into WordPress ACSS settings
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Color Palette ──────────────────────────────────────────────────────────────
+# Provide hex values. ACSS generates the full scale (ultra-dark → ultra-light)
+# automatically from each hex using its fixed lightness steps:
+#   ultra-dark=10% · dark=25% · semi-dark=35% · [main] · semi-light=65% · light=85% · ultra-light=95%
+# Hue and saturation are preserved across all shades.
+
+colors:
+  primary:   "#085a7d"   # Main brand colour (teal) — used for links, focus rings, primary buttons
+  secondary: "#8518ce"   # Secondary accent (purple) — used for highlights, secondary CTAs
+  accent:    "#28b5f1"   # Light accent (sky blue) — decorative highlights, badges
+  action:    "#a5de21"   # CTA colour (lime green) — primary buttons on dark backgrounds
+  neutral:   "#080c0e"   # Near-black — body/section backgrounds on dark-scheme sites
+  base:      "#878e92"   # Body text colour (grey)
+  shade:     "#1c1c1c"   # Pure dark shade (greyscale) — cards, overlays
+
+# ── Spacing ────────────────────────────────────────────────────────────────────
+# All spacing is fluid (clamp) between vp.min and vp.max.
+# --space-m (the base) scales from base_min to base_max.
+# All other steps multiply/divide by `scale`.
+
+spacing:
+  base_max: 30           # --space-m maximum (desktop), pixels
+  base_min: 24           # --space-m minimum (mobile), pixels
+  scale: 1.5             # Spacing scale per step (1.5 = Minor Third)
+  section_multiplier: 4  # Section padding = space × this value
+  section_x_max: 30      # Horizontal section padding max, pixels
+  section_x_min: 24      # Horizontal section padding min, pixels
+
+# ── Typography ─────────────────────────────────────────────────────────────────
+typography:
+  base_text_desk: 18     # Body text size at max viewport (px)
+  base_text_mob: 16      # Body text size at min viewport (px)
+  heading_scale: 1.333   # Heading type scale (1.333=Major Third, 1.25=Major Second, 1.414=√2)
+  heading_weight: 600    # CSS font-weight for all headings
+  heading_transform: uppercase      # CSS text-transform (uppercase / none / capitalize)
+  heading_letter_spacing: "0.1em"   # CSS letter-spacing for all headings
+  mob_heading_scale: 1.2            # Scale used on mobile (usually smaller than desktop)
+  mob_space_scale: 1.333            # Spacing scale used on mobile
+
+# ── Border Radius ─────────────────────────────────────────────────────────────
+radius:
+  base: "1rem"   # Base radius (1rem = 10px with 62.5% root). Use "0" for sharp corners.
+  scale: 1.5     # Radius scale per step
+
+# ── Viewport ──────────────────────────────────────────────────────────────────
+viewport:
+  max: 1280   # Max viewport width for fluid calculations (px)
+  min: 360    # Min viewport width for fluid calculations (px)
+
+# ── Breakpoints ───────────────────────────────────────────────────────────────
+breakpoints:
+  xs: 360
+  s: 480
+  m: 768
+  l: 992
+  xl: 1280
+
+# ── Buttons ───────────────────────────────────────────────────────────────────
+buttons:
+  border_width: 2.5   # Button border width (px)
+  min_width: 140      # Minimum button width (px)
+  text_min: 14        # Button text size at min viewport (px)
+  text_max: 18        # Button text size at max viewport (px)
+  padding_y: ".75em"  # Vertical padding
+  padding_x: "1.5em"  # Horizontal padding
+  font_weight: 400    # Button font weight (often lighter than headings)
+  text_transform: none  # Button text-transform
+
+# ── Global ────────────────────────────────────────────────────────────────────
+scheme: dark   # "dark" or "light" — controls default bg/text colour assumptions

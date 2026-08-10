@@ -1,0 +1,55 @@
+# Content Section November
+# Full-bleed edge-to-edge image with overlapping white content box.
+# CSS grid layout: image bleeds from left/right viewport edge; white card overlaps it.
+# data-layout="" (default) → image LEFT, card overlaps from right.
+# data-layout="alt"        → image RIGHT, card overlaps from left.
+# Best for: hero-adjacent sections, immersive feature intros, high-impact split reveals.
+
+component: content-section-november
+version: "2.3.5"
+description: |
+  Full-bleed image (left by default) with overlapping white content box (rounded corners,
+  padded). H2 heading + rich text lede + primary CTA button inside the card.
+  Flip image to the right by setting data-layout="alt" on the section root after insertion.
+  Responsive: stacks image above card on mobile, card lifts slightly over image.
+
+slots:
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-content-section-november__heading
+    description: H2 heading inside the white content card
+
+  lede:
+    type: html
+    required: true
+    target_class: fr-content-section-november__lede
+    description: Body paragraphs inside the card, below the heading
+
+  media:
+    type: media
+    required: true
+    target_class: fr-content-section-november__media
+    description: Full-bleed background image (object-fit cover, 100% height of section)
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-content-section-november__button
+    description: Primary CTA button label
+
+  cta_link:
+    type: link
+    required: false
+    target_class: fr-content-section-november__button
+    description: "CTA button URL — { url: '/page/' }"
+
+# ── Layout note ────────────────────────────────────────────────────────────────
+# To flip image to the right, set attribute data-layout="alt" on the section
+# root element after inserting the compiled section. The slot compiler does not
+# handle Bricks custom attributes — do this manually in Builder.
+
+strip_elements: []

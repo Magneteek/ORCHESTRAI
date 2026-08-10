@@ -1,0 +1,2641 @@
+{
+  "content": [
+    {
+      "id": "d04200",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "cdfeef",
+        "f7b0db",
+        "73a937"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "oovoot"
+        ]
+      },
+      "label": "Pricing Section Kilo"
+    },
+    {
+      "id": "cdfeef",
+      "name": "container",
+      "parent": "d04200",
+      "children": [
+        "07b2d2",
+        "d6111b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pdcgtq"
+        ]
+      },
+      "label": "Intro Echo"
+    },
+    {
+      "id": "07b2d2",
+      "name": "block",
+      "parent": "cdfeef",
+      "children": [
+        "f6ab10",
+        "94ed0f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "cbghev"
+        ]
+      },
+      "label": "Left"
+    },
+    {
+      "id": "f6ab10",
+      "name": "heading",
+      "parent": "07b2d2",
+      "children": [],
+      "settings": {
+        "text": "Choose a plan",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "bkgkvg"
+        ]
+      }
+    },
+    {
+      "id": "94ed0f",
+      "name": "text-basic",
+      "parent": "07b2d2",
+      "children": [],
+      "settings": {
+        "text": "our pricing",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "qfdtjc",
+          "wbfkbf"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "d6111b",
+      "name": "block",
+      "parent": "cdfeef",
+      "children": [
+        "6c0ba7"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "pdtwel"
+        ]
+      },
+      "label": "Right"
+    },
+    {
+      "id": "6c0ba7",
+      "name": "text-basic",
+      "parent": "d6111b",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "kddjfd",
+          "wqqaxf"
+        ]
+      },
+      "label": "Lede"
+    },
+    {
+      "id": "f7b0db",
+      "name": "container",
+      "parent": "d04200",
+      "children": [
+        "c32526"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "aqyeor"
+        ]
+      },
+      "label": "Tabs Wrapper"
+    },
+    {
+      "id": "c32526",
+      "name": "fr-tabs",
+      "parent": "f7b0db",
+      "children": [
+        "d2e676",
+        "fa003a"
+      ],
+      "settings": {
+        "accordionOnDevice": "tablet_portrait",
+        "accordionDuration": 300,
+        "linkMinWidth": "auto",
+        "backgroundActiveLink": {
+          "raw": "var(--neutral-ultra-light)"
+        },
+        "animationDuration": 300,
+        "tag": "div",
+        "_cssGlobalClasses": [
+          "ayyrqc"
+        ],
+        "navigationDirection": "column"
+      },
+      "label": "Pricing Tabs Kilo (CSS)"
+    },
+    {
+      "id": "d2e676",
+      "name": "block",
+      "parent": "c32526",
+      "children": [
+        "d871df",
+        "c3c5d6"
+      ],
+      "settings": {
+        "tag": "nav",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__nav"
+        },
+        "_cssGlobalClasses": [
+          "09o1t5"
+        ]
+      },
+      "label": "Navigation Wrapper"
+    },
+    {
+      "id": "d871df",
+      "name": "block",
+      "parent": "d2e676",
+      "children": [
+        "d010ee",
+        "bb7741",
+        "212a3a"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "ul",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__list"
+        },
+        "_cssGlobalClasses": [
+          "vdl6gv"
+        ]
+      },
+      "label": "Navigation List"
+    },
+    {
+      "id": "d010ee",
+      "name": "div",
+      "parent": "d871df",
+      "children": [
+        "711b7a",
+        "88d39e"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "r9t85n"
+        ]
+      },
+      "label": "Plan Choice"
+    },
+    {
+      "id": "711b7a",
+      "name": "icon",
+      "parent": "d010ee",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "y7g5n2"
+        ]
+      },
+      "label": "Plan Choice Icon"
+    },
+    {
+      "id": "88d39e",
+      "name": "text-basic",
+      "parent": "d010ee",
+      "children": [],
+      "settings": {
+        "text": "Basic",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "yqegwk"
+        ]
+      },
+      "label": "Plan Choice Label"
+    },
+    {
+      "id": "bb7741",
+      "name": "div",
+      "parent": "d871df",
+      "children": [
+        "8b1448",
+        "cb5535"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "r9t85n"
+        ]
+      },
+      "label": "Plan Choice"
+    },
+    {
+      "id": "8b1448",
+      "name": "icon",
+      "parent": "bb7741",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "y7g5n2"
+        ]
+      },
+      "label": "Plan Choice Icon"
+    },
+    {
+      "id": "cb5535",
+      "name": "text-basic",
+      "parent": "bb7741",
+      "children": [],
+      "settings": {
+        "text": "Intermediate",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "yqegwk"
+        ]
+      },
+      "label": "Plan Choice Label"
+    },
+    {
+      "id": "212a3a",
+      "name": "div",
+      "parent": "d871df",
+      "children": [
+        "a5af5b",
+        "886c71"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__link"
+        },
+        "_cssGlobalClasses": [
+          "r9t85n"
+        ]
+      },
+      "label": "Plan Choice"
+    },
+    {
+      "id": "a5af5b",
+      "name": "icon",
+      "parent": "212a3a",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "y7g5n2"
+        ]
+      },
+      "label": "Plan Choice Icon"
+    },
+    {
+      "id": "886c71",
+      "name": "text-basic",
+      "parent": "212a3a",
+      "children": [],
+      "settings": {
+        "text": "Advanced",
+        "tag": "span",
+        "_cssGlobalClasses": [
+          "yqegwk"
+        ]
+      },
+      "label": "Plan Choice Label"
+    },
+    {
+      "id": "c3c5d6",
+      "name": "text-basic",
+      "parent": "d2e676",
+      "children": [],
+      "settings": {
+        "text": "Use this space for helper text to guide the visitor on which place to choose. It can make a big difference.",
+        "_cssGlobalClasses": [
+          "uqzndb"
+        ],
+        "tag": "p"
+      },
+      "label": "Helper Text"
+    },
+    {
+      "id": "fa003a",
+      "name": "block",
+      "parent": "c32526",
+      "children": [
+        "2292c9",
+        "b1a5aa",
+        "1f18e1"
+      ],
+      "settings": {
+        "tag": "custom",
+        "customTag": "ul",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "owzotz"
+        ],
+        "_attributes": [
+          {
+            "id": "zlemkc",
+            "name": "tabindex",
+            "value": "-1"
+          }
+        ]
+      },
+      "label": "Tabs Content Wrapper"
+    },
+    {
+      "id": "2292c9",
+      "name": "block",
+      "parent": "fa003a",
+      "children": [
+        "3d81e4"
+      ],
+      "settings": {
+        "tag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "3ehh7h"
+        ],
+        "_attributes": [
+          {
+            "id": "ykmqhs",
+            "name": "tabindex",
+            "value": "-1"
+          }
+        ]
+      },
+      "label": "Plan"
+    },
+    {
+      "id": "3d81e4",
+      "name": "block",
+      "parent": "2292c9",
+      "children": [
+        "6e6c5e",
+        "2f9991",
+        "85c346"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "ply9yl"
+        ]
+      },
+      "label": "Plan Inner"
+    },
+    {
+      "id": "6e6c5e",
+      "name": "block",
+      "parent": "3d81e4",
+      "children": [
+        "bade7c",
+        "b4b976"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "z2i73k"
+        ]
+      },
+      "label": "Plan Header"
+    },
+    {
+      "id": "bade7c",
+      "name": "heading",
+      "parent": "6e6c5e",
+      "children": [],
+      "settings": {
+        "text": "Basic Plan",
+        "tag": "h3",
+        "_cssGlobalClasses": [
+          "czrpex"
+        ]
+      },
+      "label": "Plan Heading"
+    },
+    {
+      "id": "b4b976",
+      "name": "div",
+      "parent": "6e6c5e",
+      "children": [
+        "422c94",
+        "d731d6"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ddbvkf"
+        ]
+      },
+      "label": "Price Wrapper"
+    },
+    {
+      "id": "422c94",
+      "name": "text-basic",
+      "parent": "b4b976",
+      "children": [],
+      "settings": {
+        "text": "$98",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-text"
+        },
+        "_cssGlobalClasses": [
+          "ezgrcc"
+        ],
+        "tag": "span"
+      },
+      "label": "Price"
+    },
+    {
+      "id": "d731d6",
+      "name": "text-basic",
+      "parent": "b4b976",
+      "children": [],
+      "settings": {
+        "text": "/mo",
+        "_cssGlobalClasses": [
+          "qndbol"
+        ],
+        "tag": "span"
+      },
+      "label": "Price Term"
+    },
+    {
+      "id": "2f9991",
+      "name": "block",
+      "parent": "3d81e4",
+      "children": [
+        "903646",
+        "643e8d",
+        "13b3e3",
+        "3ddd91",
+        "0723f4",
+        "28ac06",
+        "a6298b",
+        "9c61f8"
+      ],
+      "settings": {
+        "tag": "ul",
+        "_cssGlobalClasses": [
+          "ww93ql"
+        ]
+      },
+      "label": "Plan Features"
+    },
+    {
+      "id": "903646",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "8b88b8",
+        "212978"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "8b88b8",
+      "name": "icon",
+      "parent": "903646",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "212978",
+      "name": "text-basic",
+      "parent": "903646",
+      "children": [],
+      "settings": {
+        "text": "Feature one",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "643e8d",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "7dbcf0",
+        "bbaa81"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "7dbcf0",
+      "name": "icon",
+      "parent": "643e8d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "bbaa81",
+      "name": "text-basic",
+      "parent": "643e8d",
+      "children": [],
+      "settings": {
+        "text": "Feature two",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "13b3e3",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "2d7848",
+        "ea5888"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "2d7848",
+      "name": "icon",
+      "parent": "13b3e3",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "ea5888",
+      "name": "text-basic",
+      "parent": "13b3e3",
+      "children": [],
+      "settings": {
+        "text": "Feature three",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "3ddd91",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "28d798",
+        "43c146"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "28d798",
+      "name": "icon",
+      "parent": "3ddd91",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "43c146",
+      "name": "text-basic",
+      "parent": "3ddd91",
+      "children": [],
+      "settings": {
+        "text": "Feature four",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "0723f4",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "2f345d",
+        "1ae301"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "2f345d",
+      "name": "icon",
+      "parent": "0723f4",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "1ae301",
+      "name": "text-basic",
+      "parent": "0723f4",
+      "children": [],
+      "settings": {
+        "text": "Feature five",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "28ac06",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "863338",
+        "819053"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "863338",
+      "name": "icon",
+      "parent": "28ac06",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "819053",
+      "name": "text-basic",
+      "parent": "28ac06",
+      "children": [],
+      "settings": {
+        "text": "Feature six",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "a6298b",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "dc36be",
+        "2b7efc"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "dc36be",
+      "name": "icon",
+      "parent": "a6298b",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "2b7efc",
+      "name": "text-basic",
+      "parent": "a6298b",
+      "children": [],
+      "settings": {
+        "text": "Feature seven",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "9c61f8",
+      "name": "block",
+      "parent": "2f9991",
+      "children": [
+        "fea5c1",
+        "2da180"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "fea5c1",
+      "name": "icon",
+      "parent": "9c61f8",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "2da180",
+      "name": "text-basic",
+      "parent": "9c61f8",
+      "children": [],
+      "settings": {
+        "text": "Feature eight",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "85c346",
+      "name": "block",
+      "parent": "3d81e4",
+      "children": [
+        "846afd",
+        "7d47a0"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kwhmal"
+        ]
+      },
+      "label": "Plan Footer"
+    },
+    {
+      "id": "846afd",
+      "name": "button",
+      "parent": "85c346",
+      "children": [],
+      "settings": {
+        "text": "Select Monthly",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--white",
+          "btn--outline",
+          "rgn186"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button"
+    },
+    {
+      "id": "7d47a0",
+      "name": "button",
+      "parent": "85c346",
+      "children": [],
+      "settings": {
+        "text": "Select Annual (Save 20%)",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--white"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button Alt"
+    },
+    {
+      "id": "b1a5aa",
+      "name": "block",
+      "parent": "fa003a",
+      "children": [
+        "96fa0c"
+      ],
+      "settings": {
+        "tag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "3ehh7h"
+        ],
+        "_attributes": [
+          {
+            "id": "ahqugn",
+            "name": "tabindex",
+            "value": "-1"
+          }
+        ]
+      },
+      "label": "Plan"
+    },
+    {
+      "id": "96fa0c",
+      "name": "block",
+      "parent": "b1a5aa",
+      "children": [
+        "c859d9",
+        "93d999",
+        "852e8b"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "ply9yl"
+        ]
+      },
+      "label": "Plan Inner"
+    },
+    {
+      "id": "c859d9",
+      "name": "block",
+      "parent": "96fa0c",
+      "children": [
+        "999755",
+        "5a95db"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "z2i73k"
+        ]
+      },
+      "label": "Plan Header"
+    },
+    {
+      "id": "999755",
+      "name": "heading",
+      "parent": "c859d9",
+      "children": [],
+      "settings": {
+        "text": "Intermediate Plan",
+        "tag": "h3",
+        "_cssGlobalClasses": [
+          "czrpex"
+        ]
+      },
+      "label": "Plan Heading"
+    },
+    {
+      "id": "5a95db",
+      "name": "div",
+      "parent": "c859d9",
+      "children": [
+        "b5e64b",
+        "43248e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ddbvkf"
+        ]
+      },
+      "label": "Price Wrapper"
+    },
+    {
+      "id": "b5e64b",
+      "name": "text-basic",
+      "parent": "5a95db",
+      "children": [],
+      "settings": {
+        "text": "$198",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-text"
+        },
+        "_cssGlobalClasses": [
+          "ezgrcc"
+        ],
+        "tag": "span"
+      },
+      "label": "Price"
+    },
+    {
+      "id": "43248e",
+      "name": "text-basic",
+      "parent": "5a95db",
+      "children": [],
+      "settings": {
+        "text": "/mo",
+        "_cssGlobalClasses": [
+          "qndbol"
+        ],
+        "tag": "span"
+      },
+      "label": "Price Term"
+    },
+    {
+      "id": "93d999",
+      "name": "block",
+      "parent": "96fa0c",
+      "children": [
+        "bc78b8",
+        "1c8ebc",
+        "63099b",
+        "a202c2",
+        "02768d",
+        "b083b0",
+        "e9d1eb",
+        "09cec3"
+      ],
+      "settings": {
+        "tag": "ul",
+        "_cssGlobalClasses": [
+          "ww93ql"
+        ]
+      },
+      "label": "Plan Features"
+    },
+    {
+      "id": "bc78b8",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "67ed6c",
+        "f0e9b0"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "67ed6c",
+      "name": "icon",
+      "parent": "bc78b8",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "f0e9b0",
+      "name": "text-basic",
+      "parent": "bc78b8",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "1c8ebc",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "0e0ee1",
+        "779799"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "0e0ee1",
+      "name": "icon",
+      "parent": "1c8ebc",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "779799",
+      "name": "text-basic",
+      "parent": "1c8ebc",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "63099b",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "19d8d0",
+        "6704d0"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "19d8d0",
+      "name": "icon",
+      "parent": "63099b",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "6704d0",
+      "name": "text-basic",
+      "parent": "63099b",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "a202c2",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "16141a",
+        "941a17"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "16141a",
+      "name": "icon",
+      "parent": "a202c2",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "941a17",
+      "name": "text-basic",
+      "parent": "a202c2",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "02768d",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "5bb8d9",
+        "a9b694"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "5bb8d9",
+      "name": "icon",
+      "parent": "02768d",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "a9b694",
+      "name": "text-basic",
+      "parent": "02768d",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "b083b0",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "cc4865",
+        "fa1d9d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "cc4865",
+      "name": "icon",
+      "parent": "b083b0",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "fa1d9d",
+      "name": "text-basic",
+      "parent": "b083b0",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "e9d1eb",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "2d0e47",
+        "abefeb"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "2d0e47",
+      "name": "icon",
+      "parent": "e9d1eb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "abefeb",
+      "name": "text-basic",
+      "parent": "e9d1eb",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "09cec3",
+      "name": "block",
+      "parent": "93d999",
+      "children": [
+        "a36a68",
+        "c7d989"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "a36a68",
+      "name": "icon",
+      "parent": "09cec3",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "c7d989",
+      "name": "text-basic",
+      "parent": "09cec3",
+      "children": [],
+      "settings": {
+        "text": "Feature goes here",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "852e8b",
+      "name": "block",
+      "parent": "96fa0c",
+      "children": [
+        "ba2f16",
+        "455e57"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kwhmal"
+        ]
+      },
+      "label": "Plan Footer"
+    },
+    {
+      "id": "ba2f16",
+      "name": "button",
+      "parent": "852e8b",
+      "children": [],
+      "settings": {
+        "text": "Select Monthly",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--white",
+          "btn--outline",
+          "rgn186"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button"
+    },
+    {
+      "id": "455e57",
+      "name": "button",
+      "parent": "852e8b",
+      "children": [],
+      "settings": {
+        "text": "Select Annual (Save 20%)",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--white"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button Alt"
+    },
+    {
+      "id": "1f18e1",
+      "name": "block",
+      "parent": "fa003a",
+      "children": [
+        "be97c8"
+      ],
+      "settings": {
+        "tag": "li",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item-wrapper"
+        },
+        "_cssGlobalClasses": [
+          "3ehh7h"
+        ],
+        "_attributes": [
+          {
+            "id": "bwrrlq",
+            "name": "tabindex",
+            "value": "-1"
+          }
+        ]
+      },
+      "label": "Plan"
+    },
+    {
+      "id": "be97c8",
+      "name": "block",
+      "parent": "1f18e1",
+      "children": [
+        "546846",
+        "c70599",
+        "a56218"
+      ],
+      "settings": {
+        "tag": "div",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-item"
+        },
+        "_cssGlobalClasses": [
+          "ply9yl"
+        ]
+      },
+      "label": "Plan Inner"
+    },
+    {
+      "id": "546846",
+      "name": "block",
+      "parent": "be97c8",
+      "children": [
+        "8af54d",
+        "56bffb"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "z2i73k"
+        ]
+      },
+      "label": "Plan Header"
+    },
+    {
+      "id": "8af54d",
+      "name": "heading",
+      "parent": "546846",
+      "children": [],
+      "settings": {
+        "text": "Advanced Plan",
+        "tag": "h3",
+        "_cssGlobalClasses": [
+          "czrpex"
+        ]
+      },
+      "label": "Plan Heading"
+    },
+    {
+      "id": "56bffb",
+      "name": "div",
+      "parent": "546846",
+      "children": [
+        "ad0d37",
+        "3a9650"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ddbvkf"
+        ]
+      },
+      "label": "Price Wrapper"
+    },
+    {
+      "id": "ad0d37",
+      "name": "text-basic",
+      "parent": "56bffb",
+      "children": [],
+      "settings": {
+        "text": "$299",
+        "_hidden": {
+          "_cssClasses": "fr-tabs__content-text"
+        },
+        "_cssGlobalClasses": [
+          "ezgrcc"
+        ],
+        "tag": "span"
+      },
+      "label": "Price"
+    },
+    {
+      "id": "3a9650",
+      "name": "text-basic",
+      "parent": "56bffb",
+      "children": [],
+      "settings": {
+        "text": "/mo",
+        "_cssGlobalClasses": [
+          "qndbol"
+        ],
+        "tag": "span"
+      },
+      "label": "Price Term"
+    },
+    {
+      "id": "c70599",
+      "name": "block",
+      "parent": "be97c8",
+      "children": [
+        "588bdd",
+        "295045",
+        "29adea",
+        "deeddb",
+        "4e42da",
+        "c9118b",
+        "1172a9",
+        "0532ee"
+      ],
+      "settings": {
+        "tag": "ul",
+        "_cssGlobalClasses": [
+          "ww93ql"
+        ]
+      },
+      "label": "Plan Features"
+    },
+    {
+      "id": "588bdd",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "0ed66e",
+        "119a71"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "0ed66e",
+      "name": "icon",
+      "parent": "588bdd",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "119a71",
+      "name": "text-basic",
+      "parent": "588bdd",
+      "children": [],
+      "settings": {
+        "text": "Feature one",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "295045",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "19ad19",
+        "27703e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "19ad19",
+      "name": "icon",
+      "parent": "295045",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "27703e",
+      "name": "text-basic",
+      "parent": "295045",
+      "children": [],
+      "settings": {
+        "text": "Feature two",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "29adea",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "8168d8",
+        "b0b148"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "8168d8",
+      "name": "icon",
+      "parent": "29adea",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "b0b148",
+      "name": "text-basic",
+      "parent": "29adea",
+      "children": [],
+      "settings": {
+        "text": "Feature three",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "deeddb",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "97cab1",
+        "6ca09c"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "97cab1",
+      "name": "icon",
+      "parent": "deeddb",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "6ca09c",
+      "name": "text-basic",
+      "parent": "deeddb",
+      "children": [],
+      "settings": {
+        "text": "Feature four",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "4e42da",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "daf83e",
+        "a29e56"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "daf83e",
+      "name": "icon",
+      "parent": "4e42da",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "a29e56",
+      "name": "text-basic",
+      "parent": "4e42da",
+      "children": [],
+      "settings": {
+        "text": "Feature five",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "c9118b",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "b996a0",
+        "3e3fbf"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "b996a0",
+      "name": "icon",
+      "parent": "c9118b",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "3e3fbf",
+      "name": "text-basic",
+      "parent": "c9118b",
+      "children": [],
+      "settings": {
+        "text": "Feature six",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "1172a9",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "361c9b",
+        "429a82"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "361c9b",
+      "name": "icon",
+      "parent": "1172a9",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "429a82",
+      "name": "text-basic",
+      "parent": "1172a9",
+      "children": [],
+      "settings": {
+        "text": "Feature seven",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "0532ee",
+      "name": "block",
+      "parent": "c70599",
+      "children": [
+        "1f13ed",
+        "fedc72"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "puspzg"
+        ],
+        "tag": "li"
+      },
+      "label": "Plan Feature"
+    },
+    {
+      "id": "1f13ed",
+      "name": "icon",
+      "parent": "0532ee",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          }
+        },
+        "_cssGlobalClasses": [
+          "cb1t5i",
+          "e7w2kf"
+        ]
+      },
+      "label": "Plan Feature Icon"
+    },
+    {
+      "id": "fedc72",
+      "name": "text-basic",
+      "parent": "0532ee",
+      "children": [],
+      "settings": {
+        "text": "Feature eight",
+        "_cssGlobalClasses": [
+          "b6xoed",
+          "uood0l"
+        ]
+      },
+      "label": "Plan Feature Label"
+    },
+    {
+      "id": "a56218",
+      "name": "block",
+      "parent": "be97c8",
+      "children": [
+        "cc9fcf",
+        "dfd6b3"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "kwhmal"
+        ]
+      },
+      "label": "Plan Footer"
+    },
+    {
+      "id": "cc9fcf",
+      "name": "button",
+      "parent": "a56218",
+      "children": [],
+      "settings": {
+        "text": "Select Monthly",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--white",
+          "btn--outline",
+          "rgn186"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button"
+    },
+    {
+      "id": "dfd6b3",
+      "name": "button",
+      "parent": "a56218",
+      "children": [],
+      "settings": {
+        "text": "Select Annual (Save 20%)",
+        "style": "primary",
+        "_cssGlobalClasses": [
+          "btn--white"
+        ],
+        "link": {
+          "type": "external",
+          "url": "#"
+        }
+      },
+      "label": "Button Alt"
+    },
+    {
+      "id": "73a937",
+      "name": "container",
+      "parent": "d04200",
+      "children": [
+        "bad3da"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "bpujxp"
+        ]
+      }
+    },
+    {
+      "id": "bad3da",
+      "name": "text-basic",
+      "parent": "73a937",
+      "children": [],
+      "settings": {
+        "text": "If you need help choosing a plan, please <a href=\"#\">contact us.</a>",
+        "_cssGlobalClasses": [
+          "kwnneo"
+        ],
+        "tag": "p"
+      },
+      "label": "Notice"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "oovoot",
+      "name": "fr-pricing-section-kilo",
+      "settings": {
+        "_background": {
+          "color": {
+            "raw": "var(--neutral-ultra-light)"
+          }
+        },
+        "_rowGap": "var(--container-gap)"
+      }
+    },
+    {
+      "id": "pdcgtq",
+      "name": "fr-intro-echo",
+      "settings": {
+        "_cssCustom:mobile_landscape": ".fr-intro-echo {\n  grid-template-columns: 1fr;\n}",
+        "_gridGap": "var(--grid-gap)",
+        "_gridTemplateColumns": "var(--grid-2-1)",
+        "_gridTemplateRows": "var(--grid-1)",
+        "_display": "grid",
+        "_gridTemplateColumns:mobile_landscape": "var(--grid-1)",
+        "_alignItemsGrid": "center"
+      }
+    },
+    {
+      "id": "cbghev",
+      "name": "fr-intro-echo__heading-wrapper",
+      "settings": {
+        "_rowGap": "calc(var(--content-gap) / 2)"
+      },
+      "modified": 1779452806,
+      "user_id": 1
+    },
+    {
+      "id": "bkgkvg",
+      "name": "fr-intro-echo__heading",
+      "settings": {
+        "_cssCustom": ".fr-intro-echo__heading {\n  text-wrap: balance;\n}"
+      },
+      "modified": 1779452806,
+      "user_id": 1
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading",
+      "settings": {
+        "_typography": {
+          "line-height": "1.1",
+          "text-transform": "uppercase",
+          "letter-spacing": ".095em",
+          "font-size": "var(--text-s)",
+          "font-weight": "400"
+        },
+        "_order": "-1",
+        "_margin": {
+          "bottom": "0"
+        }
+      },
+      "_mappedId": "qfdtjc",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "wbfkbf",
+      "name": "fr-intro-echo__accent-heading",
+      "settings": []
+    },
+    {
+      "id": "pdtwel",
+      "name": "fr-intro-echo__lede-wrapper",
+      "settings": {
+        "_rowGap": "var(--content-gap)"
+      },
+      "modified": 1779452806,
+      "user_id": 1
+    },
+    {
+      "id": "kddjfd",
+      "name": "fr-lede",
+      "settings": []
+    },
+    {
+      "id": "wqqaxf",
+      "name": "fr-intro-echo__lede",
+      "settings": []
+    },
+    {
+      "id": "aqyeor",
+      "name": "fr-pricing-tabs-kilo-wrapper",
+      "settings": {
+        "_background": {
+          "color": {
+            "raw": "var(--white)"
+          }
+        },
+        "_padding": {
+          "top": "var(--section-space-m)"
+        },
+        "_padding:tablet_portrait": {
+          "top": "0"
+        }
+      }
+    },
+    {
+      "id": "ayyrqc",
+      "name": "fr-pricing-tabs-kilo",
+      "settings": {
+        "_cssCustom": ".fr-pricing-tabs-kilo {\n  --tab-label-color: var(--black);\n  --tab-label-color-active: DarkSlateBlue;\n  --plan-padding: var(--space-xxl);\n}\n\n/***** \nNavigation \n*****/\n\n/* Tab */\n\n.fr-pricing-tabs-kilo__plan-choice:focus-visible {\n\tbox-shadow: none !important;\n  outline: none !important;\n}\n.fr-pricing-tabs-kilo__plan-choice.active {\n\tbackground-color: transparent !important;\n}\n\n/* Icon */\n\n.fr-pricing-tabs-kilo__plan-choice-icon {\n\tvisibility: hidden;\n}\n.fr-pricing-tabs-kilo__plan-choice.active .fr-pricing-tabs-kilo__plan-choice-icon {\n\tvisibility: visible;\n  --icon-color: var(--tab-label-color-active);\n}\n\n/* Label */\n\n.fr-pricing-tabs-kilo__plan-choice.active .fr-pricing-tabs-kilo__plan-choice-label,\n.fr-pricing-tabs-kilo__plan-choice:hover .fr-pricing-tabs-kilo__plan-choice-label{\n\tcolor: var(--tab-label-color-active);\n}",
+        "_gridTemplateColumns": "var(--grid-1-2)",
+        "_gridTemplateColumns:tablet_portrait": "var(--grid-1)",
+        "navigationJustifyContent:tablet_portrait": "center",
+        "_cssCustom:tablet_portrait": ".fr-pricing-tabs-kilo {\n\t--plan-padding: var(--space-l);\n}\n\n.fr-pricing-tabs-kilo__plan-choice.active .fr-pricing-tabs-kilo__plan-choice-label,\n.fr-pricing-tabs-kilo__plan-choice:hover .fr-pricing-tabs-kilo__plan-choice-label{\n\ttext-decoration: underline;\n  text-underline-offset: .25em;\n}",
+        "navigationPadding:tablet_portrait": {
+          "top": "var(--space-s)",
+          "right": "var(--plan-padding)",
+          "bottom": "var(--space-s)",
+          "left": "var(--plan-padding)"
+        },
+        "linkMinWidth": "max-content!important"
+      }
+    },
+    {
+      "id": "09o1t5",
+      "name": "fr-pricing-tabs-kilo__navigation-wrapper",
+      "settings": {
+        "_padding": {
+          "top": "var(--section-space-m)",
+          "right": "var(--space-xl)",
+          "bottom": "var(--section-space-m)",
+          "left": "var(--space-xl)"
+        },
+        "_padding:tablet_portrait": {
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0"
+        },
+        "_justifyContent": "space-between",
+        "_rowGap": "var(--content-gap)"
+      },
+      "modified": 1779523587,
+      "user_id": 1
+    },
+    {
+      "id": "vdl6gv",
+      "name": "fr-pricing-tabs-kilo__navigation-list",
+      "settings": {
+        "_rowGap:tablet_portrait": "var(--content-gap)",
+        "_columnGap:tablet_portrait": "var(--content-gap)",
+        "_rowGap": ".5em",
+        "_flexWrap:mobile_landscape": "nowrap",
+        "_direction:tablet_portrait": "row",
+        "_cssCustom:tablet_portrait": ".fr-pricing-tabs-kilo__navigation-list {\n\tflex-direction: row!important;\n  justify-content: start!important;\n}",
+        "_overflow": "visible!important",
+        "_overflow:mobile_landscape": "scroll visible!important"
+      }
+    },
+    {
+      "id": "r9t85n",
+      "name": "fr-pricing-tabs-kilo__plan-choice",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "auto minmax(0, 1fr)",
+        "_gridGap": ".5em",
+        "_gridTemplateRows": "var(--grid-1)",
+        "_alignItemsGrid": "center",
+        "_padding": {
+          "top": "var(--space-s)",
+          "right": "var(--space-s)",
+          "bottom": "var(--space-s)",
+          "left": "var(--space-s)"
+        },
+        "_padding:tablet_portrait": {
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0"
+        },
+        "_gridGap:tablet_portrait": "0",
+        "_width:tablet_portrait": "fit-content"
+      }
+    },
+    {
+      "id": "y7g5n2",
+      "name": "fr-pricing-tabs-kilo__plan-choice-icon",
+      "settings": {
+        "_cssCustom": ".fr-pricing-tabs-kilo__plan-choice-icon {\n\t--icon-size: 1em;\n  --icon-color: var(--black-trans-50);\n}\n\n.fr-pricing-tabs-kilo__plan-choice-icon {\n\tfill: var(--icon-color);\n  height: var(--icon-size);\n  width: var(--icon-size);\n  color: var(--icon-color);\n  font-size: var(--icon-size);\n}",
+        "_display:tablet_portrait": "none"
+      }
+    },
+    {
+      "id": "yqegwk",
+      "name": "fr-pricing-tabs-kilo__plan-choice-label",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-xl)",
+          "line-height": "1",
+          "font-weight": "700"
+        },
+        "_cssCustom": ".fr-pricing-tabs-kilo__plan-choice-label {\n  white-space:nowrap;\n}",
+        "_width": "100%"
+      }
+    },
+    {
+      "id": "uqzndb",
+      "name": "fr-pricing-tabs-kilo__helper-text",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--black-trans-60)"
+          }
+        },
+        "_margin": {
+          "top": "var(--space-l)"
+        },
+        "_display:tablet_portrait": "none"
+      },
+      "modified": 1779523587,
+      "user_id": 1
+    },
+    {
+      "id": "owzotz",
+      "name": "fr-pricing-tabs-kilo__content-wrapper",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--white)"
+          }
+        }
+      }
+    },
+    {
+      "id": "3ehh7h",
+      "name": "fr-pricing-tabs-kilo__plan",
+      "settings": {
+        "_display": "flex",
+        "_flexGrow": "1",
+        "_background": {
+          "color": {
+            "raw": "var(--neutral-ultra-dark)"
+          }
+        },
+        "_padding": {
+          "top": "var(--plan-padding)",
+          "right": "var(--plan-padding)",
+          "bottom": "var(--plan-padding)",
+          "left": "var(--plan-padding)"
+        }
+      }
+    },
+    {
+      "id": "ply9yl",
+      "name": "fr-pricing-tabs-kilo__plan-inner",
+      "settings": {
+        "_rowGap": "calc(var(--container-gap) / 1.5)"
+      }
+    },
+    {
+      "id": "z2i73k",
+      "name": "fr-pricing-tabs-kilo__plan-header",
+      "settings": {
+        "_direction": "row",
+        "_alignItems": "baseline",
+        "_columnGap": "var(--content-gap)",
+        "_rowGap": "calc(var(--content-gap) / 2)",
+        "_direction:mobile_landscape": "column"
+      }
+    },
+    {
+      "id": "czrpex",
+      "name": "fr-pricing-tabs-kilo__plan-heading",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--h2)",
+          "color": {
+            "raw": "var(--text-light)"
+          }
+        }
+      },
+      "modified": 1779523587,
+      "user_id": 1
+    },
+    {
+      "id": "ddbvkf",
+      "name": "fr-pricing-tabs-kilo__price-wrapper",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-xxl)"
+        },
+        "_display": "flex",
+        "_justifyContent": "center",
+        "_alignItems": "baseline"
+      },
+      "modified": 1779523587,
+      "user_id": 1
+    },
+    {
+      "id": "ezgrcc",
+      "name": "fr-pricing-tabs-kilo__price",
+      "settings": {
+        "_typography": {
+          "line-height": "1"
+        }
+      }
+    },
+    {
+      "id": "qndbol",
+      "name": "fr-pricing-tabs-kilo__price-term",
+      "settings": {
+        "_typography": {
+          "line-height": "1",
+          "font-size": "50%"
+        }
+      }
+    },
+    {
+      "id": "ww93ql",
+      "name": "fr-pricing-tabs-kilo__plan-features",
+      "settings": {
+        "_padding": {
+          "left": "0"
+        },
+        "_display": "block",
+        "_cssCustom": ".fr-pricing-tabs-kilo__plan-features {\n\tcolumns: 2 150px;\n}\n\n.fr-pricing-tabs-kilo__plan-features > li {\n\tmargin-bottom: var(--content-gap);\n  break-inside: avoid;\n}"
+      }
+    },
+    {
+      "id": "puspzg",
+      "name": "fr-pricing-tabs-kilo__plan-feature",
+      "settings": {
+        "_direction": "row",
+        "_alignItems": "flex-start",
+        "_columnGap": ".5em"
+      }
+    },
+    {
+      "id": "e7w2kf",
+      "name": "fr-pricing-tabs-kilo__plan-feature-icon",
+      "settings": {
+        "_cssCustom": ".fr-pricing-tabs-kilo__plan-feature-icon {\n\t--icon-size: 1em;\n  --icon-color: var(--white-trans-50);\n  --icon-offset: .25em;\n}\n\n.fr-pricing-tabs-kilo__plan-feature-icon {\n\tfill: var(--icon-color);\n  height: var(--icon-size);\n  width: var(--icon-size);\n  color: var(--icon-color);\n  font-size: var(--icon-size);\n}",
+        "_position": "relative",
+        "_top": "var(--icon-offset)"
+      }
+    },
+    {
+      "id": "uood0l",
+      "name": "fr-pricing-tabs-kilo__plan-feature-label",
+      "settings": []
+    },
+    {
+      "id": "kwhmal",
+      "name": "fr-pricing-tabs-kilo__plan-footer",
+      "settings": {
+        "_display": "flex",
+        "_direction": "row",
+        "_columnGap": "var(--content-gap)",
+        "_rowGap": "var(--content-gap)"
+      }
+    },
+    {
+      "id": "btn--outline",
+      "name": "btn--outline",
+      "settings": [],
+      "_mappedId": "acss_import_btn--outline",
+      "modified": 1759255176,
+      "user_id": 1
+    },
+    {
+      "id": "bpujxp",
+      "name": "fr-pricing-section-kilo__footer",
+      "settings": []
+    },
+    {
+      "id": "kwnneo",
+      "name": "fr-pricing-section-kilo__footer-notice",
+      "settings": {
+        "_typography": {
+          "color": {
+            "raw": "var(--black-trans-60)"
+          }
+        }
+      }
+    }
+  ]
+}

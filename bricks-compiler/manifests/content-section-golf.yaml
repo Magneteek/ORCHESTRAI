@@ -1,0 +1,39 @@
+# Content Section Golf
+# Pure text section. Intro row: H2 heading (left-aligned) + small uppercase accent label.
+# Below: full-width rich text body rendered in 2-column newspaper layout
+# (CSS column-count: 2, 30ch column-width). Responsive: 1 column on mobile.
+# Best for: long service descriptions, company values, about-page body copy.
+
+component: content-section-golf
+version: "2.3.5"
+description: |
+  Text-only section. Intro row with H2 heading + accent label, then a wide
+  multi-column rich text body below (2-col newspaper layout on desktop, 1-col mobile).
+  No images or media — purely typographic.
+
+slots:
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-bravo__heading
+    description: H2 heading in the intro row
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-accent-heading
+    description: Small uppercase accent label (ordered before heading via CSS)
+
+  content:
+    type: html
+    required: true
+    target_class: fr-content-section-golf__text
+    description: |
+      Multi-column rich text body — renders in 2-col newspaper layout on desktop.
+      Use h3/h4 subheads + paragraphs. Avoid very short paragraphs that break badly
+      across columns.
+
+strip_elements: []

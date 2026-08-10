@@ -1,0 +1,533 @@
+{
+  "content": [
+    {
+      "id": "a9169d",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "4a9497"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dhlvll"
+        ]
+      },
+      "label": "Content Section Kilo"
+    },
+    {
+      "id": "4a9497",
+      "name": "container",
+      "parent": "a9169d",
+      "children": [
+        "e8b729",
+        "b9ddfd"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "fdhkez"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "e8b729",
+      "name": "block",
+      "parent": "4a9497",
+      "children": [
+        "b2673b",
+        "e2f11f",
+        "56656b",
+        "2b9b33"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ggeuxb"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "b9ddfd",
+      "name": "block",
+      "parent": "4a9497",
+      "children": [
+        "b4beb4",
+        "ab5676",
+        "595469",
+        "381e26"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ygkjim"
+        ]
+      },
+      "label": "Image Group Bravo (CSS)"
+    },
+    {
+      "id": "b2673b",
+      "name": "block",
+      "parent": "e8b729",
+      "children": [
+        "ec640b",
+        "e7a20e"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "zivsvo"
+        ]
+      },
+      "label": "Heading Wrapper"
+    },
+    {
+      "id": "e2f11f",
+      "name": "block",
+      "parent": "e8b729",
+      "children": [
+        "e9a91b",
+        "1cbdef"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "xtodmg"
+        ]
+      },
+      "label": "Feature Card Foxtrot"
+    },
+    {
+      "id": "56656b",
+      "name": "block",
+      "parent": "e8b729",
+      "children": [
+        "3dc995",
+        "7f7f6b"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "xtodmg"
+        ]
+      },
+      "label": "Feature Card Foxtrot"
+    },
+    {
+      "id": "2b9b33",
+      "name": "block",
+      "parent": "e8b729",
+      "children": [
+        "232fd3",
+        "52a589"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "xtodmg"
+        ]
+      },
+      "label": "Feature Card Foxtrot"
+    },
+    {
+      "id": "b4beb4",
+      "name": "image",
+      "parent": "b9ddfd",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "jksepa"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "ab5676",
+      "name": "image",
+      "parent": "b9ddfd",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "jksepa"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "595469",
+      "name": "image",
+      "parent": "b9ddfd",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "jksepa"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "381e26",
+      "name": "image",
+      "parent": "b9ddfd",
+      "children": [],
+      "settings": {
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure",
+        "_cssGlobalClasses": [
+          "jksepa"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "ec640b",
+      "name": "text-basic",
+      "parent": "b2673b",
+      "children": [],
+      "settings": {
+        "text": "accent heading",
+        "_cssGlobalClasses": [
+          "qfdtjc"
+        ],
+        "tag": "p"
+      }
+    },
+    {
+      "id": "e7a20e",
+      "name": "heading",
+      "parent": "b2673b",
+      "children": [],
+      "settings": {
+        "tag": "h2",
+        "text": "A longer headline",
+        "_cssGlobalClasses": [
+          "uxllgn"
+        ]
+      }
+    },
+    {
+      "id": "e9a91b",
+      "name": "block",
+      "parent": "e2f11f",
+      "children": [
+        "81171a"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ngmkpl"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "1cbdef",
+      "name": "block",
+      "parent": "e2f11f",
+      "children": [
+        "290fd5",
+        "f4fd74"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dfsgzp"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "3dc995",
+      "name": "block",
+      "parent": "56656b",
+      "children": [
+        "75b0bb"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ngmkpl"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "7f7f6b",
+      "name": "block",
+      "parent": "56656b",
+      "children": [
+        "ad501d",
+        "79513f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dfsgzp"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "232fd3",
+      "name": "block",
+      "parent": "2b9b33",
+      "children": [
+        "717de9"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ngmkpl"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "52a589",
+      "name": "block",
+      "parent": "2b9b33",
+      "children": [
+        "fa8e02",
+        "9dfd66"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "dfsgzp"
+        ]
+      },
+      "label": "Body"
+    },
+    {
+      "id": "81171a",
+      "name": "icon",
+      "parent": "e9a91b",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "height": "var(--icon-size)",
+          "width": "var(--icon-size)",
+          "fill": {
+            "raw": "var(--icon-color)"
+          }
+        },
+        "_cssGlobalClasses": [
+          "aybarc"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "290fd5",
+      "name": "heading",
+      "parent": "1cbdef",
+      "children": [],
+      "settings": {
+        "text": "Feature heading",
+        "_cssGlobalClasses": [
+          "zzlqtr"
+        ]
+      }
+    },
+    {
+      "id": "f4fd74",
+      "name": "text-basic",
+      "parent": "1cbdef",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "oronuy"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "75b0bb",
+      "name": "icon",
+      "parent": "3dc995",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "height": "var(--icon-size)",
+          "width": "var(--icon-size)",
+          "fill": {
+            "raw": "var(--icon-color)"
+          }
+        },
+        "_cssGlobalClasses": [
+          "aybarc"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "ad501d",
+      "name": "heading",
+      "parent": "7f7f6b",
+      "children": [],
+      "settings": {
+        "text": "Feature heading",
+        "_cssGlobalClasses": [
+          "zzlqtr"
+        ]
+      }
+    },
+    {
+      "id": "79513f",
+      "name": "text-basic",
+      "parent": "7f7f6b",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "oronuy"
+        ]
+      },
+      "label": "Text"
+    },
+    {
+      "id": "717de9",
+      "name": "icon",
+      "parent": "232fd3",
+      "children": [],
+      "settings": {
+        "icon": {
+          "library": "svg",
+          "svg": {
+            "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+            "isPlaceholder": true,
+            "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+          },
+          "height": "var(--icon-size)",
+          "width": "var(--icon-size)",
+          "fill": {
+            "raw": "var(--icon-color)"
+          }
+        },
+        "_cssGlobalClasses": [
+          "aybarc"
+        ]
+      },
+      "themeStyles": []
+    },
+    {
+      "id": "fa8e02",
+      "name": "heading",
+      "parent": "52a589",
+      "children": [],
+      "settings": {
+        "text": "Feature heading",
+        "_cssGlobalClasses": [
+          "zzlqtr"
+        ]
+      }
+    },
+    {
+      "id": "9dfd66",
+      "name": "text-basic",
+      "parent": "52a589",
+      "children": [],
+      "settings": {
+        "text": "Lorem ipsum.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "oronuy"
+        ]
+      },
+      "label": "Text"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading"
+    },
+    {
+      "id": "dhlvll",
+      "name": "fr-content-section-kilo"
+    },
+    {
+      "id": "fdhkez",
+      "name": "fr-content-section-kilo__inner"
+    },
+    {
+      "id": "ggeuxb",
+      "name": "fr-content-section-kilo__content-wrapper"
+    },
+    {
+      "id": "zivsvo",
+      "name": "fr-content-section-kilo__heading-wrapper"
+    },
+    {
+      "id": "uxllgn",
+      "name": "fr-feature-section-golf__heading"
+    },
+    {
+      "id": "xtodmg",
+      "name": "fr-feature-card-foxtrot"
+    },
+    {
+      "id": "ngmkpl",
+      "name": "fr-feature-card-foxtrot__media-wrapper"
+    },
+    {
+      "id": "aybarc",
+      "name": "fr-feature-card-foxtrot__icon"
+    },
+    {
+      "id": "dfsgzp",
+      "name": "fr-feature-card-foxtrot__body"
+    },
+    {
+      "id": "zzlqtr",
+      "name": "fr-feature-card-foxtrot__heading"
+    },
+    {
+      "id": "oronuy",
+      "name": "fr-feature-card-foxtrot__text"
+    },
+    {
+      "id": "ygkjim",
+      "name": "fr-image-group-bravo"
+    },
+    {
+      "id": "jksepa",
+      "name": "fr-image-group-bravo__image"
+    }
+  ]
+}

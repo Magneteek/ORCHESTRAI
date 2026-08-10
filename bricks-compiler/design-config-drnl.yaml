@@ -1,0 +1,135 @@
+# Design Config — DeleteReviews.nl (DRNL)
+# ─────────────────────────────────────────────────────────────────────────────
+# Source of truth: homepage-DESIGNED.html (2026-05-23)
+# Run: node generate-acss-export.js design-config-drnl.yaml acss-base-template.json acss-export-drnl.json
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Color Palette ──────────────────────────────────────────────────────────────
+# Extracted exactly from homepage-DESIGNED.html CSS tokens
+#
+# --navy:       #0b1927  → neutral  (dark section bg — navy blue, NOT teal-dark)
+# --teal:       #00a3a0  → primary  (brand teal — buttons, links, highlights)
+# --teal-dark:  #00807d  → secondary (teal hover / secondary actions)
+# --teal-deep:  #006361  → accent   (deep teal, dark cards, accent panels)
+# --off:        #f3f1ee  → (not a palette slot — used via bg-light utility class)
+# --grey-text:  #65605a  → base     (body text — warm grey, NOT teal-grey)
+# --black:      #0a0a0a  → shade    (overlays, deepest dark)
+# --e8a020             → action    (amber-gold — CTAs on dark bg, high contrast)
+
+colors:
+  primary:   "#00a3a0"   # Brand teal — buttons, links, primary CTAs, proof bar bg
+  secondary: "#00807d"   # Teal dark — secondary buttons, hover state for primary
+  accent:    "#006361"   # Teal deep — dark accent panels, calc blocks
+  action:    "#e8a020"   # Amber-gold — high-contrast CTA on dark backgrounds
+  neutral:   "#0b1927"   # Navy blue — dark section backgrounds, hero, why, CTA
+  base:      "#65605a"   # Warm grey — body text, card descriptions, FAQ answers
+  shade:     "#0a0a0a"   # Near-pure black — overlays, deepest contrast
+
+# ── Spacing ────────────────────────────────────────────────────────────────────
+# Section padding in design: 96px top/bottom, 24px horizontal
+spacing:
+  base_max: 28
+  base_min: 20
+  scale: 1.5
+  section_multiplier: 4
+  section_x_max: 24     # Matches design: padding: 0 24px on all containers
+  section_x_min: 16
+
+# ── Typography ─────────────────────────────────────────────────────────────────
+# Khand: display/heading serif (Google Fonts)
+# Switzer: body sans (Fontshare)
+# Note: font loading (@import) must be added to WordPress > Appearance > Customize
+# or via a custom CSS plugin — ACSS sets the family token only.
+typography:
+  base_text_desk: 16      # Design uses 16px base (not 18)
+  base_text_mob: 15
+  heading_scale: 1.2      # Conservative — H1 clamp(36,4.5vw,60) → H2 clamp(28,3.2vw,42)
+  heading_weight: 700
+  heading_transform: none
+  heading_letter_spacing: "-0.02em"   # NEGATIVE — design uses -.02em to -.025em
+  heading_font_family: "'Khand', Georgia, sans-serif"
+  heading_line_height: "1.15"         # Design: line-height 1.1–1.15 on headings
+  mob_heading_scale: 1.1
+  body_line_height: "1.65"            # Design: body line-height 1.65–1.7
+  lede_max_width: "56"                # fr-lede-width — design constrains lede to ~560px / ~56ch
+
+# ── Border Radius ─────────────────────────────────────────────────────────────
+# Design system: --r4: 4px (buttons, tags), --r8: 8px (cards), --r12: 12px (large)
+# ACSS: base-radius = --radius (mid-size = 8px), scale=2 → xs=4px, l=16px
+radius:
+  base: "8px"    # --radius = 8px (cards, panels)
+  scale: 2       # xs=4px (buttons/tags), base=8px, l=16px, xl=32px
+
+# ── Viewport ──────────────────────────────────────────────────────────────────
+viewport:
+  max: 1120      # Design: max-width 1120px on all containers
+  min: 360
+
+# ── Breakpoints ───────────────────────────────────────────────────────────────
+breakpoints:
+  xs: 360
+  s: 480
+  m: 768
+  l: 992
+  xl: 1120
+
+# ── Buttons ───────────────────────────────────────────────────────────────────
+# Design: .btn-primary { padding: 15px 32px; border-radius: 4px; font-weight: 700 }
+# Note: btn border-radius uses --r4 (4px = radius-xs in our system)
+buttons:
+  border_width: 1.5       # Design: border: 1.5px solid on outline buttons
+  min_width: 0            # No min-width — design lets buttons size to content
+  text_min: 14
+  text_max: 16
+  padding_y: "15px"       # Matches design's 15px top/bottom
+  padding_x: "32px"       # Matches design's 32px left/right
+  font_weight: 700
+  text_transform: none
+
+# ── Cards ─────────────────────────────────────────────────────────────────────
+# Design cards: 32px 28px padding, 8px radius, 1px solid border
+# Pain cards: white bg + #e8e5e0 border
+# Why cards: dark bg + rgba(255,255,255,.07) border (context-sensitive via ACSS color scheme)
+cards:
+  # Frames card tokens (fr-card-* prefix — used by all fr- card sections)
+  fr_card_radius: "var(--radius)"               # 8px — matches design's --r8
+  fr_card_border_color: "var(--shade-ultra-light)" # Warm light border (light mode)
+  fr_card_border_size: "1px"
+  fr_card_border_style: "solid"
+  fr_card_padding: "var(--space-m)"
+  fr_card_gap: "var(--space-xs)"
+  fr_card_avatar_radius: "50%"
+
+  # ACSS global card tokens (applied to [class*='card'] elements auto)
+  card_radius: "var(--radius)"                  # 8px
+  card_padding: "var(--space-m)"
+  card_gap: "calc(var(--content-gap) / 2)"
+  card_heading_size: "var(--h3)"
+  card_text_size: "var(--text-s)"
+  card_media_aspect: "16 / 9"
+  card_avatar_size: "38px"                      # Design: 38px for testimonial avatars
+  card_border_style: "solid"
+  card_border_width: "1px"
+  card_icon_size: "46px"                        # Design: pain__icon 46px
+
+# ── Box Shadows ───────────────────────────────────────────────────────────────
+# Design values extracted exactly:
+# Hover state: box-shadow: 0 16px 48px rgba(0,0,0,.07)
+# Dropdown:    box-shadow: 0 16px 40px rgba(0,0,0,.4)
+shadows:
+  sm: "0 2px 8px 0 rgba(0,0,0,.04)"     # --shadow-m  — resting card shadow
+  md: "0 8px 24px 0 rgba(0,0,0,.06)"    # --shadow-l  — elevated card
+  lg: "0 16px 48px 0 rgba(0,0,0,.07)"   # --shadow-xl — hover state (design value)
+
+# ── Icons ─────────────────────────────────────────────────────────────────────
+# Design: icon wrappers are 46px, radius --r8, teal bg at 8% opacity
+icons:
+  default_theme: "dark"
+  size_m: "22px"          # Icon SVG size inside wrapper
+  size_l: "46px"          # Icon wrapper size (pain__icon)
+  padding: ".35em"
+  radius: "var(--radius)" # 8px — matches design's icon wrapper radius
+
+# ── Global ────────────────────────────────────────────────────────────────────
+# Design is a dark-scheme site (navy hero/why/CTA sections, light body sections)
+scheme: dark

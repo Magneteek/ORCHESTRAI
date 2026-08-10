@@ -1,0 +1,103 @@
+# Pricing Section Echo
+# Light-bg section: centered intro + fr-tabs monthly/yearly toggle + 4-plan comparison grid.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: pricing-section-echo
+version: "2.3.5"
+description: |
+  Light-background pricing section. Centered intro block (H2, accent, lede). Below: a
+  fr-tabs component with "Pay Monthly" / "Pay Yearly" nav pills, each panel containing
+  a 4-column pricing grid. Each card: plan label, savings badge, price + term, CTA button,
+  plan intro text, and a 5-item feature list.
+  NOTE: Both monthly and yearly grids share the same CSS classes — filling plan slots via
+  the compiler updates BOTH grids simultaneously. Yearly prices must be updated manually
+  in Bricks after pasting.
+  NOTE: Tab labels ("Pay Monthly" / "Pay Yearly") use a hidden CSS class and are not
+  slot-fillable. Edit them manually in Bricks.
+  NOTE: Plan features (icon + text per item) are not individually slot-fillable — nested
+  arrays are not supported. Edit features manually per card in Bricks.
+
+slots:
+
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: H2 section heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-alpha__lede
+    description: Supporting paragraph below the heading
+
+  # ── Pricing cards (array) ─────────────────────────────────────────────────
+  # NOTE: Fills BOTH monthly and yearly grids. Provide 4 plans.
+  # Yearly prices must be updated manually in Bricks after pasting.
+
+  plans:
+    type: array
+    required: false
+    min: 2
+    max: 4
+    template_label: "Pricing Card Echo"
+    description: |
+      Pricing plan cards. Fills both monthly and yearly grids (same CSS classes).
+      Update yearly prices manually in Bricks after pasting.
+    item_slots:
+      plan_label:
+        type: string
+        required: true
+        max_length: 40
+        target_class: pricing-card-echo__plan-label
+        description: Plan tier name (e.g. "Starter", "Pro", "Business")
+      savings_badge:
+        type: string
+        required: false
+        max_length: 20
+        target_class: pricing-card-echo__savings-badge
+        description: Savings label shown beside plan name (e.g. "-10%", "Best Value")
+      price:
+        type: string
+        required: true
+        max_length: 20
+        target_class: pricing-card-echo__price
+        description: "Monthly price value (e.g. \"$29\") — update yearly value manually"
+      price_term:
+        type: string
+        required: false
+        max_length: 10
+        target_class: pricing-card-echo__price-term
+        description: "Price period label (e.g. \"mo\", \"month\")"
+      cta_text:
+        type: string
+        required: false
+        max_length: 40
+        target_class: pricing-card-echo__cta
+        description: CTA button label (e.g. "Get Started", "Choose Plan")
+      cta_link:
+        type: link
+        required: false
+        target_class: pricing-card-echo__cta
+        description: "CTA button URL: { url: '...', type?: 'external' }"
+      plan_intro:
+        type: html
+        required: false
+        max_length: 120
+        target_class: pricing-card-echo__plan-intro
+        description: "Short intro above the feature list (e.g. \"All core features\", \"everything in <span class='plan-reference'>Plan 1</span>, plus:\")"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  - name: fr-notes

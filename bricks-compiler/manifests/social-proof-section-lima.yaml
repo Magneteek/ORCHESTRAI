@@ -1,49 +1,55 @@
 # Social Proof Section Lima
-# AUTO-GENERATED — review required/max_length fields before use
+# 2-col split: heading + accent left, lede + 8 logos right.
 # Source: https://krisbal.com (Bricks 2.3.5)
 
 component: social-proof-section-lima
 version: "2.3.5"
 description: |
-  TODO: describe what this section is for
+  Full-section social proof block. Left column: H2 heading + accent heading label.
+  Right column: lede paragraph + a flex logo group (fr-logos-bravo) of up to 8 logos.
+  All logo images are individually slot-fillable via the logos array.
 
 slots:
 
-  # ── Top-level slots ──────────────────────────────────────────────
+  # ── Left column ───────────────────────────────────────────────────────────
 
   heading:
     type: string
-    required: false  # set to true if agent must always fill this
+    required: true
     max_length: 80
     target_class: fr-social-proof-section-lima__heading
+    description: H2 section heading (left column)
 
   accent_heading:
     type: string
-    required: false  # set to true if agent must always fill this
-    max_length: 200
+    required: false
+    max_length: 60
     target_class: fr-social-proof-section-lima__accent-heading
+    description: Small accent label above the heading
+
+  # ── Right column ──────────────────────────────────────────────────────────
 
   lede:
     type: string
-    required: false  # set to true if agent must always fill this
-    max_length: 200
+    required: false
+    max_length: 220
     target_class: fr-social-proof-section-lima__lede
+    description: Supporting paragraph above the logo row (right column)
 
-  # ── Logo (8 in template → array) ────
-
-  logo:
+  logos:
     type: array
     required: false
-    min: 2
-    max: 10
+    min: 1
+    max: 8
     template_label: "Logo"
+    description: Row of partner/client logos (fr-logos-bravo group, up to 8 images)
     item_slots:
       logo:
         type: media
-        required: false  # set to true if agent must always fill this
+        required: true
         target_class: fr-logos-bravo__logo
+        description: Logo image (recommend SVG or PNG with transparent background)
 
-
-# ── Builder-only elements ──────────────────────────────────────────────
+# ── Builder-only elements ─────────────────────────────────────────────────
 strip_elements:
   [] # none detected

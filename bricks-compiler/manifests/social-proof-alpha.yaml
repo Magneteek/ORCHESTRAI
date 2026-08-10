@@ -1,31 +1,69 @@
-# social-proof-alpha
-# AUTO-GENERATED — review required/max_length fields before use
+# Social Proof Alpha
+# Sub-component: review badge (platform logo + CSS stars + review count) + 4 stat cards.
 # Source: https://krisbal.com (Bricks 2.3.5)
 
 component: social-proof-alpha
 version: "2.3.5"
 description: |
-  TODO: describe what this section is for
+  Sub-component (no section wrapper — paste inside an existing section or container).
+  5-column horizontal bar. First column: a review platform badge (fr-badge-charlie)
+  with "reviewed on" label, platform logo image, CSS star rating, and total review count.
+  Remaining 4 columns: stat cards, each with a large bold value and a short description.
+  Used as a proof bar below hero sections or inside CTA sections.
+  NOTE: The CSS star rating (fr-rating-alpha) is driven by a data-rating attribute.
+  It is not slot-fillable — set the rating value manually in the Bricks attributes panel
+  on the "Rating Alpha" element after pasting.
 
 slots:
 
-  # ── Top-level slots ──────────────────────────────────────────────
+  # ── Review badge ──────────────────────────────────────────────────────────
 
-  logo:
+  badge_text:
+    type: string
+    required: false
+    max_length: 30
+    target_class: fr-badge-charlie__text
+    description: Label above the platform logo (e.g. "reviewed on", "as seen on")
+
+  badge_logo:
     type: media
-    required: false  # set to true if agent must always fill this
+    required: false
     target_class: fr-badge-charlie__logo
+    description: Platform logo image (e.g. Google, Trustpilot SVG, width 10em)
 
-  icon_half:
-    type: icon
-    required: false  # set to true if agent must always fill this
-    target_class: fr-rating-alpha__icon-half
+  badge_reviews:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-badge-charlie__total-reviews
+    description: Total review count label (e.g. "123 reviews", "4.8 · 200+ reviews")
 
-  icon:
-    type: icon
-    required: false  # set to true if agent must always fill this
-    target_class: fr-rating-alpha__icon
+  # ── Stat cards (array) ────────────────────────────────────────────────────
+  # NOTE: The first card in the template uses labels "Value"/"Description";
+  # cards 2-4 use "Numbers"/"Facts". Both sets share the same CSS classes.
+  # Targeting is by CSS class to handle the inconsistency.
 
-# ── Builder-only elements ──────────────────────────────────────────────
+  stats:
+    type: array
+    required: false
+    min: 1
+    max: 4
+    template_label: "Card"
+    description: "Stat cards (columns 2-5). Each card: large bold value + short description."
+    item_slots:
+      value:
+        type: string
+        required: true
+        max_length: 30
+        target_class: fr-social-proof-alpha__card-value
+        description: Large bold metric (e.g. "10 Years", "98%", "900+ Projects")
+      description:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-social-proof-alpha__card-description
+        description: Short label below the value (e.g. "Proven Track Record")
+
+# ── Builder-only elements ─────────────────────────────────────────────────
 strip_elements:
   [] # none detected

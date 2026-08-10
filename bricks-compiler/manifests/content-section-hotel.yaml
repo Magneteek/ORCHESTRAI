@@ -1,0 +1,109 @@
+# Content Section Hotel
+# 2-column split: content LEFT (H2 + accent + CTA link + 3 talking-point mini-cards),
+# media RIGHT (6-photo collage, 2 CSS columns, slightly rotated for visual energy).
+# The collage is absolutely positioned and overflows vertically (no padding on section).
+# On tablet the rotation resets and only the first 4 images show.
+# Best for: service/feature breakdowns with supporting photo collage.
+
+component: content-section-hotel
+version: "2.3.5"
+description: |
+  2-col split. Left: H2 heading + accent label + text-link CTA + 3 talking-point cards
+  (each: short heading + one-liner text). Right: CSS-rotated 6-photo mosaic
+  (2-col, slight tilt). On tablet: straight grid, 4 images max.
+
+slots:
+
+  # ── Content column ────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-content-section-hotel__heading
+    description: H2 heading in the content column
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "e22fae"
+    description: Small uppercase accent label (fr-accent-heading utility class)
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-content-section-hotel__cta-link
+    description: Text-link CTA label below the heading
+
+  cta_link:
+    type: link
+    required: false
+    target_class: fr-content-section-hotel__cta-link
+    description: "URL for the text-link CTA — { url: '/page/' }"
+
+  # ── Talking point cards (array — 3 slots in template) ────────────────────────
+
+  talking_points:
+    type: array
+    required: false
+    min: 1
+    max: 3
+    template_label: "Talking Point Card"
+    description: Short feature mini-cards below the CTA — each has a heading + one-liner
+    item_slots:
+      heading:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-content-section-hotel__talking-point-heading
+        description: Bold card heading (e.g. "Snelle doorlooptijd")
+      text:
+        type: string
+        required: true
+        max_length: 200
+        target_class: fr-content-section-hotel__talking-point-text
+        description: One-sentence supporting text
+
+  # ── Media collage (6 photos — targeted by ID) ─────────────────────────────────
+  # Rendered as 2 CSS columns, slightly rotated. Tablet: straight grid, items 5–6 hidden.
+  # Portrait images work best (the CSS applies aspect-ratio per position).
+
+  media_1:
+    type: media
+    required: false
+    target_id: "01730a"
+    description: Collage photo 1 (col-1 top — aspect 4/6)
+
+  media_2:
+    type: media
+    required: false
+    target_id: "47513e"
+    description: Collage photo 2 (col-2 top — offset down)
+
+  media_3:
+    type: media
+    required: false
+    target_id: "39141b"
+    description: Collage photo 3 (col-1 mid)
+
+  media_4:
+    type: media
+    required: false
+    target_id: "287ccf"
+    description: Collage photo 4 (col-2 mid — last visible on tablet)
+
+  media_5:
+    type: media
+    required: false
+    target_id: "8759b3"
+    description: Collage photo 5 (col-1 bottom — desktop only)
+
+  media_6:
+    type: media
+    required: false
+    target_id: "a3b2b3"
+    description: Collage photo 6 (col-2 bottom — desktop only)
+
+strip_elements: []

@@ -1,0 +1,89 @@
+# Pricing Section Mike
+# Dark-bg section: centered intro + CSS hover-highlight plan grid (2–3 plans).
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: pricing-section-mike
+version: "2.3.5"
+description: |
+  Dark-background (bg--ultra-dark) pricing section. Centered intro block (H2, accent, lede).
+  Below: an interactive CSS pricing grid (fr-pricing-grid-mike) where hovering a plan
+  highlights it. Each plan card: icon, heading, price + term, description, feature list
+  (3 items), CTA button.
+  NOTE: Plan icons (SVG) are not slot-fillable — set manually per plan in Bricks after pasting.
+  NOTE: Per-plan feature items (icon + label) are not individually slot-fillable — nested
+  arrays are not supported. All plans start with 3 feature slots; edit items per plan in Bricks.
+
+slots:
+
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: H2 section heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-alpha__lede
+    description: Supporting paragraph below the heading
+
+  # ── Pricing plans (array) ─────────────────────────────────────────────────
+
+  plans:
+    type: array
+    required: false
+    min: 2
+    max: 3
+    template_label: "Plan"
+    description: Pricing plan columns (2–3 plans). Each plan has heading, price, description, features, and CTA.
+    item_slots:
+      heading:
+        type: string
+        required: true
+        max_length: 40
+        target_class: fr-pricing-grid-mike__plan-heading
+        description: Plan tier name (e.g. "Beginner", "Intermediate", "Advanced")
+      price:
+        type: string
+        required: true
+        max_length: 20
+        target_class: fr-pricing-grid-mike__plan-price
+        description: "Price value (e.g. \"$12.99\", \"Free\")"
+      price_term:
+        type: string
+        required: false
+        max_length: 10
+        target_class: fr-pricing-grid-mike__plan-term
+        description: "Price period (e.g. \"mo\", \"yr\")"
+      description:
+        type: string
+        required: false
+        max_length: 160
+        target_class: fr-pricing-grid-mike__plan-description
+        description: One-sentence description of this tier
+      cta_text:
+        type: string
+        required: false
+        max_length: 40
+        target_class: fr-pricing-grid-mike__plan-cta
+        description: CTA button label (e.g. "Choose this plan")
+      cta_link:
+        type: link
+        required: false
+        target_class: fr-pricing-grid-mike__plan-cta
+        description: "CTA button URL: { url: '...', type?: 'external' }"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

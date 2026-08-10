@@ -1,0 +1,90 @@
+# Content Section Kilo
+# 2-column: feature list LEFT, organic image collage RIGHT.
+# Left: H2 heading + accent label + 3 feature cards (icon + heading + text, horizontal).
+# Right: fr-image-group-bravo — 4 images in a free-floating collage with varying widths
+# and aspect ratios (CSS nth-child sizing), no grid lines.
+# Best for: service features or USPs with supporting candid/lifestyle photos.
+
+component: content-section-kilo
+version: "2.3.5"
+description: |
+  2-col layout. Left: H2 + accent + 3 icon feature cards (icon left, heading + text right).
+  Right: organic 4-image collage (bravo layout — images float with different widths:
+  50%/45%/40%/50%, varying aspect ratios, responsive 1-col on mobile).
+
+slots:
+
+  # ── Heading ──────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 100
+    target_class: fr-feature-section-golf__heading
+    description: H2 section heading (rendered at h3 size via fr-feature-section-golf__heading)
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_id: "ec640b"
+    description: Small uppercase accent label (fr-accent-heading utility class)
+
+  # ── Feature cards (array — 3 cards in template) ──────────────────────────────
+
+  features:
+    type: array
+    required: true
+    min: 2
+    max: 3
+    template_label: "Feature Card Foxtrot"
+    description: Horizontal icon feature cards — icon left, heading + text right
+    item_slots:
+      icon:
+        type: icon
+        required: false
+        target_class: fr-feature-card-foxtrot__icon
+        description: "SVG icon — { url, full? }"
+      heading:
+        type: string
+        required: true
+        max_length: 60
+        target_class: fr-feature-card-foxtrot__heading
+        description: Card heading
+      text:
+        type: string
+        required: true
+        max_length: 180
+        target_class: fr-feature-card-foxtrot__text
+        description: Supporting sentence or two
+
+  # ── Image collage (Image Group Bravo — 4 images) ─────────────────────────────
+  # Free-floating layout: each child has unique CSS width + aspect-ratio.
+  # All share fr-image-group-bravo__image but are targeted by ID for distinct sizing.
+  # Candid/lifestyle photos work best; avoid rigid grid-style shots.
+
+  image_1:
+    type: media
+    required: false
+    target_id: "b4beb4"
+    description: Collage image 1 — largest (50% width, 1:1 aspect)
+
+  image_2:
+    type: media
+    required: false
+    target_id: "ab5676"
+    description: Collage image 2 — medium (45% width, 1:1 aspect)
+
+  image_3:
+    type: media
+    required: false
+    target_id: "595469"
+    description: Collage image 3 — smaller (40% width)
+
+  image_4:
+    type: media
+    required: false
+    target_id: "381e26"
+    description: Collage image 4 — wide tall (50% width, 0.8 aspect)
+
+strip_elements: []

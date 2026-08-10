@@ -1,0 +1,188 @@
+{
+  "content": [
+    {
+      "id": "998bdb",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "9d028c",
+        "25a502"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "sjy5dn"
+        ],
+        "_rowGap": "var(--container-gap)"
+      },
+      "label": "Content Section Victor"
+    },
+    {
+      "id": "9d028c",
+      "name": "container",
+      "parent": "998bdb",
+      "children": [
+        "c911a3",
+        "23cb48"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "9yqzvm"
+        ]
+      },
+      "label": "Inner"
+    },
+    {
+      "id": "25a502",
+      "name": "container",
+      "parent": "998bdb",
+      "children": [
+        "663e92"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "gn6j3a"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "c911a3",
+      "name": "block",
+      "parent": "9d028c",
+      "children": [
+        "6174ca"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ciaxv7"
+        ]
+      },
+      "label": "Heading Wrapper"
+    },
+    {
+      "id": "23cb48",
+      "name": "block",
+      "parent": "9d028c",
+      "children": [
+        "18d110"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wgarty"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "663e92",
+      "name": "image",
+      "parent": "25a502",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "wxoiqs"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-image-800x600.jpg",
+          "isPlaceholder": true
+        },
+        "tag": "figure"
+      },
+      "label": "Media"
+    },
+    {
+      "id": "6174ca",
+      "name": "heading",
+      "parent": "c911a3",
+      "children": [],
+      "settings": {
+        "text": "Write a compelling heading for this section",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "3x77sk"
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "18d110",
+      "name": "text",
+      "parent": "23cb48",
+      "children": [],
+      "settings": {
+        "text": "<p>This is just placeholder text.</p>",
+        "_cssGlobalClasses": [
+          "z6z6uc"
+        ]
+      },
+      "label": "Content"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "sjy5dn",
+      "name": "content-section-victor",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "9yqzvm",
+      "name": "content-section-victor__inner",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-auto-2)"
+      },
+      "modified": 1729437863,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "ciaxv7",
+      "name": "content-section-victor__heading-wrapper",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "3x77sk",
+      "name": "content-section-victor__heading",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "wgarty",
+      "name": "content-section-victor__content-wrapper",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "z6z6uc",
+      "name": "content-section-victor__content",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "gn6j3a",
+      "name": "content-section-victor__media-wrapper",
+      "settings": {
+        "_order": "-1"
+      },
+      "_exists": false
+    },
+    {
+      "id": "wxoiqs",
+      "name": "content-section-victor__media",
+      "settings": {
+        "_aspectRatio": "16/7",
+        "_width": "100%",
+        "_objectFit": "cover"
+      },
+      "modified": 1730583716,
+      "user_id": 1,
+      "_exists": false
+    }
+  ]
+}

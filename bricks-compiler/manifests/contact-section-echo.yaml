@@ -1,0 +1,88 @@
+# Contact Section Echo
+# 2-column: content/trust LEFT, contact form RIGHT.
+# Left: heading + lede + icon bullet list (up to 5 items) + review badges (Google + Yelp).
+# Right: Bricks contact form (Name, Email, Message).
+
+component: contact-section-echo
+version: "2.3.5"
+description: |
+  2-column contact section with trust signals. Left: heading, lede, icon bullet list
+  (2–5 items), review badges. Right: contact form (Name/Email/Message).
+
+slots:
+
+  # ── Intro ──────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-contact-section-echo__heading
+    description: Section H2 heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 300
+    target_id: "d3c3ba"
+    description: Supporting paragraph below heading
+
+  # ── Icon bullet list ────────────────────────────────────────────────────────
+  # 5 fixed list items (icon + text). Targeted by element ID.
+  # Icons are SVG placeholders — swap in Bricks after pasting.
+
+  list_item_1:
+    type: string
+    required: false
+    max_length: 100
+    target_id: "e36604"
+    description: First bullet point text
+
+  list_item_2:
+    type: string
+    required: false
+    max_length: 100
+    target_id: "4a7ae3"
+    description: Second bullet point text
+
+  list_item_3:
+    type: string
+    required: false
+    max_length: 100
+    target_id: "b3ab4c"
+    description: Third bullet point text
+
+  list_item_4:
+    type: string
+    required: false
+    max_length: 100
+    target_id: "19fc29"
+    description: Fourth bullet point text
+
+  list_item_5:
+    type: string
+    required: false
+    max_length: 100
+    target_id: "d95cf9"
+    description: Fifth bullet point text
+
+  # ── Review badges ───────────────────────────────────────────────────────────
+  # 2 fixed badges (Google + Yelp). Show star rating via data-badge-value attribute.
+  # Badge label text (e.g. "on Google") is settable.
+
+  badge_1_label:
+    type: string
+    required: false
+    max_length: 30
+    target_id: "39d125"
+    description: Label for first badge (e.g. "on Google")
+
+  badge_2_label:
+    type: string
+    required: false
+    max_length: 30
+    target_id: "f33ff4"
+    description: Label for second badge (e.g. "on Trustpilot")
+
+# ── Strip builder-only elements ────────────────────────────────────────────────
+strip_elements: []

@@ -1,0 +1,75 @@
+# Content Section Whiskey
+# Personal letter / open letter format. Centered intro above a "stacked paper" card.
+# The card has a CSS shadow effect making it look like sheets of paper.
+# Inside: rich text body + author block (signature image, avatar, name, title).
+# Best for: founder letters, trust-building personal messages, "why we exist" statements.
+
+component: content-section-whiskey
+version: "2.3.5"
+description: |
+  Open letter format. Centered intro (heading + accent + lede). Below: white "paper" card
+  with stacked-paper CSS shadow effect. Card contains rich text + author block
+  (signature image, circular avatar, name, title/role).
+
+slots:
+
+  # ── Intro (centered above the letter) ─────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: Section H2 heading (e.g. "Een persoonlijk woord van onze oprichter")
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small uppercase accent label above or below heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 200
+    target_class: fr-intro-alpha__lede
+    description: Supporting sentence below heading
+
+  # ── Letter content ─────────────────────────────────────────────────────────
+
+  content:
+    type: html
+    required: true
+    target_class: content-section-whiskey__content
+    description: Letter body — rich text paragraphs. Personal, first-person tone recommended.
+
+  # ── Author block ────────────────────────────────────────────────────────────
+
+  author_signature:
+    type: media
+    required: false
+    target_class: content-section-whiskey__author-signature
+    description: Handwritten signature image (PNG with transparent background recommended)
+
+  author_avatar:
+    type: media
+    required: false
+    target_class: content-section-whiskey__author-avatar
+    description: Circular author photo (rendered 75px, aspect-ratio 1/1)
+
+  author_name:
+    type: string
+    required: false
+    max_length: 60
+    target_class: content-section-whiskey__author-name
+    description: Author full name
+
+  author_title:
+    type: string
+    required: false
+    max_length: 60
+    target_class: content-section-whiskey__author-title
+    description: Author role/title (rendered in italic, e.g. "Oprichter, DeleteReviews.nl")
+
+strip_elements: []

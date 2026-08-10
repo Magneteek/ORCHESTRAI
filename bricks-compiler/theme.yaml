@@ -1,0 +1,170 @@
+# Site Design Tokens
+# Generated from ACSS settings export
+# Timestamp: 1779452353
+# ACSS version: 2.x
+
+meta:
+  color_scheme: dark
+  viewport: { min: 360px, max: 1280px }
+  root_font_size: 62.5%  # 1rem = 10.0px
+
+palette:
+  primary:
+    main: "#085a7d"  # --primary
+    ultra-dark: "#032230"  # --primary-ultra-dark
+    semi-dark: "#0b79a8"  # --primary-semi-dark
+    dark: "#085678"  # --primary-dark
+    hover: "#09678f"  # --primary-hover
+    semi-light: "#57c5f4"  # --primary-semi-light
+    light: "#b7e6fa"  # --primary-light
+    ultra-light: "#e7f7fd"  # --primary-ultra-light
+  secondary:
+    main: "#8518ce"  # --secondary
+    ultra-dark: "#1e052e"  # --secondary-ultra-dark
+    semi-dark: "#6713a0"  # --secondary-semi-dark
+    dark: "#4a0d72"  # --secondary-dark
+    hover: "#9723e5"  # --secondary-hover
+    semi-light: "#b45fec"  # --secondary-semi-light
+    light: "#dfbbf7"  # --secondary-light
+    ultra-light: "#f4e8fc"  # --secondary-ultra-light
+  accent:
+    main: "#28b5f1"  # --accent
+    ultra-dark: "#032230"  # --accent-ultra-dark
+    semi-dark: "#0b79a8"  # --accent-semi-dark
+    dark: "#085678"  # --accent-dark
+    hover: "#33b9f2"  # --accent-hover
+    semi-light: "#57c5f4"  # --accent-semi-light
+    light: "#b7e6fa"  # --accent-light
+    ultra-light: "#e7f7fd"  # --accent-ultra-light
+  action:
+    main: "#a5de21"  # --action
+    ultra-dark: "#212c07"  # --action-ultra-dark
+    semi-dark: "#749b17"  # --action-semi-dark
+    dark: "#536f11"  # --action-dark
+    hover: "#b3e342"  # --action-hover
+    semi-light: "#c0e864"  # --action-semi-light
+    light: "#e4f5bc"  # --action-light
+    ultra-light: "#f6fce9"  # --action-ultra-light
+  neutral:
+    main: "#080c0e"  # --neutral
+    ultra-dark: "#131c20"  # --neutral-ultra-dark
+    semi-dark: "#416171"  # --neutral-semi-dark
+    dark: "#2f4551"  # --neutral-dark
+    hover: "#293d47"  # --neutral-hover
+    semi-light: "#8eaebe"  # --neutral-semi-light
+    light: "#cedce3"  # --neutral-light
+    ultra-light: "#eff3f6"  # --neutral-ultra-light
+  base:
+    main: "#878e92"  # --base
+    ultra-dark: "#181a1b"  # --base-ultra-dark
+    semi-dark: "#555a5e"  # --base-semi-dark
+    dark: "#3d4143"  # --base-dark
+    hover: "#a0a5a9"  # --base-hover
+    semi-light: "#a1a7aa"  # --base-semi-light
+    light: "#d7d9db"  # --base-light
+    ultra-light: "#f2f2f3"  # --base-ultra-light
+  shade:
+    main: "#1c1c1c"  # --shade
+    ultra-dark: "#1a1a1a"  # --shade-ultra-dark
+    semi-dark: "#595959"  # --shade-semi-dark
+    dark: "#404040"  # --shade-dark
+    hover: "#030303"  # --shade-hover
+    semi-light: "#a6a6a6"  # --shade-semi-light
+    light: "#d9d9d9"  # --shade-light
+    ultra-light: "#f2f2f2"  # --shade-ultra-light
+  black: "#000000"
+  white: "#ffffff"
+
+typography:
+  base_text:
+    mobile: 16px
+    desktop: 18px
+    fluid: "clamp(1.6rem, calc(0.2174vw + 1.5217rem), 1.8rem)"  # --text-m / --text-base
+  heading:
+    scale: 1.333  # Major-Third (desktop)
+    scale_mobile: 1.2  # (mobile)
+    weight: 600
+    text_transform: uppercase
+    letter_spacing: 0.1em
+    sizes:
+      h6: "clamp(1.6rem, calc(0.2174vw + 1.5217rem), 1.8rem)"  # 16.0px → 18.0px
+      h5: "clamp(1.92rem, calc(0.5211vw + 1.7324rem), 2.3994rem)"  # 19.2px → 24.0px
+      h4: "clamp(2.304rem, calc(0.9722vw + 1.954rem), 3.1984rem)"  # 23.0px → 32.0px
+      h3: "clamp(2.7648rem, calc(1.629vw + 2.1784rem), 4.2635rem)"  # 27.6px → 42.6px
+      h2: "clamp(3.3178rem, calc(2.5711vw + 2.3922rem), 5.6832rem)"  # 33.2px → 56.8px
+      h1: "clamp(3.9813rem, calc(3.907vw + 2.5748rem), 7.5757rem)"  # 39.8px → 75.8px
+  body:
+    font_family: (inherited from theme)
+    paragraph_spacing: 1em
+
+spacing:
+  scale: 1.5
+  base: { min: 24px, max: 30px }
+  levels:
+    3xs: "clamp(0.4741rem, calc(0.1288vw + 0.4277rem), 0.5926rem)"  # 4.7px → 5.9px
+    2xs: "clamp(0.7111rem, calc(0.1932vw + 0.6415rem), 0.8889rem)"  # 7.1px → 8.9px
+    xs: "clamp(1.0667rem, calc(0.2899vw + 0.9623rem), 1.3333rem)"  # 10.7px → 13.3px
+    s: "clamp(1.6rem, calc(0.4348vw + 1.4435rem), 2.0rem)"  # 16.0px → 20.0px
+    m: "clamp(2.4rem, calc(0.6522vw + 2.1652rem), 3.0rem)"  # 24.0px → 30.0px
+    l: "clamp(3.6rem, calc(0.9783vw + 3.2478rem), 4.5rem)"  # 36.0px → 45.0px
+    xl: "clamp(5.4rem, calc(1.4674vw + 4.8717rem), 6.75rem)"  # 54.0px → 67.5px
+    2xl: "clamp(8.1rem, calc(2.2011vw + 7.3076rem), 10.125rem)"  # 81.0px → 101.2px
+    3xl: "clamp(12.15rem, calc(3.3016vw + 10.9614rem), 15.1875rem)"  # 121.5px → 151.9px
+    4xl: "clamp(18.225rem, calc(4.9524vw + 16.4421rem), 22.7812rem)"  # 182.2px → 227.8px
+    5xl: "clamp(27.3375rem, calc(7.4287vw + 24.6632rem), 34.1719rem)"  # 273.4px → 341.7px
+  section:
+    multiplier: 4
+    default: --section-space-m  # 96.0px → 120.0px
+    xs: "clamp(4.2667rem, calc(1.1594vw + 3.8493rem), 5.3333rem)"  # 42.7px → 53.3px
+    s: "clamp(6.4rem, calc(1.7391vw + 5.7739rem), 8.0rem)"  # 64.0px → 80.0px
+    m: "clamp(9.6rem, calc(2.6087vw + 8.6609rem), 12.0rem)"  # 96.0px → 120.0px
+    l: "clamp(14.4rem, calc(3.913vw + 12.9913rem), 18.0rem)"  # 144.0px → 180.0px
+    xl: "clamp(21.6rem, calc(5.8696vw + 19.487rem), 27.0rem)"  # 216.0px → 270.0px
+    2xl: "clamp(32.4rem, calc(8.8043vw + 29.2304rem), 40.5rem)"  # 324.0px → 405.0px
+
+radius:
+  base: 1rem  # = 10.0px
+  scale: 1.5
+  values:
+    xs: 0.444rem  # --radius-xs = 4.4px
+    s: 0.667rem  # --radius-s = 6.7px
+    base: 1.0rem  # --radius = 10.0px
+    l: 1.5rem  # --radius-l = 15.0px
+    xl: 2.25rem  # --radius-xl = 22.5px
+
+buttons:
+  border_width: 2.5px
+  min_width: 140px
+  text_size: "clamp(1.4rem, calc(0.4348vw + 1.2435rem), 1.8rem)"  # 14px → 18px
+  padding_y: .75em
+  padding_x: 1.5em
+  font_weight: 400
+  text_transform: none
+  radius: var(--radius)  # 10.0px
+  transition: "background .3s ease-in-out, color .3s ease-in-out, border .3s ease-in-out"
+
+breakpoints:
+  xs: 360px  # --bp-xs
+  s: 480px  # --bp-s
+  m: 768px  # --bp-m
+  l: 992px  # --bp-l
+  xl: 1280px  # --bp-xl
+
+borders:
+  size: 1px
+  style: solid
+  color_dark: "rgba(0, 0, 0, 0.2)"  # --border-color-dark / var(--black-trans-20)
+  color_light: "rgba(255, 255, 255, 0.2)"  # --border-color-light / var(--white-trans-20)
+
+transitions:
+  duration: .3s
+  timing: ease-in-out
+  delay: 0s
+
+dark_theme_defaults:
+  background: var(--neutral-ultra-dark)  # #131c20
+  text: var(--text-light)
+  heading: var(--text-light)
+  card_background: var(--black)  # #000000
+  btn_bg: var(--action)  # #a5de21
+  btn_text: var(--action-ultra-light)  # #f6fce9

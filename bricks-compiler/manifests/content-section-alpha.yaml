@@ -1,0 +1,49 @@
+# Content Section Alpha
+# Clean 2-column equal split: text content LEFT (heading + lede + CTA button),
+# full-height image RIGHT (object-fit cover, fills row height).
+# Responsive: stacks content above image on mobile.
+# Best for: service overviews, intro sections, simple feature callouts.
+
+component: content-section-alpha
+version: "2.3.5"
+description: |
+  The simplest 2-column content section. Left: H2 heading + short lede paragraph +
+  primary CTA button. Right: full-height image (object-fit cover, 100% height).
+  Equal columns, aligned center vertically. Stacks on tablet.
+
+slots:
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-content-section-alpha__heading
+    description: H2 heading in the content column
+
+  lede:
+    type: string
+    required: false
+    max_length: 300
+    target_class: fr-content-section-alpha__lede
+    description: Short supporting paragraph below the heading (fr-lede utility style)
+
+  media:
+    type: media
+    required: true
+    target_class: fr-content-section-alpha__media
+    description: Full-height image on the right (object-fit cover, equal column width)
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "1c06b1"
+    description: Primary CTA button label (btn--primary style)
+
+  cta_link:
+    type: link
+    required: false
+    target_id: "1c06b1"
+    description: "CTA button URL — { url: '/page/' }"
+
+strip_elements: []

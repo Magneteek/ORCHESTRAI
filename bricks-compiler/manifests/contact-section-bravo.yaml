@@ -1,0 +1,61 @@
+# Contact Section Bravo
+# 2-column grid: map LEFT, contact info RIGHT.
+# Map fills the full left half. Right: heading + address/phone/email info rows with icons.
+# Clean minimal layout — no social icons, no form.
+
+component: contact-section-bravo
+version: "2.3.5"
+description: |
+  2-column contact section. Left: embedded map (full height, min 30rem). Right: heading +
+  address/phone/email contact info rows. Each row has an icon, label, and detail text.
+
+slots:
+
+  # ── Heading ────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 60
+    target_class: fr-contact-section-bravo__heading
+    description: Section H2 heading (e.g. "Contact Us", "Neem contact op")
+
+  # ── Contact Info ───────────────────────────────────────────────────────────
+  # Three fixed info rows (address, phone, email). Targeted by element ID
+  # because all rows share the same CSS class names.
+
+  address_text:
+    type: string
+    required: false
+    max_length: 120
+    target_id: "bc1ada"
+    description: Address text (single line or use HTML for multiline)
+
+  phone_text:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "638b28"
+    description: Phone number display text
+
+  phone_link:
+    type: link
+    required: false
+    target_id: "638b28"
+    description: "Phone tel: link — { url: 'tel:+31616163282' }"
+
+  email_text:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "166ed5"
+    description: Email address display text
+
+  email_link:
+    type: link
+    required: false
+    target_id: "166ed5"
+    description: "Email mailto: link — { url: 'mailto:info@example.com' }"
+
+# ── Strip builder-only elements ────────────────────────────────────────────────
+strip_elements: []

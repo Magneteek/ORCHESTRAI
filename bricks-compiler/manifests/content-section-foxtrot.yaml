@@ -1,0 +1,68 @@
+# Content Section Foxtrot
+# 3/5–2/5 grid split: image group LEFT (2 images, CSS absolute positioned, staggered
+# rotation ±7°, bleed top/bottom), content RIGHT (heading + accent + body + CTA button).
+# Light background. On tablet: rotation resets, images go 2-col above content.
+# Best for: services, process steps, or features where visual drama is needed.
+
+component: content-section-foxtrot
+version: "2.3.5"
+description: |
+  Two images positioned absolutely in the left column — front image rotated +7°,
+  back image rotated −7°, both bleeding past section padding for dramatic overlap effect.
+  Right column: H2 heading + accent label + rich text + primary CTA button.
+  Tablet: images flatten to 2-col grid above the content block.
+
+slots:
+
+  # ── Image group (2 images, absolutely positioned) ─────────────────────────────
+  # Both images share fr-content-grid-foxtrot__image class — targeted by ID.
+  # Recommended: portrait-oriented (3/4 aspect), distinct but complementary shots.
+
+  image_1:
+    type: media
+    required: true
+    target_id: "73f45e"
+    description: Front image — top position, rotated +7° (left column, overlaps top edge)
+
+  image_2:
+    type: media
+    required: false
+    target_id: "559e9d"
+    description: Back image — bottom position, rotated −7° (overlaps bottom edge)
+
+  # ── Content column ────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 100
+    target_class: fr-content-grid-foxtrot__heading
+    description: H2 section heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-content-grid-foxtrot__accent-heading
+    description: Small uppercase accent label (ordered before heading via CSS)
+
+  main_text:
+    type: html
+    required: true
+    target_class: fr-content-grid-foxtrot__main-text
+    description: Body paragraphs in the right column
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "955aac"
+    description: Primary CTA button label (btn--primary style)
+
+  cta_link:
+    type: link
+    required: false
+    target_id: "955aac"
+    description: "CTA button URL — { url: '/page/' }"
+
+strip_elements: []

@@ -1,1 +1,487 @@
-{"content": [{"id": "9479a4", "name": "section", "parent": 0, "children": ["329891", "5a2827", "539776", "ddcded"], "settings": {"_cssGlobalClasses": ["vexrsr", "acss_import_bg--ultra-light"]}, "label": "Content Section Yankee"}, {"id": "329891", "name": "container", "parent": "9479a4", "children": ["2bbcaa", "632266", "be3ec1"], "settings": {"_cssGlobalClasses": ["u7fvr4"]}, "label": "Content Grid Yankee"}, {"id": "2bbcaa", "name": "block", "parent": "329891", "children": ["0960ea"], "settings": {"_cssGlobalClasses": ["yk103y"]}, "label": "Heading Wrapper"}, {"id": "0960ea", "name": "heading", "parent": "2bbcaa", "children": [], "settings": {"text": "Beyond Earth: Humanity's Next Giant Leap could happen in the next 10 years", "tag": "h2", "_cssGlobalClasses": ["48x2yo"], "_attributes": [{"id": "kkonew", "name": "data-heading"}]}, "label": "Heading"}, {"id": "632266", "name": "block", "parent": "329891", "children": ["a551dc"], "settings": {"_cssGlobalClasses": ["r7818p"]}, "label": "Media Wrapper"}, {"id": "a551dc", "name": "image", "parent": "632266", "children": [], "settings": {"_cssGlobalClasses": ["arlujk"], "image": {"url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg", "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg", "isPlaceholder": true, "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"}, "tag": "figure", "loading": "eager"}, "label": "Media", "themeStyles": []}, {"id": "be3ec1", "name": "block", "parent": "329891", "children": ["ae969a"], "settings": {"_cssGlobalClasses": ["a9ubsf"]}, "label": "Content Wrapper"}, {"id": "ae969a", "name": "text", "parent": "be3ec1", "children": [], "settings": {"_cssGlobalClasses": ["n5pp9g"], "text": "<p>As we enter a new era of space exploration, science fiction is becoming reality. Advanced technology is transforming our capabilities beyond Earth's atmosphere.</p><p>The mission is clear: establish lunar bases and reach Mars. The current goal is to land a person on Mars by 2035, followed by the possibility of public space travel. Would you buy a ticket?</p>"}, "label": "Content"}, {"id": "5a2827", "name": "container", "parent": "9479a4", "children": ["469d5d", "9afa30", "1ddc4b", "4a4c8e"], "settings": {"_cssGlobalClasses": ["59iani"], "tag": "ul"}, "label": "Social Proof Yankee"}, {"id": "469d5d", "name": "div", "parent": "5a2827", "children": ["5842d9", "882458"], "settings": {"_cssGlobalClasses": ["0a48t7"], "tag": "li"}, "label": "Card"}, {"id": "5842d9", "name": "text-basic", "parent": "469d5d", "children": [], "settings": {"tag": "p", "text": "$1.3 Trillion", "_cssGlobalClasses": ["sl406r"]}, "label": "Card Value"}, {"id": "882458", "name": "text-basic", "parent": "469d5d", "children": [], "settings": {"text": "Projected value of the global space economy by 2030", "tag": "p", "_cssGlobalClasses": ["6kilx3"]}, "label": "Card Description"}, {"id": "9afa30", "name": "div", "parent": "5a2827", "children": ["312b8e", "350878"], "settings": {"_cssGlobalClasses": ["0a48t7"], "tag": "li"}, "label": "Card"}, {"id": "312b8e", "name": "text-basic", "parent": "9afa30", "children": [], "settings": {"tag": "p", "text": "225 Million", "_cssGlobalClasses": ["sl406r"]}, "label": "Card Value"}, {"id": "350878", "name": "text-basic", "parent": "9afa30", "children": [], "settings": {"text": "The average distance to Mars is a whopping 225 million km.", "tag": "p", "_cssGlobalClasses": ["6kilx3"]}, "label": "Card Description"}, {"id": "1ddc4b", "name": "div", "parent": "5a2827", "children": ["4b0862", "73c81b"], "settings": {"_cssGlobalClasses": ["0a48t7"], "tag": "li"}, "label": "Card"}, {"id": "4b0862", "name": "text-basic", "parent": "1ddc4b", "children": [], "settings": {"tag": "p", "text": "8.6 Billion", "_cssGlobalClasses": ["sl406r"]}, "label": "Card Value"}, {"id": "73c81b", "name": "text-basic", "parent": "1ddc4b", "children": [], "settings": {"text": "The number of Earth-like planets estimated to exist in our galaxy.", "tag": "p", "_cssGlobalClasses": ["6kilx3"]}, "label": "Card Description"}, {"id": "4a4c8e", "name": "div", "parent": "5a2827", "children": ["96cfee", "90e8f7"], "settings": {"_cssGlobalClasses": ["0a48t7"], "tag": "li"}, "label": "Card"}, {"id": "96cfee", "name": "text-basic", "parent": "4a4c8e", "children": [], "settings": {"tag": "p", "text": "40% Decrease", "_cssGlobalClasses": ["sl406r"]}, "label": "Card Value"}, {"id": "90e8f7", "name": "text-basic", "parent": "4a4c8e", "children": [], "settings": {"text": "The reduction in space launch costs over the past decade.", "tag": "p", "_cssGlobalClasses": ["6kilx3"]}, "label": "Card Description"}, {"id": "539776", "name": "code", "parent": "9479a4", "children": [], "settings": {"javascriptCode": "function wrapHeadingLines() { const headings = document.querySelectorAll('[data-heading]'); headings.forEach(heading => { const computedStyle = window.getComputedStyle(heading); const headingWidth = heading.offsetWidth; const measure = document.createElement('span'); measure.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:'+computedStyle.font; document.body.appendChild(measure); const text = heading.textContent; const words = text.split(/(\\s+)/); let lines = [], currentLine = []; words.forEach(word => { measure.textContent = currentLine.join('') + word; if (measure.offsetWidth > headingWidth && currentLine.length > 0) { lines.push(currentLine.join('')); currentLine = [word]; } else { currentLine.push(word); } }); if (currentLine.length > 0) { lines.push(currentLine.join('')); } document.body.removeChild(measure); heading.innerHTML = lines.map(line => '<span class=\"line\" style=\"display:block;\">'+line+'</span>').join(''); }); } document.addEventListener('DOMContentLoaded', wrapHeadingLines); let resizeTimer; window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(wrapHeadingLines, 250); });", "executeCode": true, "noRoot": true}, "label": "Headline Line Styles", "themeStyles": []}, {"id": "ddcded", "name": "fr-notes", "parent": "9479a4", "children": [], "settings": {"_cssGlobalClasses": ["ieofwl"], "notesContent": "<h2>Instructions</h2><p>See Frames documentation.</p>"}}], "source": "bricksCopiedElements", "sourceUrl": "https://krisbal.com", "version": "2.3.5", "globalClasses": [{"id": "vexrsr", "name": "content-section-yankee", "settings": {"_rowGap": "var(--content-gap)", "_padding": {"top": "var(--section-space-l)", "bottom": "var(--section-space-l)"}}}, {"id": "acss_import_bg--ultra-light", "name": "bg--ultra-light", "settings": [], "category": "acss"}, {"id": "u7fvr4", "name": "content-grid-yankee", "settings": {"_cssCustom": ".content-grid-yankee { --media-span: 7; --heading-span: 7; display: grid; position: relative; isolation: isolate; gap: var(--content-gap); } @media (min-width: 768px) { .content-grid-yankee { grid-template-columns: var(--grid-12); grid-template-rows: repeat(3, 1fr); } }"}}, {"id": "yk103y", "name": "content-grid-yankee__heading-wrapper", "settings": {"_cssCustom": "@media (min-width: 768px) { .content-grid-yankee__heading-wrapper { grid-column: 1 / -1; } }"}}, {"id": "48x2yo", "name": "content-grid-yankee__heading", "settings": {"_typography": {"font-size": "var(--h1)", "text-transform": "capitalize"}}}, {"id": "r7818p", "name": "content-grid-yankee__media-wrapper", "settings": {"_cssCustom": "@media (min-width: 768px) { .content-grid-yankee__media-wrapper { grid-column: 1 / 8; grid-row: 2; } }"}}, {"id": "arlujk", "name": "content-grid-yankee__media", "settings": {"_width": "100%", "_height": "100%", "_objectFit": "cover"}}, {"id": "a9ubsf", "name": "content-grid-yankee__content-wrapper", "settings": {"_padding": {"top": "var(--space-l)", "right": "var(--space-l)", "bottom": "var(--space-l)", "left": "var(--space-l)"}, "_background": {"color": {"raw": "var(--bg-dark)"}}, "_cssCustom": "@media (min-width: 768px) { .content-grid-yankee__content-wrapper { grid-column: 8 / 13; grid-row: 2; } }"}}, {"id": "n5pp9g", "name": "content-grid-yankee__content", "settings": {"_width": "100%"}}, {"id": "59iani", "name": "social-proof-yankee", "settings": {"_display": "grid", "_gridTemplateColumns": "var(--grid-4)", "_gridTemplateColumns:tablet_portrait": "var(--grid-2)", "_gridTemplateColumns:mobile_portrait": "var(--grid-1)"}}, {"id": "0a48t7", "name": "social-proof-yankee__card", "settings": {"_display": "flex", "_direction": "column", "_rowGap": ".25em", "_typography": {"text-align": "center"}}}, {"id": "sl406r", "name": "social-proof-yankee__card-value", "settings": {"_typography": {"font-size": "var(--text-xl)", "font-weight": "700"}}}, {"id": "6kilx3", "name": "social-proof-yankee__card-description", "settings": []}, {"id": "ieofwl", "name": "fr-note", "settings": {}}]}
+{
+  "content": [
+    {
+      "id": "bd3706",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "0375fd",
+        "bdaeed",
+        "f3c3d9",
+        "8c211f"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "vexrsr",
+          "acss_import_bg--ultra-light"
+        ]
+      },
+      "label": "Content Section Yankee"
+    },
+    {
+      "id": "0375fd",
+      "name": "container",
+      "parent": "bd3706",
+      "children": [
+        "222af0",
+        "2577e9",
+        "7ff28d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "u7fvr4"
+        ]
+      },
+      "label": "Content Grid Yankee"
+    },
+    {
+      "id": "bdaeed",
+      "name": "container",
+      "parent": "bd3706",
+      "children": [
+        "0ac339",
+        "b09586",
+        "286f5c",
+        "9ae742"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "59iani"
+        ],
+        "tag": "ul"
+      },
+      "label": "Social Proof Yankee"
+    },
+    {
+      "id": "f3c3d9",
+      "name": "code",
+      "parent": "bd3706",
+      "children": [],
+      "settings": {
+        "javascriptCode": "function wrapHeadingLines() {\n    const headings = document.querySelectorAll('[data-heading]');\n\n    headings.forEach(heading => {\n        // Get the computed styles of the heading\n        const computedStyle = window.getComputedStyle(heading);\n        const headingWidth = heading.offsetWidth;\n\n        // Create a hidden element for measuring\n        const measure = document.createElement('span');\n        measure.style.cssText = `\n            position: absolute;\n            visibility: hidden;\n            white-space: nowrap;\n            font: ${computedStyle.font};\n        `;\n        document.body.appendChild(measure);\n\n        // Get the text content and preserve all spaces\n        const text = heading.textContent;\n        const words = text.split(/(\\s+)/); // Split into words AND spaces to preserve spacing\n        let lines = [];\n        let currentLine = [];\n\n        // Build lines word by word\n        words.forEach(word => {\n            measure.textContent = currentLine.join('') + word; // Join without adding extra spaces\n\n            if (measure.offsetWidth > headingWidth && currentLine.length > 0) {\n                lines.push(currentLine.join('')); // Push the current line\n                currentLine = [word]; // Start a new line\n            } else {\n                currentLine.push(word); // Add the word to the current line\n            }\n        });\n\n        // Add the last line\n        if (currentLine.length > 0) {\n            lines.push(currentLine.join(''));\n        }\n\n        // Remove measuring element\n        document.body.removeChild(measure);\n\n        // Replace heading content with wrapped lines\n        heading.innerHTML = lines\n            .map(line => `<span class=\"line\" style=\"display: block;\">${line}</span>`)\n            .join('');\n    });\n}\n\n// Run on load and resize\ndocument.addEventListener('DOMContentLoaded', wrapHeadingLines);\nlet resizeTimer;\nwindow.addEventListener('resize', () => {\n    clearTimeout(resizeTimer);\n    resizeTimer = setTimeout(wrapHeadingLines, 250);\n});\n",
+        "executeCode": true,
+        "noRoot": true
+      },
+      "label": "Headline Line Styles",
+      "themeStyles": []
+    },
+    {
+      "id": "8c211f",
+      "name": "fr-notes",
+      "parent": "bd3706",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "ieofwl"
+        ],
+        "notesContent": "<h2>Instructions</h2>"
+      }
+    },
+    {
+      "id": "222af0",
+      "name": "block",
+      "parent": "0375fd",
+      "children": [
+        "8af168"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "yk103y"
+        ]
+      },
+      "label": "Heading Wrapper"
+    },
+    {
+      "id": "2577e9",
+      "name": "block",
+      "parent": "0375fd",
+      "children": [
+        "277ea6"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "r7818p"
+        ]
+      },
+      "label": "Media Wrapper"
+    },
+    {
+      "id": "7ff28d",
+      "name": "block",
+      "parent": "0375fd",
+      "children": [
+        "78a8b5"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "a9ubsf"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "0ac339",
+      "name": "div",
+      "parent": "bdaeed",
+      "children": [
+        "e71834",
+        "ffccc2"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0a48t7"
+        ],
+        "tag": "li"
+      },
+      "label": "Card"
+    },
+    {
+      "id": "b09586",
+      "name": "div",
+      "parent": "bdaeed",
+      "children": [
+        "2db576",
+        "acade2"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0a48t7"
+        ],
+        "tag": "li"
+      },
+      "label": "Card"
+    },
+    {
+      "id": "286f5c",
+      "name": "div",
+      "parent": "bdaeed",
+      "children": [
+        "4d9767",
+        "3531dd"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0a48t7"
+        ],
+        "tag": "li"
+      },
+      "label": "Card"
+    },
+    {
+      "id": "9ae742",
+      "name": "div",
+      "parent": "bdaeed",
+      "children": [
+        "c159ad",
+        "bc1e66"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "0a48t7"
+        ],
+        "tag": "li"
+      },
+      "label": "Card"
+    },
+    {
+      "id": "8af168",
+      "name": "heading",
+      "parent": "222af0",
+      "children": [],
+      "settings": {
+        "text": "Beyond Earth: Humanity's Next Giant Leap could happen in the next 10 years",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "48x2yo"
+        ],
+        "_attributes": [
+          {
+            "id": "kkonew",
+            "name": "data-heading"
+          }
+        ]
+      },
+      "label": "Heading"
+    },
+    {
+      "id": "277ea6",
+      "name": "image",
+      "parent": "2577e9",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "arlujk"
+        ],
+        "image": {
+          "url": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "full": "https://krisbal.com/wp-content/themes/bricks/assets/images/placeholder-svg.svg",
+          "isPlaceholder": true,
+          "path": "/home/460272.cloudwaysapps.com/akfhjeexrj/public_html/wp-content/themes/bricks/assets/images/placeholder-svg.svg"
+        },
+        "tag": "figure",
+        "loading": "eager"
+      },
+      "label": "Media",
+      "themeStyles": []
+    },
+    {
+      "id": "78a8b5",
+      "name": "text",
+      "parent": "7ff28d",
+      "children": [],
+      "settings": {
+        "_cssGlobalClasses": [
+          "n5pp9g"
+        ],
+        "text": "<p>As we enter a new era of space exploration, science fiction is becoming reality. Advanced technology is transforming our capabilities beyond Earth's atmosphere.</p><p>The mission is clear: establish lunar bases and reach Mars. The current goal is to land a person on Mars by 2035, followed by the possibility of public space travel. Would you buy a ticket?</p>"
+      },
+      "label": "Content"
+    },
+    {
+      "id": "e71834",
+      "name": "text-basic",
+      "parent": "0ac339",
+      "children": [],
+      "settings": {
+        "tag": "p",
+        "text": "$1.3 Trillion",
+        "_cssGlobalClasses": [
+          "sl406r"
+        ]
+      },
+      "label": "Card Value"
+    },
+    {
+      "id": "ffccc2",
+      "name": "text-basic",
+      "parent": "0ac339",
+      "children": [],
+      "settings": {
+        "text": "Projected value of the global space economy by 2030",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "6kilx3"
+        ]
+      },
+      "label": "Card Description"
+    },
+    {
+      "id": "2db576",
+      "name": "text-basic",
+      "parent": "b09586",
+      "children": [],
+      "settings": {
+        "tag": "p",
+        "text": "225 Million",
+        "_cssGlobalClasses": [
+          "sl406r"
+        ]
+      },
+      "label": "Card Value"
+    },
+    {
+      "id": "acade2",
+      "name": "text-basic",
+      "parent": "b09586",
+      "children": [],
+      "settings": {
+        "text": "The average distance to Mars is a whopping 225 million km.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "6kilx3"
+        ]
+      },
+      "label": "Card Description"
+    },
+    {
+      "id": "4d9767",
+      "name": "text-basic",
+      "parent": "286f5c",
+      "children": [],
+      "settings": {
+        "tag": "p",
+        "text": "8.6 Billion",
+        "_cssGlobalClasses": [
+          "sl406r"
+        ]
+      },
+      "label": "Card Value"
+    },
+    {
+      "id": "3531dd",
+      "name": "text-basic",
+      "parent": "286f5c",
+      "children": [],
+      "settings": {
+        "text": "The number of Earth-like planets estimated to exist in our galaxy.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "6kilx3"
+        ]
+      },
+      "label": "Card Description"
+    },
+    {
+      "id": "c159ad",
+      "name": "text-basic",
+      "parent": "9ae742",
+      "children": [],
+      "settings": {
+        "tag": "p",
+        "text": "40% Decrease",
+        "_cssGlobalClasses": [
+          "sl406r"
+        ]
+      },
+      "label": "Card Value"
+    },
+    {
+      "id": "bc1e66",
+      "name": "text-basic",
+      "parent": "9ae742",
+      "children": [],
+      "settings": {
+        "text": "The reduction in space launch costs over the past decade.",
+        "tag": "p",
+        "_cssGlobalClasses": [
+          "6kilx3"
+        ]
+      },
+      "label": "Card Description"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "vexrsr",
+      "name": "content-section-yankee",
+      "settings": {
+        "_rowGap": "var(--content-gap)",
+        "_padding": {
+          "top": "var(--section-space-l)",
+          "bottom": "var(--section-space-l)"
+        }
+      },
+      "modified": 1739638832,
+      "user_id": 1,
+      "_exists": false
+    },
+    {
+      "id": "acss_import_bg--ultra-light",
+      "name": "bg--ultra-light",
+      "settings": [],
+      "category": "acss",
+      "_categoryData": {
+        "id": "acss",
+        "name": "Automatic.css"
+      }
+    },
+    {
+      "id": "u7fvr4",
+      "name": "content-grid-yankee",
+      "settings": {},
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "yk103y",
+      "name": "content-grid-yankee__heading-wrapper",
+      "settings": {},
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "48x2yo",
+      "name": "content-grid-yankee__heading",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--h1)"
+        }
+      },
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "r7818p",
+      "name": "content-grid-yankee__media-wrapper",
+      "settings": {},
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "arlujk",
+      "name": "content-grid-yankee__media",
+      "settings": {
+        "_width": "100%",
+        "_height": "100%",
+        "_objectFit": "cover"
+      },
+      "_exists": false
+    },
+    {
+      "id": "a9ubsf",
+      "name": "content-grid-yankee__content-wrapper",
+      "settings": {},
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "n5pp9g",
+      "name": "content-grid-yankee__content",
+      "settings": {},
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "59iani",
+      "name": "social-proof-yankee",
+      "settings": {
+        "_display": "grid",
+        "_gridTemplateColumns": "var(--grid-4)"
+      },
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "0a48t7",
+      "name": "social-proof-yankee__card",
+      "settings": {
+        "_display": "flex",
+        "_direction": "column",
+        "_rowGap": ".25em",
+        "_typography": {
+          "text-align": "center"
+        }
+      },
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "sl406r",
+      "name": "social-proof-yankee__card-value",
+      "settings": {
+        "_typography": {
+          "font-size": "var(--text-xl)",
+          "font-weight": "700"
+        }
+      },
+      "modified": 1779541523,
+      "user_id": 1
+    },
+    {
+      "id": "6kilx3",
+      "name": "social-proof-yankee__card-description",
+      "settings": {},
+      "_exists": false
+    },
+    {
+      "id": "ieofwl",
+      "name": "fr-note",
+      "settings": {},
+      "modified": 1779523545,
+      "user_id": 1
+    }
+  ]
+}

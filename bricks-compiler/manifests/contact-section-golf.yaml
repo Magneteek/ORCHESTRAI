@@ -1,0 +1,92 @@
+# Contact Section Golf
+# Full-bleed section with background image + overlay. Complex 12-column CSS grid.
+# Large H1-scale section heading top-left. White card: form + social icons.
+# Map bottom-right. Background image fills the whole section.
+# Best for: statement contact pages, local businesses.
+
+component: contact-section-golf
+version: "2.3.5"
+description: |
+  Full-bleed contact section with background image. Large H1-scale heading top-left.
+  White floating card (right): contact sub-heading + form + social icons.
+  Map bottom-right. Background image with dark overlay fills the section.
+
+slots:
+
+  # ── Main heading ────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 60
+    target_id: "1fcc69"
+    description: Large H1-scale section heading (e.g. "Get in touch", "Neem contact op")
+
+  contact_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-contact-section-golf__contact-heading
+    description: Smaller heading inside the white card (e.g. "Contact Us", "Stuur een bericht")
+
+  # ── Background image ────────────────────────────────────────────────────────
+
+  background_image:
+    type: media
+    required: false
+    target_class: fr-background-alpha__image
+    description: Full-section background image (will be covered by dark overlay)
+
+  # ── Map ─────────────────────────────────────────────────────────────────────
+
+  map_address:
+    type: insert
+    required: false
+    path: "addresses.0.address"
+    target_class: fr-contact-section-golf__map
+    description: Map location string (e.g. "Amsterdam, Netherlands")
+
+  # ── Social icons ────────────────────────────────────────────────────────────
+  # 3 fixed social icon links. Accessible labels settable.
+
+  social_1_link:
+    type: link
+    required: false
+    target_id: "08f7f4"
+    description: Social icon 1 link (e.g. Facebook)
+
+  social_1_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "78a2c3"
+    description: Hidden accessible label for social icon 1
+
+  social_2_link:
+    type: link
+    required: false
+    target_id: "a1ff8c"
+    description: Social icon 2 link (e.g. X / Twitter)
+
+  social_2_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "b001fb"
+    description: Hidden accessible label for social icon 2
+
+  social_3_link:
+    type: link
+    required: false
+    target_id: "c2e4dc"
+    description: Social icon 3 link (e.g. LinkedIn)
+
+  social_3_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "f6d344"
+    description: Hidden accessible label for social icon 3
+
+# ── Strip builder-only elements ────────────────────────────────────────────────
+strip_elements: []

@@ -112,11 +112,12 @@ function compileSection(componentName, slotValues = {}) {
   // 2. Expand array/compound_array slots (clone subtrees)
   elements = cloneArraySlots(elements, globalClasses, manifest.slots, slotValues);
 
-  // 3. Regenerate all element IDs (fresh unique IDs per compile)
-  elements = regenIds(elements);
-
-  // 4. Fill scalar slots (string, html, media, icon, link, insert)
+  // 3. Fill scalar slots (string, html, media, icon, link, insert)
+  //    NOTE: must run before regenIds so target_id still resolves original template IDs.
   elements = fillSlots(elements, globalClasses, manifest.slots, slotValues);
+
+  // 4. Regenerate all element IDs (fresh unique IDs per compile — avoids Bricks collisions)
+  elements = regenIds(elements);
 
   // 5. Warn about undefined class references
   const classWarnings = validateClassRefs(elements, globalClasses);

@@ -1,0 +1,126 @@
+{
+  "_notes": [
+    "All 17 DRNL content articles — WordPress Posts (post_type: post), category: google-reviews.",
+    "Run: node wp-import.js examples/drnl-wp-import.json",
+    "Output: wp-import-drnl.xml (import via WP Admin → Tools → Import → WordPress)",
+    "        wp-import-drnl.json + wp-import-drnl.php (WP-CLI alternative)",
+    "Permalink structure must be /%category%/%postname%/ for URLs to resolve correctly.",
+    "Category 'google-reviews' (slug) must exist before importing — or WP creates it automatically.",
+    "Excluded: homepage + service page (built via Bricks compiler instead).",
+    "Excluded: *-WITH-LINKS variants (internal linking versions, not canonical sources).",
+    "Excluded: complete-gids-REWRITE (superseded by PIPELINE-v2).",
+    "Excluded: kosten-review-verwijdering-WORDPRESS.html (superseded by v2)."
+  ],
+
+  "name": "drnl",
+  "site": "https://deletereviews.nl",
+  "html_base_dir": "../../projects/drnl-A0582FF4-6715-4266-9A54-A7E311912E41/deliverables/content/wordpress-html",
+
+  "defaults": {
+    "post_type": "post",
+    "post_status": "draft",
+    "category": "google-reviews"
+  },
+
+  "posts": [
+
+    {
+      "file": "complete-gids-PIPELINE-v2-WORDPRESS.html",
+      "url": "/google-reviews/complete-gids/",
+      "title_override": "Google Review Verwijderen: Complete Gids voor Ondernemers",
+      "seopress_title": "Google Review Verwijderen: Complete Gids voor Ondernemers | deletereviews.nl",
+      "seopress_desc": "Kan een Google review verwijderd worden? Ja — als er sprake is van een beleidsschending of juridische grond. Ontdek de 4 methoden, slagingskansen (5–95%) en het No Cure No Pay model van deletereviews.nl.",
+      "focus_keyword": "google review verwijderen"
+    },
+
+    {
+      "file": "juridisch-google-review-verwijderen-v2-WORDPRESS.html",
+      "url": "/google-reviews/juridisch-google-review-verwijderen/",
+      "seopress_title": "Juridisch een Google Review Verwijderen: Welke Gronden Werken | deletereviews.nl",
+      "seopress_desc": "Vier juridische routes om een Google review te laten verwijderen: onrechtmatige daad (art. 6:162 BW), smaad/laster, AVG-recht op vergetelheid en EU Omnibus. Bewijsvereisten, procedures en slagingskansen.",
+      "focus_keyword": "juridisch google review verwijderen"
+    },
+
+    {
+      "file": "kosten-review-verwijdering-v2-WORDPRESS.html",
+      "url": "/google-reviews/kosten-review-verwijdering/"
+    },
+
+    {
+      "file": "stap-voor-stap-v2-WORDPRESS.html",
+      "url": "/google-reviews/stap-voor-stap/"
+    },
+
+    {
+      "file": "no-cure-no-pay-review-verwijdering-WORDPRESS.html",
+      "url": "/google-reviews/no-cure-no-pay-review-verwijdering/"
+    },
+
+    {
+      "file": "negatieve-google-review-verwijderen-WORDPRESS.html",
+      "url": "/google-reviews/negatieve-google-review-verwijderen/"
+    },
+
+    {
+      "file": "professionele-hulp-v2-WORDPRESS.html",
+      "url": "/google-reviews/professionele-hulp/",
+      "seopress_title": "Professionele Hulp bij Review Verwijdering: Wat Een Specialist Doet | deletereviews.nl",
+      "seopress_desc": "Meer dan 90% van de zelfstandige Google-meldingen wordt afgewezen. Een specialist met 94% slagingskans doet wat u niet kunt: juridisch dossier, escalatieprocedure, platformrelaties. No Cure No Pay.",
+      "focus_keyword": "professionele hulp review verwijdering"
+    },
+
+    {
+      "file": "nepreviews-verwijderen-WORDPRESS.html",
+      "url": "/google-reviews/nepreviews-verwijderen/"
+    },
+
+    {
+      "file": "plotseling-veel-slechte-reviews-WORDPRESS.html",
+      "url": "/google-reviews/plotseling-veel-slechte-reviews/"
+    },
+
+    {
+      "file": "review-verwijdering-garantie-WORDPRESS.html",
+      "url": "/google-reviews/review-verwijdering-garantie/"
+    },
+
+    {
+      "file": "google-review-verwijderen-als-bedrijf-WORDPRESS.html",
+      "url": "/google-reviews/google-review-verwijderen-als-bedrijf/"
+    },
+
+    {
+      "file": "google-reageert-niet-WORDPRESS.html",
+      "url": "/google-reviews/google-reageert-niet-op-review-melding/"
+    },
+
+    {
+      "file": "professionele-verwijderen-v2-WORDPRESS.html",
+      "url": "/google-reviews/professionele-verwijderen/",
+      "seopress_title": "Wat Kost Professionele Review Verwijdering — en Verdient het Zichzelf Terug? | deletereviews.nl",
+      "seopress_desc": "Tarieven voor professionele Google review verwijdering: €295–€495 afhankelijk van complexiteit. No Cure No Pay — u betaalt alleen bij succes. Wat rekent een specialist aan en wanneer is het de investering waard?",
+      "focus_keyword": "kosten review verwijdering"
+    },
+
+    {
+      "file": "nep-google-bedrijfsprofiel-WORDPRESS.html",
+      "url": "/google-reviews/nep-google-bedrijfsprofiel/"
+    },
+
+    {
+      "file": "bedrijfsprofiel-fotos-verwijderen-v2-WORDPRESS.html",
+      "url": "/google-reviews/bedrijfsprofiel-fotos-verwijderen/"
+    },
+
+    {
+      "file": "bedrijfsprofiel-verwijderen-v2-WORDPRESS.html",
+      "url": "/google-reviews/google-bedrijfsprofiel-verwijderen/"
+    },
+
+    {
+      "file": "google-bedrijfsprofiel-WORDPRESS.html",
+      "url": "/google-reviews/google-bedrijfsprofiel/"
+    }
+
+  ]
+}

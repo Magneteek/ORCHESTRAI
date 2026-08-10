@@ -1,0 +1,112 @@
+# Pricing Section Lima
+# Split layout: sidebar left (heading+lede+CTA link) + 2-card pricing grid right.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: pricing-section-lima
+version: "2.3.5"
+description: |
+  2-column split pricing section. Left sidebar: accent label, H2 heading, lede, and a
+  CTA text link. Right: a 2-card pricing grid (fr-pricing-grid-lima). Each card: plan
+  heading, large price (currency + amount + period badge), description, 4-item feature
+  list, and a CTA button. The second card has a "Featured" ribbon via fr-price-card-lima--featured.
+  NOTE: Feature items (icon + label) within each card are not slot-fillable — nested
+  arrays not supported. Template has 4 features per card (2 enabled, 2 disabled/greyed).
+  Edit feature labels manually in Bricks after pasting.
+
+slots:
+
+  # ── Sidebar ───────────────────────────────────────────────────────────────
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-accent-heading
+    description: Small accent label above the sidebar heading
+
+  sidebar_heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-pricing-lima__sidebar-heading
+    description: H2 heading in the sidebar
+
+  sidebar_lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-pricing-lima__sidebar-lede
+    description: Supporting paragraph below the sidebar heading
+
+  sidebar_link_text:
+    type: string
+    required: false
+    max_length: 50
+    target_class: fr-pricing-section-lima__sidebar-link
+    description: Text link label below the lede (e.g. "Contact us for custom pricing")
+
+  sidebar_link_url:
+    type: link
+    required: false
+    target_class: fr-pricing-section-lima__sidebar-link
+    description: "URL for the sidebar text link: { url: '...', type?: 'external' }"
+
+  # ── Pricing cards (array) ─────────────────────────────────────────────────
+  # NOTE: Keep exactly 2 plans. Second plan gets "Featured" ribbon styling.
+  # template_label includes literal "<li>" as part of the element label.
+
+  plans:
+    type: array
+    required: false
+    min: 2
+    max: 2
+    template_label: "Pricing Card Lima <li>"
+    description: |
+      2 pricing cards. First card is standard; second gets "Featured" ribbon.
+      Feature items per card are not individually slot-fillable — edit in Bricks.
+    item_slots:
+      heading:
+        type: string
+        required: true
+        max_length: 40
+        target_class: fr-pricing-card-lima__heading
+        description: Plan name (e.g. "Standard", "Premium")
+      currency:
+        type: string
+        required: false
+        max_length: 5
+        target_class: fr-pricing-card-lima__price-currency
+        description: "Currency symbol (e.g. \"$\", \"€\")"
+      amount:
+        type: string
+        required: true
+        max_length: 10
+        target_class: fr-pricing-card-lima__price-amount
+        description: "Price amount (e.g. \"5\", \"29\", \"99\")"
+      period:
+        type: string
+        required: false
+        max_length: 20
+        target_class: fr-pricing-card-lima__price-period
+        description: "Billing period badge label (e.g. \"Annually\", \"Monthly\", \"One-time\")"
+      description:
+        type: string
+        required: false
+        max_length: 160
+        target_class: fr-pricing-card-lima__description
+        description: Short description of the plan tier
+      cta_text:
+        type: string
+        required: false
+        max_length: 40
+        target_class: fr-pricing-card-lima__button
+        description: CTA button label (e.g. "Select plan", "Get started")
+      cta_link:
+        type: link
+        required: false
+        target_class: fr-pricing-card-lima__button
+        description: "CTA button URL: { url: '...', type?: 'external' }"
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected

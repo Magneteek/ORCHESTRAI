@@ -1,80 +1,174 @@
 {
-  "page_title": "DeleteReviews.nl — Startpagina",
-  "slug": "",
+  "page_title": "DeleteReviews.nl — Homepage",
+  "slug": "/",
   "source_url": "https://deletereviews.nl",
-  "_notes": "Sections covered: HOW IT WORKS + WHY US. Templates missing for: hero, proof bar, testimonials, FAQ, final CTA.",
+
+  "_notes": [
+    "All copy verbatim from homepage-REWRITE-2026-05-11-WORDPRESS.html.",
+    "Testimonials are marked placeholder in source — replace with real quotes before publishing.",
+    "Hero secondary CTA 'Of bel direct: +31 616 163 282' must be set manually in Bricks (not slot-fillable).",
+    "Hero slider images (6) must be replaced manually in Bricks."
+  ],
 
   "sections": [
 
     {
-      "component": "feature-section-foxtrot",
-      "_label": "HOW IT WORKS",
+      "component": "hero-section-barcelona",
+      "_source": "H1 + intro em paragraph + primary CTA button",
       "slots": {
-        "accent_heading": "Het proces",
-        "heading": "Hoe wij een Google-review laten verwijderen",
-        "lede": "Ons proces is eenvoudig — de kennis die er achter zit, is dat niet. Elke dag dat een onterechte review online staat verliest u potentiële klanten.",
-        "features": [
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-01-analyse.svg" },
-            "heading": "Gratis analyse",
-            "text": "U stuurt ons de review en een korte beschrijving. Wij beoordelen binnen 24 uur of verwijdering haalbaar is, op welke grondslag, en wat de kans van slagen is."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-02-dossier.svg" },
-            "heading": "Professioneel dossier",
-            "text": "Onze specialisten bouwen het juridische en technische dossier dat Google daadwerkelijk accepteert. Dit is de stap waar zelf melden doorgaans misloopt."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/stap-03-verwijdering.svg" },
-            "heading": "Verwijdering en rapportage",
-            "text": "Wij dienen het verzoek in via officiële kanalen. Bij succes ontvangt u bevestiging en rapportage. Lukt het niet — dan betaalt u niets."
-          }
-        ],
+        "accent_heading": "Nep-reviews verwijderd",
+        "heading": "Uw online reputatie — wij lossen het op.",
+        "lede": "Onterechte of neppe Google-reviews verwijderd — professioneel, legaal en met 94% slagingskans.",
         "primary_cta_text": "Start gratis analyse",
-        "primary_cta_link": { "url": "https://deletereviews.nl/google-review-verwijdering/#analyse", "type": "internal" },
-        "secondary_cta_text": "Lees hoe het werkt",
-        "secondary_cta_link": { "url": "https://deletereviews.nl/google-reviews/stap-voor-stap/", "type": "internal" }
+        "primary_cta_link": { "url": "/google-review-verwijdering/" }
+      }
+    },
+
+    {
+      "component": "social-proof-alpha",
+      "_source": "Social proof bar columns (3 stats from WP HTML)",
+      "slots": {
+        "badge_text": "Beoordeeld op",
+        "badge_reviews": "4.9 · 200+ reviews",
+        "stats": [
+          { "value": "94%",            "description": "slagingskans bij verwijdering" },
+          { "value": "2.500+",         "description": "succesvol behandelde zaken" },
+          { "value": "No Cure No Pay", "description": "u betaalt alleen bij succes" }
+        ]
+      }
+    },
+
+    {
+      "component": "content-section-golf",
+      "_source": "H2 'Wat kost u elke dag' + problem-agitatie paragraphs + list",
+      "slots": {
+        "heading": "Wat kost u elke dag dat de review online staat?",
+        "content": "<p>Stel: een potentiële klant zoekt uw naam op in Google. Het eerste dat hij ziet, is een 1-sterreview. De kans dat hij verder klikt naar uw website — of belt — daalt dramatisch.</p><p>Reputatieschade werkt stil en cumulatief. Elke dag dat een schadelijke review zichtbaar is:</p><ul><li>verliest u klanten die kiezen voor een concurrent met een hogere beoordeling;</li><li>daalt uw gemiddelde beoordeling, wat uw zichtbaarheid in Google Maps beïnvloedt;</li><li>groeit het wantrouwen bij prospects die u nog niet kennen.</li></ul><p>Onderzoek toont aan dat 88% van consumenten online reviews net zo zwaar weegt als persoonlijk advies. Eén neppe 1-sterreview kan maanden werk tenietdoen.</p><p>Heeft u het al zelf geprobeerd via Google en werkte het niet? Dat is precies waarom professionele hulp het verschil maakt. Google hanteert strikte criteria voor het accepteren van verwijderverzoeken. Zonder het juiste dossier wordt een melding bijna altijd afgewezen.</p>"
       }
     },
 
     {
       "component": "feature-section-foxtrot",
-      "_label": "WHY US",
+      "_source": "H2 'Hoe wij een Google-review laten verwijderen' + 3 H3 steps",
       "slots": {
-        "accent_heading": "Waarom deletereviews.nl",
-        "heading": "Er zijn bureaus die beweren het te kunnen. Wij doen niets anders.",
-        "lede": "Vijf redenen waarom ondernemers ons kiezen boven DIY en generieke bureaus.",
+        "heading": "Hoe wij een Google-review laten verwijderen",
+        "lede": "Ons proces is eenvoudig — de kennis die er achter zit, is dat niet.",
         "features": [
           {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/focus.svg" },
-            "heading": "Exclusieve focus",
-            "text": "Review-verwijdering is ons enige vak. Die focus vertaalt zich in diepgaande kennis van Google's beleid, afwijzingsgronden en beroepsprocedures."
+            "heading": "Stap 1 — Gratis analyse",
+            "text": "U stuurt ons de review en een korte beschrijving van de situatie. Wij beoordelen binnen 24 uur of verwijdering haalbaar is, op welke grondslag, en wat de kans van slagen is. Kosteloos, zonder verplichtingen."
           },
           {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/juridisch-technisch.svg" },
-            "heading": "Juridisch én technisch",
-            "text": "Succes vereist kennis van de Nederlandse wet (art. 6:162 BW) én inzicht in hoe Google dossiers technisch beoordeelt. Wij hebben beide in huis."
+            "heading": "Stap 2 — Professioneel dossier",
+            "text": "Onze specialisten bouwen het juridische en technische dossier op dat Google daadwerkelijk accepteert. Wij kennen Google's interne beleidscriteria en de Nederlandse wetgeving die van toepassing is. Dit is de stap waar zelf rapporteren doorgaans misloopt: zonder onderbouwing wordt een verzoek standaard afgewezen."
           },
           {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/precedenten.svg" },
-            "heading": "2.500+ precedenten",
-            "text": "Na 2.500+ behandelde zaken herkennen wij welke argumenten werken en welke Google negeert. Uw zaak profiteert van elk eerder precedent."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/eerlijkheid.svg" },
-            "heading": "Eerlijkheid bij twijfel",
-            "text": "Is verwijdering niet haalbaar? Dan vertellen wij u dat in de gratis analyse — vóór er kosten zijn. Geen valse beloften, geen tijdverlies."
-          },
-          {
-            "icon": { "url": "https://deletereviews.nl/wp-content/uploads/icons/ncnp.svg" },
-            "heading": "No Cure No Pay",
-            "text": "Ons belang is hetzelfde als het uwe: de review moet weg. Wij worden uitsluitend betaald als dat lukt. €295–€495 bij succes. €0 bij mislukking."
+            "heading": "Stap 3 — Verwijdering en rapportage",
+            "text": "Wij dienen het verzoek in via de juiste officiële kanalen. Bij succesvolle verwijdering ontvangt u een bevestiging en een korte rapportage. No Cure No Pay: lukt het niet, dan betaalt u niets."
           }
         ],
         "primary_cta_text": "Start gratis analyse",
-        "primary_cta_link": { "url": "https://deletereviews.nl/google-review-verwijdering/#analyse", "type": "internal" },
-        "secondary_cta_text": "Lees de complete gids",
-        "secondary_cta_link": { "url": "https://deletereviews.nl/google-reviews/complete-gids/", "type": "internal" }
+        "primary_cta_link": { "url": "/google-review-verwijdering/" }
+      }
+    },
+
+    {
+      "component": "feature-section-foxtrot",
+      "_source": "H2 'Waarom ondernemers kiezen voor deletereviews.nl' + 5 bold-paragraph differentiators",
+      "slots": {
+        "heading": "Waarom ondernemers kiezen voor deletereviews.nl",
+        "lede": "Er zijn bureaus die beweren reviews te kunnen verwijderen. Wij doen niets anders — al jaren. Dat maakt een verschil.",
+        "features": [
+          {
+            "heading": "Exclusieve focus",
+            "text": "Deletereviews.nl is volledig gespecialiseerd in het verwijderen van onterechte en neppe online beoordelingen. Geen nevenwerkzaamheid, geen bijvangst: dit is ons enige vak. Die focus vertaalt zich in diepgaande kennis van Google's beleid, afwijzingsgronden en beroepsprocedures."
+          },
+          {
+            "heading": "Juridisch én technisch",
+            "text": "Een succesvolle verwijdering vereist zowel kennis van de Nederlandse wet (onrechtmatige daad, lasterrecht) als inzicht in hoe Google dossiers technisch beoordeelt. Wij hebben beide in huis."
+          },
+          {
+            "heading": "2.500+ precedenten",
+            "text": "Na meer dan 2.500 behandelde zaken herkennen wij welke argumenten werken — en welke Google negeert. Uw zaak profiteert van elk eerder precedent."
+          },
+          {
+            "heading": "Eerlijkheid bij twijfel",
+            "text": "Is verwijdering niet haalbaar? Dan vertellen wij u dat in de gratis analyse — eerlijk, vóór er kosten zijn. Geen valse beloften, geen tijdverlies."
+          },
+          {
+            "heading": "No Cure No Pay",
+            "text": "Ons belang is hetzelfde als het uwe: de review moet weg. Wij worden uitsluitend betaald als dat lukt."
+          }
+        ],
+        "secondary_cta_text": "Lees de volledige gids",
+        "secondary_cta_link": { "url": "/google-reviews/complete-gids/" }
+      }
+    },
+
+    {
+      "component": "testimonial-section-mike",
+      "_source": "H2 'Wat onze klanten zeggen' + 3 blockquotes — NOTE: source marks these as placeholders, replace before publishing",
+      "slots": {
+        "heading": "Wat onze klanten zeggen",
+        "cta_text": "Bekijk alle reviews",
+        "cta_link": { "url": "/google-review-verwijdering/" },
+        "testimonials": [
+          {
+            "name": "R.V.",
+            "title": "Restauranthouder, Amsterdam",
+            "text": "Na zes weken zelf proberen bij Google had ik er geen vertrouwen meer in. Deletereviews heeft de review binnen drie weken verwijderd."
+          },
+          {
+            "name": "M.K.",
+            "title": "Schoonheidsspecialiste, Utrecht",
+            "text": "Eén 1-sterreview van een ex-medewerker had mijn gemiddelde van 4,8 naar 4,2 gebracht. Na de verwijdering stond mijn beoordeling er weer goed bij."
+          },
+          {
+            "name": "J.B.",
+            "title": "Woningmakelaar, Rotterdam",
+            "text": "No Cure No Pay was voor mij de doorslag. Ik had geen risico, en het werkte."
+          }
+        ]
+      }
+    },
+
+    {
+      "component": "faq-section-alpha",
+      "_source": "FAQPage section — 4 questions, exact text from WP HTML (incl. FAQPage schema variant)",
+      "slots": {
+        "heading": "Veelgestelde vragen",
+        "lede": "Staat uw vraag er niet bij? Bel ons gerust: +31 616 163 282",
+        "cta_text": "Start gratis analyse",
+        "cta_link": { "url": "/google-review-verwijdering/" },
+        "items": [
+          {
+            "question": "Wat kost het verwijderen van een Google-review?",
+            "answer": "<p>De tarieven voor professionele verwijdering liggen tussen €295–€495, afhankelijk van de complexiteit van de zaak. Wij werken uitsluitend op basis van No Cure No Pay: lukt de verwijdering niet, dan betaalt u niets. De gratis analyse is altijd kosteloos — u weet vooraf wat haalbaar is.</p>"
+          },
+          {
+            "question": "Is het verwijderen van een Google-review legaal?",
+            "answer": "<p>Volledig legaal. Wij dienen verzoeken in op basis van Google's eigen beleid én de Nederlandse wetgeving, waaronder artikel 6:162 BW (onrechtmatige daad). Wij werken uitsluitend via officiële kanalen. Neppe of lasterlijke reviews zijn in strijd met zowel Google's richtlijnen als de wet — het verwijderen ervan is een legitiem recht van elke ondernemer.</p>"
+          },
+          {
+            "question": "Wat doet u met mijn gegevens?",
+            "answer": "<p>Uw gegevens worden uitsluitend gebruikt voor de behandeling van uw zaak. Wij werken conform de AVG (GDPR). Na afronding worden uw gegevens vertrouwelijk bewaard en nooit gedeeld met derden.</p>"
+          },
+          {
+            "question": "Hoe lang duurt het verwijderen van een Google-review?",
+            "answer": "<p>Gemiddeld 2–4 weken, afhankelijk van de complexiteit en Google's verwerkingstijd. In urgente situaties — bijvoorbeeld bij een acute aanval van meerdere neppe reviews — bespreken wij de mogelijkheden voor een versnelde aanpak.</p>"
+          }
+        ]
+      }
+    },
+
+    {
+      "component": "cta-section-sierra",
+      "_source": "H2 'Weet u al genoeg? Start vandaag.' + closing paragraphs",
+      "slots": {
+        "heading": "Weet u al genoeg? Start vandaag.",
+        "text": "<p>Gratis analyse, No Cure No Pay, reactie binnen 24 uur. U heeft niets te verliezen — en uw reputatie terug te winnen.</p><p>Of bel direct: <a href=\"tel:+31616163282\">+31 616 163 282</a></p><p><em>No Cure No Pay — u betaalt alleen bij succes.</em></p>",
+        "link_text": "Start gratis analyse",
+        "link_url": { "url": "/google-review-verwijdering/" }
       }
     }
 

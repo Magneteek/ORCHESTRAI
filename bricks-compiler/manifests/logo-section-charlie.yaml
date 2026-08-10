@@ -1,33 +1,62 @@
 # Logo Section Charlie
-# AUTO-GENERATED — review required/max_length fields before use
+# Centered intro + 13-item logo grid, each item: logo image + brand name label.
 # Source: https://krisbal.com (Bricks 2.3.5)
 
 component: logo-section-charlie
 version: "2.3.5"
 description: |
-  TODO: describe what this section is for
+  Full section with a centered intro block (fr-intro-alpha) and a logo grid below.
+  Intro: H2 heading, accent label, lede paragraph.
+  Grid: up to 13 logo items (fr-logo-charlie), each with a logo image and a brand
+  name text label below it.
 
 slots:
 
-  # ── Top-level slots ──────────────────────────────────────────────
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: H2 section heading (centered intro block)
 
   accent_heading:
     type: string
-    required: false  # set to true if agent must always fill this
-    max_length: 200
+    required: false
+    max_length: 60
     target_class: fr-intro-alpha__accent-heading
+    description: Small accent label above the heading
 
   lede:
     type: string
-    required: false  # set to true if agent must always fill this
-    max_length: 200
+    required: false
+    max_length: 220
     target_class: fr-intro-alpha__lede
+    description: Supporting paragraph below the heading
 
-  logo:
-    type: media
-    required: false  # set to true if agent must always fill this
-    target_class: fr-logo-charlie__logo
+  # ── Logo grid (array) ─────────────────────────────────────────────────────
 
-# ── Builder-only elements ──────────────────────────────────────────────
+  logos:
+    type: array
+    required: false
+    min: 1
+    max: 13
+    template_label: "Logo Charlie"
+    description: Grid of logo items — each with an image and a brand name label
+    item_slots:
+      logo:
+        type: media
+        required: true
+        target_class: fr-logo-charlie__logo
+        description: Brand logo image (recommend SVG or PNG, square/landscape)
+      label:
+        type: string
+        required: false
+        max_length: 60
+        target_class: fr-logo-charlie__label
+        description: Brand name text displayed below the logo
+
+# ── Builder-only elements ─────────────────────────────────────────────────
 strip_elements:
   [] # none detected

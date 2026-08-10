@@ -41,9 +41,19 @@ function findByLabel(elements, label) {
 }
 
 /**
- * Resolve a slot's target element using target_class or target_label.
+ * Find an element by its Bricks element ID.
+ * Useful when multiple elements share the same class/label (e.g. contact-info rows).
+ */
+function findById(elements, id) {
+  return elements.find(el => el.id === id) ?? null;
+}
+
+/**
+ * Resolve a slot's target element using target_id, target_class, or target_label.
+ * target_id takes precedence — use it for elements that share classes/labels.
  */
 function resolveTarget(elements, slotDef, classMap) {
+  if (slotDef.target_id)    return findById(elements, slotDef.target_id);
   if (slotDef.target_class) return findByClass(elements, slotDef.target_class, classMap);
   if (slotDef.target_label) return findByLabel(elements, slotDef.target_label);
   return null;
@@ -165,4 +175,4 @@ function fillSubtreeSlots(subtree, slotDefs, itemValues, classMap) {
   return subtree;
 }
 
-module.exports = { fillSlots, fillSubtreeSlots, buildClassMap, findByClass, findByLabel };
+module.exports = { fillSlots, fillSubtreeSlots, buildClassMap, findByClass, findByLabel, findById };

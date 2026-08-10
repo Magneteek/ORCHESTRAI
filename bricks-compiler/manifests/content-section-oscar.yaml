@@ -1,0 +1,100 @@
+# Content Section Oscar
+# 3-row layout: oversized H2 header (full-width, centered) + 2-col inner row
+# (marketing headline + icon link LEFT, rich text body RIGHT, constrained to ~75ch) +
+# full-width 3-image staggered portrait gallery (Image Group Kilo) below.
+# Best for: company story, methodology deep-dives, "how it works" with visual proof.
+
+component: content-section-oscar
+version: "2.3.5"
+description: |
+  Large-scale content section. Top: oversized centered H2 heading. Middle: 2-col row —
+  left has a pull-quote marketing headline + icon text-link CTA; right has rich text body.
+  Bottom: full-width 3-portrait staggered gallery (3/4 aspect, offset on desktop).
+  Gallery images support optional photo captions.
+
+slots:
+
+  # ── Heading ──────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 100
+    target_class: fr-content-section-oscar__heading
+    description: Large centered H2 (scaled to ~2× --h1). Aim for 1–2 lines.
+
+  # ── Left column ──────────────────────────────────────────────────────────────
+
+  marketing_headline:
+    type: string
+    required: false
+    max_length: 200
+    target_class: fr-content-section-oscar__marketing-headline
+    description: Oversized pull-quote paragraph in the left column. 2–3 punchy sentences.
+
+  cta_text:
+    type: string
+    required: false
+    max_length: 40
+    target_class: fr-icon-link-alpha
+    description: Icon text-link label below the marketing headline (e.g. "Ontdek meer")
+
+  cta_link:
+    type: link
+    required: false
+    target_class: fr-icon-link-alpha
+    description: "URL for the icon text-link — { url: '/page/' }"
+
+  # ── Right column ─────────────────────────────────────────────────────────────
+
+  main_content:
+    type: html
+    required: true
+    target_class: fr-content-section-oscar__main-content
+    description: Rich text body in the right column — h3 subheads + paragraphs
+
+  # ── Image gallery (Image Group Kilo — 3 portrait images) ─────────────────────
+  # 3-col staggered layout: 2nd image offsets downward on desktop.
+  # Each image has an optional caption (rendered below photo, small italic).
+  # Target by element ID — all images share the same CSS class.
+
+  image_1:
+    type: media
+    required: false
+    target_id: "a848af"
+    description: Gallery image 1 (3/4 portrait aspect ratio recommended)
+
+  image_1_caption:
+    type: insert
+    required: false
+    target_id: "a848af"
+    path: "captionCustom"
+    description: Optional caption for image 1
+
+  image_2:
+    type: media
+    required: false
+    target_id: "b23e55"
+    description: Gallery image 2 — offset downward on desktop
+
+  image_2_caption:
+    type: insert
+    required: false
+    target_id: "b23e55"
+    path: "captionCustom"
+    description: Optional caption for image 2
+
+  image_3:
+    type: media
+    required: false
+    target_id: "6286da"
+    description: Gallery image 3
+
+  image_3_caption:
+    type: insert
+    required: false
+    target_id: "6286da"
+    path: "captionCustom"
+    description: Optional caption for image 3
+
+strip_elements: []

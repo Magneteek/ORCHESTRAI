@@ -1,0 +1,116 @@
+{
+  "content": [
+    {
+      "id": "ad3b8f",
+      "name": "section",
+      "parent": 0,
+      "children": [
+        "7a3224",
+        "33b65d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "rsjhvx"
+        ]
+      },
+      "label": "Content Section Golf"
+    },
+    {
+      "id": "7a3224",
+      "name": "container",
+      "parent": "ad3b8f",
+      "children": [
+        "29b212",
+        "12444d"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "slhmuz"
+        ]
+      },
+      "label": "Intro Bravo"
+    },
+    {
+      "id": "33b65d",
+      "name": "container",
+      "parent": "ad3b8f",
+      "children": [
+        "ff0ecc"
+      ],
+      "settings": {
+        "_cssGlobalClasses": [
+          "sohcqn"
+        ]
+      },
+      "label": "Content Wrapper"
+    },
+    {
+      "id": "29b212",
+      "name": "heading",
+      "parent": "7a3224",
+      "children": [],
+      "settings": {
+        "text": "Your headline here",
+        "tag": "h2",
+        "_cssGlobalClasses": [
+          "okkigb"
+        ]
+      }
+    },
+    {
+      "id": "12444d",
+      "name": "text-basic",
+      "parent": "7a3224",
+      "children": [],
+      "settings": {
+        "text": "accent heading",
+        "_cssGlobalClasses": [
+          "qfdtjc"
+        ]
+      },
+      "label": "Accent Heading"
+    },
+    {
+      "id": "ff0ecc",
+      "name": "text",
+      "parent": "33b65d",
+      "children": [],
+      "settings": {
+        "text": "<p>Lorem ipsum.</p>",
+        "_cssGlobalClasses": [
+          "xkpyhk"
+        ]
+      },
+      "label": "Text"
+    }
+  ],
+  "source": "bricksCopiedElements",
+  "sourceUrl": "https://krisbal.com",
+  "version": "2.3.5",
+  "globalClasses": [
+    {
+      "id": "rsjhvx",
+      "name": "fr-content-section-golf"
+    },
+    {
+      "id": "slhmuz",
+      "name": "fr-intro-bravo"
+    },
+    {
+      "id": "okkigb",
+      "name": "fr-intro-bravo__heading"
+    },
+    {
+      "id": "qfdtjc",
+      "name": "fr-accent-heading"
+    },
+    {
+      "id": "sohcqn",
+      "name": "fr-content-section-golf__content-wrapper"
+    },
+    {
+      "id": "xkpyhk",
+      "name": "fr-content-section-golf__text"
+    }
+  ]
+}

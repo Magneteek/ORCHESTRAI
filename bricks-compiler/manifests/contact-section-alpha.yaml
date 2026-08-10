@@ -1,0 +1,123 @@
+# Contact Section Alpha
+# 2-column layout: left has intro text + social icons + contact info (address/phone/email),
+# right has a full-height map with dark overlay.
+# Compact, card-style content wrapper on a white background panel.
+
+component: contact-section-alpha
+version: "2.3.5"
+description: |
+  2-column contact section. Left: heading + lede + social icon row + address/phone/email
+  info blocks. Right: absolute-positioned full-height map with overlay. White card panel.
+
+slots:
+
+  # ── Intro ──────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-contact-section-alpha__heading
+    description: Section H2 heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-contact-section-alpha__lede
+    description: Supporting paragraph below heading
+
+  # ── Contact Info ───────────────────────────────────────────────────────────
+  # Note: address/phone/email share the same CSS classes — targeted by element ID
+
+  address_text:
+    type: string
+    required: false
+    max_length: 120
+    target_id: "654dd1"
+    description: Address text. Supports <br> for line breaks.
+
+  phone_text:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "033c71"
+    description: Phone number display text (e.g. "+31 616 163 282")
+
+  phone_link:
+    type: link
+    required: false
+    target_id: "033c71"
+    description: "Phone tel: link — { url: 'tel:+31616163282' }"
+
+  email_text:
+    type: string
+    required: false
+    max_length: 80
+    target_id: "d71cee"
+    description: Email address display text
+
+  email_link:
+    type: link
+    required: false
+    target_id: "d71cee"
+    description: "Email mailto: link — { url: 'mailto:info@example.com' }"
+
+  # ── Social Icons ────────────────────────────────────────────────────────────
+  # 4 fixed social icon slots — links only (icons are SVG placeholders to be swapped in Bricks)
+  # Accessible label text is also settable
+
+  social_1_link:
+    type: link
+    required: false
+    target_id: "e03d12"
+    description: Social icon 1 URL (e.g. Facebook)
+
+  social_1_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "d7c8e3"
+    description: Hidden accessible label for social icon 1 (e.g. "Follow us on Facebook")
+
+  social_2_link:
+    type: link
+    required: false
+    target_id: "b50313"
+    description: Social icon 2 URL (e.g. Instagram)
+
+  social_2_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "5575d1"
+    description: Hidden accessible label for social icon 2
+
+  social_3_link:
+    type: link
+    required: false
+    target_id: "93f3ac"
+    description: Social icon 3 URL (e.g. YouTube)
+
+  social_3_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "3ec79e"
+    description: Hidden accessible label for social icon 3
+
+  social_4_link:
+    type: link
+    required: false
+    target_id: "779bcb"
+    description: Social icon 4 URL (e.g. X / Twitter)
+
+  social_4_label:
+    type: string
+    required: false
+    max_length: 40
+    target_id: "6335eb"
+    description: Hidden accessible label for social icon 4
+
+# ── Strip builder-only elements ────────────────────────────────────────────────
+strip_elements: []

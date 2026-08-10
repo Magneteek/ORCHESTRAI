@@ -1,0 +1,108 @@
+# Pricing Section Charlie
+# Light-bg: centered intro + fr-switch monthly/yearly toggle + 3-plan split card grid.
+# Source: https://krisbal.com (Bricks 2.3.5)
+
+component: pricing-section-charlie
+version: "2.3.5"
+description: |
+  Light-background pricing section. Centered intro (H2, accent, lede). Below: a Frames
+  fr-switch toggle for Monthly/Yearly, controlling two 3-column grids. Each card is
+  split left/right: left has plan name, description, large price (currency + amount + term),
+  CTA button; right has a features heading and 5-item feature list.
+  NOTE: Template contains two grids (monthly/yearly). Filling "Pricing Card Charlie"
+  updates BOTH grids simultaneously (same CSS classes). Update yearly prices manually in Bricks.
+  NOTE: The fr-switch labels ("Monthly"/"Yearly") are baked into element settings — not
+  slot-fillable. Edit in the Bricks panel if needed.
+  NOTE: Feature items (icon + label) within each card are not slot-fillable — nested
+  arrays not supported. Edit features per card manually in Bricks after pasting.
+
+slots:
+
+  # ── Intro ─────────────────────────────────────────────────────────────────
+
+  heading:
+    type: string
+    required: true
+    max_length: 80
+    target_class: fr-intro-alpha__heading
+    description: H2 section heading
+
+  accent_heading:
+    type: string
+    required: false
+    max_length: 60
+    target_class: fr-intro-alpha__accent-heading
+    description: Small accent label above the heading
+
+  lede:
+    type: string
+    required: false
+    max_length: 220
+    target_class: fr-intro-alpha__lede
+    description: Supporting paragraph below the heading
+
+  # ── Pricing cards (array) ─────────────────────────────────────────────────
+  # NOTE: Fills BOTH monthly and yearly grids. Provide 3 plans.
+  # Update yearly prices manually in Bricks after pasting.
+
+  plans:
+    type: array
+    required: false
+    min: 2
+    max: 3
+    template_label: "Pricing Card Charlie"
+    description: |
+      Pricing plan cards. Fills both monthly and yearly grids.
+      Update yearly prices/terms manually in Bricks after pasting.
+    item_slots:
+      heading:
+        type: string
+        required: true
+        max_length: 40
+        target_class: fr-pricing-card-charlie__heading
+        description: Plan name (e.g. "Free", "Starter", "Pro")
+      description:
+        type: string
+        required: false
+        max_length: 160
+        target_class: fr-pricing-card-charlie__description
+        description: Short description of the plan tier
+      currency:
+        type: string
+        required: false
+        max_length: 5
+        target_class: fr-pricing-card-charlie__currency
+        description: "Currency symbol (e.g. \"$\", \"€\")"
+      price:
+        type: string
+        required: true
+        max_length: 10
+        target_class: fr-pricing-card-charlie__price
+        description: "Price amount (e.g. \"0\", \"10\", \"20\")"
+      price_term:
+        type: string
+        required: false
+        max_length: 15
+        target_class: fr-pricing-card-charlie__term
+        description: "Price period label (e.g. \"/free\", \"/month\", \"/year\")"
+      cta_text:
+        type: string
+        required: false
+        max_length: 40
+        target_class: fr-pricing-card-charlie__button
+        description: CTA button label (e.g. "Get Started")
+      cta_link:
+        type: link
+        required: false
+        target_class: fr-pricing-card-charlie__button
+        description: "CTA button URL: { url: '...', type?: 'external' }"
+      features_heading:
+        type: string
+        required: false
+        max_length: 40
+        target_class: fr-pricing-card-charlie__features-heading
+        description: Heading above the feature list (e.g. "Features", "What's included")
+
+# ── Builder-only elements ─────────────────────────────────────────────────
+strip_elements:
+  [] # none detected
