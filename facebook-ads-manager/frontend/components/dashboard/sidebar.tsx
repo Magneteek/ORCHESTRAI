@@ -54,8 +54,8 @@ const navItems: NavItem[] = [
     description: "Performance insights",
   },
   {
-    title: "Optimization",
-    href: "/dashboard/optimization",
+    title: "AI Insights",
+    href: "/dashboard/ai-insights",
     icon: Brain,
     description: "AI-powered recommendations",
   },

@@ -6,8 +6,8 @@ import { createAdSetInDb } from '@/lib/db/campaigns';
 import { createAdSetSchema, adSetQuerySchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
 import { ValidationError, BadRequestError, NotFoundError } from '@/lib/utils/errors';
-import { getFacebookAPI } from '@/lib/facebook';
 import { prisma } from '@/lib/db/prisma';
+import { decrypt } from '@/lib/utils/encryption';
 import Redis from 'ioredis';
 
 // Initialize Redis client
@@ -187,44 +187,72 @@ export async function POST(request: NextRequest) {
       throw new NotFoundError('Ad account');
     }
 
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    // Decrypt access token
+    const accessToken = decrypt(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const apiVersion = process.env.FACEBOOK_API_VERSION || 'v22.0';
 
-    // Create ad set via Facebook API
-    const facebookAdSet = await facebookAPI.adSetCreator.createAdSet(
-      campaign.campaignId, // Facebook campaign ID
+    // Build ad set payload for Graph API
+    const adSetPayload: Record<string, any> = {
+      campaign_id: campaign.campaignId,
+      name: data.name,
+      status: data.status || 'PAUSED',
+    };
+    // When the campaign has a campaign-level budget (CBO), Facebook manages the budget
+    // centrally and rejects ad-set-level budget fields with "Invalid parameter".
+    const campaignHasCBO = !!(campaign.dailyBudget || campaign.lifetimeBudget);
+    if (!campaignHasCBO) {
+      if (data.dailyBudget) adSetPayload.daily_budget = Math.round(data.dailyBudget * 100);
+      if (data.lifetimeBudget) adSetPayload.lifetime_budget = Math.round(data.lifetimeBudget * 100);
+    }
+    if (data.billingEvent) adSetPayload.billing_event = data.billingEvent;
+    if (data.optimizationGoal) adSetPayload.optimization_goal = data.optimizationGoal;
+    if (data.bidAmount) adSetPayload.bid_amount = Math.round(data.bidAmount * 100);
+    if (data.bidStrategy) adSetPayload.bid_strategy = data.bidStrategy;
+    if (data.targeting) {
+      // Facebook rejects empty arrays for genders — omit if not specified
+      const targeting = { ...data.targeting } as Record<string, any>;
+      if (Array.isArray(targeting.genders) && targeting.genders.length === 0) {
+        delete targeting.genders;
+      }
+      // Facebook requires explicitly opting in or out of Advantage audience (0 = manual targeting)
+      targeting.targeting_automation = { advantage_audience: 0 };
+      adSetPayload.targeting = targeting;
+    }
+    if (data.dynamicCreative !== undefined) adSetPayload.is_dynamic_creative = data.dynamicCreative;
+    if (data.startTime) adSetPayload.start_time = data.startTime;
+    if (data.endTime) adSetPayload.end_time = data.endTime;
+    // Facebook requires promoted_object for objectives like LEADS, CONVERSIONS, ENGAGEMENT.
+    // For LEADS/QUALITY_LEAD the promoted object is the Facebook Page.
+    if (data.pageId) adSetPayload.promoted_object = { page_id: data.pageId };
+
+    // Create ad set directly via Graph API
+    const fbRes = await fetch(
+      `https://graph.facebook.com/${apiVersion}/act_${adAccount.accountId.replace(/^act_/, '')}/adsets`,
       {
-        campaignId: campaign.campaignId,
-        name: data.name,
-        status: data.status as any,
-        dailyBudget: data.dailyBudget,
-        lifetimeBudget: data.lifetimeBudget,
-        billingEvent: data.billingEvent as any,
-        optimizationGoal: data.optimizationGoal as any,
-        bidAmount: data.bidAmount,
-        bidStrategy: data.bidStrategy as any,
-        targeting: data.targeting as any,
-        startTime: data.startTime,
-        endTime: data.endTime,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...adSetPayload, access_token: accessToken }),
       }
     );
+    const fbJson = await fbRes.json();
 
-    if (!facebookAdSet) {
-      throw new Error('Failed to create ad set on Facebook');
+    if (fbJson.error) {
+      const detail = fbJson.error.error_user_msg || '';
+      const msg = `${fbJson.error.message || 'Facebook API error'}${detail ? `: ${detail}` : ''}`;
+      throw new BadRequestError(msg, { facebookError: fbJson.error });
     }
 
     // Save ad set to database
     const adSet = await createAdSetInDb({
-      campaignId: campaign.id, // Database campaign ID
-      adSetId: facebookAdSet.id,
-      name: facebookAdSet.name,
-      status: facebookAdSet.status,
-      targeting: facebookAdSet.targeting || {},
-      budget: facebookAdSet.dailyBudget || facebookAdSet.lifetimeBudget,
-      bidStrategy: facebookAdSet.bidStrategy,
-      billingEvent: facebookAdSet.billingEvent,
-      optimizationGoal: facebookAdSet.optimizationGoal,
+      campaignId: campaign.id,
+      adSetId: fbJson.id,
+      name: data.name,
+      status: data.status || 'PAUSED',
+      targeting: (data.targeting as any) || {},
+      budget: data.dailyBudget || data.lifetimeBudget,
+      bidStrategy: data.bidStrategy,
+      billingEvent: data.billingEvent,
+      optimizationGoal: data.optimizationGoal,
       startTime: data.startTime ? new Date(data.startTime) : undefined,
       endTime: data.endTime ? new Date(data.endTime) : undefined,
     });
@@ -247,7 +275,6 @@ export async function POST(request: NextRequest) {
         endTime: adSet.endTime,
         createdAt: adSet.createdAt,
         updatedAt: adSet.updatedAt,
-        facebookData: facebookAdSet,
       },
       'Ad set created successfully'
     );

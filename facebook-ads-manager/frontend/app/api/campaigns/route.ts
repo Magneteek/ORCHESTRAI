@@ -5,8 +5,8 @@ import { getCampaignsByAdAccount, createCampaignInDb } from '@/lib/db/campaigns'
 import { createCampaignSchema, campaignQuerySchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
 import { ValidationError, BadRequestError } from '@/lib/utils/errors';
-import { getFacebookAPI } from '@/lib/facebook';
 import { prisma } from '@/lib/db/prisma';
+import { decrypt } from '@/lib/utils/encryption';
 import Redis from 'ioredis';
 
 // Initialize Redis client
@@ -72,6 +72,7 @@ export async function GET(request: NextRequest) {
       status: campaign.status,
       dailyBudget: campaign.dailyBudget,
       lifetimeBudget: campaign.lifetimeBudget,
+      bidStrategy: (campaign as any).bidStrategy || null,
       startTime: campaign.startTime,
       stopTime: campaign.stopTime,
       createdAt: campaign.createdAt,
@@ -146,44 +147,51 @@ export async function POST(request: NextRequest) {
       throw new BadRequestError('You do not have access to this ad account');
     }
 
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
+    // Decrypt access token
+    const accessToken = decrypt(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const apiVersion = process.env.FACEBOOK_API_VERSION || 'v22.0';
 
-    // Decrypt and set access token
-    // Note: In production, implement proper token decryption
-    const accessToken = adAccount.facebookBusinessAccount.accessTokenEncrypted;
-    facebookAPI.setAccessToken(accessToken);
+    // Build campaign payload for Graph API
+    const campaignPayload: Record<string, any> = {
+      name: data.name,
+      objective: data.objective,
+      status: data.status || 'PAUSED',
+      special_ad_categories: data.specialAdCategories || [],
+    };
+    if (data.dailyBudget) campaignPayload.daily_budget = Math.round(data.dailyBudget * 100);
+    if (data.lifetimeBudget) campaignPayload.lifetime_budget = Math.round(data.lifetimeBudget * 100);
+    if (data.spendCap) campaignPayload.spend_cap = Math.round(data.spendCap * 100);
+    if (data.bidStrategy) campaignPayload.bid_strategy = data.bidStrategy;
+    if (data.startTime) campaignPayload.start_time = data.startTime;
+    if (data.stopTime) campaignPayload.stop_time = data.stopTime;
 
-    // Create campaign via Facebook API
-    const facebookCampaign = await facebookAPI.campaignCreator.createCampaign(
-      adAccount.accountId,
+    // Create campaign directly via Graph API
+    const fbRes = await fetch(
+      `https://graph.facebook.com/${apiVersion}/act_${adAccount.accountId.replace(/^act_/, '')}/campaigns`,
       {
-        name: data.name,
-        objective: data.objective as any,
-        status: data.status as any,
-        specialAdCategories: data.specialAdCategories as any,
-        dailyBudget: data.dailyBudget,
-        lifetimeBudget: data.lifetimeBudget,
-        spendCap: data.spendCap,
-        bidStrategy: data.bidStrategy as any,
-        startTime: data.startTime,
-        stopTime: data.stopTime,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...campaignPayload, access_token: accessToken }),
       }
     );
+    const fbJson = await fbRes.json();
 
-    if (!facebookCampaign) {
-      throw new Error('Failed to create campaign on Facebook');
+    if (fbJson.error) {
+      throw new Error(fbJson.error.message || 'Facebook API error');
     }
+
+    const fbCampaignId = fbJson.id;
 
     // Save campaign to database
     const campaign = await createCampaignInDb({
       adAccountId: data.adAccountId,
-      campaignId: facebookCampaign.id,
-      name: facebookCampaign.name,
-      objective: facebookCampaign.objective,
-      status: facebookCampaign.status,
-      dailyBudget: facebookCampaign.dailyBudget,
-      lifetimeBudget: facebookCampaign.lifetimeBudget,
+      campaignId: fbCampaignId,
+      name: data.name,
+      objective: data.objective,
+      status: data.status || 'PAUSED',
+      dailyBudget: data.dailyBudget,
+      lifetimeBudget: data.lifetimeBudget,
+      bidStrategy: data.bidStrategy,
       startTime: data.startTime ? new Date(data.startTime) : undefined,
       stopTime: data.stopTime ? new Date(data.stopTime) : undefined,
     });
@@ -204,7 +212,6 @@ export async function POST(request: NextRequest) {
         stopTime: campaign.stopTime,
         createdAt: campaign.createdAt,
         updatedAt: campaign.updatedAt,
-        facebookData: facebookCampaign,
       },
       'Campaign created successfully'
     );

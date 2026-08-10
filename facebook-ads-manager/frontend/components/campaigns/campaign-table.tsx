@@ -83,6 +83,10 @@ export function CampaignTable({
       setSelectedCampaign(null);
       onRefresh();
     },
+    onError: (error: any) => {
+      setDeleteDialogOpen(false);
+      alert(error.message || 'Failed to delete campaign');
+    },
   });
 
   // Duplicate mutation

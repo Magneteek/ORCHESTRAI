@@ -31,11 +31,17 @@ async function apiFetch<T>(
     },
   });
 
-  const data: ApiResponse<T> = await response.json();
+  // 204 No Content — success with no body
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const text = await response.text();
+  const data: ApiResponse<T> = text ? JSON.parse(text) : ({} as ApiResponse<T>);
 
   if (!response.ok || !data.success) {
     throw new ApiError(
-      data.error?.message || 'An error occurred',
+      data.error?.message || `HTTP ${response.status}`,
       response.status,
       data.error?.code || 'UNKNOWN_ERROR',
       data.error?.details

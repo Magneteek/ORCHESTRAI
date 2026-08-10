@@ -12,6 +12,7 @@ import {
   SyncResult,
 } from '@/types/facebook';
 import { FacebookErrorLogger } from '../errors';
+import { prisma } from '@/lib/db/prisma';
 
 export class AdSetsSync {
   constructor(private client: FacebookClient) {}
@@ -22,7 +23,7 @@ export class AdSetsSync {
   async syncAdSets(
     campaignId: string,
     adAccountId: string,
-    options?: SyncOptions & { status?: CampaignStatus }
+    options?: SyncOptions & { status?: CampaignStatus; dbCampaignId?: string }
   ): Promise<SyncResult<FacebookAdSet>> {
     const cacheKey = `adsets:campaign:${campaignId}`;
     const ttl = 600; // 10 minutes
@@ -139,6 +140,43 @@ export class AdSetsSync {
         .getRedis()
         .setex(`facebook:cache:${cacheKey}`, ttl, JSON.stringify(adSets));
 
+      if (options?.dbCampaignId) {
+        try {
+          await Promise.all(
+            adSets.map((adSet) =>
+              prisma.adSet.upsert({
+                where: { campaignId_adSetId: { campaignId: options.dbCampaignId!, adSetId: adSet.id } },
+                update: {
+                  name: adSet.name,
+                  status: adSet.status,
+                  targeting: (adSet.targeting as any) || {},
+                  budget: adSet.dailyBudget ?? adSet.lifetimeBudget ?? null,
+                  bidStrategy: adSet.bidStrategy ?? null,
+                  billingEvent: adSet.billingEvent ?? null,
+                  optimizationGoal: adSet.optimizationGoal ?? null,
+                  startTime: adSet.startTime ? new Date(adSet.startTime) : null,
+                  endTime: adSet.endTime ? new Date(adSet.endTime) : null,
+                },
+                create: {
+                  campaignId: options.dbCampaignId!,
+                  adSetId: adSet.id,
+                  name: adSet.name,
+                  status: adSet.status,
+                  targeting: (adSet.targeting as any) || {},
+                  budget: adSet.dailyBudget ?? adSet.lifetimeBudget ?? null,
+                  bidStrategy: adSet.bidStrategy ?? null,
+                  billingEvent: adSet.billingEvent ?? null,
+                  optimizationGoal: adSet.optimizationGoal ?? null,
+                  startTime: adSet.startTime ? new Date(adSet.startTime) : null,
+                  endTime: adSet.endTime ? new Date(adSet.endTime) : null,
+                },
+              })
+            )
+          );
+        } catch (dbError: any) {
+          FacebookErrorLogger.log(dbError, { operation: 'persist_ad_sets', campaignId });
+        }
+      }
 
       FacebookErrorLogger.info('Successfully synced ad sets', {
         campaignId,
@@ -173,7 +211,7 @@ export class AdSetsSync {
    */
   async syncAccountAdSets(
     adAccountId: string,
-    options?: SyncOptions
+    options?: SyncOptions & { dbAdAccountId?: string }
   ): Promise<SyncResult<FacebookAdSet>> {
     const cacheKey = `adsets:account:${adAccountId}`;
     const ttl = 600; // 10 minutes
@@ -255,6 +293,49 @@ export class AdSetsSync {
         .getRedis()
         .setex(`facebook:cache:${cacheKey}`, ttl, JSON.stringify(adSets));
 
+      if (options?.dbAdAccountId && adSets.length > 0) {
+        try {
+          const fbCampaignIds = [...new Set(adSets.map((a) => a.campaignId).filter(Boolean))];
+          const dbCampaigns = await prisma.campaign.findMany({
+            where: { adAccountId: options.dbAdAccountId, campaignId: { in: fbCampaignIds } },
+            select: { id: true, campaignId: true },
+          });
+          const campaignMap = new Map(dbCampaigns.map((c) => [c.campaignId, c.id]));
+
+          await Promise.all(
+            adSets
+              .filter((a) => campaignMap.has(a.campaignId))
+              .map((adSet) => {
+                const dbCampaignId = campaignMap.get(adSet.campaignId)!;
+                return prisma.adSet.upsert({
+                  where: { campaignId_adSetId: { campaignId: dbCampaignId, adSetId: adSet.id } },
+                  update: {
+                    name: adSet.name,
+                    status: adSet.status,
+                    targeting: (adSet.targeting as any) || {},
+                    budget: adSet.dailyBudget ?? adSet.lifetimeBudget ?? null,
+                    bidStrategy: adSet.bidStrategy ?? null,
+                    billingEvent: adSet.billingEvent ?? null,
+                    optimizationGoal: adSet.optimizationGoal ?? null,
+                  },
+                  create: {
+                    campaignId: dbCampaignId,
+                    adSetId: adSet.id,
+                    name: adSet.name,
+                    status: adSet.status,
+                    targeting: (adSet.targeting as any) || {},
+                    budget: adSet.dailyBudget ?? adSet.lifetimeBudget ?? null,
+                    bidStrategy: adSet.bidStrategy ?? null,
+                    billingEvent: adSet.billingEvent ?? null,
+                    optimizationGoal: adSet.optimizationGoal ?? null,
+                  },
+                });
+              })
+          );
+        } catch (dbError: any) {
+          FacebookErrorLogger.log(dbError, { operation: 'persist_account_ad_sets', adAccountId });
+        }
+      }
 
       return {
         success: true,

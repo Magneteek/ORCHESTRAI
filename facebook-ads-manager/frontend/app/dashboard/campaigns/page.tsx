@@ -53,10 +53,13 @@ export default function CampaignsPage() {
         ...(filters.adAccountId && { adAccountId: filters.adAccountId }),
       });
 
-      return apiClient.get<CampaignsResponse>(`/api/campaigns?${params}`);
+      const res = await fetch(`/api/campaigns?${params}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error?.message || 'Failed to load campaigns');
+      return { data: json.data, ...(json.meta || {}) } as CampaignsResponse;
     },
-    staleTime: 30000, // 30 seconds
-    enabled: !!filters.adAccountId, // Only fetch when an ad account is selected
+    staleTime: 30000,
+    enabled: !!filters.adAccountId,
   });
 
   const campaigns = data?.data || [];
@@ -106,10 +109,9 @@ export default function CampaignsPage() {
           >
             <Filter className="mr-2 h-4 w-4" />
             Filters
-            {Object.values(filters).filter((f) => f && f !== 'all').length >
-              0 && (
+            {(filters.status !== 'all' || filters.objective !== 'all') && (
               <span className="ml-2 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
-                {Object.values(filters).filter((f) => f && f !== 'all').length}
+                {[filters.status !== 'all', filters.objective !== 'all'].filter(Boolean).length}
               </span>
             )}
           </Button>
@@ -174,18 +176,20 @@ export default function CampaignsPage() {
             <div className="text-center">
               <h3 className="text-lg font-semibold">No campaigns found</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                {search || Object.values(filters).some((f) => f && f !== 'all')
+                {search || filters.status !== 'all' || filters.objective !== 'all'
                   ? 'Try adjusting your search or filters'
-                  : 'Get started by creating your first campaign'}
+                  : 'Sync your Facebook account to import existing campaigns'}
               </p>
-              {!search &&
-                !Object.values(filters).some((f) => f && f !== 'all') && (
-                  <Link href="/dashboard/campaigns/new">
-                    <Button className="mt-4">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Create Campaign
-                    </Button>
-                  </Link>
+              {!search && filters.status === 'all' && filters.objective === 'all' && selectedAccountId && (
+                  <div className="mt-4 flex gap-3 justify-center">
+                    <SyncButton adAccountId={selectedAccountId} onSuccess={() => refetch()} />
+                    <Link href="/dashboard/campaigns/new">
+                      <Button variant="outline">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create New
+                      </Button>
+                    </Link>
+                  </div>
                 )}
             </div>
           </div>

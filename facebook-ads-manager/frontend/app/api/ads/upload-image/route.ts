@@ -4,195 +4,109 @@ import { requireAuth } from '@/lib/auth/session';
 import { uploadImageSchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
 import { ValidationError, BadRequestError, NotFoundError } from '@/lib/utils/errors';
-import { getFacebookAPI } from '@/lib/facebook';
 import { prisma } from '@/lib/db/prisma';
-import Redis from 'ioredis';
+import { decrypt } from '@/lib/utils/encryption';
 
-// Initialize Redis client
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+const API_VERSION = process.env.FACEBOOK_API_VERSION || 'v22.0';
+
+async function resolveAdAccount(adAccountId: string, userId: string, orgId: string) {
+  const adAccount = await prisma.adAccount.findUnique({
+    where: { id: adAccountId },
+    include: {
+      facebookBusinessAccount: {
+        select: { organizationId: true, accessTokenEncrypted: true },
+      },
+    },
+  });
+  if (!adAccount) throw new NotFoundError('Ad account');
+  if (adAccount.facebookBusinessAccount.organizationId !== orgId) {
+    throw new BadRequestError('You do not have access to this ad account');
+  }
+  return {
+    accessToken: decrypt(adAccount.facebookBusinessAccount.accessTokenEncrypted),
+    accountId: adAccount.accountId.replace(/^act_/, ''),
+  };
+}
 
 /**
  * POST /api/ads/upload-image
- * Upload image to Facebook Ad Account
+ * Upload image to Facebook Ad Account using the Graph API directly.
  *
  * Body:
  * - adAccountId: string (required) - Database ad account ID
  * - imageUrl?: string - URL of image to upload
- * - imageData?: string - Base64 encoded image data
+ * - imageData?: string - Base64 encoded image data (data URI or raw base64)
  * - fileName?: string - Original file name
- *
- * Returns:
- * - imageHash: string - Facebook image hash to use in ad creative
- * - url: string - URL of uploaded image
  */
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth();
     const body = await request.json();
 
-    // Validate request body
     const data = uploadImageSchema.parse(body);
 
     if (!data.imageUrl && !data.imageData) {
       throw new BadRequestError('Either imageUrl or imageData is required');
     }
 
-    // Get ad account to verify ownership
-    const adAccount = await prisma.adAccount.findUnique({
-      where: { id: data.adAccountId },
-      include: {
-        facebookBusinessAccount: {
-          select: {
-            organizationId: true,
-            accessTokenEncrypted: true,
-          },
-        },
-      },
-    });
+    const { accessToken, accountId } = await resolveAdAccount(data.adAccountId, user.id, user.organizationId);
 
-    if (!adAccount) {
-      throw new NotFoundError('Ad account');
-    }
+    const endpoint = `https://graph.facebook.com/${API_VERSION}/act_${accountId}/adimages`;
 
-    // Verify organization ownership
-    if (adAccount.facebookBusinessAccount.organizationId !== user.organizationId) {
-      throw new BadRequestError('You do not have access to this ad account');
-    }
-
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
-
-    // Upload image to Facebook
     let imageHash: string;
     let imageUrl: string;
 
     if (data.imageUrl) {
-      // Upload from URL
-      const result = await uploadImageFromUrl(
-        facebookAPI,
-        adAccount.accountId,
-        data.imageUrl
-      );
-      imageHash = result.hash;
-      imageUrl = result.url;
-    } else if (data.imageData) {
-      // Upload from base64 data
-      const result = await uploadImageFromData(
-        facebookAPI,
-        adAccount.accountId,
-        data.imageData,
-        data.fileName || 'image.jpg'
-      );
-      imageHash = result.hash;
-      imageUrl = result.url;
+      // Upload by URL — send as form-urlencoded
+      const params = new URLSearchParams({
+        url: data.imageUrl,
+        access_token: accessToken,
+      });
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+      });
+      const json = await res.json();
+      if (json.error) throw new Error(json.error.message || 'Facebook image upload failed');
+      const key = Object.keys(json.images || {})[0];
+      if (!key) throw new Error('No image hash returned from Facebook');
+      imageHash = json.images[key].hash;
+      imageUrl = json.images[key].url || data.imageUrl;
     } else {
-      throw new BadRequestError('Invalid upload data');
+      // Upload raw bytes (base64) — send as multipart form data
+      const base64 = (data.imageData as string).replace(/^data:image\/\w+;base64,/, '');
+      const buffer = Buffer.from(base64, 'base64');
+      const fileName = data.fileName || 'image.jpg';
+
+      const formData = new FormData();
+      formData.append('access_token', accessToken);
+      formData.append('filename', new Blob([buffer], { type: 'image/jpeg' }), fileName);
+
+      const res = await fetch(endpoint, { method: 'POST', body: formData });
+      const json = await res.json();
+      if (json.error) throw new Error(json.error.message || 'Facebook image upload failed');
+      const key = Object.keys(json.images || {})[0];
+      if (!key) throw new Error('No image hash returned from Facebook');
+      imageHash = json.images[key].hash;
+      imageUrl = json.images[key].url || '';
     }
 
     return successResponse(
-      {
-        imageHash,
-        url: imageUrl,
-        adAccountId: adAccount.accountId,
-        uploadedAt: new Date().toISOString(),
-      },
-      {
-        message: 'Image uploaded successfully',
-      }
+      { imageHash, url: imageUrl, adAccountId: data.adAccountId },
+      { message: 'Image uploaded successfully' }
     );
   } catch (error) {
     if (error instanceof ZodError) {
-      return errorResponse(
-        new ValidationError('Validation failed', error.errors),
-        422
-      );
+      return errorResponse(new ValidationError('Validation failed', error.errors), 422);
     }
-
     return errorResponse(error as Error);
   }
 }
 
 /**
- * Upload image from URL
- */
-async function uploadImageFromUrl(
-  facebookAPI: any,
-  adAccountId: string,
-  imageUrl: string
-): Promise<{ hash: string; url: string }> {
-  try {
-    const sdk = facebookAPI.client.getSdk();
-    const AdAccount = sdk.AdAccount;
-    const account = new AdAccount(adAccountId);
-
-    const response = await facebookAPI.client.makeRequest(adAccountId, () =>
-      account.createAdImage([], {
-        url: imageUrl,
-      })
-    );
-
-    const imageHash = response.images?.[Object.keys(response.images)[0]]?.hash;
-
-    if (!imageHash) {
-      throw new Error('Failed to get image hash from Facebook response');
-    }
-
-    return {
-      hash: imageHash,
-      url: imageUrl,
-    };
-  } catch (error: any) {
-    throw new Error(`Failed to upload image from URL: ${error.message}`);
-  }
-}
-
-/**
- * Upload image from base64 data
- */
-async function uploadImageFromData(
-  facebookAPI: any,
-  adAccountId: string,
-  base64Data: string,
-  fileName: string
-): Promise<{ hash: string; url: string }> {
-  try {
-    // Remove data URL prefix if present
-    const base64Image = base64Data.replace(/^data:image\/\w+;base64,/, '');
-
-    const sdk = facebookAPI.client.getSdk();
-    const AdAccount = sdk.AdAccount;
-    const account = new AdAccount(adAccountId);
-
-    const response = await facebookAPI.client.makeRequest(adAccountId, () =>
-      account.createAdImage([], {
-        bytes: base64Image,
-        filename: fileName,
-      })
-    );
-
-    const imageHash = response.images?.[Object.keys(response.images)[0]]?.hash;
-    const imageUrl = response.images?.[Object.keys(response.images)[0]]?.url;
-
-    if (!imageHash) {
-      throw new Error('Failed to get image hash from Facebook response');
-    }
-
-    return {
-      hash: imageHash,
-      url: imageUrl || '',
-    };
-  } catch (error: any) {
-    throw new Error(`Failed to upload image from data: ${error.message}`);
-  }
-}
-
-/**
- * GET /api/ads/upload-image
- * Get uploaded images for an ad account
- *
- * Query params:
- * - adAccountId: string (required)
+ * GET /api/ads/upload-image?adAccountId=...
+ * List previously uploaded images for an ad account.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -200,60 +114,31 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const adAccountId = searchParams.get('adAccountId');
 
-    if (!adAccountId) {
-      throw new BadRequestError('adAccountId query parameter is required');
-    }
+    if (!adAccountId) throw new BadRequestError('adAccountId query parameter is required');
 
-    // Get ad account to verify ownership
-    const adAccount = await prisma.adAccount.findUnique({
-      where: { id: adAccountId },
-      include: {
-        facebookBusinessAccount: {
-          select: {
-            organizationId: true,
-            accessTokenEncrypted: true,
-          },
-        },
-      },
+    const { accessToken, accountId } = await resolveAdAccount(adAccountId, user.id, user.organizationId);
+
+    const params = new URLSearchParams({
+      fields: 'id,hash,url,created_time,name,status',
+      limit: '100',
+      access_token: accessToken,
     });
-
-    if (!adAccount) {
-      throw new NotFoundError('Ad account');
-    }
-
-    // Verify organization ownership
-    if (adAccount.facebookBusinessAccount.organizationId !== user.organizationId) {
-      throw new BadRequestError('You do not have access to this ad account');
-    }
-
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
-
-    // Get ad images from Facebook
-    const sdk = facebookAPI.client.getSdk();
-    const AdAccount = sdk.AdAccount;
-    const account = new AdAccount(adAccount.accountId);
-
-    const response = await facebookAPI.client.makeRequest(adAccount.accountId, () =>
-      account.getAdImages(['id', 'hash', 'url', 'created_time', 'name', 'status'], {
-        limit: 100,
-      })
+    const res = await fetch(
+      `https://graph.facebook.com/${API_VERSION}/act_${accountId}/adimages?${params}`
     );
+    const json = await res.json();
+    if (json.error) throw new Error(json.error.message || 'Failed to fetch images');
 
-    const images = (response as any[]).map((image: any) => ({
-      id: image.id,
-      hash: image.hash,
-      url: image.url,
-      name: image.name,
-      status: image.status,
-      createdTime: image.created_time,
+    const images = (json.data || []).map((img: any) => ({
+      id: img.id,
+      hash: img.hash,
+      url: img.url,
+      name: img.name,
+      status: img.status,
+      createdTime: img.created_time,
     }));
 
-    return successResponse({
-      adAccountId: adAccount.accountId,
-      images,
-    });
+    return successResponse({ adAccountId, images });
   } catch (error) {
     return errorResponse(error as Error);
   }

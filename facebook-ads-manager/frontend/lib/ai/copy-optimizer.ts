@@ -81,8 +81,8 @@ Call-to-Action: "${adCopy.callToAction}"
 
 PERFORMANCE DATA:
 - CTR: ${(adCopy.performance.ctr * 100).toFixed(2)}%
-- Impressions: ${adCopy.performance.impressions.toLocaleString()}
-- Clicks: ${adCopy.performance.clicks.toLocaleString()}
+- Impressions: ${(adCopy.performance.impressions ?? 0).toLocaleString()}
+- Clicks: ${(adCopy.performance.clicks ?? 0).toLocaleString()}
 
 CAMPAIGN CONTEXT:
 - Objective: ${campaignObjective}

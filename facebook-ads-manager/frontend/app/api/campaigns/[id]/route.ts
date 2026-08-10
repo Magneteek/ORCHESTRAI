@@ -1,65 +1,30 @@
 import { NextRequest } from 'next/server';
 import { successResponse, errorResponse, noContentResponse } from '@/lib/utils/api-response';
-import { requireAuth } from '@/lib/auth/api-protection';
+import { requireAuth } from '@/lib/auth/session';
 import { hasPermission, UserRole } from '@/lib/auth/permissions';
 import { getCampaignWithDetails, updateCampaignInDb, deleteCampaignFromDb } from '@/lib/db/campaigns';
 import { updateCampaignSchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
-import { ValidationError, NotFoundError, BadRequestError, ForbiddenError } from '@/lib/utils/errors';
-import { getFacebookAPI } from '@/lib/facebook';
+import { ValidationError, NotFoundError, ForbiddenError } from '@/lib/utils/errors';
+import { decrypt } from '@/lib/utils/encryption';
 import { prisma } from '@/lib/db/prisma';
 import Redis from 'ioredis';
 
-// Initialize Redis client
 const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 
 /**
  * GET /api/campaigns/[id]
- * Retrieve single campaign with ad sets and insights
+ * Retrieve single campaign with ad sets
  */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth(request);
+    const user = await requireAuth();
     const { id } = await params;
 
-    // Get campaign with full details
-    const campaign = await getCampaignWithDetails(id, session.user.id, session.user.organizationId);
-
-    // Get Facebook access token
-    const adAccount = await prisma.adAccount.findUnique({
-      where: { id: campaign.adAccountId },
-      include: {
-        facebookBusinessAccount: {
-          select: {
-            accessTokenEncrypted: true,
-          },
-        },
-      },
-    });
-
-    if (!adAccount) {
-      throw new NotFoundError('Ad account');
-    }
-
-    // Initialize Facebook API to fetch fresh insights (optional)
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
-
-    // Check cache for insights
-    const cacheKey = `campaign:insights:${campaign.campaignId}`;
-    let insights = null;
-
-    const cachedInsights = await redis.get(cacheKey);
-    if (cachedInsights) {
-      insights = JSON.parse(cachedInsights);
-    } else {
-      // Fetch fresh insights from Facebook (implementation depends on your needs)
-      // For now, we'll skip this to avoid rate limits on every GET request
-      // You can implement this in the insights action endpoint instead
-    }
+    const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
 
     return successResponse({
       id: campaign.id,
@@ -69,26 +34,28 @@ export async function GET(
       status: campaign.status,
       dailyBudget: campaign.dailyBudget,
       lifetimeBudget: campaign.lifetimeBudget,
+      bidStrategy: (campaign as any).bidStrategy,
       startTime: campaign.startTime,
       stopTime: campaign.stopTime,
+      specialAdCategories: (campaign as any).specialAdCategories,
       createdAt: campaign.createdAt,
       updatedAt: campaign.updatedAt,
-      adSets: campaign.adSets.map(adSet => ({
+      adSets: campaign.adSets.map((adSet: any) => ({
         id: adSet.id,
         adSetId: adSet.adSetId,
         name: adSet.name,
         status: adSet.status,
         targeting: adSet.targeting,
         budget: adSet.budget,
-        ads: adSet.ads.map(ad => ({
+        ads: adSet.ads.map((ad: any) => ({
           id: ad.id,
           name: ad.name,
           status: ad.status,
           creative: ad.creative,
         })),
       })),
-      template: campaign.template,
-      insights,
+      template: (campaign as any).template,
+      insights: null,
     });
   } catch (error) {
     return errorResponse(error as Error);
@@ -97,76 +64,56 @@ export async function GET(
 
 /**
  * PATCH /api/campaigns/[id]
- * Update campaign (name, budget, schedule, status)
- *
- * Body (all fields optional):
- * - name?: string
- * - status?: CampaignStatus
- * - dailyBudget?: number
- * - lifetimeBudget?: number
- * - spendCap?: number
- * - bidStrategy?: BidStrategy
- * - startTime?: string (ISO 8601)
- * - stopTime?: string (ISO 8601)
+ * Update campaign fields and/or status
  */
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth(request);
+    const user = await requireAuth();
     const { id } = await params;
     const body = await request.json();
 
-    // Validate request body
     const data = updateCampaignSchema.parse(body);
 
-    // Get campaign to verify ownership
-    const campaign = await getCampaignWithDetails(id, session.user.id, session.user.organizationId);
+    const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
 
-    // Get Facebook access token
     const adAccount = await prisma.adAccount.findUnique({
       where: { id: campaign.adAccountId },
       include: {
         facebookBusinessAccount: {
-          select: {
-            accessTokenEncrypted: true,
-          },
+          select: { accessTokenEncrypted: true },
         },
       },
     });
 
-    if (!adAccount) {
-      throw new NotFoundError('Ad account');
-    }
+    if (!adAccount) throw new NotFoundError('Ad account');
 
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const accessToken = decrypt(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const apiVersion = process.env.FACEBOOK_API_VERSION || 'v22.0';
 
-    // Update campaign on Facebook
-    const updateParams: any = {};
+    const fbPayload: Record<string, any> = { access_token: accessToken };
+    if (data.name !== undefined) fbPayload.name = data.name;
+    if (data.status !== undefined) fbPayload.status = data.status;
+    if (data.dailyBudget !== undefined) fbPayload.daily_budget = Math.round(data.dailyBudget * 100);
+    if (data.lifetimeBudget !== undefined) fbPayload.lifetime_budget = Math.round(data.lifetimeBudget * 100);
+    if (data.spendCap !== undefined) fbPayload.spend_cap = Math.round(data.spendCap * 100);
+    if (data.bidStrategy !== undefined) fbPayload.bid_strategy = data.bidStrategy;
+    if (data.startTime !== undefined) fbPayload.start_time = data.startTime;
+    if (data.stopTime !== undefined) fbPayload.stop_time = data.stopTime;
 
-    if (data.name !== undefined) updateParams.name = data.name;
-    if (data.status !== undefined) updateParams.status = data.status;
-    if (data.dailyBudget !== undefined) updateParams.dailyBudget = data.dailyBudget;
-    if (data.lifetimeBudget !== undefined) updateParams.lifetimeBudget = data.lifetimeBudget;
-    if (data.spendCap !== undefined) updateParams.spendCap = data.spendCap;
-    if (data.bidStrategy !== undefined) updateParams.bidStrategy = data.bidStrategy;
-    if (data.startTime !== undefined) updateParams.startTime = data.startTime;
-    if (data.stopTime !== undefined) updateParams.stopTime = data.stopTime;
-
-    const updatedFacebookCampaign = await facebookAPI.campaignUpdater.updateCampaign(
-      campaign.campaignId,
-      adAccount.accountId,
-      updateParams
+    const fbRes = await fetch(
+      `https://graph.facebook.com/${apiVersion}/${campaign.campaignId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fbPayload),
+      }
     );
+    const fbJson = await fbRes.json();
+    if (fbJson.error) throw new Error(fbJson.error.message || 'Facebook API error');
 
-    if (!updatedFacebookCampaign) {
-      throw new Error('Failed to update campaign on Facebook');
-    }
-
-    // Update campaign in database
     const updatedCampaign = await updateCampaignInDb(id, {
       name: data.name,
       status: data.status,
@@ -176,7 +123,6 @@ export async function PATCH(
       stopTime: data.stopTime ? new Date(data.stopTime) : undefined,
     });
 
-    // Invalidate cache
     await redis.del(`campaigns:${campaign.adAccountId}`);
     await redis.del(`campaign:${campaign.campaignId}`);
 
@@ -193,76 +139,63 @@ export async function PATCH(
         stopTime: updatedCampaign.stopTime,
         createdAt: updatedCampaign.createdAt,
         updatedAt: updatedCampaign.updatedAt,
-        facebookData: updatedFacebookCampaign,
       },
-      {
-        message: 'Campaign updated successfully',
-      }
+      { message: 'Campaign updated successfully' }
     );
   } catch (error) {
     if (error instanceof ZodError) {
-      return errorResponse(
-        new ValidationError('Validation failed', error.errors),
-        422
-      );
+      return errorResponse(new ValidationError('Validation failed', error.errors), 422);
     }
-
     return errorResponse(error as Error);
   }
 }
 
 /**
  * DELETE /api/campaigns/[id]
- * Archive/delete campaign
- * Only admins can delete campaigns
+ * Archive campaign on Facebook and remove from DB
  */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth(request);
-    const userRole = session.user.role as UserRole;
+    const user = await requireAuth();
+    const userRole = (user as any).role as UserRole;
     const { id } = await params;
 
-    // Check if user has permission to delete campaigns
     if (!hasPermission(userRole, 'canDeleteCampaign')) {
       throw new ForbiddenError('Only administrators can delete campaigns');
     }
 
-    // Get campaign to verify ownership
-    const campaign = await getCampaignWithDetails(id, session.user.id, session.user.organizationId);
+    const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
 
-    // Get Facebook access token
     const adAccount = await prisma.adAccount.findUnique({
       where: { id: campaign.adAccountId },
       include: {
         facebookBusinessAccount: {
-          select: {
-            accessTokenEncrypted: true,
-          },
+          select: { accessTokenEncrypted: true },
         },
       },
     });
 
-    if (!adAccount) {
-      throw new NotFoundError('Ad account');
-    }
+    if (!adAccount) throw new NotFoundError('Ad account');
 
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const accessToken = decrypt(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const apiVersion = process.env.FACEBOOK_API_VERSION || 'v22.0';
 
-    // Archive campaign on Facebook
-    await facebookAPI.campaignStatus.archiveCampaign(
-      campaign.campaignId,
-      adAccount.accountId
+    const fbRes = await fetch(
+      `https://graph.facebook.com/${apiVersion}/${campaign.campaignId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'DELETED', access_token: accessToken }),
+      }
     );
+    const fbJson = await fbRes.json();
+    if (fbJson.error) throw new Error(fbJson.error.message || 'Facebook API error');
 
-    // Soft delete in database
     await deleteCampaignFromDb(id);
 
-    // Invalidate cache
     await redis.del(`campaigns:${campaign.adAccountId}`);
     await redis.del(`campaign:${campaign.campaignId}`);
 

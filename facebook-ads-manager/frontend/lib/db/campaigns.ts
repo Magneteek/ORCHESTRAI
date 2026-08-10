@@ -91,6 +91,9 @@ export async function getCampaignsByAdAccount(
 
   if (status && status !== 'all') {
     where.status = status;
+  } else {
+    // Exclude deleted campaigns from the default list
+    where.status = { not: 'DELETED' };
   }
 
   if (objective) {
@@ -137,6 +140,7 @@ export async function createCampaignInDb(
     status: string;
     dailyBudget?: number;
     lifetimeBudget?: number;
+    bidStrategy?: string;
     startTime?: Date;
     stopTime?: Date;
     templateId?: string;
@@ -151,6 +155,7 @@ export async function createCampaignInDb(
       status: data.status,
       dailyBudget: data.dailyBudget,
       lifetimeBudget: data.lifetimeBudget,
+      bidStrategy: data.bidStrategy,
       startTime: data.startTime,
       stopTime: data.stopTime,
       templateId: data.templateId,

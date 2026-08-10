@@ -12,6 +12,7 @@ import {
   SyncResult,
 } from '@/types/facebook';
 import { FacebookErrorLogger } from '../errors';
+import { prisma } from '@/lib/db/prisma';
 
 export class AdsSync {
   constructor(private client: FacebookClient) {}
@@ -22,7 +23,7 @@ export class AdsSync {
   async syncAds(
     adSetId: string,
     adAccountId: string,
-    options?: SyncOptions & { status?: CampaignStatus }
+    options?: SyncOptions & { status?: CampaignStatus; dbAdSetId?: string }
   ): Promise<SyncResult<FacebookAd>> {
     const cacheKey = `ads:adset:${adSetId}`;
     const ttl = 600; // 10 minutes
@@ -115,6 +116,31 @@ export class AdsSync {
         .getRedis()
         .setex(`facebook:cache:${cacheKey}`, ttl, JSON.stringify(ads));
 
+      if (options?.dbAdSetId) {
+        try {
+          await Promise.all(
+            ads.map((ad) =>
+              prisma.ad.upsert({
+                where: { adSetId_adId: { adSetId: options.dbAdSetId!, adId: ad.id } },
+                update: {
+                  name: ad.name,
+                  status: ad.status,
+                  creative: (ad.creative as any) || {},
+                },
+                create: {
+                  adSetId: options.dbAdSetId!,
+                  adId: ad.id,
+                  name: ad.name,
+                  status: ad.status,
+                  creative: (ad.creative as any) || {},
+                },
+              })
+            )
+          );
+        } catch (dbError: any) {
+          FacebookErrorLogger.log(dbError, { operation: 'persist_ads', adSetId });
+        }
+      }
 
       FacebookErrorLogger.info('Successfully synced ads', {
         adSetId,
@@ -246,7 +272,7 @@ export class AdsSync {
    */
   async syncAccountAds(
     adAccountId: string,
-    options?: SyncOptions
+    options?: SyncOptions & { dbAdAccountId?: string }
   ): Promise<SyncResult<FacebookAd>> {
     const cacheKey = `ads:account:${adAccountId}`;
     const ttl = 600; // 10 minutes
@@ -312,6 +338,34 @@ export class AdsSync {
         .getRedis()
         .setex(`facebook:cache:${cacheKey}`, ttl, JSON.stringify(ads));
 
+      if (options?.dbAdAccountId && ads.length > 0) {
+        try {
+          const fbAdSetIds = [...new Set(ads.map((a) => a.adsetId).filter(Boolean))];
+          const dbAdSets = await prisma.adSet.findMany({
+            where: {
+              adSetId: { in: fbAdSetIds },
+              campaign: { adAccountId: options.dbAdAccountId },
+            },
+            select: { id: true, adSetId: true },
+          });
+          const adSetMap = new Map(dbAdSets.map((s) => [s.adSetId, s.id]));
+
+          await Promise.all(
+            ads
+              .filter((a) => adSetMap.has(a.adsetId))
+              .map((ad) => {
+                const dbAdSetId = adSetMap.get(ad.adsetId)!;
+                return prisma.ad.upsert({
+                  where: { adSetId_adId: { adSetId: dbAdSetId, adId: ad.id } },
+                  update: { name: ad.name, status: ad.status, creative: (ad.creative as any) || {} },
+                  create: { adSetId: dbAdSetId, adId: ad.id, name: ad.name, status: ad.status, creative: (ad.creative as any) || {} },
+                });
+              })
+          );
+        } catch (dbError: any) {
+          FacebookErrorLogger.log(dbError, { operation: 'persist_account_ads', adAccountId });
+        }
+      }
 
       return {
         success: true,

@@ -53,6 +53,7 @@ export const createAdSetSchema = z.object({
   campaignId: z.string().min(1, 'Campaign ID is required'),
   name: z.string().min(1, 'Ad set name is required').max(255),
   status: z.enum(['ACTIVE', 'PAUSED', 'DELETED', 'ARCHIVED']).default('PAUSED'),
+  pageId: z.string().optional(),
   dailyBudget: z.number().positive().optional(),
   lifetimeBudget: z.number().positive().optional(),
   billingEvent: z.string().optional(),
@@ -60,6 +61,7 @@ export const createAdSetSchema = z.object({
   bidAmount: z.number().positive().optional(),
   bidStrategy: z.string().optional(),
   targeting: z.record(z.any()).optional(),
+  dynamicCreative: z.boolean().optional(),
   startTime: z.string().datetime().optional(),
   endTime: z.string().datetime().optional(),
 });
@@ -91,17 +93,57 @@ export const createAdSchema = z.object({
   adSetId: z.string().min(1, 'Ad set ID is required'),
   name: z.string().min(1, 'Ad name is required').max(255),
   status: z.enum(['ACTIVE', 'PAUSED', 'DELETED', 'ARCHIVED']).default('PAUSED'),
+  pageId: z.string().min(1, 'Facebook Page is required'),
+  format: z.enum(['SINGLE_IMAGE', 'CAROUSEL', 'VIDEO']).default('SINGLE_IMAGE'),
+  destinationType: z.enum(['WEBSITE', 'INSTANT_FORM', 'WHATSAPP']).default('WEBSITE'),
+  urlTags: z.string().optional(),
+  leadFormId: z.string().optional(),
+  whatsappNumber: z.string().optional(),
   creative: z.object({
-    imageUrl: z.string().url().optional(),
-    videoUrl: z.string().url().optional(),
-    imageHash: z.string().optional(),
-    videoId: z.string().optional(),
-    headline: z.string().max(255).optional(),
-    primaryText: z.string().max(2000).optional(),
-    description: z.string().max(500).optional(),
+    headlines: z.array(z.string().max(255)).max(5).optional(),
+    primaryTexts: z.array(z.string().max(2000)).max(5).optional(),
+    descriptions: z.array(z.string().max(500)).max(5).optional(),
     callToActionType: z.string().optional(),
-    linkUrl: z.string().url().optional(),
+    linkUrl: z.string().optional(),
+    imageUrl: z.string().optional(),
+    imageHash: z.string().optional(),
+    imageUrls: z.array(z.string()).optional(),
+    imageHashes: z.array(z.string()).optional(),
+    videoId: z.string().optional(),
+    carouselCards: z.array(z.object({
+      imageUrl: z.string().optional(),
+      imageHash: z.string().optional(),
+      headline: z.string().max(255).optional(),
+      description: z.string().max(500).optional(),
+      linkUrl: z.string().optional(),
+    })).optional(),
   }),
+}).superRefine((val, ctx) => {
+  if (val.destinationType === 'INSTANT_FORM' && !val.leadFormId) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['leadFormId'], message: 'A lead form is required for Instant Form ads' });
+  }
+  if (val.destinationType === 'WHATSAPP' && !val.whatsappNumber) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['whatsappNumber'], message: 'A WhatsApp number is required' });
+  }
+  const format = val.format || 'SINGLE_IMAGE';
+  if (format !== 'CAROUSEL') {
+    if (!val.creative.primaryTexts?.length) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['creative', 'primaryTexts'], message: 'At least one primary text is required' });
+    }
+    if (!val.creative.headlines?.length) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['creative', 'headlines'], message: 'At least one headline is required' });
+    }
+  }
+  if (format === 'SINGLE_IMAGE') {
+    const hasImage = val.creative.imageHash || val.creative.imageUrl ||
+      val.creative.imageHashes?.length || val.creative.imageUrls?.length;
+    if (!hasImage) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['creative', 'imageHash'], message: 'At least one image is required for Single Image ads' });
+    }
+  }
+  if (format === 'VIDEO' && !val.creative.videoId) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['creative', 'videoId'], message: 'A video ID is required for Video ads' });
+  }
 });
 
 export const updateAdSchema = z.object({

@@ -3,17 +3,15 @@ import { successResponse, errorResponse } from '@/lib/utils/api-response';
 import { requireAuth } from '@/lib/auth/session';
 import { getCampaignWithDetails, updateCampaignInDb } from '@/lib/db/campaigns';
 import { NotFoundError } from '@/lib/utils/errors';
-import { getFacebookAPI } from '@/lib/facebook';
+import { decrypt } from '@/lib/utils/encryption';
 import { prisma } from '@/lib/db/prisma';
 import Redis from 'ioredis';
 
-// Initialize Redis client
 const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-
 
 /**
  * POST /api/campaigns/[id]/pause
- * Pause campaign
+ * Pause campaign on Facebook and update DB
  */
 export async function POST(
   request: NextRequest,
@@ -23,45 +21,35 @@ export async function POST(
     const user = await requireAuth();
     const { id } = await params;
 
-    // Get campaign to verify ownership
     const campaign = await getCampaignWithDetails(id, user.id, user.organizationId);
 
-    // Get Facebook access token
     const adAccount = await prisma.adAccount.findUnique({
       where: { id: campaign.adAccountId },
       include: {
         facebookBusinessAccount: {
-          select: {
-            accessTokenEncrypted: true,
-          },
+          select: { accessTokenEncrypted: true },
         },
       },
     });
 
-    if (!adAccount) {
-      throw new NotFoundError('Ad account');
-    }
+    if (!adAccount) throw new NotFoundError('Ad account');
 
-    // Initialize Facebook API
-    const facebookAPI = getFacebookAPI(redis);
-    facebookAPI.setAccessToken(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const accessToken = decrypt(adAccount.facebookBusinessAccount.accessTokenEncrypted);
+    const apiVersion = process.env.FACEBOOK_API_VERSION || 'v22.0';
 
-    // Pause campaign on Facebook
-    const pausedCampaign = await facebookAPI.campaignStatus.pauseCampaign(
-      campaign.campaignId,
-      adAccount.accountId
+    const fbRes = await fetch(
+      `https://graph.facebook.com/${apiVersion}/${campaign.campaignId}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'PAUSED', access_token: accessToken }),
+      }
     );
+    const fbJson = await fbRes.json();
+    if (fbJson.error) throw new Error(fbJson.error.message || 'Facebook API error');
 
-    if (!pausedCampaign) {
-      throw new Error('Failed to pause campaign on Facebook');
-    }
+    const updatedCampaign = await updateCampaignInDb(id, { status: 'PAUSED' });
 
-    // Update status in database
-    const updatedCampaign = await updateCampaignInDb(id, {
-      status: 'PAUSED',
-    });
-
-    // Invalidate cache
     await redis.del(`campaigns:${campaign.adAccountId}`);
     await redis.del(`campaign:${campaign.campaignId}`);
 
@@ -73,9 +61,7 @@ export async function POST(
         status: updatedCampaign.status,
         updatedAt: updatedCampaign.updatedAt,
       },
-      {
-        message: 'Campaign paused successfully',
-      }
+      { message: 'Campaign paused successfully' }
     );
   } catch (error) {
     return errorResponse(error as Error);

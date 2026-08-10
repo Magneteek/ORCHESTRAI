@@ -43,21 +43,30 @@ export default function CampaignEditorPage() {
 
   const [isDirty, setIsDirty] = useState(false);
 
+  // Convert ISO/DB date string to datetime-local input format "yyyy-MM-ddThh:mm"
+  const toDatetimeLocal = (val: string | null | undefined): string => {
+    if (!val) return '';
+    try {
+      const d = new Date(val);
+      if (isNaN(d.getTime()) || d.getTime() < 0) return '';
+      return d.toISOString().slice(0, 16);
+    } catch { return ''; }
+  };
+
   // Fetch campaign data
   const { data: campaign, isLoading } = useQuery<FacebookCampaign>({
     queryKey: ['campaign', campaignId],
     queryFn: async () => {
       const data = await apiClient.get<FacebookCampaign>(`/api/campaigns/${campaignId}`);
-      // Initialize form with campaign data
       setFormData({
         name: data.name,
         objective: data.objective,
         status: data.status,
-        dailyBudget: data.dailyBudget,
-        lifetimeBudget: data.lifetimeBudget,
+        dailyBudget: data.dailyBudget ?? undefined,
+        lifetimeBudget: data.lifetimeBudget ?? undefined,
         bidStrategy: data.bidStrategy || 'LOWEST_COST_WITHOUT_CAP',
-        startTime: data.startTime,
-        endTime: data.stopTime,
+        startTime: toDatetimeLocal((data as any).startTime),
+        endTime: toDatetimeLocal((data as any).stopTime),
         specialAdCategories: data.specialAdCategories || [],
       });
       return data;
@@ -68,7 +77,24 @@ export default function CampaignEditorPage() {
   // Update campaign mutation
   const updateMutation = useMutation({
     mutationFn: async (data: CampaignFormData) => {
-      return apiClient.put(`/api/campaigns/${campaignId}`, data);
+      // Build a clean body: skip null/empty, map endTime→stopTime, convert dates to ISO
+      const body: Record<string, any> = {};
+      if (data.name) body.name = data.name;
+      if (data.objective) body.objective = data.objective;
+      if (data.status) body.status = data.status;
+      if (data.bidStrategy) body.bidStrategy = data.bidStrategy;
+      if (data.dailyBudget != null && data.dailyBudget > 0) body.dailyBudget = data.dailyBudget;
+      if (data.lifetimeBudget != null && data.lifetimeBudget > 0) body.lifetimeBudget = data.lifetimeBudget;
+      if (data.startTime) {
+        const d = new Date(data.startTime);
+        if (!isNaN(d.getTime())) body.startTime = d.toISOString();
+      }
+      if (data.endTime) {
+        const d = new Date(data.endTime);
+        if (!isNaN(d.getTime())) body.stopTime = d.toISOString();
+      }
+      if (data.specialAdCategories) body.specialAdCategories = data.specialAdCategories;
+      return apiClient.patch(`/api/campaigns/${campaignId}`, body);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['campaign', campaignId] });
@@ -114,7 +140,7 @@ export default function CampaignEditorPage() {
   // Status update mutation
   const statusMutation = useMutation({
     mutationFn: async (status: string) => {
-      return apiClient.patch(`/api/campaigns/${campaignId}/status`, { status });
+      return apiClient.patch(`/api/campaigns/${campaignId}`, { status });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['campaign', campaignId] });
@@ -277,24 +303,15 @@ export default function CampaignEditorPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="objective">Campaign Objective *</Label>
-                  <select
-                    id="objective"
-                    value={formData.objective}
-                    onChange={(e) => handleFieldChange('objective', e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    required
-                  >
-                    <option value="OUTCOME_TRAFFIC">Traffic</option>
-                    <option value="OUTCOME_ENGAGEMENT">Engagement</option>
-                    <option value="OUTCOME_LEADS">Leads</option>
-                    <option value="OUTCOME_SALES">Sales</option>
-                    <option value="OUTCOME_AWARENESS">Awareness</option>
-                    <option value="OUTCOME_APP_PROMOTION">App Promotion</option>
-                  </select>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Choose the main goal for this campaign
-                  </p>
+                  <Label htmlFor="objective">Campaign Objective</Label>
+                  <div className="mt-1 flex items-center gap-3">
+                    <span className="inline-flex h-10 items-center rounded-md border border-input bg-muted px-3 py-2 text-sm font-medium capitalize">
+                      {formData.objective?.replace('OUTCOME_', '').toLowerCase() || '—'}
+                    </span>
+                    <span className="text-xs text-amber-600 font-medium">
+                      Objective cannot be changed after campaign creation (Facebook restriction)
+                    </span>
+                  </div>
                 </div>
 
                 <div>

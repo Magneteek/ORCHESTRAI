@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useAdAccount } from '@/lib/hooks/use-ad-account';
 import {
   TrendingUp,
   AlertTriangle,
@@ -24,10 +25,28 @@ import {
 } from 'lucide-react';
 
 export default function AIInsightsPage() {
+  const { selectedAccountId } = useAdAccount();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'predictions' | 'anomalies' | 'copy' | 'audience'>(
     'predictions'
   );
+
+  // Sync with global ad account selector
+  useEffect(() => {
+    if (selectedAccountId && !selectedAccount) {
+      setSelectedAccount(selectedAccountId);
+    }
+  }, [selectedAccountId, selectedAccount]);
+
+  // Fetch real ad accounts
+  const { data: adAccounts } = useQuery({
+    queryKey: ['ad-accounts-ai'],
+    queryFn: async () => {
+      const res = await fetch('/api/ad-accounts');
+      const json = await res.json();
+      return json.data || [];
+    },
+  });
 
   // Fetch predictions
   const { data: predictionsData, isLoading: predictionsLoading } = useQuery({
@@ -125,8 +144,11 @@ export default function AIInsightsPage() {
           className="w-full md:w-96 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
         >
           <option value="">Choose an account...</option>
-          {/* TODO: Populate from actual accounts */}
-          <option value="demo-account">Demo Account</option>
+          {(adAccounts || []).map((account: any) => (
+            <option key={account.id} value={account.id}>
+              {account.name}
+            </option>
+          ))}
         </select>
       </div>
 

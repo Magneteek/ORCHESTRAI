@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useAdAccount } from '@/lib/hooks/use-ad-account';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -35,6 +36,7 @@ const campaignSchema = z.object({
   adAccountId: z.string().min(1, 'Ad account is required'),
   budgetType: z.enum(['daily', 'lifetime']),
   budget: z.number().min(1, 'Budget must be at least $1'),
+  bidStrategy: z.string().optional(),
   startTime: z.string().optional(),
   stopTime: z.string().optional(),
   status: z.enum(['ACTIVE', 'PAUSED']),
@@ -60,6 +62,7 @@ const OBJECTIVES = [
 
 export default function NewCampaignPage() {
   const router = useRouter();
+  const { selectedAccountId } = useAdAccount();
   const [currentStep, setCurrentStep] = useState(1);
 
   const {
@@ -72,23 +75,52 @@ export default function NewCampaignPage() {
     resolver: zodResolver(campaignSchema),
     defaultValues: {
       budgetType: 'daily',
+      bidStrategy: 'LOWEST_COST_WITHOUT_CAP',
       status: 'PAUSED',
     },
   });
 
+  // Pre-populate ad account from global selector
+  useEffect(() => {
+    if (selectedAccountId) setValue('adAccountId', selectedAccountId);
+  }, [selectedAccountId, setValue]);
+
   // Fetch ad accounts
   const { data: adAccounts } = useQuery({
     queryKey: ['ad-accounts'],
-    queryFn: () => apiClient.get('/api/ad-accounts'),
+    queryFn: async () => {
+      const res = await fetch('/api/ad-accounts');
+      const json = await res.json();
+      return json.data || [];
+    },
   });
 
   // Create campaign mutation
   const createCampaignMutation = useMutation({
-    mutationFn: (data: CampaignFormData) => {
-      return apiClient.post('/api/campaigns', data);
+    mutationFn: async (formData: CampaignFormData) => {
+      const body: any = {
+        adAccountId: formData.adAccountId,
+        name: formData.name,
+        objective: formData.objective,
+        status: formData.status,
+        bidStrategy: formData.bidStrategy || 'LOWEST_COST_WITHOUT_CAP',
+      };
+      if (formData.budgetType === 'daily') body.dailyBudget = formData.budget;
+      else body.lifetimeBudget = formData.budget;
+      if (formData.startTime) body.startTime = new Date(formData.startTime).toISOString();
+      if (formData.stopTime) body.stopTime = new Date(formData.stopTime).toISOString();
+
+      const res = await fetch('/api/campaigns', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error?.message || 'Failed to create campaign');
+      return json.data;
     },
-    onSuccess: (data: any) => {
-      router.push(`/dashboard/campaigns/${data.id}`);
+    onSuccess: () => {
+      router.push('/dashboard/campaigns');
     },
   });
 
@@ -162,7 +194,7 @@ export default function NewCampaignPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
         <Card className="p-6">
           {/* Step 1: Objective */}
           {currentStep === 1 && (
@@ -302,6 +334,31 @@ export default function NewCampaignPage() {
                     <p className="text-sm text-destructive">{errors.budget.message}</p>
                   )}
                 </div>
+
+                <div className="space-y-2">
+                  <Label>Bid Strategy</Label>
+                  <div className="grid gap-3">
+                    {[
+                      { value: 'LOWEST_COST_WITHOUT_CAP', label: 'Lowest Cost', description: 'Facebook spends your budget at the lowest possible cost. No bid cap needed on ad sets.' },
+                      { value: 'LOWEST_COST_WITH_BID_CAP', label: 'Bid Cap', description: 'Set a maximum bid per ad set. Requires a bid cap amount on each ad set.' },
+                      { value: 'COST_CAP', label: 'Cost Cap', description: 'Target an average cost per result. Requires a cost cap amount on each ad set.' },
+                    ].map((strategy) => (
+                      <button
+                        key={strategy.value}
+                        type="button"
+                        onClick={() => setValue('bidStrategy', strategy.value)}
+                        className={`rounded-lg border-2 p-4 text-left transition-colors ${
+                          formData.bidStrategy === strategy.value
+                            ? 'border-primary bg-primary/5'
+                            : 'border-muted hover:border-muted-foreground/50'
+                        }`}
+                      >
+                        <div className="font-medium">{strategy.label}</div>
+                        <div className="text-sm text-muted-foreground">{strategy.description}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -382,6 +439,14 @@ export default function NewCampaignPage() {
                 </p>
               </div>
 
+              {createCampaignMutation.isError && (
+                <div className="rounded-lg bg-destructive/10 p-4 text-sm text-destructive">
+                  {createCampaignMutation.error instanceof Error
+                    ? createCampaignMutation.error.message
+                    : 'Failed to create campaign. Ensure your ad account has billing configured on Facebook.'}
+                </div>
+              )}
+
               <div className="space-y-4 rounded-lg bg-muted/50 p-4">
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">
@@ -439,7 +504,8 @@ export default function NewCampaignPage() {
               </Button>
             ) : (
               <Button
-                type="submit"
+                type="button"
+                onClick={() => handleSubmit(onSubmit)()}
                 disabled={createCampaignMutation.isPending}
               >
                 {createCampaignMutation.isPending ? (
@@ -457,7 +523,7 @@ export default function NewCampaignPage() {
             )}
           </div>
         </Card>
-      </form>
+      </div>
     </div>
   );
 }

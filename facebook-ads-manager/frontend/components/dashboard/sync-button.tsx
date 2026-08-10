@@ -18,13 +18,12 @@ export function SyncButton({ adAccountId, onSuccess }: SyncButtonProps) {
   const handleSync = async () => {
     setIsSyncing(true);
     try {
-      const result = await apiClient.post('/api/sync/campaigns', {
-        adAccountId,
-      });
+      const result = await apiClient.post<{ data: { campaigns: number; adSets: number; ads: number } }>('/api/sync/all', { adAccountId });
+      const { campaigns, adSets, ads } = (result as any).data || {};
 
       toast({
         title: 'Sync Complete',
-        description: `Successfully synced ${result.data?.synced || 0} campaigns`,
+        description: `${campaigns || 0} campaigns · ${adSets || 0} ad sets · ${ads || 0} ads`,
       });
 
       if (onSuccess) {
@@ -33,7 +32,7 @@ export function SyncButton({ adAccountId, onSuccess }: SyncButtonProps) {
     } catch (error: any) {
       toast({
         title: 'Sync Failed',
-        description: error?.message || 'Failed to sync campaigns',
+        description: error?.message || 'Failed to sync from Facebook',
         variant: 'destructive',
       });
     } finally {
