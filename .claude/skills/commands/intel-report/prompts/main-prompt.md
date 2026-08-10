@@ -13,7 +13,7 @@ Generate a complete intelligence report suite for the specified client following
 ### 1. Read Template First
 **MANDATORY**: Before generating ANY content, read the canonical template:
 ```
-/Users/kris/CLAUDEtools/ORCHESTRAI/orchestrai-domains/client-intelligence/CLIENT-INTELLIGENCE-REPORT-TEMPLATE.md
+/Users/krisbal/CLAUDEtools/ORCHESTRAI/orchestrai-domains/client-intelligence/CLIENT-INTELLIGENCE-REPORT-TEMPLATE.md
 ```
 
 ### 2. Load & Validate Client Data
@@ -202,15 +202,25 @@ ${clientData.personas.map(persona => `
 ### 5. Design System (NON-NEGOTIABLE)
 
 **Colors**:
-- Primary gradient: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`
-- Background: White (#ffffff)
-- Text: Gray scale (#1a202c to #718096)
+- Primary: `#667eea` (solid purple — hero backgrounds, metric cards, progress bars, chart fills)
+- Primary dark: `#764ba2` (solid — hover states, secondary accents)
+- Page background: `#f8f9ff`
+- Cards: `#ffffff` with box shadows
+- Text: `#1a202c` primary, `#718096` muted
+- ❌ NO gradients of any kind — `linear-gradient`, `radial-gradient`, Tailwind gradient utilities — ALL FORBIDDEN
 
 **Typography**:
 - Font: Inter (Google Fonts, weights 300-800)
 - Hero title: 4rem, weight 800
 - Section headers: 2.5rem, weight 700
 - Body: 1rem, weight 400
+
+**Icons & Emoji**:
+- ❌ NO emoji anywhere in the report — not in heroes, not as section decorators, not in cards
+- ❌ NO icon fonts (Font Awesome, etc.)
+- ❌ NO decorative SVG icons cluttering headers
+- ✅ ICP avatar circles use the FIRST LETTER of the persona name (e.g. "C" for Carlos)
+- ✅ Text and data hierarchy replaces icon decoration
 
 **Layout**:
 - Max width: 1400px
@@ -291,7 +301,10 @@ const getGridClass = (count) => {
 Before delivering, verify:
 - ✅ All N + 5 pages generated and saved (where N = persona count)
 - ✅ Validation passed (logged persona count and names)
-- ✅ Purple gradient consistent throughout
+- ✅ Solid `#667eea` purple used throughout — run: `grep -c "linear-gradient\|radial-gradient" *.html` → must return 0
+- ✅ No emoji anywhere — run: `grep -c "🏄\|🎨\|👑\|📊\|✅\|💡\|🌊" *.html` → must return 0
+- ✅ ICP avatar circles show persona initial letter, not emoji
+- ✅ Section headers are plain text — no icon or emoji prefix
 - ✅ Inter font loads correctly
 - ✅ All navigation links use correct dynamic paths
 - ✅ Grid layout adapts to actual persona count
@@ -480,10 +493,13 @@ The report is complete when:
 3. ✅ Navigation works in all directions (dynamic + fixed)
 4. ✅ Grid layout adapts to actual persona count
 5. ✅ Design matches canonical template exactly
-6. ✅ Charts render correctly without height bugs
-7. ✅ Content is comprehensive and accurate
-8. ✅ Print preview looks professional
-9. ✅ Responsive design works at all breakpoints
-10. ✅ No hardcoded assumptions about persona count
+6. ✅ Zero gradients — `grep -c "linear-gradient\|radial-gradient" *.html` returns 0
+7. ✅ Zero emoji — no emoji in heroes, section headers, cards, or decorations
+8. ✅ ICP avatar shows persona initial letter (not emoji)
+9. ✅ Charts render correctly without height bugs (`maintainAspectRatio: true`)
+10. ✅ Content is comprehensive and accurate
+11. ✅ Print preview looks professional
+12. ✅ Responsive design works at all breakpoints
+13. ✅ No hardcoded assumptions about persona count
 
 **DO NOT mark as complete until all pages are generated, validated, saved, and navigation verified.**

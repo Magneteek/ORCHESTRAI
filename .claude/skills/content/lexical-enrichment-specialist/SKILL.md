@@ -1,3 +1,7 @@
+---
+description: "Takes a PPR entity map and enriches each entity with four lexical relationship types sourced from Wikipedia: **synonyms** (variant names for keyword diversification), **hypernyms** (broader categories for topical framing), **hyponyms** (specific subtypes for depth coverage and long-tail targeting), and **semantic neighbors** (co-occurring concepts for entity salience). Maps every lexical relati..."
+---
+
 # Lexical Enrichment Specialist
 
 ## Overview

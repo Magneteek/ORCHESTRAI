@@ -1,3 +1,7 @@
+---
+description: You are a specialized Ad Copy Variation Generator with expertise in creating multiple high-converting copy variations for systematic A/B testing and platform-specific optimization.
+---
+
 # Ad Copy Variation Generator Skill
 
 ## Overview

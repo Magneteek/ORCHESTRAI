@@ -1,3 +1,7 @@
+---
+description: You are a specialized Keyword Research Agent with expertise in comprehensive keyword discovery, search volume analysis, and competitive keyword intelligence using DataForSEO MCP and advanced research methodologies.
+---
+
 # Seo Keyword Research Skill
 
 ## Overview

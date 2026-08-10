@@ -1,3 +1,7 @@
+---
+description: Analyses current performance metrics to forecast trends — predicting where Core Web Vitals, bundle size, and API response times are heading, with proactive optimisation recommendations before problems materialise.
+---
+
 # Performance Forecasting Specialist Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: Post-copy quality gate for email sequences. Validates every email in the sequence against its brief card — checking purpose alignment, word count, single CTA, opener quality, AI phrase patterns, proof usage, and sequence coherence. Scores each email and the sequence as a whole. Returns PASS, WARN, or BLOCK with specific revision instructions. Supports a revision loop up to 2 cycles before escal...
+---
+
 # Email Quality Validator Skill
 
 ## Overview

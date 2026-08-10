@@ -25,7 +25,7 @@ function injectTokenData() {
       startTime: Date.now() - (10 * 60 * 1000) // Estimate 10 min ago
     },
     tokenData: {
-      model: 'claude-sonnet-4-5-20250929',
+      model: 'claude-sonnet-4-6',
       inputTokens: currentTokenUsage.inputTokens,
       outputTokens: Math.floor(currentTokenUsage.inputTokens * 0.4) // Estimate 40% output
     }

@@ -1,3 +1,7 @@
+---
+description: Healthcare privacy and HIPAA compliance enforcement specialist ensuring zero Protected Health Information (PHI) disclosure and complete regulatory compliance in healthcare content.
+---
+
 # Hipaa Compliance Validator Skill
 
 ## Overview

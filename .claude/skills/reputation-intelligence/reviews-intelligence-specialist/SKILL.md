@@ -1,3 +1,7 @@
+---
+description: Analyzes Google reviews for sentiment patterns, competitive reputation intelligence, and review-based market research. Works across all markets (SI, DE, CH, ES, NL, EN).
+---
+
 # Reviews Intelligence Specialist Skill
 
 ## Overview

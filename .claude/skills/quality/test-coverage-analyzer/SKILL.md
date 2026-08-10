@@ -1,3 +1,7 @@
+---
+description: Test coverage analysis with Istanbul/NYC and gap identification.
+---
+
 # Test Coverage Analyzer Skill
 
 ## Overview

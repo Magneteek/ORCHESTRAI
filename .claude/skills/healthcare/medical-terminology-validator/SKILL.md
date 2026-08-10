@@ -1,3 +1,7 @@
+---
+description: Clinical fact-checking and medical accuracy validation specialist ensuring 100% medical correctness in healthcare content through systematic verification against clinical guidelines and medical evidence.
+---
+
 # Medical Terminology Validator Skill
 
 ## Overview

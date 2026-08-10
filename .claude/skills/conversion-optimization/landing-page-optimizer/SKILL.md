@@ -1,3 +1,7 @@
+---
+description: Landing page copy and conversion optimization specialist. Expands a Campaign Copy Manifest LP Brief Card into a full LP copy brief (H1, subheadline, section order, proof placement, objection handling, CTA, A/B variant). Enforces message match. Also runs standalone for LP audits/CRO reviews.
+---
+
 # Landing Page Optimizer Skill
 
 ## Overview

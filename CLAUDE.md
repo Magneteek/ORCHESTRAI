@@ -1,8 +1,8 @@
 # ORCHESTRAI System
 
 **Architecture**: Hybrid (Skills-first + Strategic Agents) + Personality Layer (SOUL.md)
-**Skills**: 187 (159 domain + 28 commands) - Auto-discoverable, progressive disclosure
-**Agents**: 7 strategic agents (3 Sonnet conductors + 4 Opus orchestrators)
+**Skills**: 225 (196 domain + 29 commands) - Auto-discoverable, progressive disclosure
+**Agents**: 7 strategic agents (3 Sonnet conductors + 4 Opus orchestrators) — Fable unavailable (US ban)
 **Personality**: SOUL.md (consistent voice across all 192 capabilities)
 **MCP**: DataForSEO, Memory, Notion, GSC, Ref.tools, Magic, Sanity, Playwright
 **Total**: 190 unique capabilities + 5 plugins + personality-infused outputs
@@ -68,12 +68,14 @@ Edit("projects/[client-uuid]/CLAUDE.md") // append progress entry
 
 **Sonnet Conductors** (execution — sequence skills, manage state):
 - `pipeline-conductor` - Stateful multi-phase pipeline execution with checkpointing + retry
-- `campaign-conductor` - End-to-end ad campaign: audience research → copy → landing page
+- `campaign-conductor` - Cross-domain ad campaign delivery: takes the LP copy brief from `Skill(skill="advertising", args="paid-advertising-pipeline")`, coordinates the physical webdev build, runs the independent LP audit, maintains the client tracking-ID registry. Does NOT run strategy/offer/copy/compliance itself — that's the skill's job.
 - `webdev-conductor` - Full-stack web build: architecture → parallel streams → QA gates
 
-**Opus Orchestrators** (strategy — complex reasoning, cross-domain planning):
+**Deep Reasoning Orchestrators** (Opus — strategic planning, financial modeling):
 - `strategic-plan-synthesizer` - Comprehensive strategic planning (OPSP, EOS)
 - `financial-modeling-specialist` - Financial models, unit economics, pricing
+
+**Opus Orchestrators** (complex reasoning, cross-domain planning):
 - `client-project-orchestrator` - Full client engagement management
 - `orchestrai-master-coordinator` - Complex multi-domain task decomposition (use sparingly)
 
@@ -83,7 +85,8 @@ Edit("projects/[client-uuid]/CLAUDE.md") // append progress entry
 |-----------|-----|---------|
 | Single-purpose task | `Skill(skill="domain", args="skill-name")` | Keyword research, content QA |
 | Multi-phase pipeline (120m+) | `Task(subagent_type="pipeline-conductor")` | seo-research-pipeline, content pipeline |
-| Ad campaign (full build) | `Task(subagent_type="campaign-conductor")` | Google + Meta campaign package |
+| Ad campaign strategy/copy/compliance (full build) | `Skill(skill="advertising", args="paid-advertising-pipeline")` | Research → offer → **mandatory copy manifest (message-match gate)** → copy → **compliance gate** → LP copy brief → campaign structure spec. Manifest-checkpointed, resumable. **Use this, not campaign-conductor, for the strategy/copy/compliance chain** — it has gates campaign-conductor does not. |
+| Ad campaign — physical LP build + cross-domain delivery | `Task(subagent_type="campaign-conductor")` | Only after `paid-advertising-pipeline` has produced the LP copy brief — coordinates the actual webdev build, runs the independent LP audit (Phase 4.6), and maintains the client tracking-ID registry. Does not reimplement offer/copy/compliance logic itself. |
 | Web project (full build) | `Task(subagent_type="webdev-conductor")` | Static site or full-stack app |
 | Strategic planning | `Task(subagent_type="strategic-plan-synthesizer")` | OPSP, EOS growth plan |
 | Financial modeling | `Task(subagent_type="financial-modeling-specialist")` | 3-year revenue model |
@@ -168,7 +171,8 @@ Default to static HTML. Use frameworks only when dynamic features required.
 
 | Tool | When | Output |
 |------|------|--------|
-| `commands:client-report` | Full monthly client report — SEO rankings + traffic + local + ads combined, with DataForSEO data pull | Markdown |
+| `commands:monthly-report-pipeline` | **Unified monthly report — auto-reads stored pipeline outputs (rankings, maps, reputation, ads snapshots), pulls API only for gaps. Run after local-seo-monthly + reputation-intelligence-pipeline + ads-report** | HTML + Chart.js |
+| `commands:client-report` | Interactive monthly report — requires manual data pasting (GA4 export, ads data). Use when pipeline outputs not yet stored | Markdown |
 | `commands:ads-report` | Ads-only monthly report from pasted Google/Meta platform data, with period-over-period comparison | HTML + Chart.js |
 | `data-analytics:performance-dashboard-builder` | Multi-source executive dashboard — GA4 + ads + rankings + revenue in one visual view | HTML + Chart.js |
 
@@ -224,8 +228,8 @@ Default to static HTML. Use frameworks only when dynamic features required.
 - Auto-discovery: Enabled
 - Progressive disclosure: Active
 
-**Strategic Agents** (4 orchestrators):
-- Location: `.claude/agents/` (Opus-tier only)
+**Strategic Agents** (4 orchestrators: all Opus — Fable unavailable):
+- Location: `.claude/agents/`
 - All loaded: ~5k tokens at startup
 - Complex reasoning: Advanced multi-domain coordination
 - Explicit invocation: Required (no auto-discovery)

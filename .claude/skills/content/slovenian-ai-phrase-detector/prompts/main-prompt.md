@@ -78,6 +78,15 @@ Slovenian prose has a rhythm. AI breaks it by:
 - Always following the Subject-Verb-Object order strictly
 - Avoiding sentence-opening connectors that Slovenians use naturally: "Kar pomeni...", "Čeprav...", "Saj..."
 
+### Em-Dash Overuse (hard rule, house style — flag every instance)
+
+**No em-dashes (—) in client-facing copy, full stop — not "use sparingly."** This is one of the clearest AI tells across any language, Slovenian included, and it showed up throughout hand-written landing page copy that was never run through this detector at all. If a sentence needs an em-dash to hold together, split it into two short sentences instead.
+
+- AI: "Cirkonijeva je brez kovine — bolj naraven videz, primernejša za sprednje zobe."
+- Natural: "Cirkonijeva je brez kovine. Ima bolj naraven videz. Primernejša je za sprednje zobe."
+
+Flag `[DASH]` for every em-dash found in client-facing copy, regardless of how minor — this is not a judgment call like passive-voice overuse, it's a hard zero-tolerance rule. Full rewrite required if em-dashes appear more than 0 times in the reviewed text.
+
 ---
 
 ## Detection Process
@@ -89,13 +98,16 @@ Read through the text and mark:
 - `[PASSIVE]` — passive construction that should be active
 - `[REGISTER]` — wrong formality level for context
 - `[RHYTHM]` — sentence length/structure monotony
+- `[DASH]` — any em-dash in client-facing copy (zero-tolerance, see Em-Dash Overuse above)
 
 ### Step 2: Assess Overall AI Score
 Rate the text: **Low / Medium / High** AI signal
 
-- **Low**: 0–2 minor patterns; acceptable
+- **Low**: 0–2 minor patterns, zero `[DASH]` findings; acceptable
 - **Medium**: 3–6 patterns; revise the flagged sections
 - **High**: 7+ patterns or structural AI fingerprint throughout; full rewrite needed
+
+**Override**: any `[DASH]` finding in client-facing copy caps the score at Medium minimum, regardless of how clean everything else is — it is not averaged in as one minor pattern among many.
 
 ### Step 3: Revise
 

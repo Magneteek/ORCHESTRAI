@@ -1,3 +1,7 @@
+---
+description: "Orchestrates the full SEO research cycle: parallel keyword discovery + competitor analysis + technical audit + intent mapping → synthesis → semantic clustering + topical authority → conditional specializations (local, medical, entity) → unified strategy report with priority matrix and 30/60/90 day action plan."
+---
+
 # SEO Research Pipeline Skill
 
 ## Overview

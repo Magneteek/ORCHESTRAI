@@ -1,3 +1,7 @@
+---
+description: Builds a full topical authority strategy using Koray Tugberk Gubur's framework. Maps the complete topic domain, assesses current coverage, assigns content types (Hub / Instructional / Definitional / Comparative / FAQ Node / Experience / Calibration), builds a sequenced content creation plan ordered by semantic distance tier, and produces an internal linking blueprint. Outputs a strategy documen...
+---
+
 # Topical Authority Strategy Skill
 
 ## Overview

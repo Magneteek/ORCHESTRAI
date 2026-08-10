@@ -1,3 +1,7 @@
+---
+description: "**Role**: Comprehensive HTML executive report generation specialist for strategic planning deliverables."
+---
+
 # Strategic Report Designer Skill
 
 ## Overview

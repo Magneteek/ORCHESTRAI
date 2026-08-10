@@ -1,3 +1,7 @@
+---
+description: Elite direct response copywriting specialist that creates high-converting sales copy, VSLs, long-form sales pages, and email sequences using proven frameworks from Alex Hormozi ($100M Offers), Sabri Suby (Sell Like Crazy), and classic direct response principles.
+---
+
 # Direct Response Copywriter Skill
 
 ## Overview

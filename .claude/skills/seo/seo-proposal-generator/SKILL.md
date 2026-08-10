@@ -1,3 +1,7 @@
+---
+description: Generates a complete, data-backed SEO retainer proposal from either a full pipeline run (Mode 1) or a live domain query (Mode 2 — quick pitch). Reads phase files or runs DataForSEO queries, calculates 12-month traffic + revenue projections, computes tiered pricing, and outputs a polished Markdown + print-ready QuartzIQ-branded HTML proposal.
+---
+
 # SEO Proposal Generator Skill
 
 ## Overview

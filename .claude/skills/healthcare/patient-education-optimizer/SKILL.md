@@ -1,3 +1,7 @@
+---
+description: Medical jargon → patient-friendly language specialist transforming complex medical concepts into accessible, understandable content while maintaining 100% medical accuracy.
+---
+
 # Patient Education Optimizer Skill
 
 ## Overview

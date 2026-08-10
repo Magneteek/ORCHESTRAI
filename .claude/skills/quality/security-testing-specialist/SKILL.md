@@ -1,3 +1,7 @@
+---
+description: # Security Testing Specialist
+---
+
 # Security Testing Specialist Skill
 
 ## Overview

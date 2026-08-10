@@ -55,6 +55,8 @@ Before starting, confirm you have all of these. If any are missing, ask:
 | **Client/niche** | Yes | Dental clinic Slovenia (affects tone + compliance checks) |
 | **Outline** | Optional | Provided outline structure |
 | **Run SERP research?** | Optional | Yes / No — if Yes, runs `content:content-brief-generator` before writing (default: No if outline/brief already provided) |
+| **Run Reddit voice research?** | Optional | Yes / No / Auto (default: Auto). Auto = run when the target word count is 1,200+ or the content type is pillar / comprehensive guide / ultimate guide / hub page, skip otherwise. Costs roughly $0.15 to $0.70 per topic via Apify |
+| **Subreddits** | Optional | Known relevant subreddits to seed Phase 0.4, e.g. `r/DentalAnxiety, r/braces` |
 | **url_path** | Optional | Pre-planned canonical URL from SEO research pipeline URL map — e.g. `/beljenje-zob/stranski-ucniki/` |
 | **action** | Optional | `NEW` (default) or `UPDATE` — if UPDATE, existing_url must be provided |
 | **existing_url** | Optional | Live URL of existing page to update — read the page at this URL before writing |
@@ -113,6 +115,7 @@ Does `[run_dir]/manifest.json` exist?
     "status": "in_progress",
     "phases": {
       "phase-0-research": {"status": "pending"},
+      "phase-0.4-reddit-voice": {"status": "pending"},
       "phase-0.5-outline": {"status": "pending"},
       "phase-0.75-frame-validation": {"status": "pending"},
       "phase-1-draft": {"status": "pending"},
@@ -164,6 +167,43 @@ Update manifest.json: phase `phase-0-research` → status: completed, summary: "
 
 ---
 
+## Phase 0.4: Reddit Voice Research (Conditional)
+
+**Manifest check:** If manifest shows `phase-0.4-reddit-voice` as `completed` and `[run_dir]/phase-0.4-reddit-voice.md` exists → set `reddit_voice_path = [run_dir]/phase-0.4-reddit-voice.md`, skip this phase, proceed to Phase 0.5.
+
+**Why this phase exists:** the brief's `Mapped queries`, `Persona focus`, and `Objection handled` fields are *inferred* from competitor pages and PAA boxes. Competitor pages are marketing copy, so they tell you how providers talk, not how buyers talk. This phase replaces inferred language with recorded language. It is the only stage in the pipeline that reads what real people actually wrote.
+
+**Run this phase when** `Run Reddit voice research?` = Yes, or when it is `Auto` (the default) AND either:
+- word count target is 1,200 or more, OR
+- content type is pillar page / comprehensive guide / ultimate guide / hub page
+
+**Skip when:**
+- `Run Reddit voice research?` = No
+- Auto mode and the piece is short-form (under 1,200 words), where the cost is not justified for a FAQ node
+- The target market has no plausible Reddit presence for this topic AND the user has confirmed so
+
+**Action:** Invoke `seo:seo-reddit-research`
+
+Pass:
+- `topic`: the target keyword, written in the market's actual language (not translated to English). People post in their own language
+- `subreddits`: from the `Subreddits` input if provided
+- `market / language`: from the pipeline's Language input
+- `purpose`: "content brief enrichment"
+- `save_path = [run_dir]/phase-0.4-reddit-voice.md`
+
+**Small market note:** for small-language markets (SL, and similar), instruct the skill to also search neighbouring-country and diaspora subreddits using cognate phrasing, and to use `time_filter: "all"` rather than `"year"`. A single-country subreddit search is not complete for a 2M-speaker market.
+
+**Receive:** the file path `[run_dir]/phase-0.4-reddit-voice.md` (not the text).
+
+Store as: `reddit_voice_path = [run_dir]/phase-0.4-reddit-voice.md`
+
+**Non-blocking failure rule:** this phase never halts the pipeline. If the Apify actor errors, times out without recoverable data, or the market genuinely has no discussion, write the file with an explicit "no usable data" body (see the skill's zero-result handling), set the manifest status to `completed` with `summary: "No usable Reddit data, downstream stages use brief-inferred language"`, and proceed to Phase 0.5. Do not retry more than once. This is an enrichment layer, not a dependency. **Never substitute invented quotes for a failed scrape.** A fabricated "real user quote" is worse than no quote, because downstream stages treat this file as evidence.
+
+**Checkpoint:** the skill writes `[run_dir]/phase-0.4-reddit-voice.md` directly.
+Update manifest.json: phase `phase-0.4-reddit-voice` → completed, file: `phase-0.4-reddit-voice.md`, summary: "[N] posts, [N] comments analysed, [N] verbatim questions extracted" | "Skipped (short-form)" | "No usable data".
+
+---
+
 ## Phase 0.5: Outline
 
 **Manifest check:** If manifest shows `phase-0.5-outline` as `completed` and `[run_dir]/phase-0.5-outline.md` exists → set `outline_path = [run_dir]/phase-0.5-outline.md`, load via `Read(outline_path)`, skip this phase, proceed to Phase 0.75.
@@ -176,6 +216,7 @@ Update manifest.json: phase `phase-0-research` → status: completed, summary: "
 
 Pass:
 - `brief_path` as a file path — pass `brief_path = [run_dir]/phase-0-research-brief.md` and instruct the outline architect to read it via `Read(brief_path)`. Do NOT paste brief text inline. If Phase 0 was skipped and the user provided brief text directly, write it to `[run_dir]/phase-0-research-brief.md` first, then pass the path.
+- `reddit_voice_path` as a file path, **if Phase 0.4 ran and produced usable data**. Instruct the architect to read it via `Read(reddit_voice_path)` and to apply its **Brief Field Overrides** table when naming H3s and FAQ entries: use the verbatim user question phrasing rather than the brief's paraphrased PAA version. Omit this input entirely if Phase 0.4 was skipped or returned no usable data.
 - Target keyword, secondary keywords
 - Language and tone guidance
 - Word count target
@@ -254,6 +295,7 @@ Mark Phase 0.75 as ✅ / ⚠️ / ❌ in the pipeline report with the coverage s
 Pass to the writer (all as file paths — instruct the writer to read them via `Read()`, do NOT paste text):
 - `outline_path = [run_dir]/phase-0.5-outline.md` as the primary structural guide — the writer follows this section by section. If Phase 0.5 was skipped, pass `brief_path` instead.
 - `brief_path` for context — angle, tone, E-E-A-T requirements, keywords, differentiator opportunities
+- `reddit_voice_path` as a file path, **if Phase 0.4 produced usable data**. The writer reads it via `Read(reddit_voice_path)` for real audience vocabulary, verbatim question phrasing, and the objections people actually voice. Instruct: where the Brief Field Overrides table contradicts the brief's inferred `Persona focus`, `Objection handled`, or `Mapped queries` **wording**, the Reddit data wins for phrasing and ranking; the brief still wins for structure, coverage, and section order. Omit this input if Phase 0.4 was skipped or returned no usable data. Do not pass a path to an empty file and expect the writer to notice.
 - Target and secondary keywords with placement hints from the brief
 - Language and tone guidance (from client/niche)
 - Word count target
@@ -299,10 +341,22 @@ Pass:
 
 Add a line to the QA report: `Internal links: [N present] / [N required] — pillar link: ✅/❌`
 
+**Also perform a claims register pre-check on the Phase 1 draft:**
+
+1. Locate the **Claims Register** table in the draft's Writer Self-Assessment
+2. If it is absent or contains fewer rows than there are visible statistics, regulatory references, prices, and timeframes in the article body → note `Claims Register: absent/partial` and tell the validator to build the list itself
+3. Scan the body for `[UNVERIFIED:` markers and count them
+4. Confirm `brief_path` is being passed. Without it the validator cannot trace anything and will run claims verification in degraded mode
+
+Add a line to the QA report: `Claims: [N] registered, [N] marked UNVERIFIED, register [present/absent/partial]`
+
+**YMYL note:** on YMYL content, an untraceable or distorted claim triggers the validator's fabrication override and forces a REVISE verdict regardless of the score. Expect this and do not treat it as a scoring anomaly. A high-scoring draft with one invented statistic is exactly the case the override exists to catch.
+
 Read the validator's output and find the **QA VERDICT line** — it will read either:
 - `QA VERDICT: PASS (score X/100, threshold Y)` → score meets threshold — proceed
 - `QA VERDICT: REVISE (score X/100, threshold Y)` → score below threshold — revision required
 - `QA VERDICT: REVISE (YMYL — target 80)` → YMYL content below 80 — revision required
+- `QA VERDICT: REVISE (fabrication override: [N] untraceable claims, score X/100)` → YMYL content contains claims not traceable to the brief, revision required even when the score passes. Treat exactly as a REVISE: build the Revision Brief from the validator's Claims Detail table and return to Phase 1. This counts as a normal revision cycle
 
 Also extract from the report:
 - **Overall score** (from the Score Breakdown table)
@@ -656,6 +710,7 @@ Output the complete, validated content — full text, ready to paste into WordPr
 |-------|--------|--------|------|
 | Setup | ✅ | run_dir created | manifest.json |
 | Phase 0: SERP Research | ✅ Brief generated | OR ➖ Skipped | phase-0-research-brief.md |
+| Phase 0.4: Reddit Voice | ✅ [N] posts / [N] comments | OR ➖ Skipped (short-form) | OR ⚠️ No usable data | phase-0.4-reddit-voice.md |
 | Phase 0.5: Outline | ✅ Outline approved | OR ➖ Skipped | phase-0.5-outline.md |
 | Phase 0.75: Frame Validation | ✅ [N]/9 frames — PASS | OR ⚠️ CONDITIONAL | phase-0.75-frame-validation.md |
 | Phase 1: Write | ✅ Cycle 1 | OR ⚠️ Cycle 2 | phase-1-draft-v[N].md |
@@ -683,6 +738,9 @@ Output the complete, validated content — full text, ready to paste into WordPr
 - Do not send the writer a brief without an outline — the writer's job is to execute structure, not design it
 - Do not let the outline architect override the Research Brief's heading structure — SERP-derived structure beats internal logic
 - Do not skip Phase 2 even if the draft looks good — always run the quality gate
+- Do not let a Phase 0.4 failure stop the pipeline. Reddit voice is enrichment, not a dependency. But never let a failed scrape be replaced with plausible-sounding invented quotes; downstream stages treat that file as evidence
+- Do not pass `reddit_voice_path` to the outline architect or writer when Phase 0.4 was skipped or returned no usable data. A path to an empty file produces worse output than no path at all
+- Do not override the fabrication verdict because the score looks good. A YMYL draft scoring 88 with one invented statistic is a worse deliverable than one scoring 76 with none
 - Do not run more than 2 revision cycles — after cycle 2, proceed (standard) or escalate to human review (YMYL)
 - Do not auto-proceed with YMYL content that hasn't hit 80 after 2 cycles — the human review block is not optional
 - Do not use vague revision feedback ("improve it") — always provide specific, numbered, actionable issues

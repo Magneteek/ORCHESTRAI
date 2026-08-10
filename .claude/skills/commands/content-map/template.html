@@ -1,0 +1,555 @@
+<title>Content Map Template</title>
+<style>
+  :root {
+    --page-plane: #f9f9f7; --surface-1: #fcfcfb; --surface-2: #f2f1ec;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --muted: #898781;
+    --gridline: #e1e0d9; --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10); --border-strong: rgba(11,11,11,0.22);
+    --link-color: #4a3aa7;
+    --shadow: 0 1px 2px rgba(11,11,11,0.06), 0 8px 24px rgba(11,11,11,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page-plane: #0d0d0d; --surface-1: #1a1a19; --surface-2: #202020;
+      --text-primary: #ffffff; --text-secondary: #c3c2b7; --muted: #8f8d87;
+      --gridline: #2c2c2a; --baseline: #383835;
+      --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.24);
+      --link-color: #9085e9;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-plane: #0d0d0d; --surface-1: #1a1a19; --surface-2: #202020;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --muted: #8f8d87;
+    --gridline: #2c2c2a; --baseline: #383835;
+    --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.24);
+    --link-color: #9085e9;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px rgba(0,0,0,0.45);
+  }
+  :root[data-theme="light"] {
+    --page-plane: #f9f9f7; --surface-1: #fcfcfb; --surface-2: #f2f1ec;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --muted: #898781;
+    --gridline: #e1e0d9; --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10); --border-strong: rgba(11,11,11,0.22);
+    --link-color: #4a3aa7;
+    --shadow: 0 1px 2px rgba(11,11,11,0.06), 0 8px 24px rgba(11,11,11,0.08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--page-plane); color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden; }
+  .app { display: flex; flex-direction: column; height: 100vh; }
+
+  header { display: flex; flex-direction: column; gap: 8px; padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--surface-1); z-index: 5; }
+  .header-row1 { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  header .title { display: flex; flex-direction: column; gap: 2px; margin-right: 4px; }
+  header h1 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: 0.01em; }
+  header .sub { font-size: 12px; color: var(--muted); max-width: 580px; }
+
+  .viewswitch { display: flex; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; flex: none; }
+  .viewswitch button { background: var(--surface-2); border: none; color: var(--text-secondary); font-size: 12px; font-weight: 600;
+    padding: 6px 11px; cursor: pointer; font-family: inherit; }
+  .viewswitch button.active { background: var(--text-primary); color: var(--surface-1); }
+  .viewswitch button:not(.active):hover { color: var(--text-primary); }
+
+  .stats { display: flex; gap: 14px; font-size: 12px; color: var(--text-secondary); flex-wrap: wrap; }
+  .stats b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .legend { display: flex; gap: 12px; margin-left: auto; align-items: center; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-secondary); white-space: nowrap; }
+  .swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+
+  .toolbar { display: flex; gap: 6px; align-items: center; }
+  .toolbar input[type="text"] { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; font-size: 12.5px; color: var(--text-primary); width: 170px; font-family: inherit; }
+  .toolbar input[type="text"]:focus { outline: 2px solid var(--link-color); outline-offset: 1px; }
+  .toolbar button { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary);
+    font-size: 12px; cursor: pointer; padding: 6px 9px; font-family: inherit; line-height: 1; white-space: nowrap; }
+  .toolbar button:hover { border-color: var(--border-strong); }
+  .toolbar button.on { background: var(--link-color); color: #fff; border-color: var(--link-color); }
+  .toolbar button.hidden { display: none; }
+
+  .header-row2 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .progress-label { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+  .progress-bar { flex: 1 1 300px; max-width: 460px; height: 8px; border-radius: 4px; overflow: hidden; display: flex; background: var(--surface-2); }
+  .progress-bar div { height: 100%; }
+  .progress-figs { font-size: 11.5px; color: var(--text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .progress-figs b { color: var(--text-primary); }
+
+  .stage-wrap { position: relative; flex: 1; overflow: hidden; }
+  .stage { position: absolute; top: 0; left: 0; cursor: grab; transform-origin: 0 0; }
+  .stage.grabbing { cursor: grabbing; }
+  .stage svg { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+  .edge { fill: none; stroke: var(--baseline); stroke-width: 1.6; }
+  .edge.cross { stroke: var(--link-color); stroke-width: 1.4; stroke-dasharray: 3 4; opacity: 0.8; }
+
+  .node { position: absolute; width: 216px; padding: 8px 10px; background: var(--surface-1); border: 1.4px solid var(--border);
+    border-radius: 8px; box-shadow: var(--shadow); cursor: pointer; user-select: none;
+    transition: box-shadow .12s ease, border-color .12s ease, opacity .15s ease, transform .12s ease; }
+  .node.role-root { width: 168px; text-align: center; }
+  .node.role-hub, .node.role-pillar { border-width: 1.8px; }
+  .node.dot-dashed { border-style: dashed; opacity: 0.78; }
+  .node:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .node.selected { border-color: var(--text-primary); box-shadow: 0 0 0 2px var(--text-primary), var(--shadow); }
+  .node.dimmed { opacity: 0.2; }
+  .node.match { outline: 2px solid var(--link-color); outline-offset: 2px; }
+  .node.link-lit { border-color: var(--link-color); box-shadow: 0 0 0 1.5px var(--link-color), var(--shadow); }
+  .node.flag-lit { box-shadow: 0 0 0 1.5px currentColor, var(--shadow); }
+
+  .node .chiprow { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; flex-wrap: wrap; }
+  .node .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .node .role-chip { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 5px;
+    border-radius: 3px; color: var(--text-secondary); background: var(--surface-2); border: 1px solid var(--border); }
+  .node .flag-chip { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; padding: 1px 5px;
+    border-radius: 3px; background: var(--surface-2); border: 1px solid currentColor; }
+  .node .path { font-size: 12px; font-weight: 600; color: var(--text-primary); line-height: 1.25; word-break: break-word; }
+  .node .kw { font-size: 10.5px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .node .metric { font-size: 10.5px; color: var(--text-secondary); margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .node .metric b { color: var(--text-primary); }
+
+  .toggle { position: absolute; right: -9px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border-radius: 50%;
+    background: var(--surface-1); border: 1.4px solid var(--border-strong); display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--text-secondary); cursor: pointer; z-index: 2; line-height: 1; }
+  .toggle:hover { border-color: var(--text-primary); color: var(--text-primary); }
+
+  .panel { position: absolute; top: 0; right: 0; height: 100%; width: 360px; background: var(--surface-1); border-left: 1px solid var(--border);
+    box-shadow: -8px 0 24px rgba(11,11,11,0.10); transform: translateX(100%); transition: transform .18s ease; z-index: 10; display: flex; flex-direction: column; }
+  .panel.open { transform: translateX(0); }
+  .panel-head { padding: 16px 18px 10px; border-bottom: 1px solid var(--border); display:flex; justify-content: space-between; align-items:flex-start; gap:10px; }
+  .panel-head .chiprow { display:flex; gap:6px; align-items:center; margin-bottom:6px; flex-wrap:wrap; }
+  .panel-head h2 { font-size: 15px; margin: 0 0 2px; font-weight: 700; }
+  .panel-head .path { font-size: 12px; color: var(--muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .panel-close { background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; padding:2px 6px; line-height:1; }
+  .panel-close:hover { color: var(--text-primary); }
+  .panel-body { padding: 14px 18px 24px; overflow-y: auto; flex: 1; }
+  .field { margin-bottom: 14px; }
+  .field .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 3px; font-weight: 600; }
+  .field .value { font-size: 13px; color: var(--text-primary); line-height: 1.45; }
+  .field .value ul { margin: 2px 0 0; padding-left: 16px; }
+  .field .value li { margin-bottom: 2px; }
+  .pill { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding: 2px 9px; border-radius: 20px; background: var(--surface-2); border: 1px solid currentColor; }
+  .link-btn { font-size: 12.5px; color: var(--link-color); cursor: pointer; text-decoration: underline; background:none; border:none; padding:0; font-family:inherit; display:block; margin-bottom:3px; }
+  .empty-panel { padding: 40px 20px; color: var(--muted); font-size: 13px; text-align:center; }
+
+  .hint { position: absolute; left: 20px; bottom: 16px; font-size: 11.5px; color: var(--muted); background: var(--surface-1);
+    border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; pointer-events: none; }
+  .zoomctl { position: absolute; right: 20px; bottom: 16px; display:flex; gap:6px; z-index: 4; }
+  .zoomctl button { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary);
+    font-size: 13px; cursor: pointer; padding: 6px 9px; font-family: inherit; line-height: 1; }
+  .zoomctl button:hover { border-color: var(--border-strong); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <header>
+    <div class="header-row1">
+      <div class="title">
+        <h1 id="hTitle"></h1>
+        <div class="sub" id="hSub"></div>
+      </div>
+      <div class="viewswitch" id="viewSwitch"></div>
+      <div class="stats" id="stats"></div>
+      <div class="toolbar">
+        <button id="crossToggle" class="hidden">Cross-links</button>
+        <button id="flagToggle" class="hidden">Flag</button>
+        <input type="text" id="search" placeholder="Search path or note…" autocomplete="off" />
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="header-row2">
+      <span class="progress-label" id="progressLabel">Status</span>
+      <div class="progress-bar" id="progressBar"></div>
+      <span class="progress-figs" id="progressFigs"></span>
+    </div>
+  </header>
+
+  <div class="stage-wrap" id="stageWrap">
+    <div class="stage" id="stage">
+      <svg id="edges"></svg>
+      <div id="nodes"></div>
+    </div>
+    <div class="hint">Drag to pan · scroll to zoom · click a node for details</div>
+    <div class="zoomctl">
+      <button id="zoomOut" title="Zoom out">–</button>
+      <button id="zoomReset" title="Fit to view">⤢</button>
+      <button id="zoomIn" title="Zoom in">+</button>
+    </div>
+    <div class="panel" id="panel">
+      <div class="empty-panel" id="panelEmpty">Select a node for details.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CONTENT-MAP ENGINE — generic, data-driven. Do not edit below the CONFIG
+   block unless you're changing the engine itself for every project.
+
+   Fill in CONFIG + the tree(s) inside it for the specific project, then
+   validate with:
+     node -e "new Function(require('fs').readFileSync('file.html','utf8').match(/<script>([\s\S]*)<\/script>/)[1])"
+   before publishing via the Artifact tool.
+   ========================================================================= */
+
+var CONFIG = {
+  title: "Example Project — Content Map",
+  subline: "Replace this with a one-line description of what this map shows and how it was verified (live-checked vs. doc-only).",
+
+  // 2-5 statuses. `dot` controls the node/legend swatch style:
+  // 'solid' = normal filled dot, 'dashed' = hollow dashed ring, 'dotted' = hollow dotted ring.
+  // Pick colors that mean something consistent: green-ish = healthy/live/real,
+  // amber/orange = ready-but-not-deployed, red = broken/blocking/missing, gray = structural/non-content.
+  statuses: [
+    { key: "good",     label: "Live & healthy",         light: "#0ca30c", dark: "#0ca30c", dot: "solid" },
+    { key: "pending",  label: "Ready, not deployed",     light: "#b8860b", dark: "#eda100", dot: "solid" },
+    { key: "missing",  label: "Not started / broken",    light: "#d03b3b", dark: "#e66767", dot: "solid" },
+    { key: "planned",  label: "Planned / structural",    light: "#898781", dark: "#8f8d87", dot: "dotted" }
+  ],
+
+  // Optional. A boolean field name on nodes (e.g. "cannibalizes") plus a
+  // toggle-button label. Set to null to omit the feature entirely.
+  flagToggle: null, // { key: "cannibalizes", label: "Cannibalization (9)" }
+
+  // Optional. Real, sourced internal-link relationships that AREN'T already
+  // parent→child edges in the tree. Leave as [] to omit the toggle entirely.
+  // { from: nodeId, to: nodeId, note: "why this link exists (optional)" }
+  crossLinks: [],
+
+  // 1 or more views. Each view is an independent tree over the SAME node ids
+  // where nodes overlap (so clicking behaves consistently across views).
+  // If there's only one way to look at this project, provide exactly one view
+  // and the view-switcher UI hides itself automatically.
+  views: [
+    {
+      key: "default", label: "Architecture",
+      tree: {
+        id: "root", path: "example.com", title: "Site Root", role: "root", status: "good",
+        angle: "Replace this entire tree with the real, verified structure for the project.",
+        children: [
+          { id: "home", path: "/", title: "Homepage", role: "hub", status: "good", cluster: "Root" },
+          { id: "hub1", path: "/guides/", title: "Guides Hub", role: "pillar", status: "pending", cluster: "Guides",
+            angle: "Example pillar with two spokes.",
+            children: [
+              { id: "spoke1", path: "/guides/example-a/", title: "Example Spoke A", role: "leaf", status: "good", cluster: "Guides" },
+              { id: "spoke2", path: "/guides/example-b/", title: "Example Spoke B", role: "leaf", status: "missing", cluster: "Guides" }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+
+  // "count"  -> each status segment's width is its node count / total nodes.
+  // "words"  -> each status segment's width is the sum of each node's `words`
+  //             field for that status / total words (nodes without `words`
+  //             don't contribute; useful when tracking production volume).
+  progressMode: "count"
+};
+
+/* Node fields the panel/card renderer understands (all optional):
+   id, path, title, role ('root'|'hub'|'pillar'|'leaf'), status (a CONFIG.statuses key),
+   kw, vol, trueVol, kd, intent, words, monetization, redirectsTo, angle, cluster,
+   children, and CONFIG.flagToggle.key (boolean) if flagToggle is configured. */
+
+/* =========================================================================
+   ENGINE — generic below this line
+   ========================================================================= */
+(function () {
+  "use strict";
+
+  var statusByKey = {};
+  CONFIG.statuses.forEach(function (s) { statusByKey[s.key] = s; });
+
+  function isDark() {
+    var attr = document.documentElement.getAttribute("data-theme");
+    if (attr === "dark") return true;
+    if (attr === "light") return false;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function statusColor(key) {
+    var s = statusByKey[key];
+    if (!s) return "#999999";
+    return isDark() ? (s.dark || s.light) : s.light;
+  }
+
+  var views = CONFIG.views;
+  var viewIndex = 0;
+  var tree = views[0].tree;
+  var byId = {};
+  function indexTree(t) {
+    byId = {};
+    (function walk(n) { byId[n.id] = n; (n.children || []).forEach(walk); })(t);
+  }
+  indexTree(tree);
+
+  var COLW = 260, ROWH = 62, NODEW = 216, NODEH_EST = 50;
+  var collapsed = {}, flatNodes = [], edges = [], leafCounter = 0;
+  var showCrossLinks = false, showFlag = false, selectedId = null;
+
+  function visibleChildren(n) { return collapsed[n.id] ? [] : (n.children || []); }
+  function layout(n, depth, parent) {
+    var kids = visibleChildren(n), x = depth * COLW, y;
+    if (kids.length === 0) { y = leafCounter * ROWH; leafCounter++; }
+    else {
+      var ys = kids.map(function (k) { return layout(k, depth + 1, n); });
+      y = (Math.min.apply(null, ys) + Math.max.apply(null, ys)) / 2;
+    }
+    flatNodes.push({ n: n, x: x, y: y, depth: depth });
+    if (parent) edges.push({ from: parent, to: n, x1: depth * COLW - COLW, y1: null, x2: x, y2: y });
+    n._x = x; n._y = y;
+    return y;
+  }
+  function computeLayout() {
+    flatNodes = []; edges = []; leafCounter = 0;
+    layout(tree, 0, null);
+    edges.forEach(function (e) { e.y1 = e.from._y; e.x1 = e.from._x; });
+  }
+
+  var stage = document.getElementById("stage"), svg = document.getElementById("edges"),
+    nodesLayer = document.getElementById("nodes"), stageWrap = document.getElementById("stageWrap");
+  var scale = 1, tx = 40, ty = 40;
+
+  function field(label, value) { return '<div class="field"><div class="label">' + label + '</div><div class="value">' + value + "</div></div>"; }
+
+  function renderPanel(n) {
+    var panel = document.getElementById("panel");
+    if (!n) { panel.classList.remove("open"); return; }
+    var s = statusByKey[n.status];
+    var html = '<div class="panel-head"><div><div class="chiprow"><span class="pill" style="color:' + statusColor(n.status) + '">' + (s ? s.label : n.status) + '</span>' +
+      (n.role === "hub" ? '<span class="role-chip">Hub</span>' : "") + (n.role === "pillar" ? '<span class="role-chip">Pillar</span>' : "") +
+      (CONFIG.flagToggle && n[CONFIG.flagToggle.key] ? '<span class="flag-chip" style="color:' + statusColor("missing") + '">' + CONFIG.flagToggle.label.replace(/\s*\(\d+\)$/, "") + '</span>' : "") +
+      '</div><h2>' + n.title + '</h2><div class="path">' + n.path + '</div></div><button class="panel-close" id="panelCloseBtn">×</button></div><div class="panel-body">';
+    if (n.cluster) html += field("Cluster", n.cluster);
+    if (n.kw) html += field("Target keyword(s)", '"' + n.kw + '"' + (n.vol ? " — " + n.vol : ""));
+    if (n.trueVol) html += field("True / peak volume", n.trueVol);
+    if (n.kd !== undefined) html += field("Keyword difficulty", String(n.kd));
+    if (n.intent) html += field("Intent", n.intent);
+    if (n.words) html += field("Word count", (typeof n.words === "number" ? n.words.toLocaleString() : n.words));
+    if (n.monetization) html += field("Monetization", n.monetization);
+    if (n.redirectsTo) html += field("Redirects to", n.redirectsTo);
+    if (n.angle) html += field("Notes", n.angle);
+
+    if (CONFIG.crossLinks.length) {
+      var out = CONFIG.crossLinks.filter(function (c) { return c.from === n.id; });
+      var into = CONFIG.crossLinks.filter(function (c) { return c.to === n.id; });
+      if (out.length) html += field("Links to", "<ul>" + out.map(function (c) { return "<li>→ " + (byId[c.to] ? byId[c.to].path : c.to) + (c.note ? " — " + c.note : "") + "</li>"; }).join("") + "</ul>");
+      if (into.length) html += field("Linked from", "<ul>" + into.map(function (c) { return "<li>← " + (byId[c.from] ? byId[c.from].path : c.from) + "</li>"; }).join("") + "</ul>");
+    }
+    if (n.parentRef) html += '<div class="field"><div class="label">Parent</div><div class="value"><button class="link-btn" data-jump="' + n.parentRef.id + '">' + n.parentRef.path + '</button></div></div>';
+    html += "</div>";
+    panel.innerHTML = html;
+    panel.classList.add("open");
+    document.getElementById("panelCloseBtn").addEventListener("click", function () { selectNode(null); });
+    var jumpBtn = panel.querySelector("[data-jump]");
+    if (jumpBtn) jumpBtn.addEventListener("click", function () {
+      var target = flatNodes.find(function (f) { return f.n.id === jumpBtn.getAttribute("data-jump"); });
+      if (target) selectNode(target.n, true);
+    });
+  }
+
+  function selectNode(n, focus) { selectedId = n ? n.id : null; renderPanel(n); if (n && focus) panTo(n._x, n._y); render(); }
+
+  function drawEdgesSvg() {
+    var maxX = 0, maxY = 0;
+    flatNodes.forEach(function (f) { maxX = Math.max(maxX, f.x); maxY = Math.max(maxY, f.y); });
+    svg.setAttribute("width", maxX + COLW); svg.setAttribute("height", maxY + ROWH);
+    var pos = {}; flatNodes.forEach(function (f) { pos[f.n.id] = f; });
+    var html = "";
+    edges.forEach(function (e) {
+      var x1 = e.x1 + NODEW, y1 = e.y1 + NODEH_EST / 2, x2 = e.x2, y2 = e.y2 + NODEH_EST / 2, mx = (x1 + x2) / 2;
+      html += '<path class="edge" d="M ' + x1 + ' ' + y1 + ' C ' + mx + ' ' + y1 + ', ' + mx + ' ' + y2 + ', ' + x2 + ' ' + y2 + '"/>';
+    });
+    if (showCrossLinks) {
+      CONFIG.crossLinks.forEach(function (c) {
+        var a = pos[c.from], b = pos[c.to]; if (!a || !b) return;
+        var x1 = a.x + NODEW, y1 = a.y + NODEH_EST / 2, x2 = b.x, y2 = b.y + NODEH_EST / 2;
+        var dx = Math.max(40, Math.abs(x2 - x1) * 0.5);
+        html += '<path class="edge cross" d="M ' + x1 + ' ' + y1 + ' C ' + (x1 + dx) + ' ' + y1 + ', ' + (x2 - dx) + ' ' + y2 + ', ' + x2 + ' ' + y2 + '"/>';
+      });
+    }
+    svg.innerHTML = html;
+  }
+
+  function render() {
+    computeLayout(); drawEdgesSvg();
+
+    var litIds = {};
+    if (showCrossLinks && selectedId) {
+      CONFIG.crossLinks.forEach(function (c) { if (c.from === selectedId) litIds[c.to] = true; if (c.to === selectedId) litIds[c.from] = true; });
+    }
+
+    var html = "";
+    flatNodes.forEach(function (f) {
+      var n = f.n, hasKids = n.children && n.children.length > 0, isCollapsed = collapsed[n.id];
+      var s = statusByKey[n.status];
+      var isFlagged = CONFIG.flagToggle && n[CONFIG.flagToggle.key];
+      var cls = "node role-" + n.role +
+        (s && s.dot !== "solid" ? " dot-dashed" : "") +
+        (litIds[n.id] ? " link-lit" : "") +
+        (showFlag && isFlagged ? " flag-lit" : "") +
+        (showFlag && !isFlagged ? " dimmed" : "");
+      var dotStyle = s ? (s.dot === "solid" ? "background:" + statusColor(n.status) + ";" : "background:transparent;border:1.4px " + s.dot + " " + statusColor(n.status) + ";") : "";
+      html += '<div class="' + cls + '" data-id="' + n.id + '" style="left:' + f.x + 'px; top:' + f.y + 'px;' + (isFlagged && showFlag ? "color:" + statusColor("missing") + ";" : "") + '">' +
+        '<div class="chiprow"><span class="dot" style="' + dotStyle + '"></span>' +
+        (n.role === "hub" ? '<span class="role-chip">Hub</span>' : "") + (n.role === "pillar" ? '<span class="role-chip">Pillar</span>' : "") +
+        (isFlagged ? '<span class="flag-chip" style="color:' + statusColor("missing") + '">' + CONFIG.flagToggle.label.replace(/\s*\(\d+\)$/, "") + '</span>' : "") +
+        '</div><div class="path">' + n.title + '</div>' +
+        (n.kw ? '<div class="kw">"' + n.kw + '"' + (n.vol ? " — " + n.vol : "") + '</div>' : "") +
+        (n.words ? '<div class="metric">' + (typeof n.words === "number" ? n.words.toLocaleString() : n.words) + ' words</div>' : "") +
+        (hasKids ? '<div class="toggle" data-toggle="' + n.id + '">' + (isCollapsed ? "+" : "–") + '</div>' : "") +
+        "</div>";
+    });
+    nodesLayer.innerHTML = html;
+
+    nodesLayer.querySelectorAll(".node").forEach(function (el) {
+      el.classList.toggle("selected", el.dataset.id === selectedId);
+      el.addEventListener("click", function (ev) {
+        if (ev.target.dataset.toggle) return;
+        var f = flatNodes.find(function (ff) { return ff.n.id === el.dataset.id; });
+        if (f) {
+          var parentEdge = edges.find(function (e) { return e.to.id === f.n.id; });
+          f.n.parentRef = parentEdge ? parentEdge.from : null;
+          selectNode(f.n);
+        }
+      });
+    });
+    nodesLayer.querySelectorAll("[data-toggle]").forEach(function (el) {
+      el.addEventListener("click", function (ev) { ev.stopPropagation(); collapsed[el.getAttribute("data-toggle")] = !collapsed[el.getAttribute("data-toggle")]; render(); });
+    });
+
+    updateStats();
+  }
+
+  function countAll(n, acc) {
+    var amt = CONFIG.progressMode === "words" ? (n.words && typeof n.words === "number" ? n.words : 0) : 1;
+    acc.count[n.status] = (acc.count[n.status] || 0) + 1;
+    acc.measure[n.status] = (acc.measure[n.status] || 0) + amt;
+    (n.children || []).forEach(function (k) { countAll(k, acc); });
+    return acc;
+  }
+
+  function updateStats() {
+    var acc = countAll(tree, { count: {}, measure: {} });
+    document.getElementById("stats").innerHTML = CONFIG.statuses.map(function (s) {
+      return '<span><b>' + (acc.count[s.key] || 0) + '</b> ' + s.label.toLowerCase() + '</span>';
+    }).join("");
+
+    var total = 0;
+    CONFIG.statuses.forEach(function (s) { total += (acc.measure[s.key] || 0); });
+    total = total || 1;
+    document.getElementById("progressBar").innerHTML = CONFIG.statuses.map(function (s) {
+      var pct = 100 * (acc.measure[s.key] || 0) / total;
+      return '<div style="width:' + pct + '%;background:' + statusColor(s.key) + ';"></div>';
+    }).join("");
+    document.getElementById("progressFigs").innerHTML = CONFIG.statuses.map(function (s) {
+      var v = acc.measure[s.key] || 0;
+      return "<b>" + v.toLocaleString() + "</b> " + s.label.toLowerCase();
+    }).join(" · ");
+    document.getElementById("progressLabel").textContent = CONFIG.progressMode === "words" ? "Word production" : "Status (by count)";
+  }
+
+  function switchView(idx) {
+    viewIndex = idx;
+    tree = views[idx].tree;
+    indexTree(tree);
+    selectedId = null;
+    renderPanel(null);
+    document.querySelectorAll(".viewswitch button").forEach(function (b, i) { b.classList.toggle("active", i === idx); });
+    render();
+    requestAnimationFrame(fitToView);
+  }
+
+  function buildChrome() {
+    document.getElementById("hTitle").textContent = CONFIG.title;
+    document.getElementById("hSub").textContent = CONFIG.subline;
+
+    var vs = document.getElementById("viewSwitch");
+    if (views.length > 1) {
+      vs.innerHTML = views.map(function (v, i) { return '<button data-vi="' + i + '"' + (i === 0 ? ' class="active"' : "") + '>' + v.label + "</button>"; }).join("");
+      vs.querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { switchView(parseInt(b.getAttribute("data-vi"), 10)); }); });
+    } else { vs.style.display = "none"; }
+
+    document.getElementById("legend").innerHTML = CONFIG.statuses.map(function (s) {
+      var swatchStyle = s.dot === "solid" ? "background:" + s.light + ";" : "background:transparent;border:1px " + s.dot + " " + s.light + ";";
+      return '<div class="legend-item"><span class="swatch" style="' + swatchStyle + '"></span>' + s.label + "</div>";
+    }).join("");
+
+    var crossBtn = document.getElementById("crossToggle");
+    if (CONFIG.crossLinks.length) {
+      crossBtn.classList.remove("hidden");
+      crossBtn.addEventListener("click", function () { showCrossLinks = !showCrossLinks; this.classList.toggle("on", showCrossLinks); render(); });
+    }
+    var flagBtn = document.getElementById("flagToggle");
+    if (CONFIG.flagToggle) {
+      flagBtn.textContent = CONFIG.flagToggle.label;
+      flagBtn.classList.remove("hidden");
+      flagBtn.addEventListener("click", function () { showFlag = !showFlag; this.classList.toggle("on", showFlag); render(); });
+    }
+  }
+
+  function applyTransform() { stage.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + scale + ")"; }
+  function panTo(x, y) {
+    var rect = stageWrap.getBoundingClientRect();
+    tx = rect.width / 2 - (x + NODEW / 2) * scale; ty = rect.height / 2 - (y + NODEH_EST / 2) * scale;
+    applyTransform();
+  }
+  function fitToView() {
+    computeLayout();
+    var maxX = 0, maxY = 0, minY = Infinity;
+    flatNodes.forEach(function (f) { maxX = Math.max(maxX, f.x + NODEW); maxY = Math.max(maxY, f.y + NODEH_EST); minY = Math.min(minY, f.y); });
+    var rect = stageWrap.getBoundingClientRect();
+    var sx = (rect.width - 60) / maxX, sy = (rect.height - 60) / (maxY - minY + NODEH_EST);
+    scale = Math.max(0.2, Math.min(1, Math.min(sx, sy)));
+    tx = 30; ty = 30 - minY * scale;
+    applyTransform(); render();
+  }
+
+  var dragging = false, dragStart = null, txStart = 0, tyStart = 0;
+  stageWrap.addEventListener("pointerdown", function (ev) {
+    if (ev.target.closest(".node") || ev.target.closest(".panel") || ev.target.closest(".zoomctl")) return;
+    dragging = true; dragStart = { x: ev.clientX, y: ev.clientY }; txStart = tx; tyStart = ty;
+    stage.classList.add("grabbing"); stageWrap.setPointerCapture(ev.pointerId);
+  });
+  stageWrap.addEventListener("pointermove", function (ev) {
+    if (!dragging) return;
+    tx = txStart + (ev.clientX - dragStart.x); ty = tyStart + (ev.clientY - dragStart.y); applyTransform();
+  });
+  stageWrap.addEventListener("pointerup", function () { dragging = false; stage.classList.remove("grabbing"); });
+  stageWrap.addEventListener("pointercancel", function () { dragging = false; stage.classList.remove("grabbing"); });
+  stageWrap.addEventListener("wheel", function (ev) {
+    ev.preventDefault();
+    var rect = stageWrap.getBoundingClientRect();
+    var mx = ev.clientX - rect.left, my = ev.clientY - rect.top, prevScale = scale;
+    scale = Math.max(0.2, Math.min(2.2, scale * (1 - ev.deltaY * 0.0016)));
+    tx = mx - ((mx - tx) / prevScale) * scale; ty = my - ((my - ty) / prevScale) * scale;
+    applyTransform();
+  }, { passive: false });
+  document.getElementById("zoomIn").addEventListener("click", function () { scale = Math.min(2.2, scale * 1.2); applyTransform(); });
+  document.getElementById("zoomOut").addEventListener("click", function () { scale = Math.max(0.2, scale / 1.2); applyTransform(); });
+  document.getElementById("zoomReset").addEventListener("click", fitToView);
+
+  document.getElementById("search").addEventListener("input", function (ev) {
+    var q = ev.target.value.trim().toLowerCase();
+    var els = nodesLayer.querySelectorAll(".node");
+    if (!q) { els.forEach(function (el) { el.classList.remove("dimmed", "match"); }); return; }
+    var firstMatch = null;
+    els.forEach(function (el) {
+      var f = flatNodes.find(function (ff) { return ff.n.id === el.dataset.id; });
+      var hay = (f.n.title + " " + f.n.path + " " + (f.n.kw || "") + " " + (f.n.cluster || "") + " " + (f.n.angle || "")).toLowerCase();
+      var isMatch = hay.indexOf(q) !== -1;
+      el.classList.toggle("match", isMatch); el.classList.toggle("dimmed", !isMatch);
+      if (isMatch && !firstMatch) firstMatch = f;
+    });
+    if (firstMatch) panTo(firstMatch.x, firstMatch.y);
+  });
+
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+  }
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  buildChrome();
+  render();
+  requestAnimationFrame(fitToView);
+  window.addEventListener("resize", fitToView);
+})();
+</script>

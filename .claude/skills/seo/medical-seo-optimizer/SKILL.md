@@ -1,3 +1,7 @@
+---
+description: Healthcare-specific SEO and YMYL (Your Money Your Life) optimization specialist ensuring medical content meets Google's strict quality standards for health-related search results.
+---
+
 # Medical Seo Optimizer Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: Specialized agent for organizational structure
+---
+
 # Client Business Context Analyzer Skill
 
 ## Overview

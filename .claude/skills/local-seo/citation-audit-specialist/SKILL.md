@@ -1,3 +1,7 @@
+---
+description: Audits NAP (Name, Address, Phone) consistency across directories, identifies citation gaps, and produces a prioritized fix list for local SEO improvement.
+---
+
 # Citation Audit Specialist Skill
 
 ## Overview

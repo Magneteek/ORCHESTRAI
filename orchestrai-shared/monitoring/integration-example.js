@@ -69,9 +69,9 @@ async function simulateTokenUsage(hooksManager) {
 
   // 3. Simulate some token usage
   const tokenEvents = [
-    { inputTokens: 1500, outputTokens: 3000, model: 'claude-sonnet-4-5-20250929' },
-    { inputTokens: 2000, outputTokens: 4500, model: 'claude-sonnet-4-5-20250929' },
-    { inputTokens: 1200, outputTokens: 2800, model: 'claude-sonnet-4-5-20250929' }
+    { inputTokens: 1500, outputTokens: 3000, model: 'claude-sonnet-4-6' },
+    { inputTokens: 2000, outputTokens: 4500, model: 'claude-sonnet-4-6' },
+    { inputTokens: 1200, outputTokens: 2800, model: 'claude-sonnet-4-6' }
   ];
 
   for (const tokens of tokenEvents) {

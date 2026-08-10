@@ -29,6 +29,10 @@ These skills preserve manual invocation semantics (via `disable-model-invocation
 - **seo-status** - SEO audit status
 - **seo-strategy** - SEO strategy report
 - **convert** - Convert markdown to WordPress HTML
+- **client-report** - Monthly client performance report (interactive, data pasting)
+- **ads-report** - Ads-only monthly report with Chart.js (Google + Meta)
+- **monthly-report-pipeline** - Unified monthly HTML report pipeline (auto-reads stored pipeline outputs + API pulls for gaps)
+- **content-map** - Interactive, live-verified content architecture / publish-status map (adapts shape: production tracker, technical health map, or pre-launch map)
 
 ## Migration Notes
 

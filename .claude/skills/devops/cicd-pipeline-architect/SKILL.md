@@ -1,3 +1,7 @@
+---
+description: Enterprise-grade CI/CD pipeline specialist implementing automated testing, deployment workflows, security scanning, artifact management, and multi-environment deployment strategies for GitHub Actions, GitLab CI, and Jenkins platforms.
+---
+
 # Cicd Pipeline Architect Skill
 
 ## Overview

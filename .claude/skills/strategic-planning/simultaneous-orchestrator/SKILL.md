@@ -1,3 +1,7 @@
+---
+description: "Plans parallel execution of independent tasks: decomposes work into streams, maps dependencies, and produces a batched execution plan showing what can launch simultaneously vs what must wait."
+---
+
 # Simultaneous Orchestrator Skill
 
 ## Overview

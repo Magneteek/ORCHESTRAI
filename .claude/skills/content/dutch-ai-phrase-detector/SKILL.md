@@ -1,3 +1,7 @@
+---
+description: Detect and replace AI-generated language patterns specific to Dutch (Nederlandse) content — 60+ pattern library, contextual analysis, authentic voice optimization for Dutch business content.
+---
+
 # Dutch Ai Phrase Detector Skill
 
 ## Overview

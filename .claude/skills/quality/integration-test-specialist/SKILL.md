@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for designing and implementing integration testing strategies for multi-component systems.
+---
+
 # Integration Test Specialist Skill
 
 ## Overview

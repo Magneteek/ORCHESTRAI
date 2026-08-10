@@ -1,3 +1,7 @@
+---
+description: Full live Google SERP harvester — extracts PAA trees, AI Overviews, featured snippets, local pack, video carousels, forums/discussions, and social perspectives (Reddit, TikTok, Substack) for any keyword and locale in a single call.
+---
+
 # SEO SERP Harvest Skill
 
 ## Overview

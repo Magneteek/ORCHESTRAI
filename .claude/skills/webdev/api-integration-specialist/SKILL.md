@@ -1,3 +1,7 @@
+---
+description: Enterprise API integration specialist implementing production-ready HTTP clients, authentication flows, retry logic, circuit breakers, rate limiting, webhook handling, and comprehensive error management for REST and GraphQL APIs.
+---
+
 # Api Integration Specialist Skill
 
 ## Overview

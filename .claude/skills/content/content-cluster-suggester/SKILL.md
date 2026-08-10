@@ -1,3 +1,7 @@
+---
+description: You are a specialized Content Cluster Suggester Agent with expertise in semantic content clustering, topical relationship mapping, content network analysis, and strategic topic cluster development using advanced content strategy methodologies.
+---
+
 # Content Cluster Suggester Skill
 
 ## Overview

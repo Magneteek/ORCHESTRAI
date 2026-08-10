@@ -1,6 +1,6 @@
 ---
 name: design-production-pipeline
-description: End-to-end design production pipeline. Loads client design system → gathers visual references → generates 3–5 variants in parallel with varied direction prompts → render-screenshot-critique loop at 4 viewports → 7 parallel quality gates (contrast, a11y, token compliance, responsive, performance, vision hierarchy, copy) → surgical diff-only iteration → export. Produces browser-ready HTML with verified design quality.
+description: End-to-end design production pipeline. Loads client design system → gathers visual references → generates 3–5 variants in parallel with varied direction prompts → render-screenshot-critique loop at 4 viewports → 8 parallel quality gates (contrast, a11y, token compliance, responsive, performance, vision hierarchy, copy, mobile visual semantics) → surgical diff-only iteration → export. Produces browser-ready HTML with verified design quality.
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Skill, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_take_screenshot, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_resize, mcp__magic__21st_magic_component_builder, mcp__magic__21st_magic_component_inspiration, mcp__shadcn-ui__get_component, mcp__shadcn-ui__list_components
 model: sonnet
 color: purple
@@ -66,6 +66,7 @@ You orchestrate complete design production. A brief enters, a browser-verified, 
 | 4E — Brand Compliance | `[run_dir]/phase-4e-brand-compliance.md` |
 | 4F — Copy Quality | `[run_dir]/phase-4f-copy-quality.md` |
 | 4G — Touch/Interactive | `[run_dir]/phase-4g-touch-interactive.md` |
+| 4H — Mobile Visual Semantics | `[run_dir]/phase-4h-mobile-visual-semantics.md` |
 | 5 — Surgical Edit | `[run_dir]/phase-5-surgical-edit.md` (or status `"skipped"` if all gates pass) |
 | 6 — Delivery | `[run_dir]/phase-6-delivery.md` (checkpoint) + `projects/[client-uuid]/deliverables/design/[slug]-[YYYY-MM-DD]/` (deliverable) |
 
@@ -433,7 +434,7 @@ Update `manifest.json`: `"winner_variant": "variant-[N]-[direction-slug]"`.
 
 > **Gate check**: For each gate, check manifest independently. If `"completed"` AND file exists → load from file; skip to next gate. Run all pending gates simultaneously.
 
-Run all 7 gates on the winner variant (`[run_dir]/variants/[winner_variant]/index.html`).
+Run all 8 gates on the winner variant (`[run_dir]/variants/[winner_variant]/index.html`).
 
 **Winner file path**: read `winner_variant` from `manifest.json` → construct path.
 
@@ -720,6 +721,34 @@ Clean → ✅ PASS
 ```
 
 > **Save**: Write touch/interactive findings (focus order, hover/focus states, keyboard trap check) to `[run_dir]/phase-4g-touch-interactive.md`. Update manifest: `"phase-4g-touch-interactive": "completed"`.
+
+---
+
+### Gate 4H: Mobile Visual Semantics 🟡 (WARN — only BLOCKING if the page has a primary conversion element, e.g. a lead-capture form)
+
+> **Manifest check**: If `"phase-4h-mobile-visual-semantics": "completed"` → load from file.
+
+**This is distinct from Gate 4C (Responsive Integrity).** 4C checks whether mobile *looks* broken (overflow, clipping, touch targets). This gate checks whether mobile *reads correctly to Google* — where the primary content/functional element actually lands relative to the mobile viewport, since Google indexes mobile-first and treats the mobile render as authoritative (a desktop pass here is not evidence of anything). Full methodology lives in `seo-visual-semantics-auditor` (seo domain) — this gate runs its core checks against the winner variant instead of a live URL.
+
+**Step 1 — Resize to 375×812, `browser_evaluate` the same DOM probe from `seo-visual-semantics-auditor` Step 1** (landmarks with `top`/`domIndex`, hidden-with-text sweep, HTML byte size, DOM node count).
+
+**Step 2 — Centerpiece check**: does the highest text-density block above the fold match the page's actual purpose (see `seo-visual-semantics-auditor` Step 2)?
+
+**Step 3 — If the page has a primary functional/conversion element** (embedded form, calculator, booking widget — not just a CTA button linking elsewhere): measure that **component's own bounding-box top**, not just its first interactive child. Confirm it renders within, or very close to, the first mobile viewport (812px reference).
+
+**Decision:**
+
+```
+Primary functional element's container starts beyond ~1.5× viewport height on mobile → 🔴 BLOCK
+Centerpiece candidate (Step 2) is not the page's real purpose → 🔴 BLOCK
+Primary functional element partially below fold but its heading/framing is visible (< 1× viewport) → 🟡 WARN
+DOM-order/visual-order mismatch found (CSS `order`/`grid-row` reordering) → 🟡 WARN — flag the selector, do not auto-fix with more CSS reordering
+Clean → ✅ PASS
+```
+
+**If BLOCK**: the fix is moving content in actual markup/source order (e.g. splitting a hero-text block so secondary copy comes after the functional element in the DOM on every breakpoint), never a CSS `order`/`grid-area` repositioning trick — that reintroduces the same mismatch this gate exists to catch. Re-run this gate's measurement after the fix; don't assume it worked from the diff.
+
+> **Save**: Write mobile visual-semantics findings (viewport measurements, centerpiece check, functional-element placement) to `[run_dir]/phase-4h-mobile-visual-semantics.md`. Update manifest: `"phase-4h-mobile-visual-semantics": "completed"`.
 
 ---
 

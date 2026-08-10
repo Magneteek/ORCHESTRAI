@@ -1,3 +1,7 @@
+---
+description: Deep Reddit audience research using actual thread content — not just SERP snippets. Scrapes subreddits and search results to extract real user language, pain points, objections, questions, and sentiment. Feeds directly into content briefs and PAA strategy.
+---
+
 # SEO Reddit Research Skill
 
 ## Overview
@@ -21,7 +25,9 @@ Deep Reddit audience research using actual thread content — not just SERP snip
 
 ## Tools Required
 
-Read, Write, Edit, mcp__reddit__reddit_search, mcp__dataforseo__serp_google_organic
+Read, Write, Edit, mcp__apify__apify_reddit, mcp__dataforseo__serp_google_organic
+
+**Note**: `mcp__reddit__reddit_search` (Reddit's free direct API) has been unreliable (403 errors, confirmed 2026-07-25) — `mcp__apify__apify_reddit` (trudax/reddit-scraper-lite, pay-per-result ~$3.40/1000 items) is the primary, confirmed-working path. Try `reddit_search` first if you want the free option, but don't block on it.
 
 ## Full Prompt
 

@@ -1,3 +1,7 @@
+---
+description: "Plans and coordinates 4-stream parallel full-stack web builds: frontend, backend, content, and DevOps streams with explicit Phase 0 contracts, synchronisation checkpoints, and quality gates."
+---
+
 # VAIBE Builder Orchestrator Skill
 
 ## Overview

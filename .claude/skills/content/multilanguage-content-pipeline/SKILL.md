@@ -1,3 +1,7 @@
+---
+description: Orchestrates end-to-end multilanguage content production. Takes source content (or creates it) and produces validated, culturally-adapted versions in N target languages in parallel. Each language version gets its own SERP research, cultural adaptation, AI phrase detection, and language purity validation before delivery. Outputs all versions together with hreflang map and CMS implementation inst...
+---
+
 # Multilanguage Content Pipeline Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: Detect and replace AI-generated language patterns in German content (DE/AT/CH register differences). Reads draft_path, outputs natural German alternatives.
+---
+
 # German AI Phrase Detector Skill
 
 ## Overview

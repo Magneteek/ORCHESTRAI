@@ -21,6 +21,22 @@ async function runActorSync(actorId, input, timeoutSecs = 120) {
   });
   if (!res.ok) {
     const body = await res.text();
+    // run-sync has a short server-side window (~90-150s) and some actors (e.g.
+    // the reddit scraper on multi-query batches) legitimately take longer while
+    // still saving items to the dataset. On a TIMED-OUT run, recover the partial
+    // results instead of failing outright — don't make the caller know this quirk.
+    let parsed;
+    try { parsed = JSON.parse(body); } catch { /* not JSON, fall through to throw */ }
+    const runIdMatch = parsed?.error?.message?.match(/run ID: (\w+)/);
+    if (parsed?.error?.type === 'run-failed' && /TIMED-OUT/.test(parsed.error.message || '') && runIdMatch) {
+      const runRes = await fetch(`${APIFY_BASE}/actor-runs/${runIdMatch[1]}?token=${APIFY_TOKEN}`);
+      const runData = await runRes.json();
+      const datasetId = runData?.data?.defaultDatasetId;
+      if (datasetId) {
+        const itemsRes = await fetch(`${APIFY_BASE}/datasets/${datasetId}/items?token=${APIFY_TOKEN}&format=json`);
+        if (itemsRes.ok) return itemsRes.json();
+      }
+    }
     throw new Error(`Apify actor ${actorId} failed: ${res.status} — ${body.slice(0, 300)}`);
   }
   return res.json();
@@ -95,7 +111,7 @@ class ApifyServer {
         },
         {
           name: 'apify_reddit',
-          description: 'Scrape Reddit posts and comments from subreddits or search queries. Returns post title, full body text, upvotes, comment count, date, and top comments. Gets actual Reddit content — not just SERP snippets. Use for audience research, topic analysis, patient/customer sentiment. Actor: trudax/reddit-scraper.',
+          description: 'Scrape Reddit posts and comments from subreddits or search queries. Returns post title, full body text, upvotes, comment count, date, and top comments. Gets actual Reddit content — not just SERP snippets. Use for audience research, topic analysis, patient/customer sentiment. Actor: trudax/reddit-scraper-lite (pay-per-result, ~$3.40/1000 items — no monthly rental).',
           inputSchema: {
             type: 'object',
             properties: {
@@ -248,38 +264,56 @@ class ApifyServer {
 
   async reddit(args) {
     const { searches, max_posts = 20, max_comments = 10, time_filter = 'year', sort = 'relevance' } = args;
-    const startUrls = searches.map(s =>
-      s.startsWith('http')
-        ? { url: s }
-        : { url: `https://www.reddit.com/search/?q=${encodeURIComponent(s)}&sort=${sort}&t=${time_filter}` }
-    );
+    const urlSearches = searches.filter(s => s.startsWith('http'));
+    const textSearches = searches.filter(s => !s.startsWith('http'));
+    const queryCount = urlSearches.length + textSearches.length || 1;
+    // Lite actor is pay-per-item-saved — cap the run so a broad search can't run away on cost.
+    const maxItems = Math.min(queryCount * max_posts * (1 + max_comments), 200);
     const input = {
-      startUrls,
+      startUrls: urlSearches.map(url => ({ url })),
+      searches: textSearches,
+      searchPosts: true,
+      searchComments: false,
+      searchCommunities: false,
+      searchUsers: false,
+      sort,
+      time: time_filter,
+      includeMediaLinks: true,
+      skipComments: max_comments === 0,
       maxPostCount: max_posts,
       maxComments: max_comments,
       maxCommunitiesCount: 0,
       maxUserCount: 0,
+      maxItems,
       proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
     };
-    const results = await runActorSync('trudax/reddit-scraper', input, 180);
-    const posts = results
-      .filter(r => r.title)
-      .map(r => ({
-        title: r.title,
-        subreddit: r.communityName || r.subreddit,
-        url: r.url,
-        upvotes: r.upVotes || r.score,
-        comment_count: r.numberOfComments || r.numComments,
-        date: r.createdAt || r.created,
-        body: (r.body || r.selftext || '').slice(0, 1000),
-        top_comments: (r.comments || []).slice(0, max_comments).map(c => ({
-          author: c.author,
-          text: (c.body || '').slice(0, 500),
-          upvotes: c.score
-        }))
-      }));
+    const results = await runActorSync('trudax/reddit-scraper-lite', input, 180);
+
+    // Lite actor returns a flat list — posts and comments are separate records
+    // (dataType: "post" | "comment"), linked via comment.postId === post.id.
+    const posts = results.filter(r => r.dataType === 'post');
+    const comments = results.filter(r => r.dataType === 'comment');
+    const commentsByPost = {};
+    for (const c of comments) {
+      (commentsByPost[c.postId] ||= []).push(c);
+    }
+
+    const cleaned = posts.map(p => ({
+      title: p.title,
+      subreddit: p.communityName || p.subreddit,
+      url: p.url,
+      upvotes: p.upVotes,
+      comment_count: p.numberOfComments,
+      date: p.createdAt,
+      body: (p.body || '').slice(0, 1000),
+      top_comments: (commentsByPost[p.id] || []).slice(0, max_comments).map(c => ({
+        author: c.username,
+        text: (c.body || '').slice(0, 500),
+        upvotes: c.upVotes
+      }))
+    }));
     return {
-      content: [{ type: 'text', text: `Reddit (${searches.join(', ')}) — ${posts.length} posts:\n${JSON.stringify(posts, null, 2)}` }]
+      content: [{ type: 'text', text: `Reddit (${searches.join(', ')}) — ${cleaned.length} posts:\n${JSON.stringify(cleaned, null, 2)}` }]
     };
   }
 

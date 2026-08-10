@@ -1,7 +1,7 @@
 /**
  * Extended Thinking-Enabled Claude API Client
  *
- * Enables extended thinking for Opus-tier agents requiring sophisticated reasoning.
+ * Enables adaptive thinking for Opus/Fable-tier agents requiring sophisticated reasoning.
  * Thinking blocks provide visibility into the agent's reasoning process before
  * generating the final response.
  *
@@ -29,39 +29,42 @@ class ThinkingEnabledClient {
   }
 
   /**
-   * Create message with optional extended thinking
+   * Create message with optional adaptive thinking
    *
    * @param {Object} config - Message configuration
-   * @param {string} config.model - Model to use (e.g., 'claude-opus-4-5')
+   * @param {string} config.model - Model to use (default: claude-opus-4-8)
    * @param {Array} config.messages - Conversation messages
    * @param {number} config.maxTokens - Maximum completion tokens
-   * @param {boolean} config.enableThinking - Enable extended thinking
-   * @param {number} config.thinkingBudget - Token budget for thinking (5000-20000)
+   * @param {boolean} config.enableThinking - Enable adaptive thinking
+   * @param {string} config.effort - Effort level: 'low'|'medium'|'high'|'xhigh'|'max' (default: 'xhigh')
+   * @param {number} config.taskBudget - Total token budget for the full agentic loop (Opus 4.7+/Fable 5 only, min 20000)
    * @param {Array} config.tools - Tool definitions (optional)
    * @param {Object} config.system - System prompt configuration
    * @returns {Object} Response with separated thinking and answer
    */
   async createMessage(config) {
     const {
-      model = 'claude-opus-4-5',
+      model = 'claude-opus-4-8',
       messages,
       maxTokens = 16000,
       enableThinking = false,
-      thinkingBudget = 10000,
+      effort = 'xhigh',
+      taskBudget = null,
       tools = [],
       system = null
     } = config;
 
-    // Validate thinking budget
-    if (enableThinking && (thinkingBudget < 1000 || thinkingBudget > 20000)) {
-      logger.warn(`Thinking budget ${thinkingBudget} outside recommended range (1000-20000)`);
+    // Build API request
+    const outputConfig = { effort };
+    if (taskBudget) {
+      outputConfig.task_budget = { type: 'tokens', total: taskBudget };
     }
 
-    // Build API request
     const apiRequest = {
       model,
       max_tokens: maxTokens,
-      messages
+      messages,
+      output_config: outputConfig
     };
 
     // Add system prompt if provided
@@ -74,17 +77,18 @@ class ThinkingEnabledClient {
       apiRequest.tools = tools;
     }
 
-    // Add extended thinking if enabled
+    // Add adaptive thinking if enabled — display: 'summarized' required on Opus 4.7+/Fable 5
+    // to get non-empty thinking text (default is 'omitted')
     if (enableThinking) {
       apiRequest.thinking = {
-        type: 'enabled',
-        budget_tokens: thinkingBudget
+        type: 'adaptive',
+        display: 'summarized'
       };
 
       this.metrics.thinkingEnabled++;
       this.metrics.thinkingRequests++;
 
-      logger.debug(`Extended thinking enabled with budget: ${thinkingBudget} tokens`);
+      logger.debug(`Adaptive thinking enabled with effort: ${effort}`);
     } else {
       this.metrics.thinkingDisabled++;
     }

@@ -1,3 +1,7 @@
+---
+description: You are a specialized Entity SEO Agent with expertise in knowledge graph optimization, entity relationship mapping, and structured data implementation for enhanced search visibility.
+---
+
 # Seo Entity Optimization Skill
 
 ## Overview

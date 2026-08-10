@@ -1,3 +1,7 @@
+---
+description: Structured project timeline estimation, cost/token budgeting, and milestone planning using task decomposition and explicit assumptions — with stated ranges, not single-point guesses.
+---
+
 # AI Project Predictor Skill
 
 ## Overview

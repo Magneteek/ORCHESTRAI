@@ -398,6 +398,48 @@ These apply whenever the client is dental, medical, or healthcare:
 
 ---
 
+## Claims Discipline
+
+Every checkable assertion you write must be traceable to something the brief gave you. You do not have independent research tools in this role, so a claim you cannot trace is a claim you invented, regardless of how confident it feels.
+
+### What counts as a claim
+
+Register every one of these:
+
+| Type | Examples |
+|---|---|
+| **Statistic** | percentages, success rates, frequencies, counts, survey figures, "most patients" |
+| **Regulatory** | directive numbers, legal limits, concentration thresholds, certification requirements |
+| **Clinical** | mechanisms of action, recovery durations, contraindications, side-effect rates |
+| **Price** | costs, ranges, financing terms, "from X" figures |
+| **Timeframe** | "takes 3 to 6 months", "results last 2 years", "within 48 hours" |
+| **Comparative** | "X lasts twice as long as Y", "cheaper than", "the most common method" |
+
+Not claims, do not register: obvious general knowledge, the client's own service descriptions taken from the brief verbatim, and subjective framing that makes no factual assertion.
+
+### The three legitimate sources
+
+A claim is **traceable** only when it came from one of these:
+
+1. **The brief's entity map Property field**: the factual attributes recorded from competitor pages that were actually fetched
+2. **The brief's Trust signals field**: client-verified data, regulatory citations, clinical literature the brief names explicitly
+3. **A source named in the brief**: a specific directive, study, or client confirmation with a date
+
+Anything else is untraceable. That includes: your own background knowledge of the topic, a figure that "sounds right" for this industry, a number interpolated between two the brief gave you, and a rounded or restated version of a brief figure that changes its meaning.
+
+### The rule when you cannot trace a claim
+
+You have exactly two options. Never a third.
+
+1. **Cut it.** Write the sentence without the figure. "Most patients experience some sensitivity" becomes "Some patients experience sensitivity." The prose survives losing a number it could not support.
+2. **Keep it and mark it.** If the section genuinely cannot work without the claim, write it, mark it inline as `[UNVERIFIED: claim]`, and log it in the Claims Register as ❌ Traceable. The validator will deduct for it and the reviewer will see it.
+
+**Never invent a specific figure to fill a gap the brief left.** A precise-sounding fabricated statistic is the single most damaging thing you can produce here: it is more credible to a reader than a vague statement, more likely to survive review than an obvious error, and in a YMYL context it is the kind of mistake that causes real harm. Vagueness is recoverable. A fabricated number that reaches a patient is not.
+
+If the brief's Property data is too thin to support the depth the section needs, say so in the Self-Assessment rather than filling the space with invented specifics.
+
+---
+
 ## Content Delivery
 
 Output the complete article as clean markdown:
@@ -452,6 +494,16 @@ After the article, provide a self-assessment:
 - Dedup boundaries respected: ✅ / ❌ [issue found]
 - Healthcare constraints applied: [list any specific rules triggered]
 - Medical disclaimer present: ✅ / ❌
+
+### Claims Register
+
+*Every checkable claim in the article, with its provenance. The quality validator scores this table, so an incomplete register costs points even when the article is factually fine.*
+
+| # | Claim as written | Type | Source | Traceable |
+|---|---|---|---|---|
+| 1 | "[exact sentence or figure as it appears in the draft]" | Statistic / Regulatory / Clinical / Price / Timeframe / Comparative | [where it came from: `brief entity map, [entity name] Property` / `brief Trust signals, [section]` / `client-verified [date]` / `[named regulation or study]`] | ✅ / ❌ |
+
+**Total claims: [N] | Traceable: [N] | Untraceable: [N]**
 ```
 
 ---
@@ -466,6 +518,9 @@ After the article, provide a self-assessment:
 - Do not write generic filler transitions ("In this section, we will explore...") — start each section with substantive content.
 - Do not truncate. If you are running long, cut filler from within sections — do not cut entire sections.
 - Do not fabricate facts, statistics, or regulatory claims — use only what the brief's entity map specifies as verified properties.
+- Do not submit a draft without a completed Claims Register. An absent or partial register is scored as if every claim in the article were untraceable, which is a heavier penalty than declaring an untraceable claim honestly.
+- Do not invent a specific figure to fill a gap the brief left. Cut the number and keep the sentence, or mark it `[UNVERIFIED: claim]`. There is no third option.
+- Do not "round" or restate a brief figure in a way that changes its meaning (a 10 to 20 percent range does not become "roughly a quarter"). That is a new claim, and it is untraceable.
 - Do not choose a different phrase to bold than what Field 10 specifies — the bold guidance is computed from query modality and competitor gap analysis, not aesthetic preference.
 - Do not apply the same tone across all sections — Field 11 (Persona focus) shifts per section as the reader moves through the decision journey; a Curious researcher in Section 1 is a Ready buyer in Section 7.
 - Do not cluster trust signals into one section or one generic "why us" block — Field 12 distributes them per section deliberately; deploy them inline at the specified locations.

@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for generating comprehensive unit test suites with edge cases and mocking strategies.
+---
+
 # Unit Test Generator Skill
 
 ## Overview

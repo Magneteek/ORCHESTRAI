@@ -1,3 +1,7 @@
+---
+description: Medical content multi-language specialist ensuring medical terminology translation accuracy, cultural medical adaptation, and healthcare system contextual differences across languages (EN, ES, NL, DE, SL).
+---
+
 # Healthcare Multilang Adapter Skill
 
 ## Overview

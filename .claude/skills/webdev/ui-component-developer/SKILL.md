@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for building reusable, accessible React components with Tailwind CSS, ShadCN UI, and responsive design best practices.
+---
+
 # Ui Component Developer Skill
 
 ## Overview

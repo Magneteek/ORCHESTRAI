@@ -90,6 +90,38 @@ Phase 5: Standard Content QA
 - Cost and insurance → Transparent information
 ```
 
+### 5. 4-C Content Coverage — MANDATORY for Aesthetic/Elective Procedures
+
+For dental implants, clear aligners, orthodontics, and any aesthetic medical procedure, every content piece must cover all four pillars. **Missing any C = incomplete content.**
+
+**Priority order for dental niches:**
+
+| Priority | Pillar | Dental Application |
+|---|---|---|
+| 1 | **Visualization** | Before/after smile galleries, transformation narratives, measurable outcomes (chewing restored, smile line corrected) |
+| 2 | **Commercialization** | Cost ranges, insurance coverage, financing, value vs. alternatives (implant vs. bridge vs. denture) |
+| 3 | **Verbalization** | What it feels like, pain levels, what to expect at each appointment, anxiety addressed directly |
+| 4 | **Contextualization** | Procedure types compared, doctor credentials, patient reviews with case attribution |
+
+**Doctor/Specialist Validation is a structured section, not conversational flavour.** Every aesthetic dental content piece must include:
+```
+✅ Doctor's credentials and specialisation (DDS, Orthodontist, Periodontist)
+✅ Years of experience and case volume (specific numbers)
+✅ Before/after cases attributed to this specific doctor
+✅ Professional association memberships or certifications
+```
+
+**Outline Approval Checkpoint — 4-C Coverage Check:**
+Before proceeding past Phase 3 (outline approval), verify all four Cs are present in the planned outline:
+```
+□ Visualization section planned (before/after, transformation evidence)
+□ Commercialization section planned (cost, financing, value framing)
+□ Verbalization section planned (experience, anxiety mitigation, what to expect)
+□ Contextualization section planned (types, doctor credentials, reviews)
+
+IF ANY BOX UNCHECKED → Add missing section to outline before approval
+```
+
 ---
 
 ## Integration Patterns
@@ -100,8 +132,20 @@ Phase 5: Standard Content QA
 const icp = await memory.retrieve(`${clientName}-ICP`)
 
 // Target anxious vs. confident patient segments
-Anxious (60%): Empathetic, detailed reassurance
-Confident (40%): Efficient, fact-focused information
+Anxious (60%): Lead with Verbalization + Visualization (what it looks like, what it feels like)
+Confident (40%): Lead with Commercialization + Contextualization (cost, types, credentials)
+```
+
+**4-C emphasis shifts by psychographic segment:**
+- Anxious patient: Verbalization first → Visualization second → Contextualization → Commercialization
+- Confident patient: Commercialization first → Contextualization → Visualization → Verbalization
+
+**Myth-Busting Layer (from 24-Section ICP `falseSolutionLie` / `mistakenBeliefTruth`):**
+Every dental content piece should address at least one myth using the False Solution framework. Common dental myths:
+```
+Implants: "Too painful", "Too expensive compared to dentures", "Only for older patients"
+Aligners: "Only work for mild cases", "Take longer than braces", "You can see them"
+Use falseSolutionLie → falseSolutionTruth → falseSolutionTip structure from ICP framework
 ```
 
 ### With SEO Domain
@@ -139,19 +183,30 @@ Transactional: "book dental implant consultation"
 
 ## Healthcare Content Best Practices
 
-### 1. Balance Clinical Accuracy with Accessibility
+### 1. Make Visualization Concrete and Measurable
+```
+❌ WRONG: "Patients achieve great results with dental implants"
+✅ CORRECT: "Within 3-6 months of implant placement, most patients report eating foods they avoided for years — steak, apples, crusty bread — without thinking twice. The before/after difference isn't just cosmetic."
+```
+
+Include specific transformation milestones:
+- Implants: immediate post-op, 3-month osseointegration, 12-month final result
+- Aligners: 4-week increments showing movement progression, final smile line comparison
+- Always frame measurable outcomes (bone density preserved, bite force restored, gap closed by X mm)
+
+### 2. Balance Clinical Accuracy with Accessibility
 ```
 ❌ WRONG: "The osseointegration process involves..."
 ✅ CORRECT: "Your new dental implant will naturally fuse with your jawbone over 3-6 months..."
 ```
 
-### 2. Address Patient Anxiety Explicitly
+### 3. Address Patient Anxiety Explicitly
 ```
 ✅ "Many patients worry about pain during the procedure. Here's what you can actually expect..."
 ✅ "It's completely normal to feel nervous. Let's walk through each step..."
 ```
 
-### 3. Use Patient-Friendly Language
+### 4. Use Patient-Friendly Language
 ```
 Medical Term → Patient-Friendly Alternative:
 - Osseointegration → Bone fusion / Natural healing process
@@ -160,7 +215,7 @@ Medical Term → Patient-Friendly Alternative:
 - Endodontic → Root canal treatment
 ```
 
-### 4. Include Appropriate Disclaimers
+### 5. Include Appropriate Disclaimers
 ```
 ✅ "Results may vary based on individual circumstances"
 ✅ "Consult with your dentist to determine the best treatment option for you"

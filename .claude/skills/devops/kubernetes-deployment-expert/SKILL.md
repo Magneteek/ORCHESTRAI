@@ -1,3 +1,7 @@
+---
+description: Enterprise Kubernetes specialist implementing production-ready deployments, auto-scaling (HPA/VPA), ingress configuration, secrets management, health probes, and advanced deployment strategies (rolling updates, blue-green, canary) for cloud-native applications.
+---
+
 # Kubernetes Deployment Expert Skill
 
 ## Overview

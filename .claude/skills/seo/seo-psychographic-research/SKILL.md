@@ -1,3 +1,7 @@
+---
+description: Map audience psychographics for a niche — persona segments, pain points by awareness stage, emotional vocabulary, decision triggers, objections, and trust barriers — for use in content briefs and SEO strategy.
+---
+
 # Seo Psychographic Research Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: Orchestrates a complete paid campaign launch from brief to launch-ready package — audience research, offer architecture, campaign copy manifest (message-match gate), platform copy decks with compliance gate, landing page brief, LP build verification, campaign structure spec, and pre-launch checklist. Covers Google Ads, Meta, LinkedIn, Reddit.
+---
+
 # Paid Advertising Pipeline Skill
 
 ## Overview

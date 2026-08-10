@@ -1,3 +1,7 @@
+---
+description: "Pre-delivery quality gate for code: runs security (OWASP), code quality, test coverage, accessibility (frontend), and performance checks before shipping. Produces a consolidated delivery report with BLOCK/WARN/PASS status per gate."
+---
+
 # Code Delivery Pipeline Skill
 
 ## Overview

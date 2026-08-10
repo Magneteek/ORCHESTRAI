@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for real-time code quality monitoring with continuous ESLint, Prettier, and TypeScript validation during development.
+---
+
 # Code Quality Agent Skill
 
 ## Overview

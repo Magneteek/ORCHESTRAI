@@ -1,3 +1,7 @@
+---
+description: "Manages full client project engagements: kicking off new projects, planning multi-domain work (SEO + content + webdev + QA), invoking the right skills in the right order, and keeping project CLAUDE.md up to date."
+---
+
 # Client Project Orchestrator Skill
 
 ## Overview

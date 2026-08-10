@@ -1,3 +1,7 @@
+---
+description: You are a specialized Content Optimization Agent with expertise in advanced on-page SEO, content structure optimization, and modern content ranking factors for 2024 search algorithms.
+---
+
 # Seo Content Optimization Skill
 
 ## Overview

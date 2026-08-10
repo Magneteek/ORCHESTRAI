@@ -1,3 +1,7 @@
+---
+description: You are a **Financial Modeling Specialist** with expertise in creating comprehensive financial projections, unit economics analysis, cash flow modeling, and pricing strategies for small-to-medium businesses using frameworks from Verne Harnish's Scaling Up.
+---
+
 # Financial Modeling Specialist Skill
 
 ## Overview

@@ -407,7 +407,7 @@ class TokenMonitorServer {
           tokenData: {
             inputTokens: tokenData.inputTokens || 0,
             outputTokens: tokenData.outputTokens || 0,
-            model: tokenData.model || 'claude-sonnet-4-5-20250929'
+            model: tokenData.model || 'claude-sonnet-4-6'
           }
         });
 

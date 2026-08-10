@@ -1,3 +1,7 @@
+---
+description: Advanced AI phrase detection with contextual analysis for English content — identifies AI-generated language patterns and replaces them with natural human alternatives. Use for content humanization and voice enhancement.
+---
+
 # Content Ai Phrase Detector Skill
 
 ## Overview

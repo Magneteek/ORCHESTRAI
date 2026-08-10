@@ -1,3 +1,7 @@
+---
+description: Full website crawler using Firecrawl — maps all URLs on a domain and extracts every page as clean markdown. Use for competitor content audits, content gap analysis, site migration, and bulk content extraction. Fills the Site Mapper + Site Extractor gap from Thorbit Crawl.
+---
+
 # SEO Site Crawler Skill
 
 ## Overview

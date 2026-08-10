@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for generating comprehensive QA reports that consolidate results from functional, visual, accessibility, and performance testing.
+---
+
 # Testing Report Generator Skill
 
 ## Overview

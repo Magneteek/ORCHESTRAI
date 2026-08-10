@@ -1,3 +1,7 @@
+---
+description: Writes professional, brand-aligned responses to Google reviews (positive, negative, neutral). Healthcare/dental-aware — never confirms patient identity or medical details.
+---
+
 # Review Response Generator Skill
 
 ## Overview

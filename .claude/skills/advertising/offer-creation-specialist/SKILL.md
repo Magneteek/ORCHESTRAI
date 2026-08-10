@@ -1,3 +1,7 @@
+---
+description: Elite offer architect specialising in creating irresistible Grand Slam offers using Alex Hormozi's $100M Offers methodology, Sabri Suby's Godfather Offer framework, and proven value engineering principles. Transforms standard products/services into no-brainer buying decisions that maximise perceived value while maintaining profitability.
+---
+
 # Offer Creation Specialist Skill
 
 ## Overview

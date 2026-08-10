@@ -50,6 +50,7 @@ Check if `[run_dir]/manifest.json` exists:
     "4-copy-production": "pending",
     "4.5-compliance-gate": "pending",
     "5-landing-page": "pending",
+    "5.5-lp-build-verification": "pending",
     "6-campaign-structure": "pending"
   }
 }
@@ -66,6 +67,7 @@ Check if `[run_dir]/manifest.json` exists:
 | 4 | `[run_dir]/phase-4-copy-deck.md` |
 | 4.5 | `[run_dir]/phase-4.5-compliance-report.md` |
 | 5 | `[run_dir]/phase-5-landing-page.md` |
+| 5.5 | `[run_dir]/phase-5.5-lp-build-verification.md` (pipeline run) + `projects/[uuid]/deliverables/advertising/lp-build-audit-[YYYY-MM].md` (deliverable) — stays `pending` until the physical LP exists and passes |
 | 6 | `[run_dir]/phase-6-campaign-structure.md` |
 
 **Sub-skill ownership rule**: When invoking `advertising:campaign-copy-manifest`, `advertising:offer-creation-specialist`, or `conversion-optimization:landing-page-optimizer`, pass `run_dir` so they write their output as phase files. Sub-skills must NOT read or write `manifest.json` — only this pipeline owns the manifest.
@@ -88,6 +90,7 @@ Check if `[run_dir]/manifest.json` exists:
 | **Competitors** | Optional | Known competitors to research ad angles from |
 | **Domain/client** | Optional | If provided, read project CLAUDE.md for brand voice and existing intel |
 | **Market / language** | Optional | Defaults to EN/global. Affects copy tone, platform availability, and compliance notes |
+| **`channels_confirmed`** | Optional | Set to `true` only if the user has already explicitly confirmed channel + budget allocation before this run started. Skips the Phase 2 Confirmation Gate. Do not set this yourself to save time — it must reflect a real prior confirmation. |
 
 ---
 
@@ -231,6 +234,18 @@ CONVERSION (hot traffic / retargeting)
 
 > **Save Phase 2:** Write channel selection, budget allocation table, and funnel map to `[run_dir]/phase-2-strategy.md`. Update manifest: `"2-strategy": "completed"`.
 
+### Phase 2 Confirmation Gate (MANDATORY, blocking, human-in-the-loop)
+
+**Do not proceed to Phase 3 until the channel + budget allocation is confirmed.** Channel selection is a strategic/subjective call, not a purely data-derived one, and it is the single most expensive mistake to get wrong late — everything from Phase 3 onward (offer framing, copy manifest, compliance rules, LP brief) is channel-specific. A wrong guess here means redoing the entire rest of the pipeline, not a small patch.
+
+This happened for real on a live client build: the pipeline (via a different, less rigorous conductor) picked Meta without checking the client's actual channel preference; the client had assumed Google. The mismatch wasn't caught until after the landing page was already built. Do not repeat this.
+
+**How to apply this gate depends on how this skill was invoked:**
+
+- **Invoked directly via `Skill()` in an interactive session** (a user is present in the conversation): stop here and use `AskUserQuestion` (or plain text if that tool is unavailable) to present the recommended channel(s) and budget split from Phase 2, with the reasoning, and get explicit confirmation or a correction before continuing. Do not proceed on an assumption that silence means agreement — wait for the actual answer.
+- **Invoked as a backgrounded subagent/Task with no live user in the loop**: do NOT guess and continue. Stop the pipeline here, write the Phase 2 output clearly, and return a result stating "Channel/budget selection ready for confirmation — see `phase-2-strategy.md`. Re-invoke with `channels_confirmed: true` (and, if the user changed anything, the corrected channel/budget) to continue to Phase 3." The calling agent/orchestrator is responsible for getting that confirmation from the user before resuming — it must not resume the pipeline on its own authority.
+- **If `channels_confirmed: true` was passed in as an input at invocation time** (i.e., the user already confirmed channels/budget before this run started): skip the interactive pause and proceed directly to Phase 3.
+
 ---
 
 ## Phase 3: Offer Architecture
@@ -365,6 +380,24 @@ Output: testing matrix showing which variation tests which psychological trigger
 
 Run the Copy Compliance Checklist from the Campaign Copy Manifest (Phase 3.5, Brief Card 6) against `[run_dir]/phase-4-copy-deck.md`. This is a blocking step — do not proceed to Phase 5 until all checks pass.
 
+### Language & Natural-Voice QA (MANDATORY, added 2026-07-04 — do not skip)
+
+**Why this exists**: this pipeline previously produced client-facing copy (ad headlines, LP prose) without ever routing it through the content domain's language-naturalness QA — the same check every organic article on this site goes through. A landing page was shipped with awkward, calque-heavy Slovenian and heavy em-dash overuse, caught only by the client reviewing the page directly. Character-limit and policy compliance (above) are necessary but not sufficient — copy can pass every character/policy check and still read as machine-written.
+
+Before Phase 4.5 can be marked complete, run the produced copy (`phase-4-copy-deck.md`, and after Phase 5, `phase-5-landing-page.md`) through the appropriate language QA skill for the target market's language:
+
+```
+Skill(skill="content", args="slovenian-ai-phrase-detector")   ← for Slovenian-market campaigns
+Skill(skill="content", args="content-ai-phrase-detector")     ← for English-market campaigns
+Skill(skill="content", args="german-ai-phrase-detector")      ← German
+Skill(skill="content", args="dutch-ai-phrase-detector")       ← Dutch
+```
+Pass `draft_path` pointing to the actual copy file — never paste inline.
+
+**Hard rule, all languages, all client-facing copy**: zero em-dashes. Not "use sparingly" — zero. If a sentence needs a dash to hold together, split it into two short sentences. This is checked as `[DASH]` in the Slovenian detector's pattern library and is a zero-tolerance flag, not averaged in as one minor pattern among others.
+
+**Verdict handling**: Medium or High AI signal (or any `[DASH]` finding) blocks progression — apply the detector's revisions before proceeding. Low signal with zero `[DASH]` findings passes.
+
 ### Character limit validation
 
 For every piece of copy produced in Phase 4, count characters and flag violations:
@@ -459,6 +492,8 @@ The optimizer produces a full landing page copy brief specifying:
 
 **Message match gate:** Before finalising LP copy, validate the LP H1 against the ad headlines from Phase 4 using the message match checklist from Phase 3.5. If they diverge, LP copy must be revised until the promise is identical.
 
+**Language QA gate (mandatory, same requirement as Phase 4.5):** run `phase-5-landing-page.md` through the target market's language QA skill (e.g. `Skill(skill="content", args="slovenian-ai-phrase-detector")`) before this phase is marked complete — LP prose is longer and more exposed to calque/rhythm/em-dash issues than short ad copy, and needs its own pass even if Phase 4's copy already cleared this gate.
+
 ### LP A/B Test Structure
 
 Phase 4 produces ad copy variants. Phase 5 must define at least one LP test so there is something to optimise once traffic arrives.
@@ -482,6 +517,25 @@ Variant B changes exactly one element. State the hypothesis explicitly — what 
 **This pipeline does not build the landing page.** The copy brief (both variants) is passed to `webdev:frontend-architect-specialist` or `webdev:ui-component-developer` for implementation.
 
 > **Save Phase 5:** Write full LP copy brief (primary variant A + test variant B + PIE hypothesis) to `[run_dir]/phase-5-landing-page.md` AND `projects/[uuid]/deliverables/advertising/landing-page-brief-[YYYY-MM].md`. Update manifest: `"5-landing-page": "completed"`.
+
+---
+
+## Phase 5.5: Landing Page Build Verification (MANDATORY, blocking — run once the physical LP file exists)
+
+> **Manifest check:** If `phases.5.5-lp-build-verification = "completed"` AND `[run_dir]/phase-5.5-lp-build-verification.md` exists → read file, skip to Phase 6. If the physical LP file does not exist yet (webdev build still pending), leave this phase `"pending"` and do not proceed to Phase 6 — campaign structure and conversion events cannot be finalized against a page that doesn't exist yet or hasn't been checked.
+
+**Why this phase exists**: this pipeline correctly separates "what the LP should say" (Phase 5 brief) from "how it's built" (handed off to webdev) — but that handoff is exactly where a real defect slipped through uncaught on a live client build: the LP was built with every conversion CTA redirecting off-page to a separate booking URL instead of an embedded form, and shipped visibly thinner than the client's own prior landing page. Neither this pipeline nor the webdev build step checked the finished artifact against the brief. This phase closes that gap.
+
+**This check must be performed by an agent that did not build the page** — invoke it as a separate `Task`/`Agent` call (or `Skill(skill="conversion-optimization", args="cro-page-auditor")` if running inline), passing only the built LP file path and the Phase 5 copy brief file path. It must not receive the reasoning behind why any implementation choice was made — it audits the artifact cold, the same way a second reviewer would.
+
+**Hard-fail checks (any failure blocks Phase 6 — must be fixed and re-audited):**
+- [ ] The primary conversion CTA is an on-page `<form>` (or embedded widget) that submits from the page itself — NOT a link/redirect to a different domain or page. `tel:` links are fine as a secondary CTA only.
+- [ ] The LP H1 matches the primary claim in the Phase 5 brief / Phase 3.5 manifest — this is the message-match gate from Phase 3.5, now checked against the actual shipped page, not just the brief that was handed off.
+- [ ] A real or explicitly-flagged-placeholder form submission endpoint exists — if placeholder, it must be clearly marked as a launch blocker, not silently left as a dead link.
+
+**Completeness checks** (via `cro-page-auditor` — form length, CTA placement, trust signal presence, hero clarity, mobile experience) — report findings; each must be fixed or explicitly justified before Phase 7 delivery, not silently dropped. If a prior LP exists for the same client, pass its path for direct structural comparison — the new page must not ship visibly thinner.
+
+> **Save Phase 5.5:** Write the audit result (hard-fail pass/fail + completeness findings) to `[run_dir]/phase-5.5-lp-build-verification.md` AND `projects/[uuid]/deliverables/advertising/lp-build-audit-[YYYY-MM].md`. Update manifest: `"5.5-lp-build-verification": "completed"` only once all hard-fail checks pass — a phase file documenting failures does not count as "completed."
 
 ---
 
@@ -530,6 +584,27 @@ List the conversion events that must be configured before launch:
 | [Event] | [Platform] | [Trigger] | [Value] |
 
 **Do not launch without conversion tracking confirmed.** Flag this as a hard pre-launch requirement.
+
+### Client Tracking-ID Registry (read + write, mandatory if `client_uuid` provided)
+
+Before writing any pixel ID, GA4 ID, Google Ads conversion ID, or CRM webhook endpoint into copy or specs, check for `projects/[client_uuid]/client-intelligence/tracking-ids.md`.
+
+- **If it exists**: read it first. Use the IDs it lists as the source of truth. If this campaign needs an ID not yet in the registry (e.g., a new webhook for a new lead pipeline), that's expected — add it once confirmed, don't invent one.
+- **If it doesn't exist**: create it with whatever IDs are confirmed as part of this campaign, and flag in the campaign brief that this is the first campaign to establish it — prior campaigns' IDs (if any) should be reconciled into it as they're discovered, not left scattered across old deliverable files.
+- **If you find a conflicting or ambiguous ID** (e.g., an ID reused across what should be separate accounts, or a note elsewhere flagging an ID as off-limits while another asset uses it live) — do NOT silently pick one. Record the conflict explicitly in the registry and in the campaign brief's pre-launch blockers, and get it resolved with the client before using that ID in new tracking code. This exact ambiguity (a Google Ads conversion ID used live on one campaign while flagged elsewhere as a different, off-limits account) went unresolved across two separate campaign builds for a real client because there was no single file forcing the conflict to be surfaced.
+
+Registry format (create if missing):
+```markdown
+# [Client] — Tracking ID Registry
+Last updated: [date] by [campaign/context]
+
+| Platform | ID/Endpoint | Purpose | Status | Notes |
+|---|---|---|---|---|
+| Meta Pixel | 123456789 | Primary site pixel | ✅ Confirmed working | |
+| Google Ads | AW-XXXXXXX/label | Conversion action | ⚠️ Conflict — see note | [describe conflict + who needs to resolve it] |
+| GA4 | G-XXXXXXXXXX | Client campaign property | ⚠️ Placeholder | Awaiting client confirmation |
+| GHL Webhook | services.leadconnectorhq.com/hooks/... | [campaign] lead capture | ✅ Confirmed working | |
+```
 
 ### Bid Strategy Recommendations
 
@@ -615,6 +690,15 @@ Assemble the complete launch package.
 - [ ] Client has approved copy and creative
 - [ ] Budget confirmed in ad platform
 - [ ] Launch date agreed
+
+### Kill Criteria (define BEFORE launch, not after money is already spent)
+
+A real campaign for this exact pipeline ran 8 days and spent its full test budget with zero conversions before anyone checked in — the checkpoints were added after the fact, reactively, once the client asked why. Define these numbers now, not after spend has already happened:
+
+- **Checkpoint 1** (day 3–4): frequency (Meta) / CTR & CPC vs. keyword-research benchmark (Google) — sanity check delivery is healthy, not yet a performance verdict
+- **Checkpoint 2** (day 7): first real cost-per-lead read. If zero conversions at [X]% of total test budget spent, do not let it keep running unattended — flag for a creative/offer/audience review, don't wait out the full budget on faith
+- **Checkpoint 3** (day 14): full or partial data — decide scale, pause, or pivot
+- State the actual €/day and day-count for checkpoints 1–3 explicitly for this campaign's budget, don't leave it as a generic template line
 ```
 
 **Final delivery save:** Compile all phase files into `projects/[uuid]/deliverables/advertising/campaign-launch-package-[YYYY-MM].md`. Update all manifest phases to `"completed"`.
@@ -633,8 +717,9 @@ Assemble the complete launch package.
 | Copy Production | ✅ | [N] platforms, [N] ad variations total |
 | Copy Compliance Gate | ✅ | All char limits passed, [N] policy flags resolved |
 | Landing Page Copy | ✅ | [N]-section copy brief, H1 matches ad headline, A/B variant defined |
-| Campaign Structure | ✅ | Naming convention, UTMs, conversion events |
-| Launch Package | ✅ | All 7 deliverables assembled |
+| LP Build Verification | ✅ | Independent audit: 0 hard-fails, [N] completeness findings resolved |
+| Campaign Structure | ✅ | Naming convention, UTMs, conversion events, tracking-ID registry updated |
+| Launch Package | ✅ | All deliverables assembled, kill criteria defined |
 
 **Channels**: [Google / Meta / LinkedIn / Reddit]
 **Total ad variations**: [N]
@@ -657,3 +742,9 @@ Assemble the complete launch package.
 - Do not size LinkedIn budgets below €800/mo — LinkedIn CPCs are high (€3–12+); below this threshold reach is too limited to generate meaningful results
 - Do not build the landing page in this pipeline — produce the brief and hand off to webdev
 - Do not write platform policy as absolute — always note which elements may require client legal review (healthcare claims, financial returns, before/after)
+- Do not proceed past the Phase 2 Confirmation Gate without real user confirmation — a backgrounded subagent must stop and hand control back, not assume and continue
+- Do not skip Phase 5.5 once a physical LP file exists, and do not let the same reasoning that built the LP also perform its audit — it must be an independent check
+- Do not invent or reuse a tracking ID (pixel, GA4, Google Ads conversion) without checking the client's tracking-ID registry first — if a conflict exists, surface it, don't silently pick one
+- Do not deliver a launch package without explicit kill-criteria numbers for this campaign's actual budget — a generic template line is not sufficient
+- Do not produce or hand off client-facing copy (ad copy or LP copy) without running it through the target market's language QA skill (`slovenian-ai-phrase-detector` etc.) — character-limit and policy compliance are not a substitute for natural-voice review
+- Do not let any em-dash reach client-facing copy — zero-tolerance, not a style preference

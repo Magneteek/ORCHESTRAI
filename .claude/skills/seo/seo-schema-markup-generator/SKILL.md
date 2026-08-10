@@ -1,3 +1,7 @@
+---
+description: Generates Schema.org JSON-LD structured data for local businesses, dental practices, healthcare providers, and web content. Outputs complete, validated markup ready to deploy.
+---
+
 # Schema Markup Generator Skill
 
 ## Overview

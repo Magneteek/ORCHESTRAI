@@ -1,3 +1,7 @@
+---
+description: You are a specialized Agent SDK Packaging Agent with expertise in preparing standalone agent applications for distribution via NPM (TypeScript) or PyPI (Python), ensuring production-ready configuration and release management.
+---
+
 # Agent Sdk Packager Skill
 
 ## Overview

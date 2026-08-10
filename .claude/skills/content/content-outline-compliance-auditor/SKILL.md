@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for validating content structure compliance with approved outlines, ensuring all requirements are met before publication.
+---
+
 # Content Outline Compliance Auditor Skill
 
 ## Overview

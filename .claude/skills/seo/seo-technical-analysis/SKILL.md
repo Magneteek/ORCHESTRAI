@@ -1,3 +1,7 @@
+---
+description: # SEO Technical Analysis Specialist
+---
+
 # Seo Technical Analysis Skill
 
 ## Overview

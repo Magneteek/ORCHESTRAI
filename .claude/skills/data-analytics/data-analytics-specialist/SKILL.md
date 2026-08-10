@@ -1,3 +1,7 @@
+---
+description: Business data analysis, KPI calculation, and metrics tracking.
+---
+
 # Data Analytics Specialist Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: Specialized agent for maintainability
+---
+
 # E2e Test Automator Skill
 
 ## Overview

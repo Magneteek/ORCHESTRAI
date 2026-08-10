@@ -1,3 +1,7 @@
+---
+description: "Development-phase testing pipeline. Inventories existing tests, generates missing unit/integration/e2e tests to reach the coverage threshold (default 85%), runs security (OWASP) and accessibility (WCAG, frontend only) scans, and produces a consolidated QA report with BLOCK/WARN/PASS verdict. **Distinct from `webdev:code-delivery-pipeline`**: this pipeline *generates* missing tests during develo..."
+---
+
 # QA Pipeline Skill
 
 ## Overview

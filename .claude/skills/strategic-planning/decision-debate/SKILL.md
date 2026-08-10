@@ -1,3 +1,7 @@
+---
+description: Multi-perspective debate for high-stakes decisions. Generates 2–4 competing analytical perspectives (growth vs margin, pragmatic vs scalable, audience-first vs SEO-first, etc.), runs each independently without cross-contamination, then synthesises into an agreement map (high confidence findings), disagreement map (genuine uncertainty with resolution conditions), and a final recommendation with...
+---
+
 # Decision Debate Skill
 
 ## Overview

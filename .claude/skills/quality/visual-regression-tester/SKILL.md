@@ -1,3 +1,7 @@
+---
+description: Comprehensive visual regression testing specialist implementing screenshot comparison, pixel-by-pixel diff analysis, responsive design validation, and automated baseline management across multiple viewports and browsers.
+---
+
 # Visual Regression Tester Skill
 
 ## Overview

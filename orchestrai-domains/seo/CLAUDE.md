@@ -20,7 +20,8 @@ This domain leverages the following specialized Claude Code agents via the **Uni
 
 ### Content & Authority Agents
 - **`seo-content-optimization`** - On-page SEO and content optimization
-- **`seo-topical-authority`** - Topical authority development (Koray Gubur frameworks)
+- **`seo-topical-authority`** - Topical authority development (Koray Gubur frameworks — textual/entity semantics)
+- **`seo-visual-semantics-auditor`** - Visual semantics auditing (Koray Gubur's newer framework — layout/centerpiece/DOM-order as ranking signals, distinct from and complementary to topical authority above). Mobile-viewport-first, Playwright-driven. Pairs with `bricks-visual-semantics-checker` (webdev domain) for Bricks Builder sites.
 - **`seo-semantic-clustering`** - Semantic keyword clustering and topic modeling
 - **`seo-query-networks`** - Query network analysis and relationship mapping
 
@@ -409,6 +410,10 @@ Task(
   prompt="Develop topical authority framework for [topic] using Koray Gubur methodology..."
 )
 ```
+
+### Visual Semantics — the complementary layer (added 2026-07-27)
+
+Koray Gubur's newer framework ("Visual semantics: the missing piece of topical authority," Search Engine Land) argues topical coverage alone isn't sufficient: Google extracts a "centerpiece" from a page's *rendered layout* (not just its text) to classify purpose, and uses that as an early gate before topical/ranking evaluation runs at all. A page can have perfect topical coverage from the framework above and still underperform if its layout buries the centerpiece, mismatches DOM-order to visual-order, or fails mobile-first rendering. Use `Skill(skill="seo", args="seo-visual-semantics-auditor")` alongside topical authority work, not instead of it — the two are additive, not alternatives. See the skill's own docs for the full mechanism (centerpiece annotation, macro/micro-context, page-type-to-layout matching, retrieval cost).
 
 ---
 

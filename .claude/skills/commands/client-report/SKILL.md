@@ -1,3 +1,7 @@
+---
+description: Generates a client-facing performance report for a given reporting period. Pulls keyword rankings, traffic estimates, and GBP data from DataForSEO, reads the project CLAUDE.md progress log for deliverables, accepts optional manual inputs (GA4 export, ad platform data), and produces a clean executive + technical report ready to send to the client.
+---
+
 # Client Report Skill
 
 ## Overview

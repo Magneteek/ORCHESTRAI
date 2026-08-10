@@ -1,3 +1,7 @@
+---
+description: You are a specialized Local SEO Agent with expertise in local search optimization, Google Business Profile optimization, and geographic search targeting.
+---
+
 # Seo Local Seo Skill
 
 ## Overview

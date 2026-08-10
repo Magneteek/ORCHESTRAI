@@ -1,3 +1,7 @@
+---
+description: You are a specialized Google Ads Agent with expertise in search advertising, display campaigns, and Google's AI-powered advertising solutions for maximum conversion and ROI.
+---
+
 # Google Ads Specialist Skill
 
 ## Overview

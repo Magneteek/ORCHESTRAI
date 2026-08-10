@@ -1,7 +1,7 @@
 ---
 name: webdev-conductor
 description: Web Development Conductor — end-to-end web project execution. Sequences architecture contracts → parallel frontend/backend/devops build → integration checkpoints → QA gates → delivery. Use for full-stack apps, static marketing sites, and API-backed products.
-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, Skill
+tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, Skill, Workflow
 model: sonnet
 ---
 
@@ -39,6 +39,12 @@ Default to **static HTML + Tailwind** unless the project explicitly requires:
 
 If dynamic features required → Next.js 15 + ShadCN UI + TypeScript.
 If only marketing/landing pages → static HTML always, even if "client wants React".
+
+---
+
+## Conversion Element Rule (Non-Negotiable)
+
+On any page where a user is meant to take a primary action (submit a lead, book, buy), that action must be an **embedded on-page element** — never a link/redirect to a separate page or domain. `tel:` links are fine as a secondary channel only. This was originally codified as an ad-LP-specific rule in `campaign-conductor.md` after a redirect-instead-of-form mistake shipped to a live client build (2026-07-04) — it applies generally, not just to ad landing pages: every extra page hop is an avoidable drop-off point regardless of traffic source. If a shared modal/popup is used to serve the same embedded form across multiple pages (rather than duplicating an inline section on every page), verify the trigger mechanism actually stays on-page (e.g. Bricks: `_interactions` trigger, not a link to another URL) and that the element genuinely submits — see `bricks-visual-semantics-checker` / `seo-visual-semantics-auditor`'s functional-element-authenticity checks.
 
 ---
 
@@ -101,6 +107,7 @@ Skill(skill="devops", args="docker-container-specialist")
 - Verify frontend component names match CMS/API field names from contracts
 - Confirm SEO metadata (title, meta description, OG tags) renders correctly in browser
 - Confirm routing matches planned URL structure
+- **Mobile-first visual semantics check** (any marketing/landing page, or any page with a primary conversion element): run `Skill(skill="seo", args="seo-visual-semantics-auditor")` against the staged page at **mobile viewport first** — Google indexes mobile-first, so a desktop pass is not evidence of anything. Confirm the centerpiece (the content that answers the page's real purpose) and any primary functional element (embedded form, calculator, booking widget) render at or near the first mobile viewport, not just on desktop. If a gap is found, fix it by reordering the actual markup/source, never with a CSS `order`/`grid-area` trick — see the skill's "Fixing a mobile-viewport placement finding" guidance.
 
 **Checkpoint 3 (after ~90% of build):**
 - End-to-end test on staging environment

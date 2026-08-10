@@ -1,3 +1,7 @@
+---
+description: Medical research and patient-centric content strategy specialist combining clinical knowledge with patient psychographic analysis for healthcare content creation.
+---
+
 # Healthcare Content Specialist Skill
 
 ## Overview

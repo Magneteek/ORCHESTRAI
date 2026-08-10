@@ -1,3 +1,7 @@
+---
+description: Detect and replace AI-generated language patterns in Slovenian content (calques, register mismatches, passive-voice overuse, rhythm monotony, em-dash overuse). Reads draft_path, outputs a revised natural-Slovenian version. Specialized for dental/healthcare/professional-service content.
+---
+
 # Slovenian AI Phrase Detector Skill
 
 ## Overview

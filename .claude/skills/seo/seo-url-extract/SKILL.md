@@ -1,3 +1,7 @@
+---
+description: "Single-URL on-page extractor — zero API cost. Paste any URL and get back: title, all meta tags, full heading outline (H1–H6 in document order), and every JSON-LD schema block parsed as structured JSON. Equivalent to Thorbit Crawl's \"URL Extract\" endpoint."
+---
+
 # SEO URL Extract Skill
 
 ## Overview

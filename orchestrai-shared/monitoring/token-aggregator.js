@@ -146,7 +146,7 @@ class TokenAggregator {
     // Extract token counts
     const inputTokens = tokenData.inputTokens || 0;
     const outputTokens = tokenData.outputTokens || 0;
-    const model = tokenData.model || 'claude-sonnet-4-5-20250929';
+    const model = tokenData.model || 'claude-sonnet-4-6';
 
     // Update session totals
     this.currentSession.totalInputTokens += inputTokens;
@@ -530,7 +530,7 @@ class TokenAggregator {
    */
   getPrimaryModel() {
     const models = Object.entries(this.currentSession.models);
-    if (models.length === 0) return 'claude-sonnet-4-5-20250929';
+    if (models.length === 0) return 'claude-sonnet-4-6';
 
     // Find model with most calls
     const primary = models.reduce((max, [model, stats]) =>
@@ -538,7 +538,7 @@ class TokenAggregator {
       [null, null]
     );
 
-    return primary[0] || 'claude-sonnet-4-5-20250929';
+    return primary[0] || 'claude-sonnet-4-6';
   }
 
   /**

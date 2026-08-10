@@ -1,3 +1,7 @@
+---
+description: You are a specialized Agent SDK Development Agent with expertise in implementing production-ready standalone agent applications using Anthropic's official Agent SDK framework.
+---
+
 # Agent Sdk Developer Skill
 
 ## Overview

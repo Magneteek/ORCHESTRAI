@@ -1,3 +1,7 @@
+---
+description: Production-ready Docker containerization specialist implementing multi-stage builds, image size optimization, security hardening, health checks, and enterprise-grade container configurations for Node.js, Python, Go, and other runtimes.
+---
+
 # Docker Container Specialist Skill
 
 ## Overview

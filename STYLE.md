@@ -74,6 +74,24 @@ Use:                      Avoid:
 
 ---
 
+## Punctuation (client-facing and marketing copy — hard rule, added 2026-07-04)
+
+**No em-dashes (—) in client-facing copy — landing pages, ad copy, articles, emails, any customer-facing text.** Not "use sparingly" — do not use them at all. If a sentence needs a dash to hold together, the sentence is doing too much; split it into two short sentences instead.
+
+```
+❌ "Cirkonijeva je brez kovine — bolj naraven videz, primernejša za sprednje zobe."
+✅ "Cirkonijeva je brez kovine. Ima bolj naraven videz. Primernejša je za sprednje zobe."
+
+❌ "Prava izbira za vaš primer — določimo skupaj na pregledu."
+✅ "Pravo izbiro za vaš primer določimo skupaj na pregledu."
+```
+
+Why: short, simple sentences read as more natural and more confident than dash-chained clauses — the dash habit is a known AI-writing tell (see `slovenian-ai-phrase-detector` and equivalent language detectors), and it showed up throughout hand-written landing page copy that skipped the actual content QA pipeline. This rule applies regardless of language.
+
+This is distinct from technical/internal documentation (like this file), where em-dashes remain fine for structuring explanatory prose.
+
+---
+
 ## Document Structure
 
 ### Technical Documentation

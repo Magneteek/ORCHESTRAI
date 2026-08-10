@@ -1,3 +1,7 @@
+---
+description: Client project lifecycle manager. Reads a project folder and CLAUDE.md to determine current state (PROSPECT → ONBOARDING → RESEARCH → STRATEGY → PRODUCTION → REVIEW → DELIVERY → MAINTENANCE), what's completed, what's next, and what's blocking progress. Enforces guard conditions so phases can't be skipped. Can advance state and update CLAUDE.md when prerequisites are met.
+---
+
 # Project Lifecycle Skill
 
 ## Overview

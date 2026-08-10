@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for designing scalable, maintainable RESTful and GraphQL APIs with OpenAPI documentation and versioning strategies.
+---
+
 # Api Architect Skill
 
 ## Overview

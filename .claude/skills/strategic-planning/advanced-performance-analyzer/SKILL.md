@@ -1,3 +1,7 @@
+---
+description: "Systematic performance audits: bottleneck identification, root cause analysis, and prioritised optimisation recommendations from real Lighthouse reports, bundle stats, and query logs."
+---
+
 # Advanced Performance Analyzer Skill
 
 ## Overview

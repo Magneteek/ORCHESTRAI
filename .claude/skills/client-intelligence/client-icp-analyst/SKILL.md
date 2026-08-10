@@ -1,3 +1,7 @@
+---
+description: # Client ICP Analysis Specialist
+---
+
 # Client Icp Analyst Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for orchestrating blue-green and canary deployments with automated rollback capabilities and production monitoring integration.
+---
+
 # Deployment Orchestration Agent Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: You are a specialized Agent SDK Documentation Agent with expertise in creating comprehensive, developer-friendly documentation for standalone agent applications built with Anthropic's Agent SDK framework.
+---
+
 # Agent Sdk Documentation Specialist Skill
 
 ## Overview

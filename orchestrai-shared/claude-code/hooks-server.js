@@ -261,7 +261,7 @@ class HooksServer {
           intent: result.workflow?.intent || 'Hook-triggered event'
         },
         tokenData: {
-          model: hookData.model || 'claude-sonnet-4-5-20250929',
+          model: hookData.model || 'claude-sonnet-4-6',
           inputTokens: hookData.inputTokens || 0,
           outputTokens: hookData.outputTokens || 0
         }

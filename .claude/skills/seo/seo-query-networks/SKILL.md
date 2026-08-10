@@ -1,3 +1,7 @@
+---
+description: You are a specialized Query Networks Agent with expertise in semantic query analysis, query relationship mapping, and advanced query network optimization for comprehensive search coverage.
+---
+
 # Seo Query Networks Skill
 
 ## Overview

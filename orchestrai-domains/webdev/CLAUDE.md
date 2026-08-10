@@ -37,6 +37,7 @@ This domain leverages the following specialized Claude Code agents via the **Uni
 - **`accessibility-agent`** - WCAG 2.1 Level AA/AAA validation
 - **`security-testing-specialist`** - OWASP Top 10, vulnerability scanning
 - **`code-quality-agent`** - ESLint, Prettier, TypeScript validation
+- **`bricks-visual-semantics-checker`** (added 2026-07-27) - Audits a Bricks Builder page's element JSON for structural issues that break Google's centerpiece extraction (hidden-but-built content, risky element conditions, dynamic-data context mismatches, missing semantic landmarks). Pairs with `seo-visual-semantics-auditor` (seo domain) for pixel-measured confirmation on the live/staged page.
 
 **See [../../.claude/agents/](../../.claude/agents/) for complete agent definitions.**
 
@@ -376,6 +377,27 @@ Task(
   prompt="Validate WCAG 2.1 Level AA compliance for [component/page]..."
 )
 // Run on all components and pages
+```
+
+### 6. Mobile-First Visual Semantics + Embedded Conversion Elements (added 2026-07-27)
+```javascript
+// Google indexes mobile-first — Googlebot Smartphone's render is the
+// authoritative one for ranking, not desktop. A layout check that only
+// passes at 1280px proves nothing. Confirmed on a real build: an embedded
+// lead-capture form sat fully in-viewport on desktop but landed at 1201px
+// (below an 812px mobile viewport) — same markup, only the breakpoint differed.
+
+// Always resize to 375×812 FIRST when checking any hero/above-fold layout:
+Skill(skill="seo", args="seo-visual-semantics-auditor")   // mobile viewport first, desktop second
+
+// Any primary conversion action (lead form, booking, purchase) must be an
+// embedded on-page element, never a link/redirect to a separate page —
+// see webdev-conductor.md's "Conversion Element Rule."
+
+// If a mobile-viewport finding needs fixing: reorder the actual HTML source
+// (e.g. split a hero block so secondary copy comes after the functional
+// element), never a CSS order/grid-area trick — that just re-hides the
+// same DOM-vs-visual mismatch this check exists to catch.
 ```
 
 ---

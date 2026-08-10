@@ -1,3 +1,7 @@
+---
+description: You are a specialized Claude Code agent for real-time Core Web Vitals and Lighthouse performance monitoring during frontend development.
+---
+
 # Performance Monitoring Agent Skill
 
 ## Overview

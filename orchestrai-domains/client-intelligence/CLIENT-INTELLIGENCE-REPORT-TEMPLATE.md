@@ -15,10 +15,13 @@ This is the **canonical structure** for all client intelligence executive report
 ### Design System
 
 **Color Palette**:
-- Primary Gradient: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)` (purple/indigo)
-- Background: Same gradient, fixed attachment
-- Cards: White (#ffffff) with soft shadows
-- Text: Gray scale (#1a202c to #718096)
+- Primary: `#667eea` (solid purple/indigo — used for hero backgrounds, metric cards, progress bar, chart fills)
+- Primary dark: `#764ba2` (solid purple variant — used for hover states, secondary accents)
+- Surface: `#f8f9ff` (page background)
+- Cards: White (`#ffffff`) with soft box shadows
+- Text primary: `#1a202c`
+- Text muted: `#718096`
+- Border: `#e2e8f0`
 
 **Typography**:
 - Font Family: Inter (Google Fonts)
@@ -36,8 +39,58 @@ This is the **canonical structure** for all client intelligence executive report
 **CDN Dependencies**:
 ```html
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+```
+
+---
+
+### FORBIDDEN PATTERNS — HARD RULES (apply to every page, no exceptions)
+
+**❌ NO GRADIENTS**
+```css
+/* FORBIDDEN — never use any of these */
+background: linear-gradient(...);
+background: radial-gradient(...);
+/* Tailwind: gradient-to-r, from-purple-500, etc. — also forbidden */
+```
+```css
+/* CORRECT — flat solid colour */
+background: #667eea;
+background: #764ba2;
+```
+
+**❌ NO EMOJI OR DECORATIVE ICONS**
+- No emoji in hero sections: ❌ `🏄` `🎨` `👑` `🌊`
+- No emoji as section decorators: ❌ `✅` `📊` `🔑` `💡`
+- No Font Awesome or icon font usage
+- No inline SVG icon decorations cluttering headers or cards
+- Text and data are the decoration. Typography carries the hierarchy.
+
+```html
+<!-- FORBIDDEN -->
+<div class="icp-avatar">🏄</div>
+<h3>📊 Key Metrics</h3>
+
+<!-- CORRECT -->
+<div class="icp-avatar">C</div>  <!-- First letter of persona name -->
+<h3>Key Metrics</h3>
+```
+
+**❌ NO SINGLE-SIDED BORDERS as decorative elements**
+```css
+/* FORBIDDEN */
+border-left: 4px solid #667eea;  /* as standalone decoration */
+
+/* CORRECT if needed */
+border: 1px solid #e2e8f0;  /* full border */
+/* or: background fill instead of border accent */
+```
+
+**Verification before delivery**:
+```bash
+grep -c "linear-gradient\|radial-gradient" output.html  # Must be 0
+grep -c "border-left\|border-right\|border-top\|border-bottom" output.html  # Must be 0
 ```
 
 ---
@@ -46,7 +99,7 @@ This is the **canonical structure** for all client intelligence executive report
 
 ### 1. Scroll Progress Bar (Fixed)
 **Location**: Top of viewport, fixed position
-**Design**: 4px height, gradient background matching theme
+**Design**: 4px height, solid `#667eea` background (no gradient)
 **Behavior**: Updates width based on scroll position (JavaScript)
 
 ### 2. Sticky Navigation (Fixed Right)
@@ -67,24 +120,26 @@ This is the **canonical structure** for all client intelligence executive report
 7. Next Actions
 
 ### 3. Hero Section (Cover Page)
-**Design**: Full-viewport height, gradient background
+**Design**: Full-viewport height, solid `#667eea` background (no gradient)
 **Content Structure**:
 ```html
-<section class="hero-gradient">
-  <div class="text-center">
-    <h1 class="hero-title">[CLIENT NAME]</h1>
-    <p class="hero-subtitle">[One-line positioning statement]</p>
-    <div class="report-badge">Client Intelligence Report</div>
-    <p class="report-date">Generated: [Date]</p>
+<section style="background: #667eea; min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+  <div style="text-align: center; color: white; padding: 80px 24px;">
+    <h1 style="font-size: 4rem; font-weight: 800;">[CLIENT NAME]</h1>
+    <p style="font-size: 1.5rem; font-weight: 300; opacity: 0.9;">[One-line positioning statement]</p>
+    <div style="display: inline-block; border: 1px solid rgba(255,255,255,0.4); border-radius: 100px; padding: 6px 20px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 24px;">Client Intelligence Report</div>
+    <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 12px;">Generated: [Date]</p>
   </div>
 </section>
 ```
 
 **Required Elements**:
-- Client name (4rem, weight 800)
+- Solid `#667eea` background — NO gradient
+- Client name (4rem, weight 800, white)
 - Positioning tagline (1.5rem, weight 300, opacity 0.9)
-- Report type badge
+- Report type badge (border-only, no filled background)
 - Generation date
+- NO emoji in hero. No avatar circles with icons.
 
 ### 4. Executive Summary Section
 **Layout**: White card container, max-width 1400px
@@ -130,7 +185,7 @@ This is the **canonical structure** for all client intelligence executive report
 ```html
 <div class="icp-card">
   <!-- Avatar Circle -->
-  <div class="icp-avatar">[Icon/Emoji]</div>
+  <div class="icp-avatar">[FIRST LETTER OF PERSONA NAME — no emoji]</div>
 
   <!-- Header -->
   <h3 class="text-center">[ICP Name]</h3>
@@ -185,10 +240,10 @@ This is the **canonical structure** for all client intelligence executive report
 
 **ICP Card Requirements**:
 - Each ICP gets full-width stacked card (not side-by-side)
-- Avatar circle at top center (120px diameter, gradient background)
-- Clear section headers within card
+- Avatar circle at top center (120px diameter, solid `#667eea` background, white first-letter initial — NO emoji)
+- Clear section headers within card (text only — no icons or emoji before headers)
 - Unit economics in 4-column grid
-- Channel effectiveness visualization (progress bars or horizontal bar chart)
+- Channel effectiveness visualization (progress bars or horizontal bar chart, solid fills only)
 
 ### 6. SEO Strategy Section
 **Content Structure**:
@@ -476,10 +531,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     background: white;
   }
 
-  .hero-gradient {
+  .hero-section {
     background: white;
     color: #1a202c;
-    border-bottom: 4px solid #667eea;
+    border-bottom: 2px solid #e2e8f0;
   }
 }
 ```
@@ -503,7 +558,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 Before delivering the report, verify:
 
 - ✅ All 9 sections present and complete
-- ✅ Purple/indigo gradient consistent throughout
+- ✅ Solid `#667eea` purple consistent throughout — NO gradients anywhere
 - ✅ Inter font loads correctly from Google Fonts
 - ✅ Sticky navigation highlights active section
 - ✅ Scroll progress bar updates smoothly
@@ -545,7 +600,7 @@ Read this template file before generating the report."
 ## Version History
 
 - **v1.0 (2025-12-02)**: Initial template creation based on Score or Not intelligence-report.html canonical structure
-- Future updates will maintain backward compatibility with existing reports
+- **v2.0 (2026-05-26)**: Design system overhaul — removed all gradients (flat solid colours only), removed emoji/icon decoration, updated hero to solid `#667eea`, added FORBIDDEN PATTERNS section with hard rules
 
 ---
 

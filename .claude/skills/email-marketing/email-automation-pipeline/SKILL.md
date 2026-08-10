@@ -1,3 +1,7 @@
+---
+description: Orchestrates lead nurture and lifecycle email automation for GoHighLevel. Takes a trigger event (opt-in, appointment booked, post-purchase, inactive contact, etc.) and produces a complete GHL Workflow — email copy, wait steps, if/else branches, tag architecture, pipeline stage updates, and SMS follow-up steps. Covers lead nurture, onboarding, post-service, and re-engagement sequences.
+---
+
 # Email Automation Pipeline Skill
 
 ## Overview

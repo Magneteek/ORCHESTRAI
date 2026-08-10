@@ -1,3 +1,7 @@
+---
+description: "Structured project risk assessment: identifies technical, scope, timeline, quality, and external risks with probability/impact scoring and specific mitigation strategies."
+---
+
 # Intelligent Risk Assessor Skill
 
 ## Overview

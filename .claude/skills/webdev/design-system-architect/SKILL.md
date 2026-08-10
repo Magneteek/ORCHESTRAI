@@ -1,3 +1,7 @@
+---
+description: Design system creation and component library management.
+---
+
 # Design System Architect Skill
 
 ## Overview

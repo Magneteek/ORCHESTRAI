@@ -1,3 +1,7 @@
+---
+description: Real-time data synchronization across systems.
+---
+
 # Data Sync Coordinator Skill
 
 ## Overview

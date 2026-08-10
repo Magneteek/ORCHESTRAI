@@ -1,3 +1,7 @@
+---
+description: Knowledge Panel Optimization (KPO) auditor. Pulls live GBP data and Google Knowledge Panel for any business, scores 18 KPO fields (0–100), identifies missing fields by priority, and produces a complete actionable optimization report.
+---
+
 # SEO KPO Analyzer Skill
 
 ## Overview

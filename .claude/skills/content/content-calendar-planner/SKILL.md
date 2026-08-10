@@ -1,3 +1,7 @@
+---
+description: Creates structured monthly or quarterly content calendars from keyword clusters and SEO strategy. Maps topics to target keywords, content format, priority, and internal linking opportunities.
+---
+
 # Content Calendar Planner Skill
 
 ## Overview

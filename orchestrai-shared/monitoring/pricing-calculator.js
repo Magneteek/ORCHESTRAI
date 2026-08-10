@@ -6,34 +6,53 @@
 
 class PricingCalculator {
   constructor() {
-    // Pricing in dollars per million tokens (as of January 2025)
+    // Pricing in dollars per million tokens (as of June 2026)
     this.modelPricing = {
-      'claude-sonnet-4-5-20250929': {
-        name: 'Claude Sonnet 4.5',
+      'claude-fable-5': {
+        name: 'Claude Fable 5',
+        inputPricePerMTok: 10.00,
+        outputPricePerMTok: 50.00,
+        contextWindow: 1000000
+      },
+      'claude-opus-4-8': {
+        name: 'Claude Opus 4.8',
+        inputPricePerMTok: 5.00,
+        outputPricePerMTok: 25.00,
+        contextWindow: 1000000
+      },
+      'claude-opus-4-7': {
+        name: 'Claude Opus 4.7',
+        inputPricePerMTok: 5.00,
+        outputPricePerMTok: 25.00,
+        contextWindow: 1000000
+      },
+      'claude-sonnet-4-6': {
+        name: 'Claude Sonnet 4.6',
         inputPricePerMTok: 3.00,
         outputPricePerMTok: 15.00,
+        contextWindow: 1000000
+      },
+      'claude-haiku-4-5': {
+        name: 'Claude Haiku 4.5',
+        inputPricePerMTok: 1.00,
+        outputPricePerMTok: 5.00,
         contextWindow: 200000
       },
-      'claude-3-7-sonnet-20250219': {
-        name: 'Claude 3.7 Sonnet',
+      // Legacy models kept for historical cost reporting only
+      'claude-sonnet-4-5-20250929': {
+        name: 'Claude Sonnet 4.5 (legacy)',
         inputPricePerMTok: 3.00,
         outputPricePerMTok: 15.00,
         contextWindow: 200000
       },
       'claude-3-5-sonnet-20241022': {
-        name: 'Claude 3.5 Sonnet',
+        name: 'Claude 3.5 Sonnet (legacy)',
         inputPricePerMTok: 3.00,
         outputPricePerMTok: 15.00,
         contextWindow: 200000
       },
-      'claude-3-opus-20240229': {
-        name: 'Claude 3 Opus',
-        inputPricePerMTok: 15.00,
-        outputPricePerMTok: 75.00,
-        contextWindow: 200000
-      },
       'claude-3-haiku-20240307': {
-        name: 'Claude 3 Haiku',
+        name: 'Claude 3 Haiku (legacy)',
         inputPricePerMTok: 0.25,
         outputPricePerMTok: 1.25,
         contextWindow: 200000
@@ -41,7 +60,7 @@ class PricingCalculator {
     };
 
     // Default model for unknown model strings
-    this.defaultModel = 'claude-sonnet-4-5-20250929';
+    this.defaultModel = 'claude-sonnet-4-6';
   }
 
   /**

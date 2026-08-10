@@ -1,3 +1,7 @@
+---
+description: Multi-language sentiment analysis with emotion detection.
+---
+
 # Sentiment Analysis Specialist Skill
 
 ## Overview

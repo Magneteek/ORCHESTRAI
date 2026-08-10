@@ -1,3 +1,7 @@
+---
+description: Dental and oral surgery subspecialty expert providing deep clinical knowledge for dental procedure content, including implants, extractions, periodontics, orthodontics, and restorative dentistry.
+---
+
 # Dental Procedure Specialist Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: You are a specialized Competitor Analysis Agent with expertise in comprehensive competitive SEO intelligence, competitor strategy analysis, and competitive gap identification.
+---
+
 # Seo Competitor Analysis Skill
 
 ## Overview

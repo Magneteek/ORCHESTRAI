@@ -1,12 +1,12 @@
 ---
-description: Orchestrate full content production cycle — SERP research → outline → frame validation → write → QA → language check → medical check → WordPress HTML output → Notion sync. Produces client-ready validated content in one workflow.
+description: Orchestrate full content production cycle: SERP research → Reddit voice research → outline → frame validation → write → QA (with claims verification) → language check → medical check → WordPress HTML output → Notion sync. Produces client-ready validated content in one workflow.
 ---
 
 # Content Production Pipeline Skill
 
 ## Overview
 
-Orchestrates the full content production cycle: SERP research (optional) → outline → frame validation → write → quality gate (with revision loop) → language/AI check → medical check (if healthcare) → WordPress HTML output with JSON-LD schemas → Notion sync. Produces publish-ready content in one workflow.
+Orchestrates the full content production cycle: SERP research (optional) → Reddit voice research (conditional) → outline → frame validation → write → quality gate with claims verification (and revision loop) → language/AI check → medical check (if healthcare) → WordPress HTML output with JSON-LD schemas → Notion sync. Produces publish-ready content in one workflow.
 
 ## When to Load
 

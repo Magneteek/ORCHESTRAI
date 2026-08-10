@@ -1,3 +1,7 @@
+---
+description: ROI calculation and financial metrics analysis.
+---
+
 # Roi Calculator Skill
 
 ## Overview

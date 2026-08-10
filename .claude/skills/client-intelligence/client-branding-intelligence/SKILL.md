@@ -1,3 +1,7 @@
+---
+description: # Client Branding Intelligence Agent
+---
+
 # Client Branding Intelligence Skill
 
 ## Overview

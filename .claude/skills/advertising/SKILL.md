@@ -4,7 +4,7 @@
 
 Specialized agents for advertising tasks.
 
-Keywords: advertising, direct response, copywriting, sales copy, VSL, offer creation, Hormozi, Suby, conversion copy
+Keywords: advertising, direct response, copywriting, sales copy, VSL, offer creation, Hormozi, Suby, conversion copy, competitor ads, facebook ads library, google ads keywords, CPC research, creative brief, ad brief
 
 ## Available Skills
 
@@ -18,6 +18,11 @@ Keywords: advertising, direct response, copywriting, sales copy, VSL, offer crea
 - **linkedin-ads-specialist** — B2B advertising, professional audience targeting, lead gen forms
 - **reddit-ads-specialist** — Community-native advertising, authentic voice, subreddit targeting
 - **ad-copy-variation-generator** — A/B copy variations, psychological triggers, testing matrix
+
+### Competitive research & creative planning (new)
+- **competitor-creative-analyst** — Playwright scrape of Facebook Ads Library + Google SERP sponsored results → hooks, copy patterns, offer angles, gap analysis
+- **google-ads-keyword-planner** — DataForSEO CPC/volume + Playwright SERP scraping → tiered keyword plan with live ad copy examples
+- **meta-creative-brief-generator** — ICP + offer + competitor intel → production-ready briefs per format (image, carousel, story, video)
 
 ### Copy & offer (standalone or pipeline)
 - **direct-response-copywriter** — VSLs, long-form sales letters, email sequences (Hormozi + Suby frameworks)

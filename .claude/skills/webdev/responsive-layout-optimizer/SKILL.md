@@ -1,3 +1,7 @@
+---
+description: Responsive design optimization for all screen sizes.
+---
+
 # Responsive Layout Optimizer Skill
 
 ## Overview

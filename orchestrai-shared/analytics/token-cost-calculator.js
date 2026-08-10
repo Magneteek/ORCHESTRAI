@@ -13,16 +13,22 @@ class TokenCostCalculator {
       'gpt-3.5-turbo-16k': { input: 0.003, output: 0.004 },
       'text-davinci-003': { input: 0.02, output: 0.02 },
       
-      // Claude Models (Anthropic) - Updated December 2025
+      // Claude Models (Anthropic) - Updated June 2026
       'claude-3-opus': { input: 0.015, output: 0.075 },
       'claude-3-sonnet': { input: 0.003, output: 0.015 },
       'claude-3-haiku': { input: 0.00025, output: 0.00125 },
       'claude-3.5-sonnet': { input: 0.003, output: 0.015 },
 
-      // Claude 4.5 Series (Latest - November/December 2025)
+      // Current models (June 2026)
+      'claude-fable-5': { input: 0.01, output: 0.05 },
+      'claude-opus-4.8': { input: 0.005, output: 0.025 },
+      'claude-opus-4.7': { input: 0.005, output: 0.025 },
+      'claude-sonnet-4.6': { input: 0.003, output: 0.015 },
+      'claude-haiku-4.5': { input: 0.001, output: 0.005 },
+
+      // Legacy Claude 4.5 Series
       'claude-opus-4.5': { input: 0.005, output: 0.025 },
       'claude-sonnet-4.5': { input: 0.003, output: 0.015 },
-      'claude-haiku-4.5': { input: 0.0001, output: 0.0005 },
 
       // Legacy naming (will be normalized)
       'claude-sonnet-4': { input: 0.003, output: 0.015 },
@@ -160,16 +166,27 @@ class TokenCostCalculator {
       'claude-3-sonnet-20240229': 'claude-3-sonnet',
       'claude-3-haiku-20240307': 'claude-3-haiku',
       'claude-3-5-sonnet-20240620': 'claude-3.5-sonnet',
+      'claude-3-5-sonnet-20241022': 'claude-3.5-sonnet',
 
-      // Claude 4.5 Series model IDs
+      // Current model IDs (June 2026)
+      'claude-opus-4-8': 'claude-opus-4.8',
+      'claude-opus-4-7': 'claude-opus-4.7',
+      'claude-sonnet-4-6': 'claude-sonnet-4.6',
+      'claude-haiku-4-5-20251001': 'claude-haiku-4.5',
+
+      // Legacy Claude 4.5 Series model IDs
       'claude-opus-4-5-20251101': 'claude-opus-4.5',
       'claude-sonnet-4-5-20250929': 'claude-sonnet-4.5',
       'claude-haiku-4-5-20251024': 'claude-haiku-4.5',
 
-      // Short-hand variations
-      'opus': 'claude-opus-4.5',
-      'sonnet': 'claude-sonnet-4.5',
+      // Short-hand variations (updated to current defaults)
+      'fable': 'claude-fable-5',
+      'opus': 'claude-opus-4.8',
+      'sonnet': 'claude-sonnet-4.6',
       'haiku': 'claude-haiku-4.5',
+      'opus-4.8': 'claude-opus-4.8',
+      'opus-4.7': 'claude-opus-4.7',
+      'sonnet-4.6': 'claude-sonnet-4.6',
       'opus-4.5': 'claude-opus-4.5',
       'sonnet-4.5': 'claude-sonnet-4.5',
       'haiku-4.5': 'claude-haiku-4.5'

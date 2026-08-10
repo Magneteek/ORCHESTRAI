@@ -1,3 +1,7 @@
+---
+description: Orchestrates a complete B2B cold outreach campaign from ICP definition to GHL-ready deployment. Produces a 5–7 email sequence with A/B subject line variants, deliverability setup guide, and a step-by-step GHL Workflow blueprint with triggers, wait steps, reply detection branches, and tag architecture.
+---
+
 # Cold Outreach Pipeline Skill
 
 ## Overview

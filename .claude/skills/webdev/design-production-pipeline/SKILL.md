@@ -1,6 +1,6 @@
 ---
 name: design-production-pipeline
-description: End-to-end design production pipeline. Loads client design system → generates 3–5 variants in parallel → render-screenshot-critique loop at 4 viewports → 7 parallel quality gates (contrast, a11y, token compliance, responsive, performance, vision hierarchy, copy) → surgical diff-only iteration → export. Produces browser-verified HTML deliverables.
+description: End-to-end design production pipeline. Loads client design system → generates 3–5 variants in parallel → render-screenshot-critique loop at 4 viewports → 8 parallel quality gates (contrast, a11y, token compliance, responsive, performance, vision hierarchy, copy, mobile visual semantics) → surgical diff-only iteration → export. Produces browser-verified HTML deliverables.
 domain: webdev
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Skill, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_take_screenshot, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_evaluate, mcp__plugin_playwright_playwright__browser_resize, mcp__magic__21st_magic_component_builder, mcp__magic__21st_magic_component_inspiration, mcp__shadcn-ui__get_component, mcp__shadcn-ui__list_components
 model: sonnet

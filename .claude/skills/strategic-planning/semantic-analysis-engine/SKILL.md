@@ -1,3 +1,7 @@
+---
+description: "Semantic analysis of content and keyword sets: topic clustering, entity extraction, content gap analysis, keyword semantic grouping, and thematic analysis."
+---
+
 # Semantic Analysis Engine Skill
 
 ## Overview

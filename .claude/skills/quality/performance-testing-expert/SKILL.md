@@ -1,3 +1,7 @@
+---
+description: Enterprise performance testing specialist implementing load testing, stress testing, spike testing, endurance testing, and performance benchmarking with k6, Artillery, Apache JMeter, and comprehensive performance monitoring strategies.
+---
+
 # Performance Testing Expert Skill
 
 ## Overview

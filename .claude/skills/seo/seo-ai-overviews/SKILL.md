@@ -1,3 +1,7 @@
+---
+description: You are a specialized AI Overviews Agent with expertise in optimizing content for Google's AI Overviews (SGE), AI-generated search results, and zero-click search optimization.
+---
+
 # Seo Ai Overviews Skill
 
 ## Overview

@@ -1,3 +1,7 @@
+---
+description: Healthcare legal compliance specialist generating medically appropriate disclaimers and ensuring content meets healthcare advertising regulations, liability protection, and informed consent principles.
+---
+
 # Medical Disclaimer Generator Skill
 
 ## Overview

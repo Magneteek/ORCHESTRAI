@@ -1,3 +1,7 @@
+---
+description: # Frontend Architect Specialist
+---
+
 # Frontend Architect Specialist Skill
 
 ## Overview

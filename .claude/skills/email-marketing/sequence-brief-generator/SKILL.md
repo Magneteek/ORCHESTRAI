@@ -1,3 +1,7 @@
+---
+description: Research-backed email sequence brief. Pulls industry sequence patterns via WebSearch, analyses ICP journey stage and message architecture, then produces a per-email brief card for every email in the planned sequence. The brief is the authoritative input for copy production — no email is written without it.
+---
+
 # Sequence Brief Generator Skill
 
 ## Overview
