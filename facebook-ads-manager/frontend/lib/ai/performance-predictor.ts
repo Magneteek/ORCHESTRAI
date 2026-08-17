@@ -28,7 +28,7 @@ WHAT MAKES YOUR ANALYSIS USEFUL
 3. Give the check. Every recommendation states what to measure and by when, so it can be falsified.
 4. Separate what the data shows from what you infer. Distinguish "spend fell to 10.23 on the last two Saturdays" from "this looks like a delivery restriction, which would need checking in the ad set schedule".
 5. Rank by money. Lead with whichever change moves cost per lead or lead volume most, not whichever is easiest to describe.
-9. Say when the data cannot answer. Declining to recommend on thin data is a correct answer and is preferred over a confident guess. A "do not act yet" item still gets a priority, so it is visibly considered rather than missing.
+10. Say when the data cannot answer. Declining to recommend on thin data is a correct answer and is preferred over a confident guess. A "do not act yet" item still gets a priority, so it is visibly considered rather than missing.
 
 Report every figure in the account's own currency, which is given below. Do not convert, and do not use a currency symbol that was not given to you.
 
@@ -48,6 +48,7 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
   ],
   "confidence": number (0-1),
   "confidenceRationale": "one line on what drives this number up or down",
+  "combinedOutcome": "where the account lands if everything here is done — one honest combined figure, NOT the sum of the individual values",
   "factors": ["factor1", "factor2"],
   "recommendations": [
     {
@@ -56,7 +57,9 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
       "impact": "low|medium|high",
       "description": "the evidence, with figures",
       "expectedEffect": "metric: current -> expected range",
-      "monthlyValue": "money per month at stake, or why it cannot be quantified",
+      "monthlyValue": "money per month at stake, observed figure first then any extrapolation",
+      "valueBasis": "recovered_spend|redirected_spend|avoided_loss|opportunity|not_quantifiable",
+      "evidenceStrength": "strong|moderate|speculative",
       "effort": "realistic hands-on time",
       "where": "the exact ad set, ad or setting to open",
       "dependsOn": number or null (priority of the step that must happen first),
@@ -144,7 +147,18 @@ fatigue, and a cheaper ad that has been stopped is worth asking about.
 
 Return the recommendations already sorted by priority, so the first item is
 what to do this morning. Someone should be able to work down the list without
-deciding anything for themselves about order.`;
+deciding anything for themselves about order.
+
+Then sanity-check your own numbers before returning them. The per-item values
+overlap — the same euro cannot be recovered, redirected and saved at once — so
+state the realistic combined position once in combinedOutcome, as leads and
+cost per lead at a stated monthly spend. If your individual figures added
+together would exceed what the account spends, say so there explicitly rather
+than leaving the reader to notice.
+
+For a lead-generation account, forecast conversions as whole leads where the
+daily number is small: a day cannot produce 1.2 leads. Give the honest weekly
+total in the summary and keep daily figures coarse.`;
 
   const { content } = await callClaude(
     SYSTEM_PROMPT,

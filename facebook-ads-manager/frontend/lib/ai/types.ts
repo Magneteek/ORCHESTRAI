@@ -23,6 +23,12 @@ export const PerformancePredictionSchema = z.object({
   confidence: z.number().min(0).max(1),
   /** One line on what drives the confidence figure, so it is not a bare number. */
   confidenceRationale: z.string().optional(),
+  /**
+   * Where the account lands if every recommendation is executed, stated once
+   * and honestly. Per-item values overlap and must not be added up; this is
+   * the only place a combined figure belongs.
+   */
+  combinedOutcome: z.string().optional(),
   factors: z.array(z.string()),
   recommendations: z.array(z.object({
     action: z.string(),
@@ -44,6 +50,16 @@ export const PerformancePredictionSchema = z.object({
     effort: z.string().optional(),
     /** Money at stake per month, or why it cannot be quantified. */
     monthlyValue: z.string().optional(),
+    /**
+     * What the money figure means — these are not the same kind of number and
+     * summing them is meaningless. Without this the list read as additive and
+     * claimed more monthly value than the account spends.
+     */
+    valueBasis: z
+      .enum(['recovered_spend', 'redirected_spend', 'avoided_loss', 'opportunity', 'not_quantifiable'])
+      .optional(),
+    /** How firm the evidence is, separate from how much money is at stake. */
+    evidenceStrength: z.enum(['strong', 'moderate', 'speculative']).optional(),
     /** Priority number of the step that must happen first, if any. */
     dependsOn: z.number().int().nullable().optional(),
     /** Exactly where to make the change. */

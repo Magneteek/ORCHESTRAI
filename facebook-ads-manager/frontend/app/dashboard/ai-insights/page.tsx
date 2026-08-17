@@ -337,6 +337,17 @@ function PredictionsTab({
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-1">Prediction Confidence</h3>
             <p className="text-sm text-gray-600">{insights.summary}</p>
+            {insights.combinedOutcome && (
+              <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3">
+                <div className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                  If everything below is done
+                </div>
+                <p className="mt-1 text-sm text-gray-800">{insights.combinedOutcome}</p>
+                <p className="mt-1 text-xs text-gray-500">
+                  Individual values below overlap and are not additive.
+                </p>
+              </div>
+            )}
           </div>
           <div className="text-right">
             <div className="text-4xl font-bold text-purple-600">
@@ -415,7 +426,29 @@ function PredictionsTab({
                   </div>
                   {(rec.monthlyValue || rec.effort || rec.where) && (
                     <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600">
-                      {rec.monthlyValue && <span><span className="font-medium">Worth:</span> {rec.monthlyValue}</span>}
+                      {rec.monthlyValue && (
+                        <span>
+                          <span className="font-medium">Worth:</span> {rec.monthlyValue}
+                          {rec.valueBasis && rec.valueBasis !== 'not_quantifiable' && (
+                            <span className="ml-1 text-gray-400">
+                              ({rec.valueBasis.replace(/_/g, ' ')})
+                            </span>
+                          )}
+                        </span>
+                      )}
+                      {rec.evidenceStrength && (
+                        <span
+                          className={
+                            rec.evidenceStrength === 'strong'
+                              ? 'text-emerald-700'
+                              : rec.evidenceStrength === 'speculative'
+                              ? 'text-amber-700'
+                              : 'text-gray-600'
+                          }
+                        >
+                          <span className="font-medium">Evidence:</span> {rec.evidenceStrength}
+                        </span>
+                      )}
                       {rec.effort && <span><span className="font-medium">Effort:</span> {rec.effort}</span>}
                       {rec.where && <span><span className="font-medium">Where:</span> {rec.where}</span>}
                       {rec.dependsOn ? <span className="text-amber-700">After step {rec.dependsOn}</span> : null}
