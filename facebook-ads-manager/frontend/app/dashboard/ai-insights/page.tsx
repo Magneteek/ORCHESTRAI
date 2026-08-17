@@ -343,6 +343,11 @@ function PredictionsTab({
               {(latestPrediction.confidence * 100).toFixed(0)}%
             </div>
             <div className="text-sm text-gray-500">Confidence Level</div>
+            {insights.confidenceRationale && (
+              <p className="mt-2 max-w-xs text-xs text-gray-500">
+                {insights.confidenceRationale}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -358,8 +363,18 @@ function PredictionsTab({
                 <div className="text-sm text-gray-500">Day {index + 1}</div>
               </div>
               <div className="grid grid-cols-4 gap-6 flex-1">
-                <MetricDisplay label="ROAS" value={`${pred.roas.toFixed(2)}x`} />
-                <MetricDisplay label="CTR" value={`${(pred.ctr * 100).toFixed(2)}%`} />
+                {/* A lead-gen forecast has no revenue, so a ROAS column would
+                    read 0.00x on every row. Show the forecast that matters. */}
+                {pred.conversions !== undefined ? (
+                  <MetricDisplay label="Leads" value={pred.conversions.toLocaleString()} />
+                ) : (
+                  <MetricDisplay label="ROAS" value={`${pred.roas.toFixed(2)}x`} />
+                )}
+                {pred.cpa !== undefined ? (
+                  <MetricDisplay label="Cost/lead" value={formatCurrency(pred.cpa)} />
+                ) : (
+                  <MetricDisplay label="CTR" value={`${(pred.ctr * 100).toFixed(2)}%`} />
+                )}
                 <MetricDisplay label="Spend" value={formatCurrency(pred.spend)} />
                 <MetricDisplay label="Clicks" value={pred.clicks.toLocaleString()} />
               </div>
@@ -392,6 +407,16 @@ function PredictionsTab({
                 <div className="flex-1">
                   <div className="font-medium text-gray-900">{rec.action}</div>
                   <div className="text-sm text-gray-600 mt-1">{rec.description}</div>
+                  {rec.expectedEffect && (
+                    <div className="text-sm text-gray-800 mt-2">
+                      <span className="font-medium">Expected:</span> {rec.expectedEffect}
+                    </div>
+                  )}
+                  {rec.verifyBy && (
+                    <div className="text-sm text-gray-500 mt-1">
+                      <span className="font-medium">Verify:</span> {rec.verifyBy}
+                    </div>
+                  )}
                   <div className="text-xs text-gray-500 mt-2">
                     Impact: <span className="font-semibold">{rec.impact}</span>
                   </div>

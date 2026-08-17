@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth/auth';
 import { predictPerformance } from '@/lib/ai/performance-predictor';
 import { prisma } from '@/lib/db/prisma';
-import { getDailyPerformance } from '@/lib/analytics/aggregate';
+import { getDailyPerformance, getAdPerformance } from '@/lib/analytics/aggregate';
 import { getCampaignContext } from '@/lib/ai/campaign-context';
 import type { HistoricalPerformanceData } from '@/lib/ai/types';
 import { subDays } from 'date-fns';
@@ -95,12 +95,20 @@ export async function POST(request: NextRequest) {
     // Get campaign context
     const campaignContext = await getCampaignContext(adAccountId, campaignId);
 
+    // Per-ad totals over a deliberately wider window than the daily series.
+    // Scoped to 30 days this showed only the currently-running ad, and the
+    // analysis had nothing to compare it against; the account's cheapest
+    // creative by far had stopped delivering before that window opened.
+    const adBreakdown = await getAdPerformance(adAccountId, subDays(new Date(), 120));
+
     // Run prediction
     const prediction = await predictPerformance({
       adAccountId,
       historicalData,
       campaignContext,
       predictionDays,
+      currency: account.currency,
+      adBreakdown,
     });
 
     return NextResponse.json(

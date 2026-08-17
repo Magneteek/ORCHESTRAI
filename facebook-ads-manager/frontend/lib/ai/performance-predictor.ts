@@ -11,17 +11,25 @@ import {
 import { prisma } from '@/lib/db/prisma';
 import { addDays, format } from 'date-fns';
 
-const SYSTEM_PROMPT = `You are an expert Facebook Ads performance analyst with deep knowledge of advertising metrics, seasonality, and optimization strategies.
+const SYSTEM_PROMPT = `You are a senior paid-social analyst reviewing one Meta ad account. You are writing for the person who controls the budget, who will act on what you say.
 
-Your task is to analyze historical campaign performance data and predict future performance with high accuracy.
+HOW TO READ THE DATA
 
-Consider these factors in your analysis:
-- Trend patterns and momentum
-- Day-of-week seasonality
-- Budget changes and their impact
-- Campaign objectives and optimization goals
-- Historical performance consistency
-- External factors (holidays, market conditions)
+- \`clicks\` counts every interaction with the ad, including reactions, comments, saves and post expands. \`linkClicks\` counts people who followed the link. Conversion rate and cost per click are only meaningful against link clicks. Never divide conversions by \`clicks\`.
+- On a lead-generation objective there is no purchase revenue, so ROAS is zero by definition. That is not broken tracking. Judge those accounts on cost per lead, lead volume and link conversion rate.
+- Rates must be computed from summed totals over the period, never by averaging daily rates: a 50-impression day must not weigh the same as a 5,000-impression one.
+- Conversion counts are small. Before calling any split a pattern — weekday, ad, placement — ask whether the count behind it could arise by chance. A difference resting on 9 events against 3 is not a finding.
+
+WHAT MAKES YOUR ANALYSIS USEFUL
+
+1. Name the entity. "Refresh creative" is worthless; "ad B - Stat Hook, 55 days live, link CTR 0.84% against 1.14% for the archived New Leads Ad" is actionable. Every claim about an ad, ad set or campaign must name it.
+2. Quantify the expected effect. State the metric, its current value, and the range you expect after the change. If you cannot estimate it, say so rather than asserting impact.
+3. Give the check. Every recommendation states what to measure and by when, so it can be falsified.
+4. Separate what the data shows from what you infer. Distinguish "spend fell to 10.23 on the last two Saturdays" from "this looks like a delivery restriction, which would need checking in the ad set schedule".
+5. Rank by money. Lead with whichever change moves cost per lead or lead volume most, not whichever is easiest to describe.
+6. Say when the data cannot answer. Declining to recommend on thin data is a correct answer and is preferred over a confident guess.
+
+Report every figure in the account's own currency, which is given below. Do not convert, and do not use a currency symbol that was not given to you.
 
 CRITICAL: Respond ONLY with valid JSON matching this exact structure:
 {
@@ -32,20 +40,27 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
       "roas": number,
       "ctr": number,
       "impressions": number,
-      "clicks": number
+      "clicks": number,
+      "conversions": number,
+      "cpa": number
     }
   ],
   "confidence": number (0-1),
+  "confidenceRationale": "one line on what drives this number up or down",
   "factors": ["factor1", "factor2"],
   "recommendations": [
     {
-      "action": "specific action",
+      "action": "specific action naming the entity",
       "impact": "low|medium|high",
-      "description": "detailed description"
+      "description": "the evidence, with figures",
+      "expectedEffect": "metric: current -> expected range",
+      "verifyBy": "what to measure, and when to judge it"
     }
   ],
   "summary": "brief summary"
-}`;
+}
+
+For a lead-generation account, "conversions" and "cpa" are the important forecast fields; still return roas as 0.`;
 
 /**
  * Generate performance predictions for the next N days
@@ -53,7 +68,14 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
 export async function predictPerformance(
   request: PerformancePredictionRequest
 ): Promise<PerformancePrediction> {
-  const { adAccountId, historicalData, campaignContext, predictionDays = 7 } = request;
+  const {
+    adAccountId,
+    historicalData,
+    campaignContext,
+    predictionDays = 7,
+    currency = 'USD',
+    adBreakdown = [],
+  } = request;
 
   // Check cache first
   const cachedPrediction = await getCachedPrediction(adAccountId, predictionDays);
@@ -61,31 +83,52 @@ export async function predictPerformance(
     return cachedPrediction;
   }
 
-  // Prepare analysis context
-  const dataContext = prepareDataContext(historicalData, campaignContext);
+  // Report in the account's own currency. Hardcoded "$" meant the analysis
+  // narrated dollars while the UI beside it rendered euros.
+  const money = (n: number) => `${currency} ${n.toFixed(2)}`;
 
-  const userPrompt = `Analyze this campaign's performance and predict the next ${predictionDays} days:
+  // Prepare analysis context
+  const dataContext = prepareDataContext(historicalData, campaignContext, money);
+
+  const adTable = adBreakdown.length
+    ? adBreakdown
+        .map(
+          (a) =>
+            `  ${a.name} [${a.status}] — ${a.activeDays} days delivering (${a.firstDay}..${a.lastDay}), ` +
+            `spend ${money(a.spend)}, ${a.impressions} impressions, ${a.linkClicks} link clicks, ` +
+            `${a.conversions} conversions, cost per conversion ${a.conversions ? money(a.cpa) : 'n/a'}, ` +
+            `link CTR ${(a.linkCtr * 100).toFixed(2)}%, link-click conversion rate ${(a.cvr * 100).toFixed(1)}%`
+        )
+        .join('\n')
+    : '  (no per-ad data available)';
+
+  const userPrompt = `Analyze this account's performance and predict the next ${predictionDays} days:
+
+CURRENCY: all amounts below are in ${currency}. Report your figures in ${currency}.
 
 HISTORICAL DATA (Last 30 days):
 ${JSON.stringify(historicalData, null, 2)}
 
 CAMPAIGN CONTEXT:
 - Objective: ${campaignContext.objective}
-- Daily Budget: ${campaignContext.dailyBudget ? `$${campaignContext.dailyBudget}` : 'Not set'}
-- Lifetime Budget: ${campaignContext.lifetimeBudget ? `$${campaignContext.lifetimeBudget}` : 'Not set'}
+- Daily Budget: ${campaignContext.dailyBudget ? money(campaignContext.dailyBudget) : 'Not set'}
+- Lifetime Budget: ${campaignContext.lifetimeBudget ? money(campaignContext.lifetimeBudget) : 'Not set'}
 - Status: ${campaignContext.status}
 - Start Date: ${campaignContext.startDate}
+
+PER-AD BREAKDOWN (last 120 days — deliberately wider than the daily series\nabove, so stopped ads remain comparable against the ones running now):
+${adTable}
 
 ANALYSIS INSIGHTS:
 ${dataContext}
 
-Provide detailed predictions for each of the next ${predictionDays} days, considering:
-1. Recent trend momentum
-2. Day-of-week patterns
-3. Budget pacing
-4. Seasonal factors
+Provide a daily forecast for the next ${predictionDays} days, then recommendations
+ranked by how much they move cost per conversion or conversion volume.
 
-Include actionable recommendations for optimization.`;
+Use the per-ad breakdown: if one creative is materially cheaper or more
+efficient than another, name both and say what to do about it. Note how long
+each ad has been delivering — a long-running ad with a falling link CTR is
+fatigue, and a cheaper ad that has been stopped is worth asking about.`;
 
   const { content } = await callClaude(
     SYSTEM_PROMPT,
@@ -111,7 +154,8 @@ Include actionable recommendations for optimization.`;
  */
 function prepareDataContext(
   historicalData: any[],
-  campaignContext: any
+  campaignContext: any,
+  money: (n: number) => string
 ): string {
   if (historicalData.length === 0) {
     return 'No historical data available';
@@ -151,8 +195,8 @@ function prepareDataContext(
         ? 'improving (cost per lead falling)'
         : 'declining (cost per lead rising)';
     trendLine =
-      `- Cost per Lead: $${overallCpa.toFixed(2)} overall, ` +
-      `$${recentCpa.toFixed(2)} over the last 7 days\n- Recent Trend: ${trend}`;
+      `- Cost per Lead: ${money(overallCpa)} overall, ` +
+      `${money(recentCpa)} over the last 7 days\n- Recent Trend: ${trend}`;
   } else {
     const recentRoas = recentSpend > 0 ? recentRevenue / recentSpend : 0;
     const trend = recentRoas > overallRoas ? 'improving' : 'declining';
@@ -162,7 +206,7 @@ function prepareDataContext(
   }
 
   // Day of week analysis
-  const dayOfWeekPerf = analyzeDayOfWeek(historicalData, isLeadGen);
+  const dayOfWeekPerf = analyzeDayOfWeek(historicalData, isLeadGen, money);
 
   // Conversion counts per weekday are small enough that a large cost-per-lead
   // spread appears from chance alone. Without this caveat the model reads the
@@ -187,7 +231,7 @@ function prepareDataContext(
 
   return `
 Summary Statistics:
-- Total Spend: $${totalSpend.toFixed(2)}
+- Total Spend: ${money(totalSpend)}
 - Total Conversions: ${totalConversions}
 ${trendLine}
 - Average CTR: ${(avgCtr * 100).toFixed(2)}%
@@ -203,7 +247,11 @@ Data Completeness: ${historicalData.length} days of data available
 /**
  * Analyze day-of-week patterns
  */
-function analyzeDayOfWeek(historicalData: any[], isLeadGen = false): string {
+function analyzeDayOfWeek(
+  historicalData: any[],
+  isLeadGen = false,
+  money: (n: number) => string = (n) => n.toFixed(2)
+): string {
   const dayData: Record<
     string,
     { spend: number; revenue: number; conversions: number; count: number }
@@ -225,15 +273,15 @@ function analyzeDayOfWeek(historicalData: any[], isLeadGen = false): string {
 
   return Object.entries(dayData)
     .map(([day, stats]) => {
-      const avgSpend = (stats.spend / stats.count).toFixed(2);
+      const avgSpend = money(stats.spend / stats.count);
       if (isLeadGen) {
         const cpa = stats.conversions > 0 ? stats.spend / stats.conversions : 0;
-        const leads = cpa > 0 ? `$${cpa.toFixed(2)} per lead` : 'no leads';
-        return `  ${day}: ${stats.conversions} leads (${leads}), Avg Spend $${avgSpend}`;
+        const leads = cpa > 0 ? `${money(cpa)} per lead` : 'no leads';
+        return `  ${day}: ${stats.conversions} leads (${leads}), Avg Spend ${avgSpend}`;
       }
       // Ratio from summed totals, not an average of per-day ratios.
       const roas = stats.spend > 0 ? stats.revenue / stats.spend : 0;
-      return `  ${day}: ROAS ${roas.toFixed(2)}x, Avg Spend $${avgSpend}`;
+      return `  ${day}: ROAS ${roas.toFixed(2)}x, Avg Spend ${avgSpend}`;
     })
     .join('\n');
 }

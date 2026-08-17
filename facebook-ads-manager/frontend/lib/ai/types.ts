@@ -14,13 +14,24 @@ export const PerformancePredictionSchema = z.object({
     ctr: z.number(),
     impressions: z.number(),
     clicks: z.number(),
+    // Lead-gen campaigns forecast leads, not revenue. Without these the
+    // forecast table showed "ROAS 0.00x" on every row while the actual
+    // prediction ("9-12 leads") survived only as prose in the summary.
+    conversions: z.number().optional(),
+    cpa: z.number().optional(),
   })),
   confidence: z.number().min(0).max(1),
+  /** One line on what drives the confidence figure, so it is not a bare number. */
+  confidenceRationale: z.string().optional(),
   factors: z.array(z.string()),
   recommendations: z.array(z.object({
     action: z.string(),
     impact: z.enum(['low', 'medium', 'high']),
     description: z.string(),
+    /** Quantified expected effect, e.g. "CPL EUR 15.68 -> EUR 9-12". */
+    expectedEffect: z.string().optional(),
+    /** The measurement that would confirm or kill it, and by when. */
+    verifyBy: z.string().optional(),
   })),
   summary: z.string(),
 });
@@ -166,6 +177,26 @@ export interface PerformancePredictionRequest {
   historicalData: HistoricalPerformanceData[];
   campaignContext: CampaignContext;
   predictionDays?: number;
+  /** ISO code of the ad account's currency; all figures are reported in it. */
+  currency?: string;
+  /**
+   * Per-ad totals. Without these the model only sees account-level daily rows
+   * and cannot say which creative is responsible for anything.
+   */
+  adBreakdown?: Array<{
+    name: string;
+    status: string;
+    activeDays: number;
+    firstDay: string;
+    lastDay: string;
+    spend: number;
+    impressions: number;
+    linkClicks: number;
+    conversions: number;
+    cpa: number;
+    linkCtr: number;
+    cvr: number;
+  }>;
 }
 
 export interface AnomalyDetectionRequest {

@@ -492,3 +492,92 @@ export async function buildAnalyticsData({
     ],
   };
 }
+
+export interface EntityPerformance {
+  id: string;
+  name: string;
+  status: string;
+  /** First and last day with delivery, ISO date. */
+  firstDay: string;
+  lastDay: string;
+  /** Days with delivery, not calendar span. */
+  activeDays: number;
+  spend: number;
+  impressions: number;
+  clicks: number;
+  linkClicks: number;
+  conversions: number;
+  cpa: number;
+  linkCtr: number;
+  cvr: number;
+}
+
+/**
+ * Per-ad performance for an account, newest spend first.
+ *
+ * The AI analysis previously received only an account-level daily series, so
+ * the most it could ever say about creative was "refresh some creatives" — it
+ * had no way to know which. On DRNL the account-level view hides that an
+ * archived ad produced 68 leads at EUR 4.86 while the active one produces
+ * leads at EUR 15.68, which is the single most actionable fact in the account.
+ *
+ * `activeDays` counts days with delivery rather than the calendar span, so a
+ * long-paused ad is not reported as long-running.
+ */
+export async function getAdPerformance(
+  adAccountId: string,
+  since: Date
+): Promise<EntityPerformance[]> {
+  const rows = await prisma.performanceMetric.groupBy({
+    by: ['adId'],
+    where: {
+      date: { gte: since },
+      ad: { adSet: { campaign: { adAccountId } } },
+    },
+    _sum: {
+      spend: true,
+      impressions: true,
+      clicks: true,
+      linkClicks: true,
+      conversions: true,
+    },
+    _min: { date: true },
+    _max: { date: true },
+    _count: { _all: true },
+  });
+
+  const ads = await prisma.ad.findMany({
+    where: { id: { in: rows.map((r) => r.adId) } },
+    select: { id: true, name: true, status: true },
+  });
+  const meta = new Map(ads.map((a) => [a.id, a]));
+
+  return rows
+    .map((r) => {
+      const spend = r._sum.spend ?? 0;
+      const impressions = Number(r._sum.impressions ?? 0);
+      const clicks = Number(r._sum.clicks ?? 0);
+      const linkClicks =
+        r._sum.linkClicks === null ? clicks : Number(r._sum.linkClicks);
+      const conversions = Number(r._sum.conversions ?? 0);
+      const info = meta.get(r.adId);
+
+      return {
+        id: r.adId,
+        name: info?.name ?? 'unknown',
+        status: info?.status ?? 'unknown',
+        firstDay: r._min.date ? r._min.date.toISOString().split('T')[0] : '',
+        lastDay: r._max.date ? r._max.date.toISOString().split('T')[0] : '',
+        activeDays: r._count._all,
+        spend,
+        impressions,
+        clicks,
+        linkClicks,
+        conversions,
+        cpa: conversions > 0 ? spend / conversions : 0,
+        linkCtr: impressions > 0 ? linkClicks / impressions : 0,
+        cvr: linkClicks > 0 ? conversions / linkClicks : 0,
+      };
+    })
+    .sort((a, b) => b.spend - a.spend);
+}
