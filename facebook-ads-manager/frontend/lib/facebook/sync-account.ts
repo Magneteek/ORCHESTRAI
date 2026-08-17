@@ -204,7 +204,11 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
   });
   const adSetMap = new Map(dbAdSets.map((s) => [s.adSetId, s.id]));
 
-  const adFields = 'id,name,status,adset_id,creative{id,name,thumbnail_url,object_story_spec}';
+  // asset_feed_spec carries the actual copy for dynamic/Advantage+ creatives.
+  // object_story_spec alone returns only page_id/instagram_user_id for those,
+  // so without this the stored creative has no headline or body text at all.
+  const adFields =
+    'id,name,status,adset_id,creative{id,name,thumbnail_url,object_story_spec,asset_feed_spec,title,body,call_to_action_type}';
   const allAds = await fbGetAllPages(`/${fbAccountId}/ads`, token, {
     fields: adFields,
     limit: '200',

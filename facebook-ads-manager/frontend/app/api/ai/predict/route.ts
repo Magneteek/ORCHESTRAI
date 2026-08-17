@@ -8,6 +8,7 @@ import { auth } from '@/lib/auth/auth';
 import { predictPerformance } from '@/lib/ai/performance-predictor';
 import { prisma } from '@/lib/db/prisma';
 import { getDailyPerformance, getAdPerformance } from '@/lib/analytics/aggregate';
+import { getAccountContext } from '@/lib/ai/account-context';
 import { getCampaignContext } from '@/lib/ai/campaign-context';
 import type { HistoricalPerformanceData } from '@/lib/ai/types';
 import { subDays } from 'date-fns';
@@ -101,6 +102,11 @@ export async function POST(request: NextRequest) {
     // creative by far had stopped delivering before that window opened.
     const adBreakdown = await getAdPerformance(adAccountId, subDays(new Date(), 120));
 
+    // Placement split, ad copy, change log and audience size. Each section
+    // degrades independently, so an unavailable endpoint costs that block
+    // rather than the prediction.
+    const accountContext = await getAccountContext(adAccountId, 30);
+
     // Run prediction
     const prediction = await predictPerformance({
       adAccountId,
@@ -109,6 +115,7 @@ export async function POST(request: NextRequest) {
       predictionDays,
       currency: account.currency,
       adBreakdown,
+      accountContext,
     });
 
     return NextResponse.json(

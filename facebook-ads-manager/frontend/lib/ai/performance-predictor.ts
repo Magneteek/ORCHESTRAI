@@ -9,6 +9,7 @@ import {
   PerformancePredictionRequest,
 } from './types';
 import { prisma } from '@/lib/db/prisma';
+import type { AccountContext } from './account-context';
 import { addDays, format } from 'date-fns';
 
 const SYSTEM_PROMPT = `You are a senior paid-social analyst reviewing one Meta ad account. You are writing for the person who controls the budget, who will act on what you say.
@@ -75,6 +76,7 @@ export async function predictPerformance(
     predictionDays = 7,
     currency = 'USD',
     adBreakdown = [],
+    accountContext,
   } = request;
 
   // Check cache first
@@ -102,6 +104,10 @@ export async function predictPerformance(
         .join('\n')
     : '  (no per-ad data available)';
 
+  const contextBlocks = accountContext
+    ? renderAccountContext(accountContext, money)
+    : '';
+
   const userPrompt = `Analyze this account's performance and predict the next ${predictionDays} days:
 
 CURRENCY: all amounts below are in ${currency}. Report your figures in ${currency}.
@@ -119,6 +125,7 @@ CAMPAIGN CONTEXT:
 PER-AD BREAKDOWN (last 120 days — deliberately wider than the daily series\nabove, so stopped ads remain comparable against the ones running now):
 ${adTable}
 
+${contextBlocks}
 ANALYSIS INSIGHTS:
 ${dataContext}
 
@@ -416,4 +423,93 @@ export async function evaluatePredictionAccuracy(
   ];
 
   return { accuracy, mae, insights };
+}
+
+
+/**
+ * Render the enrichment blocks. Sections that could not be fetched say so
+ * explicitly rather than being omitted — the model must be able to tell
+ * "no placement problem" from "no placement data", and an empty change log is
+ * evidence against a configuration explanation rather than an absence of
+ * information.
+ */
+function renderAccountContext(
+  ctx: AccountContext,
+  money: (n: number) => string
+): string {
+  const parts: string[] = [];
+
+  if (ctx.placements === null) {
+    parts.push('PLACEMENT BREAKDOWN: unavailable — do not infer anything about placements.');
+  } else if (ctx.placements.length === 0) {
+    parts.push('PLACEMENT BREAKDOWN: no placement-level delivery in this period.');
+  } else {
+    const rows = ctx.placements
+      .map(
+        (p) =>
+          `  ${p.platform}/${p.position}: spend ${money(p.spend)}, ${p.impressions} impressions, ` +
+          `${p.linkClicks} link clicks, ${p.conversions} conversions, ` +
+          `cost per conversion ${p.conversions ? money(p.cpa) : 'no conversions'}`
+      )
+      .join('\n');
+    parts.push(
+      `PLACEMENT BREAKDOWN (where the budget actually went):\n${rows}\n` +
+        `  Compare each placement's cost per conversion against the account figure before ` +
+        `suggesting an exclusion, and check the conversion count behind it is large enough to act on.`
+    );
+  }
+
+  if (ctx.creatives.length > 0) {
+    const rows = ctx.creatives
+      .map((c) => {
+        const lines = [`  ${c.adName} [${c.status}]`];
+        if (c.titles.length) lines.push(`    headlines: ${c.titles.map((t) => `"${t}"`).join(' | ')}`);
+        if (c.bodies.length) lines.push(`    body copy: ${c.bodies.map((b) => `"${b}"`).join(' | ')}`);
+        if (c.descriptions.length) lines.push(`    descriptions: ${c.descriptions.join(' | ')}`);
+        if (c.callToAction) lines.push(`    call to action: ${c.callToAction}`);
+        if (c.landingUrls.length) lines.push(`    landing page: ${c.landingUrls.join(', ')}`);
+        return lines.join('\n');
+      })
+      .join('\n');
+    parts.push(
+      `AD COPY (what each ad actually said):\n${rows}\n` +
+        `  Use this to explain WHY an ad performs as it does — the angle, the offer, the ` +
+        `landing page it sends to. Flag any asset that is truncated, garbled or duplicated, ` +
+        `since those run live exactly as written here.`
+    );
+  }
+
+  if (ctx.changes === null) {
+    parts.push('CHANGE LOG: unavailable — you cannot rule a configuration change in or out.');
+  } else if (ctx.changes.length === 0) {
+    parts.push(
+      'CHANGE LOG: read successfully and contains no configuration changes in this period ' +
+        '(billing events excluded). Treat a delivery shift as an auction or pacing effect ' +
+        'rather than an edit, unless something else contradicts that.'
+    );
+  } else {
+    const rows = ctx.changes
+      .map((c) => `  ${c.date}  ${c.eventType}${c.objectName ? ` — ${c.objectName}` : ''}`)
+      .join('\n');
+    parts.push(`CHANGE LOG (configuration changes, billing excluded):\n${rows}`);
+  }
+
+  if (ctx.audiences && ctx.audiences.length > 0) {
+    const rows = ctx.audiences
+      .map((a) => {
+        const size =
+          a.lowerBound && a.upperBound
+            ? `${a.lowerBound.toLocaleString()}–${a.upperBound.toLocaleString()} monthly active people`
+            : 'size unavailable';
+        return `  ${a.adSetName}: ${size}${a.ready ? '' : ' (estimate not ready)'}`;
+      })
+      .join('\n');
+    parts.push(
+      `AUDIENCE SIZE (active ad sets):\n${rows}\n` +
+        `  Use this with frequency to judge headroom: a large pool with low frequency means a ` +
+        `budget increase has somewhere to go; a small pool means it mostly raises frequency.`
+    );
+  }
+
+  return parts.length ? `${parts.join('\n\n')}\n` : '';
 }

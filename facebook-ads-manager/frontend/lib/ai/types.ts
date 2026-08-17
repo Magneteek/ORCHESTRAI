@@ -183,6 +183,8 @@ export interface PerformancePredictionRequest {
    * Per-ad totals. Without these the model only sees account-level daily rows
    * and cannot say which creative is responsible for anything.
    */
+  /** Placement, creative copy, change log and audience size; see lib/ai/account-context. */
+  accountContext?: import('./account-context').AccountContext;
   adBreakdown?: Array<{
     name: string;
     status: string;
