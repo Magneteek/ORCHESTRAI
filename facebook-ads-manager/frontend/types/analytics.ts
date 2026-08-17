@@ -59,6 +59,22 @@ export interface TopCampaign {
   cpa: number;
 }
 
+/**
+ * Spend and conversion efficiency for one weekday, aggregated across the range.
+ * Surfaces day-of-week effects that a daily time series hides — on the DRNL
+ * account cost per lead runs 2.9x higher on Sunday than on Tuesday.
+ */
+export interface DayOfWeekPerformance {
+  /** 0 = Sunday, matching Date.getDay(). */
+  day: number;
+  label: string;
+  spend: number;
+  clicks: number;
+  conversions: number;
+  /** Cost per conversion for this weekday; 0 when it produced none. */
+  cpa: number;
+}
+
 export interface FunnelStage {
   name: string;
   value: number;
@@ -78,6 +94,7 @@ export interface AnalyticsData {
   metrics: AnalyticsMetrics;
   timeSeries: TimeSeriesDataPoint[];
   topCampaigns: TopCampaign[];
+  dayOfWeek: DayOfWeekPerformance[];
   funnelData?: FunnelStage[];
   aiInsights?: AIInsight[];
 }

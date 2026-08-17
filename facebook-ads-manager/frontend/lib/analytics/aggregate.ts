@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db/prisma';
 import type {
   AnalyticsData,
+  DayOfWeekPerformance,
   TimeSeriesDataPoint,
   TopCampaign,
 } from '@/types/analytics';
@@ -360,6 +361,33 @@ export async function buildAnalyticsData({
     .sort((a, b) => b.spend - a.spend)
     .slice(0, 10);
 
+  // Day-of-week efficiency. Built from the daily series rather than the raw
+  // rows so each calendar day is counted once, and CPA comes from summed
+  // totals rather than averaging per-day ratios.
+  const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dowAcc = DAY_LABELS.map((label, day) => ({
+    day,
+    label,
+    spend: 0,
+    clicks: 0,
+    conversions: 0,
+  }));
+
+  for (const point of timeSeries) {
+    // Parse as UTC — the date keys are YYYY-MM-DD and `new Date('2026-08-17')`
+    // is already UTC midnight, so no local-timezone shift can move a row into
+    // the neighbouring weekday.
+    const day = new Date(`${point.date}T00:00:00Z`).getUTCDay();
+    dowAcc[day].spend += point.spend;
+    dowAcc[day].clicks += point.clicks;
+    dowAcc[day].conversions += point.conversions;
+  }
+
+  const dayOfWeek: DayOfWeekPerformance[] = dowAcc.map((d) => ({
+    ...d,
+    cpa: d.conversions > 0 ? d.spend / d.conversions : 0,
+  }));
+
   return {
     metrics: {
       spend,
@@ -375,6 +403,7 @@ export async function buildAnalyticsData({
     },
     timeSeries,
     topCampaigns,
+    dayOfWeek,
     funnelData: [
       { name: 'Impressions', value: impressions, percentage: 100 },
       {

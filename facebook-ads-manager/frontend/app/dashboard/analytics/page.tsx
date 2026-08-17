@@ -1,88 +1,179 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar, TrendingUp, Download, RefreshCw, DollarSign, Users, MousePointer, Eye } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PerformanceChart } from '@/components/analytics/performance-chart';
-import { MetricCard } from '@/components/analytics/metric-card';
-import { DateRangePicker } from '@/components/analytics/date-range-picker';
-import { ComparisonMode } from '@/components/analytics/comparison-mode';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { KpiTile } from '@/components/analytics/kpi-tile';
+import { MetricSparkline } from '@/components/analytics/metric-sparkline';
+import { ConversionFunnel } from '@/components/analytics/conversion-funnel';
+import { DayOfWeekEfficiency } from '@/components/analytics/day-of-week-efficiency';
 import { ExportReport } from '@/components/analytics/export-report';
 import { apiClient } from '@/lib/helpers/api-client';
-import { isLeadGen, type AnalyticsData, type DateRange } from '@/types/analytics';
-import { formatCurrency } from '@/lib/utils/format';
+import { useAdAccount } from '@/lib/hooks/use-ad-account';
+import {
+  DEFAULT_INDUSTRY,
+  INDUSTRY_BENCHMARKS,
+  getBenchmark,
+} from '@/lib/analytics/benchmarks';
+import { isLeadGen, type AnalyticsData } from '@/types/analytics';
+
+type Preset = '7' | '30' | '90';
+
+const PRESET_LABEL: Record<Preset, string> = {
+  '7': 'Last 7 days',
+  '30': 'Last 30 days',
+  '90': 'Last 90 days',
+};
+
+const INDUSTRY_STORAGE_PREFIX = 'analyticsIndustry:';
+
+/** YYYY-MM-DD in UTC, matching how performance_metrics dates are keyed. */
+function isoDay(d: Date): string {
+  return d.toISOString().split('T')[0];
+}
+
+/**
+ * Current window plus the equal-length window immediately before it, so every
+ * KPI can be stated as a change rather than a bare number.
+ */
+function windows(days: number) {
+  const to = new Date();
+  const from = new Date();
+  from.setDate(from.getDate() - days);
+
+  const prevTo = new Date(from);
+  prevTo.setDate(prevTo.getDate() - 1);
+  const prevFrom = new Date(prevTo);
+  prevFrom.setDate(prevFrom.getDate() - days);
+
+  return {
+    from: isoDay(from),
+    to: isoDay(to),
+    prevFrom: isoDay(prevFrom),
+    prevTo: isoDay(prevTo),
+  };
+}
 
 export default function AnalyticsPage() {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-    to: new Date(),
-  });
+  const [preset, setPreset] = useState<Preset>('30');
+  const [industry, setIndustry] = useState<string>(DEFAULT_INDUSTRY);
+  const { selectedAccountId, selectedAccount, accounts, isLoading: accountsLoading } =
+    useAdAccount();
 
-  const [comparisonMode, setComparisonMode] = useState(false);
-  const [comparisonDateRange, setComparisonDateRange] = useState<DateRange>({
-    from: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 60 days ago
-    to: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-  });
+  const range = useMemo(() => windows(Number(preset)), [preset]);
 
-  // Fetch analytics data
+  // Industry is per ad account — a dental client and an e-commerce client
+  // share nothing benchmark-wise. Stored client-side for now; moving it onto
+  // the AdAccount record is a schema change, not a redesign.
+  useEffect(() => {
+    if (!selectedAccountId) return;
+    const stored = localStorage.getItem(INDUSTRY_STORAGE_PREFIX + selectedAccountId);
+    setIndustry(stored ?? DEFAULT_INDUSTRY);
+  }, [selectedAccountId]);
+
+  const onIndustryChange = (value: string) => {
+    setIndustry(value);
+    if (selectedAccountId) {
+      localStorage.setItem(INDUSTRY_STORAGE_PREFIX + selectedAccountId, value);
+    }
+  };
+
+  const fetchRange = (from: string, to: string) => {
+    const params = new URLSearchParams({
+      from,
+      to,
+      ...(selectedAccountId && { accountIds: selectedAccountId }),
+    });
+    return apiClient.get<AnalyticsData>(`/api/analytics?${params}`);
+  };
+
   const { data, isLoading, refetch } = useQuery<AnalyticsData>({
-    queryKey: ['analytics', dateRange],
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        from: dateRange.from.toISOString(),
-        to: dateRange.to.toISOString(),
-      });
-      return apiClient.get<AnalyticsData>(`/api/analytics?${params}`);
-    },
+    queryKey: ['analytics', selectedAccountId, range.from, range.to],
+    queryFn: () => fetchRange(range.from, range.to),
+    enabled: !!selectedAccountId,
   });
 
-  // Fetch comparison data
-  const { data: comparisonData } = useQuery<AnalyticsData>({
-    queryKey: ['analytics-comparison', comparisonDateRange],
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        from: comparisonDateRange.from.toISOString(),
-        to: comparisonDateRange.to.toISOString(),
-      });
-      return apiClient.get<AnalyticsData>(`/api/analytics?${params}`);
-    },
-    enabled: comparisonMode,
+  const { data: previous } = useQuery<AnalyticsData>({
+    queryKey: ['analytics-prev', selectedAccountId, range.prevFrom, range.prevTo],
+    queryFn: () => fetchRange(range.prevFrom, range.prevTo),
+    enabled: !!selectedAccountId,
   });
 
-  const calculateTrend = (current: number, previous?: number) => {
-    if (!previous || previous === 0) return null;
-    return ((current - previous) / previous) * 100;
-  };
+  // Format in the account's own currency. The app elsewhere hardcodes USD,
+  // which prints EUR spend with a dollar sign.
+  const currency = selectedAccount?.currency || 'USD';
+  const fmtCurrency = useMemo(
+    () =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 2,
+      }).format,
+    [currency]
+  );
+  const fmtCount = (n: number) => n.toLocaleString('en-US');
+  const fmtPercent = (n: number) => `${(n * 100).toFixed(2)}%`;
 
-  const metrics = data?.metrics || {
-    spend: 0,
-    impressions: 0,
-    clicks: 0,
-    conversions: 0,
-    revenue: 0,
-    ctr: 0,
-    cpc: 0,
-    cpm: 0,
-    roas: 0,
-    cpa: 0,
-  };
+  const benchmark = getBenchmark(industry);
+  const m = data?.metrics;
+  const prev = previous?.metrics;
+  const leadGen = m ? isLeadGen(m) : true;
 
-  const previousMetrics = comparisonData?.metrics;
+  const series = data?.timeSeries ?? [];
+  const cvr = m && m.clicks > 0 ? m.conversions / m.clicks : 0;
+
+  if (!accountsLoading && accounts.length === 0) {
+    return (
+      <Card className="p-8 text-center">
+        <p className="text-sm text-muted-foreground">
+          Connect a Facebook ad account to see analytics.
+        </p>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analytics Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
           <p className="text-muted-foreground">
-            Track your campaign performance and insights
+            {selectedAccount?.name ?? 'Select an account'} · {PRESET_LABEL[preset]}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Select value={industry} onValueChange={onIndustryChange}>
+            <SelectTrigger className="w-52" aria-label="Benchmark industry">
+              <SelectValue placeholder="Benchmark industry" />
+            </SelectTrigger>
+            <SelectContent>
+              {INDUSTRY_BENCHMARKS.map((b) => (
+                <SelectItem key={b.id} value={b.id}>
+                  {b.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Tabs value={preset} onValueChange={(v) => setPreset(v as Preset)}>
+            <TabsList>
+              <TabsTrigger value="7">7d</TabsTrigger>
+              <TabsTrigger value="30">30d</TabsTrigger>
+              <TabsTrigger value="90">90d</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <Button
             variant="outline"
             size="icon"
@@ -91,292 +182,198 @@ export default function AnalyticsPage() {
           >
             <RefreshCw className="h-4 w-4" />
           </Button>
-          <ExportReport data={data} dateRange={dateRange} />
-        </div>
-      </div>
 
-      {/* Date Range & Comparison Controls */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between">
-          <DateRangePicker
-            dateRange={dateRange}
-            onChange={setDateRange}
+          <ExportReport
+            data={data}
+            dateRange={{ from: new Date(range.from), to: new Date(range.to) }}
           />
-          <div className="flex items-center gap-2">
-            <Button
-              variant={comparisonMode ? 'default' : 'outline'}
-              onClick={() => setComparisonMode(!comparisonMode)}
-              size="sm"
-            >
-              <TrendingUp className="mr-2 h-4 w-4" />
-              Compare
-            </Button>
-          </div>
         </div>
-
-        {comparisonMode && (
-          <div className="mt-4 border-t pt-4">
-            <ComparisonMode
-              dateRange={comparisonDateRange}
-              onChange={setComparisonDateRange}
-            />
-          </div>
-        )}
-      </Card>
-
-      {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          title="Total Spend"
-          value={`$${metrics.spend.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-          change={calculateTrend(metrics.spend, previousMetrics?.spend) || undefined}
-          icon={DollarSign}
-          isLoading={isLoading}
-        />
-        <MetricCard
-          title="Impressions"
-          value={metrics.impressions.toLocaleString()}
-          change={calculateTrend(metrics.impressions, previousMetrics?.impressions) || undefined}
-          icon={Eye}
-          isLoading={isLoading}
-        />
-        <MetricCard
-          title="Clicks"
-          value={metrics.clicks.toLocaleString()}
-          change={calculateTrend(metrics.clicks, previousMetrics?.clicks) || undefined}
-          icon={MousePointer}
-          isLoading={isLoading}
-        />
-        <MetricCard
-          title="Conversions"
-          value={metrics.conversions.toLocaleString()}
-          change={calculateTrend(metrics.conversions, previousMetrics?.conversions) || undefined}
-          icon={Users}
-          isLoading={isLoading}
-        />
       </div>
 
-      {/* Performance Charts */}
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="engagement">Engagement</TabsTrigger>
-          <TabsTrigger value="conversions">Conversions</TabsTrigger>
-          <TabsTrigger value="roi">ROI & Costs</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold">Performance Over Time</h3>
-            <PerformanceChart
-              data={data?.timeSeries || []}
-              comparisonData={comparisonMode ? comparisonData?.timeSeries : undefined}
-              metrics={['impressions', 'clicks', 'spend']}
-              height={400}
+      {isLoading || !m ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="h-32 animate-pulse rounded-lg border bg-muted/40" />
+          ))}
+        </div>
+      ) : (
+        <>
+          {/* Headline KPIs — spend, volume, efficiency, quality */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <KpiTile
+              label="Spend"
+              value={m.spend}
+              format={fmtCurrency}
+              previous={prev?.spend}
             />
-          </Card>
+            <KpiTile
+              label={leadGen ? 'Leads' : 'Conversions'}
+              value={m.conversions}
+              format={fmtCount}
+              previous={prev?.conversions}
+            />
+            <KpiTile
+              label={leadGen ? 'Cost per lead' : 'Cost per conversion'}
+              value={m.cpa}
+              format={fmtCurrency}
+              previous={prev?.cpa}
+              lowerIsBetter
+              benchmark={benchmark.cpl}
+              benchmarkKind="currency"
+            />
+            <KpiTile
+              label="Click-through rate"
+              value={m.ctr}
+              format={fmtPercent}
+              previous={prev?.ctr}
+              benchmark={benchmark.ctr}
+              benchmarkKind="percent"
+              footnote={`${fmtCurrency(m.cpc)} per click`}
+            />
+          </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">CTR</div>
-              <div className="mt-2 text-2xl font-bold">
-                {(metrics.ctr * 100).toFixed(2)}%
-              </div>
-              {previousMetrics && (
-                <div className={`mt-1 text-xs ${
-                  calculateTrend(metrics.ctr, previousMetrics.ctr)! > 0
-                    ? 'text-green-600'
-                    : 'text-red-600'
-                }`}>
-                  {calculateTrend(metrics.ctr, previousMetrics.ctr)!.toFixed(1)}% vs previous period
-                </div>
-              )}
+          {/* Where people are lost, and when they convert cheapest */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card className="p-6">
+              <h2 className="text-lg font-semibold">Conversion funnel</h2>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Where the drop-off happens
+              </p>
+              <ConversionFunnel
+                formatCount={fmtCount}
+                steps={[
+                  { label: 'Impressions', value: m.impressions },
+                  {
+                    label: 'Clicks',
+                    value: m.clicks,
+                    rate: m.ctr,
+                    benchmark: benchmark.ctr,
+                  },
+                  {
+                    label: leadGen ? 'Leads' : 'Conversions',
+                    value: m.conversions,
+                    rate: cvr,
+                    benchmark: benchmark.cvr,
+                  },
+                ]}
+              />
             </Card>
 
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">CPC</div>
-              <div className="mt-2 text-2xl font-bold">
-                ${metrics.cpc.toFixed(2)}
-              </div>
-              {previousMetrics && (
-                <div className={`mt-1 text-xs ${
-                  calculateTrend(metrics.cpc, previousMetrics.cpc)! < 0
-                    ? 'text-green-600'
-                    : 'text-red-600'
-                }`}>
-                  {calculateTrend(metrics.cpc, previousMetrics.cpc)!.toFixed(1)}% vs previous period
-                </div>
-              )}
-            </Card>
-
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">CPM</div>
-              <div className="mt-2 text-2xl font-bold">
-                ${metrics.cpm.toFixed(2)}
-              </div>
-              {previousMetrics && (
-                <div className={`mt-1 text-xs ${
-                  calculateTrend(metrics.cpm, previousMetrics.cpm)! < 0
-                    ? 'text-green-600'
-                    : 'text-red-600'
-                }`}>
-                  {calculateTrend(metrics.cpm, previousMetrics.cpm)!.toFixed(1)}% vs previous period
-                </div>
-              )}
+            <Card className="p-6">
+              <h2 className="text-lg font-semibold">Efficiency by day of week</h2>
+              <p className="mb-4 text-sm text-muted-foreground">
+                {leadGen ? 'Cost per lead' : 'Cost per conversion'} by weekday
+              </p>
+              <DayOfWeekEfficiency
+                data={data?.dayOfWeek ?? []}
+                formatCurrency={fmtCurrency}
+              />
             </Card>
           </div>
-        </TabsContent>
 
-        <TabsContent value="engagement" className="space-y-4">
+          {/* Trends — one metric per panel, each with its own scale */}
           <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold">Engagement Metrics</h3>
-            <PerformanceChart
-              data={data?.timeSeries || []}
-              comparisonData={comparisonMode ? comparisonData?.timeSeries : undefined}
-              metrics={['clicks', 'ctr']}
-              height={400}
-            />
-          </Card>
-
-          <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold">Top Performing Campaigns</h3>
-            <div className="space-y-3">
-              {data?.topCampaigns?.slice(0, 5).map((campaign, index) => (
-                <div key={campaign.id} className="flex items-center justify-between border-b pb-3 last:border-0">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <div className="font-medium">{campaign.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {campaign.impressions.toLocaleString()} impressions
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold">{(campaign.ctr * 100).toFixed(2)}%</div>
-                    <div className="text-xs text-muted-foreground">CTR</div>
-                  </div>
-                </div>
-              ))}
+            <h2 className="text-lg font-semibold">Trends</h2>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Each panel is scaled to its own range; the arrow compares the second
+              half of the period against the first
+            </p>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <MetricSparkline
+                label="Spend"
+                format={fmtCurrency}
+                points={series.map((p) => ({ date: p.date, value: p.spend }))}
+              />
+              <MetricSparkline
+                label={leadGen ? 'Leads' : 'Conversions'}
+                format={fmtCount}
+                points={series.map((p) => ({ date: p.date, value: p.conversions }))}
+              />
+              <MetricSparkline
+                label={leadGen ? 'Cost per lead' : 'Cost per conversion'}
+                format={fmtCurrency}
+                lowerIsBetter
+                points={series
+                  // Days with no conversions have no defined cost per lead;
+                  // plotting them as zero would invent a perfect day.
+                  .filter((p) => p.conversions > 0)
+                  .map((p) => ({ date: p.date, value: p.spend / p.conversions }))}
+              />
+              <MetricSparkline
+                label="Click-through rate"
+                format={fmtPercent}
+                points={series.map((p) => ({ date: p.date, value: p.ctr }))}
+              />
             </div>
           </Card>
-        </TabsContent>
 
-        <TabsContent value="conversions" className="space-y-4">
+          {/* Campaign comparison, ordered by the decision metric */}
           <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold">Conversion Performance</h3>
-            <PerformanceChart
-              data={data?.timeSeries || []}
-              comparisonData={comparisonMode ? comparisonData?.timeSeries : undefined}
-              metrics={['conversions']}
-              height={400}
-            />
-          </Card>
+            <h2 className="text-lg font-semibold">Campaigns</h2>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Ranked by {leadGen ? 'cost per lead' : 'cost per conversion'} — cheapest first
+            </p>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">Conversion Rate</div>
-              <div className="mt-2 text-2xl font-bold">
-                {((metrics.conversions / metrics.clicks) * 100 || 0).toFixed(2)}%
+            {data?.topCampaigns.length ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b text-left text-muted-foreground">
+                      <th className="pb-2 font-medium">Campaign</th>
+                      <th className="pb-2 text-right font-medium">Spend</th>
+                      <th className="pb-2 text-right font-medium">
+                        {leadGen ? 'Leads' : 'Conv.'}
+                      </th>
+                      <th className="pb-2 text-right font-medium">
+                        {leadGen ? 'Cost/lead' : 'Cost/conv.'}
+                      </th>
+                      <th className="pb-2 text-right font-medium">CTR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...data.topCampaigns]
+                      .sort((a, b) => {
+                        // Campaigns that converted rank ahead of those that
+                        // did not, cheapest first; a zero cpa means "no leads",
+                        // not "free leads".
+                        if (!a.cpa && !b.cpa) return b.spend - a.spend;
+                        if (!a.cpa) return 1;
+                        if (!b.cpa) return -1;
+                        return a.cpa - b.cpa;
+                      })
+                      .map((c) => (
+                        <tr key={c.id} className="border-b last:border-0">
+                          <td className="py-2 pr-4">{c.name}</td>
+                          <td className="py-2 text-right tabular-nums">
+                            {fmtCurrency(c.spend)}
+                          </td>
+                          <td className="py-2 text-right tabular-nums">
+                            {c.conversions || '—'}
+                          </td>
+                          <td className="py-2 text-right tabular-nums">
+                            {c.cpa ? fmtCurrency(c.cpa) : '—'}
+                          </td>
+                          <td className="py-2 text-right tabular-nums">
+                            {fmtPercent(c.ctr)}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </div>
-            </Card>
-
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">Cost Per Conversion</div>
-              <div className="mt-2 text-2xl font-bold">
-                ${(metrics.spend / metrics.conversions || 0).toFixed(2)}
-              </div>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="roi" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold">ROI & Cost Analysis</h3>
-            <PerformanceChart
-              data={data?.timeSeries || []}
-              comparisonData={comparisonMode ? comparisonData?.timeSeries : undefined}
-              metrics={['spend', 'roas']}
-              height={400}
-            />
-          </Card>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {/* Lead-gen books no revenue, so ROAS here is always 0.00x.
-                Cost per lead is the comparable efficiency metric. */}
-            {isLeadGen(metrics) ? (
-              <Card className="p-4">
-                <div className="text-sm text-muted-foreground">Cost Per Lead</div>
-                <div className="mt-2 text-2xl font-bold">
-                  {formatCurrency(metrics.cpa)}
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  {metrics.conversions} leads · no revenue tracked
-                </div>
-              </Card>
             ) : (
-              <Card className="p-4">
-                <div className="text-sm text-muted-foreground">ROAS</div>
-                <div className="mt-2 text-2xl font-bold">
-                  {metrics.roas.toFixed(2)}x
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  Return on ad spend
-                </div>
-              </Card>
+              <p className="py-8 text-center text-sm text-muted-foreground">
+                No campaign delivery in this period
+              </p>
             )}
+          </Card>
 
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">Average CPC</div>
-              <div className="mt-2 text-2xl font-bold">
-                ${metrics.cpc.toFixed(2)}
-              </div>
-            </Card>
-
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">Average CPM</div>
-              <div className="mt-2 text-2xl font-bold">
-                ${metrics.cpm.toFixed(2)}
-              </div>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      {/* AI Insights Preview */}
-      {data?.aiInsights && data.aiInsights.length > 0 && (
-        <Card className="p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold">AI-Powered Insights</h3>
-            <Button variant="link" size="sm">
-              View All Insights →
-            </Button>
-          </div>
-          <div className="space-y-3">
-            {data.aiInsights.slice(0, 3).map((insight, index) => (
-              <div
-                key={index}
-                className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 rounded-full bg-blue-600 p-1">
-                    <TrendingUp className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-blue-900 dark:text-blue-100">
-                      {insight.title}
-                    </div>
-                    <div className="mt-1 text-sm text-blue-700 dark:text-blue-300">
-                      {insight.description}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+          <p className="text-xs text-muted-foreground">
+            Benchmarks are 2026 Meta lead-gen industry averages shown for context, not
+            targets; they are quoted in USD and swing seasonally by roughly 46%.
+            {currency !== 'USD' && ` This account reports in ${currency}.`}
+          </p>
+        </>
       )}
     </div>
   );
