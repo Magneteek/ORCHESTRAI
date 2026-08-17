@@ -15,6 +15,9 @@ async function fixUserSession() {
     const newOrg = await prisma.organization.create({
       data: {
         name: 'KrisTest',
+        // Required and unique in the schema; omitting it failed at runtime as
+        // well as in the type checker, which blocked `next build`.
+        slug: 'kristest',
       },
     });
 
