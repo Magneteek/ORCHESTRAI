@@ -7,7 +7,8 @@ import { Job } from 'bullmq';
 import { createWorker, QueueName, anomalyDetectionQueue, JobType } from '../config';
 import { detectAnomalies, calculateHistoricalStats } from '@/lib/ai/anomaly-detector';
 import { prisma } from '@/lib/db/prisma';
-import { subDays, format } from 'date-fns';
+import { getDailyPerformance, type DailyPerformance } from '@/lib/analytics/aggregate';
+import { subDays } from 'date-fns';
 
 interface AnomalyDetectionJobData {
   adAccountId: string;
@@ -32,8 +33,13 @@ async function processAnomalyDetection(job: Job<AnomalyDetectionJobData>) {
       return { success: true, skipped: true };
     }
 
-    // Get historical data (last 30 days)
-    const historicalData = await getHistoricalData(adAccountId, campaignId, 30);
+    // Get historical data (the 30 days before the day under test)
+    const historicalData = await getHistoricalData(
+      adAccountId,
+      campaignId,
+      30,
+      new Date(currentMetrics.date)
+    );
 
     if (historicalData.length < 7) {
       console.log(`Insufficient historical data for ${adAccountId}, skipping`);
@@ -67,78 +73,50 @@ async function processAnomalyDetection(job: Job<AnomalyDetectionJobData>) {
 }
 
 /**
- * Get current day's metrics
+ * Get the most recent complete day of metrics.
+ *
+ * Deliberately never today: Facebook reports the current day partially, so a
+ * day that is only a few hours old looks like a collapse in spend and
+ * impressions against a 30-day baseline and would fire a false anomaly every
+ * morning. Looks back three days so a lagging or failed sync degrades to
+ * "slightly stale" rather than "no data".
  */
 async function getCurrentMetrics(
   adAccountId: string,
   campaignId?: string
-): Promise<any | null> {
-  // TODO: Add CampaignInsights model to Prisma schema
-  // const today = format(new Date(), 'yyyy-MM-dd');
-  //
-  // const insights = await prisma.campaignInsights.findFirst({
-  //   where: {
-  //     adAccountId,
-  //     ...(campaignId && { campaignId }),
-  //     date: new Date(today),
-  //   },
-  //   orderBy: { date: 'desc' },
-  // });
-  //
-  // if (!insights) return null;
-  //
-  // return {
-  //   date: format(insights.date, 'yyyy-MM-dd'),
-  //   spend: insights.spend,
-  //   impressions: insights.impressions,
-  //   clicks: insights.clicks,
-  //   conversions: insights.conversions || 0,
-  //   roas: insights.roas || 0,
-  //   ctr: insights.ctr || 0,
-  //   cpc: insights.cpc || 0,
-  //   cpm: insights.cpm || 0,
-  // };
+): Promise<DailyPerformance | null> {
+  const until = subDays(new Date(), 1);
+  const days = await getDailyPerformance({
+    adAccountId,
+    campaignId,
+    since: subDays(until, 2),
+    until,
+  });
 
-  return null;
+  return days.length > 0 ? days[days.length - 1] : null;
 }
 
 /**
- * Get historical performance data
+ * Get historical performance data ending the day before `before`.
+ *
+ * The day under test is excluded from its own baseline; including it drags the
+ * mean toward the anomaly and shrinks the deviation that is supposed to detect
+ * it.
  */
 async function getHistoricalData(
   adAccountId: string,
   campaignId: string | undefined,
-  days: number
-): Promise<any[]> {
-  // TODO: Add CampaignInsights model to Prisma schema
-  // const since = subDays(new Date(), days);
-  // const until = subDays(new Date(), 1); // Exclude today
-  //
-  // const insights = await prisma.campaignInsights.findMany({
-  //   where: {
-  //     adAccountId,
-  //     ...(campaignId && { campaignId }),
-  //     date: {
-  //       gte: since,
-  //       lte: until,
-  //     },
-  //   },
-  //   orderBy: { date: 'asc' },
-  // });
-  //
-  // return insights.map(i => ({
-  //   date: format(i.date, 'yyyy-MM-dd'),
-  //   spend: i.spend,
-  //   impressions: i.impressions,
-  //   clicks: i.clicks,
-  //   conversions: i.conversions || 0,
-  //   roas: i.roas || 0,
-  //   ctr: i.ctr || 0,
-  //   cpc: i.cpc || 0,
-  //   cpm: i.cpm || 0,
-  // }));
+  days: number,
+  before: Date
+): Promise<DailyPerformance[]> {
+  const until = subDays(before, 1);
 
-  return [];
+  return getDailyPerformance({
+    adAccountId,
+    campaignId,
+    since: subDays(until, days),
+    until,
+  });
 }
 
 /**
@@ -204,7 +182,12 @@ export async function runImmediateAnomalyDetection(
     return { error: 'No current metrics available' };
   }
 
-  const historicalData = await getHistoricalData(adAccountId, campaignId, 30);
+  const historicalData = await getHistoricalData(
+    adAccountId,
+    campaignId,
+    30,
+    new Date(currentMetrics.date)
+  );
 
   if (historicalData.length < 7) {
     return { error: 'Insufficient historical data' };

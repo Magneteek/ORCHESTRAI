@@ -7,7 +7,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth/auth';
 import { predictPerformance } from '@/lib/ai/performance-predictor';
 import { prisma } from '@/lib/db/prisma';
-import { subDays, format } from 'date-fns';
+import { getDailyPerformance } from '@/lib/analytics/aggregate';
+import type { HistoricalPerformanceData } from '@/lib/ai/types';
+import { subDays } from 'date-fns';
 import { RateLimiter } from '@/lib/redis/client';
 
 export async function POST(request: NextRequest) {
@@ -131,37 +133,20 @@ export async function POST(request: NextRequest) {
 
 /**
  * Get historical performance data
+ *
+ * Reads performance_metrics, populated by the sync in lib/facebook/sync-account.
+ * ctr and roas come back as ratios, which is what the predictor's prompt
+ * builder expects (it multiplies ctr by 100 for display).
  */
 async function getHistoricalData(
   adAccountId: string,
   campaignId?: string
-): Promise<any[]> {
-  const since = subDays(new Date(), 30);
-
-  // TODO: Add CampaignInsights model to Prisma schema
-  // const insights = await prisma.campaignInsights.findMany({
-  //   where: {
-  //     adAccountId,
-  //     ...(campaignId && { campaignId }),
-  //     date: { gte: since },
-  //   },
-  //   orderBy: { date: 'asc' },
-  // });
-
-  // return insights.map(i => ({
-  //   date: format(i.date, 'yyyy-MM-dd'),
-  //   spend: i.spend,
-  //   impressions: i.impressions,
-  //   clicks: i.clicks,
-  //   conversions: i.conversions || 0,
-  //   roas: i.roas || 0,
-  //   ctr: i.ctr || 0,
-  //   cpc: i.cpc || 0,
-  //   cpm: i.cpm || 0,
-  // }));
-
-  // Placeholder until CampaignInsights model is added
-  return [];
+): Promise<HistoricalPerformanceData[]> {
+  return getDailyPerformance({
+    adAccountId,
+    campaignId,
+    since: subDays(new Date(), 30),
+  });
 }
 
 /**

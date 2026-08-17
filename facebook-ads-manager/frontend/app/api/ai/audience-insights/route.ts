@@ -12,6 +12,7 @@ import {
   analyzeBudgetAllocation,
 } from '@/lib/ai/audience-insights';
 import { prisma } from '@/lib/db/prisma';
+import { getDailyPerformance } from '@/lib/analytics/aggregate';
 import { RateLimiter } from '@/lib/redis/client';
 import { subDays } from 'date-fns';
 
@@ -221,8 +222,12 @@ export async function GET(request: NextRequest) {
  * Helper: Get audience data
  */
 async function getAudienceData(adAccountId: string, campaignId?: string): Promise<any> {
-  // TODO: Implement when demographic data is available in database
-  // For now, return mock structure
+  // Still zeroed, and not for want of a table: performance_metrics has no
+  // demographic dimension at all. Filling this in means requesting Facebook's
+  // `breakdowns` (age, gender, country, publisher_platform, device_platform)
+  // in the insights call in lib/facebook/sync-account and storing the result
+  // in a new per-breakdown table. Until then the shape is returned as zeros so
+  // the prompt builder has stable keys to read.
   return {
     demographics: {
       age: { '18-24': 0, '25-34': 0, '35-44': 0, '45-54': 0, '55-64': 0, '65+': 0 },
@@ -244,39 +249,69 @@ async function getPerformanceBySegment(
   adAccountId: string,
   campaignId?: string
 ): Promise<Record<string, any>> {
-  // TODO: Implement when segment performance data is available
-  // TODO: Add CampaignInsights model to Prisma schema
-  // const insights = await prisma.campaignInsights.findMany({
-  //   where: {
-  //     adAccountId,
-  //     ...(campaignId && { campaignId }),
-  //     date: {
-  //       gte: subDays(new Date(), 30),
-  //     },
-  //   },
-  // });
-
-  // if (insights.length === 0) return {};
-
-  // // Aggregate performance
-  // const aggregate = insights.reduce(
-  //   (acc, i) => ({
-  //     spend: acc.spend + i.spend,
-  //     roas: acc.roas + (i.roas || 0),
-  //     conversions: acc.conversions + (i.conversions || 0),
-  //     count: acc.count + 1,
-  //   }),
-  //   { spend: 0, roas: 0, conversions: 0, count: 0 }
-  // );
-
-  // Placeholder until CampaignInsights model is added
-  return {
-    'all-campaigns': {
-      spend: 0,
-      roas: 0,
-      conversions: 0,
+  // Campaign is the only segmentation performance_metrics can express. Real
+  // audience segments (age, gender, placement) need Facebook's breakdown
+  // parameter, which the sync does not request — see getAudienceData.
+  const metrics = await prisma.performanceMetric.groupBy({
+    by: ['adId'],
+    where: {
+      date: { gte: subDays(new Date(), 30) },
+      ad: {
+        adSet: {
+          campaign: { adAccountId, ...(campaignId && { id: campaignId }) },
+        },
+      },
     },
-  };
+    _sum: {
+      spend: true,
+      clicks: true,
+      impressions: true,
+      conversions: true,
+      purchaseValue: true,
+    },
+  });
+
+  if (metrics.length === 0) return {};
+
+  // Map each ad back to its campaign so the totals can be keyed by campaign.
+  const ads = await prisma.ad.findMany({
+    where: { id: { in: metrics.map((m) => m.adId) } },
+    select: { id: true, adSet: { select: { campaign: { select: { name: true } } } } },
+  });
+  const campaignByAd = new Map(ads.map((a) => [a.id, a.adSet.campaign.name]));
+
+  const totals = new Map<
+    string,
+    { spend: number; revenue: number; conversions: number; clicks: number; impressions: number }
+  >();
+
+  for (const row of metrics) {
+    const key = campaignByAd.get(row.adId) ?? 'unknown-campaign';
+    const acc =
+      totals.get(key) ??
+      { spend: 0, revenue: 0, conversions: 0, clicks: 0, impressions: 0 };
+
+    acc.spend += row._sum.spend ?? 0;
+    acc.revenue += row._sum.purchaseValue ?? 0;
+    acc.conversions += Number(row._sum.conversions ?? 0);
+    acc.clicks += Number(row._sum.clicks ?? 0);
+    acc.impressions += Number(row._sum.impressions ?? 0);
+    totals.set(key, acc);
+  }
+
+  return Object.fromEntries(
+    Array.from(totals.entries()).map(([name, t]) => [
+      name,
+      {
+        spend: t.spend,
+        conversions: t.conversions,
+        // Ratios from summed totals, never an average of per-ad ratios.
+        roas: t.spend > 0 ? t.revenue / t.spend : 0,
+        ctr: t.impressions > 0 ? t.clicks / t.impressions : 0,
+        cpa: t.conversions > 0 ? t.spend / t.conversions : 0,
+      },
+    ])
+  );
 }
 
 /**
@@ -286,24 +321,18 @@ async function getHistoricalPerformance(
   adAccountId: string,
   days: number
 ): Promise<Array<{ date: string; ctr: number; cpm: number; frequency: number }>> {
-  const since = subDays(new Date(), days);
+  const daily = await getDailyPerformance({
+    adAccountId,
+    since: subDays(new Date(), days),
+  });
 
-  // TODO: Add CampaignInsights model to Prisma schema
-  // const insights = await prisma.campaignInsights.findMany({
-  //   where: {
-  //     adAccountId,
-  //     date: { gte: since },
-  //   },
-  //   orderBy: { date: 'asc' },
-  // });
-
-  // return insights.map(i => ({
-  //   date: i.date.toISOString().split('T')[0],
-  //   ctr: i.ctr || 0,
-  //   cpm: i.cpm || 0,
-  //   frequency: i.frequency || 0,
-  // }));
-
-  // Placeholder until CampaignInsights model is added
-  return [];
+  return daily.map((d) => ({
+    date: d.date,
+    ctr: d.ctr,
+    cpm: d.cpm,
+    // Reach is summed across ads, so frequency is an upper bound. Fatigue
+    // detection reads its trend, not its absolute level, so the bias is
+    // constant and does not distort the signal.
+    frequency: d.frequency,
+  }));
 }

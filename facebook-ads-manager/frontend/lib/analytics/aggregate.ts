@@ -19,6 +19,107 @@ import type {
  * /api/analytics contract the Analytics page renders against.
  */
 
+/**
+ * One row per calendar day, aggregated across every ad in scope.
+ *
+ * Structurally compatible with lib/ai/types' HistoricalPerformanceData, which
+ * is what the AI routes consume. Defined here rather than imported so the
+ * analytics layer does not depend on the AI layer.
+ *
+ * Unit contract matches buildAnalyticsData: ctr and roas are ratios.
+ */
+export interface DailyPerformance {
+  /** YYYY-MM-DD */
+  date: string;
+  spend: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  revenue: number;
+  roas: number;
+  ctr: number;
+  cpc: number;
+  cpm: number;
+  reach: number;
+  frequency: number;
+}
+
+export interface DailyPerformanceParams {
+  /** AdAccount UUID (not the Facebook act_ id) */
+  adAccountId: string;
+  /** Campaign UUID (not the Facebook campaign id) */
+  campaignId?: string;
+  since: Date;
+  until?: Date;
+}
+
+/**
+ * Daily performance for one ad account, optionally narrowed to one campaign.
+ *
+ * Every rate is recomputed from the day's summed totals rather than averaged
+ * across the per-ad rows: an average of per-ad CTRs weights a 10-impression ad
+ * the same as a 10,000-impression one.
+ *
+ * `reach` is summed across ads, so it double-counts anyone reached by more than
+ * one ad, and the derived `frequency` is an upper bound. Facebook only
+ * deduplicates reach at the account level, which this per-ad table cannot
+ * reconstruct.
+ */
+export async function getDailyPerformance({
+  adAccountId,
+  campaignId,
+  since,
+  until,
+}: DailyPerformanceParams): Promise<DailyPerformance[]> {
+  const grouped = await prisma.performanceMetric.groupBy({
+    by: ['date'],
+    where: {
+      date: { gte: since, ...(until && { lte: until }) },
+      ad: {
+        adSet: {
+          campaign: {
+            adAccountId,
+            ...(campaignId && { id: campaignId }),
+          },
+        },
+      },
+    },
+    _sum: {
+      spend: true,
+      impressions: true,
+      clicks: true,
+      conversions: true,
+      purchaseValue: true,
+      reach: true,
+    },
+    orderBy: { date: 'asc' },
+  });
+
+  return grouped.map((row) => {
+    const spend = row._sum.spend ?? 0;
+    const impressions = Number(row._sum.impressions ?? 0);
+    const clicks = Number(row._sum.clicks ?? 0);
+    const conversions = Number(row._sum.conversions ?? 0);
+    const revenue = row._sum.purchaseValue ?? 0;
+    const reach = Number(row._sum.reach ?? 0);
+
+    return {
+      date: row.date.toISOString().split('T')[0],
+      spend,
+      impressions,
+      clicks,
+      conversions,
+      revenue,
+      roas: spend > 0 ? revenue / spend : 0,
+      ctr: impressions > 0 ? clicks / impressions : 0,
+      cpc: clicks > 0 ? spend / clicks : 0,
+      cpm: impressions > 0 ? (spend / impressions) * 1000 : 0,
+      reach,
+      frequency: reach > 0 ? impressions / reach : 0,
+    };
+  });
+}
+
 export class NoAdAccountsError extends Error {
   constructor() {
     super('No ad accounts found');
