@@ -81,7 +81,8 @@ For each anomaly, provide:
     SYSTEM_PROMPT,
     userPrompt,
     'anomaly_detection',
-    { maxTokens: 3096, temperature: 0.2 }
+    // Runs on a schedule across every account, so trade some depth for cost.
+    { maxTokens: 8192, effort: 'medium' }
   );
 
   // Parse and validate response

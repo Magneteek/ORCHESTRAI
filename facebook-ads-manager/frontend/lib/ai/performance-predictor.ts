@@ -91,7 +91,7 @@ Include actionable recommendations for optimization.`;
     SYSTEM_PROMPT,
     userPrompt,
     'performance_prediction',
-    { maxTokens: 4096, temperature: 0.3 }
+    { maxTokens: 16000 }
   );
 
   // Parse and validate response

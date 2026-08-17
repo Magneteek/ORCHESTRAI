@@ -116,7 +116,7 @@ Consider both current performance and growth potential.`;
     SYSTEM_PROMPT,
     userPrompt,
     'audience_insights',
-    { maxTokens: 4096, temperature: 0.4 }
+    { maxTokens: 16000 }
   );
 
   // Parse and validate response

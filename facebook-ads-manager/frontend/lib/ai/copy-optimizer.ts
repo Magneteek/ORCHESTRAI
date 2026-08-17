@@ -24,6 +24,12 @@ Consider these factors:
 - Audience psychographics and messaging fit
 - Competitive differentiation
 
+When you propose variants, make them genuinely different from each other — vary
+the angle, the opening hook and the sentence rhythm, not just a few words. Two
+variants that differ only in wording test nothing. This call previously relied
+on a high sampling temperature for that variety; current models do not accept
+sampling parameters, so the variety has to be asked for here.
+
 CRITICAL: Respond ONLY with valid JSON matching this exact structure:
 {
   "analysis": {
@@ -105,7 +111,9 @@ For each suggestion:
     SYSTEM_PROMPT,
     userPrompt,
     'copy_optimization',
-    { maxTokens: 4096, temperature: 0.8 }
+    // Variety here used to come from temperature 0.8; on current models it has
+    // to be asked for in the prompt instead (see the variation instruction above).
+    { maxTokens: 16000 }
   );
 
   // Parse and validate response

@@ -4,6 +4,7 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk';
+import { getModelId, getPricing, type Effort } from './models';
 
 // Validate API key exists
 if (!process.env.ANTHROPIC_API_KEY) {
@@ -36,13 +37,13 @@ interface TokenUsage {
 const tokenUsageStore: Map<string, TokenUsage> = new Map();
 
 /**
- * Calculate estimated cost based on token usage
- * Claude Sonnet pricing: $3 per million input tokens, $15 per million output tokens
+ * Estimated cost for one call, priced against whichever model actually ran.
+ * Previously hardcoded to Sonnet's $3/$15, which silently under-reported by
+ * ~40% the moment the model changed.
  */
 function calculateCost(inputTokens: number, outputTokens: number): number {
-  const inputCost = (inputTokens / 1_000_000) * 3;
-  const outputCost = (outputTokens / 1_000_000) * 15;
-  return inputCost + outputCost;
+  const { input, output } = getPricing(getModelId());
+  return (inputTokens / 1_000_000) * input + (outputTokens / 1_000_000) * output;
 }
 
 /**
@@ -111,13 +112,18 @@ export async function callClaude(
   analysisType: string,
   options: {
     maxTokens?: number;
-    temperature?: number;
+    /** Replaces the old `temperature`; see lib/ai/models.ts. */
+    effort?: Effort;
     maxRetries?: number;
   } = {}
 ): Promise<{ content: string; usage: TokenUsage }> {
   const {
-    maxTokens = 4096,
-    temperature = 0.7,
+    // Current models think by default, and max_tokens caps thinking *plus*
+    // the response. The old 4096 budgeted for the answer alone and now risks
+    // truncating mid-JSON, which surfaces as a parse error rather than an
+    // obvious cutoff.
+    maxTokens = 16000,
+    effort,
     maxRetries = 3,
   } = options;
 
@@ -135,9 +141,9 @@ export async function callClaude(
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       const response = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
+        model: getModelId(),
         max_tokens: maxTokens,
-        temperature,
+        ...(effort && { output_config: { effort } }),
         system: systemPrompt,
         messages: [
           {
@@ -147,10 +153,36 @@ export async function callClaude(
         ],
       });
 
-      // Extract content
-      const content = response.content[0].type === 'text'
-        ? response.content[0].text
-        : '';
+      // Safety classifiers can decline a request: HTTP 200, empty content and
+      // stop_reason "refusal". Reading content[0] blindly would throw here.
+      //
+      // Cast because SDK 0.104.1 does not yet type "refusal" or stop_details,
+      // while the API already returns both — narrowing to the shape we read
+      // rather than `any` so a future SDK bump surfaces any mismatch.
+      const stopReason = response.stop_reason as string | null;
+      const stopDetails = (response as { stop_details?: { category?: string } })
+        .stop_details;
+
+      if (stopReason === 'refusal') {
+        throw new Error(
+          `Claude declined this ${analysisType} request` +
+            (stopDetails?.category ? ` (${stopDetails.category})` : '')
+        );
+      }
+
+      // Find the text block rather than assuming index 0. Current models think
+      // by default and return thinking blocks first, so content[0] is often a
+      // thinking block whose text is empty — indexing it returned "" and every
+      // downstream JSON parse failed on an empty string.
+      const textBlock = response.content.find((block) => block.type === 'text');
+      const content = textBlock && textBlock.type === 'text' ? textBlock.text : '';
+
+      if (!content) {
+        throw new Error(
+          `Claude returned no text content for ${analysisType} ` +
+            `(stop_reason: ${stopReason})`
+        );
+      }
 
       // Track token usage
       const usage: TokenUsage = {
@@ -210,7 +242,7 @@ export async function healthCheck(): Promise<boolean> {
       'You are a helpful assistant.',
       'Respond with "OK"',
       'health_check',
-      { maxTokens: 10, temperature: 0 }
+      { maxTokens: 64, effort: 'low' }
     );
     return true;
   } catch (error) {
