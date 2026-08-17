@@ -194,18 +194,6 @@ export default function DashboardPage() {
             />
           </div>
 
-          {/* Error state */}
-          {error && (
-            <Card className="border-destructive/50 p-6 text-center">
-              <p className="text-sm font-medium text-destructive">
-                Failed to load analytics data
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {error instanceof Error ? error.message : 'Unknown error'}
-              </p>
-            </Card>
-          )}
-
           {/* Performance Overview */}
           <div className="grid gap-4 lg:grid-cols-7">
             <Card className="lg:col-span-4">
@@ -254,6 +242,7 @@ export default function DashboardPage() {
                   <div className="space-y-4">
                     <StatRow
                       label="Click-Through Rate"
+                      // API returns ctr as a fraction (clicks / impressions)
                       value={`${(metrics.ctr * 100).toFixed(2)}%`}
                     />
                     <StatRow
@@ -312,10 +301,6 @@ function MetricCard({
 }
 
 function CampaignRow({ campaign }: { campaign: TopCampaign }) {
-  const roas = campaign.spend > 0
-    ? ((campaign.conversions * 50) / campaign.spend).toFixed(1) // rough estimate
-    : '0.0';
-
   return (
     <div className="flex items-center justify-between rounded-lg border p-3">
       <div className="space-y-1">
@@ -325,7 +310,7 @@ function CampaignRow({ campaign }: { campaign: TopCampaign }) {
         </span>
       </div>
       <div className="text-right">
-        <p className="text-lg font-bold">{campaign.roas?.toFixed(1) ?? roas}x</p>
+        <p className="text-lg font-bold">{campaign.roas.toFixed(1)}x</p>
         <p className="text-xs text-muted-foreground">ROAS</p>
       </div>
     </div>

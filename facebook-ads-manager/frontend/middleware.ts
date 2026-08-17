@@ -49,6 +49,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    // Scheduled jobs carry no user session, only `Authorization: Bearer
+    // $CRON_SECRET` from Vercel Cron. They authorize themselves via
+    // checkCronAuth(), which fails closed when CRON_SECRET is unset, so
+    // skipping the session check here does not leave them open.
+    if (pathname.startsWith('/api/cron')) {
+      return NextResponse.next();
+    }
+
     // Require authentication for all other API routes
     if (!token) {
       return NextResponse.json(

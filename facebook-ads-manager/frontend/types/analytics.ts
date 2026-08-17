@@ -12,9 +12,11 @@ export interface AnalyticsMetrics {
   impressions: number;
   clicks: number;
   conversions: number;
+  /** Fraction (clicks / impressions), NOT a percentage. Multiply by 100 for display. */
   ctr: number;
   cpc: number;
   cpm: number;
+  /** Ratio (revenue / spend). */
   roas: number;
 }
 

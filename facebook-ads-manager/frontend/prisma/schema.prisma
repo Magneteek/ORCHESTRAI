@@ -315,10 +315,13 @@ model PerformanceMetric {
   date         DateTime
 
   // Core Metrics
-  spend        Float    @default(0)
-  impressions  BigInt   @default(0)
-  clicks       BigInt   @default(0)
-  conversions  BigInt   @default(0)
+  spend         Float    @default(0)
+  impressions   BigInt   @default(0)
+  clicks        BigInt   @default(0)
+  conversions   BigInt   @default(0)
+  // Purchase conversion value (revenue) for the day, from Facebook action_values.
+  // Aggregate ROAS = sum(purchaseValue) / sum(spend) — never average per-row roas.
+  purchaseValue Float?
 
   // Calculated Metrics
   roas         Float?

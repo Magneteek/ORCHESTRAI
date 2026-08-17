@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
       `?fields=${fields}&limit=100&access_token=${accessToken}`;
 
     while (url) {
-      const res = await fetch(url);
-      const json = await res.json();
+      const res: Response = await fetch(url);
+      const json: any = await res.json();
 
       if (json.error) {
         return NextResponse.json(

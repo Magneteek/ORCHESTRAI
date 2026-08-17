@@ -1,0 +1,210 @@
+import { prisma } from '@/lib/db/prisma';
+import type {
+  AnalyticsData,
+  TimeSeriesDataPoint,
+  TopCampaign,
+} from '@/types/analytics';
+
+/**
+ * Shared analytics aggregation over the local performance_metrics table
+ * (populated by POST /api/sync/all). No live Facebook calls.
+ *
+ * Both /api/analytics and /api/analytics/simple read through this so the two
+ * pages can never disagree about the same numbers again.
+ *
+ * Unit contract: ctr and roas are ratios, not percentages.
+ *   ctr  = clicks / impressions   (the UI multiplies by 100)
+ *   roas = revenue / spend
+ * funnelData percentages ARE percentages (0-100), matching the original
+ * /api/analytics contract the Analytics page renders against.
+ */
+
+export class NoAdAccountsError extends Error {
+  constructor() {
+    super('No ad accounts found');
+    this.name = 'NoAdAccountsError';
+  }
+}
+
+export interface AggregateParams {
+  userId: string;
+  fromDate: Date;
+  toDate: Date;
+  /** AdAccount UUIDs (not Facebook act_ ids) */
+  accountIds?: string[];
+  /** Facebook campaign ids */
+  campaignIds?: string[];
+}
+
+export async function buildAnalyticsData({
+  userId,
+  fromDate,
+  toDate,
+  accountIds,
+  campaignIds,
+}: AggregateParams): Promise<AnalyticsData> {
+  // Resolve ad accounts the user can reach: Organization -> FBBusinessAccount -> AdAccount
+  const adAccounts = await prisma.adAccount.findMany({
+    where: {
+      facebookBusinessAccount: {
+        organization: { users: { some: { id: userId } } },
+      },
+      ...(accountIds && { id: { in: accountIds } }),
+    },
+    select: { id: true },
+  });
+
+  if (adAccounts.length === 0) {
+    throw new NoAdAccountsError();
+  }
+
+  const metricRows = await prisma.performanceMetric.findMany({
+    where: {
+      date: { gte: fromDate, lte: toDate },
+      ad: {
+        adSet: {
+          campaign: {
+            adAccountId: { in: adAccounts.map((a) => a.id) },
+            ...(campaignIds && { campaignId: { in: campaignIds } }),
+          },
+        },
+      },
+    },
+    include: {
+      ad: {
+        select: {
+          adSet: {
+            select: {
+              campaign: { select: { id: true, campaignId: true, name: true } },
+            },
+          },
+        },
+      },
+    },
+    orderBy: { date: 'asc' },
+  });
+
+  let spend = 0;
+  let impressions = 0;
+  let clicks = 0;
+  let conversions = 0;
+  let revenue = 0;
+
+  const timeSeriesMap = new Map<string, TimeSeriesDataPoint & { revenue: number }>();
+  const campaignMap = new Map<
+    string,
+    {
+      id: string;
+      name: string;
+      impressions: number;
+      clicks: number;
+      spend: number;
+      conversions: number;
+      revenue: number;
+    }
+  >();
+
+  for (const row of metricRows) {
+    const rowImpressions = Number(row.impressions);
+    const rowClicks = Number(row.clicks);
+    const rowConversions = Number(row.conversions);
+    const rowRevenue = row.purchaseValue ?? 0;
+
+    spend += row.spend;
+    impressions += rowImpressions;
+    clicks += rowClicks;
+    conversions += rowConversions;
+    revenue += rowRevenue;
+
+    const dateKey = row.date.toISOString().split('T')[0];
+    if (!timeSeriesMap.has(dateKey)) {
+      timeSeriesMap.set(dateKey, {
+        date: dateKey,
+        impressions: 0,
+        clicks: 0,
+        spend: 0,
+        conversions: 0,
+        ctr: 0,
+        roas: 0,
+        revenue: 0,
+      });
+    }
+    const point = timeSeriesMap.get(dateKey)!;
+    point.impressions += rowImpressions;
+    point.clicks += rowClicks;
+    point.spend += row.spend;
+    point.conversions += rowConversions;
+    point.revenue += rowRevenue;
+
+    const campaign = row.ad.adSet.campaign;
+    if (!campaignMap.has(campaign.id)) {
+      campaignMap.set(campaign.id, {
+        id: campaign.campaignId,
+        name: campaign.name,
+        impressions: 0,
+        clicks: 0,
+        spend: 0,
+        conversions: 0,
+        revenue: 0,
+      });
+    }
+    const c = campaignMap.get(campaign.id)!;
+    c.impressions += rowImpressions;
+    c.clicks += rowClicks;
+    c.spend += row.spend;
+    c.conversions += rowConversions;
+    c.revenue += rowRevenue;
+  }
+
+  const timeSeries: TimeSeriesDataPoint[] = Array.from(timeSeriesMap.values()).map(
+    ({ revenue: dayRevenue, ...point }) => ({
+      ...point,
+      ctr: point.impressions > 0 ? point.clicks / point.impressions : 0,
+      roas: point.spend > 0 ? dayRevenue / point.spend : 0,
+    })
+  );
+
+  const topCampaigns: TopCampaign[] = Array.from(campaignMap.values())
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      impressions: c.impressions,
+      clicks: c.clicks,
+      spend: c.spend,
+      conversions: c.conversions,
+      ctr: c.impressions > 0 ? c.clicks / c.impressions : 0,
+      roas: c.spend > 0 ? c.revenue / c.spend : 0,
+    }))
+    .sort((a, b) => b.spend - a.spend)
+    .slice(0, 10);
+
+  return {
+    metrics: {
+      spend,
+      impressions,
+      clicks,
+      conversions,
+      ctr: impressions > 0 ? clicks / impressions : 0,
+      cpc: clicks > 0 ? spend / clicks : 0,
+      cpm: impressions > 0 ? (spend / impressions) * 1000 : 0,
+      roas: spend > 0 ? revenue / spend : 0,
+    },
+    timeSeries,
+    topCampaigns,
+    funnelData: [
+      { name: 'Impressions', value: impressions, percentage: 100 },
+      {
+        name: 'Clicks',
+        value: clicks,
+        percentage: impressions > 0 ? (clicks / impressions) * 100 : 0,
+        dropoffRate: impressions > 0 ? ((impressions - clicks) / impressions) * 100 : 0,
+      },
+      {
+        name: 'Conversions',
+        value: conversions,
+        percentage: impressions > 0 ? (conversions / impressions) * 100 : 0,
+        dropoffRate: clicks > 0 ? ((clicks - conversions) / clicks) * 100 : 0,
+      },
+    ],
+  };
+}
