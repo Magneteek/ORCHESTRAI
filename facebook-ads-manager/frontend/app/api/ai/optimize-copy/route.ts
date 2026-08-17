@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth/auth';
 import { optimizeAdCopy, generateABTestVariants } from '@/lib/ai/copy-optimizer';
 import { prisma } from '@/lib/db/prisma';
+import { getAdPerformance } from '@/lib/analytics/aggregate';
 import { RateLimiter } from '@/lib/redis/client';
 import { subDays } from 'date-fns';
 
@@ -310,4 +311,72 @@ export async function PUT(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+
+/**
+ * Assemble an ad-copy payload from what is already stored: the creative's own
+ * text plus that ad's delivery.
+ *
+ * Picks the highest-spending ad with delivery, since optimising copy for an ad
+ * nobody sees is wasted effort. Dynamic and Advantage+ creatives keep their
+ * text in asset_feed_spec as variant arrays; the first variant is the one worth
+ * optimising against, and the rest are passed along so the model can see the
+ * full rotation, including any broken assets.
+ */
+async function buildAdCopyFromStored(
+  adAccountId: string,
+  adId?: string
+): Promise<any | null> {
+  const since = subDays(new Date(), 30);
+  const performance = await getAdPerformance(adAccountId, since);
+  if (performance.length === 0) return null;
+
+  const target = adId
+    ? performance.find((p) => p.id === adId) ?? performance[0]
+    : performance[0];
+
+  const ad = await prisma.ad.findFirst({
+    where: { id: target.id },
+    select: { name: true, creative: true },
+  });
+  if (!ad) return null;
+
+  const creative: any = ad.creative ?? {};
+  const afs = creative.asset_feed_spec ?? {};
+  const story = creative.object_story_spec?.link_data ?? {};
+
+  const text = (items: any): string[] => {
+    if (!items) return [];
+    const arr = Array.isArray(items) ? items : [items];
+    return arr.map((i) => (typeof i === 'string' ? i : i?.text ?? '')).filter(Boolean);
+  };
+
+  const headlines = text(afs.titles);
+  const bodies = text(afs.bodies);
+  const descriptions = text(afs.descriptions);
+
+  const headline = headlines[0] ?? creative.title ?? story.name ?? '';
+  const primaryText = bodies[0] ?? creative.body ?? story.message ?? '';
+  if (!headline || !primaryText) return null;
+
+  return {
+    headline,
+    primaryText,
+    description: descriptions[0] ?? '',
+    callToAction:
+      (Array.isArray(afs.call_to_action_types) ? afs.call_to_action_types[0] : null) ??
+      creative.call_to_action_type ??
+      story.call_to_action?.type ??
+      'LEARN_MORE',
+    performance: {
+      ctr: target.linkCtr,
+      impressions: target.impressions,
+      clicks: target.linkClicks,
+    },
+    // Extra context the schema does not require but the prompt benefits from.
+    adName: ad.name,
+    allHeadlines: headlines,
+    allBodies: bodies,
+  };
 }

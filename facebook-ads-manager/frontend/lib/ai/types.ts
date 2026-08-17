@@ -249,6 +249,8 @@ export interface CopyOptimizationRequest {
 
 export interface AudienceInsightsRequest {
   adAccountId: string;
+  /** ISO code of the ad account's currency; all figures are reported in it. */
+  currency?: string;
   audienceData: AudienceData;
   performanceBySegment: Record<string, HistoricalPerformanceData>;
   campaignObjective: string;

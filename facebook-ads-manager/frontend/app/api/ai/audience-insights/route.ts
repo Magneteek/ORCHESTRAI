@@ -95,6 +95,7 @@ export async function POST(request: NextRequest) {
       audienceData,
       performanceBySegment,
       campaignObjective: campaign?.objective || 'CONVERSIONS',
+      currency: account.currency,
     });
 
     // Generate lookalike recommendations

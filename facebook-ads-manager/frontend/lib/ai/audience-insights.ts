@@ -70,7 +70,7 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
 export async function analyzeAudience(
   request: AudienceInsightsRequest
 ): Promise<AudienceInsights> {
-  const { adAccountId, audienceData, performanceBySegment, campaignObjective } = request;
+  const { adAccountId, audienceData, performanceBySegment, campaignObjective, currency = 'USD' } = request;
 
   // Check cache first
   const cachedInsights = await getCachedInsights(adAccountId);
@@ -79,7 +79,10 @@ export async function analyzeAudience(
   }
 
   // Prepare audience analysis
-  const analysisContext = prepareAudienceContext(audienceData, performanceBySegment);
+  // Report in the account's own currency; hardcoded "$" narrated dollars
+  // against euro accounts, the same defect fixed in the predictor.
+  const money = (n: number) => `${currency} ${(n ?? 0).toFixed(2)}`;
+  const analysisContext = prepareAudienceContext(audienceData, performanceBySegment, money);
 
   const userPrompt = `Analyze this audience performance data and provide targeting insights:
 
@@ -136,7 +139,8 @@ Consider both current performance and growth potential.`;
  */
 function prepareAudienceContext(
   audienceData: any,
-  performanceBySegment: Record<string, any>
+  performanceBySegment: Record<string, any>,
+  money: (n: number) => string
 ): string {
   const segments = Object.entries(performanceBySegment);
 
@@ -155,19 +159,19 @@ function prepareAudienceContext(
 
   return `
 Aggregate Statistics:
-- Total Spend: $${totalSpend.toFixed(2)}
+- Total Spend: ${money(totalSpend)}
 - Average ROAS: ${avgRoas.toFixed(2)}x
 - Segment Count: ${segments.length}
 
 Best Performer:
 - Segment: ${topPerformer[0]}
 - ROAS: ${topPerformer[1].roas?.toFixed(2)}x
-- Spend: $${topPerformer[1].spend?.toFixed(2)}
+- Spend: ${money(topPerformer[1].spend)}
 
 Worst Performer:
 - Segment: ${worstPerformer[0]}
 - ROAS: ${worstPerformer[1].roas?.toFixed(2)}x
-- Spend: $${worstPerformer[1].spend?.toFixed(2)}
+- Spend: ${money(worstPerformer[1].spend)}
 
 Performance Distribution: ${segments.filter(([_, p]) => (p.roas || 0) > avgRoas).length}/${segments.length} segments above average
 `;
