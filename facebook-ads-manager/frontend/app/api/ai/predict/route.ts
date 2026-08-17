@@ -8,6 +8,7 @@ import { auth } from '@/lib/auth/auth';
 import { predictPerformance } from '@/lib/ai/performance-predictor';
 import { prisma } from '@/lib/db/prisma';
 import { getDailyPerformance } from '@/lib/analytics/aggregate';
+import { getCampaignContext } from '@/lib/ai/campaign-context';
 import type { HistoricalPerformanceData } from '@/lib/ai/types';
 import { subDays } from 'date-fns';
 import { RateLimiter } from '@/lib/redis/client';
@@ -147,32 +148,6 @@ async function getHistoricalData(
     campaignId,
     since: subDays(new Date(), 30),
   });
-}
-
-/**
- * Get campaign context
- */
-async function getCampaignContext(adAccountId: string, campaignId?: string): Promise<any> {
-  const campaign = await prisma.campaign.findFirst({
-    where: campaignId ? { id: campaignId } : { adAccountId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  if (!campaign) {
-    return {
-      objective: 'CONVERSIONS',
-      status: 'ACTIVE',
-      startDate: new Date().toISOString(),
-    };
-  }
-
-  return {
-    objective: campaign.objective,
-    dailyBudget: campaign.dailyBudget,
-    lifetimeBudget: campaign.lifetimeBudget,
-    status: campaign.status,
-    startDate: campaign.startTime?.toISOString() || campaign.createdAt.toISOString(),
-  };
 }
 
 /**

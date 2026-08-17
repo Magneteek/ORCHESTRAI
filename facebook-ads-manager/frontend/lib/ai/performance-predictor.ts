@@ -119,25 +119,65 @@ function prepareDataContext(
 
   // Calculate basic statistics
   const totalSpend = historicalData.reduce((sum, d) => sum + d.spend, 0);
-  const avgRoas = historicalData.reduce((sum, d) => sum + (d.roas || 0), 0) / historicalData.length;
+  const totalRevenue = historicalData.reduce((sum, d) => sum + (d.revenue || 0), 0);
+  const totalConversions = historicalData.reduce((sum, d) => sum + (d.conversions || 0), 0);
   const avgCtr = historicalData.reduce((sum, d) => sum + (d.ctr || 0), 0) / historicalData.length;
 
-  // Identify trends
+  // A lead-gen campaign books no purchase revenue, so its ROAS is structurally
+  // zero. Presented as "ROAS 0.00x" the model reads that as broken conversion
+  // tracking and spends its recommendations telling the user to fix it. Cost
+  // per lead is the metric that actually means something here.
+  const isLeadGen = totalRevenue === 0 && totalConversions > 0;
+
+  // Ratios come from summed totals, never an average of per-day ratios: a
+  // 50-impression day would otherwise weigh as much as a 5,000-impression one.
+  const overallRoas = totalSpend > 0 ? totalRevenue / totalSpend : 0;
+  const overallCpa = totalConversions > 0 ? totalSpend / totalConversions : 0;
+
+  // Trend on whichever metric is meaningful. Comparing ROAS on a lead-gen
+  // campaign compares 0 against 0, which always reported "declining".
   const recentData = historicalData.slice(-7);
-  const recentRoas = recentData.reduce((sum, d) => sum + (d.roas || 0), 0) / recentData.length;
-  const trend = recentRoas > avgRoas ? 'improving' : 'declining';
+  const recentSpend = recentData.reduce((sum, d) => sum + d.spend, 0);
+  const recentRevenue = recentData.reduce((sum, d) => sum + (d.revenue || 0), 0);
+  const recentConversions = recentData.reduce((sum, d) => sum + (d.conversions || 0), 0);
+
+  let trendLine: string;
+  if (isLeadGen) {
+    const recentCpa = recentConversions > 0 ? recentSpend / recentConversions : 0;
+    const trend =
+      recentConversions === 0
+        ? 'no conversions in the last 7 days'
+        : recentCpa < overallCpa
+        ? 'improving (cost per lead falling)'
+        : 'declining (cost per lead rising)';
+    trendLine =
+      `- Cost per Lead: $${overallCpa.toFixed(2)} overall, ` +
+      `$${recentCpa.toFixed(2)} over the last 7 days\n- Recent Trend: ${trend}`;
+  } else {
+    const recentRoas = recentSpend > 0 ? recentRevenue / recentSpend : 0;
+    const trend = recentRoas > overallRoas ? 'improving' : 'declining';
+    trendLine =
+      `- ROAS: ${overallRoas.toFixed(2)}x overall, ` +
+      `${recentRoas.toFixed(2)}x over the last 7 days\n- Recent Trend: ${trend}`;
+  }
 
   // Day of week analysis
-  const dayOfWeekPerf = analyzeDayOfWeek(historicalData);
+  const dayOfWeekPerf = analyzeDayOfWeek(historicalData, isLeadGen);
+
+  const objectiveNote = isLeadGen
+    ? `\nIMPORTANT: this is a lead-generation campaign. It records ${totalConversions} ` +
+      `conversions and no purchase revenue, so ROAS is zero by definition — that is ` +
+      `expected, NOT a tracking failure. Judge it on cost per lead and lead volume, ` +
+      `and do not recommend fixing revenue attribution.\n`
+    : '';
 
   return `
 Summary Statistics:
 - Total Spend: $${totalSpend.toFixed(2)}
-- Average ROAS: ${avgRoas.toFixed(2)}x
+- Total Conversions: ${totalConversions}
+${trendLine}
 - Average CTR: ${(avgCtr * 100).toFixed(2)}%
-- Recent Trend: ${trend}
-- Recent 7-day ROAS: ${recentRoas.toFixed(2)}x
-
+${objectiveNote}
 Day of Week Performance:
 ${dayOfWeekPerf}
 
@@ -148,26 +188,37 @@ Data Completeness: ${historicalData.length} days of data available
 /**
  * Analyze day-of-week patterns
  */
-function analyzeDayOfWeek(historicalData: any[]): string {
-  const dayData: Record<string, { spend: number; roas: number; count: number }> = {};
+function analyzeDayOfWeek(historicalData: any[], isLeadGen = false): string {
+  const dayData: Record<
+    string,
+    { spend: number; revenue: number; conversions: number; count: number }
+  > = {};
 
   historicalData.forEach(data => {
     const date = new Date(data.date);
     const dayName = format(date, 'EEEE');
 
     if (!dayData[dayName]) {
-      dayData[dayName] = { spend: 0, roas: 0, count: 0 };
+      dayData[dayName] = { spend: 0, revenue: 0, conversions: 0, count: 0 };
     }
 
     dayData[dayName].spend += data.spend;
-    dayData[dayName].roas += data.roas || 0;
+    dayData[dayName].revenue += data.revenue || 0;
+    dayData[dayName].conversions += data.conversions || 0;
     dayData[dayName].count += 1;
   });
 
   return Object.entries(dayData)
     .map(([day, stats]) => {
-      const avgRoas = stats.count > 0 ? stats.roas / stats.count : 0;
-      return `  ${day}: Avg ROAS ${avgRoas.toFixed(2)}x, Avg Spend $${(stats.spend / stats.count).toFixed(2)}`;
+      const avgSpend = (stats.spend / stats.count).toFixed(2);
+      if (isLeadGen) {
+        const cpa = stats.conversions > 0 ? stats.spend / stats.conversions : 0;
+        const leads = cpa > 0 ? `$${cpa.toFixed(2)} per lead` : 'no leads';
+        return `  ${day}: ${stats.conversions} leads (${leads}), Avg Spend $${avgSpend}`;
+      }
+      // Ratio from summed totals, not an average of per-day ratios.
+      const roas = stats.spend > 0 ? stats.revenue / stats.spend : 0;
+      return `  ${day}: ROAS ${roas.toFixed(2)}x, Avg Spend $${avgSpend}`;
     })
     .join('\n');
 }
