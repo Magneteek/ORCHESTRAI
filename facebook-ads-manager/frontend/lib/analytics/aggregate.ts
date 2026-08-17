@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db/prisma';
 import type {
   AnalyticsData,
   DayOfWeekPerformance,
+  DayOfWeekSignificance,
   TimeSeriesDataPoint,
   TopCampaign,
 } from '@/types/analytics';
@@ -211,6 +212,54 @@ export async function getCampaignTotals(
   );
 }
 
+/**
+ * Upper-tail chi-square critical values at p = 0.05, indexed by degrees of
+ * freedom. Only small df are needed here: at most six, one per weekday beyond
+ * the first.
+ */
+const CHI2_CRITICAL_P05: Record<number, number> = {
+  1: 3.84,
+  2: 5.99,
+  3: 7.81,
+  4: 9.49,
+  5: 11.07,
+  6: 12.59,
+};
+
+/**
+ * Is the weekday variation in conversions bigger than chance would produce?
+ *
+ * Leads expected per weekday are proportional to that weekday's share of spend,
+ * not a flat 1/7 — a day given more budget should return more leads, and
+ * testing against a flat split would flag ordinary budget skew as a pattern.
+ */
+function assessDayOfWeek(days: DayOfWeekPerformance[]): DayOfWeekSignificance {
+  const spending = days.filter((d) => d.spend > 0);
+  const totalSpend = spending.reduce((sum, d) => sum + d.spend, 0);
+  const totalConversions = spending.reduce((sum, d) => sum + d.conversions, 0);
+  const degreesOfFreedom = Math.max(spending.length - 1, 0);
+
+  if (totalSpend <= 0 || totalConversions <= 0 || degreesOfFreedom === 0) {
+    return { chiSquare: 0, degreesOfFreedom, significant: false, totalConversions };
+  }
+
+  const chiSquare = spending.reduce((sum, d) => {
+    const expected = (d.spend / totalSpend) * totalConversions;
+    return expected > 0 ? sum + (d.conversions - expected) ** 2 / expected : sum;
+  }, 0);
+
+  const critical = CHI2_CRITICAL_P05[degreesOfFreedom];
+
+  return {
+    chiSquare,
+    degreesOfFreedom,
+    // No critical value for this df means more weekdays than a week has —
+    // treat as not significant rather than inventing a threshold.
+    significant: critical !== undefined && chiSquare > critical,
+    totalConversions,
+  };
+}
+
 export class NoAdAccountsError extends Error {
   constructor() {
     super('No ad accounts found');
@@ -404,6 +453,8 @@ export async function buildAnalyticsData({
     cpa: d.conversions > 0 ? d.spend / d.conversions : 0,
   }));
 
+  const dayOfWeekSignificance = assessDayOfWeek(dayOfWeek);
+
   return {
     metrics: {
       spend,
@@ -423,6 +474,7 @@ export async function buildAnalyticsData({
     timeSeries,
     topCampaigns,
     dayOfWeek,
+    dayOfWeekSignificance,
     funnelData: [
       { name: 'Impressions', value: impressions, percentage: 100 },
       {

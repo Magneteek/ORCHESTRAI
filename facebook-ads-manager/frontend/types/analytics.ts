@@ -85,6 +85,24 @@ export interface DayOfWeekPerformance {
   cpa: number;
 }
 
+/**
+ * Whether the weekday differences are distinguishable from chance.
+ *
+ * Conversion counts per weekday are small, so a 3x cost-per-lead spread can
+ * appear from nothing. Chi-square against leads expected in proportion to each
+ * weekday's share of spend; without this the UI invites budget decisions based
+ * on noise, and on this account the "best day" changes from Tuesday to Thursday
+ * simply by widening the window from 30 to 90 days.
+ */
+export interface DayOfWeekSignificance {
+  chiSquare: number;
+  /** Degrees of freedom: weekdays with spend, minus one. */
+  degreesOfFreedom: number;
+  /** True when chi-square clears the p<0.05 critical value. */
+  significant: boolean;
+  totalConversions: number;
+}
+
 export interface FunnelStage {
   name: string;
   value: number;
@@ -105,6 +123,7 @@ export interface AnalyticsData {
   timeSeries: TimeSeriesDataPoint[];
   topCampaigns: TopCampaign[];
   dayOfWeek: DayOfWeekPerformance[];
+  dayOfWeekSignificance: DayOfWeekSignificance;
   funnelData?: FunnelStage[];
   aiInsights?: AIInsight[];
 }

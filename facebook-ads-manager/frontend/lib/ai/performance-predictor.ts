@@ -164,6 +164,20 @@ function prepareDataContext(
   // Day of week analysis
   const dayOfWeekPerf = analyzeDayOfWeek(historicalData, isLeadGen);
 
+  // Conversion counts per weekday are small enough that a large cost-per-lead
+  // spread appears from chance alone. Without this caveat the model reads the
+  // spread as a schedule and leads with "shift budget to <day>", which is
+  // advice built on noise.
+  const dayOfWeekCaveat =
+    totalConversions > 0 && totalConversions < 70
+      ? `\nNOTE ON DAY-OF-WEEK DATA: only ${totalConversions} conversions are spread ` +
+        `across seven weekdays here (about ${(totalConversions / 7).toFixed(1)} each), ` +
+        `so differences between days are unlikely to be statistically meaningful. Do ` +
+        `not recommend day-parting, weekday budget shifts or schedule changes on the ` +
+        `basis of this spread unless one day is extreme and backed by a large share of ` +
+        `the conversions. Say explicitly that more data is needed instead.\n`
+      : '';
+
   const objectiveNote = isLeadGen
     ? `\nIMPORTANT: this is a lead-generation campaign. It records ${totalConversions} ` +
       `conversions and no purchase revenue, so ROAS is zero by definition — that is ` +
@@ -180,6 +194,7 @@ ${trendLine}
 ${objectiveNote}
 Day of Week Performance:
 ${dayOfWeekPerf}
+${dayOfWeekCaveat}
 
 Data Completeness: ${historicalData.length} days of data available
 `;

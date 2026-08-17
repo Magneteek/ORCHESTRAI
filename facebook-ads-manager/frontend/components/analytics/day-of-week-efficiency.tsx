@@ -1,25 +1,35 @@
 'use client';
 
 import React from 'react';
-import type { DayOfWeekPerformance } from '@/types/analytics';
+import type {
+  DayOfWeekPerformance,
+  DayOfWeekSignificance,
+} from '@/types/analytics';
 
 /**
  * Cost per lead by weekday.
  *
- * A daily time series hides this completely: a 30-day line chart shows spiky
- * conversion counts, not that Tuesdays convert at a third of Sunday's cost.
- * The spread is directly actionable through scheduling and budget rules, and
- * it was the strongest finding in the AI analysis while being invisible in the
- * UI the analysis sat next to.
+ * A daily time series hides weekday structure completely, so this panel exists
+ * to surface it — but it deliberately refuses to dramatise it. Conversion
+ * counts per weekday are small, and a 3x cost-per-lead spread arises easily
+ * from chance: on the DRNL account the apparent best day moves from Tuesday to
+ * Thursday purely by widening the window from 30 days to 90, while the spread
+ * narrows from 2.9x to 1.7x. Both are the signature of noise, not a schedule.
+ *
+ * So best/worst are highlighted only when `significance` says the variation
+ * clears a chi-square test; otherwise the panel says plainly that the spread
+ * is scatter. See assessDayOfWeek in lib/analytics/aggregate.
  *
  * Bars are scaled against the worst day so the best day is visibly shortest —
  * for a cost metric, shorter is better, which matches the reading direction.
  */
 export function DayOfWeekEfficiency({
   data,
+  significance,
   formatCurrency,
 }: {
   data: DayOfWeekPerformance[];
+  significance?: DayOfWeekSignificance;
   formatCurrency: (n: number) => string;
 }) {
   const withLeads = data.filter((d) => d.conversions > 0);
@@ -34,8 +44,13 @@ export function DayOfWeekEfficiency({
 
   const worst = Math.max(...withLeads.map((d) => d.cpa));
   const best = Math.min(...withLeads.map((d) => d.cpa));
-  // A single day of data makes "best vs worst" meaningless.
-  const showMarkers = withLeads.length > 1 && worst !== best;
+
+  // Highlight a best and worst day only when the weekday variation is actually
+  // distinguishable from chance. Colouring them regardless turns random
+  // scatter into an apparent instruction to move budget — and on low-volume
+  // accounts the "best" day changes as soon as the window changes.
+  const isNoise = significance ? !significance.significant : false;
+  const showMarkers = withLeads.length > 1 && worst !== best && !isNoise;
 
   return (
     <div className="space-y-2">
@@ -78,6 +93,17 @@ export function DayOfWeekEfficiency({
         <p className="pt-1 text-xs text-muted-foreground">
           Best day costs {formatCurrency(best)} per lead against{' '}
           {formatCurrency(worst)} on the worst — a {(worst / best).toFixed(1)}x spread.
+        </p>
+      )}
+
+      {isNoise && (
+        <p className="pt-1 text-xs text-muted-foreground">
+          The spread between days ({formatCurrency(best)}–{formatCurrency(worst)}
+          {' '}per lead) is not distinguishable from random variation at this
+          volume ({significance!.totalConversions} conversions,
+          {' '}&chi;&sup2;&nbsp;{significance!.chiSquare.toFixed(1)} on{' '}
+          {significance!.degreesOfFreedom} df). Treat it as scatter rather than
+          a scheduling opportunity until more conversions accumulate.
         </p>
       )}
     </div>

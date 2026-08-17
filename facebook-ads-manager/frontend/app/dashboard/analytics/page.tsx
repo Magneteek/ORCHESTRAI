@@ -268,6 +268,7 @@ export default function AnalyticsPage() {
               </p>
               <DayOfWeekEfficiency
                 data={data?.dayOfWeek ?? []}
+                significance={data?.dayOfWeekSignificance}
                 formatCurrency={fmtCurrency}
               />
             </Card>
