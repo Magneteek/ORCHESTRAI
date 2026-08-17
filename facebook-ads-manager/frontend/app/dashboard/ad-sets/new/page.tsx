@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAdAccount } from '@/lib/hooks/use-ad-account';
+import { useCurrency } from '@/lib/hooks/use-currency';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -152,6 +153,7 @@ const LANGUAGES = [
 ];
 
 export default function NewAdSetPage() {
+  const { format: formatCurrency } = useCurrency();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { selectedAccountId } = useAdAccount();
@@ -751,12 +753,12 @@ export default function NewAdSetPage() {
                   { label: 'Billing Event', value: BILLING_EVENT_LABELS[formData.billingEvent] || formData.billingEvent },
                   campaignHasCBO
                     ? { label: 'Budget', value: `Campaign-level CBO ($${selectedCampaign?.dailyBudget ?? selectedCampaign?.lifetimeBudget}/day)` }
-                    : { label: 'Budget', value: formData.budget && !isNaN(formData.budget) ? `$${formData.budget} (${formData.budgetType})` : undefined },
+                    : { label: 'Budget', value: formData.budget && !isNaN(formData.budget) ? `${formatCurrency(formData.budget)} (${formData.budgetType})` : undefined },
                   { label: 'Locations', value: formData.countries },
                   { label: 'Age Range', value: `${formData.ageMin} – ${formData.ageMax}` },
                   { label: 'Gender', value: !formData.genders?.length ? 'All' : formData.genders.includes(1) && formData.genders.includes(2) ? 'All' : formData.genders.includes(1) ? 'Men' : 'Women' },
                   { label: 'Language', value: LANGUAGES.find(l => l.code === (formData.languages || 'ALL'))?.label || 'All languages' },
-                  { label: 'Bid Cap', value: formData.bidAmount && !isNaN(formData.bidAmount) ? `$${formData.bidAmount}` : undefined },
+                  { label: 'Bid Cap', value: formData.bidAmount && !isNaN(formData.bidAmount) ? formatCurrency(formData.bidAmount) : undefined },
                   { label: 'Status', value: formData.status?.toLowerCase() },
                 ].filter((item): item is { label: string; value: any } => item !== null).map(({ label, value }) => (
                   <div key={label} className="flex justify-between">

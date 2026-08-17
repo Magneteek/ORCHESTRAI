@@ -31,7 +31,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { apiClient } from '@/lib/helpers/api-client';
-import { formatCurrency, formatNumber, formatPercentage } from '@/lib/utils';
+import { formatNumber, formatPercentage } from '@/lib/utils';
+import { useCurrency } from '@/lib/hooks/use-currency';
 import type { FacebookCampaign } from '@/types/facebook';
 
 interface CampaignTableProps {
@@ -49,6 +50,8 @@ export function CampaignTable({
   totalPages,
   onPageChange,
 }: CampaignTableProps) {
+  // Money renders in the selected account's currency, not a hardcoded USD.
+  const { format: formatCurrency } = useCurrency();
   const queryClient = useQueryClient();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<FacebookCampaign | null>(

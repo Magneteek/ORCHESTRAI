@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAdAccount } from '@/lib/hooks/use-ad-account';
+import { useCurrency } from '@/lib/hooks/use-currency';
 import { apiClient } from '@/lib/helpers/api-client';
 import { isLeadGen, type AnalyticsData, type TopCampaign } from '@/types/analytics';
 
@@ -51,13 +52,11 @@ function formatNumber(n: number): string {
   return n.toLocaleString();
 }
 
-function formatCurrency(n: number): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
-}
 
 export default function DashboardPage() {
   const [datePreset, setDatePreset] = useState<DatePreset>('7days');
   const { selectedAccountId, accounts, isLoading: accountsLoading } = useAdAccount();
+  const { format: formatCurrency } = useCurrency();
 
   const dateRange = useMemo(() => getDateRange(datePreset), [datePreset]);
 
@@ -230,7 +229,11 @@ export default function DashboardPage() {
                 ) : (
                   <div className="space-y-4">
                     {topCampaigns.slice(0, 4).map((campaign) => (
-                      <CampaignRow key={campaign.id} campaign={campaign} />
+                      <CampaignRow
+                        key={campaign.id}
+                        campaign={campaign}
+                        formatCurrency={formatCurrency}
+                      />
                     ))}
                   </div>
                 )}
@@ -326,7 +329,13 @@ function MetricCard({
   );
 }
 
-function CampaignRow({ campaign }: { campaign: TopCampaign }) {
+function CampaignRow({
+  campaign,
+  formatCurrency,
+}: {
+  campaign: TopCampaign;
+  formatCurrency: (n: number) => string;
+}) {
   // Same reasoning as the headline tile: a lead-gen campaign's ROAS is always
   // 0.0x, so lead count and cost per lead are what's worth showing.
   const leadGen = isLeadGen(campaign);

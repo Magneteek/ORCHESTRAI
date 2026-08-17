@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAdAccount } from '@/lib/hooks/use-ad-account';
+import { useCurrency } from '@/lib/hooks/use-currency';
 import {
   TrendingUp,
   AlertTriangle,
@@ -283,6 +284,7 @@ function PredictionsTab({
   onRefresh: () => void;
   refreshing: boolean;
 }) {
+  const { format: formatCurrency } = useCurrency();
   if (loading) {
     return <LoadingState message="Loading predictions..." />;
   }
@@ -358,7 +360,7 @@ function PredictionsTab({
               <div className="grid grid-cols-4 gap-6 flex-1">
                 <MetricDisplay label="ROAS" value={`${pred.roas.toFixed(2)}x`} />
                 <MetricDisplay label="CTR" value={`${(pred.ctr * 100).toFixed(2)}%`} />
-                <MetricDisplay label="Spend" value={`$${pred.spend.toFixed(0)}`} />
+                <MetricDisplay label="Spend" value={formatCurrency(pred.spend)} />
                 <MetricDisplay label="Clicks" value={pred.clicks.toLocaleString()} />
               </div>
             </div>

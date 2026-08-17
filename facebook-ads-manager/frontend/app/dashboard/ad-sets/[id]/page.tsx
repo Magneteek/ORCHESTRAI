@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Users, Target, Calendar, Zap, Play, Pause } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useCurrency } from '@/lib/hooks/use-currency';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { apiClient } from '@/lib/helpers/api-client';
@@ -34,6 +35,7 @@ const OPTIMIZATION_GOAL_LABELS: Record<string, string> = {
 };
 
 export default function AdSetDetailPage() {
+  const { format: formatCurrency } = useCurrency();
   const params = useParams();
   const router = useRouter();
   const adSetId = params.id as string;
@@ -141,7 +143,7 @@ export default function AdSetDetailPage() {
             <div className="flex justify-between">
               <dt className="text-muted-foreground">Budget</dt>
               <dd className="font-medium">
-                {adSet.budget ? `$${adSet.budget}` : 'Campaign-level (CBO)'}
+                {adSet.budget ? formatCurrency(adSet.budget) : 'Campaign-level (CBO)'}
               </dd>
             </div>
             <div className="flex justify-between">
