@@ -120,6 +120,85 @@ export async function getDailyPerformance({
   });
 }
 
+export interface CampaignTotals {
+  spend: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  revenue: number;
+  /** Ratio, not a percentage — the UI's formatPercentage multiplies by 100. */
+  ctr: number;
+  roas: number;
+  cpc: number;
+  cpa: number;
+}
+
+/**
+ * Lifetime-to-date totals per campaign, keyed by Campaign.id (the UUID).
+ *
+ * Feeds the spend/ROAS/CTR columns of the campaigns list, which read a
+ * `campaign.insights` object. Campaigns with no metric rows are absent from
+ * the map rather than present with zeros, so the table can render "-" for
+ * "never delivered" instead of a misleading 0.00.
+ */
+export async function getCampaignTotals(
+  campaignIds: string[]
+): Promise<Map<string, CampaignTotals>> {
+  if (campaignIds.length === 0) return new Map();
+
+  const grouped = await prisma.performanceMetric.groupBy({
+    by: ['adId'],
+    where: { ad: { adSet: { campaign: { id: { in: campaignIds } } } } },
+    _sum: {
+      spend: true,
+      impressions: true,
+      clicks: true,
+      conversions: true,
+      purchaseValue: true,
+    },
+  });
+
+  // groupBy cannot group by a relation field, so map each ad back to its campaign.
+  const ads = await prisma.ad.findMany({
+    where: { id: { in: grouped.map((g) => g.adId) } },
+    select: { id: true, adSet: { select: { campaignId: true } } },
+  });
+  const campaignByAd = new Map(ads.map((a) => [a.id, a.adSet.campaignId]));
+
+  const acc = new Map<
+    string,
+    { spend: number; impressions: number; clicks: number; conversions: number; revenue: number }
+  >();
+
+  for (const row of grouped) {
+    const campaignId = campaignByAd.get(row.adId);
+    if (!campaignId) continue;
+
+    const t =
+      acc.get(campaignId) ??
+      { spend: 0, impressions: 0, clicks: 0, conversions: 0, revenue: 0 };
+    t.spend += row._sum.spend ?? 0;
+    t.impressions += Number(row._sum.impressions ?? 0);
+    t.clicks += Number(row._sum.clicks ?? 0);
+    t.conversions += Number(row._sum.conversions ?? 0);
+    t.revenue += row._sum.purchaseValue ?? 0;
+    acc.set(campaignId, t);
+  }
+
+  return new Map(
+    Array.from(acc.entries()).map(([id, t]) => [
+      id,
+      {
+        ...t,
+        ctr: t.impressions > 0 ? t.clicks / t.impressions : 0,
+        roas: t.spend > 0 ? t.revenue / t.spend : 0,
+        cpc: t.clicks > 0 ? t.spend / t.clicks : 0,
+        cpa: t.conversions > 0 ? t.spend / t.conversions : 0,
+      },
+    ])
+  );
+}
+
 export class NoAdAccountsError extends Error {
   constructor() {
     super('No ad accounts found');

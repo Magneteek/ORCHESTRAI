@@ -22,6 +22,33 @@ const INSIGHTS_LOOKBACK_DAYS = 90;
 // Bounds concurrent Prisma writes so a large account cannot exhaust the pool.
 const WRITE_CHUNK = 25;
 
+// The campaigns/adsets/ads edges exclude archived entities by default, but their
+// insights persist forever. Syncing only the default set therefore drops the
+// spend of every archived ad: on the DRNL account that was 15 daily rows and
+// EUR 330.73, silently missing from reported totals. Ask for every status
+// explicitly so historical spend stays attributable.
+const ALL_EFFECTIVE_STATUSES = [
+  'ACTIVE',
+  'PAUSED',
+  'DELETED',
+  'PENDING_REVIEW',
+  'DISAPPROVED',
+  'PREAPPROVED',
+  'PENDING_BILLING_INFO',
+  'CAMPAIGN_PAUSED',
+  'ARCHIVED',
+  'ADSET_PAUSED',
+  'IN_PROCESS',
+  'WITH_ISSUES',
+];
+
+/** Graph API `filtering` clause selecting every effective_status for one level. */
+function allStatusesFilter(level: 'campaign' | 'adset' | 'ad'): string {
+  return JSON.stringify([
+    { field: `${level}.effective_status`, operator: 'IN', value: ALL_EFFECTIVE_STATUSES },
+  ]);
+}
+
 export type AdAccountWithBusiness = AdAccount & {
   facebookBusinessAccount: FacebookBusinessAccount;
 };
@@ -103,6 +130,7 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
   const campaignsData = await fbGetAllPages(`/${fbAccountId}/campaigns`, token, {
     fields: campaignFields,
     limit: '100',
+    filtering: allStatusesFilter('campaign'),
   });
 
   await runChunked(
@@ -137,6 +165,7 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
   const allAdSets = await fbGetAllPages(`/${fbAccountId}/adsets`, token, {
     fields: adSetFields,
     limit: '200',
+    filtering: allStatusesFilter('adset'),
   });
 
   await runChunked(
@@ -179,6 +208,7 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
   const allAds = await fbGetAllPages(`/${fbAccountId}/ads`, token, {
     fields: adFields,
     limit: '200',
+    filtering: allStatusesFilter('ad'),
   });
 
   await runChunked(
@@ -219,6 +249,24 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
     fields: insightFields,
     limit: '500',
   });
+
+  // An insight row for an ad we never stored is dropped spend. That used to
+  // happen silently for archived ads; the status filter above should now keep
+  // adMap complete, so anything still dropping here is a real gap worth seeing
+  // rather than a rounding error in someone's monthly report.
+  const orphanRows = insightRows.filter((row: any) => !adMap.has(row.ad_id));
+  if (orphanRows.length > 0) {
+    const orphanSpend = orphanRows.reduce(
+      (sum: number, row: any) => sum + parseFloat(row.spend || '0'),
+      0
+    );
+    const orphanAdIds = [...new Set(orphanRows.map((row: any) => row.ad_id))];
+    console.warn(
+      `[sync ${adAccount.name}] dropping ${orphanRows.length} insight rows ` +
+        `(spend ${orphanSpend.toFixed(2)}) for ${orphanAdIds.length} unknown ad(s): ` +
+        orphanAdIds.join(', ')
+    );
+  }
 
   const metricTasks = insightRows
     .filter((row: any) => adMap.has(row.ad_id))

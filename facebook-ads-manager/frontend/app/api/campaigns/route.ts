@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { successResponse, errorResponse, createdResponse, paginatedResponse } from '@/lib/utils/api-response';
 import { requireAuth } from '@/lib/auth/session';
 import { getCampaignsByAdAccount, createCampaignInDb } from '@/lib/db/campaigns';
+import { getCampaignTotals } from '@/lib/analytics/aggregate';
 import { createCampaignSchema, campaignQuerySchema } from '@/lib/utils/campaign-validation';
 import { ZodError } from 'zod';
 import { ValidationError, BadRequestError } from '@/lib/utils/errors';
@@ -63,6 +64,10 @@ export async function GET(request: NextRequest) {
       }
     );
 
+    // The campaigns table renders spend/ROAS/CTR from `campaign.insights`;
+    // without this the columns rendered "-" for every campaign forever.
+    const totals = await getCampaignTotals(result.campaigns.map(c => c.id));
+
     // Transform campaigns to include ad set and ad counts
     const campaignsWithCounts = result.campaigns.map(campaign => ({
       id: campaign.id,
@@ -79,6 +84,9 @@ export async function GET(request: NextRequest) {
       updatedAt: campaign.updatedAt,
       adSetCount: campaign.adSets?.length || 0,
       templateId: campaign.templateId,
+      // Absent (undefined) when the campaign never delivered, so the table
+      // shows "-" rather than a misleading 0.00.
+      insights: totals.get(campaign.id),
     }));
 
     return paginatedResponse(
