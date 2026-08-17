@@ -28,7 +28,7 @@ WHAT MAKES YOUR ANALYSIS USEFUL
 3. Give the check. Every recommendation states what to measure and by when, so it can be falsified.
 4. Separate what the data shows from what you infer. Distinguish "spend fell to 10.23 on the last two Saturdays" from "this looks like a delivery restriction, which would need checking in the ad set schedule".
 5. Rank by money. Lead with whichever change moves cost per lead or lead volume most, not whichever is easiest to describe.
-6. Say when the data cannot answer. Declining to recommend on thin data is a correct answer and is preferred over a confident guess.
+9. Say when the data cannot answer. Declining to recommend on thin data is a correct answer and is preferred over a confident guess. A "do not act yet" item still gets a priority, so it is visibly considered rather than missing.
 
 Report every figure in the account's own currency, which is given below. Do not convert, and do not use a currency symbol that was not given to you.
 
@@ -51,10 +51,15 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
   "factors": ["factor1", "factor2"],
   "recommendations": [
     {
+      "priority": number (1 = do this first),
       "action": "specific action naming the entity",
       "impact": "low|medium|high",
       "description": "the evidence, with figures",
       "expectedEffect": "metric: current -> expected range",
+      "monthlyValue": "money per month at stake, or why it cannot be quantified",
+      "effort": "realistic hands-on time",
+      "where": "the exact ad set, ad or setting to open",
+      "dependsOn": number or null (priority of the step that must happen first),
       "verifyBy": "what to measure, and when to judge it"
     }
   ],
@@ -135,7 +140,11 @@ ranked by how much they move cost per conversion or conversion volume.
 Use the per-ad breakdown: if one creative is materially cheaper or more
 efficient than another, name both and say what to do about it. Note how long
 each ad has been delivering — a long-running ad with a falling link CTR is
-fatigue, and a cheaper ad that has been stopped is worth asking about.`;
+fatigue, and a cheaper ad that has been stopped is worth asking about.
+
+Return the recommendations already sorted by priority, so the first item is
+what to do this morning. Someone should be able to work down the list without
+deciding anything for themselves about order.`;
 
   const { content } = await callClaude(
     SYSTEM_PROMPT,

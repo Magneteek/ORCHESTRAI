@@ -32,6 +32,22 @@ export const PerformancePredictionSchema = z.object({
     expectedEffect: z.string().optional(),
     /** The measurement that would confirm or kill it, and by when. */
     verifyBy: z.string().optional(),
+    /**
+     * Execution order, 1 = do first. Ranked by value against effort, not by
+     * how interesting the finding is. Without this the list arrived as six
+     * peers whose stated impact labels contradicted their own reasoning — a
+     * "low impact" item recovering EUR 9/day outranked a "medium" one worth
+     * nothing measurable.
+     */
+    priority: z.number().int().optional(),
+    /** Realistic hands-on time, e.g. "10 minutes in Ads Manager". */
+    effort: z.string().optional(),
+    /** Money at stake per month, or why it cannot be quantified. */
+    monthlyValue: z.string().optional(),
+    /** Priority number of the step that must happen first, if any. */
+    dependsOn: z.number().int().nullable().optional(),
+    /** Exactly where to make the change. */
+    where: z.string().optional(),
   })),
   summary: z.string(),
 });

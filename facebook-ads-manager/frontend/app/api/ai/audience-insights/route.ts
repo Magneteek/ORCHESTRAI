@@ -13,6 +13,8 @@ import {
 } from '@/lib/ai/audience-insights';
 import { prisma } from '@/lib/db/prisma';
 import { getDailyPerformance } from '@/lib/analytics/aggregate';
+import { getDemographicPerformance } from '@/lib/ai/account-context';
+import { decrypt } from '@/lib/utils/encryption';
 import { RateLimiter } from '@/lib/redis/client';
 import { subDays } from 'date-fns';
 
@@ -222,25 +224,43 @@ export async function GET(request: NextRequest) {
  * Helper: Get audience data
  */
 async function getAudienceData(adAccountId: string, campaignId?: string): Promise<any> {
-  // Still zeroed, and not for want of a table: performance_metrics has no
-  // demographic dimension at all. Filling this in means requesting Facebook's
-  // `breakdowns` (age, gender, country, publisher_platform, device_platform)
-  // in the insights call in lib/facebook/sync-account and storing the result
-  // in a new per-breakdown table. Until then the shape is returned as zeros so
-  // the prompt builder has stable keys to read.
-  return {
-    demographics: {
-      age: { '18-24': 0, '25-34': 0, '35-44': 0, '45-54': 0, '55-64': 0, '65+': 0 },
-      gender: { male: 0, female: 0, unknown: 0 },
-    },
-    geographic: {
-      country: {},
-      region: {},
-    },
-    device: { mobile: 0, desktop: 0, tablet: 0 },
-    placement: { feed: 0, stories: 0, reels: 0, messenger: 0 },
+  // Real age, gender, country, device and placement performance from Meta's
+  // breakdowns. This previously returned a hardcoded shape of zeros, because
+  // performance_metrics carries no demographic dimension — so the analysis was
+  // producing confident-sounding audience findings from an empty input.
+  const empty = {
+    demographics: { age: {}, gender: {} },
+    geographic: { country: {}, region: {} },
+    device: {},
+    placement: {},
   };
+
+  const account = await prisma.adAccount.findFirst({
+    where: { id: adAccountId },
+    include: { facebookBusinessAccount: true },
+  });
+  if (!account?.facebookBusinessAccount?.accessTokenEncrypted) return empty;
+
+  let token: string;
+  try {
+    token = decrypt(account.facebookBusinessAccount.accessTokenEncrypted);
+  } catch {
+    return empty;
+  }
+
+  const since = subDays(new Date(), 30);
+  const data = await getDemographicPerformance(
+    account.accountId,
+    token,
+    since.toISOString().split('T')[0],
+    new Date().toISOString().split('T')[0]
+  );
+
+  // Falling back to the empty shape keeps the prompt's keys stable; the values
+  // being empty is itself the signal that nothing was retrievable.
+  return data ?? empty;
 }
+
 
 /**
  * Helper: Get performance by segment

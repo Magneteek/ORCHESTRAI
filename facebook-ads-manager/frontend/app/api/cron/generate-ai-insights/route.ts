@@ -4,17 +4,16 @@
  *
  * Runs anomaly detection per ad account and records the outcome.
  *
- * KNOWN LIMITATION (as of 2026-08-10): this is plumbing-complete but produces
- * nothing yet. `getHistoricalData()` in lib/queue/jobs/anomaly-detection.ts is
- * a hardcoded `return []` sitting under a "TODO: Add CampaignInsights model"
- * comment, so every account short-circuits on the "Insufficient historical
- * data" guard. The data it wants now exists in `performance_metrics`; the fix
- * is to repoint that helper, not to add a model.
+ * This works as of 2026-08-17 — the helper it depends on now reads
+ * `performance_metrics`, and a run against a live account produces stored
+ * anomalies. An earlier note here described it as a no-op blocked on a stubbed
+ * getHistoricalData(); that is no longer true.
  *
- * Until then this route is a safe no-op: with no historical rows it never
- * reaches the Anthropic client, so scheduling it costs nothing. It reports
- * `insufficientData` per account so the blocker is visible in the cron log
- * rather than looking like a silent success.
+ * Note this is the only thing that populates the Anomaly Detection tab on a
+ * schedule. The tab reads stored results from the last 24 hours, so on an
+ * environment where this cron never fires — a local dev machine, or anywhere
+ * not deployed — the tab stays empty until someone triggers it from the UI.
+ * Empty there means "never run", not "nothing found".
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';

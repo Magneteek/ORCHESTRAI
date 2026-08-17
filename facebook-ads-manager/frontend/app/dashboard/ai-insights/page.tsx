@@ -405,7 +405,22 @@ function PredictionsTab({
                   <Target className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{rec.action}</div>
+                  <div className="font-medium text-gray-900">
+                    {rec.priority ? (
+                      <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-xs text-white">
+                        {rec.priority}
+                      </span>
+                    ) : null}
+                    {rec.action}
+                  </div>
+                  {(rec.monthlyValue || rec.effort || rec.where) && (
+                    <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600">
+                      {rec.monthlyValue && <span><span className="font-medium">Worth:</span> {rec.monthlyValue}</span>}
+                      {rec.effort && <span><span className="font-medium">Effort:</span> {rec.effort}</span>}
+                      {rec.where && <span><span className="font-medium">Where:</span> {rec.where}</span>}
+                      {rec.dependsOn ? <span className="text-amber-700">After step {rec.dependsOn}</span> : null}
+                    </div>
+                  )}
                   <div className="text-sm text-gray-600 mt-1">{rec.description}</div>
                   {rec.expectedEffect && (
                     <div className="text-sm text-gray-800 mt-2">

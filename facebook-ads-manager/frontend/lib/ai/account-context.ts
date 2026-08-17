@@ -280,3 +280,81 @@ export async function getAccountContext(
 
   return { placements, creatives, changes, audiences };
 }
+
+export interface SegmentStat {
+  spend: number;
+  linkClicks: number;
+  conversions: number;
+  cpa: number | null;
+}
+
+export interface DemographicPerformance {
+  demographics: { age: Record<string, SegmentStat>; gender: Record<string, SegmentStat> };
+  geographic: { country: Record<string, SegmentStat> };
+  device: Record<string, SegmentStat>;
+  placement: Record<string, SegmentStat>;
+}
+
+/** Fold Graph rows into { key -> spend/clicks/conversions/cpa }. */
+function foldSegments(
+  rows: any[],
+  key: (row: any) => string | null
+): Record<string, SegmentStat> {
+  const out: Record<string, SegmentStat> = {};
+  for (const r of rows) {
+    const k = key(r);
+    if (!k) continue;
+    const bucket = out[k] ?? { spend: 0, linkClicks: 0, conversions: 0, cpa: null };
+    bucket.spend += parseFloat(r.spend || '0');
+    bucket.linkClicks += parseInt(r.inline_link_clicks || '0', 10);
+    bucket.conversions += leadsFromActions(r.actions);
+    out[k] = bucket;
+  }
+  for (const bucket of Object.values(out)) {
+    bucket.spend = Math.round(bucket.spend * 100) / 100;
+    // null rather than 0 — "no conversions" is not "free conversions", and a
+    // zero here would rank a dead segment as the best performer.
+    bucket.cpa = bucket.conversions > 0 ? Math.round((bucket.spend / bucket.conversions) * 100) / 100 : null;
+  }
+  return out;
+}
+
+/**
+ * Age, gender, country, device and placement performance.
+ *
+ * The audience analysis previously received a hardcoded shape of zeros —
+ * `performance_metrics` has no demographic dimension, so there was nothing to
+ * read — and produced confident-sounding output from an empty input. Meta
+ * exposes all of it through `breakdowns`, one request per dimension because
+ * they cannot all be combined.
+ */
+export async function getDemographicPerformance(
+  accountId: string,
+  token: string,
+  since: string,
+  until: string
+): Promise<DemographicPerformance | null> {
+  const time_range = JSON.stringify({ since, until });
+  const fields = 'impressions,inline_link_clicks,spend,actions';
+
+  const [ageGender, country, device, placement] = await Promise.all([
+    fbGet(`/${accountId}/insights`, token, { level: 'account', time_range, breakdowns: 'age,gender', fields, limit: '100' }),
+    fbGet(`/${accountId}/insights`, token, { level: 'account', time_range, breakdowns: 'country', fields, limit: '100' }),
+    fbGet(`/${accountId}/insights`, token, { level: 'account', time_range, breakdowns: 'impression_device', fields, limit: '100' }),
+    fbGet(`/${accountId}/insights`, token, { level: 'account', time_range, breakdowns: 'publisher_platform,platform_position', fields, limit: '100' }),
+  ]);
+
+  if (!ageGender && !country && !device && !placement) return null;
+
+  return {
+    demographics: {
+      age: foldSegments(ageGender?.data ?? [], (r) => r.age ?? null),
+      gender: foldSegments(ageGender?.data ?? [], (r) => r.gender ?? null),
+    },
+    geographic: { country: foldSegments(country?.data ?? [], (r) => r.country ?? null) },
+    device: foldSegments(device?.data ?? [], (r) => r.impression_device ?? null),
+    placement: foldSegments(placement?.data ?? [], (r) =>
+      r.publisher_platform ? `${r.publisher_platform}/${r.platform_position ?? 'unknown'}` : null
+    ),
+  };
+}
