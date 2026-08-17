@@ -241,7 +241,7 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
   const untilStr = new Date().toISOString().split('T')[0];
 
   const insightFields =
-    'ad_id,date_start,impressions,clicks,spend,ctr,cpc,cpm,reach,frequency,actions,action_values';
+    'ad_id,date_start,impressions,clicks,inline_link_clicks,spend,ctr,cpc,cpm,reach,frequency,actions,action_values';
   const insightRows = await fbGetAllPages(`/${fbAccountId}/insights`, token, {
     level: 'ad',
     time_increment: '1',
@@ -276,6 +276,12 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
       const spend = parseFloat(row.spend || '0');
       const impressions = parseInt(row.impressions || '0', 10);
       const clicks = parseInt(row.clicks || '0', 10);
+      // Clicks that followed the link, as opposed to `clicks`, which also counts
+      // reactions, comments, saves and post expands.
+      const linkClicks =
+        row.inline_link_clicks !== undefined
+          ? parseInt(row.inline_link_clicks || '0', 10)
+          : null;
       const conversions = getConversions(row.actions);
       const purchaseValue = getPurchaseValue(row.action_values);
 
@@ -283,6 +289,7 @@ export async function syncAdAccount(adAccount: AdAccountWithBusiness): Promise<S
         spend,
         impressions,
         clicks,
+        linkClicks,
         conversions,
         purchaseValue,
         // Facebook reports ctr as a percentage; stored as reported.

@@ -317,7 +317,14 @@ model PerformanceMetric {
   // Core Metrics
   spend         Float    @default(0)
   impressions   BigInt   @default(0)
+  // Facebook's `clicks` counts EVERY click on the ad — reactions, comments,
+  // saves, post expands, video plays. On this account 60% of them never
+  // reached the destination, so a click-to-lead rate computed from it reads
+  // ~3.3% where the real figure is ~8.5%.
   clicks        BigInt   @default(0)
+  // `inline_link_clicks`: clicks that actually followed the link. This is the
+  // denominator conversion-rate benchmarks are quoted against.
+  linkClicks    BigInt?
   conversions   BigInt   @default(0)
   // Purchase conversion value (revenue) for the day, from Facebook action_values.
   // Aggregate ROAS = sum(purchaseValue) / sum(spend) — never average per-row roas.

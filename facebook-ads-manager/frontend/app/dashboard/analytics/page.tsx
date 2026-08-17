@@ -130,7 +130,8 @@ export default function AnalyticsPage() {
   const leadGen = m ? isLeadGen(m) : true;
 
   const series = data?.timeSeries ?? [];
-  const cvr = m && m.clicks > 0 ? m.conversions / m.clicks : 0;
+  // Conversion rate against LINK clicks, not all clicks — see AnalyticsMetrics.
+  const cvr = m?.cvr ?? 0;
 
   if (!accountsLoading && accounts.length === 0) {
     return (
@@ -237,17 +238,18 @@ export default function AnalyticsPage() {
             <Card className="p-6">
               <h2 className="text-lg font-semibold">Conversion funnel</h2>
               <p className="mb-4 text-sm text-muted-foreground">
-                Where the drop-off happens
+                Where the drop-off happens. Measured on link clicks — Meta&apos;s
+                total click count also includes reactions, comments and post
+                expands, which never reached the destination.
               </p>
               <ConversionFunnel
                 formatCount={fmtCount}
                 steps={[
                   { label: 'Impressions', value: m.impressions },
                   {
-                    label: 'Clicks',
-                    value: m.clicks,
-                    rate: m.ctr,
-                    benchmark: benchmark.ctr,
+                    label: 'Link clicks',
+                    value: m.linkClicks,
+                    rate: m.linkCtr,
                   },
                   {
                     label: leadGen ? 'Leads' : 'Conversions',

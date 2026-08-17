@@ -11,6 +11,12 @@ export interface AnalyticsMetrics {
   spend: number;
   impressions: number;
   clicks: number;
+  /**
+   * Clicks that followed the link. `clicks` also counts reactions, comments,
+   * saves and post expands, so it is the wrong denominator for a conversion
+   * rate — on this data it understated click-to-lead by more than half.
+   */
+  linkClicks: number;
   conversions: number;
   /** Purchase conversion value. Zero for lead-gen objectives, which book no revenue. */
   revenue: number;
@@ -20,6 +26,10 @@ export interface AnalyticsMetrics {
   cpm: number;
   /** Ratio (revenue / spend). Meaningless when revenue is 0 — see isLeadGen(). */
   roas: number;
+  /** Link clicks / impressions. The rate Meta reports as "CTR (link)". */
+  linkCtr: number;
+  /** Conversions / link clicks — the figure CVR benchmarks are quoted against. */
+  cvr: number;
   /** Cost per conversion (spend / conversions). The lead-gen equivalent of ROAS. */
   cpa: number;
 }

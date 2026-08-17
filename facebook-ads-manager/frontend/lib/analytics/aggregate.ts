@@ -35,10 +35,14 @@ export interface DailyPerformance {
   spend: number;
   impressions: number;
   clicks: number;
+  /** Clicks that followed the link; see AnalyticsMetrics.linkClicks. */
+  linkClicks: number;
   conversions: number;
   revenue: number;
   roas: number;
   ctr: number;
+  linkCtr: number;
+  cvr: number;
   cpc: number;
   cpm: number;
   reach: number;
@@ -89,6 +93,7 @@ export async function getDailyPerformance({
       spend: true,
       impressions: true,
       clicks: true,
+      linkClicks: true,
       conversions: true,
       purchaseValue: true,
       reach: true,
@@ -100,6 +105,9 @@ export async function getDailyPerformance({
     const spend = row._sum.spend ?? 0;
     const impressions = Number(row._sum.impressions ?? 0);
     const clicks = Number(row._sum.clicks ?? 0);
+    // Null for days synced before the column existed; fall back to total clicks
+    // rather than reporting zero link clicks for historical data.
+    const linkClicks = row._sum.linkClicks === null ? clicks : Number(row._sum.linkClicks);
     const conversions = Number(row._sum.conversions ?? 0);
     const revenue = row._sum.purchaseValue ?? 0;
     const reach = Number(row._sum.reach ?? 0);
@@ -109,10 +117,13 @@ export async function getDailyPerformance({
       spend,
       impressions,
       clicks,
+      linkClicks,
       conversions,
       revenue,
       roas: spend > 0 ? revenue / spend : 0,
       ctr: impressions > 0 ? clicks / impressions : 0,
+      linkCtr: impressions > 0 ? linkClicks / impressions : 0,
+      cvr: linkClicks > 0 ? conversions / linkClicks : 0,
       cpc: clicks > 0 ? spend / clicks : 0,
       cpm: impressions > 0 ? (spend / impressions) * 1000 : 0,
       reach,
@@ -268,6 +279,7 @@ export async function buildAnalyticsData({
   let spend = 0;
   let impressions = 0;
   let clicks = 0;
+  let linkClicks = 0;
   let conversions = 0;
   let revenue = 0;
 
@@ -288,12 +300,16 @@ export async function buildAnalyticsData({
   for (const row of metricRows) {
     const rowImpressions = Number(row.impressions);
     const rowClicks = Number(row.clicks);
+    // Null for rows synced before linkClicks existed; fall back to total clicks
+    // so historical days are not silently counted as zero link clicks.
+    const rowLinkClicks = row.linkClicks === null ? rowClicks : Number(row.linkClicks);
     const rowConversions = Number(row.conversions);
     const rowRevenue = row.purchaseValue ?? 0;
 
     spend += row.spend;
     impressions += rowImpressions;
     clicks += rowClicks;
+    linkClicks += rowLinkClicks;
     conversions += rowConversions;
     revenue += rowRevenue;
 
@@ -393,6 +409,7 @@ export async function buildAnalyticsData({
       spend,
       impressions,
       clicks,
+      linkClicks,
       conversions,
       revenue,
       ctr: impressions > 0 ? clicks / impressions : 0,
@@ -400,6 +417,8 @@ export async function buildAnalyticsData({
       cpm: impressions > 0 ? (spend / impressions) * 1000 : 0,
       roas: spend > 0 ? revenue / spend : 0,
       cpa: conversions > 0 ? spend / conversions : 0,
+      linkCtr: impressions > 0 ? linkClicks / impressions : 0,
+      cvr: linkClicks > 0 ? conversions / linkClicks : 0,
     },
     timeSeries,
     topCampaigns,
