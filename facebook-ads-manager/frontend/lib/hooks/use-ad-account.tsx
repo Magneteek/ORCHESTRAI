@@ -20,6 +20,8 @@ interface AdAccount {
   currency: string;
   timezone: string;
   accountStatus: string;
+  /** Most recent day with delivery; null if the account has never delivered. */
+  lastActivityAt?: string | null;
   facebookBusinessAccount?: {
     name: string;
     businessId: string;

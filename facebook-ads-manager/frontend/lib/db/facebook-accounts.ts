@@ -243,7 +243,7 @@ export async function getAdAccountsByOrganization(
     throw new ForbiddenError('You do not have access to this organization');
   }
 
-  return prisma.adAccount.findMany({
+  const accounts = await prisma.adAccount.findMany({
     where: {
       facebookBusinessAccount: {
         organizationId,
@@ -259,6 +259,43 @@ export async function getAdAccountsByOrganization(
     },
     orderBy: { createdAt: 'desc' },
   });
+
+  // Order by the most recent day with delivery, newest first, so the account
+  // picker auto-selects somewhere with data.
+  //
+  // Ordering by createdAt meant the dashboard opened on whichever account was
+  // connected last — for this org, a dormant one that Facebook reports zero
+  // insight rows for — and every chart correctly rendered nothing. Accounts
+  // that have never delivered keep their createdAt order at the bottom.
+  //
+  // One grouped query rather than a per-account lookup; Prisma cannot group by
+  // a relation field, hence the join.
+  const activity = await prisma.$queryRaw<
+    Array<{ adAccountId: string; lastActivityAt: Date | null }>
+  >`
+    SELECT c."adAccountId" AS "adAccountId", MAX(pm.date) AS "lastActivityAt"
+    FROM performance_metrics pm
+    JOIN ads a ON a.id = pm."adId"
+    JOIN ad_sets s ON s.id = a."adSetId"
+    JOIN campaigns c ON c.id = s."campaignId"
+    GROUP BY c."adAccountId"
+  `;
+
+  const lastActivity = new Map(
+    activity.map((row) => [row.adAccountId, row.lastActivityAt])
+  );
+
+  return accounts
+    .map((account) => ({
+      ...account,
+      lastActivityAt: lastActivity.get(account.id) ?? null,
+    }))
+    .sort((a, b) => {
+      const aTime = a.lastActivityAt?.getTime() ?? 0;
+      const bTime = b.lastActivityAt?.getTime() ?? 0;
+      if (aTime === bTime) return 0; // preserve the createdAt ordering above
+      return bTime - aTime;
+    });
 }
 
 /**
