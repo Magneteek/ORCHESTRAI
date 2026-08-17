@@ -12,6 +12,7 @@ import {
   Eye,
   MousePointerClick,
   TrendingUp,
+  Target,
   RefreshCw,
   Facebook,
 } from 'lucide-react';
@@ -19,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useAdAccount } from '@/lib/hooks/use-ad-account';
 import { apiClient } from '@/lib/helpers/api-client';
-import type { AnalyticsData, TopCampaign } from '@/types/analytics';
+import { isLeadGen, type AnalyticsData, type TopCampaign } from '@/types/analytics';
 
 type DatePreset = 'today' | '7days' | '30days';
 
@@ -186,12 +187,24 @@ export default function DashboardPage() {
               icon={<MousePointerClick className="h-4 w-4 text-muted-foreground" />}
               isLoading={isLoading || accountsLoading}
             />
-            <MetricCard
-              title="ROAS"
-              value={metrics ? `${metrics.roas.toFixed(2)}x` : '--'}
-              icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
-              isLoading={isLoading || accountsLoading}
-            />
+            {/* Lead-gen books no revenue, so a ROAS tile is a permanent 0.00x
+                that reads as failure. Show leads and cost per lead instead. */}
+            {metrics && isLeadGen(metrics) ? (
+              <MetricCard
+                title="Leads"
+                value={formatNumber(metrics.conversions)}
+                subtitle={`${formatCurrency(metrics.cpa)} per lead`}
+                icon={<Target className="h-4 w-4 text-muted-foreground" />}
+                isLoading={isLoading || accountsLoading}
+              />
+            ) : (
+              <MetricCard
+                title="ROAS"
+                value={metrics ? `${metrics.roas.toFixed(2)}x` : '--'}
+                icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
+                isLoading={isLoading || accountsLoading}
+              />
+            )}
           </div>
 
           {/* Performance Overview */}
@@ -254,9 +267,15 @@ export default function DashboardPage() {
                       value={formatCurrency(metrics.cpm)}
                     />
                     <StatRow
-                      label="Conversions"
+                      label={isLeadGen(metrics) ? 'Leads' : 'Conversions'}
                       value={formatNumber(metrics.conversions)}
                     />
+                    {metrics.conversions > 0 && (
+                      <StatRow
+                        label={isLeadGen(metrics) ? 'Cost Per Lead' : 'Cost Per Conversion'}
+                        value={formatCurrency(metrics.cpa)}
+                      />
+                    )}
                   </div>
                 ) : (
                   <p className="py-8 text-center text-sm text-muted-foreground">
@@ -275,11 +294,13 @@ export default function DashboardPage() {
 function MetricCard({
   title,
   value,
+  subtitle,
   icon,
   isLoading,
 }: {
   title: string;
   value: string;
+  subtitle?: string;
   icon: React.ReactNode;
   isLoading: boolean;
 }) {
@@ -293,7 +314,12 @@ function MetricCard({
         {isLoading ? (
           <div className="h-8 w-24 animate-pulse rounded bg-muted" />
         ) : (
-          <div className="text-2xl font-bold">{value}</div>
+          <>
+            <div className="text-2xl font-bold">{value}</div>
+            {subtitle && (
+              <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
@@ -301,6 +327,10 @@ function MetricCard({
 }
 
 function CampaignRow({ campaign }: { campaign: TopCampaign }) {
+  // Same reasoning as the headline tile: a lead-gen campaign's ROAS is always
+  // 0.0x, so lead count and cost per lead are what's worth showing.
+  const leadGen = isLeadGen(campaign);
+
   return (
     <div className="flex items-center justify-between rounded-lg border p-3">
       <div className="space-y-1">
@@ -310,8 +340,19 @@ function CampaignRow({ campaign }: { campaign: TopCampaign }) {
         </span>
       </div>
       <div className="text-right">
-        <p className="text-lg font-bold">{campaign.roas.toFixed(1)}x</p>
-        <p className="text-xs text-muted-foreground">ROAS</p>
+        {leadGen ? (
+          <>
+            <p className="text-lg font-bold">{formatNumber(campaign.conversions)}</p>
+            <p className="text-xs text-muted-foreground">
+              leads &middot; {formatCurrency(campaign.cpa)} each
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-lg font-bold">{campaign.roas.toFixed(1)}x</p>
+            <p className="text-xs text-muted-foreground">ROAS</p>
+          </>
+        )}
       </div>
     </div>
   );

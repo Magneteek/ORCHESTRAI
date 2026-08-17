@@ -12,7 +12,8 @@ import { DateRangePicker } from '@/components/analytics/date-range-picker';
 import { ComparisonMode } from '@/components/analytics/comparison-mode';
 import { ExportReport } from '@/components/analytics/export-report';
 import { apiClient } from '@/lib/helpers/api-client';
-import type { AnalyticsData, DateRange } from '@/types/analytics';
+import { isLeadGen, type AnalyticsData, type DateRange } from '@/types/analytics';
+import { formatCurrency } from '@/lib/utils/format';
 
 export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -61,10 +62,12 @@ export default function AnalyticsPage() {
     impressions: 0,
     clicks: 0,
     conversions: 0,
+    revenue: 0,
     ctr: 0,
     cpc: 0,
     cpm: 0,
     roas: 0,
+    cpa: 0,
   };
 
   const previousMetrics = comparisonData?.metrics;
@@ -301,15 +304,29 @@ export default function AnalyticsPage() {
           </Card>
 
           <div className="grid gap-4 md:grid-cols-3">
-            <Card className="p-4">
-              <div className="text-sm text-muted-foreground">ROAS</div>
-              <div className="mt-2 text-2xl font-bold">
-                {metrics.roas.toFixed(2)}x
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">
-                Return on ad spend
-              </div>
-            </Card>
+            {/* Lead-gen books no revenue, so ROAS here is always 0.00x.
+                Cost per lead is the comparable efficiency metric. */}
+            {isLeadGen(metrics) ? (
+              <Card className="p-4">
+                <div className="text-sm text-muted-foreground">Cost Per Lead</div>
+                <div className="mt-2 text-2xl font-bold">
+                  {formatCurrency(metrics.cpa)}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {metrics.conversions} leads · no revenue tracked
+                </div>
+              </Card>
+            ) : (
+              <Card className="p-4">
+                <div className="text-sm text-muted-foreground">ROAS</div>
+                <div className="mt-2 text-2xl font-bold">
+                  {metrics.roas.toFixed(2)}x
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  Return on ad spend
+                </div>
+              </Card>
+            )}
 
             <Card className="p-4">
               <div className="text-sm text-muted-foreground">Average CPC</div>

@@ -139,6 +139,8 @@ export function CampaignTable({
               <TableHead>Objective</TableHead>
               <TableHead className="text-right">Budget</TableHead>
               <TableHead className="text-right">Spend</TableHead>
+              <TableHead className="text-right">Leads</TableHead>
+              <TableHead className="text-right">Cost/Lead</TableHead>
               <TableHead className="text-right">ROAS</TableHead>
               <TableHead className="text-right">CTR</TableHead>
               <TableHead className="w-[50px]"></TableHead>
@@ -179,6 +181,18 @@ export function CampaignTable({
                     : '-'}
                 </TableCell>
                 <TableCell className="text-right">
+                  {(campaign as any).insights?.conversions
+                    ? formatNumber((campaign as any).insights.conversions, 0)
+                    : '-'}
+                </TableCell>
+                <TableCell className="text-right">
+                  {(campaign as any).insights?.cpa
+                    ? formatCurrency((campaign as any).insights.cpa)
+                    : '-'}
+                </TableCell>
+                <TableCell className="text-right">
+                  {/* Lead-gen campaigns book no revenue, so ROAS stays "-"
+                      rather than a misleading 0.00 — read Cost/Lead instead. */}
                   {(campaign as any).insights?.roas
                     ? formatNumber((campaign as any).insights.roas, 2)
                     : '-'}

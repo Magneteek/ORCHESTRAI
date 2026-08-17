@@ -352,8 +352,10 @@ export async function buildAnalyticsData({
       clicks: c.clicks,
       spend: c.spend,
       conversions: c.conversions,
+      revenue: c.revenue,
       ctr: c.impressions > 0 ? c.clicks / c.impressions : 0,
       roas: c.spend > 0 ? c.revenue / c.spend : 0,
+      cpa: c.conversions > 0 ? c.spend / c.conversions : 0,
     }))
     .sort((a, b) => b.spend - a.spend)
     .slice(0, 10);
@@ -364,10 +366,12 @@ export async function buildAnalyticsData({
       impressions,
       clicks,
       conversions,
+      revenue,
       ctr: impressions > 0 ? clicks / impressions : 0,
       cpc: clicks > 0 ? spend / clicks : 0,
       cpm: impressions > 0 ? (spend / impressions) * 1000 : 0,
       roas: spend > 0 ? revenue / spend : 0,
+      cpa: conversions > 0 ? spend / conversions : 0,
     },
     timeSeries,
     topCampaigns,
