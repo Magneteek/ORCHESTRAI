@@ -30,8 +30,9 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
       "segment": "segment name",
       "type": "age|gender|location|device|placement",
       "spend": number,
-      "roas": number,
+      "roas": number (omit on lead-generation accounts),
       "conversions": number,
+      "cpa": number (cost per conversion; give this instead of roas on lead-gen),
       "insight": "why this segment performs well"
     }
   ],
@@ -40,7 +41,9 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
       "segment": "segment name",
       "type": "age|gender|location|device|placement",
       "spend": number,
-      "roas": number,
+      "roas": number (omit on lead-generation accounts),
+      "conversions": number,
+      "cpa": number (omit where the segment produced no conversions),
       "issue": "what's wrong",
       "recommendation": "how to fix it"
     }
@@ -50,7 +53,8 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
       "opportunity": "opportunity name",
       "segment": "target segment",
       "reasoning": "why this will work",
-      "expectedRoas": number,
+      "expectedRoas": number (omit on lead-generation accounts),
+      "expectedCpa": number (expected cost per lead; give this instead on lead-gen),
       "riskLevel": "low|medium|high"
     }
   ],
@@ -62,7 +66,11 @@ CRITICAL: Respond ONLY with valid JSON matching this exact structure:
     }
   ],
   "summary": "brief summary"
-}`;
+}
+
+Never invent a stand-in figure for a metric the account does not produce. If
+there is no purchase revenue, omit roas entirely rather than filling it with a
+score, an index or a placeholder and explaining the substitution in prose.`;
 
 /**
  * Generate audience insights and recommendations
@@ -82,7 +90,25 @@ export async function analyzeAudience(
   // Report in the account's own currency; hardcoded "$" narrated dollars
   // against euro accounts, the same defect fixed in the predictor.
   const money = (n: number) => `${currency} ${(n ?? 0).toFixed(2)}`;
-  const analysisContext = prepareAudienceContext(audienceData, performanceBySegment, money);
+
+  // A lead-gen account records conversions but no purchase revenue, so every
+  // segment's ROAS is zero by construction. Told to rank on ROAS anyway, the
+  // model either calls tracking broken or substitutes an invented index.
+  const isLeadGen = isLeadGenSegments(performanceBySegment);
+  const analysisContext = prepareAudienceContext(
+    audienceData,
+    performanceBySegment,
+    money,
+    isLeadGen
+  );
+
+  const objectiveNote = isLeadGen
+    ? `\nIMPORTANT: this is a lead-generation account. It records conversions and ` +
+      `no purchase revenue, so ROAS is zero by definition — that is expected, NOT a ` +
+      `tracking failure. Rank and judge every segment on cost per lead and lead ` +
+      `volume. Omit the roas and expectedRoas fields entirely and give cpa and ` +
+      `expectedCpa instead. Do not recommend fixing revenue attribution.\n`
+    : '';
 
   const userPrompt = `Analyze this audience performance data and provide targeting insights:
 
@@ -102,7 +128,7 @@ PERFORMANCE BY SEGMENT:
 ${JSON.stringify(performanceBySegment, null, 2)}
 
 CAMPAIGN OBJECTIVE: ${campaignObjective}
-
+${objectiveNote}
 ANALYSIS CONTEXT:
 ${analysisContext}
 
@@ -111,7 +137,7 @@ Provide insights on:
 2. Underperforming segments to optimize or pause
 3. Expansion opportunities (lookalike audiences, new demographics)
 4. Budget reallocation recommendations
-5. Targeting refinements for better ROAS
+5. Targeting refinements for better ${isLeadGen ? 'cost per lead' : 'ROAS'}
 
 Consider both current performance and growth potential.`;
 
@@ -135,12 +161,33 @@ Consider both current performance and growth potential.`;
 }
 
 /**
+ * Does this account's segment data describe lead generation rather than sales?
+ *
+ * Spend and conversions with no revenue anywhere is the signature: ROAS is
+ * zero for every segment because there is nothing to divide, not because
+ * tracking failed.
+ */
+export function isLeadGenSegments(performanceBySegment: Record<string, any>): boolean {
+  const segments = Object.values(performanceBySegment);
+  if (segments.length === 0) return false;
+
+  const conversions = segments.reduce((sum, p) => sum + (p.conversions || 0), 0);
+  const revenue = segments.reduce(
+    (sum, p) => sum + (p.revenue ?? (p.roas || 0) * (p.spend || 0)),
+    0
+  );
+
+  return conversions > 0 && revenue === 0;
+}
+
+/**
  * Prepare audience context for analysis
  */
 function prepareAudienceContext(
   audienceData: any,
   performanceBySegment: Record<string, any>,
-  money: (n: number) => string
+  money: (n: number) => string,
+  isLeadGen = false
 ): string {
   const segments = Object.entries(performanceBySegment);
 
@@ -150,30 +197,58 @@ function prepareAudienceContext(
 
   // Calculate aggregate statistics
   const totalSpend = segments.reduce((sum, [_, perf]) => sum + (perf.spend || 0), 0);
-  const avgRoas = segments.reduce((sum, [_, perf]) => sum + (perf.roas || 0), 0) / segments.length;
+  const totalConversions = segments.reduce((sum, [_, perf]) => sum + (perf.conversions || 0), 0);
 
-  // Identify best and worst performers
-  const sortedByRoas = segments.sort((a, b) => (b[1].roas || 0) - (a[1].roas || 0));
-  const topPerformer = sortedByRoas[0];
-  const worstPerformer = sortedByRoas[sortedByRoas.length - 1];
+  // Efficiency is cost per lead where there is no revenue, ROAS where there is.
+  // Both are computed from summed totals, never as an average of per-segment
+  // ratios, which would weight a EUR 3 segment the same as a EUR 300 one.
+  const cpa = (perf: any) =>
+    perf.conversions > 0 ? perf.spend / perf.conversions : Infinity;
+  const blendedCpa = totalConversions > 0 ? totalSpend / totalConversions : 0;
+  const avgRoas =
+    totalSpend > 0
+      ? segments.reduce((sum, [_, p]) => sum + (p.roas || 0) * (p.spend || 0), 0) / totalSpend
+      : 0;
+
+  // Rank on whichever metric means something. Sorting by an all-zero ROAS made
+  // "best" and "worst" whatever order the map happened to produce.
+  const ranked = [...segments].sort((a, b) =>
+    isLeadGen ? cpa(a[1]) - cpa(b[1]) : (b[1].roas || 0) - (a[1].roas || 0)
+  );
+  const topPerformer = ranked[0];
+  const worstPerformer = ranked[ranked.length - 1];
+
+  const describe = ([name, perf]: [string, any]) =>
+    isLeadGen
+      ? `- Segment: ${name}\n- Conversions: ${perf.conversions || 0}\n` +
+        `- Cost per Lead: ${perf.conversions > 0 ? money(cpa(perf)) : 'no leads'}\n` +
+        `- Spend: ${money(perf.spend)}`
+      : `- Segment: ${name}\n- ROAS: ${(perf.roas || 0).toFixed(2)}x\n` +
+        `- Spend: ${money(perf.spend)}`;
+
+  const headline = isLeadGen
+    ? `- Total Conversions: ${totalConversions}\n- Blended Cost per Lead: ${money(blendedCpa)}`
+    : `- Average ROAS: ${avgRoas.toFixed(2)}x`;
+
+  const betterThanBlended = isLeadGen
+    ? segments.filter(([_, p]) => p.conversions > 0 && cpa(p) < blendedCpa).length
+    : segments.filter(([_, p]) => (p.roas || 0) > avgRoas).length;
 
   return `
 Aggregate Statistics:
 - Total Spend: ${money(totalSpend)}
-- Average ROAS: ${avgRoas.toFixed(2)}x
+${headline}
 - Segment Count: ${segments.length}
 
 Best Performer:
-- Segment: ${topPerformer[0]}
-- ROAS: ${topPerformer[1].roas?.toFixed(2)}x
-- Spend: ${money(topPerformer[1].spend)}
+${describe(topPerformer)}
 
 Worst Performer:
-- Segment: ${worstPerformer[0]}
-- ROAS: ${worstPerformer[1].roas?.toFixed(2)}x
-- Spend: ${money(worstPerformer[1].spend)}
+${describe(worstPerformer)}
 
-Performance Distribution: ${segments.filter(([_, p]) => (p.roas || 0) > avgRoas).length}/${segments.length} segments above average
+Performance Distribution: ${betterThanBlended}/${segments.length} segments better than the ${
+    isLeadGen ? 'blended cost per lead' : 'average ROAS'
+  }
 `;
 }
 
@@ -268,13 +343,16 @@ export function calculateSegmentScore(
  * Generate lookalike audience recommendations
  */
 export async function generateLookalikeRecommendations(
-  topSegments: Array<{ segment: string; roas: number; conversions: number }>,
+  topSegments: Array<{ segment: string; roas?: number; conversions: number; cpa?: number }>,
   campaignObjective: string
 ): Promise<Array<{ name: string; source: string; size: string; reasoning: string }>> {
   const recommendations: Array<{ name: string; source: string; size: string; reasoning: string }> = [];
 
-  // High-value converter lookalike
-  if (topSegments.some(s => s.conversions > 50 && s.roas > 3)) {
+  // High-value converter lookalike. The ROAS > 3 test can never pass on a
+  // lead-gen account, where ROAS is zero everywhere, so volume alone qualifies
+  // a segment there — a seed audience needs converters, not revenue.
+  const hasRevenue = topSegments.some(s => (s.roas ?? 0) > 0);
+  if (topSegments.some(s => s.conversions > 50 && (hasRevenue ? (s.roas ?? 0) > 3 : true))) {
     recommendations.push({
       name: 'High-Value Converter Lookalike',
       source: 'Top converting customers (90 days)',
@@ -348,7 +426,11 @@ export async function analyzeBudgetAllocation(
     return sum + (s.roas * recommendedSpend);
   }, 0) / totalSpend;
 
-  const projectedRoasIncrease = ((projectedAvgRoas - currentAvgRoas) / currentAvgRoas) * 100;
+  // On a lead-gen account every ROAS is zero, so this divides 0 by 0 and ships
+  // NaN, which JSON renders as null. There is no ROAS improvement to project
+  // when there is no ROAS; report zero rather than a non-number.
+  const projectedRoasIncrease =
+    currentAvgRoas > 0 ? ((projectedAvgRoas - currentAvgRoas) / currentAvgRoas) * 100 : 0;
 
   return {
     currentAllocation,

@@ -122,19 +122,28 @@ export type CopyOptimization = z.infer<typeof CopyOptimizationSchema>;
 // ============ AUDIENCE INSIGHTS ============
 
 export const AudienceInsightsSchema = z.object({
+  // A lead-generation account books no purchase revenue, so every segment's
+  // ROAS is structurally zero. Required, it forced the model to fill the field
+  // anyway: it invented an "efficiency index", put that number in roas, and
+  // explained the substitution in prose. Optional roas plus a conversions/cpa
+  // pair lets it report the metric that exists, as the prediction schema does.
   topPerformingSegments: z.array(z.object({
     segment: z.string(),
     type: z.enum(['age', 'gender', 'location', 'device', 'placement']),
     spend: z.number(),
-    roas: z.number(),
+    roas: z.number().optional(),
     conversions: z.number(),
+    /** Cost per conversion, the meaningful efficiency metric on lead-gen. */
+    cpa: z.number().optional(),
     insight: z.string(),
   })),
   underperformingSegments: z.array(z.object({
     segment: z.string(),
     type: z.enum(['age', 'gender', 'location', 'device', 'placement']),
     spend: z.number(),
-    roas: z.number(),
+    roas: z.number().optional(),
+    conversions: z.number().optional(),
+    cpa: z.number().optional(),
     issue: z.string(),
     recommendation: z.string(),
   })),
@@ -142,7 +151,9 @@ export const AudienceInsightsSchema = z.object({
     opportunity: z.string(),
     segment: z.string(),
     reasoning: z.string(),
-    expectedRoas: z.number(),
+    expectedRoas: z.number().optional(),
+    /** Expected cost per lead where there is no revenue to return. */
+    expectedCpa: z.number().optional(),
     riskLevel: z.enum(['low', 'medium', 'high']),
   })),
   targetingRecommendations: z.array(z.object({

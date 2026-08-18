@@ -700,6 +700,8 @@ function CopyOptimizationTab({ data, loading }: { data: any; loading: boolean })
 
 // Audience Insights Tab Component
 function AudienceInsightsTab({ data, loading }: { data: any; loading: boolean }) {
+  const { format: formatCurrency } = useCurrency();
+
   if (loading) {
     return <LoadingState message="Loading audience insights..." />;
   }
@@ -715,18 +717,163 @@ function AudienceInsightsTab({ data, loading }: { data: any; loading: boolean })
   }
 
   const latestInsights = data.insights[0];
+  const analysis = latestInsights.insights ?? {};
+
+  // Segments carry roas on a sales account and cpa on a lead-gen one, never
+  // both. Render whichever arrived rather than a 0.00x column of nothing.
+  const efficiency = (seg: any) =>
+    seg.cpa !== undefined
+      ? { label: 'Cost/lead', value: formatCurrency(seg.cpa) }
+      : seg.roas !== undefined
+      ? { label: 'ROAS', value: `${seg.roas.toFixed(2)}x` }
+      : null;
 
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Latest Analysis</h3>
         <div className="text-sm text-gray-600">
-          {latestInsights.insights?.summary || 'Audience analysis completed'}
+          {analysis.summary || 'Audience analysis completed'}
         </div>
         <div className="text-xs text-gray-500 mt-2">
           Analyzed: {new Date(latestInsights.analyzedAt).toLocaleString()}
         </div>
       </div>
+
+      {/* Top performing segments. The analysis has always produced these; the
+          tab rendered only the prose summary, so they were never visible. */}
+      {analysis.topPerformingSegments?.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Performing Segments</h3>
+          <div className="space-y-3">
+            {analysis.topPerformingSegments.map((seg: any, i: number) => (
+              <div key={i} className="border-b pb-3 last:border-0 last:pb-0">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900">
+                      {seg.segment}
+                      <span className="ml-2 text-xs uppercase tracking-wide text-gray-400">
+                        {seg.type}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">{seg.insight}</div>
+                  </div>
+                  <div className="flex gap-6">
+                    <MetricDisplay label="Spend" value={formatCurrency(seg.spend)} />
+                    <MetricDisplay label="Conversions" value={String(seg.conversions ?? 0)} />
+                    {efficiency(seg) && (
+                      <MetricDisplay
+                        label={efficiency(seg)!.label}
+                        value={efficiency(seg)!.value}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Underperforming segments */}
+      {analysis.underperformingSegments?.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Underperforming Segments</h3>
+          <div className="space-y-3">
+            {analysis.underperformingSegments.map((seg: any, i: number) => (
+              <div key={i} className="border-b pb-3 last:border-0 last:pb-0">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900">
+                      {seg.segment}
+                      <span className="ml-2 text-xs uppercase tracking-wide text-gray-400">
+                        {seg.type}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">{seg.issue}</div>
+                    <div className="text-sm text-gray-800 mt-1">
+                      <span className="font-medium">Fix:</span> {seg.recommendation}
+                    </div>
+                  </div>
+                  <div className="flex gap-6">
+                    <MetricDisplay label="Spend" value={formatCurrency(seg.spend)} />
+                    {efficiency(seg) && (
+                      <MetricDisplay
+                        label={efficiency(seg)!.label}
+                        value={efficiency(seg)!.value}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Expansion opportunities */}
+      {analysis.expansionOpportunities?.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Expansion Opportunities</h3>
+          <div className="space-y-3">
+            {analysis.expansionOpportunities.map((opp: any, i: number) => (
+              <div key={i} className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900">{opp.opportunity}</div>
+                  <div className="text-sm text-gray-600 mt-1">{opp.reasoning}</div>
+                  <div className="mt-2 flex flex-wrap gap-x-4 text-xs text-gray-600">
+                    <span><span className="font-medium">Segment:</span> {opp.segment}</span>
+                    {opp.expectedCpa !== undefined && (
+                      <span>
+                        <span className="font-medium">Expected cost/lead:</span>{' '}
+                        {formatCurrency(opp.expectedCpa)}
+                      </span>
+                    )}
+                    {opp.expectedRoas !== undefined && (
+                      <span>
+                        <span className="font-medium">Expected ROAS:</span>{' '}
+                        {opp.expectedRoas.toFixed(2)}x
+                      </span>
+                    )}
+                    <span><span className="font-medium">Risk:</span> {opp.riskLevel}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Targeting recommendations */}
+      {analysis.targetingRecommendations?.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Targeting Recommendations</h3>
+          <div className="space-y-3">
+            {analysis.targetingRecommendations.map((rec: any, i: number) => (
+              <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                <div
+                  className={`p-2 rounded-lg ${
+                    rec.impact === 'high'
+                      ? 'bg-green-500'
+                      : rec.impact === 'medium'
+                      ? 'bg-yellow-500'
+                      : 'bg-gray-400'
+                  }`}
+                >
+                  <Target className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900">{rec.action}</div>
+                  <div className="text-sm text-gray-600 mt-1">{rec.description}</div>
+                  <div className="text-xs text-gray-500 mt-2">
+                    Impact: <span className="font-semibold">{rec.impact}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Audience Fatigue */}
       {data.fatigueAnalysis && data.fatigueAnalysis.isFatigued && (
