@@ -6,7 +6,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAdAccount } from '@/lib/hooks/use-ad-account';
 import { useCurrency } from '@/lib/hooks/use-currency';
@@ -28,6 +28,7 @@ import {
 export default function AIInsightsPage() {
   const { selectedAccountId } = useAdAccount();
   const [selectedAccount, setSelectedAccount] = useState<string>('');
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<'predictions' | 'anomalies' | 'copy' | 'audience'>(
     'predictions'
   );
@@ -116,6 +117,32 @@ export default function AIInsightsPage() {
     },
     onSuccess: () => {
       refetchAnomalies();
+    },
+  });
+
+  // Trigger copy optimization and audience analysis. Both tabs only ever GET
+  // stored results, so without these the newest analysis a user could see was
+  // whatever a cron run happened to leave behind — the copy tab was showing a
+  // result from June with no control able to replace it.
+  const copyMutation = useMutation({
+    mutationFn: async () => {
+      return await axios.post('/api/ai/optimize-copy', {
+        adAccountId: selectedAccount,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ai-copy', selectedAccount] });
+    },
+  });
+
+  const audienceMutation = useMutation({
+    mutationFn: async () => {
+      return await axios.post('/api/ai/audience-insights', {
+        adAccountId: selectedAccount,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ai-audience', selectedAccount] });
     },
   });
 
@@ -221,12 +248,24 @@ export default function AIInsightsPage() {
 
             {/* Copy Optimization Tab */}
             {activeTab === 'copy' && (
-              <CopyOptimizationTab data={copyData} loading={copyLoading} />
+              <CopyOptimizationTab
+                data={copyData}
+                loading={copyLoading}
+                onRefresh={() => copyMutation.mutate()}
+                refreshing={copyMutation.isPending}
+                error={copyMutation.error as any}
+              />
             )}
 
             {/* Audience Insights Tab */}
             {activeTab === 'audience' && (
-              <AudienceInsightsTab data={audienceData} loading={audienceLoading} />
+              <AudienceInsightsTab
+                data={audienceData}
+                loading={audienceLoading}
+                onRefresh={() => audienceMutation.mutate()}
+                refreshing={audienceMutation.isPending}
+                error={audienceMutation.error as any}
+              />
             )}
           </div>
         </>
@@ -654,7 +693,19 @@ function AnomaliesTab({
 }
 
 // Copy Optimization Tab Component
-function CopyOptimizationTab({ data, loading }: { data: any; loading: boolean }) {
+function CopyOptimizationTab({
+  data,
+  loading,
+  onRefresh,
+  refreshing,
+  error,
+}: {
+  data: any;
+  loading: boolean;
+  onRefresh: () => void;
+  refreshing: boolean;
+  error?: { response?: { data?: { error?: string; message?: string } } };
+}) {
   if (loading) {
     return <LoadingState message="Loading copy optimizations..." />;
   }
@@ -664,7 +715,15 @@ function CopyOptimizationTab({ data, loading }: { data: any; loading: boolean })
       <EmptyState
         icon={<FileText className="w-12 h-12 text-gray-400" />}
         title="No Copy Optimizations"
-        description="Start optimizing your ad copy to see AI-powered suggestions"
+        description="Analyse the highest-spending ad's copy to see AI-powered suggestions"
+        action={
+          <GenerateButton
+            onClick={onRefresh}
+            refreshing={refreshing}
+            label="Analyse Ad Copy"
+            error={error}
+          />
+        }
       />
     );
   }
@@ -672,7 +731,15 @@ function CopyOptimizationTab({ data, loading }: { data: any; loading: boolean })
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Optimizations</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Optimizations</h3>
+          <GenerateButton
+            onClick={onRefresh}
+            refreshing={refreshing}
+            label="Analyse Again"
+            error={error}
+          />
+        </div>
         <div className="space-y-4">
           {data.optimizations.map((opt: any, index: number) => (
             <div key={opt.id} className="border border-gray-200 rounded-lg p-4">
@@ -699,7 +766,19 @@ function CopyOptimizationTab({ data, loading }: { data: any; loading: boolean })
 }
 
 // Audience Insights Tab Component
-function AudienceInsightsTab({ data, loading }: { data: any; loading: boolean }) {
+function AudienceInsightsTab({
+  data,
+  loading,
+  onRefresh,
+  refreshing,
+  error,
+}: {
+  data: any;
+  loading: boolean;
+  onRefresh: () => void;
+  refreshing: boolean;
+  error?: { response?: { data?: { error?: string; message?: string } } };
+}) {
   const { format: formatCurrency } = useCurrency();
 
   if (loading) {
@@ -712,6 +791,14 @@ function AudienceInsightsTab({ data, loading }: { data: any; loading: boolean })
         icon={<Users className="w-12 h-12 text-gray-400" />}
         title="No Audience Insights"
         description="Generate audience insights to see targeting recommendations"
+        action={
+          <GenerateButton
+            onClick={onRefresh}
+            refreshing={refreshing}
+            label="Generate Insights"
+            error={error}
+          />
+        }
       />
     );
   }
@@ -731,7 +818,15 @@ function AudienceInsightsTab({ data, loading }: { data: any; loading: boolean })
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Latest Analysis</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Latest Analysis</h3>
+          <GenerateButton
+            onClick={onRefresh}
+            refreshing={refreshing}
+            label="Regenerate"
+            error={error}
+          />
+        </div>
         <div className="text-sm text-gray-600">
           {analysis.summary || 'Audience analysis completed'}
         </div>
@@ -934,6 +1029,39 @@ function EmptyState({
       <h3 className="text-xl font-semibold text-gray-700 mb-2">{title}</h3>
       <p className="text-gray-500 mb-6">{description}</p>
       {action}
+    </div>
+  );
+}
+
+/**
+ * Generate/refresh control for the tabs that produce an analysis on demand.
+ * Surfaces the route's own error text: these calls take real money and real
+ * time, so a silent no-op is worse than a visible reason.
+ */
+function GenerateButton({
+  onClick,
+  refreshing,
+  label,
+  error,
+}: {
+  onClick: () => void;
+  refreshing: boolean;
+  label: string;
+  error?: { response?: { data?: { error?: string; message?: string } } };
+}) {
+  const reason = error?.response?.data?.message || error?.response?.data?.error;
+
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <button
+        onClick={onClick}
+        disabled={refreshing}
+        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+      >
+        <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+        {refreshing ? 'Analysing...' : label}
+      </button>
+      {reason && <span className="text-xs text-red-600 max-w-xs text-right">{reason}</span>}
     </div>
   );
 }

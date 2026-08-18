@@ -43,15 +43,35 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       adAccountId,
-      adCopy,
+      adCopy: suppliedAdCopy,
+      adId,
       campaignObjective,
       targetAudience,
       generateVariants = false,
     } = body;
 
-    if (!adAccountId || !adCopy) {
+    if (!adAccountId) {
       return NextResponse.json(
-        { error: 'adAccountId and adCopy are required' },
+        { error: 'adAccountId is required' },
+        { status: 400 }
+      );
+    }
+
+    // Nothing in the app builds an adCopy payload — the tab only reads stored
+    // results — so requiring one in the body meant this route could never be
+    // called from the UI at all. Assemble it from what we already hold when
+    // the caller does not supply one.
+    const adCopy =
+      suppliedAdCopy ?? (await buildAdCopyFromStored(adAccountId, adId));
+
+    if (!adCopy) {
+      return NextResponse.json(
+        {
+          error:
+            'No ad copy available to analyse. This account has no ad with ' +
+            'delivery in the last 30 days whose creative carries a headline ' +
+            'and body text.',
+        },
         { status: 400 }
       );
     }
