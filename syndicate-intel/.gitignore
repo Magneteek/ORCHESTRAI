@@ -16,3 +16,4 @@ droplet.conf
 
 # Object storage target; machine-specific, never committed
 spaces.conf
+production.conf
