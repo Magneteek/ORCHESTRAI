@@ -58,12 +58,21 @@ const rows = db.prepare(`
 
 const RARITY_ORDER = ['god', 'founder', 'legendary', 'epic', 'rare', 'uncommon', 'common']
 const RANK_ORDER = ['boss', 'underboss', 'lieutenant', 'captain', 'soldier', 'recruit']
+// Alphabetical, because no order is meaningful: specialty is a matchup
+// property, and averaged across opponents the five sit within 1.6 points of
+// each other. Ranking them would imply a hierarchy the fights do not support.
+const SPEC_ORDER = ['enforcer', 'fixer', 'hustler', 'negotiator', 'survivor']
+const ROLE_ORDER = ['garrison', 'hustler', 'unassigned']
 const idx = (arr, v) => { const i = arr.indexOf(v); return i === -1 ? arr.length : i }
 
 // Positional arrays, not objects: repeating eleven key names 95,000 times cost
 // 16.9MB against 3MB for the same data. Field order is published in the payload
 // so the page decodes it without a hardcoded contract.
-const FIELDS = ['name', 'rarity', 'tier', 'age', 'invested', 'active']
+// specialty and role are carried so the profile can rank a roster against the
+// combat model without a second request: the model keys on the specialty
+// matchup, and role is what separates a capo that is working from one that is
+// merely in the twenty.
+const FIELDS = ['name', 'rarity', 'tier', 'age', 'invested', 'active', 'specialty', 'role']
 const byRef = {}
 for (const r of rows) {
   const age = r.season_created != null && currentSeason != null
@@ -76,6 +85,8 @@ for (const r of rows) {
     age,
     r.total_racket_invested || 0,
     r.status === 'active' ? 1 : 0,
+    idx(SPEC_ORDER, r.specialty),
+    idx(ROLE_ORDER, r.role || 'unassigned'),
   ])
 }
 // Best first: rarity, then rank, then the most invested in.
@@ -94,6 +105,9 @@ for (const [key, payload] of Object.entries(shards)) {
   const json = JSON.stringify({
     as_of: day, current_season: currentSeason,
     fields: FIELDS, rarities: RARITY_ORDER, ranks: RANK_ORDER,
+    specialties: SPEC_ORDER, roles: ROLE_ORDER,
+    // The roster is capped at 20; everything above that is held but cannot act.
+    roster_cap: 20,
     players: payload,
   })
   fs.writeFileSync(path.join(OUT_DIR, key + '.json'), json)
