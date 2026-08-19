@@ -14,7 +14,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead } from './style.js'
 import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -123,6 +123,7 @@ function page({ file, title, description, heading, eyebrow, section, body, scrip
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
 <meta name="description" content="${description}">${robots}
+${metaHead({ title, description, path: href })}
 ${FONTS}
 <style>${CSS}${NAV_CSS}${CHART_CSS}${SHELL_CSS}${CALC_CSS}</style>
 </head>
@@ -292,8 +293,7 @@ function render() {
 
   document.getElementById('guide').className = 'guide'
   document.getElementById('guide').innerHTML = [
-    ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes.'],
-    ['Money', '/money.html', 'Supply, what mints and burns it, secondary volume and how the market clears.'],
+    ['Economy', '/money.html', 'Supply, what mints and burns it, secondary volume and how the market clears.'],
     ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, win rates, cities and leagues.'],
     ['Growth', '/growth.html', 'Players arriving, sticking and leaving, and how ownership concentrates.'],
     ['Capos', '/capos.html', 'Rarity, rank, age, promotion, what traits cost, and which gear raises which stat.'],
@@ -1197,7 +1197,7 @@ const PAGES = [
   },
   {
     file: 'money.html', section: 'money',
-    title: 'Money · ' + SITE, heading: 'Money',
+    title: 'Economy · ' + SITE, heading: 'Economy',
     eyebrow: 'The Syndicate &middot; economy',
     description: 'RACKET supply, emissions, sinks and secondary market volume.',
     body: `<div class="tiles" id="tiles"></div>
@@ -1347,6 +1347,19 @@ function main() {
 
   for (const f of fs.readdirSync(DATA_SRC)) {
     if (f.endsWith('.json')) fs.copyFileSync(path.join(DATA_SRC, f), path.join(DATA_OUT, f))
+  }
+
+  // Icons and the social card sit at the site root, because that is where the
+  // <link> tags and every scraper look for them.
+  const assetSrc = path.join(__dirname, 'assets')
+  if (fs.existsSync(assetSrc)) {
+    let n = 0
+    for (const f of fs.readdirSync(assetSrc)) {
+      if (f.startsWith('.')) continue
+      fs.copyFileSync(path.join(assetSrc, f), path.join(SITE_DIR, f))
+      n++
+    }
+    console.log(`  assets/       ${n} files`)
   }
   // Per-player rosters live in a subdirectory and are fetched on demand by the
   // profile page, so they have to be copied across too, not just the top level.

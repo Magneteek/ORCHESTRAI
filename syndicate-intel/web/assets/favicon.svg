@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Capowatch">
+  <!-- Solid gold tile rather than the site's dark ground: a favicon sits on
+       whatever chrome the browser gives it, and a near-black square disappears
+       into a dark tab strip. -->
+  <rect width="32" height="32" rx="6.5" fill="#d2b974"/>
+  <!-- The C drawn as a stroked arc, not text, so it needs no font and stays
+       identical at 16px on every platform. -->
+  <path d="M20.9 10.3 A 7.4 7.4 0 1 0 20.9 21.7"
+        fill="none" stroke="#0b0906" stroke-width="4.6" stroke-linecap="round"/>
+</svg>

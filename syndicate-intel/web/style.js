@@ -14,6 +14,42 @@
  * that is what a reader needs to know the page is ABOUT.
  */
 export const SITE = 'Capowatch'
+export const SITE_URL = 'https://capowatch.com'
+
+/**
+ * Social and icon tags, shared by all three builders.
+ *
+ * og:image must be an absolute URL. Every scraper fetches it from its own
+ * servers with no page context, so a relative path silently yields no preview
+ * at all, which looks like the tags were never added.
+ *
+ * The SVG icon is listed first and PNG second: browsers that understand SVG
+ * take the crisp one, and the rest fall through to the raster without a
+ * separate media query or a .ico file.
+ */
+export const metaHead = ({ title, description, path = '/' }) => {
+  const url = SITE_URL + path
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  return `<link rel="canonical" href="${url}">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#060504">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${SITE}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${SITE_URL}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Capowatch: community-kept data for The Syndicate">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(description)}">
+<meta name="twitter:image" content="${SITE_URL}/og.png">`
+}
 
 /**
  * The three faces the game itself uses. Its display face is proprietary, so
@@ -653,10 +689,14 @@ export const NAV_CSS = String.raw`
  * posted" on those two and "Updated" everywhere else. Defined once here so a new
  * page can never quietly ship a different one.
  */
+// Players is deliberately absent. The page is still built and still reachable
+// from the overview search and by direct link, but it republishes player names
+// and wallets, so it stays off the nav until the game's team has said that is
+// fine. The filename stays money.html while the label reads Economy: renaming
+// the file would break the one thing a URL is for.
 export const NAV = [
   { href: '/', label: 'Overview' },
-  { href: '/players.html', label: 'Players' },
-  { href: '/money.html', label: 'Money' },
+  { href: '/money.html', label: 'Economy' },
   { href: '/wars.html', label: 'Wars' },
   { href: '/growth.html', label: 'Growth' },
   { href: '/capos.html', label: 'Capos' },
