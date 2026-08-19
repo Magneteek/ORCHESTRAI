@@ -13,3 +13,6 @@ web/dist/
 # Deploy target; machine-specific, never committed
 deploy.conf
 droplet.conf
+
+# Object storage target; machine-specific, never committed
+spaces.conf
