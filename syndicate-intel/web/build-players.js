@@ -529,16 +529,15 @@ function renderRoster(pane, ref) {
 // Deliberately not filtered by the search box: these describe the population,
 // and recomputing them per keystroke would make them look like search results.
 /**
- * One line instead of four charts.
+ * One sentence, and it earns its place by being about yesterday.
  *
- * The charts answered questions nobody arrives at this page with. What is
- * actually worth knowing is whether the game is still pulling people in, and
- * that is a sentence.
+ * Yesterday rather than today, because the current day is still being written
+ * and quoting it compares a part-day against whole ones. The week's context
+ * lives in the tiles now, so this does not have to carry it.
  *
- * Yesterday, not today: the current day is still being written, so quoting it
- * compares a part-day against whole ones. And a single day says little here,
- * because the series swings between 21 and 330, so the week's average runs
- * beside it or the number means nothing.
+ * "Picked their first fight" is literal, not flavour: the series counts first
+ * fights, not signups, so a player who only ever hustles never enters it. The
+ * full caveat sits on hover rather than in the sentence.
  */
 function renderArrivals() {
   const el = document.getElementById('arrivals')
@@ -548,22 +547,15 @@ function renderArrivals() {
   const today = new Date().toISOString().slice(0, 10)
   const done = p.daily.filter((d) => d.date < today)
   if (!done.length) return
-  const last = done[done.length - 1]
-  const prior = done.slice(-8, -1)
-  const avg = prior.length
-    ? Math.round(prior.reduce((t, d) => t + d.new_players, 0) / prior.length) : null
+  const n = done[done.length - 1].new_players
 
-  const when = new Date(last.date + 'T00:00:00Z')
-    .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' })
-
-  el.innerHTML =
-    'On ' + escd(when) + ', <b>' + fmt(last.new_players) + '</b> players fought for the first time' +
-    (avg != null
-      ? ', against <b>' + fmt(avg) + '</b> a day across the week before.'
-      : '.') +
-    ' <span>That counts first fights rather than signups, so anyone who only ever ' +
-    'hustles never appears in it. ' + fmt(p.recency.ever) + ' players have fought at least once, ' +
-    fmt(p.recency.d7) + ' of them in the last seven days.</span>'
+  el.title = 'Counts first fights rather than signups: a player who only ever ' +
+    'hustles never appears in the combat feed. Measured on ' +
+    done[done.length - 1].date + ', the last full day.'
+  el.innerHTML = n === 0
+    ? 'Nobody new picked a fight yesterday.'
+    : 'Yesterday, <b>' + fmt(n) + '</b> new ' + (n === 1 ? 'player' : 'players') +
+      ' picked ' + (n === 1 ? 'a' : 'their') + ' first fight.'
 }
 
 function renderDirTiles() {
@@ -571,12 +563,26 @@ function renderDirTiles() {
   const prized = ps.filter((p) => p.prizes).length
   const el = document.getElementById('dirtiles')
   if (!el) return
+  // Wallets resolved and SOL position were about our own coverage rather than
+  // about the players, which is not what somebody opens this page to learn.
+  const a = DATA.arrivals
+  const held = ps.filter((p) => p.territory).length
+
+  // The last seven complete days. Today is excluded for the same reason the
+  // sentence above skips it: it is a part-day and would drag the total down.
+  let joined = null
+  if (a && a.daily) {
+    const today = new Date().toISOString().slice(0, 10)
+    const week = a.daily.filter((d) => d.date < today).slice(-7)
+    if (week.length) joined = week.reduce((t, d) => t + d.new_players, 0)
+  }
+
   el.innerHTML =
-    tile('Players tracked', fmt(DATA.player_count), 'with at least one capo') +
-    tile('Wallets resolved', fmt(DATA.wallets_resolved), 'linked to an on-chain wallet') +
-    tile('With a SOL position', fmt(DATA.position_players),
-      fmt(DATA.position_net_positive) + ' of them net positive') +
-    tile('Prize winners', fmt(prized), 'have been paid on chain')
+    tile('Players tracked', fmt(DATA.player_count)) +
+    (a ? tile('Fought this week', fmt(a.recency.d7)) : '') +
+    (joined != null ? tile('Joined this week', fmt(joined)) : '') +
+    tile('Holding territory', fmt(held)) +
+    tile('Prize winners', fmt(prized))
 }
 
 /**
