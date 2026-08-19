@@ -12,7 +12,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead } from './style.js'
+import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS } from './style.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -104,6 +104,10 @@ const PAGE_CSS = String.raw`
    row sitting above a chart. These tabs switch everything beneath them, and the
    first heading inside each pane zeroes its own top margin because it counts as
    a section opener, so without this the tab bar sits flush against it. */
+/* Shared with the other builder: an out-of-date stamp turns red rather than
+   just reading old. */
+.stale { color: var(--debit); }
+
 #ptabs { margin-bottom: var(--space-6); }
 
 .arrivals {
@@ -644,8 +648,10 @@ function route() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('generated').textContent =
-    new Date(DATA.generated_at).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
+  // This page embeds its data and never polls, so without the ticker its stamp
+  // would freeze at whatever the age was when the tab opened.
+  paintStamp(DATA.generated_at, true)
+  tickStamp(() => DATA.generated_at)
   renderDirTiles()
   renderArrivals()
   renderList('')
@@ -690,6 +696,7 @@ function buildBody(data) {
 
 <script>
 const DATA = ${JSON.stringify(data)};
+${STAMP_JS}
 ${CLIENT_JS}
 </script>
 `

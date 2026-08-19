@@ -9,7 +9,10 @@
 #   fast     5m      listings, sales, royalties
 #   hourly   :05     combat, contracts, territory, bounties
 #   daily    04:15   the 58MB capos dump, equipment, economy, supply
-#   derive   20m     rebuild the derived layer and the site
+#   derive   10m     rebuild the derived layer and the site. Was 20m only
+#                    because Vercel's free tier capped deployments per day;
+#                    the droplet has no such ceiling, and a rebuild costs 44s
+#                    of CPU, so ten minutes is about 7% of the single core.
 #   rewards  1h      on-chain prize and bounty watch over public RPC
 #   verify   09:00   archive gap check
 #   offload  03:30   push cold raw feeds to the Space and reclaim local disk
@@ -50,7 +53,7 @@ JOBS=(
   "fast|Listings, sales and royalties|$NODE_BIN --no-warnings ingest/snapshot.js --tier fast|every:300"
   "hourly|Combat, contracts and territory|$NODE_BIN --no-warnings ingest/snapshot.js --tier hourly|*-*-* *:05:00"
   "daily|Full capo, equipment and economy pull|$NODE_BIN --no-warnings ingest/snapshot.js --tier daily|*-*-* 04:15:00"
-  "derive|Rebuild derived layer and site|/bin/bash derive/refresh.sh|every:1200"
+  "derive|Rebuild derived layer and site|/bin/bash derive/refresh.sh|every:600"
   "rewards|On-chain prize and bounty watch|$NODE_BIN --no-warnings ingest/rewards-watch.js --watch|every:3600"
   "verify|Archive gap check|$NODE_BIN --no-warnings ingest/verify.js|*-*-* 09:00:00"
   "offload|Move the cold raw archive to object storage|/bin/bash ingest/archive-offload.sh|*-*-* 03:30:00"

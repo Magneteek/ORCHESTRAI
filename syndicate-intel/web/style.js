@@ -693,6 +693,61 @@ export const NAV_CSS = String.raw`
 // file would break the one thing a URL is for. Growth is gone; its supply and
 // ownership blocks moved to Capos and its player blocks to Players, which is
 // where each of them was always about.
+/**
+ * The "Updated" stamp, shared by every builder.
+ *
+ * Relative rather than UTC, because the question a reader actually has is "is
+ * this current?", and a UTC clock makes them do timezone arithmetic to answer
+ * it. That cost real confusion once: a page four minutes old read as an hour
+ * stale to someone on UTC+1 comparing it against their own clock.
+ *
+ * It also makes a broken pipeline obvious. "Updated 3 hours ago" is alarming
+ * on sight in a way that a timestamp never is, so anything older than four
+ * missed rebuilds marks itself stale. The exact UTC time stays on hover for
+ * when precision matters.
+ */
+export const STAMP_JS = String.raw`
+function relTime(iso) {
+  const secs = Math.max(0, (Date.now() - new Date(iso)) / 1000)
+  const mins = Math.round(secs / 60)
+  if (secs < 45) return 'just now'
+  if (mins < 2) return 'a minute ago'
+  if (mins < 60) return mins + ' minutes ago'
+  const hrs = Math.round(mins / 60)
+  if (hrs < 2) return 'an hour ago'
+  if (hrs < 24) return hrs + ' hours ago'
+  const days = Math.round(hrs / 24)
+  return days < 2 ? 'a day ago' : days + ' days ago'
+}
+
+// Four missed rebuilds at the ten minute cadence. Past that something is wrong
+// rather than merely slow, and the stamp should say so without being asked.
+const STALE_AFTER_MS = 45 * 60 * 1000
+
+function paintStamp(iso, ok) {
+  const el = document.getElementById('generated')
+  if (!el) return
+  if (!ok || !iso) {
+    el.textContent = 'update failed'
+    el.classList.add('stale')
+    return
+  }
+  const age = Date.now() - new Date(iso)
+  el.textContent = relTime(iso)
+  el.title = new Date(iso).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
+  el.classList.toggle('stale', age > STALE_AFTER_MS)
+}
+
+/**
+ * Keep it truthful on a tab left open. Without this a page opened at
+ * "just now" still says "just now" an hour later, which is worse than the
+ * absolute timestamp it replaced.
+ */
+function tickStamp(getIso) {
+  setInterval(() => paintStamp(getIso(), true), 30000)
+}
+`
+
 export const NAV = [
   { href: '/', label: 'Overview' },
   { href: '/players.html', label: 'Players' },

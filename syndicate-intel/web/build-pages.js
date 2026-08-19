@@ -14,7 +14,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS } from './style.js'
 import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -76,11 +76,7 @@ let DATA = null
 let lastStamp = null
 
 function setStamp(ok) {
-  const el = document.getElementById('generated')
-  if (!el) return
-  if (!ok) { el.textContent = 'update failed'; el.classList.add('stale'); return }
-  el.classList.remove('stale')
-  el.textContent = new Date(DATA.generated_at).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
+  paintStamp(DATA && DATA.generated_at, ok)
 }
 
 async function load(first) {
@@ -109,6 +105,8 @@ async function load(first) {
 document.addEventListener('DOMContentLoaded', () => {
   load(true)
   setInterval(() => load(false), ${POLL_MS})
+  // The poll refreshes the data; this keeps the age honest between polls.
+  tickStamp(() => DATA && DATA.generated_at)
 })
 `
 
@@ -141,6 +139,7 @@ ${FONTS}
 </div>
 <script>
 const SECTION_URL = '/data/${section}.json';
+${STAMP_JS}
 ${CHART_JS}
 ${LEDGER_JS}
 ${script}
