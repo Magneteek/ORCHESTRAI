@@ -108,7 +108,48 @@ const PAGE_CSS = String.raw`
    just reading old. */
 .stale { color: var(--debit); }
 
-#ptabs { margin-bottom: var(--space-6); }
+/* Tabs, not a button row.
+   They previously borrowed .controls, which is what the period selectors and
+   the capo sort bar use, so four section switches read as four filter chips at
+   0.68rem. Underlined tabs are the one pattern nobody has to decode, and the
+   active underline points down at the content it belongs to.
+
+   The bar carries the rule; each tab carries a 2px bottom border pulled down
+   1px so the active one sits ON the rule rather than above it. */
+.tabbar {
+  display: flex;
+  gap: var(--space-5);
+  margin: var(--space-5) 0;
+  border-bottom: 1px solid var(--rule-firm);
+  /* Tabs belong on one line. Four of them at this size overflow a narrow
+     phone, so the bar scrolls rather than wrapping into a second row that
+     stops looking like a tab bar at all. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabbar::-webkit-scrollbar { display: none; }
+
+.tabbar button {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: var(--step-0);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0 0 0.55rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tabbar button:hover { color: var(--ink); }
+.tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tabbar button[aria-selected="true"] {
+  color: var(--accent-bright);
+  border-bottom-color: var(--accent);
+}
 
 .arrivals {
   margin: var(--space-5) 0 0;
@@ -237,7 +278,7 @@ function renderProfile(p) {
 
   // Two views over the same player. The roster is thousands of rows for the
   // biggest holders, so it lives behind a tab and loads only when asked for.
-  parts.push('<div class="controls" id="ptabs" role="tablist">' +
+  parts.push('<div class="tabbar" id="ptabs" role="tablist">' +
     '<button type="button" data-tab="profile" aria-selected="true">Money</button>' +
     '<button type="button" data-tab="outfit" aria-selected="false">Crew</button>' +
     '<button type="button" data-tab="prizes" aria-selected="false">Prizes</button>' +
