@@ -213,7 +213,11 @@ const bench = roster.filter((x) => x.status !== 'active')
 const activeRoles = {}
 for (const x of active) activeRoles[x.role || 'unassigned'] = (activeRoles[x.role || 'unassigned'] || 0) + 1
 
-console.log(`  ${active.length} of ${ROSTER_CAP} slots in play, ${n(bench.length)} on the bench`)
+// A handful of players read above the cap in any one snapshot, which is the
+// archive catching a swap mid-flight rather than the cap being soft.
+console.log(active.length > ROSTER_CAP
+  ? `  ${active.length} in play against a ${ROSTER_CAP} slot cap, ${n(bench.length)} on the bench`
+  : `  ${active.length} of ${ROSTER_CAP} slots in play, ${n(bench.length)} on the bench`)
 console.log('')
 for (const [k, v] of Object.entries(activeRoles).sort((a2, b2) => b2[1] - a2[1])) {
   console.log(`    ${String(k).padEnd(14)}${String(v).padStart(4)}`)
@@ -249,7 +253,9 @@ if (bench.length && active.length) {
     console.log(`   benched, strongest:${pct(benched[0].r.p)}  ${benched[0].x.name} (${benched[0].x.tier})`)
     console.log('')
     if (upgrades.length) {
-      console.log(`  ${upgrades.length} benched capo${upgrades.length === 1 ? '' : 's'} out-rank your weakest active one.`)
+      console.log(upgrades.length === 1
+        ? '  One benched capo out-ranks your weakest active one.'
+        : `  ${upgrades.length} benched capos out-rank your weakest active one.`)
       for (const s of upgrades.slice(0, 4)) {
         console.log(`   ${pct(s.r.p)}  ${s.x.name.padEnd(22)}${s.x.specialty.padEnd(11)}${s.x.tier.padEnd(11)}${s.x.rarity}`)
       }
