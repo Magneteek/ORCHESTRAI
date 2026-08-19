@@ -72,9 +72,13 @@ WorkingDirectory=$PROJECT_DIR
 ExecStart=$exec
 # The API key lives here, mode 600, and never on a command line.
 EnvironmentFile=-$PROJECT_DIR/.env
-# A stuck socket must not wedge the schedule. The daily pull is a 58MB payload
-# on a 1 vCPU box, so it gets the whole window; everything else is quick.
-TimeoutStartSec=$([ "$name" = "daily" ] || [ "$name" = "offload" ] && echo 1800 || echo 600)
+# A stuck socket must not wedge the schedule, but the ceiling has to fit the
+# job. rewards walks ~1000 wallets on the public Solana RPC, which rate-limits
+# a datacenter IP hard: a first pass spent 10 minutes wall-clock on 5.8s of CPU,
+# purely waiting. It checkpoints per wallet and resumes, so a kill costs
+# progress rather than data, but it still needs most of its hour. daily pulls a
+# 58MB payload and offload can push hundreds of MB on its early runs.
+TimeoutStartSec=$(case "$name" in rewards) echo 3000;; daily|offload) echo 1800;; *) echo 600;; esac)
 Nice=10
 # One CPU shared with nginx: keep a burst of JSON parsing from starving the
 # thing actually serving the site.
