@@ -220,18 +220,33 @@ function fitLogistic(rows, index) {
   const w = new Float64Array(D)
   const wins = rows.filter((r) => r.y).length
   let b = Math.log(Math.max(1, wins) / Math.max(1, rows.length - wins))
+
+  // Resolve the string keys to column numbers once, not on every pass. Doing it
+  // inside the loop meant three thousand iterations times twenty-four thousand
+  // fights times six features of hash lookups, which took two minutes of CPU on
+  // a box that also has to serve the site every twenty minutes.
+  const N = rows.length
+  const cols = new Int32Array(N * 6).fill(-1)
+  const y = new Float64Array(N)
+  rows.forEach((r, n) => {
+    y[n] = r.y
+    r.k.forEach((k, c) => { if (c < 6) cols[n * 6 + c] = index.has(k) ? index.get(k) : -1 })
+  })
+
+  const g = new Float64Array(D)
   for (let it = 0; it < ITERS; it++) {
-    const g = new Float64Array(D)
+    g.fill(0)
     let gb = 0
-    for (const r of rows) {
+    for (let n = 0; n < N; n++) {
+      const o = n * 6
       let z = b
-      for (const k of r.k) { const i = index.get(k); if (i !== undefined) z += w[i] }
-      const e = 1 / (1 + Math.exp(-z)) - r.y
+      for (let c = 0; c < 6; c++) { const i = cols[o + c]; if (i >= 0) z += w[i] }
+      const e = 1 / (1 + Math.exp(-z)) - y[n]
       gb += e
-      for (const k of r.k) { const i = index.get(k); if (i !== undefined) g[i] += e }
+      for (let c = 0; c < 6; c++) { const i = cols[o + c]; if (i >= 0) g[i] += e }
     }
-    for (let i = 0; i < D; i++) w[i] -= LR * (g[i] / rows.length + (L2 * w[i]) / rows.length)
-    b -= (LR * gb) / rows.length
+    for (let i = 0; i < D; i++) w[i] -= LR * (g[i] / N + (L2 * w[i]) / N)
+    b -= (LR * gb) / N
   }
   return { w, b }
 }
