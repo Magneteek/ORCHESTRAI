@@ -12,7 +12,9 @@ web/dist/
 
 # Deploy target; machine-specific, never committed
 deploy.conf
-droplet.conf
+# droplet.conf and any disabled copy: the Mac no longer publishes, and a stale
+# one would let a local refresh overwrite the droplet's own build.
+droplet.conf*
 
 # Object storage target; machine-specific, never committed
 spaces.conf
