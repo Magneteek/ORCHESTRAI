@@ -1,0 +1,15 @@
+# Secrets. The API key is server-side only per the vendor docs.
+.env
+
+# The archive itself. Large, append-only, backed up separately.
+data/
+
+node_modules/
+*.log
+
+# Generated site output; rebuild with `node web/build-site.js`
+web/dist/
+
+# Deploy target; machine-specific, never committed
+deploy.conf
+droplet.conf

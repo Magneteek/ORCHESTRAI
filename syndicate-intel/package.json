@@ -1,0 +1,17 @@
+{
+  "name": "syndicate-intel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Community data archive and analytics for The Syndicate (thesyndicate.games)",
+  "scripts": {
+    "ingest:fast": "node ingest/snapshot.js --tier fast",
+    "ingest:hourly": "node ingest/snapshot.js --tier hourly",
+    "ingest:daily": "node ingest/snapshot.js --tier daily",
+    "ingest:backfill": "node ingest/snapshot.js --tier all --backfill",
+    "verify": "node ingest/verify.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
