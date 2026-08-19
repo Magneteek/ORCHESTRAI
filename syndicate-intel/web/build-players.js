@@ -13,7 +13,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead } from './style.js'
-import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -107,6 +106,14 @@ const PAGE_CSS = String.raw`
    a section opener, so without this the tab bar sits flush against it. */
 #ptabs { margin-bottom: var(--space-6); }
 
+.arrivals {
+  margin: var(--space-5) 0 0;
+  font-size: var(--step--1); line-height: 1.6; color: var(--ink-muted);
+  max-width: 62ch;
+}
+.arrivals b { font-family: var(--mono); font-weight: 500; color: var(--accent); }
+.arrivals span { color: var(--ink-faint); }
+
 .former {
   font-family: var(--mono); font-size: 0.78rem; color: var(--ink-muted);
 }
@@ -137,9 +144,10 @@ const PAGE_CSS = String.raw`
 const CLIENT_JS = String.raw`
 const fmt = (n) => (n == null ? '-' : Number(n).toLocaleString('en-US'))
 const sol = (n) => (n == null ? '-' : (n >= 0 ? '+' : '') + n.toFixed(3) + ' SOL')
-// Deliberately not the chart runtime's esc(): that one renders a missing value
-// as an empty string, and these tables want a dash, so an absent figure reads
-// as absent rather than as a cell that failed to fill.
+// Renders a missing value as a dash, so an absent figure reads as absent
+// rather than as a cell that failed to fill. Named apart from the usual esc()
+// because it differs in exactly that way, and the two got mixed up once
+// already when this page briefly carried the chart runtime.
 const escd = (s) => String(s ?? '-').replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
 
@@ -517,45 +525,41 @@ function renderRoster(pane, ref) {
 // Deliberately not filtered by the search box: these describe the population,
 // and recomputing them per keystroke would make them look like search results.
 /**
- * Arrivals and retention, moved here from the retired growth page.
+ * One line instead of four charts.
  *
- * They were always about players rather than about growth: who turns up, and
- * which of them are still fighting a month later.
+ * The charts answered questions nobody arrives at this page with. What is
+ * actually worth knowing is whether the game is still pulling people in, and
+ * that is a sentence.
+ *
+ * Yesterday, not today: the current day is still being written, so quoting it
+ * compares a part-day against whole ones. And a single day says little here,
+ * because the series swings between 21 and 330, so the week's average runs
+ * beside it or the number means nothing.
  */
 function renderArrivals() {
+  const el = document.getElementById('arrivals')
   const p = DATA.arrivals
-  if (!p || !p.daily) return
+  if (!el || !p || !p.daily || !p.daily.length) return
 
-  lineChart(document.getElementById('c-players'), {
-    xs: p.daily.map((d) => d.date.slice(5)),
-    series: [{ name: 'Players who have fought', values: p.daily.map((d) => d.cumulative),
-      color: 'var(--cat-4)' }],
-    height: 240,
-  })
+  const today = new Date().toISOString().slice(0, 10)
+  const done = p.daily.filter((d) => d.date < today)
+  if (!done.length) return
+  const last = done[done.length - 1]
+  const prior = done.slice(-8, -1)
+  const avg = prior.length
+    ? Math.round(prior.reduce((t, d) => t + d.new_players, 0) / prior.length) : null
 
-  columns(document.getElementById('c-newplayers'), {
-    rows: p.daily.map((d) => ({ label: d.date.slice(5), value: d.new_players })),
-    color: 'var(--cat-3)',
-  })
+  const when = new Date(last.date + 'T00:00:00Z')
+    .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' })
 
-  columns(document.getElementById('c-recency'), {
-    rows: [
-      { label: 'today', value: p.bands.b1 },
-      { label: '2-7d', value: p.bands.b7 },
-      { label: '8-30d', value: p.bands.b30 },
-      { label: '30d+', value: p.bands.older },
-    ],
-    color: 'var(--cat-1)',
-  })
-
-  // The newest cohorts cannot have gone quiet yet, so they always read 100%.
-  // Dropping them beats publishing a number that is guaranteed to flatter.
-  columns(document.getElementById('c-retention'), {
-    rows: p.cohorts.filter((c) => !c.incomplete)
-      .map((c) => ({ label: c.starts.slice(5), value: c.retained_pct })),
-    color: 'var(--cat-2)',
-    yFormat: (n) => n + '%',
-  })
+  el.innerHTML =
+    'On ' + escd(when) + ', <b>' + fmt(last.new_players) + '</b> players fought for the first time' +
+    (avg != null
+      ? ', against <b>' + fmt(avg) + '</b> a day across the week before.'
+      : '.') +
+    ' <span>That counts first fights rather than signups, so anyone who only ever ' +
+    'hustles never appears in it. ' + fmt(p.recency.ever) + ' players have fought at least once, ' +
+    fmt(p.recency.d7) + ' of them in the last seven days.</span>'
 }
 
 function renderDirTiles() {
@@ -674,16 +678,7 @@ function buildBody(data) {
     <span class="count" id="count"></span>
     <div class="plist" id="list"></div>
 
-    <div class="section-head"><h2>Arrivals</h2><span class="section-meta">the stock, and the flow</span></div>
-    <div class="duo">
-      <div><p class="duo-head">Players, cumulative</p><div class="chart" id="c-players"></div></div>
-      <div><p class="duo-head">New players, by day</p><div class="chart" id="c-newplayers"></div></div>
-    </div>
-    <div class="section-head"><h2>Who stays</h2><span class="section-meta">recency, and retention by cohort</span></div>
-    <div class="duo">
-      <div><p class="duo-head">Last fight recency</p><div class="chart" id="c-recency"></div></div>
-      <div><p class="duo-head">Retention by joining week</p><div class="chart" id="c-retention"></div></div>
-    </div>
+    <p class="arrivals" id="arrivals"></p>
   </div>
 
   <div id="profile" hidden></div>
@@ -695,7 +690,6 @@ function buildBody(data) {
 
 <script>
 const DATA = ${JSON.stringify(data)};
-${CHART_JS}
 ${CLIENT_JS}
 </script>
 `
@@ -730,7 +724,7 @@ function main() {
 <meta name="description" content="${DESCRIPTION}">${robots}
 ${metaHead({ title: TITLE, description: DESCRIPTION, path: '/players.html' })}
 ${FONTS}
-<style>${CSS}${NAV_CSS}${CHART_CSS}${PAGE_CSS}</style>
+<style>${CSS}${NAV_CSS}${PAGE_CSS}</style>
 </head>
 <body>
 ${buildBody(data)}
