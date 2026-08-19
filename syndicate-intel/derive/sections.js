@@ -781,7 +781,17 @@ const g = growth()
 console.log('sections:')
 write('money', m)
 write('wars', w)
+// The growth page is gone. Its supply and ownership blocks belong with the
+// capos they describe, and its player blocks with the players. growth.json is
+// still written because build-players.js reads its `players` block at build
+// time, but no page fetches it any more.
 write('growth', g)
-write('capos', capos())
+write('capos', {
+  ...capos(),
+  supply: g.supply,
+  ownership: g.ownership,
+  owners: g.owners,
+  by_season: g.by_season,
+})
 write('overview', overview(m, w, g))
 db.close()

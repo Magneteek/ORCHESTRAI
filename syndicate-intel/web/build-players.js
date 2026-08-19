@@ -13,6 +13,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead } from './style.js'
+import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -136,14 +137,17 @@ const PAGE_CSS = String.raw`
 const CLIENT_JS = String.raw`
 const fmt = (n) => (n == null ? '-' : Number(n).toLocaleString('en-US'))
 const sol = (n) => (n == null ? '-' : (n >= 0 ? '+' : '') + n.toFixed(3) + ' SOL')
-const esc = (s) => String(s ?? '-').replace(/[&<>"']/g, (c) =>
+// Deliberately not the chart runtime's esc(): that one renders a missing value
+// as an empty string, and these tables want a dash, so an absent figure reads
+// as absent rather than as a cell that failed to fill.
+const escd = (s) => String(s ?? '-').replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
 
 const bySlug = {}
 for (const p of DATA.players) bySlug[p.slug] = p
 
 function tile(label, value, note, cls) {
-  return '<div class="tile"><span class="tile-label">' + esc(label) + '</span>' +
+  return '<div class="tile"><span class="tile-label">' + escd(label) + '</span>' +
     '<span class="tile-value ' + (cls || '') + '">' + value + '</span>' +
     '</div>'
 }
@@ -151,7 +155,7 @@ function tile(label, value, note, cls) {
 function rows(pairs) {
   return '<div class="ledger">' + pairs.filter(Boolean).map(([k, v]) =>
     '<div class="row" style="grid-template-columns:1fr auto">' +
-    '<span class="name">' + esc(k) + '</span>' +
+    '<span class="name">' + escd(k) + '</span>' +
     '<span class="num">' + v + '</span></div>').join('') + '</div>'
 }
 
@@ -172,8 +176,8 @@ function ordinal(n) {
 function standingLine(t) {
   if (!t) return ''
   const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1)
-  return '<span class="standing"><span class="league">' + esc(cap(t.league)) +
-    ' league</span> &middot; ' + esc(t.city) + ' &middot; <span class="place">' +
+  return '<span class="standing"><span class="league">' + escd(cap(t.league)) +
+    ' league</span> &middot; ' + escd(t.city) + ' &middot; <span class="place">' +
     ordinal(t.place) + ' of ' + t.of + '</span> on ' + t.districts +
     (t.districts === 1 ? ' district' : ' districts') + '</span>'
 }
@@ -191,13 +195,13 @@ function renderProfile(p) {
   // address can still match it, so this is a display convention, not anonymity.
   const maskWallet = (w) => (w && w.length > 12 ? w.slice(0, 4) + '****' + w.slice(-4) : w)
   parts.push('<header class="masthead"><span class="eyebrow">Player ledger</span>' +
-    '<h1>' + esc(p.name) +
+    '<h1>' + escd(p.name) +
     ((p.wallets && p.wallets.length)
-      ? '<span class="wallet">' + p.wallets.map((w) => esc(maskWallet(w))).join(' ') + '</span>'
+      ? '<span class="wallet">' + p.wallets.map((w) => escd(maskWallet(w))).join(' ') + '</span>'
       : '') + '</h1>' +
     standingLine(p.territory) +
     (p.names ? '<span class="former">Also seen as ' +
-      p.names.map(n => esc(n.name)).join(', ') + '</span>' : '') +
+      p.names.map(n => escd(n.name)).join(', ') + '</span>' : '') +
     '</header>')
 
   parts.push('<div class="tiles">' +
@@ -470,7 +474,7 @@ function drawRoster(pane) {
     '</div>'
   const rows = sorted.map((c, i) =>
     '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
-    '<span class="name">' + esc(c[0]) + (c[5] ? '' : '<br><span class="sub">inactive</span>') + '</span>' +
+    '<span class="name">' + escd(c[0]) + (c[5] ? '' : '<br><span class="sub">inactive</span>') + '</span>' +
     '<span class="extra">' +
     '<span><span class="cell-label">Rarity</span>' + cap(RAR[c[1]] || '-') + '</span>' +
     '<span><span class="cell-label">Rank</span>' + cap(RNK[c[2]] || '-') + '</span>' +
@@ -512,6 +516,48 @@ function renderRoster(pane, ref) {
 // The shape of the whole set, stated before the reader starts scrolling it.
 // Deliberately not filtered by the search box: these describe the population,
 // and recomputing them per keystroke would make them look like search results.
+/**
+ * Arrivals and retention, moved here from the retired growth page.
+ *
+ * They were always about players rather than about growth: who turns up, and
+ * which of them are still fighting a month later.
+ */
+function renderArrivals() {
+  const p = DATA.arrivals
+  if (!p || !p.daily) return
+
+  lineChart(document.getElementById('c-players'), {
+    xs: p.daily.map((d) => d.date.slice(5)),
+    series: [{ name: 'Players who have fought', values: p.daily.map((d) => d.cumulative),
+      color: 'var(--cat-4)' }],
+    height: 240,
+  })
+
+  columns(document.getElementById('c-newplayers'), {
+    rows: p.daily.map((d) => ({ label: d.date.slice(5), value: d.new_players })),
+    color: 'var(--cat-3)',
+  })
+
+  columns(document.getElementById('c-recency'), {
+    rows: [
+      { label: 'today', value: p.bands.b1 },
+      { label: '2-7d', value: p.bands.b7 },
+      { label: '8-30d', value: p.bands.b30 },
+      { label: '30d+', value: p.bands.older },
+    ],
+    color: 'var(--cat-1)',
+  })
+
+  // The newest cohorts cannot have gone quiet yet, so they always read 100%.
+  // Dropping them beats publishing a number that is guaranteed to flatter.
+  columns(document.getElementById('c-retention'), {
+    rows: p.cohorts.filter((c) => !c.incomplete)
+      .map((c) => ({ label: c.starts.slice(5), value: c.retained_pct })),
+    color: 'var(--cat-2)',
+    yFormat: (n) => n + '%',
+  })
+}
+
 function renderDirTiles() {
   const ps = DATA.players
   const prized = ps.filter((p) => p.prizes).length
@@ -525,18 +571,28 @@ function renderDirTiles() {
     tile('Prize winners', fmt(prized), 'have been paid on chain')
 }
 
+/**
+ * Results only once something is typed.
+ *
+ * The page used to open on all 4,768 players, which answered a question nobody
+ * had: you arrive here looking for one person. An empty box now shows nothing
+ * rather than a wall of names to scroll past.
+ */
 function renderList(filter) {
   const q = (filter || '').toLowerCase().trim()
-  const list = q
-    ? DATA.players.filter((p) => (p.name || '').toLowerCase().includes(q))
-    : DATA.players
+  if (!q) {
+    document.getElementById('count').textContent = ''
+    document.getElementById('list').innerHTML = ''
+    return
+  }
+  const list = DATA.players.filter((p) => (p.name || '').toLowerCase().includes(q))
   const shown = list.slice(0, 250)
   document.getElementById('count').textContent =
     list.length + ' player' + (list.length === 1 ? '' : 's') +
     (list.length > shown.length ? ', showing first ' + shown.length : '')
   document.getElementById('list').innerHTML = shown.map((p) =>
-    '<button class="pitem" type="button" data-slug="' + esc(p.slug) + '">' +
-    '<span class="pname">' + esc(p.name) + '</span>' +
+    '<button class="pitem" type="button" data-slug="' + escd(p.slug) + '">' +
+    '<span class="pname">' + escd(p.name) + '</span>' +
     '<span class="pstats">' +
       '<span>' + fmt(p.roster.capos) + ' capos</span>' +
       (p.combat ? '<span>' + fmt(p.combat.won) + ' won</span>' : '') +
@@ -587,6 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('generated').textContent =
     new Date(DATA.generated_at).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
   renderDirTiles()
+  renderArrivals()
   renderList('')
   document.getElementById('q').addEventListener('input', (e) => renderList(e.target.value))
   document.getElementById('list').addEventListener('click', (e) => {
@@ -616,6 +673,17 @@ function buildBody(data) {
     </div>
     <span class="count" id="count"></span>
     <div class="plist" id="list"></div>
+
+    <div class="section-head"><h2>Arrivals</h2><span class="section-meta">the stock, and the flow</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Players, cumulative</p><div class="chart" id="c-players"></div></div>
+      <div><p class="duo-head">New players, by day</p><div class="chart" id="c-newplayers"></div></div>
+    </div>
+    <div class="section-head"><h2>Who stays</h2><span class="section-meta">recency, and retention by cohort</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Last fight recency</p><div class="chart" id="c-recency"></div></div>
+      <div><p class="duo-head">Retention by joining week</p><div class="chart" id="c-retention"></div></div>
+    </div>
   </div>
 
   <div id="profile" hidden></div>
@@ -627,6 +695,7 @@ function buildBody(data) {
 
 <script>
 const DATA = ${JSON.stringify(data)};
+${CHART_JS}
 ${CLIENT_JS}
 </script>
 `
@@ -638,6 +707,14 @@ function main() {
     process.exit(1)
   }
   const data = JSON.parse(fs.readFileSync(IN, 'utf8'))
+
+  // Arrivals and retention came from the retired growth page. They are read
+  // here at build time rather than fetched, because this page already inlines
+  // everything it needs and one more fetch would only add a way to fail.
+  const growthFile = path.join(ROOT, 'data', 'site', 'growth.json')
+  if (fs.existsSync(growthFile)) {
+    data.arrivals = JSON.parse(fs.readFileSync(growthFile, 'utf8')).players || null
+  }
   assignSlugs(data.players)
   writeSearchIndex(data.players)
 
@@ -653,7 +730,7 @@ function main() {
 <meta name="description" content="${DESCRIPTION}">${robots}
 ${metaHead({ title: TITLE, description: DESCRIPTION, path: '/players.html' })}
 ${FONTS}
-<style>${CSS}${NAV_CSS}${PAGE_CSS}</style>
+<style>${CSS}${NAV_CSS}${CHART_CSS}${PAGE_CSS}</style>
 </head>
 <body>
 ${buildBody(data)}

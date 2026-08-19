@@ -689,16 +689,15 @@ export const NAV_CSS = String.raw`
  * posted" on those two and "Updated" everywhere else. Defined once here so a new
  * page can never quietly ship a different one.
  */
-// Players is deliberately absent. The page is still built and still reachable
-// from the overview search and by direct link, but it republishes player names
-// and wallets, so it stays off the nav until the game's team has said that is
-// fine. The filename stays money.html while the label reads Economy: renaming
-// the file would break the one thing a URL is for.
+// The filename stays money.html while the label reads Economy: renaming the
+// file would break the one thing a URL is for. Growth is gone; its supply and
+// ownership blocks moved to Capos and its player blocks to Players, which is
+// where each of them was always about.
 export const NAV = [
   { href: '/', label: 'Overview' },
+  { href: '/players.html', label: 'Players' },
   { href: '/money.html', label: 'Economy' },
   { href: '/wars.html', label: 'Wars' },
-  { href: '/growth.html', label: 'Growth' },
   { href: '/capos.html', label: 'Capos' },
   { href: '/trainers.html', label: 'Trainers' },
   { href: '/prizes.html', label: 'Prizes' },

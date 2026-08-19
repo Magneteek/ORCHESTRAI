@@ -293,10 +293,10 @@ function render() {
 
   document.getElementById('guide').className = 'guide'
   document.getElementById('guide').innerHTML = [
+    ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes, plus who arrives and who stays.'],
     ['Economy', '/money.html', 'Supply, what mints and burns it, secondary volume and how the market clears.'],
     ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, win rates, cities and leagues.'],
-    ['Growth', '/growth.html', 'Players arriving, sticking and leaving, and how ownership concentrates.'],
-    ['Capos', '/capos.html', 'Rarity, rank, age, promotion, what traits cost, and which gear raises which stat.'],
+    ['Capos', '/capos.html', 'Rarity, rank, age, promotion, supply, ownership, and which gear raises which stat.'],
     ['Trainers', '/trainers.html', 'The training market: who charges what, who delivers, and how much sits idle.'],
     ['Prizes', '/prizes.html', 'Every season prize paid on chain, and who won it.'],
   ].map(([name, href, what]) =>
@@ -704,55 +704,40 @@ function renderBalance() {
 }
 `
 
-const GROWTH_JS = String.raw`
-function render() {
-  const last = DATA.supply[DATA.supply.length - 1] || {}
-  const p = DATA.players
-  document.getElementById('tiles').innerHTML = [
-    ['Active in 24h', nfmt(p.recency.d1), 'fought at least once'],
-    ['Active in 7 days', nfmt(p.recency.d7), 'of ' + nfmt(p.recency.ever) + ' who ever fought'],
-    ['Seated in a city', nfmt(p.seats.seated),
-      p.seats.capacity ? (100 * p.seats.seated / p.seats.capacity).toFixed(0) + '% of capacity' : ''],
-    ['Capos in existence', nfmt(last.total), nfmt(DATA.owners) + ' owners'],
-    ['Capos burned', nfmt(last.burned), 'crafting and salvage'],
-    ['Wallets', nfmt(DATA.wallet_count), ''],
-  ].map(([l, v, n]) =>
-    '<div class="tile"><span class="tile-label">' + l + '</span>' +
-    '<span class="tile-value">' + v + '</span>' +
-    '</div>').join('')
 
-  lineChart(document.getElementById('c-players'), {
-    xs: p.daily.map((d) => d.date.slice(5)),
-    series: [{ name: 'Players who have fought', values: p.daily.map((d) => d.cumulative),
-      color: 'var(--cat-4)' }],
-    height: 240,
-  })
+const CAPOS_JS = String.raw`
+const RANK_LABELS = { recruit: 'Recruit', soldier: 'Soldier', captain: 'Captain',
+  lieutenant: 'Lieutenant', underboss: 'Underboss', boss: 'Boss' }
+const RARITY_LABELS = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', epic: 'Epic',
+  legendary: 'Legendary', god: 'God', founder: 'Founder' }
 
-  columns(document.getElementById('c-newplayers'), {
-    rows: p.daily.map((d) => ({ label: d.date.slice(5), value: d.new_players })),
-    color: 'var(--cat-3)',
-  })
+/* ---- gear reference, from derive/combat-odds.js via capos.json ---- */
 
-  columns(document.getElementById('c-recency'), {
-    rows: [
-      { label: 'today', value: p.bands.b1 },
-      { label: '2-7d', value: p.bands.b7 },
-      { label: '8-30d', value: p.bands.b30 },
-      { label: '30d+', value: p.bands.older },
-    ],
-    color: 'var(--cat-1)',
-  })
+const SLOT_ORDER = ['head', 'chest', 'hands', 'feet', 'defense']
+// The page's other exact() is scoped inside renderTraitPrice, not shared, so
+// this needs its own. nfmt would abbreviate 25,132 items down to "25k".
+const gexact = (n) => Number(n || 0).toLocaleString('en-US')
+const gcap = (v) => {
+  if (v == null) return '-'
+  const t = String(v).charAt(0).toUpperCase() + String(v).slice(1).replace(/_/g, ' ')
+  // One genuine acronym in the item list; title-casing it gives "Cctv".
+  return t === 'Cctv' ? 'CCTV' : t
+}
 
-  // The newest cohorts cannot have gone quiet yet, so they always read 100%.
-  // Dropping them beats publishing a number that is guaranteed to flatter.
-  const usable = p.cohorts.filter((c) => !c.incomplete)
-  const dropped = p.cohorts.length - usable.length
-  columns(document.getElementById('c-retention'), {
-    rows: usable.map((c) => ({ label: c.starts.slice(5), value: c.retained_pct })),
-    color: 'var(--cat-2)',
-    yFormat: (n) => n + '%',
-  })
-
+/**
+ * Item type fixes the primary stat: every balaclava is muscle, every cctv is
+ * brains, with no roll involved across all 39k items in circulation. That makes
+ * this a lookup table rather than a probability, which is why it is worth
+ * printing at all. The secondary stat IS rolled, uniformly across the other
+ * four, so it is deliberately not shown as if it were choosable.
+ */
+/**
+ * Supply and ownership, moved here from the retired growth page.
+ *
+ * They were always about capos rather than about growth: how many exist, what
+ * they are made of, and who ends up holding them.
+ */
+function renderSupply() {
   lineChart(document.getElementById('c-supply'), {
     xs: DATA.supply.map((s) => s.date.slice(5)),
     series: [
@@ -786,34 +771,7 @@ function render() {
     color: 'var(--cat-3)',
   })
 }
-`
 
-const CAPOS_JS = String.raw`
-const RANK_LABELS = { recruit: 'Recruit', soldier: 'Soldier', captain: 'Captain',
-  lieutenant: 'Lieutenant', underboss: 'Underboss', boss: 'Boss' }
-const RARITY_LABELS = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', epic: 'Epic',
-  legendary: 'Legendary', god: 'God', founder: 'Founder' }
-
-/* ---- gear reference, from derive/combat-odds.js via capos.json ---- */
-
-const SLOT_ORDER = ['head', 'chest', 'hands', 'feet', 'defense']
-// The page's other exact() is scoped inside renderTraitPrice, not shared, so
-// this needs its own. nfmt would abbreviate 25,132 items down to "25k".
-const gexact = (n) => Number(n || 0).toLocaleString('en-US')
-const gcap = (v) => {
-  if (v == null) return '-'
-  const t = String(v).charAt(0).toUpperCase() + String(v).slice(1).replace(/_/g, ' ')
-  // One genuine acronym in the item list; title-casing it gives "Cctv".
-  return t === 'Cctv' ? 'CCTV' : t
-}
-
-/**
- * Item type fixes the primary stat: every balaclava is muscle, every cctv is
- * brains, with no roll involved across all 39k items in circulation. That makes
- * this a lookup table rather than a probability, which is why it is worth
- * printing at all. The secondary stat IS rolled, uniformly across the other
- * four, so it is deliberately not shown as if it were choosable.
- */
 function renderGear() {
   const el = document.getElementById('gear')
   if (!el || !DATA.gear) return
@@ -845,6 +803,7 @@ function renderGear() {
 
 function render() {
   renderGear()
+  renderSupply()
   const rk = DATA.ranks
   const boss = (rk.pyramid.find((r) => r.rank === 'boss') || {}).capos || 0
   document.getElementById('tiles').innerHTML = [
@@ -856,6 +815,10 @@ function render() {
       'RACKET, all capos, lifetime'],
     ['Founders', nfmt((DATA.by_rarity.find((r) => r.rarity === 'founder') || {}).capos || 0),
       'fixed supply'],
+    // Existence is already the first tile, from the live capo count. Only the
+    // burned figure is new, and it is what explains why the first number is not
+    // simply everything ever minted.
+    ['Capos burned', nfmt((DATA.supply.at(-1) || {}).burned), 'crafting and salvage'],
   ].map(([l, v, n]) =>
     '<div class="tile"><span class="tile-label">' + l + '</span>' +
     '<span class="tile-value">' + v + '</span>' +
@@ -1244,34 +1207,6 @@ const PAGES = [
     script: WARS_JS,
   },
   {
-    file: 'growth.html', section: 'growth',
-    title: 'Growth · ' + SITE, heading: 'Growth',
-    eyebrow: 'The Syndicate &middot; supply and players',
-    description: 'Capo supply over time, rarity composition, ownership concentration.',
-    body: `<div class="tiles" id="tiles"></div>
-  <div class="section-head"><h2>Arrivals</h2><span class="section-meta">the stock, and the flow</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Players, cumulative</p><div class="chart" id="c-players"></div></div>
-    <div><p class="duo-head">New players, by day</p><div class="chart" id="c-newplayers"></div></div>
-  </div>
-  <div class="section-head"><h2>Who stays</h2><span class="section-meta">recency, and retention by cohort</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Last fight recency</p><div class="chart" id="c-recency"></div></div>
-    <div><p class="duo-head">Retention by joining week</p><div class="chart" id="c-retention"></div></div>
-  </div>
-  <div class="section-head"><h2>Capo supply</h2><span class="section-meta">how many, and of what</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Minted against burned</p><div class="chart" id="c-supply"></div></div>
-    <div><p class="duo-head">Composition by rarity</p><div class="chart" id="c-supply-rarity"></div></div>
-  </div>
-  <div class="section-head"><h2>Who holds them</h2><span class="section-meta">concentration, and vintage</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Owners by roster size</p><div class="chart" id="c-ownership"></div></div>
-    <div><p class="duo-head">Capos by season created</p><div class="chart" id="c-season"></div></div>
-  </div>`,
-    script: GROWTH_JS,
-  },
-  {
     file: 'capos.html', section: 'capos',
     title: 'Capos · ' + SITE, heading: 'Capos',
     eyebrow: 'The Syndicate &middot; rarity, rank and progression',
@@ -1304,7 +1239,17 @@ const PAGES = [
   <div class="section-head"><h2>Which item raises which stat</h2><span class="section-meta">fixed by item type, never rolled</span></div>
   <div id="gear"></div>
   <div class="section-head"><h2>What gear rarity buys you</h2><span class="section-meta">bonus against durability</span></div>
-  <div id="ladder"></div>`,
+  <div id="ladder"></div>
+  <div class="section-head"><h2>Capo supply</h2><span class="section-meta">how many, and of what</span></div>
+  <div class="duo">
+    <div><p class="duo-head">Minted against burned</p><div class="chart" id="c-supply"></div></div>
+    <div><p class="duo-head">Composition by rarity</p><div class="chart" id="c-supply-rarity"></div></div>
+  </div>
+  <div class="section-head"><h2>Who holds them</h2><span class="section-meta">concentration, and vintage</span></div>
+  <div class="duo">
+    <div><p class="duo-head">Owners by roster size</p><div class="chart" id="c-ownership"></div></div>
+    <div><p class="duo-head">Capos by season created</p><div class="chart" id="c-season"></div></div>
+  </div>`,
     script: CAPOS_JS,
   },
   {
