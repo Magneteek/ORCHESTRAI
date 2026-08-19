@@ -43,7 +43,6 @@ COLD="market_listings market_sales royalties capos combat_players leaderboards"
 
 s3() { s3cmd --config=/root/.s3cfg "$@"; }
 
-total_up=0
 total_freed=0
 
 for feed in $COLD; do
@@ -83,7 +82,6 @@ for feed in $COLD; do
   done < <(find "$src" -type f -mtime +"$RETAIN_DAYS")
 
   rm -f "$remote"
-  up=$(wc -l < "$remote" 2>/dev/null || echo 0)
   total_freed=$((total_freed + freed))
   echo "  $feed: $(du -sh "$src" 2>/dev/null | cut -f1) local, freed $((freed / 1024 / 1024))MB"
 done

@@ -12,6 +12,7 @@
 #   derive   20m     rebuild the derived layer and the site
 #   rewards  1h      on-chain prize and bounty watch over public RPC
 #   verify   09:00   archive gap check
+#   offload  03:30   push cold raw feeds to the Space and reclaim local disk
 #
 # Timers, not cron, for three reasons that matter here: Persistent=true makes a
 # calendar job that was missed while the box was down run once on boot rather
@@ -52,6 +53,7 @@ JOBS=(
   "derive|Rebuild derived layer and site|/bin/bash derive/refresh.sh|every:1200"
   "rewards|On-chain prize and bounty watch|$NODE_BIN --no-warnings ingest/rewards-watch.js --watch|every:3600"
   "verify|Archive gap check|$NODE_BIN --no-warnings ingest/verify.js|*-*-* 09:00:00"
+  "offload|Move the cold raw archive to object storage|/bin/bash ingest/archive-offload.sh|*-*-* 03:30:00"
 )
 
 for job in "${JOBS[@]}"; do
@@ -72,7 +74,7 @@ ExecStart=$exec
 EnvironmentFile=-$PROJECT_DIR/.env
 # A stuck socket must not wedge the schedule. The daily pull is a 58MB payload
 # on a 1 vCPU box, so it gets the whole window; everything else is quick.
-TimeoutStartSec=$([ "$name" = "daily" ] && echo 900 || echo 600)
+TimeoutStartSec=$([ "$name" = "daily" ] || [ "$name" = "offload" ] && echo 1800 || echo 600)
 Nice=10
 # One CPU shared with nginx: keep a burst of JSON parsing from starving the
 # thing actually serving the site.
