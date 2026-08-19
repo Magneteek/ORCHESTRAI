@@ -42,9 +42,23 @@ ssh -o BatchMode=yes "${PROD_USER}@${PROD_HOST}" "
 
 echo
 echo "  smoke test:"
+
+# Ask the box what it just built rather than keeping a list here. A hardcoded
+# list rots the moment a page is added or retired, and this one did: it kept
+# testing growth.html after growth.html was deliberately deleted, so a correct
+# release reported itself broken.
+pages=$(ssh -o BatchMode=yes "${PROD_USER}@${PROD_HOST}" \
+  "ls ${PROD_DIR}/web/dist/site/*.html | xargs -n1 basename")
+
 fail=0
-for p in / /players.html /money.html /wars.html /growth.html /capos.html /trainers.html /prizes.html; do
+n=0
+for f in $pages; do
+  p="/$f"
+  [ "$f" = "index.html" ] && p="/"
   code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "${PROD_URL}${p}?cb=$(date +%s%N)")
+  n=$((n + 1))
   [ "$code" = "200" ] || { fail=1; echo "    FAIL $p -> $code"; }
 done
-[ "$fail" = "0" ] && echo "    all pages 200" || { echo "  RELEASE LOOKS BROKEN" >&2; exit 1; }
+
+[ "$n" -gt 0 ] || { echo "  nothing built on the box" >&2; exit 1; }
+[ "$fail" = "0" ] && echo "    $n pages, all 200" || { echo "  RELEASE LOOKS BROKEN" >&2; exit 1; }
