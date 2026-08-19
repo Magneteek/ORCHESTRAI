@@ -25,6 +25,17 @@ if [ -n "$(git status --porcelain -- . 2>/dev/null)" ]; then
 fi
 
 branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Production tracks develop. Without this, releasing from a feature branch
+# quietly deploys that branch to the droplet, because the pull below uses
+# whatever branch happens to be checked out.
+RELEASE_BRANCH="${RELEASE_BRANCH:-develop}"
+if [ "$branch" != "$RELEASE_BRANCH" ]; then
+  echo "  refusing: on '$branch', and production tracks '$RELEASE_BRANCH'." >&2
+  echo "  Merge first, or set RELEASE_BRANCH if you really mean it." >&2
+  exit 1
+fi
+
 if [ -n "$(git log "origin/$branch..$branch" --oneline 2>/dev/null)" ]; then
   echo "  refusing: commits not pushed. The droplet installs from git." >&2
   git log "origin/$branch..$branch" --oneline >&2
