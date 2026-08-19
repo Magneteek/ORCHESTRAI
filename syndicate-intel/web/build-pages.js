@@ -1296,6 +1296,20 @@ function main() {
 
   // Icons and the social card sit at the site root, because that is where the
   // <link> tags and every scraper look for them.
+  // Retire pages that no longer exist. The build only ever wrote files, so a
+  // page removed from PAGES kept being served from the last build that made it:
+  // growth.html outlived its own removal this way, and a stale page is worse
+  // than a missing one because nothing about it looks wrong.
+  //
+  // build-players.js runs before this one and owns players.html, so it is kept
+  // explicitly rather than by accident.
+  const expected = new Set(PAGES.map((p) => p.file).concat(['players.html']))
+  for (const f of fs.readdirSync(SITE_DIR)) {
+    if (!f.endsWith('.html') || expected.has(f)) continue
+    fs.rmSync(path.join(SITE_DIR, f))
+    console.log(`  retired      ${f}`)
+  }
+
   const assetSrc = path.join(__dirname, 'assets')
   if (fs.existsSync(assetSrc)) {
     let n = 0
