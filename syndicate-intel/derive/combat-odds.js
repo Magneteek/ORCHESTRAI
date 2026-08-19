@@ -178,6 +178,115 @@ function isotonic(deltas, weights, increasing) {
   return out
 }
 
+/* ------------------------------------------------------------------- fit --- */
+
+/**
+ * One logistic regression over every factor at once.
+ *
+ * The first version of this summed each factor's marginal effect, measured on
+ * its own, and that was wrong in a way that only backtesting revealed. The
+ * factors are correlated: attackers pick targets near their own rank, rarity
+ * tracks rank, and districts sit inside leagues. Adding marginals counts the
+ * same underlying advantage several times, so the extremes ran away. Fights it
+ * called 80-plus percent actually won 63% out of sample, a 26 point error, and
+ * confidently wrong is worse than absent.
+ *
+ * Fitting every coefficient in the presence of the others removes the double
+ * counting by construction. The same backtest puts the worst band within about
+ * 6 points, most within 2.
+ *
+ * L2 keeps thin cells from getting loud opinions, and an unseen combination
+ * simply contributes nothing, which lands it on the population base rate
+ * rather than on a coefficient invented from three fights.
+ */
+const L2 = 2.0
+const LR = 0.5
+const ITERS = 3000
+
+function featureKeys(f, capo) {
+  const a = capo.get(f.attacker_capo_id), d = capo.get(f.defender_capo_id)
+  if (!a || !d || !a.tier || !d.tier) return null
+  const k = ['m:' + f.attacker_specialty + '>' + f.defender_specialty,
+             'rp:' + a.tier + '>' + d.tier]
+  if (f.attacker_capo_rarity) k.push('ara:' + f.attacker_capo_rarity)
+  if (f.defender_capo_rarity) k.push('dra:' + f.defender_capo_rarity)
+  if (f.district_resource) k.push('dis:' + f.district_resource)
+  if (f.city_league) k.push('lg:' + f.city_league)
+  return k
+}
+
+function fitLogistic(rows, index) {
+  const D = index.size
+  const w = new Float64Array(D)
+  const wins = rows.filter((r) => r.y).length
+  let b = Math.log(Math.max(1, wins) / Math.max(1, rows.length - wins))
+  for (let it = 0; it < ITERS; it++) {
+    const g = new Float64Array(D)
+    let gb = 0
+    for (const r of rows) {
+      let z = b
+      for (const k of r.k) { const i = index.get(k); if (i !== undefined) z += w[i] }
+      const e = 1 / (1 + Math.exp(-z)) - r.y
+      gb += e
+      for (const k of r.k) { const i = index.get(k); if (i !== undefined) g[i] += e }
+    }
+    for (let i = 0; i < D; i++) w[i] -= LR * (g[i] / rows.length + (L2 * w[i]) / rows.length)
+    b -= (LR * gb) / rows.length
+  }
+  return { w, b }
+}
+
+const scoreOf = (keys, coef, intercept) => {
+  let z = intercept
+  for (const k of keys) if (coef[k] != null) z += coef[k]
+  return z
+}
+
+/**
+ * Backtest on fights the fit never saw.
+ *
+ * Trained on the earlier three quarters, measured on the most recent quarter,
+ * because in-sample calibration flatters any model and this one has already
+ * been wrong once. The result is published on the page: a tool that states its
+ * own error is one a reader can decide how far to trust.
+ */
+function validate(rows) {
+  const cut = Math.floor(rows.length * 0.75)
+  const tr = rows.slice(0, cut), te = rows.slice(cut)
+  if (te.length < 500) return null
+  const idx = new Map()
+  for (const r of tr) for (const k of r.k) if (!idx.has(k)) idx.set(k, idx.size)
+  const { w, b } = fitLogistic(tr, idx)
+  const coef = {}
+  for (const [k, i] of idx) coef[k] = w[i]
+
+  const p = (r) => 1 / (1 + Math.exp(-scoreOf(r.k, coef, b)))
+  const bands = [[0, 0.15], [0.15, 0.25], [0.25, 0.35], [0.35, 0.45],
+                 [0.45, 0.55], [0.55, 0.65], [0.65, 0.8], [0.8, 1]]
+  let worst = 0
+  const table = []
+  for (const [lo, hi] of bands) {
+    const s = te.map((r) => ({ p: p(r), y: r.y })).filter((r) => r.p >= lo && r.p < hi)
+    if (s.length < 25) continue
+    const pr = 100 * s.reduce((t, r) => t + r.p, 0) / s.length
+    const ac = 100 * s.filter((r) => r.y).length / s.length
+    worst = Math.max(worst, Math.abs(ac - pr))
+    table.push({ band: Math.round(lo * 100) + '-' + Math.round(hi * 100), n: s.length,
+                 predicted: pct1(pr / 100), actual: pct1(ac / 100) })
+  }
+  const brier = te.reduce((t, r) => t + Math.pow(p(r) - r.y, 2), 0) / te.length
+  const base = tr.filter((r) => r.y).length / tr.length
+  const bb = te.reduce((t, r) => t + Math.pow(base - r.y, 2), 0) / te.length
+  return {
+    tested_on: te.length, trained_on: tr.length,
+    worst_gap_pp: Math.round(worst * 10) / 10,
+    brier: Math.round(brier * 1e4) / 1e4,
+    baseline_brier: Math.round(bb * 1e4) / 1e4,
+    better_than_guessing_pct: Math.round(1000 * (1 - brier / bb)) / 10,
+    bands: table,
+  }
+}
+
 /* ---------------------------------------------------------------- build --- */
 
 function main() {
@@ -229,76 +338,101 @@ function main() {
     return (POWER_BANDS.find((b) => p >= b.lo && p <= b.hi) || {}).key || null
   }
 
-  /**
-   * Power shifts are measured against the powered subsample's own base rate.
-   *
-   * Capos that reach the marketplace are not a random draw, and it shows: the
-   * weakest attacker band still wins 41.4% against a 30.7% population average.
-   * Taking the shift against the global base would import that selection as if
-   * it were an effect of power. Against the subsample base it carries only the
-   * relative step from one band to the next, which is what the reader picks.
-   */
-  const powerShifts = (side) => {
-    const known = F.filter((f) => pband(f[side]) != null)
-    if (known.length < 100) return {}
-    const kw = known.filter((f) => f.winner === 'attacker').length
-    const kp = Math.min(0.98, Math.max(0.02, kw / known.length))
-    const out = {}
-    for (const b of POWER_BANDS) {
-      const cells = known.filter((f) => pband(f[side]) === b.key)
-      out[b.key] = shift(cells, kp)
-    }
-    // More power helps the attacker win and helps the defender hold, so the
-    // attacker's deltas rise across the bands and the defender's fall.
-    const keys = POWER_BANDS.map((b) => b.key)
-    const fitted = isotonic(
-      keys.map((k) => out[k].delta), keys.map((k) => Math.max(1, out[k].n)),
-      side === 'attacker_capo_id')
-    keys.forEach((k, i) => {
-      out[k].raw_delta = out[k].delta
-      out[k].delta = Math.round(fitted[i] * 1e4) / 1e4
-    })
-    return out
-  }
-
   // ---- single-factor shifts used by the calculator
   const rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'god', 'founder']
   const present = (list, m) => list.filter((k) => m.has(k))
 
-  const rankPairM = byKey(F, (f) => {
-    const a = capo.get(f.attacker_capo_id), d = capo.get(f.defender_capo_id)
-    return a && d && a.tier && d.tier ? a.tier + '|' + d.tier : null
-  })
-  const attRankM = byKey(F, (f) => capo.get(f.attacker_capo_id)?.tier || null)
-  const defRankM = byKey(F, (f) => capo.get(f.defender_capo_id)?.tier || null)
-  const defRarM = byKey(F, 'defender_capo_rarity')
-  const attRarM = byKey(F, 'attacker_capo_rarity')
-  const resM = byKey(F, 'district_resource')
-  const leagueM = byKey(F, 'city_league')
-  const tierM = byKey(F, 'district_tier')
-
-  const shiftsFor = (m, keys) => Object.fromEntries(
-    keys.map((k) => [k, { ...shift(m.get(k), baseP), hold_pct: pct1(
-      m.get(k).filter((f) => f.winner === 'defender').length / m.get(k).length) }]))
-
   const RANKS = ['recruit', 'soldier', 'captain', 'lieutenant', 'underboss', 'boss']
-  // Only pairs with real support; the page falls back to the marginals below.
-  const pairKeys = [...rankPairM.keys()].filter((k) => rankPairM.get(k).length >= 50).sort()
+
+  // ---- the model proper: one joint fit, then a backtest of it
+  const sorted = F.slice().sort((x, y) =>
+    String(x.resolved_at).localeCompare(String(y.resolved_at)))
+  const rows = sorted.map((f) => ({ k: featureKeys(f, capo), y: f.winner === 'attacker' ? 1 : 0 }))
+    .filter((r) => r.k)
+  if (rows.length < 500) throw new Error('too few usable fights to fit a model')
+
+  const index = new Map()
+  for (const r of rows) for (const k of r.k) if (!index.has(k)) index.set(k, index.size)
+  const fitted = fitLogistic(rows, index)
+  const coef = {}
+  for (const [k, i] of index) coef[k] = Math.round(fitted.w[i] * 1e4) / 1e4
+
+  // How many fights stand behind each coefficient. Published because the page
+  // has to be able to tell "we measured this" apart from "we have nothing":
+  // bosses never attack captains, so that pair has no coefficient at all, and
+  // silently falling back to the average would print a confident number with
+  // nothing behind it.
+  const support = {}
+  for (const r of rows) for (const k of r.k) support[k] = (support[k] || 0) + 1
+
+  const validation = validate(rows)
+
+  /**
+   * Total stats, applied on top of the fit rather than inside it.
+   *
+   * Only 549 fights know the attacker's power and 708 the defender's, against
+   * 24k that know everything else. Folding it into the joint fit would throw
+   * away 97% of the evidence to keep one column. Instead each band is measured
+   * as the residual the fit does not already explain, on the rows where it is
+   * known, which is why the reader can leave it on Not known and lose nothing.
+   */
+  const powerShifts = (side) => {
+    const known = sorted.filter((f) => featureKeys(f, capo) && pband(f[side]) != null)
+    if (known.length < 100) return {}
+    const out = {}
+    for (const band of POWER_BANDS) {
+      const cells = known.filter((f) => pband(f[side]) === band.key)
+      if (cells.length < 30) { out[band.key] = { n: cells.length, delta: 0, thin: true }; continue }
+      // Mean residual in log-odds: how far the fit is off for this band.
+      let obs = 0, exp = 0
+      for (const f of cells) {
+        obs += f.winner === 'attacker' ? 1 : 0
+        exp += 1 / (1 + Math.exp(-scoreOf(featureKeys(f, capo), coef, fitted.b)))
+      }
+      const o = Math.min(0.98, Math.max(0.02, obs / cells.length))
+      const e = Math.min(0.98, Math.max(0.02, exp / cells.length))
+      out[band.key] = {
+        n: cells.length, thin: false,
+        delta: Math.round((Math.log(o / (1 - o)) - Math.log(e / (1 - e))) * 1e4) / 1e4,
+      }
+    }
+    const keys = POWER_BANDS.map((b) => b.key)
+    const fit = isotonic(keys.map((k) => out[k].delta), keys.map((k) => Math.max(1, out[k].n)),
+      side === 'attacker_capo_id')
+    keys.forEach((k, i) => {
+      out[k].raw_delta = out[k].delta
+      out[k].delta = Math.round(fit[i] * 1e4) / 1e4
+    })
+    return out
+  }
+
+  // The form's dropdowns come from the data, not from a list in the page, so a
+  // rarity or league the game adds later appears without a code change.
+  const seen = (get, order) => {
+    const found = new Set(F.map(get).filter(Boolean))
+    const known = (order || []).filter((k) => found.has(k))
+    return known.concat([...found].filter((k) => !known.includes(k)).sort())
+  }
 
   const model = {
     base_att_win_pct: pct1(baseP),
     ranks: RANKS,
-    rank_pair: shiftsFor(rankPairM, pairKeys),
-    attacker_rank: shiftsFor(attRankM, present(RANKS, attRankM)),
-    defender_rank: shiftsFor(defRankM, present(RANKS, defRankM)),
+    options: {
+      specialties: specs,
+      rarities: seen((f) => f.attacker_capo_rarity, rarities),
+      districts: seen((f) => f.district_resource),
+      leagues: seen((f) => f.city_league,
+        ['street', 'borough', 'district', 'metro', 'kingpin']),
+    },
+    intercept: Math.round(fitted.b * 1e4) / 1e4,
+    coef,
+    support,
+    // Below this the pair is treated as measured but shaky, not as fact.
+    thin_below: 30,
     power_bands: POWER_BANDS.map((b) => ({ key: b.key, label: b.label })),
     attacker_power: powerShifts('attacker_capo_id'),
     defender_power: powerShifts('defender_capo_id'),
-    defender_rarity: shiftsFor(defRarM, present(rarities, defRarM)),
-    attacker_rarity: shiftsFor(attRarM, present(rarities, attRarM)),
-    district_resource: shiftsFor(resM, [...resM.keys()].sort()),
-    city_league: shiftsFor(leagueM, [...leagueM.keys()].sort()),
-    district_tier: shiftsFor(tierM, [...tierM.keys()].sort()),
+    validation,
   }
 
   // ---- passion, the other guessed formula

@@ -514,10 +514,10 @@ function buildCalc() {
 
   const side = (who, ids, spec) =>
     '<div><p class="calc-side-head">' + who + '</p><div class="calc">' +
-    calcField('Specialty', ids.s, DATA.odds.specialties, spec) +
+    calcField('Specialty', ids.s, m.options.specialties, spec) +
     calcField('Rank', ids.r, m.ranks, 'captain') +
     calcField('Total stats', ids.p, powerOpts, 'unknown', powerLabel) +
-    calcField('Rarity', ids.q, Object.keys(m.attacker_rarity), 'rare') +
+    calcField('Rarity', ids.q, m.options.rarities, 'rare') +
     '</div></div>'
 
   el.innerHTML =
@@ -526,8 +526,8 @@ function buildCalc() {
       side('Defender', { s: 'c-ds', r: 'c-drank', p: 'c-dpow', q: 'c-dr' }, 'survivor') +
     '</div>' +
     '<div class="calc calc-ground">' +
-      calcField('District', 'c-res', Object.keys(m.district_resource), 'racket_hub') +
-      calcField('League', 'c-lg', Object.keys(m.city_league), 'street') +
+      calcField('District', 'c-res', m.options.districts, 'racket_hub') +
+      calcField('League', 'c-lg', m.options.leagues, 'street') +
     '</div><div class="verdict" id="c-out"></div>'
   el.querySelectorAll('select').forEach((x) => x.addEventListener('change', recalc))
   calcBuilt = true
@@ -555,31 +555,55 @@ function recalc() {
   if (!cell || cell.att_win_pct == null) {
     out.innerHTML = '<p class="basis">No fights recorded for that matchup yet.</p>'; return
   }
-  // Rank is read as a pair wherever the archive has a real cell for it, because
-  // attackers overwhelmingly pick targets near their own rank. Only the sparse
-  // corners fall back to two independent shifts.
-  const ar = g('c-arank'), dr = g('c-drank')
-  const pair = m.rank_pair[ar + '|' + dr]
-  const rankFactors = pair
-    ? [['rank matchup', pair]]
-    : [['attacker rank', m.attacker_rank[ar]], ['defender rank', m.defender_rank[dr]]]
+  // One score from one jointly fitted model. The previous version added each
+  // factor's marginal effect separately, which double counted the overlap
+  // between rank, rarity, district and league and ran away at the extremes:
+  // fights it called 80-plus percent won 63% of the time. Coefficients are now
+  // fitted together, so a missing combination simply contributes nothing and
+  // lands on the base rate.
+  const keys = [
+    'm:' + as + '>' + ds,
+    'rp:' + g('c-arank') + '>' + g('c-drank'),
+    'ara:' + g('c-ar'),
+    'dra:' + g('c-dr'),
+    'dis:' + g('c-res'),
+    'lg:' + g('c-lg'),
+  ]
+  // Rank is the largest single factor, so without it there is no answer worth
+  // printing. Bosses never attack captains; that combination has no evidence at
+  // all, and the honest output is to say so rather than quietly return the
+  // population average dressed up as a prediction.
+  const rankKey = 'rp:' + g('c-arank') + '>' + g('c-drank')
+  if (m.coef[rankKey] == null) {
+    out.innerHTML = '<span class="verdict-word">No fights on record</span>' +
+      '<p class="verdict-basis">Nothing in ' + exactN(DATA.odds.fights.n) +
+      ' settled fights has a ' + esc(cap1(g('c-arank'))) + ' attacking a ' +
+      esc(cap1(g('c-drank'))) + '. Rank is the biggest factor in the outcome, so ' +
+      'with none of it measured there is no honest number to give you here.</p>'
+    return
+  }
 
+  let x = m.intercept
+  const shaky = []
+  for (const k of keys) {
+    if (m.coef[k] == null) continue
+    x += m.coef[k]
+    if ((m.support[k] || 0) < m.thin_below) shaky.push(k.split(':')[0])
+  }
+  const LABEL = { m: 'this specialty matchup', rp: 'these two ranks', ara: 'that attacker rarity',
+    dra: 'that defender rarity', dis: 'that district', lg: 'that league' }
+
+  // Stats sit outside the fit, on far less evidence, so they are added only if
+  // the reader actually knows them.
   const apow = g('c-apow'), dpow = g('c-dpow')
-  const factors = rankFactors.concat([
-    ['attacker stats', apow === 'unknown' ? null : m.attacker_power[apow]],
-    ['defender stats', dpow === 'unknown' ? null : m.defender_power[dpow]],
-    ['attacker rarity', m.attacker_rarity[g('c-ar')]],
-    ['defender rarity', m.defender_rarity[g('c-dr')]],
-    ['district', m.district_resource[g('c-res')]],
-    ['league', m.city_league[g('c-lg')]],
-  ])
-  let x = tologit(cell.att_win_pct / 100)
   const thin = []
-  factors.forEach((f) => {
-    if (!f[1]) return
-    x += f[1].delta
-    if (f[1].thin) thin.push(f[0])
-  })
+  for (const [label, cell] of [['attacker stats', apow === 'unknown' ? null : m.attacker_power[apow]],
+                               ['defender stats', dpow === 'unknown' ? null : m.defender_power[dpow]]]) {
+    if (!cell) continue
+    x += cell.delta
+    if (cell.thin) thin.push(label)
+  }
+
   const p = invlogit(x) * 100
   const base = DATA.odds.fights.attacker_win_pct
 
@@ -588,26 +612,24 @@ function recalc() {
   else if (p >= 45) word = 'Toss-up'
   else if (p >= 35) word = 'Uphill'
 
+  const v = m.validation
   out.innerHTML =
     '<span class="verdict-num">' + p.toFixed(1) + '%</span>' +
     '<span class="verdict-word">' + esc(word) + ' &middot; chance the attacker takes the district</span>' +
     '<p class="verdict-basis">' +
     (p >= base ? 'Better than the ' : 'Worse than the ') + base +
-    '% an average attack wins. The ' + esc(cap1(as)) + ' against ' + esc(cap1(ds)) +
-    ' matchup is measured on ' + exactN(cell.n) + ' real fights and wins ' + cell.att_win_pct +
-    '% on its own (' + cell.lo + '% to ' + cell.hi + '% at 95% confidence). ' +
-    (pair
-      ? 'Rank is read as a matchup rather than as two separate bonuses, measured on ' +
-        exactN(pair.n) + ' fights between these two ranks, because attackers overwhelmingly ' +
-        'pick targets near their own rank. '
-      : 'No fights are on record between these two ranks, so each rank is applied on its own. ') +
-    'Stats, rarity, district and league are then applied as separately measured adjustments, ' +
-    'which assumes they act independently of each other. Total stats are only visible for capos ' +
-    'that have passed through the marketplace, so those two shifts rest on ' +
-    exactN(Object.values(m.attacker_power).reduce((a, b) => a + b.n, 0)) + ' attacking and ' +
-    exactN(Object.values(m.defender_power).reduce((a, b) => a + b.n, 0)) + ' defending fights, ' +
-    'far fewer than everything else here, and are measured against that sample rather than the ' +
-    'whole population. Leave them on Not known and they are left out entirely.' +
+    '% an average attack wins. Every factor is fitted together on ' +
+    exactN(DATA.odds.fights.n) + ' settled fights rather than measured one at a time, ' +
+    'because rank, rarity, district and league overlap and counting them separately ' +
+    'made the confident answers wrong.' +
+    (v ? ' Checked against ' + exactN(v.tested_on) + ' fights the fit never saw: predictions ' +
+      'land within ' + v.worst_gap_pp + ' points of what actually happened, and beat guessing ' +
+      'the average by ' + v.better_than_guessing_pct + '%.' : '') +
+    ' Stats are the one input measured separately, on a few hundred fights rather than ' +
+    'thousands, so leaving them on Not known costs nothing.' +
+    (shaky.length ? ' Thin evidence for ' +
+      esc([...new Set(shaky)].map((k) => LABEL[k] || k).join(' and ')) +
+      ', so treat this one loosely.' : '') +
     (thin.length ? ' Thin data for: ' + esc(thin.join(', ')) + '.' : '') + '</p>'
 }
 
