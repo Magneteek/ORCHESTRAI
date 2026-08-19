@@ -195,18 +195,73 @@ if (c) {
   console.log(`  the field averages ${odds.fights.attacker_win_pct}% attacking, ${odds.fights.defender_hold_pct}% holding`)
 }
 
-/* ---- idle capacity: the cheapest win available to most players */
-head('capacity')
-const byRole = {}
-for (const x of roster) byRole[x.role || 'unassigned'] = (byRole[x.role || 'unassigned'] || 0) + 1
-console.log(`  ${n(roster.length)} capos`)
-for (const [k, v] of Object.entries(byRole).sort((a, b) => b[1] - a[1])) {
-  console.log(`    ${String(k).padEnd(14)}${String(v).padStart(5)}`)
+/* ---- the roster, which is capped */
+head('your twenty')
+/**
+ * The roster is capped at 20. Everything else a player owns sits outside it as
+ * a collectible and cannot act until it is swapped in.
+ *
+ * This tool originally read the unassigned pile as idle capacity and called it
+ * the largest free gain on the page. That was backwards: those capos are not
+ * idle, they are benched, and for a player already at 20 of 20 there is no free
+ * gain at all. The cap is visible in the archive once you look for it, with
+ * 1,043 players sitting at exactly 20 and the count falling off a cliff above.
+ */
+const ROSTER_CAP = 20
+const active = roster.filter((x) => x.status === 'active')
+const bench = roster.filter((x) => x.status !== 'active')
+const activeRoles = {}
+for (const x of active) activeRoles[x.role || 'unassigned'] = (activeRoles[x.role || 'unassigned'] || 0) + 1
+
+console.log(`  ${active.length} of ${ROSTER_CAP} slots in play, ${n(bench.length)} on the bench`)
+console.log('')
+for (const [k, v] of Object.entries(activeRoles).sort((a2, b2) => b2[1] - a2[1])) {
+  console.log(`    ${String(k).padEnd(14)}${String(v).padStart(4)}`)
 }
-if (byRole.unassigned) {
+if (active.length < ROSTER_CAP) {
   console.log('')
-  console.log(`  ${n(byRole.unassigned)} capos are doing nothing. That is the largest`)
-  console.log('  free gain on this page: they cost nothing to assign.')
+  console.log(`  ${ROSTER_CAP - active.length} slot${ROSTER_CAP - active.length === 1 ? '' : 's'} empty. Filling them costs nothing.`)
+} else if (bench.length) {
+  console.log('')
+  console.log('  Full. Nothing improves without swapping somebody out, so the')
+  console.log('  question below is whether these are the right twenty.')
+}
+
+/* ---- is the bench stronger than the roster? */
+if (bench.length && active.length) {
+  const strength = (x) => winChance({
+    as: x.specialty, ar: x.tier, ara: x.rarity,
+    ds: 'survivor', dr: 'captain', dra: 'rare', district: 'racket_hub', league,
+  })
+  const rate = (list) => list.map((x) => ({ x, r: strength(x) }))
+    .filter((s) => s.r && !s.r.thin)
+    .sort((a2, b2) => b2.r.p - a2.r.p)
+  const inPlay = rate(active)
+  const benched = rate(bench)
+
+  if (inPlay.length && benched.length) {
+    const weakest = inPlay.at(-1)
+    const upgrades = benched.filter((s) => s.r.p > weakest.r.p)
+    sub('your bench against your roster')
+    console.log('  ranked as attackers, so this is about fighting, not earning')
+    console.log('')
+    console.log(`   in play, weakest:  ${pct(weakest.r.p)}  ${weakest.x.name} (${weakest.x.tier})`)
+    console.log(`   benched, strongest:${pct(benched[0].r.p)}  ${benched[0].x.name} (${benched[0].x.tier})`)
+    console.log('')
+    if (upgrades.length) {
+      console.log(`  ${upgrades.length} benched capo${upgrades.length === 1 ? '' : 's'} out-rank your weakest active one.`)
+      for (const s of upgrades.slice(0, 4)) {
+        console.log(`   ${pct(s.r.p)}  ${s.x.name.padEnd(22)}${s.x.specialty.padEnd(11)}${s.x.tier.padEnd(11)}${s.x.rarity}`)
+      }
+      console.log('')
+      console.log('  Worth knowing before you swap: a capo earns while it hustles,')
+      console.log('  and nothing in the archive reports what hustling pays. This')
+      console.log('  ranks them as fighters only.')
+    } else {
+      console.log('  Nobody on the bench out-ranks your weakest active capo as a')
+      console.log('  fighter. Your twenty are already your twenty.')
+    }
+  }
 }
 
 /* ---- attack */
