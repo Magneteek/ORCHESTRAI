@@ -19,3 +19,9 @@ droplet.conf*
 # Object storage target; machine-specific, never committed
 spaces.conf
 production.conf
+
+# The full-resolution logo cut-out. Regenerated from the artwork beside it by
+# `node tools/make-assets.js`, so it is an output kept for convenience rather
+# than an input worth 1.4MB of history. The artwork itself IS committed: it is
+# the one file here that cannot be rebuilt.
+web/assets/source/badge-full.png

@@ -14,7 +14,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar } from './style.js'
 import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -81,9 +81,19 @@ function setStamp(ok) {
 
 async function load(first) {
   try {
-    const res = await fetch(SECTION_URL + '?t=' + Math.floor(Date.now() / 30000), { cache: 'no-store' })
-    if (!res.ok) throw new Error('HTTP ' + res.status)
-    const next = await res.json()
+    // A page may draw on more than one section file. They are written by
+    // different derive scripts and merged here rather than on disk, so each
+    // script keeps sole ownership of the file it produces.
+    const bust = '?t=' + Math.floor(Date.now() / 30000)
+    const parts = await Promise.all(SECTION_URLS.map(async (u) => {
+      const res = await fetch(u + bust, { cache: 'no-store' })
+      if (!res.ok) throw new Error(u + ': HTTP ' + res.status)
+      return res.json()
+    }))
+    // The first file named is the one whose timestamp the page reports; it is
+    // the page's primary subject, and mixing stamps would make the age lie.
+    const next = Object.assign({}, ...parts.slice().reverse(), 
+      { generated_at: parts[0].generated_at })
     // Only re-render when the payload actually moved, so hover state and open
     // data tables survive a poll that changed nothing.
     if (next.generated_at !== lastStamp) {
@@ -91,6 +101,7 @@ async function load(first) {
       lastStamp = next.generated_at
       render()
       ledesToTop()
+      revealIn()
     }
     setStamp(true)
   } catch (err) {
@@ -110,8 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 `
 
-function page({ file, title, description, heading, eyebrow, section, body, script }) {
-  const indexable = process.env.SITE_INDEXABLE === '1'
+function page({ file, title, description, heading, eyebrow, section, body, script, share }) {
+  // Indexable unless explicitly switched off. It shipped noindex for months
+  // while the site was unreleased, and leaving the default that way meant a
+  // launch could quietly go out invisible.
+  const indexable = process.env.SITE_INDEXABLE !== '0'
   const robots = indexable ? '' : '\n<meta name="robots" content="noindex, nofollow">'
   const href = file === 'index.html' ? '/' : '/' + file
   return `<!DOCTYPE html>
@@ -128,20 +142,30 @@ ${FONTS}
 <body>
 <div class="wrap">
   <header class="masthead">
-    <span class="eyebrow">${eyebrow}</span>
-    <h1>${heading}</h1>
+    <div class="brandrow">
+      ${file === 'index.html'
+        ? '<img class="brandmark" src="/badge-small.png" width="72" height="62" alt="Capowatch">'
+        : '<a class="brandlink" href="/" aria-label="Capowatch home">' +
+          '<img class="brandmark" src="/badge-small.png" width="72" height="62" alt="Capowatch"></a>'}
+      <div>
+        <span class="eyebrow">${eyebrow}</span>
+        <h1>${heading}</h1>
+      </div>
+    </div>
     <span class="live">Updated <span id="generated">&hellip;</span></span>
     ${navHtml(href)}
   </header>
   <div id="main">${body}</div>
-  <footer>
-  </footer>
+  ${shareBar(href, share || title.replace(' \u00b7 ' + SITE, '').replace(SITE + ': ', ''))}
+  ${REFERRAL}
+  ${FOOTER}
 </div>
 <script>
-const SECTION_URL = '/data/${section}.json';
+const SECTION_URLS = ${JSON.stringify([].concat(section).map((n) => '/data/' + n + '.json'))};
 ${STAMP_JS}
 ${CHART_JS}
 ${LEDGER_JS}
+${REVEAL_JS}
 ${script}
 ${RUNTIME}
 </script>
@@ -164,7 +188,10 @@ const LEDGER_JS = String.raw`
  * is on screen. CSS order would have flipped one and not the other.
  */
 function ledesToTop() {
-  document.querySelectorAll('#main > div').forEach((el) => {
+  // Direct children of #main, plus one level inside a tab panel. Tabs put a
+  // wrapper between #main and the data blocks, which silently stopped every
+  // explainer on a tabbed page from being lifted.
+  document.querySelectorAll('#main > div, #main > [id^="tab-"] > div').forEach((el) => {
     // Data blocks only. A block with controls in it is interface, and its
     // trailing paragraph is status text ("showing 8 of 36"), which belongs under
     // the thing it reports on: lifting that above the label read as nonsense.
@@ -227,6 +254,7 @@ function ledgerRows(rows, cols, opts) {
 const OVERVIEW_JS = String.raw`
 function render() {
   const h = DATA.headline
+  renderPaid()
   document.getElementById('tiles').innerHTML = [
     ['Active in 24h', nfmt(h.active_24h), nfmt(h.active_7d) + ' in 7 days'],
     ['Seated in a city', nfmt(h.seated), 'current season'],
@@ -264,44 +292,61 @@ function render() {
     t('Top sale', f.top_sale_24h ? f.top_sale_24h.sol + ' SOL' : '-',
       f.top_sale_24h ? cap(f.top_sale_24h.rarity) : 'nothing sold')
 
-  // A table, not bars: the shares run from 59% to 0.115%, so a bar chart gives
-  // one full-width column and a row of invisible slivers. The odds column is the
-  // part people actually repeat to each other.
-  document.getElementById('scarcity').innerHTML =
-    ledgerRows(f.rarity_share || [], [
-      { label: 'Rarity', get: (r) => cap(r.rarity) },
-      { label: 'Capos', num: true, get: (r) => nfmt(r.capos) },
-      { label: 'Share', num: true, get: (r) => r.share_pct + '%' },
-      { label: 'Odds', num: true, get: (r) => '1 in ' + nfmt(r.one_in) },
-    ], { rank: false }) +
-    '<p class="basis">Just ' + nfmt(f.gods) + ' Gods exist, one in every ' +
-    nfmt(f.gods_per) + ' capos. The last seven days turned up ' + nfmt(f.gods_7d) +
-    ' more, and ' + nfmt(f.legendaries_7d) + ' new Legendaries.' +
-    (f.top_sale_ever ? ' The most anyone has paid is ' + f.top_sale_ever.sol +
-      ' SOL, for a ' + cap(f.top_sale_ever.rarity) + '.' : '') + '</p>'
-
-  // The ladder narrows hard at the top, which is the whole story, so the ranks
-  // are listed from boss down rather than sorted by count.
-  document.getElementById('climbed').innerHTML =
-    ledgerRows(f.promotions_by_rank || [], [
-      { label: 'Promoted to', get: (r) => cap(r.rank) },
-      { label: 'Capos', num: true, get: (r) => nfmt(r.promoted) },
-    ], { rank: false }) +
-    '<p class="basis">' + nfmt(f.promotions_24h) + ' promotions in the last day, paid for in ' +
-    'RACKET. Recruit is excluded: it is the rank a capo is born at, not one it climbs to.</p>'
-
   document.getElementById('guide').className = 'guide'
   document.getElementById('guide').innerHTML = [
     ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes, plus who arrives and who stays.'],
-    ['Economy', '/money.html', 'Supply, what mints and burns it, secondary volume and how the market clears.'],
-    ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, win rates, cities and leagues.'],
-    ['Capos', '/capos.html', 'Rarity, rank, age, promotion, supply, ownership, and which gear raises which stat.'],
-    ['Trainers', '/trainers.html', 'The training market: who charges what, who delivers, and how much sits idle.'],
-    ['Prizes', '/prizes.html', 'Every season prize paid on chain, and who won it.'],
+    ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, what each gear item does, win rates, cities and leagues.'],
+    ['Capos', '/capos.html', 'Who earns most, how capos rank up, and how many exist by rank, age and owner.'],
+    ['Market', '/market.html', 'What capos sell for, how fast they sell, whether traits move the price, and every trainer for hire.'],
+    ['Economy', '/money.html', 'RACKET supply, what mints and burns it, and the USD prize pools paid out on chain.'],
   ].map(([name, href, what]) =>
     '<div class="guide-item">' +
     '<span class="name"><a href="' + href + '">' + name + '</a></span>' +
     '<span class="what">' + what + '</span></div>').join('')
+}
+
+
+/**
+ * What the game has paid out, in money that leaves the game.
+ *
+ * RACKET earnings are a bigger number and a smaller fact: the token is minted
+ * by the game and spent back into it. This is USD settled on chain, so it is
+ * the one figure on the site that answers "does this pay anything".
+ *
+ * Three figures and no board. The per-player breakdown was cut, so all_time is
+ * read here only for its length, which is the count of players ever paid.
+ *
+ * No backticks in this comment: it sits inside a String.raw template, and one
+ * would close the literal early.
+ */
+function renderPaid() {
+  const winners = DATA.all_time || []
+  if (!winners.length) return
+  // Same bar as the economy page, from the same prizes.json this page already
+  // fetches for its tiles. It leads because it is the one figure on the site
+  // that answers whether any of this pays anything.
+  renderSeasonBar()
+  const usd = (n) => '$' + Math.round(n).toLocaleString('en-US')
+
+  // Every individual prize ever awarded, flattened out of the season ledgers.
+  // These 794 rows sum to total_usdc_seasons exactly, so the average and the
+  // maximum below are computed over the whole population and not a sample.
+  //
+  // The daily prizes and bounties are deliberately outside this: the feed gives
+  // their total but never the individual awards, so folding that money in would
+  // divide a known sum by an unknown count. Hence "season prize", not "prize".
+  const prizes = (DATA.seasons || []).flatMap((x) => x.ledger || [])
+  const avg = prizes.length
+    ? prizes.reduce((a, x) => a + x.usd, 0) / prizes.length : 0
+  const biggest = prizes.reduce((a, x) => (x.usd > a ? x.usd : a), 0)
+
+  document.getElementById('paidtiles').innerHTML = [
+    ['Players paid', nfmt(winners.length)],
+    ['Average season prize', usd(avg)],
+    ['Largest single prize', usd(biggest)],
+  ].map(([l, v]) =>
+    '<div class="tile"><span class="tile-label">' + l + '</span>' +
+    '<span class="tile-value">' + v + '</span></div>').join('')
 }
 
 /**
@@ -371,18 +416,153 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const MONEY_JS = String.raw`
 function render() {
+  renderTiles()
+  // Panels draw through the tab controller: a chart drawn into a hidden panel
+  // measures zero width and comes out empty.
+  tabsReset()
+}
+
+function renderTiles() {
   const t = DATA.totals || {}
+  const pz = (DATA.seasons || [])[0]
+  const big = (DATA.all_time || [])[0]
   document.getElementById('tiles').innerHTML = [
     ['In circulation', nfmt(t.total_racket_supply), nfmt(t.wallet_count) + ' wallets'],
     ['Earned lifetime', nfmt(t.lifetime_earned_racket), ''],
     ['Spent lifetime', nfmt(t.lifetime_spent_racket), ''],
-    ['Sales recorded', nfmt(DATA.market.volume.reduce((a, v) => a + v.sales, 0)),
-      DATA.market.volume.reduce((a, v) => a + v.sol, 0).toFixed(1) + ' SOL'],
+    // Three prize figures, not six. The strip is an auto-fit grid: any count
+    // that overflows one row leaves an orphan cell the width of the page. The
+    // daily-prize and SOL-bounty totals were the two smallest, and the season
+    // table below carries the per-season detail either way.
+    ['Total cash given away', '$' + nfmt(Math.round(DATA.total_usdc_all)),
+      'across ' + DATA.seasons_captured + ' seasons'],
+    ['Latest season pool', pz ? '$' + nfmt(Math.round(pz.total_usdc)) : '-', ''],
+    ['Biggest all-time winner', big ? '$' + nfmt(Math.round(big.usd)) : '-', ''],
   ].map(([l, v, n]) =>
     '<div class="tile"><span class="tile-label">' + l + '</span>' +
     '<span class="tile-value">' + v + '</span>' +
     '</div>').join('')
+}
 
+
+/**
+ * The latest season split by league.
+ *
+ * Worth its own section because the leagues are not scaled copies of each
+ * other: kingpin paid 11 winners more than district paid 32, so a single
+ * ranked board hides four leagues behind one. Ordered strongest first, from
+ * the seat counts the cities feed publishes.
+ *
+ * Winners whose league could not be matched are counted in the note and given
+ * no board of their own. They are a gap in the join, not a league, and the
+ * money involved is large enough that quietly dropping them would mislead.
+ */
+function renderLeagueBoards(latest, usd, cap1) {
+  const el = document.getElementById('c-leagues')
+  if (!el || !latest) return
+  // The heading names the season rather than saying "latest", which stops being
+  // true the moment a new one closes. The markup ships a generic fallback so a
+  // page whose script fails still has a sensible heading rather than a blank one.
+  const h = document.getElementById('h-leagues')
+  if (h && latest.season) h.textContent = 'Top players in season ' + latest.season
+  const leagues = DATA.leagues || []
+  const rows = latest.ledger || []
+  const parts = []
+
+  for (const lg of leagues) {
+    const won = rows.filter((w) => w.league === lg.name)
+    if (!won.length) continue
+    const total = won.reduce((a, w) => a + w.usd, 0)
+    parts.push('<div>' +
+      '<p class="leaguehead"><span class="nm">' + esc(lg.name) + '</span>' +
+      '<span class="sub">' + won.length + (won.length === 1 ? ' winner' : ' winners') +
+      ' &middot; ' + usd(total) + '</span></p>' +
+      ledgerRows(won.slice(0, 5), [
+        { label: 'Player', get: (r) => r.name },
+        { label: 'Won', num: true, get: (r) => usd(r.usd) },
+      ]) + '</div>')
+  }
+
+  const unmatched = rows.filter((w) => !w.league)
+  const note = unmatched.length
+    ? '<p class="basis">' + unmatched.length + ' of ' + rows.length +
+      ' winners held no ground when the season closed, so no league could be ' +
+      'matched to them, ' + usd(unmatched.reduce((a, w) => a + w.usd, 0)) +
+      ' between them. They appear ' +
+      // Not "the boards above": ledesToTop lifts this paragraph to the head of
+      // the block, so any wording that points at a direction ends up wrong.
+      'in no league board here rather than being filed under a guess. Seat counts: ' +
+      leagues.map((l) => esc(l.name) + ' ' + l.seats).join(', ') + '.</p>'
+    : ''
+
+  el.innerHTML = '<div class="leaguegrid">' + parts.join('') + '</div>' + note
+}
+
+
+/**
+ * The reward streams that are not a season pool.
+ *
+ * Small money, 1.5% of everything paid, but it answers a question the season
+ * boards cannot: what else is there to win, and does anyone actually win it.
+ * The answer is 24 players, which is worth stating plainly rather than leaving
+ * a reader to assume bounties are a meaningful second income.
+ *
+ * SOL bounties sit in their own row and are never folded into a dollar figure.
+ * There is no rate in any feed, and inventing one to make the totals add up
+ * would be the kind of tidy number that is simply wrong.
+ */
+function renderOtherRewards(usd) {
+  const el = document.getElementById('c-streams')
+  const who = document.getElementById('c-collectors')
+  if (!el || !who) return
+  const sb = DATA.sol_bounties || {}
+  const collectors = (DATA.all_time || []).filter((w) => w.other_usd > 0)
+    .slice().sort((a, b) => b.other_usd - a.other_usd)
+  const solOnly = (DATA.all_time || []).filter((w) => w.sol_bounties > 0).length
+
+  el.innerHTML = ledgerRows([
+    { k: 'Daily prizes', sub: 'awarded every day, outside any season',
+      v: usd(DATA.total_usdc_daily) },
+    { k: 'Bounties, in USDC', sub: 'paid for specific targets',
+      v: usd(DATA.total_usdc_bounty) },
+    { k: 'Bounties, in SOL', sub: (sb.payouts || 0) + ' payouts to ' + (sb.wallets || 0) + ' wallets',
+      v: (sb.total_sol != null ? sb.total_sol + ' SOL' : '-') },
+    // Computed, not written down: a share stated as a literal goes stale the
+    // first week the split moves and nothing flags it.
+    { k: 'Season pools, for scale',
+      sub: 'the other ' + (100 * DATA.total_usdc_seasons / DATA.total_usdc_all).toFixed(1) +
+        '% of the money',
+      v: usd(DATA.total_usdc_seasons) },
+  ], [
+    { label: 'Stream', get: (x) => x.k, sub: (x) => x.sub },
+    { label: 'Paid', num: true, get: (x) => x.v },
+  ], { rank: false }) +
+  '<p class="basis">SOL bounties are shown in SOL and left out of every dollar ' +
+  'total on this page. No feed carries a conversion rate, and picking one to make ' +
+  'the figures add up would invent money. Their capture also starts later than the ' +
+  'USDC ledger' + (sb.span ? ', on ' + String(sb.span.from).slice(0, 10) : '') +
+  ', so the SOL row is a floor rather than a lifetime total.</p>'
+
+  who.innerHTML = ledgerRows(collectors.slice(0, 10), [
+    { label: 'Player', get: (r) => r.name,
+      sub: (r) => [r.daily_usd > 0 ? usd(r.daily_usd) + ' daily' : null,
+                   r.bounty_usd > 0 ? usd(r.bounty_usd) + ' bounty' : null]
+                   .filter(Boolean).join(' · ') },
+    { label: 'Collected', num: true, get: (r) => usd(r.other_usd) },
+  ]) +
+  '<p class="basis">Top 10 of ' + collectors.length + ' players who have ever been ' +
+  'paid outside a season pool, out of ' + (DATA.all_time || []).length + ' paid at all. ' +
+  solOnly + ' players have taken a SOL bounty, listed separately because that money ' +
+  'is not counted here.</p>'
+}
+
+
+/* ---- tab: racket ---- */
+function renderRacket() {
+  // Its own handle on totals: the cumulative supply below is reconstructed
+  // backwards from the reported figure, and this used to share the const that
+  // the tiles declared before the two were split into separate functions.
+  const t = DATA.totals || {}
   // The mirrored minted/burned pair took 260px to show two quantities whose
   // difference was the actual question. This draws the difference.
   netColumns(document.getElementById('c-net'), {
@@ -426,45 +606,65 @@ function render() {
   }
   document.getElementById('c-income').innerHTML = shares(DATA.sinks.income, 'var(--credit)', 8)
   document.getElementById('c-sinks').innerHTML = shares(DATA.sinks.spend, 'var(--debit)', 8)
+}
 
-  let vol = 0
-  lineChart(document.getElementById('c-volume'), {
-    xs: DATA.market.volume.map((v) => v.day.slice(5)),
-    series: [{
-      name: 'SOL traded, cumulative',
-      values: DATA.market.volume.map((v) => { vol += v.sol; return +vol.toFixed(2) }),
-      color: 'var(--cat-3)',
-    }],
-    yFormat: (n) => nfmt(n) + ' SOL',
-    height: 170,
-  })
 
-  // Four numbers do not need an axis. Three decimals because the cheapest tier
-  // averages 0.038 SOL, and at one decimal every rarity below legendary reads
-  // as zero.
-  const capr = (x) => x.charAt(0).toUpperCase() + x.slice(1)
-  document.getElementById('c-price').innerHTML = '<div class="tiles">' +
-    DATA.market.price_band.map((p) =>
-      '<div class="tile"><span class="tile-label">' + capr(p.rarity) + '</span>' +
-      '<span class="tile-value">' + p.avg_sol.toFixed(3) + ' SOL</span></div>').join('') +
-    '</div>'
+/**
+ * Season payouts, folded in from the retired prizes page.
+ * Real USD leaving the game is the other half of the money story: RACKET is
+ * what the game mints, this is what it pays out to players.
+ */
+function renderPrizes() {
+  const seasons = DATA.seasons || []
+  const latest = seasons[0]
+  const usd = (n) => '$' + Math.round(n).toLocaleString('en-US')
+  const cap1 = (x) => (x ? String(x).charAt(0).toUpperCase() + String(x).slice(1) : x)
 
-  // Liquidity is four numbers, not a shape. A chart of three percentiles is a
-  // chart of three numbers, so this is a table.
-  const q = DATA.liquidity
-  document.getElementById('liquidity').innerHTML = ledgerRows([
-    { k: 'Quickest quarter', sub: 'time from listing to sale', v: q.hours_to_sell.p25 + 'h' },
-    { k: 'Typical', sub: 'median time on market', v: q.hours_to_sell.median + 'h' },
-    { k: 'Slowest quarter', sub: 'still sold, just waited', v: q.hours_to_sell.p75 + 'h' },
-    { k: 'Sold at or above ask', sub: 'share of matched sales', v: q.sold_at_or_above_ask_pct + '%' },
-    { k: 'Discount when discounted', sub: 'lower quartile against ask', v: q.vs_ask_pct.p25 + '%' },
-    { k: 'Listed right now', sub: 'average ask ' + q.avg_ask_sol + ' SOL', v: nfmt(q.listed_now) },
-    { k: 'Sold in the last week', sub: 'clearing rate', v: nfmt(q.sold_7d) },
-    { k: 'Weeks of inventory', sub: 'shelf against clearing rate', v: q.weeks_of_inventory },
-  ], [
-    { label: 'Measure', get: (x) => x.k, sub: (x) => x.sub },
-    { label: 'Value', num: true, get: (x) => x.v },
-  ])
+  /**
+   * Ranked lists, not bars.
+   *
+   * These are standings: the question is who is first and by how much, and a
+   * rank column answers it directly. Side by side each board is half width,
+   * where fifteen bars and their labels would be squeezed into about 250px and
+   * the shorter half of them become indistinguishable slivers. The site already
+   * makes this call for the fight and promotion boards.
+   */
+  const board = (rows, el, secondary, note) => {
+    const target = document.getElementById(el)
+    if (!target || !rows.length) return
+    target.innerHTML = ledgerRows(rows.slice(0, 15), [
+      { label: 'Player', get: (r) => r.name, sub: secondary },
+      { label: 'Won', num: true, get: (r) => usd(r.usd) },
+    ]) + '<p class="basis">' + note + '</p>'
+  }
+
+  board(DATA.all_time || [], 'c-alltime',
+    (r) => r.seasons_won + (r.seasons_won === 1 ? ' season' : ' seasons'),
+    'Top 15 of ' + (DATA.all_time || []).length + ' players ever paid. A career total ' +
+    'across every season, so the top of this board got there by winning repeatedly ' +
+    'rather than once.')
+
+  if (latest) {
+    const known = latest.ledger.filter((w) => w.league).length
+    board(latest.ledger, 'c-latest',
+      (r) => (r.league ? cap1(r.league) + ' league' : 'no ground held'),
+      'Season ' + latest.season + ', top 15 of ' + latest.winners + ' paid. The prize ' +
+      'feed records no league, so it is read from the last territory snapshot before ' +
+      'the season closed' + (latest.league_snapshot ? ' (' + latest.league_snapshot + ')' : '') +
+      '. It has to be that one: players are promoted a league at the rollover, and a ' +
+      'later snapshot shows most winners a rung above where they actually won. ' +
+      known + ' of ' + latest.winners + ' matched; the rest held no ground at that moment.')
+  }
+
+  renderLeagueBoards(latest, usd, cap1)
+  renderOtherRewards(usd)
+
+  renderSeasonBar()
+}
+
+TAB_DRAW = {
+  racket: renderRacket,
+  prizes: renderPrizes,
 }
 `
 
@@ -647,9 +847,58 @@ function renderWheel() {
   el.innerHTML = ledgerRows(specs.map((a) => ({ a: a })), cols, { rank: false })
 }
 
+/* ---- gear reference, from derive/combat-odds.js via wars.json ---- */
+
+const SLOT_ORDER = ['head', 'chest', 'hands', 'feet', 'defense']
+// Its own formatter rather than the shared one: nfmt would abbreviate 25,132 items down to "25k".
+const gexact = (n) => Number(n || 0).toLocaleString('en-US')
+const gcap = (v) => {
+  if (v == null) return '-'
+  const t = String(v).charAt(0).toUpperCase() + String(v).slice(1).replace(/_/g, ' ')
+  // One genuine acronym in the item list; title-casing it gives "Cctv".
+  return t === 'Cctv' ? 'CCTV' : t
+}
+
+/**
+ * Item type fixes the primary stat: every balaclava is muscle, every cctv is
+ * brains, with no roll involved across all 39k items in circulation. That makes
+ * this a lookup table rather than a probability, which is why it is worth
+ * printing at all. The secondary stat IS rolled, uniformly across the other
+ * four, so it is deliberately not shown as if it were choosable.
+ */
+function renderGear() {
+  const el = document.getElementById('gear')
+  if (!el || !DATA.gear) return
+  const stats = [...new Set(DATA.gear.items.map((i) => i.stat))].sort()
+  const rows = stats.map((st) => {
+    const row = { stat: st }
+    SLOT_ORDER.forEach((sl) => {
+      const hit = DATA.gear.items.find((i) => i.stat === st && i.slot === sl)
+      row[sl] = hit ? gcap(hit.item_type) : '-'
+    })
+    return row
+  })
+  el.innerHTML = ledgerRows(rows, [{ label: 'To raise', get: (r) => gcap(r.stat) }].concat(
+    SLOT_ORDER.map((sl) => ({ label: gcap(sl), get: (r) => r[sl] }))), { rank: false })
+
+  const lad = document.getElementById('ladder')
+  if (!lad) return
+  // god and uncommon gear exist but carry a 0% bonus, so they are unfinished
+  // content rather than a tier worth buying. Showing them as 0% would read as
+  // a real choice.
+  lad.innerHTML = ledgerRows(DATA.gear.ladder.filter((l) => l.primary_pct > 0), [
+    { label: 'Item rarity', get: (r) => gcap(r.rarity) },
+    { label: 'Primary stat', get: (r) => '+' + r.primary_pct + '%', num: true },
+    { label: 'Secondary', get: (r) => '+' + r.secondary_pct + '%', num: true },
+    { label: 'Uses before it breaks', get: (r) => r.max_durability, num: true },
+    { label: 'In circulation', get: (r) => gexact(r.n), num: true },
+  ], { rank: false })
+}
+
 function render() {
   buildCalc()
   renderWheel()
+  renderGear()
   const a = DATA.aggregate
   const atkRate = a.attacks ? (100 * a.attacks_won / a.attacks) : 0
   const defRate = a.defenses ? (100 * a.defenses_held / a.defenses) : 0
@@ -726,32 +975,324 @@ function renderBalance() {
 `
 
 
+const PAYS_JS = String.raw`
+/**
+ * The one page written for someone who does not play yet.
+ *
+ * Every other page assumes you are in the game. This one answers the question
+ * that gets typed into a search box before signing up for anything: does it
+ * actually pay, and how much, to how many.
+ *
+ * It is deliberately not a sales page. The concentration, the median prize and
+ * the share of players who have never been paid all sit above the referral
+ * link, not below it. A page that only listed the good numbers would be worth
+ * nothing to the reader and, on a site whose entire value is being checkable,
+ * worth less than nothing to us.
+ */
+function render() {
+  const usd = (n) => '$' + Math.round(n).toLocaleString('en-US')
+  const winners = DATA.all_time || []
+  const prizes = (DATA.seasons || []).flatMap((x) => x.ledger || []).map((x) => x.usd)
+    .sort((a, b) => a - b)
+  const owners = (DATA.headline || {}).owners || 0
+  const med = prizes.length ? prizes[Math.floor(prizes.length / 2)] : 0
+  const top10 = winners.slice(0, 10).reduce((a, w) => a + w.usd, 0)
+  const paidPct = owners ? (100 * winners.length / owners) : 0
+  const under50 = prizes.length ? 100 * prizes.filter((x) => x < 50).length / prizes.length : 0
+
+  document.getElementById('tiles').innerHTML = [
+    ['Paid out so far', usd(DATA.total_usdc_all)],
+    ['Players ever paid', nfmt(winners.length)],
+    ['Typical prize', usd(med)],
+    ['Largest single prize', usd(Math.max.apply(null, prizes))],
+  ].map(([l, v]) =>
+    '<div class="tile"><span class="tile-label">' + l + '</span>' +
+    '<span class="tile-value">' + v + '</span></div>').join('')
+
+  // The old opening said "the game" and never named it. On the one page written
+  // for someone who has not arrived from inside the game, that left the subject
+  // unstated in the body entirely.
+  document.getElementById('short').innerHTML =
+    '<p class="answer">Yes, and you can check it.</p>' +
+    '<p class="basis">The Syndicate is a free to play crypto game on Solana. Since ' +
+    String(DATA.captured_span.from).slice(0, 10) + ' it has paid ' +
+    usd(DATA.total_usdc_all) + ' of USDC to players across ' + DATA.seasons_captured +
+    ' weekly seasons, every payment settled on chain rather than promised. If you are ' +
+    'trying to work out whether it is legit before signing up, what follows is the ' +
+    'whole answer, including the parts that do not flatter it.</p>'
+
+  renderSeasonBar()
+
+  // The honest half. These are the figures a signup page would leave out.
+  document.getElementById('odds').innerHTML = ledgerRows([
+    { k: 'Players who have ever been paid', v: nfmt(winners.length) + ' of ' + nfmt(owners),
+      sub: paidPct.toFixed(1) + '% of everyone holding capos' },
+    { k: 'Typical prize', v: usd(med),
+      sub: Math.round(under50) + '% of all prizes are under $50' },
+    { k: 'Share taken by the top ten', v: Math.round(100 * top10 / DATA.total_usdc_all) + '%',
+      sub: usd(top10) + ' between ten players' },
+    { k: 'Biggest single payout', v: usd(Math.max.apply(null, prizes)),
+      sub: 'one player, one season' },
+    { k: 'Best career total', v: winners.length ? usd(winners[0].usd) : '-',
+      sub: winners.length ? winners[0].name + ', ' + winners[0].seasons_won + ' seasons won' : '' },
+  ], [
+    { label: 'Measure', get: (x) => x.k, sub: (x) => x.sub },
+    { label: 'Figure', num: true, get: (x) => x.v },
+  ], { rank: false }) +
+  // No commentary under this table. It used to carry a paragraph explaining that
+  // prize money is concentrated, which the five rows above already demonstrate,
+  // and it read as lecturing rather than reporting. The figures are the argument.
+  '<p class="basis">The game is free to start, so the floor is nothing spent.</p>'
+
+  document.getElementById('streams').innerHTML = ledgerRows([
+    { k: 'Season pools', v: usd(DATA.total_usdc_seasons),
+      sub: 'league placement, paid every week' },
+    { k: 'Daily prizes', v: usd(DATA.total_usdc_daily), sub: 'outside the season pools' },
+    { k: 'Bounties in USDC', v: usd(DATA.total_usdc_bounty), sub: 'paid for specific targets' },
+    { k: 'Bounties in SOL', v: ((DATA.sol_bounties || {}).total_sol || 0) + ' SOL',
+      sub: 'never converted to a dollar figure here' },
+  ], [
+    { label: 'Stream', get: (x) => x.k, sub: (x) => x.sub },
+    { label: 'Paid', num: true, get: (x) => x.v },
+  ], { rank: false }) +
+  '<p class="basis">Four ways money reaches a player, and one of them is most of it. ' +
+  'Season pools are league placement, so where you finish in your league is what pays.</p>'
+
+  // The treasury address was printed here and has been taken out. It is public
+  // on chain either way, but naming the game's wallet on a page that exists to
+  // recommend the game reads as pointing at it rather than vouching for it.
+  // Kept, but short. It is the answer to "how do you know", which is the whole
+  // basis of the page; three sentences is enough to give it.
+  document.getElementById('verify').innerHTML =
+    '<p class="basis">Prizes are paid as USDC transfers on Solana. We record those ' +
+    'transfers as they happen and add them up, so nothing on this page is estimated ' +
+    'or modelled. Figures start ' + String(DATA.captured_span.from).slice(0, 10) +
+    ', which is when this archive begins rather than when the game did.</p>'
+}
+`
+
+const SEASONBAR_JS = String.raw`
+/**
+ * Every season as one bar.
+ *
+ * This replaced a short column chart beside an eleven-row table, a pairing that
+ * left roughly 500px of empty page under the chart and split one quantity
+ * across two shapes. The seasons are parts of a whole, so they are drawn as a
+ * whole: one bar, one segment each, width proportional to what that season paid.
+ *
+ * The eleven-row detail is not lost, it moves behind the same show-data-table
+ * control every chart on the site already carries.
+ *
+ * The headline figure is the season total, not the all-in total, because it has
+ * to be the sum of the bar underneath it. The difference is named in the note
+ * rather than quietly folded in.
+ */
+function renderSeasonBar() {
+  const usd = (n) => '$' + Math.round(n).toLocaleString('en-US')
+  const el = document.getElementById('c-seasonbar')
+  const seasons = (DATA.seasons || []).slice().reverse()   // oldest first, left to right
+  if (!el || !seasons.length) return
+
+  const total = seasons.reduce((a, x) => a + x.total_usdc, 0)
+  // One hue, stepped: season order is a sequence, not a set of categories.
+  const shade = (i) => {
+    const t = seasons.length > 1 ? i / (seasons.length - 1) : 1
+    const l = 34 + Math.round(t * 34)      // 34% -> 68% lightness
+    return 'hsl(43 46% ' + l + '%)'
+  }
+
+  const bar = seasons.map((x, i) =>
+    // flex-grow, not a width percentage. Percentages sum to 100% and the ten 2px
+    // gaps are then added on top, which pushed the page sideways on a phone.
+    // Growing from a zero basis divides whatever is left after the gaps.
+    '<button type="button" data-season="' + i + '" aria-label="Season ' + x.season +
+    ', ' + usd(x.total_usdc) + '" style="flex:' +
+    (1000 * x.total_usdc / total).toFixed(2) + ' 1 0;background:' + shade(i) + '"></button>').join('')
+
+  // The caption sits above the bar, not under it: it is the thing that changes
+  // as you move across, so it belongs where the eye already is rather than
+  // below the segments and the axis labels.
+  el.innerHTML =
+    '<p class="seasontotal"><span class="big">' + usd(total) + '</span>' +
+    '<span class="of">paid out across ' + seasons.length + ' seasons</span></p>' +
+    '<p class="seasonpick" id="seasonpick"></p>' +
+    '<div class="seasonbar" role="group" aria-label="Prize money by season">' + bar + '</div>' +
+    '<p class="seasonbar-ends"><span>S' + seasons[0].season + '</span>' +
+    '<span>S' + seasons[seasons.length - 1].season + '</span></p>' +
+    '<div class="table-more"><button type="button" class="table-toggle" data-seasontable="1">' +
+    'Show season detail</button></div>' +
+    '<div id="seasontable" hidden>' + ledgerRows(DATA.seasons, [
+      { label: 'Season', get: (x) => 'S' + x.season, sub: (x) => x.date },
+      { label: 'Winners', num: true, get: (x) => nfmt(x.winners) },
+      { label: 'Paid', num: true, get: (x) => usd(x.total_usdc) },
+    ], { rank: false }) + '</div>'
+
+  // A caption rather than a floating tooltip: it cannot fall off a phone screen,
+  // and it works for keyboard focus without any positioning maths.
+  const pick = document.getElementById('seasonpick')
+  const say = (i) => {
+    const x = seasons[i]
+    pick.innerHTML = '<b>Season ' + x.season + '</b>' +
+      '<span>' + x.date + '</span>' +
+      '<span>' + nfmt(x.winners) + ' winners</span>' +
+      '<b class="amt">' + usd(x.total_usdc) + '</b>' +
+      '<span>' + (100 * x.total_usdc / total).toFixed(1) + '% of the total</span>'
+  }
+  el.querySelectorAll('[data-season]').forEach((b) => {
+    const i = +b.dataset.season
+    b.addEventListener('mouseenter', () => say(i))
+    b.addEventListener('focus', () => say(i))
+  })
+  // Rest on the newest season rather than blanking: an empty line at this size
+  // is a hole in the layout, and the resting state doubles as the explanation
+  // of what the bar is for.
+  const rest = () => say(seasons.length - 1)
+  el.addEventListener('mouseleave', rest)
+  rest()
+
+  animateSeasonBar(el, total, usd)
+}
+
+/**
+ * The one flourish on the site: the bar wipes in and the total counts up to it.
+ *
+ * Once per page load, never on a refresh. render() re-runs whenever the payload
+ * timestamp moves, which is every ten minutes, and replaying this under someone
+ * reading the table below it would be an irritation rather than a flourish.
+ *
+ * The delay is a full second so it is not already over by the time the page has
+ * settled and the reader has looked at it. During that second the segments are
+ * scaled to zero, which leaves the bar's own strip visible rather than a gap
+ * that collapses and shoves the page around when it fills.
+ *
+ * A failsafe forces the finished state after three seconds. If anything throws
+ * mid-sequence the alternative is a permanently empty bar under a $0 headline,
+ * which is worse than a chart that simply appears.
+ */
+let seasonBarPlayed = false
+
+function animateSeasonBar(el, total, usd) {
+  const big = el.querySelector('.seasontotal .big')
+  const segs = [].slice.call(el.querySelectorAll('.seasonbar > button'))
+  if (!big || !segs.length) return
+
+  const settle = () => {
+    big.textContent = usd(total)
+    segs.forEach((sg) => {
+      sg.style.transition = ''
+      sg.style.transitionDelay = ''
+      sg.style.transform = ''
+    })
+  }
+  const reduce = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (seasonBarPlayed || reduce) { settle(); return }
+  seasonBarPlayed = true
+
+  segs.forEach((sg) => {
+    sg.style.transformOrigin = 'left center'
+    sg.style.transform = 'scaleX(0)'
+  })
+  big.textContent = usd(0)
+
+  const STEP = 70, GROW = 520, RUN = (segs.length - 1) * STEP + GROW
+  const failsafe = setTimeout(settle, 3000)
+
+  setTimeout(() => {
+    segs.forEach((sg, i) => {
+      sg.style.transition = 'transform ' + GROW + 'ms cubic-bezier(.22,.9,.25,1)'
+      sg.style.transitionDelay = (i * STEP) + 'ms'
+      sg.style.transform = 'scaleX(1)'
+    })
+    const t0 = performance.now()
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / RUN)
+      // ease-out, so the number slows into its final value rather than stopping dead
+      const eased = 1 - Math.pow(1 - p, 3)
+      big.textContent = usd(total * eased)
+      if (p < 1) requestAnimationFrame(tick)
+      else { clearTimeout(failsafe); settle() }
+    }
+    requestAnimationFrame(tick)
+  }, 1000)
+}
+
+
+// The detail toggle lives with the bar it opens rather than in the tab
+// controller, because the overview has this section and no tabs at all.
+document.addEventListener('click', (e) => {
+  const st = e.target.closest('[data-seasontable]')
+  if (!st) return
+  const t = document.getElementById('seasontable')
+  t.hidden = !t.hidden
+  st.textContent = t.hidden ? 'Show season detail' : 'Hide season detail'
+})
+`
+
+const TABS_JS = String.raw`
+/**
+ * Tab controller for the section pages.
+ *
+ * Panels are hidden with the hidden attribute, which is display:none, and the
+ * chart code sizes every SVG off container.clientWidth. Drawing into a hidden
+ * panel therefore produces a zero-width chart. So a panel is drawn the first
+ * time it is shown and never before, and a fresh payload marks every panel
+ * undrawn again so the ones nobody is looking at redraw when next opened.
+ *
+ * The chosen tab lives in the URL fragment, so a tab can be linked and survives
+ * a reload. Anything unrecognised falls back to the first tab rather than
+ * leaving the page blank.
+ */
+let TAB_DRAW = {}
+let tabDrawn = {}
+let tabCurrent = null
+
+function tabNames() { return Object.keys(TAB_DRAW) }
+
+function showTab(want, push) {
+  const names = tabNames()
+  if (!names.length) return
+  if (names.indexOf(want) === -1) want = names[0]
+  tabCurrent = want
+  const bar = document.getElementById('tabs')
+  if (bar) bar.querySelectorAll('button[data-tab]').forEach((b) =>
+    b.setAttribute('aria-selected', String(b.dataset.tab === want)))
+  names.forEach((n) => {
+    const el = document.getElementById('tab-' + n)
+    if (el) el.hidden = n !== want
+  })
+  if (!tabDrawn[want]) {
+    tabDrawn[want] = true
+    TAB_DRAW[want]()
+    // A panel drawn on click has missed the ledesToTop() that follows render().
+    // The lift is idempotent, so calling it again for the whole page is safe.
+    ledesToTop()
+    revealIn()
+  }
+  if (push && location.hash.slice(1) !== want) history.replaceState(null, '', '#' + want)
+}
+
+// Called by each page's render() once the payload has changed, before anything
+// is drawn: everything on screen is now stale, including the panels that are
+// currently hidden.
+function tabsReset() {
+  tabDrawn = {}
+  showTab(tabCurrent || location.hash.slice(1) || tabNames()[0], false)
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('#tabs button[data-tab]')
+  if (btn) showTab(btn.dataset.tab, true)
+})
+window.addEventListener('hashchange', () => showTab(location.hash.slice(1), false))
+`
+
 const CAPOS_JS = String.raw`
 const RANK_LABELS = { recruit: 'Recruit', soldier: 'Soldier', captain: 'Captain',
   lieutenant: 'Lieutenant', underboss: 'Underboss', boss: 'Boss' }
 const RARITY_LABELS = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare', epic: 'Epic',
   legendary: 'Legendary', god: 'God', founder: 'Founder' }
 
-/* ---- gear reference, from derive/combat-odds.js via capos.json ---- */
-
-const SLOT_ORDER = ['head', 'chest', 'hands', 'feet', 'defense']
-// The page's other exact() is scoped inside renderTraitPrice, not shared, so
-// this needs its own. nfmt would abbreviate 25,132 items down to "25k".
-const gexact = (n) => Number(n || 0).toLocaleString('en-US')
-const gcap = (v) => {
-  if (v == null) return '-'
-  const t = String(v).charAt(0).toUpperCase() + String(v).slice(1).replace(/_/g, ' ')
-  // One genuine acronym in the item list; title-casing it gives "Cctv".
-  return t === 'Cctv' ? 'CCTV' : t
-}
-
-/**
- * Item type fixes the primary stat: every balaclava is muscle, every cctv is
- * brains, with no roll involved across all 39k items in circulation. That makes
- * this a lookup table rather than a probability, which is why it is worth
- * printing at all. The secondary stat IS rolled, uniformly across the other
- * four, so it is deliberately not shown as if it were choosable.
- */
 /**
  * Supply and ownership, moved here from the retired growth page.
  *
@@ -793,38 +1334,14 @@ function renderSupply() {
   })
 }
 
-function renderGear() {
-  const el = document.getElementById('gear')
-  if (!el || !DATA.gear) return
-  const stats = [...new Set(DATA.gear.items.map((i) => i.stat))].sort()
-  const rows = stats.map((st) => {
-    const row = { stat: st }
-    SLOT_ORDER.forEach((sl) => {
-      const hit = DATA.gear.items.find((i) => i.stat === st && i.slot === sl)
-      row[sl] = hit ? gcap(hit.item_type) : '-'
-    })
-    return row
-  })
-  el.innerHTML = ledgerRows(rows, [{ label: 'To raise', get: (r) => gcap(r.stat) }].concat(
-    SLOT_ORDER.map((sl) => ({ label: gcap(sl), get: (r) => r[sl] }))), { rank: false })
-
-  const lad = document.getElementById('ladder')
-  if (!lad) return
-  // god and uncommon gear exist but carry a 0% bonus, so they are unfinished
-  // content rather than a tier worth buying. Showing them as 0% would read as
-  // a real choice.
-  lad.innerHTML = ledgerRows(DATA.gear.ladder.filter((l) => l.primary_pct > 0), [
-    { label: 'Item rarity', get: (r) => gcap(r.rarity) },
-    { label: 'Primary stat', get: (r) => '+' + r.primary_pct + '%', num: true },
-    { label: 'Secondary', get: (r) => '+' + r.secondary_pct + '%', num: true },
-    { label: 'Uses before it breaks', get: (r) => r.max_durability, num: true },
-    { label: 'In circulation', get: (r) => gexact(r.n), num: true },
-  ], { rank: false })
+function render() {
+  renderTiles()
+  // Panels are drawn by the tab controller, never here: a chart drawn into a
+  // hidden panel measures zero width and comes out empty.
+  tabsReset()
 }
 
-function render() {
-  renderGear()
-  renderSupply()
+function renderTiles() {
   const rk = DATA.ranks
   const boss = (rk.pyramid.find((r) => r.rank === 'boss') || {}).capos || 0
   document.getElementById('tiles').innerHTML = [
@@ -844,10 +1361,10 @@ function render() {
     '<div class="tile"><span class="tile-label">' + l + '</span>' +
     '<span class="tile-value">' + v + '</span>' +
     '</div>').join('')
+}
 
-  // Rarity is ordered, so one hue stepped light to dark, never seven categoricals.
-  const RARITY_HUE = { common: '#BBD5C4', uncommon: '#8FBCA2', rare: '#5F9C7B',
-    epic: '#3B7A57', legendary: '#245239', god: '#12331F', founder: 'var(--cat-3)' }
+/* ---- tab: earnings ---- */
+function renderEarnings() {
   // Lifetime is the API's own board. The 24 hour column is ours: the API reports
   // a running total and never a delta, so a period figure exists only by
   // differencing snapshots we took.
@@ -881,10 +1398,14 @@ function render() {
       : '<p class="basis">Nobody moved that way in this window.</p>')
   document.getElementById('c-climb').innerHTML = movePane(mv.climbers, 'Up')
   document.getElementById('c-slide').innerHTML = movePane(mv.fallers, 'Down')
+}
 
-  document.getElementById('c-rarity').innerHTML = shareBars(
-    DATA.by_rarity.map((r) => ({ label: RARITY_LABELS[r.rarity], value: r.capos })),
-    'var(--cat-2)')
+/* ---- tab: progression ---- */
+function renderProgression() {
+  const rk = DATA.ranks
+  // No rarity census on this page. It came off the overview as well, so the
+  // "1 in 864 for a God" odds table is not published anywhere at the moment; the
+  // rarity composition chart under Capo supply is the nearest thing left.
 
   document.getElementById('c-ranks').innerHTML = shareBars(
     rk.pyramid.map((r) => ({ label: RANK_LABELS[r.rank], value: r.capos })),
@@ -905,6 +1426,8 @@ function render() {
     { label: 'Boss', num: true, get: (r) => nfmt(r.boss) },
     { label: 'Promoted', num: true, get: (r) => r.promoted_pct + '%' },
   ], { rank: false })
+
+  renderLadderCost()
 
   // Forty-four bars is not a chart anyone reads; it is a list with decoration.
   // As a table the supporting ranks fit alongside, which is the actual question:
@@ -927,85 +1450,58 @@ function render() {
       { label: 'Player', get: (p) => p.name || p.owner_ref.slice(0, 8) },
       { label: 'Promotions', num: true, get: (p) => nfmt(p.promotions) },
     ])
-
-  renderTraitPrice()
 }
 
-// Five rows against four rows, with the median and the mean side by side because
-// the gap between them IS the finding. Bars would hide that the two measures
-// disagree about how big the effect is.
-function renderTraitPrice() {
-  const tp = DATA.trait_price
-  if (!tp) return
-  const cols = (labelName) => [
-    { label: labelName, get: (x) => x.key },
-    { label: 'Sales', num: true, get: (x) => nfmt(x.sales) },
-    { label: 'Median', num: true, get: (x) => x.median_sol + ' SOL' },
-    { label: 'Average', num: true, get: (x) => x.avg_sol + ' SOL' },
-  ]
-  document.getElementById('traitprice').innerHTML =
-    ledgerRows(tp.specialty, cols('Specialty')) +
-    ledgerRows(tp.personality, cols('Personality'))
+
+/**
+ * The price of each rung.
+ *
+ * Exact figures, not nfmt. The point of this table is that a player can check
+ * whether they can afford the next step, and "1.9M" does not answer that.
+ *
+ * The promotion count is a column rather than a footnote because the top rung
+ * rests on nineteen observations and the bottom on thirteen hundred, and a
+ * reader deciding what to spend should see which is which.
+ */
+function renderLadderCost() {
+  const el = document.getElementById('c-cost')
+  const rows = DATA.promotion_cost || []
+  if (!el || !rows.length) return
+  const exact = (n) => Number(n || 0).toLocaleString('en-US')
+  const top = rows[rows.length - 1]
+  const before = rows.length > 1 ? rows[rows.length - 2].total : 0
+
+  el.innerHTML = ledgerRows(rows, [
+    { label: 'Rank', get: (r) => RANK_LABELS[r.tier] },
+    { label: 'This step', num: true, get: (r) => exact(r.step) },
+    { label: 'Total to here', num: true, get: (r) => exact(r.total) },
+    { label: 'Promotions seen', num: true, get: (r) => exact(r.promotions) },
+  ], { rank: false }) +
+  '<p class="basis">Taking one capo to ' + RANK_LABELS[top.tier].toLowerCase() +
+  ' costs about ' + exact(top.total) + ' RACKET. The last step alone is ' +
+  exact(top.step) + ', which is ' + (top.step / (before || 1)).toFixed(1) +
+  ' times everything spent getting there, and it rests on only ' +
+  exact(top.promotions) + ' promotions anyone has made, ranging ' +
+  exact(top.p25) + ' to ' + exact(top.p75) + ' across the middle half. ' +
+  'Each figure is measured from the same capo either side of its promotion, ' +
+  'not from what capos at that rank have spent in total. The price is close to ' +
+  'fixed but not exactly: legendary, god and founder capos are seen paying ' +
+  'about a tenth less at several rungs.</p>'
 }
-`
 
-const PRIZES_JS = String.raw`
-function render() {
-  const seasons = DATA.seasons || []
-  const latest = seasons[0]
-  const biggest = (DATA.all_time || [])[0]
-  const sb = DATA.sol_bounties || {}
-  document.getElementById('tiles').innerHTML = [
-    ['Total cash given away', '$' + nfmt(Math.round(DATA.total_usdc_all)),
-      'across ' + DATA.seasons_captured + ' seasons, plus daily prizes and bounties'],
-    ['Latest season pool', latest ? '$' + nfmt(Math.round(latest.total_usdc)) : '-',
-      latest ? 'season ' + latest.season + ', ' + latest.winners + ' winners' : ''],
-    ['Daily prizes and bounties', '$' + nfmt(Math.round(DATA.total_usdc_other)),
-      'outside the season pools'],
-    ['SOL bounties', sb.total_sol ? sb.total_sol.toFixed(2) + ' SOL' : '-',
-      sb.payouts ? nfmt(sb.payouts) + ' payouts, not converted to USD' : 'none captured'],
-    ['Biggest all-time winner', biggest ? '$' + nfmt(Math.round(biggest.usd)) : '-',
-      biggest ? biggest.name : ''],
-    ['Seasons paid out', nfmt(DATA.seasons_captured), 'on-chain, recovered retroactively'],
-  ].map(([l, v, n]) =>
-    '<div class="tile"><span class="tile-label">' + l + '</span>' +
-    '<span class="tile-value">' + v + '</span>' +
-    '</div>').join('')
+/* ---- tab: population ---- */
+function renderPopulation() {
+  renderSupply()
+}
 
-  // Per season, not cumulative: a running total only ever climbs, so it hides
-  // whether a given season paid more or less than the one before, which is the
-  // movement worth seeing here.
-  columns(document.getElementById('c-pools'), {
-    rows: DATA.seasons.slice().reverse().map((x) => ({ label: 'S' + x.season, value: x.total_usdc })),
-    color: 'var(--cat-5)',
-    yFormat: (n) => '$' + nfmt(n),
-    height: 200,
-  })
-
-  document.getElementById('c-seasons').innerHTML = ledgerRows(DATA.seasons, [
-    { label: 'Season', get: (x) => 'S' + x.season, sub: (x) => x.date },
-    { label: 'Winners', num: true, get: (x) => nfmt(x.winners) },
-    { label: 'Paid', num: true, get: (x) => '$' + nfmt(Math.round(x.total_usdc)) },
-  ], { rank: false })
-
-  if (latest) {
-    hBars(document.getElementById('c-latest'), {
-      rows: latest.ledger.map((w) => ({ label: w.name, value: w.usd })),
-      color: 'var(--cat-5)',
-      unit: '',
-      maxBars: 15,
-    })
-  }
-
-  hBars(document.getElementById('c-alltime'), {
-    rows: (DATA.all_time || []).map((w) => ({ label: w.name, value: w.usd })),
-    color: 'var(--cat-1)',
-    maxBars: 15,
-  })
+TAB_DRAW = {
+  earnings: renderEarnings,
+  progression: renderProgression,
+  population: renderPopulation,
 }
 `
 
-const TRAINERS_JS = String.raw`
+const MARKET_JS = String.raw`
 /**
  * Tables, not charts, almost everywhere on this page.
  *
@@ -1039,6 +1535,10 @@ function render() {
   const m = DATA.market, r = DATA.rates
 
   document.getElementById('tiles').innerHTML = [
+    // The capo marketplace leads: it is the bigger of the two markets here,
+    // and the one most readers came to ask about.
+    ['Capo sales recorded', nfmt(DATA.sales.volume.reduce((a, v) => a + v.sales, 0)),
+      DATA.sales.volume.reduce((a, v) => a + v.sol, 0).toFixed(1) + ' SOL'],
     ['Trainers listed', nfmt(m.trainers), m.available + ' taking work'],
     ['Jobs settled', nfmt(m.jobs_settled), 'lifetime, all trainers'],
     ['Median rate', m.median_rate_sol + ' SOL', 'per job'],
@@ -1063,7 +1563,77 @@ function render() {
   })
 
   renderRoster()
+  renderMarket()
+  renderTraitPrice()
 }
+
+/* ---- the capo marketplace, moved here from the economy page ---- */
+
+/**
+ * What a capo sells for, how long it takes to sell, and whether its traits
+ * change the price. This sat under Economy beside RACKET emissions, where a
+ * reader asking what their capo is worth had to walk past the token supply
+ * first. The two markets on this page are unrelated in the data and related in
+ * the question: both are what someone will pay you.
+ */
+function renderMarket() {
+  let vol = 0
+  lineChart(document.getElementById('c-volume'), {
+    xs: DATA.sales.volume.map((v) => v.day.slice(5)),
+    series: [{
+      name: 'SOL traded, cumulative',
+      values: DATA.sales.volume.map((v) => { vol += v.sol; return +vol.toFixed(2) }),
+      color: 'var(--cat-3)',
+    }],
+    yFormat: (n) => nfmt(n) + ' SOL',
+    height: 170,
+  })
+
+  // Four numbers do not need an axis. Three decimals because the cheapest tier
+  // averages 0.038 SOL, and at one decimal every rarity below legendary reads
+  // as zero.
+  const capr = (x) => x.charAt(0).toUpperCase() + x.slice(1)
+  document.getElementById('c-price').innerHTML = '<div class="tiles">' +
+    DATA.sales.price_band.map((p) =>
+      '<div class="tile"><span class="tile-label">' + capr(p.rarity) + '</span>' +
+      '<span class="tile-value">' + p.avg_sol.toFixed(3) + ' SOL</span></div>').join('') +
+    '</div>'
+
+  // Liquidity is four numbers, not a shape. A chart of three percentiles is a
+  // chart of three numbers, so this is a table.
+  const q = DATA.liquidity
+  document.getElementById('liquidity').innerHTML = ledgerRows([
+    { k: 'Quickest quarter', sub: 'time from listing to sale', v: q.hours_to_sell.p25 + 'h' },
+    { k: 'Typical', sub: 'median time on market', v: q.hours_to_sell.median + 'h' },
+    { k: 'Slowest quarter', sub: 'still sold, just waited', v: q.hours_to_sell.p75 + 'h' },
+    { k: 'Sold at or above ask', sub: 'share of matched sales', v: q.sold_at_or_above_ask_pct + '%' },
+    { k: 'Discount when discounted', sub: 'lower quartile against ask', v: q.vs_ask_pct.p25 + '%' },
+    { k: 'Listed right now', sub: 'average ask ' + q.avg_ask_sol + ' SOL', v: nfmt(q.listed_now) },
+    { k: 'Sold in the last week', sub: 'clearing rate', v: nfmt(q.sold_7d) },
+    { k: 'Weeks of inventory', sub: 'shelf against clearing rate', v: q.weeks_of_inventory },
+  ], [
+    { label: 'Measure', get: (x) => x.k, sub: (x) => x.sub },
+    { label: 'Value', num: true, get: (x) => x.v },
+  ])
+}
+
+// Five rows against four rows, with the median and the mean side by side because
+// the gap between them IS the finding. Bars would hide that the two measures
+// disagree about how big the effect is.
+function renderTraitPrice() {
+  const tp = DATA.trait_price
+  if (!tp) return
+  const cols = (labelName) => [
+    { label: labelName, get: (x) => x.key },
+    { label: 'Sales', num: true, get: (x) => nfmt(x.sales) },
+    { label: 'Median', num: true, get: (x) => x.median_sol + ' SOL' },
+    { label: 'Average', num: true, get: (x) => x.avg_sol + ' SOL' },
+  ]
+  document.getElementById('traitprice').innerHTML =
+    ledgerRows(tp.specialty, cols('Specialty')) +
+    ledgerRows(tp.personality, cols('Personality'))
+}
+
 
 /**
  * The roster, sorted on demand.
@@ -1082,6 +1652,17 @@ const ROSTER_SORTS = [
 ]
 let rosterKey = 'jobs_settled'
 let rosterDir = -1
+
+/**
+ * The roster prints fifteen of sixty-two until asked for the rest.
+ *
+ * All sixty-two ran to 3,874px, which was 63% of this page on its own and made
+ * everything below the roster effectively unreachable. Nobody reads trainer
+ * forty-seven without sorting first, and the sort controls sit above the cut,
+ * so the top fifteen of whatever column you chose is the useful view.
+ */
+const ROSTER_CAP = 15
+let rosterAll = false
 
 function sortRoster(rows) {
   return rows.slice().sort((a, b) => {
@@ -1119,7 +1700,8 @@ function renderRoster() {
   const head = '<div class="row head"><span></span>' + cols.map((c) =>
     '<span class="' + (c.num ? 'num ' : '') + 'sortable" data-sort="' + c.key + '" role="button" tabindex="0">' +
     esc(c.label) + arrow(c.key) + '</span>').join('') + '</div>'
-  const body = rows.map((t, i) => {
+  const shown = rosterAll ? rows : rows.slice(0, ROSTER_CAP)
+  const body = shown.map((t, i) => {
     const first = cols[0], rest = cols.slice(1)
     return '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
       '<span class="name">' + esc(first.get(t)) +
@@ -1129,8 +1711,16 @@ function renderRoster() {
         '<span class="cell-label">' + esc(c.label) + '</span>' + esc(c.get(t)) + '</span>').join('') +
       '</span></div>'
   }).join('')
+  // data-roster is deliberately not data-sort: the page-wide click handler routes
+  // anything carrying data-sort into pickSort, and this button must not re-sort.
+  const more = rows.length > ROSTER_CAP
+    ? '<div class="table-more"><button type="button" class="table-toggle" data-roster="1">' +
+      (rosterAll ? 'Show top ' + ROSTER_CAP + ' only'
+                 : 'Show all ' + rows.length + ' trainers') +
+      '</button></div>'
+    : ''
   document.getElementById('roster').innerHTML =
-    '<div class="ledger" data-cols="' + (cols.length + 1) + '">' + head + body + '</div>'
+    '<div class="ledger" data-cols="' + (cols.length + 1) + '">' + head + body + '</div>' + more
 }
 
 function pickSort(key) {
@@ -1144,6 +1734,11 @@ function pickSort(key) {
 }
 
 document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-roster]')) {
+    rosterAll = !rosterAll
+    renderRoster()
+    return
+  }
   const el = e.target.closest('[data-sort]')
   if (el) pickSort(el.dataset.sort)
 })
@@ -1157,10 +1752,14 @@ document.addEventListener('keydown', (e) => {
 
 const PAGES = [
   {
-    file: 'index.html', section: 'overview',
-    title: SITE, heading: SITE,
+    // The prize ledger joins the overview: what the game has actually paid
+    // out is the single fact most worth putting on the front door.
+    file: 'index.html', section: ['overview', 'prizes'],
+    share: 'Capowatch tracks The Syndicate: every prize paid, on chain, plus live capo, combat and market data.',
+    title: SITE + ': The Syndicate stats, prizes and economy', heading: SITE,
     eyebrow: 'The Syndicate &middot; kept by the community',
-    description: 'Community-kept economy, combat and market data for The Syndicate.',
+    description: 'Community-kept data for The Syndicate: what the game has paid out, ' +
+      'who is winning, and live capo, combat and market figures. Unofficial, made by players.',
     body: `<div class="psearch">
     <label class="psearch-label" for="psearch">Look up a player</label>
     <input id="psearch" type="search" placeholder="Type a player name"
@@ -1171,30 +1770,101 @@ const PAGES = [
   <div class="tiles" id="tiles"></div>
   <div class="section-head"><h2>Last 24 hours</h2><span class="section-meta">what moved today</span></div>
   <div class="tiles" id="today"></div>
-  <div class="section-head"><h2>How rare is rare</h2><span class="section-meta">every capo alive, by rarity</span></div>
-  <div id="scarcity"></div>
-  <div class="section-head"><h2>Who climbed today</h2><span class="section-meta">promotions in the last 24 hours</span></div>
-  <div id="climbed"></div>
+  <div class="section-head"><h2>What the game pays out</h2><span class="section-meta">real USD, on chain</span></div>
+  <div id="c-seasonbar"></div>
+  <div class="tiles" id="paidtiles"></div>
   <div class="section-head"><h2>Where to look</h2><span class="section-meta">the rest of the ledger</span></div>
   <div id="guide"></div>`,
-    script: OVERVIEW_JS,
+    script: SEASONBAR_JS + OVERVIEW_JS,
   },
   {
-    file: 'money.html', section: 'money',
-    title: 'Economy · ' + SITE, heading: 'Economy',
-    eyebrow: 'The Syndicate &middot; economy',
-    description: 'RACKET supply, emissions, sinks and secondary market volume.',
+    // Written for the visitor who has not played, which is the only search
+    // intent in this category with any measurable volume behind it and the one
+    // question this site can answer better than anybody: not "is it fun" but
+    // "does it pay", settled against the chain rather than asserted.
+    file: 'does-it-pay.html', section: ['prizes', 'overview'],
+    share: 'Does The Syndicate actually pay? Every payout is on chain, and here is the full breakdown.',
+    // No site suffix on this one. Every other title can afford the eleven
+    // characters; this one is already at 54 and the query it answers has to
+    // survive Google's truncation intact.
+    title: 'Does The Syndicate actually pay? Every payout, on chain',
+    // The heading names the game. "Does it actually pay?" reads fine to someone
+    // already on the site and means nothing in a search result.
+    heading: 'Does The Syndicate actually pay?',
+    eyebrow: 'The honest answer, settled on chain',
+    // Figure-free on purpose: a description with a dollar total in it goes stale
+    // between rebuilds and Google caches the stale one.
+    description: 'Does The Syndicate pay real money? Every prize is a USDC transfer ' +
+      'on Solana. The exact total, how many players got any of it, and the typical prize.',
+    body: `<div id="short"></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="section-head"><h2>Every season, and what it paid</h2><span class="section-meta">USD on chain</span></div>
+  <div id="c-seasonbar"></div>
+  <div class="section-head"><h2>Your realistic odds</h2><span class="section-meta">what the record shows</span></div>
+  <div id="odds"></div>
+  <div class="section-head"><h2>The four ways money reaches a player</h2><span class="section-meta">where the prize pool actually goes</span></div>
+  <div id="streams"></div>
+  <div class="section-head"><h2>Where these numbers come from</h2><span class="section-meta">recorded, not reported</span></div>
+  <div id="verify"></div>`,
+    script: SEASONBAR_JS + PAYS_JS,
+  },
+  {
+    // Two files: the RACKET economy this page has always covered, and the prize
+    // ledger from the retired prizes page. They are now a tab each, because a
+    // reader arrives wanting one or the other and never both at once.
+    file: 'money.html', section: ['money', 'prizes'],
+    share: 'Every USD prize The Syndicate has paid out on chain, season by season, with the winners of each.',
+    title: 'Economy and prizes · The Syndicate · ' + SITE, heading: 'Economy',
+    eyebrow: 'The Syndicate &middot; token supply and payouts',
+    description: 'RACKET supply, what mints and burns it, and every USD prize pool The ' +
+      'Syndicate has paid on chain, season by season, with the winners of each.',
     body: `<div class="tiles" id="tiles"></div>
-  <div class="section-head"><h2>Supply</h2><span class="section-meta">what changed, and where it stands</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Net each day</p><div class="chart" id="c-net"></div></div>
-    <div><p class="duo-head">In circulation, cumulative</p><div class="chart" id="c-supply"></div></div>
+  <div class="tabbar" id="tabs" role="tablist">
+    <button type="button" data-tab="racket" aria-selected="true">RACKET</button>
+    <button type="button" data-tab="prizes" aria-selected="false">Prizes</button>
   </div>
-  <div class="section-head"><h2>Where RACKET comes from and goes</h2><span class="section-meta">share of lifetime total</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Created</p><div id="c-income"></div></div>
-    <div><p class="duo-head">Destroyed</p><div id="c-sinks"></div></div>
+
+  <div id="tab-racket">
+    <div class="section-head"><h2>Supply</h2><span class="section-meta">what changed, and where it stands</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Net each day</p><div class="chart" id="c-net"></div></div>
+      <div><p class="duo-head">In circulation, cumulative</p><div class="chart" id="c-supply"></div></div>
+    </div>
+    <div class="section-head"><h2>Where RACKET comes from and goes</h2><span class="section-meta">share of lifetime total</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Created</p><div id="c-income"></div></div>
+      <div><p class="duo-head">Destroyed</p><div id="c-sinks"></div></div>
+    </div>
   </div>
+
+  <div id="tab-prizes" hidden>
+    <div class="section-head"><h2>Prizes paid</h2><span class="section-meta">USD on chain, every season so far</span></div>
+    <div id="c-seasonbar"></div>
+    <div class="section-head"><h2>The money standings</h2><span class="section-meta">USD won, ranked</span></div>
+    <div class="duo">
+      <div><p class="duo-head">All time</p><div id="c-alltime"></div></div>
+      <div><p class="duo-head">Latest season</p><div id="c-latest"></div></div>
+    </div>
+    <div class="section-head"><h2 id="h-leagues">Top players last season</h2><span class="section-meta">top five paid in each league</span></div>
+    <div id="c-leagues"></div>
+    <div class="section-head"><h2>Everything else that pays</h2><span class="section-meta">outside the season pools</span></div>
+    <div class="duo">
+      <div><p class="duo-head">By stream</p><div id="c-streams"></div></div>
+      <div><p class="duo-head">Who collects it</p><div id="c-collectors"></div></div>
+    </div>
+  </div>`,
+    script: TABS_JS + SEASONBAR_JS + MONEY_JS,
+  },
+  {
+    // Two files again: the capo marketplace and the trainer hiring market. They
+    // share no data, only the question. Both are what someone will pay you.
+    file: 'market.html', section: ['market', 'trainers'],
+    share: 'What capos sell for in The Syndicate, how fast they sell, and every trainer for hire.',
+    title: 'Market and trainers · The Syndicate · ' + SITE, heading: 'Market',
+    eyebrow: 'The Syndicate &middot; what things cost',
+    description: 'What capos sell for in The Syndicate, how fast listings clear, whether ' +
+      'traits move the price, and every trainer for hire with rates and turnaround.',
+    body: `<div class="tiles" id="tiles"></div>
   <div class="section-head"><h2>Secondary market</h2><span class="section-meta">what trades, and at what price</span></div>
   <div class="duo">
     <div><p class="duo-head">SOL traded, cumulative</p><div class="chart" id="c-volume"></div></div>
@@ -1202,19 +1872,31 @@ const PAGES = [
   </div>
   <div class="section-head"><h2>How the market clears</h2><span class="section-meta">liquidity, not volume</span></div>
   <div id="liquidity"></div>
-`,
-    script: MONEY_JS,
+  <div class="section-head"><h2>Do traits move the price?</h2><span class="section-meta">specialty and personality, by what people paid</span></div>
+  <div id="traitprice"></div>
+  <div class="section-head"><h2>Every trainer</h2><span class="section-meta"><a href="https://thesyndicate.games/hiring?market=trainers&amp;tab=browse" target="_blank" rel="noopener">Hire on The Syndicate &rarr;</a></span></div>
+  <div class="controls" id="rostersort" role="group" aria-label="Sort the roster"></div>
+  <div id="roster"></div>
+  <div class="section-head"><h2>Who actually gets hired</h2><span class="section-meta">jobs settled, lifetime</span></div>
+  <div class="chart" id="c-busiest"></div>`,
+    script: MARKET_JS,
   },
   {
     file: 'wars.html', section: 'wars',
-    title: 'Wars · ' + SITE, heading: 'Wars',
-    eyebrow: 'The Syndicate &middot; territory and combat',
-    description: 'Takeover odds, the specialty wheel, combat records and leagues.',
+    share: 'Takeover odds for The Syndicate, measured from recorded fights rather than guessed, plus what every gear item does.',
+    title: 'Wars and gear · The Syndicate · ' + SITE, heading: 'Wars',
+    eyebrow: 'The Syndicate &middot; combat and gear',
+    description: 'Takeover odds for The Syndicate, measured from recorded fights rather ' +
+      'than guessed: the specialty wheel, what each gear item does, and win rates by league.',
     body: `<div class="tiles" id="tiles"></div>
   <div class="section-head"><h2>Will this takeover land</h2><span class="section-meta">measured, not modelled from guesses</span></div>
   <div id="calc"></div>
   <div class="section-head"><h2>The specialty wheel</h2><span class="section-meta">attacker wins, by matchup</span></div>
   <div id="wheel"></div>
+  <div class="section-head"><h2>Which item raises which stat</h2><span class="section-meta">fixed by item type, never rolled</span></div>
+  <div id="gear"></div>
+  <div class="section-head"><h2>What gear rarity buys you</h2><span class="section-meta">bonus against durability</span></div>
+  <div id="ladder"></div>
   <div class="section-head"><h2>The shape of the war</h2><span class="section-meta">who wins, and where they play</span></div>
   <div class="duo">
     <div><p class="duo-head">Attack against defence</p><div id="balance"></div></div>
@@ -1229,81 +1911,62 @@ const PAGES = [
   },
   {
     file: 'capos.html', section: 'capos',
-    title: 'Capos · ' + SITE, heading: 'Capos',
-    eyebrow: 'The Syndicate &middot; rarity, rank and progression',
-    description: 'Every capo by rarity, rank and age, and how players promote them.',
+    share: 'What it actually costs to take a capo to boss in The Syndicate, measured from real promotions.',
+    title: 'Capos and promotion costs · The Syndicate · ' + SITE, heading: 'Capos',
+    eyebrow: 'The Syndicate &middot; population and progression',
+    description: 'Every capo in The Syndicate by rank, rarity and age, who earns the most ' +
+      'RACKET, and what each promotion actually costs, measured from real promotions.',
+    // Three tabs, because ten screens of stacked duos on a phone is not a page
+    // anyone reaches the bottom of. The sections are alternatives rather than an
+    // argument, so nothing is lost by showing one group at a time.
     body: `<div class="tiles" id="tiles"></div>
-  <div class="section-head"><h2>Top earners</h2><span class="section-meta">RACKET, the API caps this board at 50 capos</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Lifetime</p><div id="c-earn-life"></div></div>
-    <div><p class="duo-head">Last 24 hours</p><div id="c-earn-24h"></div></div>
+  <div class="tabbar" id="tabs" role="tablist">
+    <button type="button" data-tab="earnings" aria-selected="true">Earnings</button>
+    <button type="button" data-tab="progression" aria-selected="false">Progression</button>
+    <button type="button" data-tab="population" aria-selected="false">Population</button>
   </div>
-  <div class="section-head"><h2>Board movement</h2><span class="section-meta">places changed in the last 24 hours</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Climbing</p><div id="c-climb"></div></div>
-    <div><p class="duo-head">Sliding</p><div id="c-slide"></div></div>
+
+  <div id="tab-earnings">
+    <div class="section-head"><h2>Top earners</h2><span class="section-meta">RACKET, the API caps this board at 50 capos</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Lifetime</p><div id="c-earn-life"></div></div>
+      <div><p class="duo-head">Last 24 hours</p><div id="c-earn-24h"></div></div>
+    </div>
+    <div class="section-head"><h2>Board movement</h2><span class="section-meta">places changed in the last 24 hours</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Climbing</p><div id="c-climb"></div></div>
+      <div><p class="duo-head">Sliding</p><div id="c-slide"></div></div>
+    </div>
   </div>
-  <div class="section-head"><h2>What they are, and what they became</h2><span class="section-meta">count and share of all capos</span></div>
-  <div class="duo">
-    <div><p class="duo-head">By rarity, fixed at mint</p><div id="c-rarity"></div></div>
-    <div><p class="duo-head">By rank, earned by promotion</p><div id="c-ranks"></div></div>
+
+  <div id="tab-progression" hidden>
+    <div class="section-head"><h2>The rank ladder</h2><span class="section-meta">what capos became, and how often they get there</span></div>
+    <p class="duo-head">Capos by rank, earned by promotion</p>
+    <div id="c-ranks"></div>
+    <p class="duo-head">Promotion rate by rarity</p>
+    <div id="c-progression"></div>
+    <div class="section-head"><h2>What the ladder costs</h2><span class="section-meta">RACKET, typical spend per capo</span></div>
+    <div id="c-cost"></div>
+    <div class="section-head"><h2>Who is climbing</h2><span class="section-meta">top 15 each</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Most bosses held</p><div id="c-rankleaders"></div></div>
+      <div><p class="duo-head">Most promotions, last 7 days</p><div id="c-promoleaders"></div></div>
+    </div>
   </div>
-  <div class="section-head"><h2>Promotion rate by rarity</h2><span class="section-meta">share promoted past recruit</span></div>
-  <div id="c-progression"></div>
-  <div class="section-head"><h2>Who is climbing</h2><span class="section-meta">top 15 each</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Most bosses held</p><div id="c-rankleaders"></div></div>
-    <div><p class="duo-head">Most promotions, last 7 days</p><div id="c-promoleaders"></div></div>
-  </div>
-  <div class="section-head"><h2>Do traits move the price?</h2><span class="section-meta">specialty and personality, by what people paid</span></div>
-  <div id="traitprice"></div>
-  <div class="section-head"><h2>Which item raises which stat</h2><span class="section-meta">fixed by item type, never rolled</span></div>
-  <div id="gear"></div>
-  <div class="section-head"><h2>What gear rarity buys you</h2><span class="section-meta">bonus against durability</span></div>
-  <div id="ladder"></div>
-  <div class="section-head"><h2>Capo supply</h2><span class="section-meta">how many, and of what</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Minted against burned</p><div class="chart" id="c-supply"></div></div>
-    <div><p class="duo-head">Composition by rarity</p><div class="chart" id="c-supply-rarity"></div></div>
-  </div>
-  <div class="section-head"><h2>Who holds them</h2><span class="section-meta">concentration, and vintage</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Owners by roster size</p><div class="chart" id="c-ownership"></div></div>
-    <div><p class="duo-head">Capos by season created</p><div class="chart" id="c-season"></div></div>
+
+  <div id="tab-population" hidden>
+    <div class="section-head"><h2>Capo supply</h2><span class="section-meta">how many, and of what</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Minted against burned</p><div class="chart" id="c-supply"></div></div>
+      <div><p class="duo-head">Composition by rarity</p><div class="chart" id="c-supply-rarity"></div></div>
+    </div>
+    <div class="section-head"><h2>Who holds them</h2><span class="section-meta">concentration, and vintage</span></div>
+    <div class="duo">
+      <div><p class="duo-head">Owners by roster size</p><div class="chart" id="c-ownership"></div></div>
+      <div><p class="duo-head">Capos by season created</p><div class="chart" id="c-season"></div></div>
+    </div>
   </div>`,
-    script: CAPOS_JS,
-  },
-  {
-    file: 'prizes.html', section: 'prizes',
-    title: 'Prizes · ' + SITE, heading: 'Prizes',
-    eyebrow: 'The Syndicate &middot; season winnings, real USD',
-    description: 'On-chain USD prize payouts by season, and who won them.',
-    body: `<div class="tiles" id="tiles"></div>
-  <div class="section-head"><h2>Prizes paid</h2><span class="section-meta">USD on chain, season by season</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Paid each season</p><div class="chart" id="c-pools"></div></div>
-    <div><p class="duo-head">Season detail</p><div id="c-seasons"></div></div>
-  </div>
-  <div class="section-head"><h2>Who won</h2><span class="section-meta">the latest payout, and all time</span></div>
-  <div class="duo">
-    <div><p class="duo-head">Latest season winners</p><div class="chart" id="c-latest"></div></div>
-    <div><p class="duo-head">All-time winnings</p><div class="chart" id="c-alltime"></div></div>
-  </div>`,
-    script: PRIZES_JS,
-  },
-  {
-    file: 'trainers.html', section: 'trainers',
-    title: 'Trainers · ' + SITE, heading: 'Trainers',
-    eyebrow: 'The Syndicate &middot; the training market',
-    description: 'Who trains capos, what they charge, how fast they deliver and how much of the market sits idle.',
-    body: `<div class="tiles" id="tiles"></div>
-  <div class="section-head"><h2>Every trainer</h2><span class="section-meta"><a href="https://thesyndicate.games/hiring?market=trainers&amp;tab=browse" target="_blank" rel="noopener">Hire on The Syndicate &rarr;</a></span></div>
-  <div class="controls" id="rostersort" role="group" aria-label="Sort the roster"></div>
-  <div id="roster"></div>
-  <div class="section-head"><h2>Who actually gets hired</h2><span class="section-meta">jobs settled, lifetime</span></div>
-  <div class="chart" id="c-busiest"></div>
-`,
-    script: TRAINERS_JS,
+    script: TABS_JS + CAPOS_JS,
   },
 ]
 
@@ -1311,8 +1974,23 @@ function main() {
   fs.mkdirSync(SITE_DIR, { recursive: true })
   fs.mkdirSync(DATA_OUT, { recursive: true })
 
+  // growth.json is a build input, not a site payload: build-players.js reads it
+  // from data/site at build time and no page ever fetches it.
+  const NOT_PUBLISHED = new Set(['growth.json'])
+  const published = new Set()
   for (const f of fs.readdirSync(DATA_SRC)) {
-    if (f.endsWith('.json')) fs.copyFileSync(path.join(DATA_SRC, f), path.join(DATA_OUT, f))
+    if (!f.endsWith('.json') || NOT_PUBLISHED.has(f)) continue
+    fs.copyFileSync(path.join(DATA_SRC, f), path.join(DATA_OUT, f))
+    published.add(f)
+  }
+  // Retire payloads the same way pages are retired. Without this the build only
+  // ever wrote files, so a derive script that stops producing one leaves the last
+  // copy being served forever: territory.json outlived its own feature by a day
+  // and 141KB, with nothing on the site fetching it and nothing looking wrong.
+  for (const f of fs.readdirSync(DATA_OUT)) {
+    if (!f.endsWith('.json') || published.has(f)) continue
+    fs.rmSync(path.join(DATA_OUT, f))
+    console.log(`  data/         retired ${f}`)
   }
 
   // Icons and the social card sit at the site root, because that is where the
@@ -1334,9 +2012,12 @@ function main() {
   const assetSrc = path.join(__dirname, 'assets')
   if (fs.existsSync(assetSrc)) {
     let n = 0
-    for (const f of fs.readdirSync(assetSrc)) {
-      if (f.startsWith('.')) continue
-      fs.copyFileSync(path.join(assetSrc, f), path.join(SITE_DIR, f))
+    // Files only. assets/source holds the original artwork the icons are cut
+    // from, which is a build input rather than something to publish, and
+    // copyFileSync throws ENOTSUP on a directory rather than skipping it.
+    for (const e of fs.readdirSync(assetSrc, { withFileTypes: true })) {
+      if (e.name.startsWith('.') || !e.isFile()) continue
+      fs.copyFileSync(path.join(assetSrc, e.name), path.join(SITE_DIR, e.name))
       n++
     }
     console.log(`  assets/       ${n} files`)

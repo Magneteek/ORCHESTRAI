@@ -191,12 +191,26 @@ h1 {
   font-size: var(--step--1);
   color: var(--ink-muted);
 }
+/* Three states, and until now there was only one: the dot was hardcoded to the
+   debit red whatever the data was doing, so a site updating perfectly on time
+   looked like a site that had fallen over. Green means the last rebuild landed
+   when it should have, gold means it is late, red means the fetch actually
+   failed. The .stale class existed and had no rule attached to it at all. */
 .live::before {
   content: "";
   width: 0.5rem;
   height: 0.5rem;
-  background: var(--debit);
+  background: var(--credit);
   border-radius: 50%;
+}
+.live:has(.stale)::before { background: var(--accent); }
+.live:has(.failed)::before { background: var(--debit); }
+.live .stale { color: var(--accent); }
+.live .failed { color: var(--debit); }
+/* :has() is the whole mechanism above, so browsers without it would show a
+   green dot on a dead feed. This keeps the text colour carrying the state. */
+@supports not selector(:has(*)) {
+  .live::before { background: var(--ink-faint); }
 }
 
 /* ---------------------------------------------------------------- tiles --- */
@@ -486,6 +500,198 @@ h3 {
 .duo { display: grid; gap: var(--space-4); }
 .duo > * { min-width: 0; }
 @media (min-width: 52rem) { .duo { grid-template-columns: 1fr 1fr; } }
+/* A control that follows a table, e.g. the roster's show-all toggle. The chart
+   toggles get their spacing from the chart wrapper; a bare table has none. */
+.table-more { margin-top: var(--space-3); }
+
+/* Share row. Quiet by design: it sits at the end of the page for the reader who
+   already decided they liked something, not as a banner asking them to. */
+.sharebar {
+  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+  margin-top: var(--space-6);
+  font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sharelabel { color: var(--ink-faint); }
+.sharelink {
+  color: var(--ink-muted); text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--rule-firm);
+}
+.sharelink:hover { color: var(--ground); background: var(--accent); border-color: var(--accent); }
+.sharelink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* The one-line answer at the top of the does-it-pay page. */
+.answer {
+  margin: 0 0 var(--space-3);
+  font-family: var(--display); font-weight: 600;
+  font-size: var(--step-3); line-height: 1.05; color: var(--accent-bright);
+}
+
+/* Referral block. Sits quietly at the end of a page: almost every visitor
+   already plays, and pushing a signup pitch above the data would be aimed at
+   the wrong ninety-nine percent. */
+.joinbox {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-5); flex-wrap: wrap;
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border: 1px solid var(--rule-firm);
+  background: var(--band, transparent);
+}
+.joinhead {
+  margin: 0; font-family: var(--display); font-weight: 600;
+  font-size: var(--step-1); color: var(--ink);
+}
+.joinsub {
+  margin: var(--space-2) 0 0; max-width: 54ch;
+  font-size: var(--step--1); color: var(--ink-muted);
+}
+.joinlink {
+  flex: 0 0 auto;
+  font-family: var(--mono); font-size: var(--step--1);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.7rem 1.4rem;
+  color: var(--ground); background: var(--accent);
+  text-decoration: none; white-space: nowrap;
+}
+.joinlink:hover { background: var(--accent-bright); }
+.joinlink:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 3px; }
+
+/* One bar, one segment per season.
+   Seasons are ordinal, so this is a single hue stepped light to dark, never
+   eleven categorical colours implying eleven unrelated things. The gaps are
+   the page ground showing through, which is how the tile strips draw their
+   rules too, so the segments read as divisions of one quantity. */
+.seasonbar {
+  display: flex;
+  gap: 2px;
+  height: 3.25rem;
+  margin: var(--space-4) 0 var(--space-3);
+  background: var(--ground);
+}
+.seasonbar > button {
+  /* flex is set inline per season; min-width 0 lets a small one shrink instead
+     of forcing the row wider than the page */
+  min-width: 0;
+  border: 0; padding: 0; margin: 0;
+  cursor: pointer;
+  transition: filter 140ms ease-out;
+}
+.seasonbar > button:hover,
+.seasonbar > button[aria-current="true"] { filter: brightness(1.35); }
+.seasonbar > button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seasonbar-ends {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.1em; color: var(--ink-faint);
+}
+.seasontotal { display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+.seasontotal .big {
+  font-family: var(--display); font-weight: 600;
+  font-size: var(--step-4); line-height: 1; color: var(--accent-bright);
+  /* the digits change every frame while counting; tabular figures stop the
+     number jittering wider and narrower as it climbs */
+  font-variant-numeric: tabular-nums;
+}
+.seasontotal .of { font-size: var(--step--1); color: var(--ink-muted); }
+/* The caption is the part that moves, so it is sized to be read at a glance
+   rather than squinted at. Rendered as separated fields instead of one long
+   sentence: the amount is what people are scanning for, and a run of middots
+   buries it in the middle of a line. */
+.seasonpick {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 0.35rem var(--space-4);
+  margin: var(--space-3) 0;
+  font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint);
+}
+.seasonpick b {
+  font-family: var(--display); font-weight: 600; font-size: var(--step-1);
+  letter-spacing: 0.01em; color: var(--ink);
+}
+.seasonpick b.amt { color: var(--accent-bright); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .seasonbar > button { transition: none; } }
+
+/* Scroll reveal.
+   The hidden state only exists on elements JS has marked, so a page whose
+   script never runs, or a browser without IntersectionObserver, shows
+   everything immediately rather than a blank column.
+   .shown clears the transform entirely rather than zeroing it: a lingering
+   transform makes the element a containing block, which would reposition the
+   absolutely-placed chart tooltips inside it. */
+.reveal { opacity: 0; transform: translateY(8px); }
+.reveal.shown {
+  opacity: 1;
+  transform: none;
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.shown { opacity: 1; transform: none; transition: none; }
+}
+
+/* League boards: as many columns as fit, so five leagues land 3+2 on a desktop
+   and stack on a phone without a media query per breakpoint. */
+.leaguegrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: var(--space-5) var(--space-6);
+  margin-top: var(--space-4);
+}
+.leaguehead {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--space-3); margin: 0 0 var(--space-2);
+  border-bottom: 1px solid var(--rule-firm); padding-bottom: 0.35rem;
+}
+.leaguehead .nm {
+  font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent-bright);
+}
+.leaguehead .sub { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-faint); }
+
+/* Tab bar. Lived in build-players.js until the capos page needed one too. */
+/* Tabs, not a button row.
+   They previously borrowed .controls, which is what the period selectors and
+   the capo sort bar use, so four section switches read as four filter chips at
+   0.68rem. Underlined tabs are the one pattern nobody has to decode, and the
+   active underline points down at the content it belongs to.
+
+   The bar carries the rule; each tab carries a 2px bottom border pulled down
+   1px so the active one sits ON the rule rather than above it. */
+.tabbar {
+  display: flex;
+  gap: var(--space-5);
+  margin: var(--space-5) 0;
+  border-bottom: 1px solid var(--rule-firm);
+  /* Tabs belong on one line. Four of them at this size overflow a narrow
+     phone, so the bar scrolls rather than wrapping into a second row that
+     stops looking like a tab bar at all. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabbar::-webkit-scrollbar { display: none; }
+
+.tabbar button {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: var(--step-0);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0 0 0.55rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tabbar button:hover { color: var(--ink); }
+.tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tabbar button[aria-selected="true"] {
+  color: var(--accent-bright);
+  border-bottom-color: var(--accent);
+}
+
 .duo-head {
   font-family: var(--mono);
   font-size: var(--step--2);
@@ -645,6 +851,30 @@ footer {
   font-size: var(--step--1);
 }
 footer p { max-width: 74ch; }
+footer p + p { margin-top: var(--space-3); }
+/* The mark sits beside the text on a wide screen and above it on a phone, where
+   a 96px image in a flex row leaves the paragraph about twenty characters wide. */
+footer { display: flex; gap: var(--space-5); align-items: flex-start; flex-wrap: wrap; }
+.footmark { flex: 0 0 auto; width: 96px; height: auto; opacity: 0.9; }
+/* PROTOTYPE: masthead logo. Sized to the eyebrow+h1 block so it costs no
+   vertical space; if it is taller than that block it pushes the data down. */
+.brandrow { display: flex; align-items: center; gap: var(--space-4); }
+.brandmark { flex: 0 0 auto; width: 72px; height: auto; }
+.brandlink { flex: 0 0 auto; display: block; line-height: 0; }
+.brandlink:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (max-width: 34rem) { .brandmark { width: 52px; } }
+.foottext { flex: 1 1 22rem; min-width: 0; }
+/* The legal line sits under the data notes and reads quieter than them: it is
+   there to be found, not to be the first thing anyone reads in a footer. */
+.colophon {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--step--2);
+  color: var(--ink-faint);
+}
+.colophon .copy { white-space: nowrap; }
+@media (max-width: 34rem) { .footmark { width: 64px; } }
 code {
   font-family: var(--mono);
   font-size: var(--step--1);
@@ -729,9 +959,11 @@ function paintStamp(iso, ok) {
   if (!el) return
   if (!ok || !iso) {
     el.textContent = 'update failed'
-    el.classList.add('stale')
+    el.classList.remove('stale')
+    el.classList.add('failed')
     return
   }
+  el.classList.remove('failed')
   const age = Date.now() - new Date(iso)
   el.textContent = relTime(iso)
   el.title = new Date(iso).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
@@ -748,14 +980,183 @@ function tickStamp(getIso) {
 }
 `
 
+/**
+ * The game first, then the money.
+ *
+ * Trainers and Prizes were pages of two sections each holding a nav slot apiece,
+ * while Capos carried ten sections across four unrelated subjects. Trainers
+ * joined the capo marketplace under Market, because both answer what someone
+ * will pay you; Prizes joined Economy, because both are where value ends up.
+ */
+/**
+ * Site footer, shared by the section pages and the players page. Both shipped an
+ * empty <footer> element; only the standalone artifact carried any provenance.
+ *
+ * The mark is the one place the artwork appears on the site itself. It is small
+ * and at the bottom on purpose: the H1 wordmark is the brand up top, and a
+ * detailed illustration beside it competes with the type rather than supporting
+ * it. width/height are set so the row does not reflow when the image lands.
+ */
+
+/**
+ * Reveal blocks as they scroll into view.
+ *
+ * Deliberately small: a 400ms fade and an 8px rise, once per element, never on
+ * the way back out. This is a reference archive, and content that keeps moving
+ * while you read a table is an irritation rather than a flourish.
+ *
+ * Not an IntersectionObserver, which was the first attempt and was wrong. An
+ * observer only fires when an element crosses the viewport edge, so jumping the
+ * scroll past a block never fires for it and it stays invisible forever. Press
+ * End, drag the scrollbar, or open a deep link and eight blocks on the wars page
+ * were simply gone. A sweep on scroll cannot stand content up late: anything at
+ * or above the fold is revealed on the next frame, however you arrived there.
+ *
+ * Three further refusals. Nothing happens at all under prefers-reduced-motion.
+ * Elements are marked from script, so nothing is hidden unless something is
+ * guaranteed to unhide it. And a block with no layout box yet, which means it
+ * sits in a closed tab panel, is left pending rather than revealed blind, so it
+ * still animates when that panel is opened.
+ */
+export const REVEAL_JS = String.raw`
+const REVEAL_ON = !(window.matchMedia &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+
+let revealPending = []
+
+function revealSweep() {
+  if (!revealPending.length) return
+  const fold = window.innerHeight * 0.94
+  let i = 0
+  revealPending = revealPending.filter((el) => {
+    const r = el.getBoundingClientRect()
+    // no box yet: in a closed panel, keep it for when that panel opens
+    if (!r.height && !r.width) return true
+    if (r.top > fold) return true
+    // stagger only across what crossed together, so a lone block later on does
+    // not sit behind a stale delay
+    el.style.transitionDelay = Math.min(i++, 5) * 45 + 'ms'
+    el.classList.add('shown')
+    return false
+  })
+}
+
+function revealIn(root) {
+  if (!REVEAL_ON) return
+  const scope = root || document.getElementById('main')
+  if (!scope) return
+  const targets = []
+  for (const child of scope.children) {
+    // a tab panel is a wrapper, not a block: reveal what is inside it so the
+    // sections cascade rather than the panel appearing as one slab
+    if (child.id && child.id.indexOf('tab-') === 0) targets.push(...child.children)
+    else targets.push(child)
+  }
+  for (const el of targets) {
+    if (el.classList.contains('reveal')) continue
+    el.classList.add('reveal')
+    revealPending.push(el)
+  }
+  revealSweep()
+}
+
+let revealTicking = false
+window.addEventListener('scroll', () => {
+  if (revealTicking) return
+  revealTicking = true
+  requestAnimationFrame(() => { revealTicking = false; revealSweep() })
+}, { passive: true })
+window.addEventListener('resize', revealSweep, { passive: true })
+`
+
+/**
+ * Referral link to the game, for visitors who do not play it yet.
+ *
+ * Empty means the block does not render at all, so the site never ships a dead
+ * "start here" button pointing nowhere. Put the referral URL here and it
+ * appears on the next build.
+ *
+ * It is marked rel="sponsored nofollow" because it is a paid referral, which is
+ * what Google asks for and what keeps the site honest about the arrangement.
+ *
+ * The copy leads with the $15 pack the visitor receives rather than with the
+ * referral, because that is the part that is worth something to the person
+ * reading it. The referral is still disclosed in the same breath, in plain
+ * words, not buried in the rel attribute.
+ */
+/**
+ * Share links for X, Telegram and WhatsApp.
+ *
+ * Plain intent URLs, not the platforms' embed scripts. Those scripts load
+ * third-party JavaScript on every page and track the reader whether or not they
+ * ever click, which is a strange thing to do on a site whose pitch is that you
+ * can check everything it says. These are ordinary links: nothing runs until
+ * someone chooses to share.
+ *
+ * The text is the page's own share line and the URL is absolute, because a
+ * relative one pasted into Telegram goes nowhere.
+ */
+export const shareBar = (path, text) => {
+  const url = encodeURIComponent(SITE_URL + (path === '/' ? '/' : path))
+  const msg = encodeURIComponent(text)
+  const links = [
+    ['X', 'https://x.com/intent/post?url=' + url + '&text=' + msg],
+    ['Telegram', 'https://t.me/share/url?url=' + url + '&text=' + msg],
+    // WhatsApp takes one field, so the message carries the URL on its end.
+    ['WhatsApp', 'https://wa.me/?text=' + msg + '%20' + url],
+  ]
+  return `<div class="sharebar">
+    <span class="sharelabel">Share this</span>
+    ${links.map(([name, href]) =>
+      `<a class="sharelink" href="${href}" target="_blank" rel="noopener nofollow">${name}</a>`).join('')}
+  </div>`
+}
+
+export const REFERRAL_URL = 'https://thesyndicate.games?ref=aaaa'
+
+export const REFERRAL = REFERRAL_URL ? `<div class="joinbox">
+    <div>
+      <p class="joinhead">Not playing yet? Start with a free $15 pack</p>
+      <p class="joinsub">The Syndicate is free to play. Sign up through this link and
+        you get a $15 pack once you reach Borough league, the second rung up from
+        Street. It is a referral link, so it also pays this site a small amount.</p>
+    </div>
+    <a class="joinlink" href="${REFERRAL_URL}" target="_blank"
+       rel="sponsored nofollow noopener">Start here</a>
+  </div>` : ''
+
+export const FOOTER = `<footer>
+    <img class="footmark" src="/badge-small.png" width="96" height="83"
+         alt="" loading="lazy" decoding="async">
+    <div class="foottext">
+      <p>
+        Built from the public Syndicate data API. Figures the API reports as lifetime
+        totals are shown as lifetime totals; anything described as a window is measured
+        by differencing our own snapshots, because the API cannot report a time range.
+      </p>
+      <p>
+        RACKET figures are in-game currency. Amounts marked as spent or invested are
+        spend, not profit, and no figure here is a profit or loss statement.
+      </p>
+      <p class="colophon">
+        ${SITE} is an unofficial fan project, created and sustained by the community.
+        It is not affiliated with, endorsed by, or connected to The Syndicate or its
+        developers, and all game names and trademarks belong to their owners.
+        <span class="copy">&copy; ${new Date().getUTCFullYear()} ${SITE}</span>
+      </p>
+    </div>
+  </footer>`
+
 export const NAV = [
   { href: '/', label: 'Overview' },
   { href: '/players.html', label: 'Players' },
-  { href: '/money.html', label: 'Economy' },
   { href: '/wars.html', label: 'Wars' },
   { href: '/capos.html', label: 'Capos' },
-  { href: '/trainers.html', label: 'Trainers' },
-  { href: '/prizes.html', label: 'Prizes' },
+  { href: '/market.html', label: 'Market' },
+  { href: '/money.html', label: 'Economy' },
+  // Last, and named as a question, because it is the one page addressed to
+  // someone who does not play rather than to the regulars.
+  { href: '/does-it-pay.html', label: 'Does it pay?' },
 ]
 
 export const navHtml = (current) =>

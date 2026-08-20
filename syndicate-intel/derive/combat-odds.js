@@ -525,11 +525,12 @@ function main() {
     fs.writeFileSync(f, JSON.stringify(j))
   }
   patch('wars.json', 'odds', odds)
-  patch('capos.json', 'gear', gear)
+  // Gear belongs beside the odds it moves, not on the capo census page.
+  patch('wars.json', 'gear', gear)
 
   console.log(
     `merged combat model into wars.json (${F.length} fights, ${specs.length} specialties) ` +
-    `and gear into capos.json (${items.size} types)`)
+    `and gear (${items.size} types)`)
 }
 
 main()

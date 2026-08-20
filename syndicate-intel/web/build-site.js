@@ -494,7 +494,10 @@ function main() {
   const boards = loadBoards()
   // Safe by default: the page is only indexable when explicitly opted in, so
   // forgetting the flag can never accidentally expose it to search engines.
-  const indexable = process.env.SITE_INDEXABLE === '1'
+  // Indexable unless explicitly switched off. It shipped noindex for months
+  // while the site was unreleased, and leaving the default that way meant a
+  // launch could quietly go out invisible.
+  const indexable = process.env.SITE_INDEXABLE !== '0'
 
   fs.mkdirSync(OUT_DIR, { recursive: true })
   const fragment = buildFragment(boards)

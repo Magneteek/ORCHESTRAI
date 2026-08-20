@@ -12,7 +12,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS } from './style.js'
+import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar } from './style.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -20,9 +20,10 @@ const IN = path.join(ROOT, 'data', 'boards', 'players.json')
 const OUT_DIR = path.join(__dirname, 'dist')
 const SITE_DIR = path.join(OUT_DIR, 'site')
 
-const TITLE = 'Players · ' + SITE
+const TITLE = 'Players and league standings · The Syndicate · ' + SITE
 const DESCRIPTION =
-  'Per-player rosters, combat records and realized SOL trading for The Syndicate.'
+  'Every player in The Syndicate: roster, combat record, trading, prize winnings ' +
+  'and league standing, plus the top five paid in each league last season.'
 
 const slugify = (s) =>
   String(s || '').toLowerCase().trim()
@@ -108,48 +109,7 @@ const PAGE_CSS = String.raw`
    just reading old. */
 .stale { color: var(--debit); }
 
-/* Tabs, not a button row.
-   They previously borrowed .controls, which is what the period selectors and
-   the capo sort bar use, so four section switches read as four filter chips at
-   0.68rem. Underlined tabs are the one pattern nobody has to decode, and the
-   active underline points down at the content it belongs to.
 
-   The bar carries the rule; each tab carries a 2px bottom border pulled down
-   1px so the active one sits ON the rule rather than above it. */
-.tabbar {
-  display: flex;
-  gap: var(--space-5);
-  margin: var(--space-5) 0;
-  border-bottom: 1px solid var(--rule-firm);
-  /* Tabs belong on one line. Four of them at this size overflow a narrow
-     phone, so the bar scrolls rather than wrapping into a second row that
-     stops looking like a tab bar at all. */
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.tabbar::-webkit-scrollbar { display: none; }
-
-.tabbar button {
-  flex: 0 0 auto;
-  font-family: var(--mono);
-  font-size: var(--step-0);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0 0 0.55rem;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  color: var(--ink-faint);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.tabbar button:hover { color: var(--ink); }
-.tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.tabbar button[aria-selected="true"] {
-  color: var(--accent-bright);
-  border-bottom-color: var(--accent);
-}
 
 .arrivals {
   margin: var(--space-5) 0 0;
@@ -282,6 +242,9 @@ function renderProfile(p) {
     '<button type="button" data-tab="profile" aria-selected="true">Money</button>' +
     '<button type="button" data-tab="outfit" aria-selected="false">Crew</button>' +
     '<button type="button" data-tab="prizes" aria-selected="false">Prizes</button>' +
+    (SHOW_STRATEGY
+      ? '<button type="button" data-tab="strategy" aria-selected="false">Strategy</button>'
+      : '') +
     '<button type="button" data-tab="capos" aria-selected="false">Capos (' +
       fmt(r.capos) + ')</button>' +
     '</div>')
@@ -452,6 +415,9 @@ function renderProfile(p) {
     '<div id="tab-profile">', pair(position, trading), ...portfolio, '</div>',
     '<div id="tab-outfit" hidden>', pair(ranks, roster), pair(combat, training), '</div>',
     '<div id="tab-prizes" hidden>', ...prizes, '</div>',
+    (SHOW_STRATEGY
+      ? '<div id="tab-strategy" hidden><p class="basis">Reading the fight archive...</p></div>'
+      : ''),
     '<div id="tab-capos" hidden><p class="basis">Loading roster...</p></div>',
   ].join('')
 }
@@ -475,6 +441,254 @@ async function loadRoster(ref) {
       .catch((err) => { rosterCache[key] = null; throw err })
   }
   return rosterCache[key]
+}
+
+/**
+ * The Strategy tab is built but not shown.
+ *
+ * It reads the fight archive and talks a player through their matchups, and it
+ * is not finished enough to publish. Everything it needs stays in this file:
+ * renderStrategy, its panel, and its lazy-draw hook. Flip this to true and the
+ * tab returns exactly as it was, with no rebuild of the work behind it.
+ */
+const SHOW_STRATEGY = false
+
+/* -------------------------------------------------------------- strategy --- */
+
+/**
+ * The same engine the CLI runs, in the browser.
+ *
+ * It needs two things the page does not already hold: the combat model, which
+ * is 6KB inside wars.json, and specialty per capo, which the roster shard now
+ * carries. Everything else is arithmetic, so there is no server here and no
+ * precomputed report going stale between rebuilds.
+ *
+ * Every figure traces to measured fights. Where the archive has nothing, this
+ * says so rather than filling the gap, which is the whole reason it exists:
+ * a strategist that guesses confidently is worse than one that stops.
+ */
+let oddsCache = null
+async function loadOdds() {
+  if (!oddsCache) {
+    oddsCache = fetch('/data/wars.json')
+      .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json() })
+      .then((j) => j.odds)
+      .catch((e) => { oddsCache = null; throw e })
+  }
+  return oddsCache
+}
+
+const invlogit = (x) => 1 / (1 + Math.exp(-x))
+
+/**
+ * Returns null where no fights exist between those ranks, and flags the cell as
+ * thin where too few do. Both matter: regularisation shrinks a sparse
+ * coefficient toward zero, which reads as "rank does not matter" rather than
+ * "we do not know", and that once ranked an underboss below captains against a
+ * recruit on the strength of 7 fights.
+ */
+function chance(odds, a, d) {
+  const rank = 'rp:' + a.tier + '>' + d.tier
+  const m = odds.model
+  if (m.coef[rank] == null) return null
+  const keys = ['m:' + a.spec + '>' + d.spec, rank,
+    'ara:' + a.rarity, 'dra:' + d.rarity, 'dis:' + d.district, 'lg:' + d.league]
+  let x = m.intercept
+  for (const k of keys) if (m.coef[k] != null) x += m.coef[k]
+  const support = (m.support && m.support[rank]) || 0
+  return { p: 100 * invlogit(x), support, thin: support < (m.thin_below || 30) }
+}
+
+function decodeRoster(shard, ref) {
+  const list = (shard.players || {})[ref] || []
+  const R = shard.rarities, K = shard.ranks, S = shard.specialties || [], RL = shard.roles || []
+  return list.map((c) => ({
+    name: c[0], rarity: R[c[1]], tier: K[c[2]], age: c[3],
+    inRoster: !!c[5], spec: S[c[6]], role: RL[c[7]] || 'unassigned',
+  })).filter((c) => c.spec && c.tier && c.rarity)
+}
+
+const cap1 = (v) => (v == null ? '-' : String(v).charAt(0).toUpperCase() + String(v).slice(1).replace(/_/g, ' '))
+const exact = (v) => Number(v || 0).toLocaleString('en-US')
+
+/**
+ * The site's ledger markup, written here rather than shared.
+ *
+ * build-pages.js has an equivalent, but this page is built by a different
+ * script and importing across the two would couple them for the sake of twenty
+ * lines. The class names and the data-cols contract are what actually keep them
+ * looking identical, and those are in the shared stylesheet.
+ */
+function stratTable(rows, cols) {
+  if (!rows || !rows.length) return '<p class="basis">Nothing to show.</p>'
+  const head = '<div class="row head">' +
+    cols.map((c) => '<span class="' + (c.num ? 'num' : '') + '">' + escd(c.label) + '</span>').join('') +
+    '</div>'
+  const body = rows.map((r) => {
+    const first = cols[0], rest = cols.slice(1)
+    return '<div class="row">' +
+      '<span class="name">' + escd(first.get(r)) + '</span>' +
+      '<span class="extra">' + rest.map((c) =>
+        '<span class="' + (c.num ? 'num' : '') + '">' +
+        '<span class="cell-label">' + escd(c.label) + '</span>' + escd(c.get(r)) + '</span>').join('') +
+      '</span></div>'
+  }).join('')
+  return '<div class="ledger" data-rank="none" data-cols="' + cols.length + '">' + head + body + '</div>'
+}
+
+async function renderStrategy(pane, player) {
+  let odds, shard
+  try {
+    ;[odds, shard] = await Promise.all([loadOdds(), loadRoster(player.ref)])
+  } catch (e) {
+    pane.innerHTML = '<p class="basis">Could not read the fight archive just now.</p>'
+    return
+  }
+  const roster = decodeRoster(shard, player.ref)
+  if (!roster.length) {
+    pane.innerHTML = '<p class="basis">No capos on record, so there is nothing to advise on.</p>'
+    return
+  }
+
+  const cap = shard.roster_cap || 20
+  const league = player.territory ? player.territory.league : 'street'
+  const inPlay = roster.filter((c) => c.inRoster)
+  const bench = roster.filter((c) => !c.inRoster)
+  const target = { spec: 'survivor', tier: 'captain', rarity: 'rare', district: 'racket_hub', league: league }
+
+  const rank = (list) => list
+    .map((c) => ({ c, r: chance(odds, c, target) }))
+    .filter((x) => x.r && !x.r.thin)
+    .sort((a, b) => b.r.p - a.r.p)
+  const ranked = rank(inPlay.concat(bench))
+  const rankedIn = rank(inPlay)
+  const rankedBench = rank(bench)
+
+  const parts = []
+
+  /* ---- the twenty */
+  parts.push('<div class="section-head"><h2>Your twenty</h2>' +
+    '<span class="section-meta">the roster is capped</span></div>')
+  const roles = {}
+  for (const c of inPlay) roles[c.role] = (roles[c.role] || 0) + 1
+  parts.push('<div class="tiles">' +
+    tile('In play', escd(inPlay.length + ' of ' + cap)) +
+    tile('On the bench', fmt(bench.length)) +
+    tile('Hustling', fmt(roles.hustler || 0)) +
+    tile('Garrisoned', fmt(roles.garrison || 0)) +
+    '</div>')
+
+  if (inPlay.length < cap) {
+    parts.push('<p class="basis">' + (cap - inPlay.length) +
+      ' slot' + (cap - inPlay.length === 1 ? '' : 's') + ' empty. Filling them costs nothing.</p>')
+  }
+
+  /* ---- is the bench stronger */
+  if (rankedIn.length && rankedBench.length) {
+    const weakest = rankedIn[rankedIn.length - 1]
+    const better = rankedBench.filter((x) => x.r.p > weakest.r.p)
+    parts.push('<div class="section-head"><h2>Bench against roster</h2>' +
+      '<span class="section-meta">ranked as fighters only</span></div>')
+    if (better.length) {
+      parts.push(stratTable(better.slice(0, 8), [
+        { label: 'Benched', get: (x) => x.c.name },
+        { label: 'Specialty', get: (x) => cap1(x.c.spec) },
+        { label: 'Rank', get: (x) => cap1(x.c.tier) },
+        { label: 'Beats your weakest by', num: true,
+          get: (x) => '+' + (x.r.p - weakest.r.p).toFixed(1) + ' pts' },
+      ]))
+      parts.push('<p class="basis">Your weakest in play is ' + escd(weakest.c.name) +
+        ' at ' + weakest.r.p.toFixed(1) + '%. A capo earns while it hustles, and no feed ' +
+        'reports what hustling pays, so this ranks fighters and not earners.</p>')
+    } else {
+      parts.push('<p class="basis">Nobody on the bench out-ranks your weakest capo in play. ' +
+        'Your twenty are already your twenty.</p>')
+    }
+  }
+
+  /* ---- who to send */
+  parts.push('<div class="section-head"><h2>Who to send</h2>' +
+    '<span class="section-meta">against a rare survivor captain on a racket hub</span></div>')
+  if (!ranked.length) {
+    parts.push('<p class="basis">No fights on record between your ranks and that target.</p>')
+  } else {
+    parts.push(stratTable(ranked.slice(0, 8), [
+      { label: 'Capo', get: (x) => x.c.name },
+      { label: 'Specialty', get: (x) => cap1(x.c.spec) },
+      { label: 'Rank', get: (x) => cap1(x.c.tier) },
+      { label: 'In play', get: (x) => (x.c.inRoster ? 'yes' : 'benched') },
+      { label: 'Wins', num: true, get: (x) => x.r.p.toFixed(1) + '%' },
+    ]))
+    parts.push('<p class="basis">Across your whole roster this runs from ' +
+      ranked[ranked.length - 1].r.p.toFixed(1) + '% to ' + ranked[0].r.p.toFixed(1) +
+      '%. Which capo you send matters more than anything else you control. ' +
+      'The odds land within ' + odds.model.validation.worst_gap_pp +
+      ' points of what actually happened, tested on ' +
+      exact(odds.model.validation.tested_on) + ' fights the model never saw.</p>')
+  }
+
+  /* ---- where to hold */
+  parts.push('<div class="section-head"><h2>Where to hold</h2>' +
+    '<span class="section-meta">same capo, same attacker, different ground</span></div>')
+
+  /**
+   * Expressed as a swing on one fixed scenario rather than as a raw hold rate,
+   * because the two disagree and only one of them answers the question a
+   * player is asking.
+   *
+   * Raw rates say a street league holds 70.8% and a kingpin league 50.8%, which
+   * makes kingpin look lethal. But kingpin cities are full of high-rank capos
+   * on both sides, so that gap is mostly who is fighting rather than where.
+   * Hold the fighters constant, as this does, and the order reverses: the same
+   * capo against the same attacker holds BETTER in kingpin.
+   *
+   * A player choosing where to put a capo wants the second question, so that is
+   * the one answered, and the heading says which it is.
+   */
+  const base = { spec: 'survivor', tier: 'captain', rarity: 'rare', district: 'racket_hub', league: league }
+  const me2 = { spec: 'survivor', tier: 'captain', rarity: 'rare' }
+  const refAtk = { spec: 'enforcer', tier: 'captain', rarity: 'rare' }
+  const at = (over) => {
+    const r = chance(odds, refAtk, Object.assign({}, base, me2, over))
+    return r ? r.p : null
+  }
+  const here = at({})
+
+  const swing = (list, key, label) => list
+    .map((v) => ({ v, p: at({ [key]: v }) }))
+    .filter((x) => x.p != null)
+    .sort((a2, b2) => a2.p - b2.p)
+    .map((x) => ({ name: x.v, delta: here == null ? null : here - x.p }))
+
+  const disList = Object.keys(odds.model.coef).filter((k) => k.startsWith('dis:')).map((k) => k.slice(4))
+  const lgList = Object.keys(odds.model.coef).filter((k) => k.startsWith('lg:')).map((k) => k.slice(3))
+
+  parts.push('<div class="duo">' +
+    '<div><p class="duo-head">District type</p>' + stratTable(swing(disList, 'district'), [
+      { label: 'Type', get: (x) => cap1(x.name) },
+      { label: 'Holds better by', num: true,
+        get: (x) => (x.delta == null ? '-' : (x.delta >= 0 ? '+' : '') + x.delta.toFixed(1) + ' pts') },
+    ]) + '</div>' +
+    '<div><p class="duo-head">League</p>' + stratTable(swing(lgList, 'league'), [
+      { label: 'League', get: (x) => cap1(x.name) + (x.name === league ? ' (yours)' : '') },
+      { label: 'Holds better by', num: true,
+        get: (x) => (x.delta == null ? '-' : (x.delta >= 0 ? '+' : '') + x.delta.toFixed(1) + ' pts') },
+    ]) + '</div></div>')
+  parts.push('<p class="basis">Measured against your own ground, for a rare survivor captain ' +
+    'defending a rare captain enforcer. Positive means the same capo holds better there. ' +
+    'This deliberately differs from the raw hold rates on the Wars page: those count every ' +
+    'fight in a league, and kingpin leagues are full of high-rank capos on both sides, so the ' +
+    'raw figure mostly measures who turns up rather than where they fight.</p>')
+
+  /* ---- the honest limits */
+  parts.push('<div class="section-head"><h2>What this cannot tell you</h2>' +
+    '<span class="section-meta">absent on purpose</span></div>')
+  parts.push('<p class="basis">Your capos\' stats are not published: muscle, hustle, brains, ' +
+    'rep and grit exist only for capos that have been listed for sale. Nor is your gear, ' +
+    'nor anything about hustling, which no feed reports the outcome of. None of those are ' +
+    'guessed at here.</p>')
+
+  pane.innerHTML = parts.join('')
 }
 
 /**
@@ -663,6 +877,7 @@ function wireTabs(player) {
   // Driven off the pane ids rather than a hardcoded pair, so adding a tab is a
   // change in one place instead of two that can fall out of step.
   const names = ['profile', 'outfit', 'prizes', 'capos']
+  if (SHOW_STRATEGY) names.splice(3, 0, 'strategy')
   const panes = {}
   names.forEach((n) => { panes[n] = document.getElementById('tab-' + n) })
   let loaded = false
@@ -673,8 +888,48 @@ function wireTabs(player) {
     bar.querySelectorAll('button').forEach((b) =>
       b.setAttribute('aria-selected', String(b.dataset.tab === want)))
     names.forEach((n) => { if (panes[n]) panes[n].hidden = n !== want })
+      if (panes[want]) revealIn(panes[want])
     if (want === 'capos' && !loaded) { loaded = true; renderRoster(panes.capos, player.ref) }
   })
+}
+
+
+/**
+ * The league boards, the same five as the economy page.
+ *
+ * Repeated here on purpose rather than by accident: this is the players page,
+ * and "who is winning in my league" is a player question. It is a static
+ * build-time summary, so it costs a kilobyte and no request.
+ */
+function renderLeagueBoards() {
+  const el = document.getElementById('leagueboards')
+  if (!el || !LEAGUES || !LEAGUES.boards.length) return
+  // Named, not "latest": the number comes from the ledger, so it follows the
+  // weekly rollover on its own.
+  const h = document.getElementById('h-leagues')
+  if (h && LEAGUES.season) h.textContent = 'Top players in season ' + LEAGUES.season
+  const usd = (n) => '$' + Math.round(n).toLocaleString('en-US')
+  const rows = (b) => b.top.map((w, i) =>
+    '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
+    '<span class="name">' + escd(w.name) + '</span>' +
+    '<span class="extra"><span class="num">' +
+    '<span class="cell-label">Won</span>' + usd(w.usd) + '</span></span></div>').join('')
+
+  el.innerHTML = '<div class="leaguegrid">' + LEAGUES.boards.map((b) =>
+    '<div>' +
+    '<p class="leaguehead"><span class="nm">' + escd(b.name) + '</span>' +
+    '<span class="sub">' + b.winners + (b.winners === 1 ? ' winner' : ' winners') +
+    ' &middot; ' + usd(b.total) + '</span></p>' +
+    '<div class="ledger" data-cols="3">' +
+    '<div class="row head"><span></span><span>Player</span><span class="num">Won</span></div>' +
+    rows(b) + '</div></div>').join('') + '</div>' +
+    '<p class="basis">Season ' + LEAGUES.season + ', top five of ' + LEAGUES.winners +
+    ' players paid. League is read from the territory snapshot taken before the season ' +
+    'closed, because players are promoted a league at the rollover and a later reading ' +
+    'puts most winners a rung above where they actually won. ' + LEAGUES.unmatched +
+    ' winners held no ground at that moment, ' + usd(LEAGUES.unmatched_usd) +
+    ' between them, and appear on no board. Full season detail is on the ' +
+    '<a href="/money.html#prizes">economy page</a>.</p>'
 }
 
 function route() {
@@ -688,9 +943,12 @@ function route() {
     document.getElementById('back').addEventListener('click', () => { location.hash = '' })
     wireTabs(bySlug[decodeURIComponent(m[1])])
     window.scrollTo(0, 0)
+    revealIn(prof)
   } else {
     prof.hidden = true
     dir.hidden = false
+    renderLeagueBoards()
+    revealIn(dir)
   }
 }
 
@@ -712,12 +970,54 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 `
 
+
+/**
+ * The latest season's league boards, summarised at build time.
+ *
+ * This page embeds its data and never fetches, so rather than teaching it to
+ * pull prizes.json at runtime for one block, the five boards are reduced here to
+ * about a kilobyte and inlined. derive/rewards-ledger.js runs before this
+ * builder, so the file is always current.
+ *
+ * The league on each winner is already resolved against the snapshot taken
+ * before that season closed, which matters: read afterwards, every promoted
+ * winner shows a rung too high.
+ */
+function leagueBoards() {
+  const f = path.join(ROOT, 'data', 'site', 'prizes.json')
+  if (!fs.existsSync(f)) return null
+  const p = JSON.parse(fs.readFileSync(f, 'utf8'))
+  const latest = (p.seasons || [])[0]
+  if (!latest || !p.leagues) return null
+  const boards = p.leagues.map((lg) => {
+    const won = (latest.ledger || []).filter((w) => w.league === lg.name)
+    if (!won.length) return null
+    return {
+      name: lg.name, winners: won.length,
+      total: +won.reduce((a, w) => a + w.usd, 0).toFixed(2),
+      top: won.slice(0, 5).map((w) => ({ name: w.name, usd: w.usd })),
+    }
+  }).filter(Boolean)
+  const unmatched = (latest.ledger || []).filter((w) => !w.league)
+  return {
+    season: latest.season, winners: latest.winners, boards,
+    unmatched: unmatched.length,
+    unmatched_usd: +unmatched.reduce((a, w) => a + w.usd, 0).toFixed(2),
+  }
+}
+
 function buildBody(data) {
   return `<div class="wrap">
   <div id="directory">
     <header class="masthead">
-      <span class="eyebrow">The Syndicate &middot; kept by the community</span>
-      <h1>Players</h1>
+      <div class="brandrow">
+        <a class="brandlink" href="/" aria-label="Capowatch home"><img class="brandmark"
+           src="/badge-small.png" width="72" height="62" alt="Capowatch"></a>
+        <div>
+          <span class="eyebrow">The Syndicate &middot; kept by the community</span>
+          <h1>Players</h1>
+        </div>
+      </div>
       <span class="live">Updated <span id="generated">&hellip;</span></span>
       ${navHtml('/players.html')}
     </header>
@@ -732,18 +1032,23 @@ function buildBody(data) {
     <div class="plist" id="list"></div>
 
     <p class="arrivals" id="arrivals"></p>
+
+    <div class="section-head"><h2 id="h-leagues">Top players last season</h2><span class="section-meta">top five paid in each league</span></div>
+    <div id="leagueboards"></div>
   </div>
 
   <div id="profile" hidden></div>
 
-  <footer>
-
-  </footer>
+  ${shareBar('/players.html', 'Every player in The Syndicate: rosters, combat records, trading and prize winnings, kept by the community.')}
+  ${REFERRAL}
+  ${FOOTER}
 </div>
 
 <script>
 const DATA = ${JSON.stringify(data)};
+const LEAGUES = ${JSON.stringify(leagueBoards())};
 ${STAMP_JS}
+${REVEAL_JS}
 ${CLIENT_JS}
 </script>
 `
@@ -766,7 +1071,10 @@ function main() {
   assignSlugs(data.players)
   writeSearchIndex(data.players)
 
-  const indexable = process.env.SITE_INDEXABLE === '1'
+  // Indexable unless explicitly switched off. It shipped noindex for months
+  // while the site was unreleased, and leaving the default that way meant a
+  // launch could quietly go out invisible.
+  const indexable = process.env.SITE_INDEXABLE !== '0'
   const robots = indexable ? '' : '\n<meta name="robots" content="noindex, nofollow">'
 
   const doc = `<!DOCTYPE html>
