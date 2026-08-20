@@ -12,7 +12,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar } from './style.js'
+import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, PRICE_JS, PRICE_TICKER } from './style.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -148,7 +148,10 @@ const PAGE_CSS = String.raw`
 
 const CLIENT_JS = String.raw`
 const fmt = (n) => (n == null ? '-' : Number(n).toLocaleString('en-US'))
-const sol = (n) => (n == null ? '-' : (n >= 0 ? '+' : '') + n.toFixed(3) + ' SOL')
+// Dollars lead, SOL stays underneath. solAmount comes from PRICE_JS and falls
+// back to plain SOL when no rate has arrived.
+const sol = (n) => (n == null ? '-' : solAmount(n, { sign: true }))
+const solBare = (n) => (n == null ? '-' : solAmount(n, { bare: true }))
 // Renders a missing value as a dash, so an absent figure reads as absent
 // rather than as a cell that failed to fill. Named apart from the usual esc()
 // because it differs in exactly that way, and the two got mixed up once
@@ -218,13 +221,13 @@ function renderProfile(p) {
     '</header>')
 
   parts.push('<div class="tiles">' +
-    tile('Net SOL', q ? sol(q.net_sol) : '-',
+    tile('Net position', q ? sol(q.net_sol) : '-',
       q ? 'traded + held' : 'no position',
       q ? (q.net_sol >= 0 ? 'pos' : 'neg') : '') +
-    tile('Realized SOL', t ? sol(t.realized_sol) : '-',
+    tile('Realized', t ? sol(t.realized_sol) : '-',
       t ? t.sells + ' sold, ' + t.buys + ' bought' : 'has not traded',
       t ? (t.realized_sol >= 0 ? 'pos' : 'neg') : '') +
-    tile('Portfolio SOL', h && h.priced_capos ? h.portfolio_sol.toFixed(2) : '-',
+    tile('Portfolio', h && h.priced_capos ? solBare(h.portfolio_sol) : '-',
       h && h.priced_capos ? fmt(h.priced_capos) + ' tradeable' : 'nothing tradeable') +
     tile('Capos held', fmt(r.capos), fmt(r.active) + ' active') +
     tile('Fights won', c ? fmt(c.won) : '-', c ? 'of ' + fmt(c.fights) : 'no combat record') +
@@ -267,13 +270,10 @@ function renderProfile(p) {
     // worth now, so today's rate is the right rate. Realized and net are lifetime
     // totals made of trades struck at many different SOL prices; converting them
     // at today's would state a number that never happened.
-    const held = SOLUSD
-      ? q.portfolio_sol.toFixed(3) + ' SOL <span class="approx">&asymp; $' +
-        fmt(Math.round(q.portfolio_sol * SOLUSD.usd)) + '</span>'
-      : q.portfolio_sol.toFixed(3) + ' SOL'
+    const held = solAmount(q.portfolio_sol)
     parts.push('<section><div class="section-head"><h2>Position</h2>' +
       '<span class="section-meta">' +
-      (q.prize_usd ? 'SOL position and USD prizes' : 'SOL, secondary market') +
+      (q.prize_usd ? 'secondary market and prizes' : 'secondary market') +
       '</span></div>' +
       rows([
         ['Realized on trades', sol(q.realized_sol)],
@@ -281,11 +281,12 @@ function renderProfile(p) {
         ['Net position', sol(q.net_sol)],
         q.prize_usd ? ['Prize winnings', '$' + fmt(Math.round(q.prize_usd))] : null,
       ]) +
-      (SOLUSD
-        ? '<p class="basis">SOL at $' + SOLUSD.usd + ', ' + escd(SOLUSD.source) +
-          ' spot. Only the held value is converted, because it is what those capos ' +
-          'are worth today. The lifetime totals above it were traded at many ' +
-          'different SOL prices, so a dollar figure on them would be invented.</p>'
+      (window.SOL_USD
+        ? '<p class="basis">Every figure here is SOL converted at the current rate, ' +
+          'shown in the masthead. The SOL amount is underneath each one, because ' +
+          'that is what the game charges and pays in. Lifetime totals were traded ' +
+          'at many different SOL prices, so read their dollar figure as today\'s ' +
+          'value of that many SOL, not as what changed hands at the time.</p>'
         : '') +
       '</section>')
   }
@@ -311,7 +312,7 @@ function renderProfile(p) {
       rows([
         pz.daily_usd ? ['Daily prizes', usd(pz.daily_usd)] : null,
         pz.bounty_usd ? ['Bounties', usd(pz.bounty_usd)] : null,
-        pz.sol_bounties ? ['SOL bounties', pz.sol_bounties.toFixed(3) + ' SOL'] : null,
+        pz.sol_bounties ? ['SOL bounties', solAmount(pz.sol_bounties)] : null,
       ].concat((pz.by_season || []).map((s) =>
         ['Season ' + s.season, usd(s.usd)]))) +
       '</section>')
@@ -375,7 +376,7 @@ function renderProfile(p) {
         ['Completion rate', tr.completion_rate + '%'],
         ['On time rate', tr.on_time_rate + '%'],
         ['Average turnaround', tr.turnaround_hours + 'h'],
-        tr.rate_sol ? ['Rate', tr.rate_sol.toFixed(4) + ' SOL'] : null,
+        tr.rate_sol ? ['Rate', solAmount(tr.rate_sol)] : null,
       ]) + '</section>')
   }
 
@@ -384,8 +385,8 @@ function renderProfile(p) {
     '<span class="section-meta">SOL, secondary market</span></div>')
   if (t) {
     parts.push(rows([
-      ['Sold', fmt(t.sells) + ' for ' + t.sol_received.toFixed(3) + ' SOL'],
-      ['Bought', fmt(t.buys) + ' for ' + t.sol_spent.toFixed(3) + ' SOL'],
+      ['Sold', fmt(t.sells) + ' for ' + solAmount(t.sol_received)],
+      ['Bought', fmt(t.buys) + ' for ' + solAmount(t.sol_spent)],
       ['Realized', sol(t.realized_sol)],
     ]))
   }
@@ -398,14 +399,14 @@ function renderProfile(p) {
     parts = portfolio
     parts.push('<section><div class="section-head"><h2>Portfolio</h2>' +
       '<span class="section-meta">' +
-      (h.priced_capos ? h.portfolio_sol.toFixed(2) + ' SOL' : 'nothing tradeable') +
+      (h.priced_capos ? solAmount(h.portfolio_sol, { bare: true }) : 'nothing tradeable') +
       '</span></div>')
     if (held.length) {
       parts.push(rows(held.map((k) => {
         const b = h.by_rarity[k]
         const at = M[k] && M[k].median_sol != null ? ' at ' + M[k].median_sol + ' each' : ''
         return [k.charAt(0).toUpperCase() + k.slice(1),
-          fmt(b.n) + ' ×' + at + ' = ' + b.sol.toFixed(2) + ' SOL']
+          fmt(b.n) + ' ×' + at + ' = ' + solAmount(b.sol, { bare: true })]
       })))
     }
     // The untradeable count is the whole story for most players, so it is stated
@@ -967,6 +968,8 @@ function route() {
   }
 }
 
+window.onSolPrice = () => route()
+
 document.addEventListener('DOMContentLoaded', () => {
   // This page embeds its data and never polls, so without the ticker its stamp
   // would freeze at whatever the age was when the tab opened.
@@ -1058,6 +1061,7 @@ function buildBody(data) {
       </div>
       <span class="live">Updated <span id="generated">&hellip;</span></span>
       ${navHtml('/players.html')}
+    ${PRICE_TICKER}
     </header>
 
     <div class="tiles" id="dirtiles"></div>
@@ -1088,6 +1092,7 @@ const DATA = ${JSON.stringify(data)};
 const SOLUSD = ${JSON.stringify(solUsd())};
 const LEAGUES = ${JSON.stringify(leagueBoards())};
 ${STAMP_JS}
+${PRICE_JS}
 ${REVEAL_JS}
 ${CLIENT_JS}
 </script>

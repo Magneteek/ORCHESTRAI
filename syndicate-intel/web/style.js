@@ -512,6 +512,36 @@ h3 {
    toggles get their spacing from the chart wrapper; a bare table has none. */
 .table-more { margin-top: var(--space-3); }
 
+/* Price ticker. Sits in the masthead's top right, above the nav, and is the one
+   number on the site that is not the game's. */
+.tick {
+  position: absolute; top: 0; right: 0;
+  display: inline-flex; align-items: baseline; gap: 0.45rem;
+  font-family: var(--mono); font-size: var(--step--1);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--rule-firm);
+}
+/* The SOL amount under a converted figure: the number the game charges in. */
+.insol { display: block; font-size: var(--step--2); color: var(--ink-faint); }
+.tick-label { color: var(--ink-faint); letter-spacing: 0.12em; }
+.tick-value { color: var(--ink); font-variant-numeric: tabular-nums; }
+.tick-arrow.up { color: var(--credit); }
+.tick-arrow.down { color: var(--debit); }
+@keyframes tick-up   { from { background: color-mix(in oklab, var(--credit) 28%, transparent); } to { background: transparent; } }
+@keyframes tick-down { from { background: color-mix(in oklab, var(--debit) 28%, transparent); } to { background: transparent; } }
+.tick.flash-up   { animation: tick-up 1.1s ease-out; }
+.tick.flash-down { animation: tick-down 1.1s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .tick.flash-up, .tick.flash-down { animation: none; }
+}
+/* The masthead becomes the ticker's positioning context. */
+.masthead { position: relative; }
+@media (max-width: 34rem) {
+  /* On a phone the masthead is tall and the top right corner is beside the
+     eyebrow, which is where it would collide. Put it under the nav instead. */
+  .tick { position: static; align-self: flex-start; margin-top: var(--space-3); }
+}
+
 /* A converted figure sits beside its source figure, not in place of it: the SOL
    amount is the fact, the dollar amount is a reading of it at today's rate. */
 .approx { color: var(--ink-faint); font-variant-numeric: tabular-nums; }
@@ -1134,6 +1164,97 @@ export const shareBar = (path, text) => {
       `<a class="sharelink" href="${href}" target="_blank" rel="noopener nofollow">${name}</a>`).join('')}
   </div>`
 }
+
+/**
+ * SOL price ticker, top right of the masthead on every page.
+ *
+ * It fetches /data/price.json itself rather than riding on a page's section
+ * payload, because the players page embeds its data and never uses that runtime.
+ * One small request, shared cache, and a page whose price never arrives simply
+ * shows nothing where the ticker would be.
+ *
+ * Direction comes from the previous reading published beside the current one, so
+ * a page knows which way the price moved on first paint rather than only after
+ * sitting open long enough to see it change.
+ *
+ * Every USD figure on the site is derived from this number, so it is exported on
+ * window for the page scripts to convert with, and it re-renders them when it
+ * moves.
+ */
+export const PRICE_JS = String.raw`
+window.SOL_USD = null
+
+/**
+ * A SOL amount, shown in dollars.
+ *
+ * The dollar figure leads because that is what people asked for, and the SOL
+ * amount stays beside it in small type because SOL is what the game actually
+ * denominates in: a trainer charges 0.0053 SOL, not $0.46, and a player about to
+ * pay one needs the number they will actually be charged.
+ *
+ * Falls back to plain SOL when no rate has arrived, so a page whose price fetch
+ * failed still shows every figure it always did.
+ *
+ * Everything here is converted at the current rate, including lifetime totals
+ * that were transacted at many different rates. That is a deliberate choice and
+ * the pages that carry such totals say so.
+ */
+function solAmount(sol, opts) {
+  const o = opts || {}
+  const n = Number(sol) || 0
+  const dp = Math.abs(n) < 0.01 ? 4 : 3
+  const solText = n.toFixed(dp) + ' SOL'
+  if (!window.SOL_USD) return solText
+  const usd = n * window.SOL_USD
+  // Sign outside the symbol. "$-21,884" is not how anyone writes money.
+  const neg = usd < 0
+  const abs = Math.abs(usd)
+  const money = (neg ? '-' : '') + (abs < 10 ? '$' + abs.toFixed(2)
+    : '$' + Math.round(abs).toLocaleString('en-US'))
+  const signed = o.sign && n > 0 ? '+' + money : money
+  return signed + (o.bare ? '' : '<span class="insol">' + solText + '</span>')
+}
+
+function paintPrice(next, prev) {
+  const el = document.getElementById('solprice')
+  if (!el || !next) return
+  const dir = prev == null || next === prev ? '' : (next > prev ? 'up' : 'down')
+  el.innerHTML = '<span class="tick-label">SOL</span>' +
+    '<span class="tick-value">$' + next.toFixed(2) + '</span>' +
+    (dir ? '<span class="tick-arrow ' + dir + '">' + (dir === 'up' ? '\u25b2' : '\u25bc') + '</span>' : '')
+  el.hidden = false
+  if (!dir) return
+  // Re-trigger rather than add: a class already present does not restart a CSS
+  // animation, so two moves in the same direction would flash only once.
+  el.classList.remove('flash-up', 'flash-down')
+  void el.offsetWidth
+  el.classList.add(dir === 'up' ? 'flash-up' : 'flash-down')
+}
+
+async function loadPrice(first) {
+  try {
+    const res = await fetch('/data/price.json?t=' + Math.floor(Date.now() / 30000), { cache: 'no-store' })
+    if (!res.ok) return
+    const j = await res.json()
+    if (!j.sol_usd) return
+    const was = window.SOL_USD
+    window.SOL_USD = j.sol_usd.usd
+    paintPrice(j.sol_usd.usd, first ? (j.previous && j.previous.usd) : was)
+    // Figures elsewhere are quoted from this rate, so they move with it. This
+    // fires on the first arrival too, not only on later changes: the page renders
+    // before the fetch resolves, so without it every figure would keep the plain
+    // SOL fallback it was drawn with and never pick the rate up.
+    if (was !== j.sol_usd.usd && typeof window.onSolPrice === 'function') window.onSolPrice()
+  } catch { /* no ticker, no dollar figures; the page is still the page */ }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadPrice(true)
+  setInterval(() => loadPrice(false), 60000)
+})
+`
+
+export const PRICE_TICKER = '<div class="tick" id="solprice" hidden></div>'
 
 export const REFERRAL_URL = 'https://thesyndicate.games?ref=aaaa'
 

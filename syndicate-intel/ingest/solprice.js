@@ -68,12 +68,13 @@ async function fetchPrice() {
  * for data that moves in cents is how free endpoints stop being free.
  */
 const MAX_AGE_MS = 30 * 60 * 1000
-function lastReading() {
+function readings(n) {
   try {
     const lines = fs.readFileSync(OUT, 'utf8').trim().split('\n')
-    return JSON.parse(lines[lines.length - 1])
-  } catch { return null }
+    return lines.slice(-n).map((l) => JSON.parse(l))
+  } catch { return [] }
 }
+const lastReading = () => readings(1)[0] || null
 
 /**
  * The site reads price.json, not the ledger.
@@ -84,11 +85,15 @@ function lastReading() {
  * date rather than today's.
  */
 function publish(reading) {
+  // The previous reading ships too, so a page can show which way the price moved
+  // the moment it loads instead of waiting for a change to happen under it.
+  const prev = readings(2).filter((r) => r.at !== (reading || {}).at).slice(-1)[0] || null
   const site = path.join(ROOT, 'data', 'site', 'price.json')
   fs.mkdirSync(path.dirname(site), { recursive: true })
   fs.writeFileSync(site, JSON.stringify({
     generated_at: new Date().toISOString(),
     sol_usd: reading ? { usd: reading.usd, source: reading.source, at: reading.at } : null,
+    previous: prev ? { usd: prev.usd, at: prev.at } : null,
   }))
 }
 

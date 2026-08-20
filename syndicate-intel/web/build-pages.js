@@ -14,7 +14,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, SITE_URL } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, SITE_URL, PRICE_JS, PRICE_TICKER } from './style.js'
 import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -102,6 +102,9 @@ async function load(first) {
       render()
       ledesToTop()
       revealIn()
+      // Dollar figures are quoted from window.SOL_USD, so a price move has to
+      // repaint them. render() is idempotent, so re-running it is the whole fix.
+      window.onSolPrice = () => { render(); ledesToTop(); revealIn() }
     }
     setStamp(true)
   } catch (err) {
@@ -156,6 +159,7 @@ ${FONTS}
     </div>
     ${isStatic ? '' : '<span class="live">Updated <span id="generated">&hellip;</span></span>'}
     ${navHtml(href)}
+  ${PRICE_TICKER}
   </header>
   <main id="main">${body}</main>
   ${shareBar(href, share || title.replace(' \u00b7 ' + SITE, '').replace(SITE + ': ', ''))}
@@ -167,9 +171,10 @@ ${isStatic
   // A static page ships the reveal and nothing else. RUNTIME calls render() on
   // load, so including it here would have the page fetch a payload it has no
   // use for and then blank itself when no render function turns up.
-  ? REVEAL_JS + '\ndocument.addEventListener("DOMContentLoaded", () => revealIn())'
+  ? PRICE_JS + REVEAL_JS + '\ndocument.addEventListener("DOMContentLoaded", () => revealIn())'
   : `const SECTION_URLS = ${JSON.stringify([].concat(section).map((n) => '/data/' + n + '.json'))};
 ${STAMP_JS}
+${PRICE_JS}
 ${CHART_JS}
 ${LEDGER_JS}
 ${REVEAL_JS}
@@ -272,7 +277,7 @@ function render() {
       // day that actually closed, never today's running total.
       h.net_yesterday_day ? 'minted less burned, ' + h.net_yesterday_day : 'minted less burned',
       h.net_yesterday >= 0 ? 'pos' : 'neg'],
-    ['Secondary volume, 7d', h.sol_volume_7d.toFixed(1) + ' SOL', nfmt(h.sales_7d) + ' sales'],
+    ['Secondary volume, 7d', solAmount(h.sol_volume_7d, { bare: true }), nfmt(h.sales_7d) + ' sales'],
   ].map(([l, v, n, cls]) =>
     '<div class="tile"><span class="tile-label">' + l + '</span>' +
     '<span class="tile-value ' + (cls || '') + '">' + v + '</span>' +
@@ -296,7 +301,7 @@ function render() {
     t('New capos', nfmt(f.new_capos_24h), 'minted into the world') +
     t('Promotions', nfmt(f.promotions_24h), 'capos moved up a rank') +
     t('Sales', nfmt(f.sales_24h), f.sol_24h + ' SOL traded') +
-    t('Top sale', f.top_sale_24h ? f.top_sale_24h.sol + ' SOL' : '-',
+    t('Top sale', f.top_sale_24h ? solAmount(f.top_sale_24h.sol, { bare: true }) : '-',
       f.top_sale_24h ? cap(f.top_sale_24h.rarity) : 'nothing sold')
 
   document.getElementById('guide').className = 'guide'
@@ -533,7 +538,7 @@ function renderOtherRewards(usd) {
     { k: 'Bounties, in USDC', sub: 'paid for specific targets',
       v: usd(DATA.total_usdc_bounty) },
     { k: 'Bounties, in SOL', sub: (sb.payouts || 0) + ' payouts to ' + (sb.wallets || 0) + ' wallets',
-      v: (sb.total_sol != null ? sb.total_sol + ' SOL' : '-') },
+      v: (sb.total_sol != null ? solAmount(sb.total_sol) : '-') },
     // Computed, not written down: a share stated as a literal goes stale the
     // first week the split moves and nothing flags it.
     { k: 'Season pools, for scale',
@@ -1056,8 +1061,8 @@ function render() {
       sub: 'league placement, paid every week' },
     { k: 'Daily prizes', v: usd(DATA.total_usdc_daily), sub: 'outside the season pools' },
     { k: 'Bounties in USDC', v: usd(DATA.total_usdc_bounty), sub: 'paid for specific targets' },
-    { k: 'Bounties in SOL', v: ((DATA.sol_bounties || {}).total_sol || 0) + ' SOL',
-      sub: 'never converted to a dollar figure here' },
+    { k: 'Bounties in SOL', v: solAmount((DATA.sol_bounties || {}).total_sol || 0),
+      sub: 'converted at the current rate' },
   ], [
     { label: 'Stream', get: (x) => x.k, sub: (x) => x.sub },
     { label: 'Paid', num: true, get: (x) => x.v },
@@ -1542,22 +1547,21 @@ function render() {
   const m = DATA.market, r = DATA.rates
 
   document.getElementById('tiles').innerHTML = [
-    // SOL first, because every other figure on this page is priced in it. The
-    // only number on the site that does not come from the game, so it says where
-    // it came from. Omitted entirely rather than guessed if the feed is down.
-    ...(DATA.sol_usd ? [['SOL price', '$' + DATA.sol_usd.usd, DATA.sol_usd.source]] : []),
-    // The capo marketplace leads the game's own figures: it is the bigger of the
-    // two markets here, and the one most readers came to ask about.
+    // The SOL price used to be a tile here. It is in the masthead on every page
+    // now, so a copy on this one page would be the same number twice.
+    // The capo marketplace leads: it is the bigger of the two markets here, and
+    // the one most readers came to ask about.
     ['Capo sales recorded', nfmt(DATA.sales.volume.reduce((a, v) => a + v.sales, 0)),
-      DATA.sales.volume.reduce((a, v) => a + v.sol, 0).toFixed(1) + ' SOL'],
+      solAmount(DATA.sales.volume.reduce((a, v) => a + v.sol, 0), { bare: true })],
     ['Trainers listed', nfmt(m.trainers), m.available + ' taking work'],
     ['Jobs settled', nfmt(m.jobs_settled), 'lifetime, all trainers'],
-    ['Median rate', m.median_rate_sol + ' SOL', 'per job'],
+    ['Median rate', solAmount(m.median_rate_sol, { bare: true }), 'per job'],
     ['Median turnaround', m.median_turnaround_h + 'h', 'typical trainer'],
     ['Slot utilisation', m.utilisation_pct + '%', nfmt(m.active_fills) + ' of ' + nfmt(m.total_slots) + ' slots busy'],
     // The middle half of the rate spread: the figure to know before deciding
     // what to pay, which the median alone does not give you.
-    ['Typical rate', DATA.rates.p25_sol + ' to ' + DATA.rates.p75_sol, 'SOL, middle half'],
+    ['Typical rate', solAmount(DATA.rates.p25_sol, { bare: true }) + ' to ' +
+      solAmount(DATA.rates.p75_sol, { bare: true }), 'middle half'],
   ].map(([l, v, n]) =>
     '<div class="tile"><span class="tile-label">' + l + '</span>' +
     '<span class="tile-value">' + v + '</span>' +
@@ -1606,21 +1610,20 @@ function renderMarket() {
   document.getElementById('c-price').innerHTML = '<div class="tiles">' +
     DATA.sales.price_band.map((p) =>
       '<div class="tile"><span class="tile-label">' + capr(p.rarity) + '</span>' +
-      '<span class="tile-value">' + p.avg_sol.toFixed(3) + ' SOL</span></div>').join('') +
+      '<span class="tile-value">' + solAmount(p.avg_sol) + '</span></div>').join('') +
     '</div>'
 
   // Liquidity is four numbers, not a shape. A chart of three percentiles is a
   // chart of three numbers, so this is a table.
   const q = DATA.liquidity
-  if (DATA.sol_usd) {
-    const traded = DATA.sales.volume.reduce((a, v) => a + v.sol, 0)
+  if (window.SOL_USD) {
     const el = document.getElementById('c-volume')
     if (el) el.insertAdjacentHTML('beforeend',
-      '<p class="basis">' + traded.toFixed(1) + ' SOL has changed hands here, worth about $' +
-      nfmt(Math.round(traded * DATA.sol_usd.usd)) + ' at today\'s rate of $' +
-      DATA.sol_usd.usd + ' (' + esc(DATA.sol_usd.source) + ' spot). Those trades were ' +
-      'struck at many different SOL prices, so read that as a size, not as what ' +
-      'anyone actually paid.</p>')
+      '<p class="basis">Dollar figures on this page are SOL converted at the ' +
+      'current rate, shown in the masthead, with the SOL amount underneath. ' +
+      'Lifetime and cumulative totals were traded at many different SOL prices, ' +
+      'so read their dollar figure as today\'s value of that many SOL rather ' +
+      'than as what anyone actually paid.</p>')
   }
 
   document.getElementById('liquidity').innerHTML = ledgerRows([
@@ -1629,7 +1632,7 @@ function renderMarket() {
     { k: 'Slowest quarter', sub: 'still sold, just waited', v: q.hours_to_sell.p75 + 'h' },
     { k: 'Sold at or above ask', sub: 'share of matched sales', v: q.sold_at_or_above_ask_pct + '%' },
     { k: 'Discount when discounted', sub: 'lower quartile against ask', v: q.vs_ask_pct.p25 + '%' },
-    { k: 'Listed right now', sub: 'average ask ' + q.avg_ask_sol + ' SOL', v: nfmt(q.listed_now) },
+    { k: 'Listed right now', sub: 'average ask ' + solAmount(q.avg_ask_sol, { bare: true }), v: nfmt(q.listed_now) },
     { k: 'Sold in the last week', sub: 'clearing rate', v: nfmt(q.sold_7d) },
     { k: 'Weeks of inventory', sub: 'shelf against clearing rate', v: q.weeks_of_inventory },
   ], [
@@ -1647,8 +1650,8 @@ function renderTraitPrice() {
   const cols = (labelName) => [
     { label: labelName, get: (x) => x.key },
     { label: 'Sales', num: true, get: (x) => nfmt(x.sales) },
-    { label: 'Median', num: true, get: (x) => x.median_sol + ' SOL' },
-    { label: 'Average', num: true, get: (x) => x.avg_sol + ' SOL' },
+    { label: 'Median', num: true, get: (x) => solAmount(x.median_sol, { bare: true }) },
+    { label: 'Average', num: true, get: (x) => solAmount(x.avg_sol, { bare: true }) },
   ]
   document.getElementById('traitprice').innerHTML =
     ledgerRows(tp.specialty, cols('Specialty')) +
@@ -1710,7 +1713,7 @@ function renderRoster() {
     { label: 'Trainer', key: 'name',
       get: (t) => t.name,
       sub: (t) => (t.available ? t.free + ' of ' + dash(t.capacity) + ' slots free' : 'not available') },
-    { label: 'Rate', key: 'rate_sol', num: true, get: (t) => t.rate_sol },
+    { label: 'Rate', key: 'rate_sol', num: true, get: (t) => solAmount(t.rate_sol, { bare: true }) },
     { label: 'Jobs', key: 'jobs_settled', num: true, get: (t) => nfmt(t.jobs_settled) },
     { label: 'Done', key: 'completion', num: true, get: (t) => dash(t.completion, '%') },
     { label: 'Turnaround', key: 'turnaround_h', num: true, get: (t) => dash(t.turnaround_h, 'h') },
@@ -1879,7 +1882,7 @@ const PAGES = [
   {
     // Two files again: the capo marketplace and the trainer hiring market. They
     // share no data, only the question. Both are what someone will pay you.
-    file: 'market.html', section: ['market', 'trainers', 'price'],
+    file: 'market.html', section: ['market', 'trainers'],
     share: 'What capos sell for in The Syndicate, how fast they sell, and every trainer for hire.',
     title: 'Market and trainers · The Syndicate · ' + SITE, heading: 'Market',
     eyebrow: 'The Syndicate &middot; what things cost',
