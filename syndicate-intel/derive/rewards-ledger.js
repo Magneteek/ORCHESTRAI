@@ -23,6 +23,7 @@
  * Usage: node derive/rewards-ledger.js
  */
 import fs from 'node:fs'
+import zlib from 'node:zlib'
 import path from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
@@ -164,6 +165,133 @@ const payload = {
 }
 fs.writeFileSync(OUT, JSON.stringify(payload, null, 2))
 
+
+/**
+ * Which league a winner plays in.
+ *
+ * The prize feed does not say. It carries a name and an amount and nothing else,
+ * so this is joined on from the newest territory snapshot, matching owner_ref
+ * rather than display name: refs are stable and two players can share a name.
+ *
+ * It is therefore where a winner holds ground NOW, not a recorded property of
+ * the prize they won. For the most recent season those are days apart and the
+ * answer is almost always the same one, but it is an inference and the page says
+ * so. A winner holding no ground at all has no league and is left blank rather
+ * than guessed at; that is about a quarter of any season's winners.
+ */
+function feedFiles(feed) {
+  const dir = path.join(ROOT, 'data', 'raw', feed)
+  if (!fs.existsSync(dir)) return []
+  const found = []
+  ;(function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const q = path.join(d, e.name)
+      if (e.isDirectory()) walk(q); else found.push(q)
+    }
+  })(dir)
+  return found.sort()
+}
+
+function loadFeed(file) {
+  let j = JSON.parse(zlib.gunzipSync(fs.readFileSync(file)))
+  while (j.data) j = j.data
+  return j
+}
+
+function newestFeed(feed) {
+  const f = feedFiles(feed)
+  return f.length ? loadFeed(f.at(-1)) : null
+}
+
+/**
+ * Which league a winner was playing in, as of the season they won.
+ *
+ * The prize feed records no league, so it is joined from the territory archive
+ * on owner_ref. The snapshot has to be one taken DURING that season. The first
+ * version of this used the newest snapshot instead, which was wrong in a way
+ * that looked plausible:
+ *
+ *   during S11   kingpin  9  metro 17  district 34  borough 27  street 17
+ *   after S11    kingpin 11  metro 14  district 32  borough 18  street  2
+ *
+ * Players are promoted a league at the rollover. Across the archived days either
+ * side of it, 25 refs went street to borough, 8 borough to district, 4 district
+ * to metro and 2 metro to kingpin, and 263 left the map entirely. Reading
+ * leagues afterwards therefore moves most winners up a rung and loses everyone
+ * who stopped holding ground: that is what emptied street to two winners and
+ * pushed the unmatched count from 2 to 29.
+ *
+ * Territory archiving began 2026-08-16, so only seasons from S11 on can be
+ * attributed at all. Earlier seasons get no league rather than a wrong one.
+ */
+const TERRITORY_FILES = feedFiles('territory')
+const leagueCache = new Map()
+
+/**
+ * When each season actually ended, from the cities feed rather than assumed.
+ *
+ * A date-only cutoff is not good enough. S11 paid on 2026-08-17 and ended at
+ * 19:00 UTC that same day, so snapshots from 19:05 onward already show the new
+ * season: taking the last snapshot "on the 17th" picks one from after the
+ * rollover and reads every promotion as though it had been the winner's league
+ * all along.
+ *
+ * territory_cities states season_ends_at outright, so that is used where the
+ * archive covers the season. Otherwise the payout date at 19:00 UTC, which is
+ * the pattern every observed season follows.
+ */
+function seasonEnds() {
+  const m = new Map()
+  for (const f of feedFiles('territory_cities')) {
+    for (const c of loadFeed(f).cities || []) {
+      if (c.is_active && c.season_number && c.season_ends_at) m.set(c.season_number, c.season_ends_at)
+    }
+  }
+  return m
+}
+const SEASON_ENDS = seasonEnds()
+
+// 2026-08-17T18-05-14-303Z.json.gz -> 2026-08-17T18:05:14Z
+const stampOf = (file) => {
+  const b = path.basename(file)
+  return b.slice(0, 11) + b.slice(11, 19).replace(/-/g, ':') + 'Z'
+}
+
+function leagueMapFor(season) {
+  const cutoff = SEASON_ENDS.get(season) || (season.date + 'T19:00:00Z')
+  const end = new Date(cutoff).getTime()
+  const file = TERRITORY_FILES.filter((f) => new Date(stampOf(f)).getTime() < end).at(-1)
+  if (!file) return null
+  if (!leagueCache.has(file)) {
+    const m = new Map()
+    for (const d of loadFeed(file).districts || []) {
+      if (d.controller_ref && d.city_league) m.set(d.controller_ref, d.city_league)
+    }
+    leagueCache.set(file, m)
+  }
+  return { map: leagueCache.get(file), at: stampOf(file) }
+}
+
+/**
+ * The leagues, strongest first.
+ *
+ * The feed states no tier, but max_players is a clean ladder and matches the
+ * city counts exactly: street seats 20 across 49 cities, borough 35 across 6,
+ * district 50 across 3, metro 75 in one, kingpin 100 in one. Ordering by that
+ * rather than hardcoding names means a new league slots itself in.
+ */
+function leagueOrder() {
+  const j = newestFeed('territory_cities')
+  const cap = new Map()
+  for (const c of (j && j.cities) || []) {
+    if (!c.is_active || !c.league) continue
+    cap.set(c.league, Math.max(cap.get(c.league) || 0, c.max_players || 0))
+  }
+  return [...cap.entries()].sort((a, b) => b[1] - a[1]).map(([name, seats]) => ({ name, seats }))
+}
+
+const LEAGUES = leagueOrder()
+
 const sitePayload = {
   generated_at: payload.generated_at,
   captured_span: payload.captured_span,
@@ -174,12 +302,22 @@ const sitePayload = {
   total_usdc_other: payload.total_usdc_other,
   total_usdc_all: payload.total_usdc_all,
   sol_bounties: payload.sol_bounties,
+  leagues: LEAGUES,
   seasons: seasons.map((s) => ({
     season: s.season, date: s.date, total_usdc: s.total_usdc, winners: s.winners,
-    ledger: s.ledger.map((w) => ({ name: w.name || 'unnamed', usd: w.usdc })),
+    ledger: (() => {
+      const lg = leagueMapFor(s.season)
+      return s.ledger.map((w) => ({ name: w.name || 'unnamed', usd: w.usdc,
+        league: (lg && lg.map.get(w.owner_ref)) || null }))
+    })(),
+    league_snapshot: (leagueMapFor(s.season) || {}).at || null,
   })),
   all_time: allTimeLedger.map((w) => ({
     name: w.name || 'unnamed', usd: w.usdc, season_usd: w.season_usdc,
+    // The two halves of other_usd ship separately: a daily prize and a bounty
+    // are won for different things, and a page showing only the sum cannot say
+    // which of the two anyone is actually collecting.
+    daily_usd: w.daily_usdc, bounty_usd: w.bounty_usdc,
     other_usd: w.other_usdc, sol_bounties: w.sol_bounties, seasons_won: w.seasons_won,
   })),
 }

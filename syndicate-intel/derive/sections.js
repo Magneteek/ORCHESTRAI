@@ -480,6 +480,56 @@ function playerActivity() {
  * rarity is the point of the page rather than an afterthought: it shows whether
  * players bother ranking up commons or reserve promotion RACKET for the good ones.
  */
+/**
+ * What each rung of the promotion ladder costs, in RACKET.
+ *
+ * Measured from the same capo either side of a promotion: consecutive snapshots
+ * where tier changed, differencing its cumulative total_racket_invested. That is
+ * what the capo's owner actually paid to move up.
+ *
+ * The obvious shortcut is wrong and was shipped once. Taking the median spend of
+ * capos now at boss and subtracting the median of capos now at underboss put the
+ * last rung at 2,595,272 when it is 1,942,000, a 656,502 overstatement across
+ * the ladder. Two different populations: a boss keeps buying training after it
+ * is promoted, so its lifetime total is not what it had spent on promotion day,
+ * and the underboss it is compared against is a capo that never made the jump.
+ *
+ * Non-positive deltas are dropped. A tier change with no change in spend is the
+ * snapshot pair landing either side of the payment rather than a free promotion,
+ * and it affects the count without moving any median (verified: identical
+ * medians with and without them).
+ *
+ * The price is not quite fixed. Legendary, god and founder capos are seen paying
+ * around 10% less at several rungs, and the boss step ranges from 1,800,000 to
+ * 2,200,000 across the only 19 promotions anyone has made. p25 and p75 ship so a
+ * consumer can see the spread, and the promotion count ships so a thin rung
+ * cannot be mistaken for a firm price.
+ */
+function promotionCost() {
+  const rows = all(`SELECT tier, total_racket_invested AS inv,
+                           LAG(tier) OVER w AS pt,
+                           LAG(total_racket_invested) OVER w AS pi
+                    FROM capos_daily
+                    WINDOW w AS (PARTITION BY capo_id ORDER BY day)`)
+
+  const q = (v, p) => v[Math.floor(p * (v.length - 1))]
+  const out = []
+  let cumulative = 0
+  for (let i = 1; i < RANKS.length; i++) {
+    const from = RANKS[i - 1], to = RANKS[i]
+    const v = rows.filter((r) => r.pt === from && r.tier === to)
+      .map((r) => r.inv - r.pi).filter((d) => d > 0).sort((a, b) => a - b)
+    if (!v.length) continue
+    const step = q(v, 0.5)
+    cumulative += step
+    out.push({
+      tier: to, from, promotions: v.length,
+      step, total: cumulative, p25: q(v, 0.25), p75: q(v, 0.75),
+    })
+  }
+  return out
+}
+
 function capos() {
   const day = one('SELECT MAX(day) d FROM capos_daily').d
 
@@ -669,6 +719,7 @@ function capos() {
     current_season: ageStats.current_season,
     crosstab,
     ranks: ranksSection(day),
+    promotion_cost: promotionCost(),
   }
 }
 
@@ -778,16 +829,38 @@ function overview(m, w, g) {
 const m = money()
 const w = wars()
 const g = growth()
+const c = capos()
 console.log('sections:')
-write('money', m)
-write('wars', w)
+
+// The economy page keeps the RACKET token: what is minted, what is burned,
+// where it comes from and where it goes. The secondary market left for a page
+// of its own, because what a capo sells for is a different question from how
+// the token supply behaves, and the two were competing for one reader.
+const { market, liquidity, ...economy } = m
+write('money', economy)
+
+// Gear travels with the fight model that consumes it. Which item raises which
+// stat is only interesting next to the odds it moves, and it was sitting on the
+// capo census page where nothing used it.
+write('wars', { ...w, gear: c.gear })
+
+// The market page: what people pay, for capos and for the traits on them. The
+// trainer rates that complete the picture are fetched alongside from
+// trainers.json, which derive/trainers.js owns and writes after this script.
+// `sales`, not `market`: trainers.json is fetched onto the same page and already
+// owns a `market` key describing the hiring market. Two different markets under
+// one name would have silently shadowed each other at merge time.
+write('market', { generated_at, sales: market, liquidity, trait_price: c.trait_price })
 // The growth page is gone. Its supply and ownership blocks belong with the
 // capos they describe, and its player blocks with the players. growth.json is
 // still written because build-players.js reads its `players` block at build
 // time, but no page fetches it any more.
 write('growth', g)
+
+// gear and trait_price moved to wars and market above.
+const { gear: _gear, trait_price: _tp, ...capoCensus } = c
 write('capos', {
-  ...capos(),
+  ...capoCensus,
   supply: g.supply,
   ownership: g.ownership,
   owners: g.owners,

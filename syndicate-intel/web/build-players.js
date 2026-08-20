@@ -12,7 +12,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS } from './style.js'
+import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar } from './style.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -20,9 +20,10 @@ const IN = path.join(ROOT, 'data', 'boards', 'players.json')
 const OUT_DIR = path.join(__dirname, 'dist')
 const SITE_DIR = path.join(OUT_DIR, 'site')
 
-const TITLE = 'Players · ' + SITE
+const TITLE = 'Players and league standings · The Syndicate · ' + SITE
 const DESCRIPTION =
-  'Per-player rosters, combat records and realized SOL trading for The Syndicate.'
+  'Every player in The Syndicate: roster, combat record, trading, prize winnings ' +
+  'and league standing, plus the top five paid in each league last season.'
 
 const slugify = (s) =>
   String(s || '').toLowerCase().trim()
@@ -108,48 +109,7 @@ const PAGE_CSS = String.raw`
    just reading old. */
 .stale { color: var(--debit); }
 
-/* Tabs, not a button row.
-   They previously borrowed .controls, which is what the period selectors and
-   the capo sort bar use, so four section switches read as four filter chips at
-   0.68rem. Underlined tabs are the one pattern nobody has to decode, and the
-   active underline points down at the content it belongs to.
 
-   The bar carries the rule; each tab carries a 2px bottom border pulled down
-   1px so the active one sits ON the rule rather than above it. */
-.tabbar {
-  display: flex;
-  gap: var(--space-5);
-  margin: var(--space-5) 0;
-  border-bottom: 1px solid var(--rule-firm);
-  /* Tabs belong on one line. Four of them at this size overflow a narrow
-     phone, so the bar scrolls rather than wrapping into a second row that
-     stops looking like a tab bar at all. */
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.tabbar::-webkit-scrollbar { display: none; }
-
-.tabbar button {
-  flex: 0 0 auto;
-  font-family: var(--mono);
-  font-size: var(--step-0);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0 0 0.55rem;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  color: var(--ink-faint);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.tabbar button:hover { color: var(--ink); }
-.tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.tabbar button[aria-selected="true"] {
-  color: var(--accent-bright);
-  border-bottom-color: var(--accent);
-}
 
 .arrivals {
   margin: var(--space-5) 0 0;
@@ -282,7 +242,9 @@ function renderProfile(p) {
     '<button type="button" data-tab="profile" aria-selected="true">Money</button>' +
     '<button type="button" data-tab="outfit" aria-selected="false">Crew</button>' +
     '<button type="button" data-tab="prizes" aria-selected="false">Prizes</button>' +
-    '<button type="button" data-tab="strategy" aria-selected="false">Strategy</button>' +
+    (SHOW_STRATEGY
+      ? '<button type="button" data-tab="strategy" aria-selected="false">Strategy</button>'
+      : '') +
     '<button type="button" data-tab="capos" aria-selected="false">Capos (' +
       fmt(r.capos) + ')</button>' +
     '</div>')
@@ -453,7 +415,9 @@ function renderProfile(p) {
     '<div id="tab-profile">', pair(position, trading), ...portfolio, '</div>',
     '<div id="tab-outfit" hidden>', pair(ranks, roster), pair(combat, training), '</div>',
     '<div id="tab-prizes" hidden>', ...prizes, '</div>',
-    '<div id="tab-strategy" hidden><p class="basis">Reading the fight archive...</p></div>',
+    (SHOW_STRATEGY
+      ? '<div id="tab-strategy" hidden><p class="basis">Reading the fight archive...</p></div>'
+      : ''),
     '<div id="tab-capos" hidden><p class="basis">Loading roster...</p></div>',
   ].join('')
 }
@@ -483,6 +447,16 @@ async function loadRoster(ref) {
   }
   return rosterCache[key]
 }
+
+/**
+ * The Strategy tab is built but not shown.
+ *
+ * It reads the fight archive and talks a player through their matchups, and it
+ * is not finished enough to publish. Everything it needs stays in this file:
+ * renderStrategy, its panel, and its lazy-draw hook. Flip this to true and the
+ * tab returns exactly as it was, with no rebuild of the work behind it.
+ */
+const SHOW_STRATEGY = false
 
 /* -------------------------------------------------------------- strategy --- */
 
@@ -910,7 +884,8 @@ function wireTabs(player) {
   if (!bar) return
   // Driven off the pane ids rather than a hardcoded pair, so adding a tab is a
   // change in one place instead of two that can fall out of step.
-  const names = ['profile', 'outfit', 'prizes', 'strategy', 'capos']
+  const names = ['profile', 'outfit', 'prizes', 'capos']
+  if (SHOW_STRATEGY) names.splice(3, 0, 'strategy')
   const panes = {}
   names.forEach((n) => { panes[n] = document.getElementById('tab-' + n) })
   let loaded = false
@@ -922,9 +897,49 @@ function wireTabs(player) {
     bar.querySelectorAll('button').forEach((b) =>
       b.setAttribute('aria-selected', String(b.dataset.tab === want)))
     names.forEach((n) => { if (panes[n]) panes[n].hidden = n !== want })
+      if (panes[want]) revealIn(panes[want])
     if (want === 'capos' && !loaded) { loaded = true; renderRoster(panes.capos, player.ref) }
     if (want === 'strategy' && !advised) { advised = true; renderStrategy(panes.strategy, player) }
   })
+}
+
+
+/**
+ * The league boards, the same five as the economy page.
+ *
+ * Repeated here on purpose rather than by accident: this is the players page,
+ * and "who is winning in my league" is a player question. It is a static
+ * build-time summary, so it costs a kilobyte and no request.
+ */
+function renderLeagueBoards() {
+  const el = document.getElementById('leagueboards')
+  if (!el || !LEAGUES || !LEAGUES.boards.length) return
+  // Named, not "latest": the number comes from the ledger, so it follows the
+  // weekly rollover on its own.
+  const h = document.getElementById('h-leagues')
+  if (h && LEAGUES.season) h.textContent = 'Top players in season ' + LEAGUES.season
+  const usd = (n) => '$' + Math.round(n).toLocaleString('en-US')
+  const rows = (b) => b.top.map((w, i) =>
+    '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
+    '<span class="name">' + escd(w.name) + '</span>' +
+    '<span class="extra"><span class="num">' +
+    '<span class="cell-label">Won</span>' + usd(w.usd) + '</span></span></div>').join('')
+
+  el.innerHTML = '<div class="leaguegrid">' + LEAGUES.boards.map((b) =>
+    '<div>' +
+    '<p class="leaguehead"><span class="nm">' + escd(b.name) + '</span>' +
+    '<span class="sub">' + b.winners + (b.winners === 1 ? ' winner' : ' winners') +
+    ' &middot; ' + usd(b.total) + '</span></p>' +
+    '<div class="ledger" data-cols="3">' +
+    '<div class="row head"><span></span><span>Player</span><span class="num">Won</span></div>' +
+    rows(b) + '</div></div>').join('') + '</div>' +
+    '<p class="basis">Season ' + LEAGUES.season + ', top five of ' + LEAGUES.winners +
+    ' players paid. League is read from the territory snapshot taken before the season ' +
+    'closed, because players are promoted a league at the rollover and a later reading ' +
+    'puts most winners a rung above where they actually won. ' + LEAGUES.unmatched +
+    ' winners held no ground at that moment, ' + usd(LEAGUES.unmatched_usd) +
+    ' between them, and appear on no board. Full season detail is on the ' +
+    '<a href="/money.html#prizes">economy page</a>.</p>'
 }
 
 function route() {
@@ -938,9 +953,12 @@ function route() {
     document.getElementById('back').addEventListener('click', () => { location.hash = '' })
     wireTabs(bySlug[decodeURIComponent(m[1])])
     window.scrollTo(0, 0)
+    revealIn(prof)
   } else {
     prof.hidden = true
     dir.hidden = false
+    renderLeagueBoards()
+    revealIn(dir)
   }
 }
 
@@ -962,12 +980,54 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 `
 
+
+/**
+ * The latest season's league boards, summarised at build time.
+ *
+ * This page embeds its data and never fetches, so rather than teaching it to
+ * pull prizes.json at runtime for one block, the five boards are reduced here to
+ * about a kilobyte and inlined. derive/rewards-ledger.js runs before this
+ * builder, so the file is always current.
+ *
+ * The league on each winner is already resolved against the snapshot taken
+ * before that season closed, which matters: read afterwards, every promoted
+ * winner shows a rung too high.
+ */
+function leagueBoards() {
+  const f = path.join(ROOT, 'data', 'site', 'prizes.json')
+  if (!fs.existsSync(f)) return null
+  const p = JSON.parse(fs.readFileSync(f, 'utf8'))
+  const latest = (p.seasons || [])[0]
+  if (!latest || !p.leagues) return null
+  const boards = p.leagues.map((lg) => {
+    const won = (latest.ledger || []).filter((w) => w.league === lg.name)
+    if (!won.length) return null
+    return {
+      name: lg.name, winners: won.length,
+      total: +won.reduce((a, w) => a + w.usd, 0).toFixed(2),
+      top: won.slice(0, 5).map((w) => ({ name: w.name, usd: w.usd })),
+    }
+  }).filter(Boolean)
+  const unmatched = (latest.ledger || []).filter((w) => !w.league)
+  return {
+    season: latest.season, winners: latest.winners, boards,
+    unmatched: unmatched.length,
+    unmatched_usd: +unmatched.reduce((a, w) => a + w.usd, 0).toFixed(2),
+  }
+}
+
 function buildBody(data) {
   return `<div class="wrap">
   <div id="directory">
     <header class="masthead">
-      <span class="eyebrow">The Syndicate &middot; kept by the community</span>
-      <h1>Players</h1>
+      <div class="brandrow">
+        <a class="brandlink" href="/" aria-label="Capowatch home"><img class="brandmark"
+           src="/badge-small.png" width="72" height="62" alt="Capowatch"></a>
+        <div>
+          <span class="eyebrow">The Syndicate &middot; kept by the community</span>
+          <h1>Players</h1>
+        </div>
+      </div>
       <span class="live">Updated <span id="generated">&hellip;</span></span>
       ${navHtml('/players.html')}
     </header>
@@ -982,18 +1042,23 @@ function buildBody(data) {
     <div class="plist" id="list"></div>
 
     <p class="arrivals" id="arrivals"></p>
+
+    <div class="section-head"><h2 id="h-leagues">Top players last season</h2><span class="section-meta">top five paid in each league</span></div>
+    <div id="leagueboards"></div>
   </div>
 
   <div id="profile" hidden></div>
 
-  <footer>
-
-  </footer>
+  ${shareBar('/players.html', 'Every player in The Syndicate: rosters, combat records, trading and prize winnings, kept by the community.')}
+  ${REFERRAL}
+  ${FOOTER}
 </div>
 
 <script>
 const DATA = ${JSON.stringify(data)};
+const LEAGUES = ${JSON.stringify(leagueBoards())};
 ${STAMP_JS}
+${REVEAL_JS}
 ${CLIENT_JS}
 </script>
 `
@@ -1016,7 +1081,10 @@ function main() {
   assignSlugs(data.players)
   writeSearchIndex(data.players)
 
-  const indexable = process.env.SITE_INDEXABLE === '1'
+  // Indexable unless explicitly switched off. It shipped noindex for months
+  // while the site was unreleased, and leaving the default that way meant a
+  // launch could quietly go out invisible.
+  const indexable = process.env.SITE_INDEXABLE !== '0'
   const robots = indexable ? '' : '\n<meta name="robots" content="noindex, nofollow">'
 
   const doc = `<!DOCTYPE html>
