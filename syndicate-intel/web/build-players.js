@@ -1008,6 +1008,7 @@ function leagueBoards() {
 
 function buildBody(data) {
   return `<div class="wrap">
+  <main id="main">
   <div id="directory">
     <header class="masthead">
       <div class="brandrow">
@@ -1038,6 +1039,7 @@ function buildBody(data) {
   </div>
 
   <div id="profile" hidden></div>
+  </main>
 
   ${shareBar('/players.html', 'Every player in The Syndicate: rosters, combat records, trading and prize winnings, kept by the community.')}
   ${REFERRAL}
@@ -1089,6 +1091,7 @@ ${FONTS}
 <style>${CSS}${NAV_CSS}${PAGE_CSS}</style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 ${buildBody(data)}
 </body>
 </html>

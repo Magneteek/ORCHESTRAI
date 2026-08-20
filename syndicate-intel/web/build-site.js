@@ -12,7 +12,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, SITE_URL } from './style.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -507,9 +507,13 @@ function main() {
   // the capos page, and everything else on it duplicated money, wars, trainers
   // or growth. buildDocument is left in place so it can be brought back cheaply.
   fs.mkdirSync(SITE_DIR, { recursive: true })
+  // The sitemap line only goes in when the site is crawlable, so a blocked
+  // build does not advertise a map nobody is allowed to follow.
   fs.writeFileSync(
     path.join(SITE_DIR, 'robots.txt'),
-    indexable ? 'User-agent: *\nAllow: /\n' : 'User-agent: *\nDisallow: /\n',
+    indexable
+      ? 'User-agent: *\nAllow: /\n\nSitemap: ' + SITE_URL + '/sitemap.xml\n'
+      : 'User-agent: *\nDisallow: /\n',
   )
 
   const kb = (n) => (Buffer.byteLength(n) / 1024).toFixed(0)

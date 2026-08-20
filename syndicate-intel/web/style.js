@@ -504,6 +504,17 @@ h3 {
    toggles get their spacing from the chart wrapper; a bare table has none. */
 .table-more { margin-top: var(--space-3); }
 
+/* Skip link. Off screen until focused, then anchored top-left. Without it a
+   keyboard user tabs through the whole nav on every page before reaching a
+   table, which on the tabbed pages is a lot of stops. */
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 20;
+  font-family: var(--mono); font-size: var(--step--1);
+  padding: 0.7rem 1.1rem;
+  background: var(--accent); color: var(--ground); text-decoration: none;
+}
+.skip:focus { left: 0; }
+
 /* Share row. Quiet by design: it sits at the end of the page for the reader who
    already decided they liked something, not as a banner asking them to. */
 .sharebar {

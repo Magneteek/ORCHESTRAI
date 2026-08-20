@@ -14,7 +14,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, SITE_URL } from './style.js'
 import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -121,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 `
 
-function page({ file, title, description, heading, eyebrow, section, body, script, share }) {
+function page({ file, title, description, heading, eyebrow, section, body, script, share,
+  isStatic }) {
   // Indexable unless explicitly switched off. It shipped noindex for months
   // while the site was unreleased, and leaving the default that way meant a
   // launch could quietly go out invisible.
@@ -140,6 +141,7 @@ ${FONTS}
 <style>${CSS}${NAV_CSS}${CHART_CSS}${SHELL_CSS}${CALC_CSS}</style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
   <header class="masthead">
     <div class="brandrow">
@@ -152,22 +154,27 @@ ${FONTS}
         <h1>${heading}</h1>
       </div>
     </div>
-    <span class="live">Updated <span id="generated">&hellip;</span></span>
+    ${isStatic ? '' : '<span class="live">Updated <span id="generated">&hellip;</span></span>'}
     ${navHtml(href)}
   </header>
-  <div id="main">${body}</div>
+  <main id="main">${body}</main>
   ${shareBar(href, share || title.replace(' \u00b7 ' + SITE, '').replace(SITE + ': ', ''))}
   ${REFERRAL}
   ${FOOTER}
 </div>
 <script>
-const SECTION_URLS = ${JSON.stringify([].concat(section).map((n) => '/data/' + n + '.json'))};
+${isStatic
+  // A static page ships the reveal and nothing else. RUNTIME calls render() on
+  // load, so including it here would have the page fetch a payload it has no
+  // use for and then blank itself when no render function turns up.
+  ? REVEAL_JS + '\ndocument.addEventListener("DOMContentLoaded", () => revealIn())'
+  : `const SECTION_URLS = ${JSON.stringify([].concat(section).map((n) => '/data/' + n + '.json'))};
 ${STAMP_JS}
 ${CHART_JS}
 ${LEDGER_JS}
 ${REVEAL_JS}
 ${script}
-${RUNTIME}
+${RUNTIME}`}
 </script>
 </body>
 </html>
@@ -1983,6 +1990,72 @@ function main() {
     fs.copyFileSync(path.join(DATA_SRC, f), path.join(DATA_OUT, f))
     published.add(f)
   }
+  /**
+   * Sitemap, generated from PAGES so it cannot drift.
+   *
+   * A hand-kept list would have carried prizes.html and trainers.html into a
+   * release that deleted them, and would be missing does-it-pay.html now. This
+   * derives from the same array the build renders, plus players.html, which
+   * build-players.js owns and this build never sees.
+   *
+   * lastmod is the data timestamp rather than the moment of the build: the site
+   * rebuilds every ten minutes whether or not anything changed, and telling a
+   * crawler every page changed six times an hour is a good way to be ignored.
+   */
+  const lastmod = (() => {
+    try {
+      const o = JSON.parse(fs.readFileSync(path.join(DATA_SRC, 'overview.json'), 'utf8'))
+      return String(o.generated_at).slice(0, 10)
+    } catch { return new Date().toISOString().slice(0, 10) }
+  })()
+  const urls = PAGES.map((p) => (p.file === 'index.html' ? '/' : '/' + p.file))
+    .concat(['/players.html'])
+  fs.writeFileSync(path.join(SITE_DIR, 'sitemap.xml'),
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    urls.map((u) =>
+      '  <url><loc>' + SITE_URL + u + '</loc>' +
+      '<lastmod>' + lastmod + '</lastmod></url>').join('\n') +
+    '\n</urlset>\n')
+  console.log(`  sitemap.xml   ${urls.length} urls`)
+
+  /**
+   * A 404 that belongs to the site.
+   *
+   * nginx was answering with its own white page, down to the version string.
+   * Two retired URLs, prizes.html and trainers.html, are still linked from
+   * elsewhere and bookmarked, so this is a page people actually reach.
+   *
+   * Static, with no script and no data: whatever went wrong to land here, this
+   * page should not be able to fail too. Rendered through page() so it carries
+   * the same masthead, nav and footer as everything else.
+   */
+  fs.writeFileSync(path.join(SITE_DIR, '404.html'), page({
+    file: '404.html', section: 'overview',
+    title: 'Page not found · ' + SITE,
+    heading: 'Nothing here',
+    eyebrow: 'The Syndicate &middot; wrong turn',
+    description: 'That page does not exist on Capowatch.',
+    share: 'Capowatch tracks The Syndicate: every prize paid, on chain.',
+    body: `<p class="basis">That address does not exist here. It may have been a page
+    that has since been retired: the old prizes and trainers pages were folded into
+    <a href="/money.html">Economy</a> and <a href="/market.html">Market</a>.</p>
+  <div class="section-head"><h2>Where to go instead</h2><span class="section-meta">everything on the site</span></div>
+  <div class="guide" id="guide404">` +
+      [['Overview', '/', 'What the game has paid out, and what moved today.'],
+       ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes.'],
+       ['Wars', '/wars.html', 'Takeover odds, the specialty wheel and what gear does.'],
+       ['Capos', '/capos.html', 'Who earns most, and what promotion costs.'],
+       ['Market', '/market.html', 'What capos sell for, and every trainer for hire.'],
+       ['Economy', '/money.html', 'RACKET supply, and every prize paid on chain.'],
+       ['Does it pay?', '/does-it-pay.html', 'The honest answer, for anyone not playing yet.']]
+        .map(([n, h, w]) => '<div class="guide-item"><span class="name"><a href="' + h +
+          '">' + n + '</a></span><span class="what">' + w + '</span></div>').join('') +
+    `</div>`,
+    isStatic: true,
+  }))
+  console.log('  404.html      static, no data')
+
   // Retire payloads the same way pages are retired. Without this the build only
   // ever wrote files, so a derive script that stops producing one leaves the last
   // copy being served forever: territory.json outlived its own feature by a day
@@ -2001,8 +2074,10 @@ function main() {
   // than a missing one because nothing about it looks wrong.
   //
   // build-players.js runs before this one and owns players.html, so it is kept
-  // explicitly rather than by accident.
-  const expected = new Set(PAGES.map((p) => p.file).concat(['players.html']))
+  // explicitly rather than by accident. 404.html is written by this build but is
+  // not in PAGES, since it is served by nginx on error rather than linked; without
+  // it here the prune deletes it moments after it is written.
+  const expected = new Set(PAGES.map((p) => p.file).concat(['players.html', '404.html']))
   for (const f of fs.readdirSync(SITE_DIR)) {
     if (!f.endsWith('.html') || expected.has(f)) continue
     fs.rmSync(path.join(SITE_DIR, f))
