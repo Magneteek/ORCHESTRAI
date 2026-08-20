@@ -66,10 +66,27 @@ n=0
 for f in $pages; do
   p="/$f"
   [ "$f" = "index.html" ] && p="/"
+  # 404.html is the error document. nginx serves it on any unknown path and it
+  # answers with the 404 it is there to produce, so demanding 200 from it made a
+  # correct release report itself broken. It is checked below for what actually
+  # matters: that a missing page returns our page and not the nginx default.
+  [ "$f" = "404.html" ] && continue
   code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "${PROD_URL}${p}?cb=$(date +%s%N)")
   n=$((n + 1))
   [ "$code" = "200" ] || { fail=1; echo "    FAIL $p -> $code"; }
 done
+
+# The error page: right status, and ours rather than nginx's.
+miss=$(curl -s --max-time 30 -o /tmp/capowatch-404.$$ -w '%{http_code}' \
+  "${PROD_URL}/this-page-does-not-exist-$(date +%s)")
+if [ "$miss" != "404" ]; then
+  fail=1; echo "    FAIL a missing page returned $miss, expected 404"
+elif ! grep -q "Nothing here" /tmp/capowatch-404.$$ 2>/dev/null; then
+  fail=1; echo "    FAIL the 404 is not ours; nginx is answering with its default"
+else
+  echo "    404 page: ours, correct status"
+fi
+rm -f /tmp/capowatch-404.$$
 
 [ "$n" -gt 0 ] || { echo "  nothing built on the box" >&2; exit 1; }
 [ "$fail" = "0" ] && echo "    $n pages, all 200" || { echo "  RELEASE LOOKS BROKEN" >&2; exit 1; }
