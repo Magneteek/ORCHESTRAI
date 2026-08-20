@@ -26,6 +26,12 @@ fi
 
 echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] refreshing derived layer"
 
+# The SOL spot price, the one number here that does not come from the game. It
+# self-throttles to one reading every half hour, so calling it on every refresh
+# costs nothing, and a failure is ignored on purpose: no price means the site
+# shows SOL without a dollar figure beside it, which is not worth failing over.
+node --no-warnings ingest/solprice.js || echo "  WARNING: sol price unavailable; USD figures will be omitted"
+
 node --no-warnings derive/build.js
 
 for period in 24h 7d 30d all; do

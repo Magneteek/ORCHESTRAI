@@ -214,14 +214,22 @@ h1 {
 }
 
 /* ---------------------------------------------------------------- tiles --- */
+/* The strip drew its grid lines by letting a --rule coloured background show
+   through 1px gaps, which meant any row the tiles did not fill showed that
+   colour as a solid dead block. The column count changes continuously with
+   viewport width, so no tile count avoids it at every size: six fills a phone
+   and a desktop and still leaves a gap at 900px.
+   Each tile now draws its own rule as a box-shadow, which takes no layout space
+   and blends where tiles meet, so an unfilled cell is simply the page. */
 .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
   gap: 1px;
   margin: var(--space-4) 0 0;
-  background: var(--rule);
-  border: 1px solid var(--rule);
+  background: transparent;
+  border: none;
 }
+.tiles > * { box-shadow: 0 0 0 1px var(--rule); }
 .tile {
   background: var(--surface);
   padding: 0.75rem 0.9rem 0.8rem;
@@ -503,6 +511,10 @@ h3 {
 /* A control that follows a table, e.g. the roster's show-all toggle. The chart
    toggles get their spacing from the chart wrapper; a bare table has none. */
 .table-more { margin-top: var(--space-3); }
+
+/* A converted figure sits beside its source figure, not in place of it: the SOL
+   amount is the fact, the dollar amount is a reading of it at today's rate. */
+.approx { color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 
 /* Skip link. Off screen until focused, then anchored top-left. Without it a
    keyboard user tabs through the whole nav on every page before reaching a

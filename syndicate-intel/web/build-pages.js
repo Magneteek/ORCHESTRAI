@@ -1542,8 +1542,12 @@ function render() {
   const m = DATA.market, r = DATA.rates
 
   document.getElementById('tiles').innerHTML = [
-    // The capo marketplace leads: it is the bigger of the two markets here,
-    // and the one most readers came to ask about.
+    // SOL first, because every other figure on this page is priced in it. The
+    // only number on the site that does not come from the game, so it says where
+    // it came from. Omitted entirely rather than guessed if the feed is down.
+    ...(DATA.sol_usd ? [['SOL price', '$' + DATA.sol_usd.usd, DATA.sol_usd.source]] : []),
+    // The capo marketplace leads the game's own figures: it is the bigger of the
+    // two markets here, and the one most readers came to ask about.
     ['Capo sales recorded', nfmt(DATA.sales.volume.reduce((a, v) => a + v.sales, 0)),
       DATA.sales.volume.reduce((a, v) => a + v.sol, 0).toFixed(1) + ' SOL'],
     ['Trainers listed', nfmt(m.trainers), m.available + ' taking work'],
@@ -1551,9 +1555,8 @@ function render() {
     ['Median rate', m.median_rate_sol + ' SOL', 'per job'],
     ['Median turnaround', m.median_turnaround_h + 'h', 'typical trainer'],
     ['Slot utilisation', m.utilisation_pct + '%', nfmt(m.active_fills) + ' of ' + nfmt(m.total_slots) + ' slots busy'],
-    // Replaces the "never hired" count. Removing the rate-spread section took
-    // away the only figure a player could actually act on, and the middle half
-    // is the number you want before deciding what to pay.
+    // The middle half of the rate spread: the figure to know before deciding
+    // what to pay, which the median alone does not give you.
     ['Typical rate', DATA.rates.p25_sol + ' to ' + DATA.rates.p75_sol, 'SOL, middle half'],
   ].map(([l, v, n]) =>
     '<div class="tile"><span class="tile-label">' + l + '</span>' +
@@ -1609,6 +1612,17 @@ function renderMarket() {
   // Liquidity is four numbers, not a shape. A chart of three percentiles is a
   // chart of three numbers, so this is a table.
   const q = DATA.liquidity
+  if (DATA.sol_usd) {
+    const traded = DATA.sales.volume.reduce((a, v) => a + v.sol, 0)
+    const el = document.getElementById('c-volume')
+    if (el) el.insertAdjacentHTML('beforeend',
+      '<p class="basis">' + traded.toFixed(1) + ' SOL has changed hands here, worth about $' +
+      nfmt(Math.round(traded * DATA.sol_usd.usd)) + ' at today\'s rate of $' +
+      DATA.sol_usd.usd + ' (' + esc(DATA.sol_usd.source) + ' spot). Those trades were ' +
+      'struck at many different SOL prices, so read that as a size, not as what ' +
+      'anyone actually paid.</p>')
+  }
+
   document.getElementById('liquidity').innerHTML = ledgerRows([
     { k: 'Quickest quarter', sub: 'time from listing to sale', v: q.hours_to_sell.p25 + 'h' },
     { k: 'Typical', sub: 'median time on market', v: q.hours_to_sell.median + 'h' },
@@ -1865,7 +1879,7 @@ const PAGES = [
   {
     // Two files again: the capo marketplace and the trainer hiring market. They
     // share no data, only the question. Both are what someone will pay you.
-    file: 'market.html', section: ['market', 'trainers'],
+    file: 'market.html', section: ['market', 'trainers', 'price'],
     share: 'What capos sell for in The Syndicate, how fast they sell, and every trainer for hire.',
     title: 'Market and trainers · The Syndicate · ' + SITE, heading: 'Market',
     eyebrow: 'The Syndicate &middot; what things cost',

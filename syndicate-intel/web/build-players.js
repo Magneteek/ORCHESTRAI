@@ -263,23 +263,38 @@ function renderProfile(p) {
     // Every SOL figure carries its unit for the same reason: with a $ row in the
     // same ledger, a bare number would be the one thing left to misread.
     parts = position
+    // Only the held value carries a dollar figure. It is what those capos are
+    // worth now, so today's rate is the right rate. Realized and net are lifetime
+    // totals made of trades struck at many different SOL prices; converting them
+    // at today's would state a number that never happened.
+    const held = SOLUSD
+      ? q.portfolio_sol.toFixed(3) + ' SOL <span class="approx">&asymp; $' +
+        fmt(Math.round(q.portfolio_sol * SOLUSD.usd)) + '</span>'
+      : q.portfolio_sol.toFixed(3) + ' SOL'
     parts.push('<section><div class="section-head"><h2>Position</h2>' +
       '<span class="section-meta">' +
       (q.prize_usd ? 'SOL position and USD prizes' : 'SOL, secondary market') +
       '</span></div>' +
       rows([
         ['Realized on trades', sol(q.realized_sol)],
-        ['Value of capos held', q.portfolio_sol.toFixed(3) + ' SOL'],
+        ['Value of capos held', held],
         ['Net position', sol(q.net_sol)],
         q.prize_usd ? ['Prize winnings', '$' + fmt(Math.round(q.prize_usd))] : null,
       ]) +
+      (SOLUSD
+        ? '<p class="basis">SOL at $' + SOLUSD.usd + ', ' + escd(SOLUSD.source) +
+          ' spot. Only the held value is converted, because it is what those capos ' +
+          'are worth today. The lifetime totals above it were traded at many ' +
+          'different SOL prices, so a dollar figure on them would be invented.</p>'
+        : '') +
       '</section>')
   }
 
   // Prize winnings: money actually received, read off chain. Three streams, kept
   // apart because they are different prizes: season league placement, the daily
-  // prize, and bounties. SOL bounties get their own line and are never converted
-  // into the USD total, because there is no price feed here to convert on.
+  // prize, and bounties. SOL bounties keep their own line and stay out of the USD
+  // total even now a price feed exists: they arrived on many different days, and
+  // folding them in at one rate would misstate a total that is otherwise exact.
   if (p.prizes) {
     const pz = p.prizes
     const usd = (n) => '$' + fmt(Math.round(n))
@@ -983,6 +998,28 @@ document.addEventListener('DOMContentLoaded', () => {
  * before that season closed, which matters: read afterwards, every promoted
  * winner shows a rung too high.
  */
+
+/**
+ * The SOL price to quote alongside SOL figures.
+ *
+ * Read from the ledger ingest/solprice.js appends to, not fetched here: a build
+ * should not depend on a third-party endpoint answering. A missing or stale
+ * ledger returns null and every USD figure simply does not render, which is the
+ * intended degraded state rather than a failure.
+ *
+ * Stale means older than six hours. Yesterday's price quoted as today's is worse
+ * than no price, because nothing on the page would look wrong.
+ */
+function solUsd() {
+  const f = path.join(ROOT, 'data', 'prices', 'sol-usd.jsonl')
+  try {
+    const lines = fs.readFileSync(f, 'utf8').trim().split('\n')
+    const last = JSON.parse(lines[lines.length - 1])
+    if (Date.now() - new Date(last.at).getTime() > 6 * 3600 * 1000) return null
+    return { usd: last.usd, source: last.source }
+  } catch { return null }
+}
+
 function leagueBoards() {
   const f = path.join(ROOT, 'data', 'site', 'prizes.json')
   if (!fs.existsSync(f)) return null
@@ -1048,6 +1085,7 @@ function buildBody(data) {
 
 <script>
 const DATA = ${JSON.stringify(data)};
+const SOLUSD = ${JSON.stringify(solUsd())};
 const LEAGUES = ${JSON.stringify(leagueBoards())};
 ${STAMP_JS}
 ${REVEAL_JS}
