@@ -21,6 +21,29 @@
  * drag a whole rarity band upward, and this number is published per player.
  */
 
+/**
+ * Which sale rows are denominated in SOL.
+ *
+ * /market/listings is tagged in-game (RACKET) or Tensor (SOL), and sales inherit
+ * the same split through `source`. Every in-game sale row carries a
+ * price_lamports as well as a price_racket (169 of 169), so summing
+ * price_lamports across the whole feed books RACKET spending as secondary-market
+ * SOL: 21.2 SOL of it, concentrated in founder trades worth 1-2 SOL apiece.
+ *
+ * Found on 2026-08-22 by comparing our per-player totals against the game's own
+ * /market/traders. Of the 46 players holding an in-game sale, 22 match our
+ * Tensor-only counts exactly and 2 match the combined counts, the rest having
+ * traded since our last snapshot. So the game excludes these rows from SOL
+ * trading, and so do we.
+ *
+ * Keyed on the venue rather than on `price_racket IS NULL`, which also separates
+ * the two today. Listings are the counter-example that settles it: 10,934 of
+ * 10,936 Tensor listings carry a racket price alongside the lamport one, so a
+ * populated price_racket does not mean RACKET-denominated, and a price-column
+ * test would one day silently drop real SOL sales.
+ */
+export const SOL_SALES = "source = 'tensor'"
+
 const WINDOW_DAYS = 30
 const WIDE_WINDOW_DAYS = 90
 
@@ -50,6 +73,7 @@ export function buildCompTable(db) {
     SELECT rarity, tier, price_lamports, sold_at
     FROM sales
     WHERE asset_kind IN ('capo', 'founder')
+      AND ${SOL_SALES}
       AND price_lamports > 0
       AND rarity IS NOT NULL
       AND sold_at > date('now', '-${WIDE_WINDOW_DAYS} day')`).all()
