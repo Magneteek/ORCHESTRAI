@@ -29,6 +29,7 @@ import path from 'node:path'
 import zlib from 'node:zlib'
 import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
+import { buildAgeResolver } from './age.js'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const OUT_DIR = path.join(ROOT, 'data', 'site', 'rosters')
@@ -61,10 +62,16 @@ const currentSeason = currentSeasonFromSections()
 
 const rows = db.prepare(`
   SELECT owner_ref, name, character_name, rarity, tier, role, specialty,
-         season_created, total_racket_invested, status, is_founder, capo_id
+         season_created, total_racket_invested, status, is_founder, capo_id,
+         created_at
   FROM capos_daily
   WHERE day = ? AND owner_ref IS NOT NULL
   ORDER BY owner_ref`).all(day)
+
+// Age comes from the API where the archive has ever measured it, and is derived
+// only where it has not. See derive/age.js: the old birth-season derivation aged
+// every founder by eleven years.
+const ages = buildAgeResolver(db, day)
 
 /**
  * Lifetime RACKET earned, per capo, from the newest /capos/production snapshot.
@@ -106,12 +113,14 @@ const idx = (arr, v) => { const i = arr.indexOf(v); return i === -1 ? arr.length
 // Positional arrays, not objects: repeating eleven key names 95,000 times cost
 // 16.9MB against 3MB for the same data. Field order is published in the payload
 // so the page decodes it without a hardcoded contract.
-const FIELDS = ['name', 'rarity', 'tier', 'age', 'invested', 'active', 'earned', 'per_day', 'last_7d']
+const FIELDS = ['name', 'rarity', 'tier', 'age', 'invested', 'active', 'earned', 'per_day', 'last_7d', 'age_basis']
 const byRef = {}
+// Basis codes travel as small integers rather than strings: repeating a word
+// like "measured" 96,000 times costs more than the whole earnings column.
+const BASIS = ['measured', 'measured+seasons', 'founder_base', 'derived', 'unknown']
 for (const r of rows) {
-  const age = r.season_created != null && currentSeason != null
-    ? 25 + Math.max(0, currentSeason - r.season_created)
-    : null
+  const a = ages.resolve(r)
+  const age = a.age
   ;(byRef[r.owner_ref] ||= []).push([
     r.name || 'unnamed',
     idx(RARITY_ORDER, r.rarity),
@@ -122,6 +131,7 @@ for (const r of rows) {
     earned.has(r.capo_id) ? earned.get(r.capo_id).earned : null,
     earned.has(r.capo_id) ? earned.get(r.capo_id).per_day : null,
     earned.has(r.capo_id) ? earned.get(r.capo_id).last_7d : null,
+    Math.max(0, BASIS.indexOf(a.basis)),
   ])
 }
 // Best first: rarity, then rank, then the most invested in.
@@ -139,7 +149,7 @@ let bytes = 0
 for (const [key, payload] of Object.entries(shards)) {
   const json = JSON.stringify({
     as_of: day, current_season: currentSeason,
-    fields: FIELDS, rarities: RARITY_ORDER, ranks: RANK_ORDER,
+    fields: FIELDS, rarities: RARITY_ORDER, ranks: RANK_ORDER, age_bases: BASIS,
     players: payload,
   })
   fs.writeFileSync(path.join(OUT_DIR, key + '.json'), json)
@@ -152,4 +162,12 @@ console.log('  ' + Object.keys(shards).length + ' shards,',
   (bytes / 1048576).toFixed(2) + ' MB total,',
   Math.round(bytes / Object.keys(shards).length / 1024) + ' KB average')
 console.log('  current season', currentSeason, '(a capo born this season is 25)')
+{
+  const tally = {}
+  for (const list of Object.values(byRef)) {
+    for (const c of list) { const k = BASIS[c[9]]; tally[k] = (tally[k] || 0) + 1 }
+  }
+  console.log('  age basis:', Object.entries(tally)
+    .sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v.toLocaleString()}`).join(', '))
+}
 db.close()

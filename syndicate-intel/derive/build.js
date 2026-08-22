@@ -124,6 +124,18 @@ function loadListings(db, doc, capturedAt) {
       observations   = observations + 1,
       price_lamports = excluded.price_lamports,
       price_racket   = excluded.price_racket,
+      -- Fields that change while a listing sits open, and were previously frozen
+      -- at whatever they were the first time we saw it. age moves at every season
+      -- rollover and every elixir rewind, tier moves on promotion, the promotion
+      -- fields move as achievements complete, and a capo can be renamed. A
+      -- listing left up across a rollover was reporting a stale age forever, and
+      -- listings are the only place the API states a real age at all.
+      age                    = COALESCE(excluded.age, age),
+      tier                   = COALESCE(excluded.tier, tier),
+      name                   = COALESCE(excluded.name, name),
+      promo_next_tier        = excluded.promo_next_tier,
+      completed_achievements =
+        COALESCE(excluded.completed_achievements, completed_achievements),
       -- never overwrite a known stat with a null, in case the API strips more
       stat_muscle = COALESCE(excluded.stat_muscle, stat_muscle),
       stat_hustle = COALESCE(excluded.stat_hustle, stat_hustle),

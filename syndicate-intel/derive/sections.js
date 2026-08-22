@@ -16,6 +16,7 @@ import path from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
 import { SOL_SALES } from './valuation.js'
+import { buildAgeResolver } from './age.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -717,14 +718,20 @@ function capos() {
     for (const st of seasonStarts) { if (createdAt >= st.start) s = st.season; else break }
     return s
   }
-  const ageOf = (createdAt) =>
-    currentSeason == null ? null : 25 + Math.max(0, currentSeason - birthSeason(createdAt))
+  // Resolved rather than derived. Deriving from the birth season aged every
+  // founder by eleven years, because founders do not age with the calendar at
+  // all, and it is a year too high for the ~20% of everyone else who has taken
+  // an elixir rewind. See derive/age.js.
+  const ages = buildAgeResolver(db, day)
 
   const ageCounts = {}
   let ageSum = 0, ageN = 0
+  const basisTally = {}
   for (const r of all(
-    `SELECT created_at FROM capos_daily WHERE day = ? AND created_at IS NOT NULL`, day)) {
-    const a = ageOf(r.created_at)
+    `SELECT capo_id, rarity, is_founder, created_at, season_created
+     FROM capos_daily WHERE day = ? AND created_at IS NOT NULL`, day)) {
+    const { age: a, basis } = ages.resolve(r)
+    basisTally[basis] = (basisTally[basis] || 0) + 1
     if (a == null) continue
     ageCounts[a] = (ageCounts[a] || 0) + 1
     ageSum += a; ageN++
@@ -735,6 +742,12 @@ function capos() {
     avg_years: ageN ? +(ageSum / ageN).toFixed(1) : null,
     max_years: ageBuckets.length ? ageBuckets.at(-1).age : null,
     current_season: currentSeason,
+    // How each age was arrived at, so the page can be honest that most are
+    // inferred. Only a marketplace listing ever states a real age, and it is not
+    // recoverable for the rest: capos minted in the same minute of the same
+    // season carry different ages today, so no rule reproduces it.
+    basis: basisTally,
+    measured: ages.measuredCount,
   }
 
   // Rank by rarity: for each rarity, how its capos spread across the ladder.
