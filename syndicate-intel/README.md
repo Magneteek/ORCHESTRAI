@@ -8,18 +8,27 @@ those views against the public data API. This is the data layer for that.
 
 ## Why an archive, not just an API client
 
-Every earnings figure the API returns is **lifetime cumulative**, and time
-filtering does not work: `/leaderboards?season=11` and `?season=0` return
-byte-identical arrays (verified 2026-08-16, the `season` field echoes your input
-and is otherwise ignored).
+Almost every figure the API returns is **lifetime cumulative**, and the time
+filtering that exists is coarse. `?season=` was ignored outright when this
+started (verified 2026-08-16: `?season=11` and `?season=0` returned
+byte-identical arrays) and now genuinely filters on `/leaderboards`,
+`/combat/players` and `/combat/fights` (re-verified 2026-08-22). A season is a
+week, and that is the finest cut anything offers, apart from the 7-day and
+30-day figures `/capos/production` computes per capo.
 
-So "this week's top 10 earners" cannot be answered by any single API call. It
-can only be answered by snapshotting daily and diffing consecutive snapshots.
+So "the top 10 earners between Tuesday and Thursday", or any question about a
+board's shape on a past date, cannot be answered by any single API call. It can
+only be answered by snapshotting and diffing consecutive snapshots.
 
 That makes the archive the whole product. Nobody can reconstruct last week's
 numbers after the fact, including the game itself unless it was already
 recording. **Every day the ingest does not run is history that is gone
 permanently.** Every design decision below follows from that.
+
+The thesis has held up in both directions. Fields have been withdrawn (the
+combat stats stripped from `/market/sales` mid-session, recorded below) and
+fields have been added (`/capos/production`, `/market/traders`, `buyer_ref` and
+`seller_ref` on every sale). What the archive holds is what survives either.
 
 ## Architecture
 
@@ -134,7 +143,7 @@ node ingest/verify.js                            # confirm health
 | Tier | Cadence | Endpoints |
 |---|---|---|
 | fast | 5 min | leaderboards, market_listings, market_sales, royalties |
-| hourly | hourly at :05 | combat_players, combat_fights, contracts, contracts_open_jobs, bounties, boosts, territory |
+| hourly | hourly at :05 | combat_players, combat_fights, contracts, contracts_open_jobs, bounties, boosts, territory, market_traders |
 | daily | 04:15 | capos, equipment, equipment_supply, supply, economy, prestige, territory_cities |
 | derive | 15 min | rebuild SQLite + regenerate all boards |
 | verify | 09:00 | health check |
@@ -246,7 +255,7 @@ places, so treat the API as observed rather than as documented.
 | `/capos` | "~3–4k rows" | **89,237 rows, 58 MB**, no pagination, no `limit` |
 | `/equipment` | "~2.3k" | **37,433 rows** |
 | `/territory` | "~2k districts" | **6,428 rows** |
-| `/leaderboards` | `?season=` filter | **ignored**; always lifetime, capped at 50 rows |
+| `/leaderboards` | `?season=` filter | **now works** (re-verified 2026-08-22); still capped at 50 rows |
 | `/royalties` | `?limit=`, `?since=` | **no cursor**, hard-capped at 1000 rows/call |
 | `/market/sales` | `?limit=`, `?cursor=` | works as documented; full history backfillable |
 
@@ -288,24 +297,33 @@ data is being withdrawn, and only what was already archived survives.
 suspiciously round prices (0.5, 1, 2.5, 10 SOL). Treat as test data and filter
 before any modelling; a stray 10 SOL row would badly skew a price model.
 
-## What cannot be built yet
+## What the game has since added
 
-These need changes on the game's side, and are the gap list to send them:
+The gap list below was sent, and most of it was built. Re-verified 2026-08-22.
 
-1. **Account-level total earnings.** No endpoint aggregates RACKET earnings per
-   account. `/leaderboards` is capo-scoped and capped at 50 rows. With 4,048
-   owners averaging 22 capos each, a large holder of mid-tier capos is entirely
-   invisible. This is precisely the datapoint being removed from the site, and
-   no third party can rebuild it without an API change.
-2. **Top hustlers.** 33,635 capos carry `role: "hustler"` but no hustle earnings
-   are exposed at capo or account level.
-3. **Time-scoped leaderboards.** Make `?season=` filter, or add `?since=`.
-   Until then, weekly boards come only from our own snapshot diffs.
-4. **Deeper leaderboards.** 50 rows across 4,048 owners is thin.
-5. **Full account PNL.** Realized SOL trading PNL is computable from
-   `/market/sales`, but the wallet-to-account bridge runs through
-   `mint_address` and only **11,157 of 89,237 capos (12.5%)** have ever been
-   minted on chain. Primary spend (packs, Stripe) is not exposed at all.
+1. **Account-level total earnings** and **top hustlers**, both closed by
+   `/capos/production`: per-capo side-hustle RACKET, 52,404 earning capos across
+   4,208 owners, with lifetime, current-season, 7-day and 30-day figures per
+   capo. Summing by `owner_ref` gives the per-account number that was the whole
+   reason for the gap list. It is on every player profile.
+2. **Time-scoped leaderboards**, closed by `?season=` now filtering on
+   `/leaderboards`, `/combat/players` and `/combat/fights`. Season boards no
+   longer require our own snapshot diffs, though sub-season windows still do.
+3. **Full account PNL**, closed twice over: `/market/sales` now carries
+   `buyer_ref` and `seller_ref` directly, and `/market/traders` states realized
+   SOL per player outright. The mint-join inference is retired.
+
+## What still cannot be built
+
+1. **Deeper leaderboards.** Still 50 rows across 4,048 owners.
+2. **Primary spend.** Packs are bought with SOL, USDC, card, Contraband or
+   RACKET and none of it is exposed anywhere, so every PNL figure on the site is
+   trading PNL and not lifetime profit. This is the one gap that matters most
+   and the only one left that no archive can close.
+3. **Earnings other than side hustles.** `/capos/production` breaks out side
+   hustles only, so an account's RACKET figure is not its total income.
+4. **Royalty history.** `/royalties` still returns no cursor and still caps at
+   1000 receipts whatever `limit` says, so anything older is unreachable.
 
 ## Legal note
 
