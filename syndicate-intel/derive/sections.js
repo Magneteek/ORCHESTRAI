@@ -11,9 +11,11 @@
  */
 
 import fs from 'node:fs'
+import zlib from 'node:zlib'
 import path from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
+import { SOL_SALES } from './valuation.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -59,18 +61,59 @@ function money() {
            COUNT(*) AS sales,
            SUM(price_lamports) / 1000000000.0 AS sol
     FROM sales
-    WHERE sold_at >= '2026-01-01' AND price_lamports IS NOT NULL
+    WHERE sold_at >= '2026-01-01' AND price_lamports IS NOT NULL AND ${SOL_SALES}
     GROUP BY day ORDER BY day`)
 
-  const priceBand = all(`
-    SELECT rarity,
-           COUNT(*) AS sales,
-           ROUND(MIN(price_lamports) / 1000000000.0, 4) AS min_sol,
-           ROUND(AVG(price_lamports) / 1000000000.0, 4) AS avg_sol,
-           ROUND(MAX(price_lamports) / 1000000000.0, 4) AS max_sol
-    FROM sales
-    WHERE sold_at >= '2026-01-01' AND rarity IS NOT NULL AND asset_kind = 'capo'
-    GROUP BY rarity ORDER BY avg_sol DESC`)
+  /**
+   * What a capo costs, per rarity.
+   *
+   * This used to be the mean of every sale since January, which was wrong in
+   * three ways at once. A mean over a distribution this skewed is dragged up by
+   * a handful of large sales; with no time window a June sale counted the same
+   * as yesterday's, on a market where rare prices moved 71% in a fortnight; and
+   * it described what had already happened rather than what anything costs now.
+   * It ran 27% to 53% above the recent median on every rarity.
+   *
+   * Three figures instead. The floor is the lowest live ask and answers "what
+   * can I buy one for". The seven-day median answers "what do they actually go
+   * for". The listed count says whether either number means anything, because a
+   * floor across nine listings is a different object from a floor across a
+   * thousand.
+   *
+   * The live book is the rows carrying the newest last_seen_at: the listings
+   * feed is a snapshot of what is currently for sale, so anything not seen in
+   * the last pass has gone.
+   */
+  const bookAt = one('SELECT MAX(last_seen_at) c FROM listings')?.c || null
+  const priceBand = RARITIES.map((rarity) => {
+    const book = bookAt
+      ? one(`SELECT COUNT(*) n, MIN(price_lamports) floor
+             FROM listings
+             WHERE last_seen_at = ? AND rarity = ? AND price_lamports > 0`, bookAt, rarity)
+      : { n: 0, floor: null }
+    const recent = all(`
+      SELECT price_lamports p FROM sales
+      WHERE rarity = ? AND asset_kind = 'capo' AND price_lamports > 0
+        AND ${SOL_SALES}
+        AND sold_at >= date('now', '-7 days')
+      ORDER BY p`, rarity).map((r) => r.p)
+    const lifetime = one(`
+      SELECT COUNT(*) n, AVG(price_lamports) avg FROM sales
+      WHERE rarity = ? AND asset_kind = 'capo' AND price_lamports > 0
+        AND ${SOL_SALES}
+        AND sold_at >= '2026-01-01'`, rarity)
+    const sol = (lam) => (lam == null ? null : +(lam / 1e9).toFixed(4))
+    return {
+      rarity,
+      listed: book.n || 0,
+      floor_sol: sol(book.floor),
+      sales_7d: recent.length,
+      median_7d_sol: recent.length ? sol(recent[Math.floor(recent.length / 2)]) : null,
+      // Kept for the history toggle, not for the headline it used to be.
+      lifetime_sales: lifetime.n || 0,
+      lifetime_avg_sol: sol(lifetime.avg),
+    }
+  }).filter((r) => r.listed || r.sales_7d || r.lifetime_sales)
 
   // How the market actually clears. Volume and price say what changed hands;
   // none of it says how long a seller waits or whether they get their ask.
@@ -80,7 +123,8 @@ function money() {
     SELECT l.price_lamports AS ask, s.price_lamports AS got, l.listed_at, s.sold_at
     FROM listings l
     JOIN sales s ON s.capo_id = l.capo_id AND s.sold_at >= l.listed_at
-    WHERE l.capo_id IS NOT NULL AND l.price_lamports > 0 AND s.price_lamports > 0`)
+    WHERE l.capo_id IS NOT NULL AND l.price_lamports > 0 AND s.price_lamports > 0
+      AND s.${SOL_SALES}`)
 
   const pctl = (arr, p) => {
     const a = arr.filter((x) => x != null && !Number.isNaN(x)).sort((x, y) => x - y)
@@ -95,7 +139,8 @@ function money() {
     SELECT COUNT(*) n, AVG(price_lamports) / 1000000000.0 avg_sol FROM listings
     WHERE last_seen_at = (SELECT MAX(last_seen_at) FROM listings)`)
   const sold7 = one(
-    "SELECT COUNT(*) n FROM sales WHERE sold_at >= datetime('now', '-7 days')").n
+    `SELECT COUNT(*) n FROM sales WHERE sold_at >= datetime('now', '-7 days')
+       AND ${SOL_SALES}`).n
 
   const liquidity = {
     matched: cleared.length,
@@ -530,6 +575,119 @@ function promotionCost() {
   return out
 }
 
+
+/**
+ * Per-capo RACKET earnings, from /capos/production.
+ *
+ * Until this endpoint existed the only per-capo earnings anywhere were the
+ * leaderboard's top 50, which named 109 distinct capos across the whole archive
+ * against 96,806 alive. Nothing on the site could honestly say what a capo
+ * earns. This covers 51,650.
+ *
+ * Everything here is a median. Earnings are heavily skewed, and a mean would
+ * describe a capo nobody owns.
+ *
+ * The payback figures hold rarity fixed. Comparing all bosses against all
+ * underbosses mixes the promotion effect with the fact that rarer capos both
+ * earn more and get promoted more, which flatters the top rungs badly. That is
+ * the same cross-population mistake that once put the boss promotion at
+ * 2,595,272 RACKET when it is 1,942,000.
+ */
+function production() {
+  const dir = path.join(ROOT, 'data', 'raw', 'capos_production')
+  if (!fs.existsSync(dir)) return null
+  const files = []
+  ;(function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const q = path.join(d, e.name)
+      if (e.isDirectory()) walk(q); else files.push(q)
+    }
+  })(dir)
+  if (!files.length) return null
+  let j = JSON.parse(zlib.gunzipSync(fs.readFileSync(files.sort().at(-1))))
+  const asOf = j.as_of || null
+  while (j && j.data) j = j.data
+  const rows = (j && j.capos) || []
+  if (!rows.length) return null
+
+  const day = one('SELECT MAX(day) d FROM capos_daily').d
+  const attr = new Map()
+  for (const r of all('SELECT capo_id, rarity, tier FROM capos_daily WHERE day = ?', day)) {
+    attr.set(r.capo_id, r)
+  }
+  const joined = rows.map((r) => ({ ...r, attr: attr.get(r.capo_id) }))
+    .filter((r) => r.attr && r.avg_racket_per_day > 0)
+
+  const med = (v) => (v.length ? v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)] : 0)
+  const perDay = (rows_) => med(rows_.map((r) => r.avg_racket_per_day))
+
+  const byRarity = RARITIES.map((rarity) => {
+    const g = joined.filter((r) => r.attr.rarity === rarity)
+    return g.length >= 25
+      ? { rarity, capos: g.length, per_day: Math.round(perDay(g)),
+          lifetime: Math.round(med(g.map((r) => r.total_racket_earned))) }
+      : null
+  }).filter(Boolean)
+
+  const byTier = RANKS.map((tier) => {
+    const g = joined.filter((r) => r.attr.tier === tier)
+    return g.length >= 25
+      ? { tier, capos: g.length, per_day: Math.round(perDay(g)),
+          lifetime: Math.round(med(g.map((r) => r.total_racket_earned))) }
+      : null
+  }).filter(Boolean)
+
+  // Payback, rarity held fixed. Reported per rarity so a reader picks the row
+  // that matches the capo they actually own.
+  const cost = {}
+  for (const r of promotionCost()) cost[r.tier] = r.step
+  const payback = []
+  for (const rarity of RARITIES) {
+    const cell = joined.filter((r) => r.attr.rarity === rarity)
+    // No gate on the rarity as a whole. There used to be one at 200 capos, which
+    // did nothing the per-rung test below does not do better and silently
+    // dropped god entirely: 110 earning gods in total, but 35 lieutenants and 41
+    // underbosses, which is a perfectly reportable rung. The sample size that
+    // matters is the one on each side of the step, not the size of the rarity.
+    for (let i = 1; i < RANKS.length; i++) {
+      const from = RANKS[i - 1], to = RANKS[i]
+      const a = cell.filter((r) => r.attr.tier === from)
+      const b = cell.filter((r) => r.attr.tier === to)
+      // 25 is the floor everywhere here: below it a median is one or two capos
+      // deciding what the whole rung looks like.
+      if (a.length < 25 || b.length < 25 || !cost[to]) continue
+      const gain = perDay(b) - perDay(a)
+      payback.push({
+        rarity, from, to, cost: cost[to],
+        gain_per_day: Math.round(gain),
+        days: gain > 0 ? +(cost[to] / gain).toFixed(1) : null,
+        n_from: a.length, n_to: b.length,
+      })
+    }
+  }
+
+  const top = joined.slice()
+    .sort((a, b) => b.total_racket_earned - a.total_racket_earned)
+    .slice(0, 25)
+    .map((r) => ({
+      capo: r.capo_name, owner: r.owner_display_name || null,
+      rarity: r.attr.rarity, tier: r.attr.tier,
+      lifetime: r.total_racket_earned, per_day: r.avg_racket_per_day,
+      last_7d: r.racket_last_7d, active_days: r.active_days,
+    }))
+
+  return {
+    as_of: asOf,
+    earning_capos: rows.length,
+    capos_alive: attr.size,
+    matched: joined.length,
+    by_rarity: byRarity,
+    by_tier: byTier,
+    payback,
+    top,
+  }
+}
+
 function capos() {
   const day = one('SELECT MAX(day) d FROM capos_daily').d
 
@@ -608,6 +766,7 @@ function capos() {
     const rows = all(`
       SELECT ${col} AS k, price_lamports p FROM sales
       WHERE ${col} IS NOT NULL AND price_lamports > 0 AND sold_at >= '2026-01-01'
+        AND ${SOL_SALES}
         AND asset_kind = 'capo'`)
     const groups = {}
     for (const r of rows) (groups[r.k] ||= []).push(r.p)
@@ -720,6 +879,7 @@ function capos() {
     crosstab,
     ranks: ranksSection(day),
     promotion_cost: promotionCost(),
+    production: production(),
   }
 }
 
@@ -777,13 +937,15 @@ function overview(m, w, g) {
       })).reverse()
       const promo24 = promoRows.reduce((a, r) => a + r.n, 0)
       const s24 = one(`SELECT COUNT(*) n, ROUND(SUM(price_lamports)/1000000000.0, 1) sol
-        FROM sales WHERE sold_at >= ${since(1)} AND sold_at >= '2026-01-01'`)
+        FROM sales WHERE sold_at >= ${since(1)} AND sold_at >= '2026-01-01'
+          AND ${SOL_SALES}`)
       const top24 = one(`SELECT ROUND(price_lamports/1000000000.0, 2) sol, rarity
         FROM sales WHERE sold_at >= ${since(1)} AND sold_at >= '2026-01-01'
-          AND price_lamports > 0 ORDER BY price_lamports DESC LIMIT 1`)
+          AND price_lamports > 0 AND ${SOL_SALES}
+          ORDER BY price_lamports DESC LIMIT 1`)
       const topEver = one(`SELECT ROUND(price_lamports/1000000000.0, 2) sol, rarity,
           substr(sold_at, 1, 10) day FROM sales
-        WHERE price_lamports > 0 AND sold_at >= '2026-01-01'
+        WHERE price_lamports > 0 AND sold_at >= '2026-01-01' AND ${SOL_SALES}
         ORDER BY price_lamports DESC LIMIT 1`)
       const total = one('SELECT COUNT(*) n FROM capos_daily WHERE day=?', day).n
       const rar = (r) => one(

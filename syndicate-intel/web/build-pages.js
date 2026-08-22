@@ -250,12 +250,16 @@ function ledgerRows(rows, cols, opts) {
     cols.map((c) => '<span class="' + (c.num ? 'num' : '') + '">' + esc(c.label) + '</span>').join('') + '</div>'
   const body = rows.map((r, i) => {
     const first = cols[0], rest = cols.slice(1)
+    // Cells escape by default. A column opts into raw only when it deliberately
+    // returns markup, such as a converted amount carrying its SOL figure in a
+    // span. Everything else stays escaped: these rows carry player-chosen names.
+    const cell = (c, v) => (c.raw ? v : esc(v))
     return '<div class="row">' + (ranked ? '<span class="rank">' + (i + 1) + '</span>' : '') +
-      '<span class="name">' + esc(first.get(r)) +
+      '<span class="name">' + cell(first, first.get(r)) +
       (first.sub ? '<br><span class="sub">' + esc(first.sub(r)) + '</span>' : '') + '</span>' +
       '<span class="extra">' + rest.map((c) =>
         '<span class="' + (c.num ? 'num' : '') + '">' +
-        '<span class="cell-label">' + esc(c.label) + '</span>' + esc(c.get(r)) + '</span>').join('') +
+        '<span class="cell-label">' + esc(c.label) + '</span>' + cell(c, c.get(r)) + '</span>').join('') +
       '</span></div>'
   }).join('')
   return '<div class="ledger" data-cols="' + (cols.length + (ranked ? 1 : 0)) + '"' +
@@ -547,7 +551,8 @@ function renderOtherRewards(usd) {
       v: usd(DATA.total_usdc_seasons) },
   ], [
     { label: 'Stream', get: (x) => x.k, sub: (x) => x.sub },
-    { label: 'Paid', num: true, get: (x) => x.v },
+    // raw: the SOL bounty row is a converted amount carrying its SOL figure
+    { label: 'Paid', num: true, raw: true, get: (x) => x.v },
   ], { rank: false }) +
   '<p class="basis">SOL bounties are shown in SOL and left out of every dollar ' +
   'total on this page. No feed carries a conversion rate, and picking one to make ' +
@@ -1065,7 +1070,8 @@ function render() {
       sub: 'converted at the current rate' },
   ], [
     { label: 'Stream', get: (x) => x.k, sub: (x) => x.sub },
-    { label: 'Paid', num: true, get: (x) => x.v },
+    // raw: same, the SOL bounty row carries markup
+    { label: 'Paid', num: true, raw: true, get: (x) => x.v },
   ], { rank: false }) +
   '<p class="basis">Four ways money reaches a player, and one of them is most of it. ' +
   'Season pools are league placement, so where you finish in your league is what pays.</p>'
@@ -1377,6 +1383,7 @@ function renderTiles() {
 
 /* ---- tab: earnings ---- */
 function renderEarnings() {
+  renderEarnPower()
   // Lifetime is the API's own board. The 24 hour column is ours: the API reports
   // a running total and never a delta, so a period figure exists only by
   // differencing snapshots we took.
@@ -1440,6 +1447,7 @@ function renderProgression() {
   ], { rank: false })
 
   renderLadderCost()
+  renderPayback()
 
   // Forty-four bars is not a chart anyone reads; it is a list with decoration.
   // As a table the supporting ranks fit alongside, which is the actual question:
@@ -1499,6 +1507,83 @@ function renderLadderCost() {
   'not from what capos at that rank have spent in total. The price is close to ' +
   'fixed but not exactly: legendary, god and founder capos are seen paying ' +
   'about a tenth less at several rungs.</p>'
+}
+
+
+/**
+ * What a capo actually earns, from /capos/production.
+ *
+ * Before that endpoint the only per-capo earnings available were the
+ * leaderboard's top 50, which has named 109 capos in the whole archive against
+ * 96,806 alive, so the site could never answer this at all. It now rests on
+ * 51,673.
+ *
+ * Medians, because earnings are skewed hard enough that a mean describes a capo
+ * nobody owns.
+ */
+function renderEarnPower() {
+  const p = DATA.production
+  if (!p) return
+  const exact = (n) => Number(n || 0).toLocaleString('en-US')
+  const board = (rows, el, label, key) => {
+    const t = document.getElementById(el)
+    if (!t) return
+    t.innerHTML = ledgerRows(rows, [
+      { label, get: (r) => (key === 'rarity' ? RARITY_LABELS[r.rarity] : RANK_LABELS[r.tier]) },
+      { label: 'Per day', num: true, get: (r) => exact(r.per_day) },
+      { label: 'Lifetime', num: true, get: (r) => exact(r.lifetime) },
+      { label: 'Capos', num: true, get: (r) => exact(r.capos) },
+    ], { rank: false })
+  }
+  board(p.by_rarity, 'c-earn-rarity', 'Rarity', 'rarity')
+  board(p.by_tier, 'c-earn-tier', 'Rank', 'tier')
+
+  const el = document.getElementById('c-earn-rarity')
+  if (el) el.insertAdjacentHTML('beforeend',
+    '<p class="basis">Median RACKET per active day across ' + exact(p.earning_capos) +
+    ' capos that have ever earned anything, of ' + exact(p.capos_alive) + ' alive. ' +
+    'Medians, not averages: the top of this distribution is far enough out that a ' +
+    'mean would describe a capo nobody owns.</p>')
+}
+
+/**
+ * Whether a promotion earns itself back, and how fast.
+ *
+ * Rarity is held fixed on every row. Comparing all bosses against all underbosses
+ * mixes the promotion with the fact that rarer capos both earn more and get
+ * promoted more, which flatters the top rungs. Rows thinner than 25 capos on
+ * either side are dropped rather than shown with a wide error nobody can see.
+ */
+function renderPayback() {
+  const el = document.getElementById('c-payback')
+  const p = DATA.production
+  if (!el || !p || !p.payback.length) return
+  const exact = (n) => Number(n || 0).toLocaleString('en-US')
+  const fastest = p.payback.slice().sort((a, b) => (a.days || 1e9) - (b.days || 1e9))[0]
+  const slowest = p.payback.slice().sort((a, b) => (b.days || 0) - (a.days || 0))[0]
+
+  el.innerHTML = ledgerRows(p.payback, [
+    { label: 'Capo', get: (r) => RARITY_LABELS[r.rarity],
+      // The counts either side are on the row. A rung resting on 35 capos and
+      // one resting on 8,448 should not look equally solid.
+      sub: (r) => RANK_LABELS[r.from] + ' to ' + RANK_LABELS[r.to] +
+        '  ·  ' + exact(r.n_from) + ' and ' + exact(r.n_to) + ' capos' },
+    { label: 'Costs', num: true, get: (r) => exact(r.cost) },
+    { label: 'Earns extra', num: true, get: (r) => '+' + exact(r.gain_per_day) + '/day' },
+    { label: 'Pays back in', num: true, get: (r) => (r.days ? r.days + ' days' : 'never') },
+  ], { rank: false }) +
+  '<p class="basis">The first two rungs pay for themselves almost at once: ' +
+  RARITY_LABELS[fastest.rarity].toLowerCase() + ' ' + RANK_LABELS[fastest.from].toLowerCase() +
+  ' to ' + RANK_LABELS[fastest.to].toLowerCase() + ' costs ' + exact(fastest.cost) +
+  ' and is back in ' + fastest.days + ' days. The slowest here is ' +
+  RARITY_LABELS[slowest.rarity].toLowerCase() + ' ' + RANK_LABELS[slowest.from].toLowerCase() +
+  ' to ' + RANK_LABELS[slowest.to].toLowerCase() + ' at ' + slowest.days + ' days. ' +
+  'Every row compares capos of the same rarity, so what changes between the two ' +
+  'sides is the rank and not the capo. Rungs with fewer than 25 capos either side ' +
+  'are left out rather than guessed at, which is why the highest ranks are missing ' +
+  'for the commonest capos: not one common capo has ever reached boss. The two ' +
+  'counts on each row are how many capos sit either side of that step, so a rung ' +
+  'resting on a few dozen can be read with the caution it deserves.</p>'
 }
 
 /* ---- tab: population ---- */
@@ -1603,15 +1688,34 @@ function renderMarket() {
     height: 170,
   })
 
-  // Four numbers do not need an axis. Three decimals because the cheapest tier
-  // averages 0.038 SOL, and at one decimal every rarity below legendary reads
-  // as zero.
+  /**
+   * Floor, recent median, and how many are on the book.
+   *
+   * A table rather than tiles: three numbers per rarity that only mean anything
+   * read across, and a tile can hold one. The floor is the lowest live ask, the
+   * median is what actually sold in the last seven days, and the count is there
+   * so a floor across nine listings is not read like a floor across a thousand.
+   */
   const capr = (x) => x.charAt(0).toUpperCase() + x.slice(1)
-  document.getElementById('c-price').innerHTML = '<div class="tiles">' +
-    DATA.sales.price_band.map((p) =>
-      '<div class="tile"><span class="tile-label">' + capr(p.rarity) + '</span>' +
-      '<span class="tile-value">' + solAmount(p.avg_sol) + '</span></div>').join('') +
-    '</div>'
+  const band = DATA.sales.price_band || []
+  document.getElementById('c-price').innerHTML = ledgerRows(band, [
+    { label: 'Rarity', get: (p) => capr(p.rarity),
+      sub: (p) => (p.listed ? nfmt(p.listed) + ' listed' : 'none listed') },
+    { label: 'Floor', num: true, raw: true,
+      get: (p) => (p.floor_sol != null ? solAmount(p.floor_sol) : '-') },
+    { label: 'Sold, 7 days', num: true, raw: true,
+      get: (p) => (p.median_7d_sol != null
+        ? solAmount(p.median_7d_sol) + '<span class="insol">' + nfmt(p.sales_7d) +
+          (p.sales_7d === 1 ? ' sale' : ' sales') + '</span>'
+        : 'none') },
+  ], { rank: false }) +
+  '<p class="basis">Floor is the lowest ask on the book right now; the second ' +
+  'column is the median of what actually changed hands in the last seven days. ' +
+  'This section used to show the mean of every sale since January, which ran ' +
+  '27% to 53% above the recent median on every rarity: a mean is dragged up by a ' +
+  'few large sales, and a June price says little about today on a market that ' +
+  'moved 71% in a fortnight. Note that common and uncommon capos are never ' +
+  'listed at all, so the book starts at rare.</p>'
 
   // Liquidity is four numbers, not a shape. A chart of three percentiles is a
   // chart of three numbers, so this is a table.
@@ -1892,7 +1996,7 @@ const PAGES = [
   <div class="section-head"><h2>Secondary market</h2><span class="section-meta">what trades, and at what price</span></div>
   <div class="duo">
     <div><p class="duo-head">SOL traded, cumulative</p><div class="chart" id="c-volume"></div></div>
-    <div><p class="duo-head">Average price by rarity</p><div id="c-price"></div></div>
+    <div><p class="duo-head">What a capo costs</p><div id="c-price"></div></div>
   </div>
   <div class="section-head"><h2>How the market clears</h2><span class="section-meta">liquidity, not volume</span></div>
   <div id="liquidity"></div>
@@ -1956,6 +2060,11 @@ const PAGES = [
       <div><p class="duo-head">Lifetime</p><div id="c-earn-life"></div></div>
       <div><p class="duo-head">Last 24 hours</p><div id="c-earn-24h"></div></div>
     </div>
+    <div class="section-head"><h2>What a capo earns</h2><span class="section-meta">RACKET per active day</span></div>
+    <div class="duo">
+      <div><p class="duo-head">By rarity</p><div id="c-earn-rarity"></div></div>
+      <div><p class="duo-head">By rank</p><div id="c-earn-tier"></div></div>
+    </div>
     <div class="section-head"><h2>Board movement</h2><span class="section-meta">places changed in the last 24 hours</span></div>
     <div class="duo">
       <div><p class="duo-head">Climbing</p><div id="c-climb"></div></div>
@@ -1971,6 +2080,8 @@ const PAGES = [
     <div id="c-progression"></div>
     <div class="section-head"><h2>What the ladder costs</h2><span class="section-meta">RACKET, typical spend per capo</span></div>
     <div id="c-cost"></div>
+    <div class="section-head"><h2>Does promoting pay for itself?</h2><span class="section-meta">days to earn the promotion back</span></div>
+    <div id="c-payback"></div>
     <div class="section-head"><h2>Who is climbing</h2><span class="section-meta">top 15 each</span></div>
     <div class="duo">
       <div><p class="duo-head">Most bosses held</p><div id="c-rankleaders"></div></div>
