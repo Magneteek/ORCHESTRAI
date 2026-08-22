@@ -114,7 +114,13 @@ function loadListings(db, doc, capturedAt) {
       first_seen_at, last_seen_at, observations
     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)
     ON CONFLICT(listing_id) DO UPDATE SET
-      last_seen_at   = excluded.last_seen_at,
+      -- MAX/MIN rather than assignment, so the archive can be replayed in any
+      -- order. A plain assignment pushes last_seen_at BACKWARDS when an older
+      -- snapshot is loaded after a newer one, which is exactly what happens when
+      -- history is imported from another machine, and it silently corrupts the
+      -- time-on-market figures derived from the two.
+      first_seen_at  = MIN(first_seen_at, excluded.first_seen_at),
+      last_seen_at   = MAX(last_seen_at, excluded.last_seen_at),
       observations   = observations + 1,
       price_lamports = excluded.price_lamports,
       price_racket   = excluded.price_racket,
@@ -277,7 +283,8 @@ function loadBounties(db, doc, capturedAt) {
       first_seen_at, last_seen_at
     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ON CONFLICT(bounty_id) DO UPDATE SET
-      last_seen_at = excluded.last_seen_at,
+      first_seen_at = MIN(first_seen_at, excluded.first_seen_at),
+      last_seen_at = MAX(last_seen_at, excluded.last_seen_at),
       -- A bounty is posted first and collected later, so these three only ever
       -- arrive on a subsequent fetch. Everything else is fixed at creation.
       collected = excluded.collected,
@@ -508,7 +515,8 @@ function loadOpenJobs(db, doc, capturedAt) {
       first_seen_at, last_seen_at, observations
     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)
     ON CONFLICT(job_id) DO UPDATE SET
-      last_seen_at = excluded.last_seen_at,
+      first_seen_at = MIN(first_seen_at, excluded.first_seen_at),
+      last_seen_at = MAX(last_seen_at, excluded.last_seen_at),
       observations = observations + 1`)
 
   let n = 0
