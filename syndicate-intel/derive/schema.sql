@@ -176,6 +176,101 @@ CREATE TABLE IF NOT EXISTS combat_daily (
   PRIMARY KEY (day, player_ref)
 );
 
+-- ---------------------------------------------------------------- bounties ---
+-- One row per bounty, not per observation, keyed on the id so re-fetching an
+-- already-known bounty updates it rather than duplicating it.
+--
+-- The only per-player RACKET income the API attributes outside side hustles:
+-- collector_ref with collector_payout_racket on one side, poster_ref with
+-- amount_racket on the other, and a season on every row. That is what makes a
+-- net figure possible here and nowhere else.
+--
+-- Mutable fields are refreshed on conflict because a bounty is posted first and
+-- collected later; the collector and collected_at only appear on a later fetch.
+-- Everything else is fixed at creation and left alone.
+--
+-- The feed returns 1000 rows whatever limit says and offers no cursor, exactly
+-- like /royalties, so anything older than the most recent 1000 is unreachable
+-- from the API. This table is the only place that history accumulates.
+CREATE TABLE IF NOT EXISTS bounties (
+  bounty_id               TEXT PRIMARY KEY,
+  kind                    TEXT,
+  city_id                 TEXT,
+  city_name               TEXT,
+  target_district_id      TEXT,
+  season                  INTEGER,
+  amount_racket           INTEGER,
+  collector_payout_racket INTEGER,
+  pool_lamports           INTEGER,
+  payout_lamports         INTEGER,
+  fee_lamports            INTEGER,
+  poster_ref              TEXT,
+  poster_display_name     TEXT,
+  target_ref              TEXT,
+  target_display_name     TEXT,
+  collector_ref           TEXT,
+  collector_display_name  TEXT,
+  collected               INTEGER,
+  refunded                INTEGER,
+  is_system_seeded        INTEGER,
+  created_at              TEXT,
+  collected_at            TEXT,
+  first_seen_at           TEXT,
+  last_seen_at            TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_bounty_collector ON bounties (collector_ref, season);
+CREATE INDEX IF NOT EXISTS idx_bounty_poster    ON bounties (poster_ref, season);
+CREATE INDEX IF NOT EXISTS idx_bounty_target    ON bounties (target_ref, season);
+
+-- -------------------------------------------------------------- production ---
+-- Cumulative RACKET earned per owner, one row per owner per day.
+--
+-- /capos/production is lifetime-cumulative and carries no daily breakdown, so
+-- "what did this player earn on Tuesday" exists only as the difference between
+-- two of our own snapshots. That makes this table the same kind of moat the
+-- leaderboard archive is: the game does not publish it, and it cannot be
+-- reconstructed after the fact.
+--
+-- Per owner rather than per capo: 4.2k rows a day against 52k, and the question
+-- a profile asks is what the account earned. Per-capo dailies are the same
+-- derivation at 12x the storage if they are ever wanted.
+--
+-- Cumulative, not the delta. Storing the running total means a missed day
+-- self-heals (the next delta simply spans two days and is labelled as such),
+-- whereas storing deltas would bake a gap in permanently. captured_at rides
+-- along so the width of each interval is known rather than assumed to be 24h.
+CREATE TABLE IF NOT EXISTS production_owner_daily (
+  day             TEXT NOT NULL,
+  owner_ref       TEXT NOT NULL,
+  captured_at     TEXT,
+  lifetime_racket INTEGER,
+  earning_capos   INTEGER,
+  PRIMARY KEY (day, owner_ref)
+);
+CREATE INDEX IF NOT EXISTS idx_prod_owner ON production_owner_daily (owner_ref, day);
+
+-- ----------------------------------------------------------------- traders ---
+-- The game's own per-player SOL trading totals, one row per player per day.
+--
+-- We derive the same figures from buyer_ref/seller_ref on the sales feed, and
+-- that derivation stays the number the site publishes: it is rebuildable from
+-- raw and can be cut to any window, while this endpoint is lifetime-cumulative
+-- only. This table exists so the two can be compared on every build. A player
+-- who drifts apart from their API row means our sales history is incomplete or
+-- our attribution is wrong, and both are worth knowing before publishing a
+-- figure with somebody's name on it.
+CREATE TABLE IF NOT EXISTS traders_daily (
+  day                 TEXT NOT NULL,
+  player_ref          TEXT NOT NULL,
+  display_name        TEXT,
+  sales_sold          INTEGER,
+  sol_sold_lamports   INTEGER,
+  sales_bought        INTEGER,
+  sol_bought_lamports INTEGER,
+  net_sol_lamports    INTEGER,
+  PRIMARY KEY (day, player_ref)
+);
+
 -- ---------------------------------------------------------------- trainers ---
 CREATE TABLE IF NOT EXISTS trainers_daily (
   day                        TEXT NOT NULL,

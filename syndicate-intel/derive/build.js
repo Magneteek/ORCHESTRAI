@@ -266,6 +266,101 @@ function loadCombat(db, doc, capturedAt) {
   return n
 }
 
+function loadBounties(db, doc, capturedAt) {
+  const stmt = db.prepare(`
+    INSERT INTO bounties (
+      bounty_id, kind, city_id, city_name, target_district_id, season,
+      amount_racket, collector_payout_racket, pool_lamports, payout_lamports,
+      fee_lamports, poster_ref, poster_display_name, target_ref,
+      target_display_name, collector_ref, collector_display_name,
+      collected, refunded, is_system_seeded, created_at, collected_at,
+      first_seen_at, last_seen_at
+    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    ON CONFLICT(bounty_id) DO UPDATE SET
+      last_seen_at = excluded.last_seen_at,
+      -- A bounty is posted first and collected later, so these three only ever
+      -- arrive on a subsequent fetch. Everything else is fixed at creation.
+      collected = excluded.collected,
+      refunded = excluded.refunded,
+      collected_at = COALESCE(excluded.collected_at, collected_at),
+      collector_ref = COALESCE(excluded.collector_ref, collector_ref),
+      collector_display_name =
+        COALESCE(excluded.collector_display_name, collector_display_name),
+      collector_payout_racket =
+        COALESCE(excluded.collector_payout_racket, collector_payout_racket)`)
+
+  let n = 0
+  for (const b of feedRows(doc, 'bounties')) {
+    stmt.run(
+      b.bounty_id, b.kind ?? null, b.city_id ?? null, b.city_name ?? null,
+      b.target_district_id ?? null, b.season ?? null,
+      b.amount_racket ?? null, b.collector_payout_racket ?? null,
+      b.pool_lamports ?? null, b.payout_lamports ?? null, b.fee_lamports ?? null,
+      b.poster_ref ?? null, b.poster_display_name ?? null,
+      b.target_ref ?? null, b.target_display_name ?? null,
+      b.collector_ref ?? null, b.collector_display_name ?? null,
+      boolInt(b.collected), boolInt(b.refunded), boolInt(b.is_system_seeded),
+      b.created_at ?? null, b.collected_at ?? null,
+      capturedAt, capturedAt,
+    )
+    n++
+  }
+  return n
+}
+
+function loadProductionOwners(db, doc, capturedAt) {
+  const day = dayOf(capturedAt)
+  const byOwner = new Map()
+  for (const r of doc.data?.capos ?? []) {
+    if (!r.owner_ref) continue
+    const o = byOwner.get(r.owner_ref) || { racket: 0, capos: 0 }
+    o.racket += r.total_racket_earned || 0
+    o.capos++
+    byOwner.set(r.owner_ref, o)
+  }
+  const stmt = db.prepare(`
+    INSERT INTO production_owner_daily (day, owner_ref, captured_at, lifetime_racket, earning_capos)
+    VALUES (?,?,?,?,?)
+    ON CONFLICT(day, owner_ref) DO UPDATE SET
+      captured_at = excluded.captured_at,
+      lifetime_racket = excluded.lifetime_racket,
+      earning_capos = excluded.earning_capos`)
+  let n = 0
+  for (const [ref, o] of byOwner) {
+    stmt.run(day, ref, capturedAt, o.racket, o.capos)
+    n++
+  }
+  return n
+}
+
+function loadTraders(db, doc, capturedAt) {
+  const day = dayOf(capturedAt)
+  const stmt = db.prepare(`
+    INSERT INTO traders_daily (
+      day, player_ref, display_name, sales_sold, sol_sold_lamports,
+      sales_bought, sol_bought_lamports, net_sol_lamports
+    ) VALUES (?,?,?,?,?,?,?,?)
+    ON CONFLICT(day, player_ref) DO UPDATE SET
+      display_name = excluded.display_name,
+      sales_sold = excluded.sales_sold,
+      sol_sold_lamports = excluded.sol_sold_lamports,
+      sales_bought = excluded.sales_bought,
+      sol_bought_lamports = excluded.sol_bought_lamports,
+      net_sol_lamports = excluded.net_sol_lamports`)
+
+  let n = 0
+  for (const t of doc.data?.traders ?? []) {
+    stmt.run(
+      day, t.player_ref, t.display_name ?? null,
+      t.sales_sold ?? null, t.sol_sold_lamports ?? null,
+      t.sales_bought ?? null, t.sol_bought_lamports ?? null,
+      t.net_sol_lamports ?? null,
+    )
+    n++
+  }
+  return n
+}
+
 function loadContracts(db, doc, capturedAt) {
   const day = dayOf(capturedAt)
   const stmt = db.prepare(`
@@ -445,6 +540,9 @@ const LOADERS = {
   },
   capos: loadCapos,
   combat_players: loadCombat,
+  market_traders: loadTraders,
+  capos_production: loadProductionOwners,
+  bounties: loadBounties,
   contracts: loadContracts,
   contracts_open_jobs: loadOpenJobs,
   economy: loadEconomy,
@@ -574,8 +672,8 @@ function main() {
   console.log('\ntable counts:')
   const tables = [
     'leaderboard_obs', 'listings', 'sales', 'capos_daily',
-    'combat_daily', 'trainers_daily', 'economy_daily', 'economy_sinks',
-    'economy_totals', 'supply_daily',
+    'combat_daily', 'traders_daily', 'trainers_daily', 'production_owner_daily',
+    'bounties', 'economy_daily', 'economy_sinks', 'economy_totals', 'supply_daily',
   ]
   for (const t of tables) {
     const { n } = db.prepare(`SELECT COUNT(*) AS n FROM ${t}`).get()

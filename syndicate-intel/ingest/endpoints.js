@@ -149,10 +149,43 @@ export const ENDPOINTS = [
     kind: 'snapshot',
     note: '~2k districts, ~900 occupied',
   },
+  {
+    name: 'market_traders',
+    path: '/market/traders',
+    // Realized SOL per player, attributed by the game rather than by us. We
+    // already derive the same figure from buyer_ref/seller_ref on /market/sales
+    // and agree with it on 904 of 1057 shared players, so this is not a new
+    // number. It is archived as an independent check on the one we publish:
+    // ours is rebuildable and can be windowed to any period, theirs cannot be
+    // windowed at all, and a drift between the two means one of us is wrong.
+    //
+    // It already earned its place. The first comparison showed our SOL totals
+    // counting in-game RACKET trades as SOL, which the API excludes.
+    tier: 'hourly',
+    kind: 'snapshot',
+    approxBytes: 209_707,
+    note: '1062 traders; lifetime cumulative, marketplace only, swaps excluded',
+  },
 
   // --------------------------------------------------------------- daily ---
   // 58MB, no pagination, no limit param. Documented as "~3-4k rows" but
   // actually returns ~89k. Never fetch this on a request path.
+  {
+    name: 'capos_production',
+    path: '/capos/production',
+    // Per-capo RACKET earnings, which nothing else in the API carries: the
+    // leaderboard board is 50 rows and has named 109 capos in our whole archive,
+    // against 51,650 here.
+    //
+    // The API refreshes it hourly and we take it daily anyway. At 4.8MB
+    // compressed a snapshot, hourly is 41GB a year against 44GB free on this
+    // box, to watch cumulative lifetime earnings that barely move in an hour.
+    // Daily costs 1.7GB a year and pairs with the roster pull it is joined to.
+    tier: 'daily',
+    kind: 'snapshot',
+    approxBytes: 23_058_420,
+    note: '51650 earning capos; lifetime, per-day, season, 7d/30d. Filters: owner, capo, min_earned',
+  },
   {
     name: 'capos',
     path: '/capos',
