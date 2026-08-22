@@ -92,6 +92,38 @@ const PAGE_CSS = String.raw`
   display: flex; gap: 0.9rem; flex-wrap: wrap;
 }
 
+/* The profile's eight tiles, as two rows of four rather than one long strip.
+   auto-fit fills the width, so on a wide screen all eight landed on one line and
+   read as an undifferentiated row of numbers with no grouping to hang on to.
+   Pinned to four so the money figures sit above the roster and combat ones.
+
+   Mobile keeps auto-fit and lands on two columns, which is four rows: four
+   columns at 375px would give each tile 88px, and "NET POSITION" alone does not
+   fit in that. The pin starts at 44rem, the first width where four tiles clear
+   the 9.5rem the auto-fit track already asks for. */
+@media (min-width: 44rem) {
+  .tiles-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* The group label sits on its own line under a right-aligned figure, so on
+   mobile it was right-aligned inside a cell as wide as its longest line and
+   floated away from the label it belongs to. Left on mobile, right on desktop
+   where the column really is right-aligned. */
+#tab-hustles .num .sub { display: block; text-align: left; }
+@media (min-width: 46rem) {
+  #tab-hustles .num .sub { text-align: right; }
+}
+
+/* The hustles table carries two text columns and four numbers. The shared
+   seven-column template gives everything past the name about 5rem, which wrapped
+   "Legendary Underboss" onto three lines and tripled the row height. This widens
+   the rarity-and-rank column at the expense of the name, which has room spare. */
+@media (min-width: 46rem) {
+  #tab-hustles .ledger[data-cols="7"] .row {
+    grid-template-columns: 2.25rem minmax(5rem, 1fr) 9rem 6rem 7rem 5.5rem 6rem;
+  }
+}
+
 .back {
   font-family: var(--mono); font-size: 0.75rem;
   letter-spacing: 0.08em; text-transform: uppercase;
@@ -131,6 +163,26 @@ const PAGE_CSS = String.raw`
 }
 .standing .league { color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; }
 .standing .place { color: var(--ink); }
+/* Prestige, beside the name. Shares the wallet's opt-out of the heading face but
+   is not an identifier, so it carries the accent and a border to read as a
+   standing rather than as a second address.
+
+   Only a small minority of profiles can show one: trainer_prestige_level is the
+   only per-player prestige in the API. Its absence is therefore not a claim, and
+   the note under the level says which it is. */
+.prestige {
+  display: inline-block;
+  margin-left: 0.6rem;
+  vertical-align: middle;
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--rule-firm);
+  padding: 0.15rem 0.5rem;
+}
 /* Sits inside the h1, so it has to opt out of the display face and the heading
    size it would otherwise inherit. */
 .wallet {
@@ -152,6 +204,17 @@ const fmt = (n) => (n == null ? '-' : Number(n).toLocaleString('en-US'))
 // back to plain SOL when no rate has arrived.
 const sol = (n) => (n == null ? '-' : solAmount(n, { sign: true }))
 const solBare = (n) => (n == null ? '-' : solAmount(n, { bare: true }))
+// RACKET is an in-game currency with no exchange rate anywhere in this data, so
+// it is never converted and never sits in the same column as a SOL or dollar
+// figure. Scaled because account totals run to hundreds of millions, and nine
+// digits of tabular numerals is not a number anyone reads.
+const rkt = (n) => {
+  if (n == null) return '-'
+  const a = Math.abs(n)
+  if (a >= 1e6) return (n / 1e6).toFixed(a >= 1e8 ? 0 : 1) + 'M $R'
+  if (a >= 1e4) return Math.round(n / 1e3) + 'K $R'
+  return fmt(n) + ' $R'
+}
 // Renders a missing value as a dash, so an absent figure reads as absent
 // rather than as a cell that failed to fill. Named apart from the usual esc()
 // because it differs in exactly that way, and the two got mixed up once
@@ -198,11 +261,98 @@ function standingLine(t) {
     (t.districts === 1 ? ' district' : ' districts') + '</span>'
 }
 
+/**
+ * Where the account's money came from, season or lifetime.
+ *
+ * Three sources, and the page says so. The game's own panel breaks a season take
+ * into five: tournaments, bounties, hustles, territory and market. Two of those
+ * are invisible to any third party, since no endpoint attributes tournament
+ * winnings or territory income to a player, and on the game's panel those two
+ * were 43% of the take. So this lists what it can measure and states what it
+ * cannot, and deliberately shows no total. A sum of three fifths presented as a
+ * take would be wrong by a wide margin and look authoritative doing it.
+ *
+ * Both views are rendered up front and toggled with hidden, rather than
+ * re-rendered on click. There are six numbers involved; a re-render would be
+ * machinery for nothing.
+ */
+function incomeSection(p) {
+  const inc = p.income
+  if (!inc) return ''
+  const S = DATA.season || null
+  const b = inc.bounties
+
+  const view = (which) => {
+    const collected = b ? (which === 'season' ? b.season : b.all_time) : 0
+    const spent = b ? (which === 'season' ? b.season_spent : b.all_time_spent) : 0
+    const n = b ? (which === 'season' ? b.season_collections : b.all_time_collections) : 0
+    const net = collected - spent
+    const m = inc.market_sol[which]
+    return rows([
+      ['Hustles', inc.hustles
+        ? fmt(inc.hustles[which]) + ' $R'
+        : '-<span class="sub"> not collected yet</span>'],
+      b && (collected || spent)
+        ? ['Bounties', fmt(collected) + ' $R' +
+            '<span class="sub"> ' +
+            (n ? n + (n === 1 ? ' collected' : ' collected') : 'none collected') +
+            (spent ? ', ' + fmt(spent) + ' posted, net ' +
+              (net >= 0 ? '+' : '') + fmt(net) : '') +
+            '</span>']
+        : null,
+      m != null ? ['Market', sol(m) + '<span class="sub"> realized on trades</span>'] : null,
+    ])
+  }
+
+  const seasonLabel = S && S.season != null
+    ? 'Season ' + fmt(S.season) + (S.day != null ? ' &middot; Day ' + fmt(S.day) : '')
+    : 'this season'
+
+  return '<section><div class="section-head"><h2>Income</h2>' +
+    '<span class="section-meta" id="inc-meta">' + seasonLabel + '</span></div>' +
+    '<div class="controls" id="inc-toggle" role="group" aria-label="Period">' +
+      '<button type="button" data-inc="season" aria-pressed="true">Season</button>' +
+      '<button type="button" data-inc="all_time" aria-pressed="false">All time</button>' +
+    '</div>' +
+    '<div id="inc-season">' + view('season') + '</div>' +
+    '<div id="inc-all_time" hidden>' + view('all_time') + '</div>' +
+    '<p class="basis">Not a total. The game splits a season take five ways and ' +
+    'two of them cannot be seen from outside: no endpoint attributes tournament ' +
+    'winnings or territory income to a player, and on the game\'s own panel those ' +
+    'two came to about 43% of the take. What is here is measured, not estimated. ' +
+    'Bounties is the only line with a net, because the poster and the collector ' +
+    'are both named on a bounty; hustle initiation cost is a game-wide figure and ' +
+    'cannot be split per player.</p>' +
+    '</section>'
+}
+
+function wireIncome() {
+  const bar = document.getElementById('inc-toggle')
+  if (!bar) return
+  const meta = document.getElementById('inc-meta')
+  const S = DATA.season || null
+  const seasonLabel = S && S.season != null
+    ? 'Season ' + fmt(S.season) + (S.day != null ? ' \u00b7 Day ' + fmt(S.day) : '')
+    : 'this season'
+  bar.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-inc]')
+    if (!btn) return
+    const want = btn.dataset.inc
+    bar.querySelectorAll('button').forEach((x) =>
+      x.setAttribute('aria-pressed', String(x.dataset.inc === want)))
+    ;['season', 'all_time'].forEach((k) => {
+      const el = document.getElementById('inc-' + k)
+      if (el) el.hidden = k !== want
+    })
+    if (meta) meta.innerHTML = want === 'season' ? seasonLabel : 'lifetime'
+  })
+}
+
 function renderProfile(p) {
   const c = p.combat, t = p.trading, r = p.roster, h = p.holdings, q = p.position
   let parts = []
   const chrome = parts
-  const position = [], portfolio = [], trading = [], prizes = []
+  const position = [], portfolio = [], trading = [], prizes = [], earnings = []
   const ranks = [], roster = [], combat = [], training = []
 
   parts.push('<button class="back" type="button" id="back">&larr; All players</button>')
@@ -210,17 +360,30 @@ function renderProfile(p) {
   // you already know, not enough to read off the page. Anyone holding the full
   // address can still match it, so this is a display convention, not anonymity.
   const maskWallet = (w) => (w && w.length > 12 ? w.slice(0, 4) + '****' + w.slice(-4) : w)
+  // Prestige leads the wallet: it is something the player earned, the wallet is
+  // just how we recognise them.
+  const pres = p.prestige
   parts.push('<header class="masthead"><span class="eyebrow">Player ledger</span>' +
     '<h1>' + escd(p.name) +
+    (pres ? '<span class="prestige">Prestige ' + fmt(pres.level) + '</span>' : '') +
     ((p.wallets && p.wallets.length)
       ? '<span class="wallet">' + p.wallets.map((w) => escd(maskWallet(w))).join(' ') + '</span>'
       : '') + '</h1>' +
+    (pres
+      ? '<span class="standing">' +
+        (pres.holders != null
+          ? '<span class="place">' + fmt(pres.holders) + '</span> player' +
+            (pres.holders === 1 ? '' : 's') + ' at this level' +
+            (pres.holders_pct != null ? ' &middot; ' + pres.holders_pct + '% of the game' : '')
+          : 'prestige level') +
+        ' &middot; seen ' + escd(pres.seen_on) + '</span>'
+      : '') +
     standingLine(p.territory) +
     (p.names ? '<span class="former">Also seen as ' +
       p.names.map(n => escd(n.name)).join(', ') + '</span>' : '') +
     '</header>')
 
-  parts.push('<div class="tiles">' +
+  parts.push('<div class="tiles tiles-4">' +
     tile('Net position', q ? sol(q.net_sol) : '-',
       q ? 'traded + held' : 'no position',
       q ? (q.net_sol >= 0 ? 'pos' : 'neg') : '') +
@@ -229,6 +392,10 @@ function renderProfile(p) {
       t ? (t.realized_sol >= 0 ? 'pos' : 'neg') : '') +
     tile('Portfolio', h && h.priced_capos ? solBare(h.portfolio_sol) : '-',
       h && h.priced_capos ? fmt(h.priced_capos) + ' tradeable' : 'nothing tradeable') +
+    tile('RACKET earned', p.earnings ? rkt(p.earnings.lifetime_racket) : '-',
+      p.earnings
+        ? ordinal(p.earnings.rank) + ' of ' + fmt(DATA.earning_owners) + ' earners'
+        : 'nothing has earned yet') +
     tile('Capos held', fmt(r.capos), fmt(r.active) + ' active') +
     tile('Fights won', c ? fmt(c.won) : '-', c ? 'of ' + fmt(c.fights) : 'no combat record') +
     tile('Win rate', c && c.win_rate != null ? c.win_rate + '%' : '-', c ? '' : 'no combat record') +
@@ -243,6 +410,7 @@ function renderProfile(p) {
   // biggest holders, so it lives behind a tab and loads only when asked for.
   parts.push('<div class="tabbar" id="ptabs" role="tablist">' +
     '<button type="button" data-tab="profile" aria-selected="true">Money</button>' +
+    '<button type="button" data-tab="hustles" aria-selected="false">Hustles</button>' +
     '<button type="button" data-tab="outfit" aria-selected="false">Crew</button>' +
     '<button type="button" data-tab="prizes" aria-selected="false">Prizes</button>' +
     (SHOW_STRATEGY
@@ -289,6 +457,21 @@ function renderProfile(p) {
           'value of that many SOL, not as what changed hands at the time.</p>'
         : '') +
       '</section>')
+  }
+
+  // What the account earns in game, as opposed to what it is worth on the
+  // market. Kept in RACKET and never converted: there is no rate anywhere in
+  // this data, and the two sections above are the SOL half of the same page.
+  //
+  // The windows are the game's own per-capo figures rather than differences
+  // between our snapshots, which is why a week is available on a profile the
+  // day it is first built.
+  // The income breakdown takes the Money tab. The hustle-only detail it replaces
+  // (windows, rank, best earner) moved to the Hustles tab, which is where a
+  // reader already goes for that question.
+  if (p.income) {
+    parts = earnings
+    parts.push(incomeSection(p))
   }
 
   // Prize winnings: money actually received, read off chain. Three streams, kept
@@ -428,7 +611,8 @@ function renderProfile(p) {
   }
   return [
     ...chrome,
-    '<div id="tab-profile">', pair(position, trading), ...portfolio, '</div>',
+    '<div id="tab-profile">', pair(position, trading), pair(portfolio, earnings), '</div>',
+    '<div id="tab-hustles" hidden><p class="basis">Reading the roster...</p></div>',
     '<div id="tab-outfit" hidden>', pair(ranks, roster), pair(combat, training), '</div>',
     '<div id="tab-prizes" hidden>', ...prizes, '</div>',
     (SHOW_STRATEGY
@@ -441,11 +625,12 @@ function renderProfile(p) {
 /**
  * The player's capos, fetched on demand.
  *
- * NOT included: RACKET collected per capo. The API only ever exposes per-capo
- * earnings through /leaderboards, which is capped at 50 rows and has named 106
- * capos in total, belonging to 17 owners, out of 95,000+ alive. There is no
- * honest earnings column to draw, so the money column here is what the owner has
- * SPENT promoting each capo.
+ * The money column here is what the owner has SPENT promoting each capo, not
+ * what it earned. Per-capo earnings do exist now, through /capos/production,
+ * and the account total is on the Money tab. They are deliberately not repeated
+ * in this table: the roster shard is built for every player at once and adding a
+ * second money column to 90,000+ rows costs more than the answer is worth on a
+ * page that already states the account figure.
  */
 const rosterCache = {}
 
@@ -723,6 +908,8 @@ async function renderStrategy(pane, player) {
 const CAPO_SORTS = [
   { key: 1, label: 'Rarity', dir: 1 },
   { key: 2, label: 'Rank', dir: 1 },
+  // Descending by default: nobody opens an earnings column to find the worst.
+  { key: 6, label: 'Earned', dir: -1 },
   { key: 3, label: 'Age', dir: -1 },
   { key: 0, label: 'Name', dir: 1 },
 ]
@@ -754,6 +941,7 @@ function drawRoster(pane) {
     '<span class="sortable" data-capo-sort="1" role="button" tabindex="0">Rarity' + arrow(1) + '</span>' +
     '<span class="sortable" data-capo-sort="2" role="button" tabindex="0">Rank' + arrow(2) + '</span>' +
     '<span class="num sortable" data-capo-sort="3" role="button" tabindex="0">Age' + arrow(3) + '</span>' +
+    '<span class="num sortable" data-capo-sort="6" role="button" tabindex="0">Earned' + arrow(6) + '</span>' +
     '</div>'
   const rows = sorted.map((c, i) =>
     '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
@@ -762,8 +950,13 @@ function drawRoster(pane) {
     '<span><span class="cell-label">Rarity</span>' + cap(RAR[c[1]] || '-') + '</span>' +
     '<span><span class="cell-label">Rank</span>' + cap(RNK[c[2]] || '-') + '</span>' +
     '<span class="num"><span class="cell-label">Age</span>' + (c[3] == null ? '-' : c[3]) + '</span>' +
+    // A capo with no production row has never earned. Shown as a dash rather
+    // than 0 $R, because the two say different things and the dash is the one
+    // that is true.
+    '<span class="num"><span class="cell-label">Earned</span>' +
+      (c[6] == null ? '-' : rkt(c[6])) + '</span>' +
     '</span></div>').join('')
-  pane.innerHTML = bar + '<div class="ledger" data-cols="5">' + head + rows + '</div>'
+  pane.innerHTML = bar + '<div class="ledger" data-cols="6">' + head + rows + '</div>'
 
   pane.querySelectorAll('[data-capo-sort]').forEach((el) => {
     const pick = () => {
@@ -779,6 +972,286 @@ function drawRoster(pane) {
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick() }
     })
+  })
+}
+
+/**
+ * The Hustles tab: which capos to send, judged against their own class.
+ *
+ * A flat ranking by RACKET per day would just list the player's rarest capos in
+ * order, which they already know. What they cannot see anywhere is whether a
+ * capo is earning what its class earns: measured across the population, a boss
+ * takes a median 129,931 a day against a recruit's 576, so an epic captain on
+ * 900 is failing badly while a common recruit on 870 is doing fine. Only the
+ * benchmark separates those two, and it is the whole point of this tab.
+ *
+ * What this deliberately does not do is tell you which KIND of hustle to run.
+ * Nothing in the API exposes one: /economy reports side_hustle as a single mint
+ * bucket, /capos/production has no hustle dimension, and the published roadmap
+ * still lists bucketed game activity as planned. Specialty is not a stand-in
+ * either. Holding rarity and rank fixed, the five specialties earn within 10% of
+ * each other on ~220 capos per cell, which is noise, so ranking by specialty
+ * would be dressing up a coin flip as advice.
+ */
+const HUSTLE_SORTS = [
+  { key: 'per_day', label: 'Earns a day', dir: -1 },
+  { key: 'ratio', label: 'Times typical', dir: -1 },
+  { key: 'last_7d', label: 'Last 7d', dir: -1 },
+  { key: 'name', label: 'Name', dir: 1 },
+]
+let hustleList = []
+let hustleKey = 'per_day'
+let hustleDir = -1
+
+/** Decorate each capo with its class, its class median, and the ratio. */
+function decorateHustles(shard, list) {
+  const RAR = shard.rarities, RNK = shard.ranks
+  const B = DATA.class_benchmarks || {}
+  const cells = B.cells || {}, ranks = B.ranks || {}
+  return list.map((c) => {
+    const rarity = RAR[c[1]] || null
+    const tier = RNK[c[2]] || null
+    // Cell first, rank as the fallback, and remember which one answered.
+    let cell = null, basis = null
+    if (rarity && tier && cells[rarity + '|' + tier]) {
+      cell = cells[rarity + '|' + tier]; basis = 'cell'
+    } else if (tier && ranks[tier]) {
+      cell = ranks[tier]; basis = 'rank'
+    }
+    const perDay = c[7]
+    return {
+      name: c[0], rarity, tier,
+      per_day: perDay,
+      last_7d: c[8],
+      earned: c[6],
+      active: c[5],
+      class_per_day: cell ? cell.per_day : null,
+      basis,
+      // Null when the capo has never earned or no step of the ladder answered.
+      // Both are "we cannot say", and neither is a zero.
+      ratio: cell && cell.per_day > 0 && perDay != null ? perDay / cell.per_day : null,
+    }
+  })
+}
+
+// "boss" + "s" is "bosss". Only two ranks need the rule, but a wrong plural in
+// the one label whose whole job is explaining the comparison is worse than the
+// four lines it takes to get right.
+const plural = (t) =>
+  t === 'boss' ? 'bosses' : t === 'underboss' ? 'underbosses' : t + 's'
+
+function drawHustles(pane) {
+  const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : '-')
+  const sorted = hustleList.slice().sort((a, b) => {
+    const x = a[hustleKey], y = b[hustleKey]
+    if (x == null && y == null) return 0
+    if (x == null) return 1
+    if (y == null) return -1
+    if (x === y) return (a.name < b.name ? -1 : 1)
+    return (x < y ? -1 : 1) * hustleDir
+  })
+
+  const earners = hustleList.filter((c) => c.per_day != null)
+  const idle = earners.filter((c) => !c.last_7d)
+  const judged = earners.filter((c) => c.ratio != null)
+  // 15% either side before a capo is called over or under. Below that the cell
+  // medians themselves are not separated well enough to justify the label.
+  const over = judged.filter((c) => c.ratio >= 1.15)
+  const under = judged.filter((c) => c.ratio <= 0.85)
+  const never = hustleList.length - earners.length
+
+  // Before the first production snapshot lands there is nothing to summarise, and
+  // four zero tiles read as four findings rather than as an absence.
+  if (!earners.length) {
+    pane.innerHTML = '<p class="basis">No earnings have been collected for this ' +
+      'roster yet. Per-capo earnings come from a daily snapshot of ' +
+      '/capos/production, and figures appear here once the first one has been ' +
+      'taken.</p>'
+    return
+  }
+
+  const summary = '<div class="tiles">' +
+    tile('Earning capos', fmt(earners.length),
+      never ? fmt(never) + ' have never earned' : '') +
+    tile('Idle this week', fmt(idle.length), 'earned nothing in 7 days',
+      idle.length ? 'neg' : '') +
+    tile('Above their class', fmt(over.length), 'earning 1.15x the class median',
+      over.length ? 'pos' : '') +
+    tile('Below their class', fmt(under.length), 'earning 0.85x or less',
+      under.length ? 'neg' : '') +
+    '</div>'
+
+  /**
+   * Earned per day, from our own snapshot diffs.
+   *
+   * The API has no daily figure at any level, so every row here is the
+   * difference between two snapshots we took. That means the series starts the
+   * day the archive did and can never be backfilled, and it means an interval is
+   * whatever the gap between two runs actually was. A gap materially off 24
+   * hours gets its width and a normalised rate stated beside it, so a short
+   * interval reads as a short interval rather than as a bad day.
+   */
+  const mine = (hustleList.length && DATA_PLAYER && DATA_PLAYER.earnings
+    ? DATA_PLAYER.earnings.daily : null) || []
+  const want = 7
+  const daily = mine.slice(-want).reverse()
+  const e = DATA_PLAYER && DATA_PLAYER.earnings
+  const detailBlock = e
+    ? '<section><div class="section-head"><h2>Hustle earnings</h2>' +
+      '<span class="section-meta">' + fmt(e.earning_capos) +
+      (e.earning_capos === 1 ? ' capo' : ' capos') + ' earning</span></div>' +
+      rows([
+        ['Lifetime', fmt(e.lifetime_racket) + ' $R'],
+        ['This season', fmt(e.season_racket) + ' $R'],
+        ['Last 30 days', fmt(e.last_30d_racket) + ' $R'],
+        ['Last 7 days', fmt(e.last_7d_racket) + ' $R'],
+        ['Rank by lifetime', ordinal(e.rank) + ' of ' + fmt(DATA.earning_owners)],
+        e.top_capo
+          ? ['Best earner', escd(e.top_capo.name) + ', ' +
+             fmt(e.top_capo.lifetime_racket) + ' $R']
+          : null,
+      ]) +
+      '<p class="basis">RACKET is in-game currency and is never converted to ' +
+      'dollars anywhere on this page, because nothing in this data prices it. ' +
+      'Side hustles only, which is the one earnings stream the API breaks out ' +
+      'per capo, and only capos that have earned at least once.</p>' +
+      '</section>'
+    : ''
+
+  const dailyBlock = '<section><div class="section-head"><h2>Earned per day</h2>' +
+    '<span class="section-meta">' +
+    (daily.length >= want ? 'the last ' + want + ' days'
+      : daily.length ? daily.length + (daily.length === 1 ? ' day' : ' days') +
+        ' so far, of ' + want
+      : 'nothing to difference yet') +
+    '</span></div>' +
+    (daily.length
+      ? rows(daily.map((d) => {
+          // 20 to 28 hours is a normal overnight gap and needs no explanation.
+          const odd = d.hours != null && (d.hours < 20 || d.hours > 28)
+          return [d.date, fmt(d.racket) + ' $R' +
+            (odd && d.per_day != null
+              ? '<span class="sub"> over ' + d.hours + 'h, ' + rkt(d.per_day) + '/day</span>'
+              : '')]
+        }))
+      : '<p class="basis">Nothing in the API reports RACKET by day, so each ' +
+        'figure here is the difference between two daily snapshots of our own. ' +
+        'The first one appears once a second snapshot exists, and the series ' +
+        'grows a day at a time from there. It cannot be backfilled: a day not ' +
+        'captured is gone.</p>') +
+    (daily.length && daily.length < want
+      ? '<p class="basis">Our first snapshot was ' +
+        escd((DATA.earnings_daily || {}).first_snapshot || 'recent') +
+        ', and a day can only appear here once there are two snapshots to ' +
+        'difference. Anything earlier does not exist, here or in the API, ' +
+        'because nothing was recording it. The series fills in a day at a ' +
+        'time from now on.</p>'
+      : '') +
+    '</section>'
+
+  const arrow = (k) => (k === hustleKey ? (hustleDir === 1 ? ' ↑' : ' ↓') : '')
+  const bar = '<div class="controls" role="group" aria-label="Sort by">' +
+    HUSTLE_SORTS.map((c) =>
+      '<button type="button" data-hustle-sort="' + c.key + '" aria-pressed="' +
+      (c.key === hustleKey) + '">' + c.label + arrow(c.key) + '</button>').join('') +
+    '</div>'
+
+  const head = '<div class="row head"><span></span>' +
+    '<span class="sortable" data-hustle-sort="name" role="button" tabindex="0">Capo' + arrow('name') + '</span>' +
+    '<span>Rarity and rank</span>' +
+    '<span class="num sortable" data-hustle-sort="per_day" role="button" tabindex="0">Earns a day' + arrow('per_day') + '</span>' +
+    '<span class="num">Typical for these</span>' +
+    '<span class="num sortable" data-hustle-sort="ratio" role="button" tabindex="0">Times typical' + arrow('ratio') + '</span>' +
+    '<span class="num sortable" data-hustle-sort="last_7d" role="button" tabindex="0">Last 7d' + arrow('last_7d') + '</span>' +
+    '</div>'
+
+  // Named bodyRows, not rows: a local binding called rows here shadows the shared
+  // rows() ledger helper across the whole function, and the daily block above
+  // calls it, which put the helper in the temporal dead zone and threw.
+  const bodyRows = sorted.map((c, i) => {
+    const cls = c.ratio == null ? '' : c.ratio >= 1.15 ? 'pos' : c.ratio <= 0.85 ? 'neg' : ''
+    const ratio = c.ratio == null ? '-' : c.ratio.toFixed(c.ratio < 10 ? 1 : 0) + 'x'
+    const note = c.per_day == null
+      ? '<br><span class="sub">never earned</span>'
+      : !c.last_7d ? '<br><span class="sub">idle this week</span>'
+      : !c.active ? '<br><span class="sub">inactive</span>' : ''
+    // Only the exception is labelled. Saying "same rarity and rank" on every
+    // ordinary row restated what the Rarity and rank column already says, and
+    // cost each of them a second line; the rows that fall back to a coarser
+    // group are the only ones where the reader needs telling.
+    const group = c.ratio != null && c.basis === 'rank'
+      ? '<br><span class="sub">all ' + escd(plural(c.tier)) + '</span>' : ''
+    return '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
+      '<span class="name">' + escd(c.name) + note + '</span>' +
+      // Inside .extra, not beside it. On mobile .extra is one flex line spanning
+      // columns 2 to -1; a sibling span instead takes the row's third track and
+      // squeezes the name track to nothing, which overflow-wrap then breaks one
+      // character per line. At 46rem .extra becomes display:contents, so this
+      // still lands as its own column on desktop.
+      '<span class="extra">' +
+      '<span><span class="cell-label">Rarity and rank</span>' +
+        cap(c.rarity) + ' ' + cap(c.tier) + '</span>' +
+      '<span class="num"><span class="cell-label">Earns a day</span>' +
+        (c.per_day == null ? '-' : rkt(c.per_day)) + '</span>' +
+      '<span class="num"><span class="cell-label">Typical for these</span>' +
+        (c.class_per_day == null ? '-' : rkt(c.class_per_day)) + group + '</span>' +
+      '<span class="num ' + cls + '"><span class="cell-label">Times typical</span>' + ratio + '</span>' +
+      '<span class="num"><span class="cell-label">Last 7d</span>' +
+        (c.last_7d == null ? '-' : rkt(c.last_7d)) + '</span>' +
+      '</span></div>'
+  }).join('')
+
+  pane.innerHTML = summary + detailBlock + dailyBlock + bar +
+    '<div class="ledger" data-cols="7">' + head + bodyRows + '</div>' +
+    '<p class="basis"><b>Earns a day</b> is the RACKET a capo has made across the ' +
+    'days it actually earned, as the game reports it. <b>Typical for these</b> is ' +
+    'what the middle capo of the same rarity and rank makes, so a Legendary ' +
+    'Underboss is judged against other Legendary Underbosses and never against ' +
+    'your commons. <b>Times typical</b> divides the first by the second: 2.0x is ' +
+    'twice the going rate for that kind of capo, 0.5x is half it.</p>' +
+    '<p class="basis">A group needs ' +
+    fmt((DATA.class_benchmarks || {}).min_sample || 25) + ' earning capos before ' +
+    'its figure means anything, and some do not have that many. There are only ' +
+    '121 bosses in the whole game across seven rarities, so a Legendary Boss has ' +
+    'no group of its own and is measured against every boss instead. Those rows ' +
+    'say "all bosses" under the typical figure. It is a rougher comparison, which ' +
+    'is exactly why it is labelled.</p>' +
+    '<p class="basis">Rank and rarity are the only things that move hustle ' +
+    'earnings, and they move it enormously: a boss earns a median 129,931 a day ' +
+    'against a recruit\'s 576. Specialty and personality do not move it at all, ' +
+    'so there is nothing here about sending your fixers rather than your ' +
+    'enforcers. Which kind of hustle a capo runs is not exposed by the API.</p>'
+
+  pane.querySelectorAll('[data-hustle-sort]').forEach((el) => {
+    const pick = () => {
+      const k = el.dataset.hustleSort
+      if (k === hustleKey) hustleDir = -hustleDir
+      else {
+        hustleKey = k
+        hustleDir = (HUSTLE_SORTS.find((c) => c.key === k) || { dir: -1 }).dir
+      }
+      drawHustles(pane)
+    }
+    el.addEventListener('click', pick)
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick() }
+    })
+  })
+}
+
+let DATA_PLAYER = null
+
+function renderHustles(pane, ref) {
+  DATA_PLAYER = DATA.players.find((x) => x.ref === ref) || null
+  loadRoster(ref).then((shard) => {
+    const list = (shard.players || {})[ref] || []
+    if (!list.length) { pane.innerHTML = '<p class="basis">No capos on record.</p>'; return }
+    hustleList = decorateHustles(shard, list)
+    hustleKey = 'per_day'
+    hustleDir = -1
+    drawHustles(pane)
+  }).catch(() => {
+    pane.innerHTML = '<p class="basis">Could not load the roster just now.</p>'
   })
 }
 
@@ -880,6 +1353,7 @@ function renderList(filter) {
     '<span class="pname">' + escd(p.name) + '</span>' +
     '<span class="pstats">' +
       '<span>' + fmt(p.roster.capos) + ' capos</span>' +
+      (p.earnings ? '<span>' + rkt(p.earnings.lifetime_racket) + '</span>' : '') +
       (p.combat ? '<span>' + fmt(p.combat.won) + ' won</span>' : '') +
       (p.combat && p.combat.win_rate != null ? '<span>' + p.combat.win_rate + '%</span>' : '') +
       (p.position ? '<span class="' + (p.position.net_sol >= 0 ? 'pos' : 'neg') + '">' +
@@ -892,11 +1366,12 @@ function wireTabs(player) {
   if (!bar) return
   // Driven off the pane ids rather than a hardcoded pair, so adding a tab is a
   // change in one place instead of two that can fall out of step.
-  const names = ['profile', 'outfit', 'prizes', 'capos']
-  if (SHOW_STRATEGY) names.splice(3, 0, 'strategy')
+  const names = ['profile', 'hustles', 'outfit', 'prizes', 'capos']
+  if (SHOW_STRATEGY) names.splice(4, 0, 'strategy')
   const panes = {}
   names.forEach((n) => { panes[n] = document.getElementById('tab-' + n) })
   let loaded = false
+  let hustlesLoaded = false
   bar.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-tab]')
     if (!btn) return
@@ -906,6 +1381,11 @@ function wireTabs(player) {
     names.forEach((n) => { if (panes[n]) panes[n].hidden = n !== want })
       if (panes[want]) revealIn(panes[want])
     if (want === 'capos' && !loaded) { loaded = true; renderRoster(panes.capos, player.ref) }
+    // Same shard as the Capos tab, so whichever is opened first pays for both.
+    if (want === 'hustles' && !hustlesLoaded) {
+      hustlesLoaded = true
+      renderHustles(panes.hustles, player.ref)
+    }
   })
 }
 
@@ -958,6 +1438,7 @@ function route() {
     prof.innerHTML = renderProfile(bySlug[decodeURIComponent(m[1])])
     document.getElementById('back').addEventListener('click', () => { location.hash = '' })
     wireTabs(bySlug[decodeURIComponent(m[1])])
+    wireIncome()
     window.scrollTo(0, 0)
     revealIn(prof)
   } else {

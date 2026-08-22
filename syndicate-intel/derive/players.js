@@ -21,6 +21,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
 import {
   buildCompTable, buildFloorTable, valuePortfolios, effectiveRarityPrice,
+  SOL_SALES,
 } from './valuation.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -85,6 +86,175 @@ function loadTerritory() {
         place, of: ranked.length,
       }
     })
+  }
+  return out
+}
+
+/**
+ * RACKET earned, per account.
+ *
+ * The first per-account earnings figure this project has ever been able to
+ * state. Until /capos/production existed the only per-capo earnings anywhere
+ * were /leaderboards, capped at 50 rows and naming 109 capos across the whole
+ * archive, so a player page had to say outright that there was no honest
+ * earnings column to draw. This covers 52,404 earning capos across 4,208
+ * owners, and summing by owner_ref is all it takes.
+ *
+ * The windowed figures come from the API rather than from differencing our own
+ * snapshots, which is the exception rather than the rule here: racket_last_7d
+ * and racket_last_30d are computed game-side per capo, so unlike the earnings
+ * leaderboard these do not need the archive to be time-scoped. The lifetime
+ * total still does, in the sense that nothing else exposes it.
+ *
+ * Read from the newest raw snapshot rather than SQLite. One snapshot is 52k
+ * rows and the only question asked of it is "what does this account earn now",
+ * so a daily table would add 19M rows a year to answer nothing extra.
+ */
+// One shape on every path. These early returns used to omit `rows`, which
+// classBenchmarks iterates, so a machine with no production archive yet threw
+// "rows is not iterable" and took the whole build down rather than degrading to
+// a site with no earnings on it. That is the state every fresh deploy starts in.
+const EMPTY_PRODUCTION = { byRef: {}, rows: [], as_of: null, owners: 0 }
+
+function loadProduction() {
+  const dir = path.join(ROOT, 'data', 'raw', 'capos_production')
+  if (!fs.existsSync(dir)) return EMPTY_PRODUCTION
+  const files = []
+  ;(function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const f = path.join(d, e.name)
+      if (e.isDirectory()) walk(f)
+      else files.push(f)
+    }
+  })(dir)
+  if (!files.length) return EMPTY_PRODUCTION
+
+  let j
+  try { j = JSON.parse(zlib.gunzipSync(fs.readFileSync(files.sort().at(-1)))) } catch {
+    return EMPTY_PRODUCTION
+  }
+  const asOf = j.as_of || null
+  while (j.data) j = j.data
+  const rows = j.capos || []
+  if (!rows.length) return EMPTY_PRODUCTION
+
+  const house = new Set(HOUSE_REFS)
+  const byRef = {}
+  for (const r of rows) {
+    if (!r.owner_ref || house.has(r.owner_ref)) continue
+    const e = (byRef[r.owner_ref] ||= {
+      lifetime_racket: 0, last_7d_racket: 0, last_30d_racket: 0,
+      season_racket: 0, earning_capos: 0, top_capo: null,
+    })
+    e.lifetime_racket += r.total_racket_earned || 0
+    e.last_7d_racket += r.racket_last_7d || 0
+    e.last_30d_racket += r.racket_last_30d || 0
+    e.season_racket += r.racket_current_season || 0
+    e.earning_capos++
+    // The single capo carrying the account, which for a large roster is the
+    // difference between one god earner and two hundred mediocre ones.
+    if (!e.top_capo || (r.total_racket_earned || 0) > e.top_capo.lifetime_racket) {
+      e.top_capo = {
+        name: r.capo_name || null,
+        lifetime_racket: r.total_racket_earned || 0,
+      }
+    }
+  }
+
+  // Standard competition ranking on lifetime, the same convention the territory
+  // standing uses: ties share a place and the next player down skips.
+  const ranked = Object.entries(byRef).sort((a, b) => b[1].lifetime_racket - a[1].lifetime_racket)
+  let place = 0, prev = null
+  ranked.forEach(([, e], i) => {
+    if (e.lifetime_racket !== prev) { place = i + 1; prev = e.lifetime_racket }
+    e.rank = place
+  })
+
+  return { byRef, rows, as_of: asOf, owners: ranked.length }
+}
+
+/**
+ * What a capo of a given class typically earns per day.
+ *
+ * Rank and rarity are the only things that move hustle earnings, and they move
+ * it enormously: measured 2026-08-22, a boss earns a median 129,931 RACKET a day
+ * against a recruit's 576, and a god 97,343 against a common's 870. Specialty
+ * and personality do not move it at all. Within rare soldiers the five
+ * specialties run 3,023 to 3,333 on ~220 capos each, which is noise, so this
+ * benchmarks on rarity and rank and offers nothing on the other two. A tool that
+ * ranked capos by specialty would be inventing a signal.
+ *
+ * Medians, and 25 per cell before a cell is published. Both match what
+ * sections.js already does with the same data, so a figure cannot mean one thing
+ * on the capos page and another on a profile.
+ *
+ * A two-step ladder, with the basis published alongside, exactly as
+ * valuation.js prices a capo. The rarity-and-rank cell first; where that is too
+ * thin, the rank on its own. The fallback is rank rather than rarity because
+ * rank is the stronger axis by some margin, and because the cells that need it
+ * are all at the top: there are 121 bosses in the entire game, so god, epic and
+ * legendary bosses each fall under the floor while being precisely the capos an
+ * owner most wants judged. Falling back to rarity instead would compare a god
+ * boss against god recruits and call it underperforming.
+ *
+ * Which step produced a number travels with it, so the page can say "vs all
+ * bosses" rather than quietly presenting a coarser comparison as the fine one.
+ */
+const MIN_CELL = 25
+
+function classBenchmarks(rows) {
+  const day = db.prepare('SELECT MAX(day) d FROM capos_daily').get().d
+  const attr = new Map()
+  for (const r of db.prepare(
+    'SELECT capo_id, rarity, tier FROM capos_daily WHERE day = ?').all(day)) {
+    attr.set(r.capo_id, r)
+  }
+  const cells = {}
+  const ranks = {}
+  for (const r of rows) {
+    const a = attr.get(r.capo_id)
+    if (!a || !a.rarity || !a.tier) continue
+    const v = r.avg_racket_per_day || 0
+    ;(cells[`${a.rarity}|${a.tier}`] ||= []).push(v)
+    ;(ranks[a.tier] ||= []).push(v)
+  }
+  const summarise = (groups) => {
+    const out = {}
+    for (const [k, v] of Object.entries(groups)) {
+      if (v.length < MIN_CELL) continue
+      v.sort((a, b) => a - b)
+      out[k] = { per_day: Math.round(v[Math.floor(v.length / 2)]), n: v.length }
+    }
+    return out
+  }
+  return { min_sample: MIN_CELL, cells: summarise(cells), ranks: summarise(ranks) }
+}
+
+/**
+ * How rare each prestige level is, from /prestige.
+ *
+ * Aggregate only, and deliberately so: the endpoint is documented as carrying no
+ * player identity. It cannot say who is prestige 5, only that 48 players are, so
+ * it is used here purely to give a level the context that makes it mean
+ * something on a profile.
+ */
+function prestigeLevels() {
+  const dir = path.join(ROOT, 'data', 'raw', 'prestige')
+  if (!fs.existsSync(dir)) return {}
+  const files = []
+  ;(function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const f = path.join(d, e.name)
+      if (e.isDirectory()) walk(f); else files.push(f)
+    }
+  })(dir)
+  if (!files.length) return {}
+  let j
+  try { j = JSON.parse(zlib.gunzipSync(fs.readFileSync(files.sort().at(-1)))) } catch { return {} }
+  while (j.data) j = j.data
+  const out = {}
+  for (const l of j.levels || []) {
+    out[l.level] = { holders: l.holders, holders_pct: l.holders_pct }
   }
   return out
 }
@@ -177,11 +347,11 @@ function tradingByPlayer() {
     FROM (
       SELECT seller_ref AS owner_ref, price_lamports AS sol_in, 0 AS sol_out,
              1 AS sells, 0 AS buys
-      FROM sales WHERE seller_ref IS NOT NULL
+      FROM sales WHERE seller_ref IS NOT NULL AND ${SOL_SALES}
       UNION ALL
       SELECT buyer_ref AS owner_ref, 0 AS sol_in, price_lamports AS sol_out,
              0 AS sells, 1 AS buys
-      FROM sales WHERE buyer_ref IS NOT NULL
+      FROM sales WHERE buyer_ref IS NOT NULL AND ${SOL_SALES}
     )
     GROUP BY owner_ref`).all()
   const out = {}
@@ -199,6 +369,205 @@ function tradingByPlayer() {
     }
   }
   return out
+}
+
+/**
+ * RACKET earned per day, per account, from our own snapshot diffs.
+ *
+ * The API publishes no daily figure at any level. /capos/production is lifetime
+ * cumulative with a single racket_last_7d total beside it, so "what did this
+ * account earn on Tuesday" is not a question the API can answer, now or
+ * retrospectively. It exists only as the difference between two of our
+ * snapshots, which makes this the same kind of moat the leaderboard archive is.
+ *
+ * Intervals, not calendar days. The daily tier runs at 04:15, so a normal
+ * interval is about 24 hours, but a missed run makes the next one span two days
+ * and a manual snapshot can make one span a few hours. The width in hours rides
+ * along with every point and a per-day rate is given beside the raw amount, so a
+ * short or double interval reads as what it is instead of as a slump or a spike.
+ *
+ * Days with no prior snapshot to difference are absent rather than zero, which
+ * is the same rule the boards already follow: report the window we have, never
+ * the window that was asked for.
+ */
+const DAILY_WINDOW = 8
+
+function dailyEarnings() {
+  const rows = db.prepare(`
+    SELECT owner_ref, day, captured_at, lifetime_racket
+    FROM production_owner_daily
+    WHERE day >= date((SELECT MAX(day) FROM production_owner_daily), '-${DAILY_WINDOW} day')
+    ORDER BY owner_ref, day`).all()
+
+  const byRef = {}
+  const days = new Set()
+  let prevRef = null, prev = null
+  for (const r of rows) {
+    if (r.owner_ref !== prevRef) { prevRef = r.owner_ref; prev = null }
+    if (prev) {
+      const hours = prev.captured_at && r.captured_at
+        ? (Date.parse(r.captured_at) - Date.parse(prev.captured_at)) / 3.6e6
+        : null
+      const racket = (r.lifetime_racket ?? 0) - (prev.lifetime_racket ?? 0)
+      // A negative delta should be impossible on a lifetime counter. If the game
+      // ever resets one, publish nothing rather than a negative day.
+      if (racket >= 0) {
+        ;(byRef[r.owner_ref] ||= []).push({
+          date: r.day,
+          racket,
+          hours: hours == null ? null : +hours.toFixed(1),
+          per_day: hours && hours > 0 ? Math.round((racket / hours) * 24) : null,
+        })
+        days.add(r.day)
+      }
+    }
+    prev = r
+  }
+  // The first snapshot, not the first differenced day. They differ by one run,
+  // and the page explains the gap with this rather than misreporting when the
+  // archive started.
+  const first = db.prepare(
+    'SELECT MIN(day) d FROM production_owner_daily').get()?.d ?? null
+  return { byRef, days: [...days].sort(), window: DAILY_WINDOW, first_snapshot: first }
+}
+
+/**
+ * Which season is running, and how far into it we are.
+ *
+ * Taken from /territory/cities, which is the only place the season calendar
+ * appears. The day is counted the way the game counts it: the start date is day
+ * 1 and it rolls at UTC midnight, which reproduces the "Season 12 - Day 6" the
+ * game itself shows rather than an elapsed-hours figure that would read a day
+ * behind for most of every day.
+ */
+function seasonInfo() {
+  const day = db.prepare('SELECT MAX(day) d FROM cities_daily').get()?.d
+  if (!day) return null
+  const r = db.prepare(`
+    SELECT season_number, MIN(season_started_at) started, MAX(season_ends_at) ends
+    FROM cities_daily WHERE day = ? AND is_active = 1 AND season_number IS NOT NULL
+    GROUP BY season_number ORDER BY season_number DESC LIMIT 1`).get(day)
+  if (!r || r.season_number == null) return null
+  const startDay = (r.started || '').slice(0, 10)
+  const today = new Date().toISOString().slice(0, 10)
+  const n = startDay
+    ? Math.round((Date.parse(today) - Date.parse(startDay)) / 86400000) + 1
+    : null
+  return { season: r.season_number, started_at: r.started, ends_at: r.ends, day: n }
+}
+
+/**
+ * RACKET from bounties, per player, collected and posted.
+ *
+ * The only per-player RACKET income the API attributes outside side hustles, and
+ * the only one where a net figure is possible: the collector and the poster are
+ * both named on the row, so money in and money out are both measurable.
+ *
+ * RACKET bounties only. SOL bounties carry pool_lamports instead and are a
+ * different currency; they are read off chain by the rewards ledger and are not
+ * folded in here, because adding two currencies would produce a number that is
+ * neither.
+ *
+ * Refunded postings are not counted as spend. The RACKET came back.
+ */
+function bountyIncome(season) {
+  const out = {}
+  const bump = (ref, key, v) => {
+    const o = (out[ref] ||= {
+      collected: 0, posted: 0, collections: 0,
+      season_collected: 0, season_posted: 0, season_collections: 0,
+    })
+    o[key] += v
+  }
+  for (const b of db.prepare(`
+    SELECT collector_ref, poster_ref, season, amount_racket,
+           collector_payout_racket, collected, refunded
+    FROM bounties WHERE kind = 'racket'`).all()) {
+    if (b.collected && b.collector_ref) {
+      bump(b.collector_ref, 'collected', b.collector_payout_racket || 0)
+      bump(b.collector_ref, 'collections', 1)
+      if (season != null && b.season === season) {
+        bump(b.collector_ref, 'season_collected', b.collector_payout_racket || 0)
+        bump(b.collector_ref, 'season_collections', 1)
+      }
+    }
+    if (b.poster_ref && !b.refunded) {
+      bump(b.poster_ref, 'posted', b.amount_racket || 0)
+      if (season != null && b.season === season) {
+        bump(b.poster_ref, 'season_posted', b.amount_racket || 0)
+      }
+    }
+  }
+  return out
+}
+
+/** Realized SOL inside the current season window, per player. */
+function tradingThisSeason(startedAt) {
+  const out = {}
+  if (!startedAt) return out
+  for (const r of db.prepare(`
+    SELECT owner_ref, SUM(sol_in) - SUM(sol_out) AS net
+    FROM (
+      SELECT seller_ref AS owner_ref, price_lamports AS sol_in, 0 AS sol_out
+      FROM sales WHERE seller_ref IS NOT NULL AND ${SOL_SALES} AND sold_at >= ?
+      UNION ALL
+      SELECT buyer_ref AS owner_ref, 0, price_lamports
+      FROM sales WHERE buyer_ref IS NOT NULL AND ${SOL_SALES} AND sold_at >= ?
+    ) GROUP BY owner_ref`).all(startedAt, startedAt)) {
+    out[r.owner_ref] = (r.net ?? 0) / 1e9
+  }
+  return out
+}
+
+/**
+ * Check our derived SOL trading against the game's own /market/traders.
+ *
+ * We publish our figure, not theirs, for two reasons: ours is rebuildable from
+ * the archive, and ours can be cut to a window, which theirs cannot be at all.
+ * That makes an independent check worth having rather than optional, because
+ * these numbers carry a player's name.
+ *
+ * Compared on lamports exactly, with a tolerance only on the count of players
+ * that may legitimately differ: their snapshot is live and our sales table is
+ * as fresh as the last ingest, so anyone who traded in between will differ by
+ * the trades in that gap. A drift that is not explained by recency is the
+ * signal worth acting on, so the newest sale we hold is reported beside it.
+ */
+function reconcileTrading(trading) {
+  const day = db.prepare('SELECT MAX(day) d FROM traders_daily').get()?.d
+  if (!day) return null
+  const theirs = db.prepare(
+    'SELECT player_ref, net_sol_lamports FROM traders_daily WHERE day = ?').all(day)
+  if (!theirs.length) return null
+
+  const newestSale = db.prepare('SELECT MAX(sold_at) m FROM sales').get()?.m ?? null
+  let agree = 0, differ = 0, missing = 0
+  let worstRef = null, worstDelta = 0
+  for (const t of theirs) {
+    const ours = trading[t.player_ref]
+    if (!ours) { missing++; continue }
+    const delta = (t.net_sol_lamports ?? 0) - Math.round(ours.realized_sol * 1e9)
+    if (Math.abs(delta) <= 1) agree++
+    else {
+      differ++
+      if (Math.abs(delta) > Math.abs(worstDelta)) { worstDelta = delta; worstRef = t.player_ref }
+    }
+  }
+  return {
+    checked_on: day,
+    api_traders: theirs.length,
+    agree,
+    differ,
+    not_in_ours: missing,
+    worst_delta_sol: +(worstDelta / 1e9).toFixed(4),
+    worst_ref: worstRef,
+    newest_sale_held: newestSale,
+    basis:
+      'the game states realized SOL per player at /market/traders; we derive the same figure ' +
+      'from buyer_ref and seller_ref on the sales feed and publish ours, because ours can be ' +
+      'rebuilt and windowed. Players who traded between our last sales snapshot and theirs ' +
+      'differ legitimately.',
+  }
 }
 
 function main() {
@@ -252,6 +621,16 @@ function main() {
   for (const t of db.prepare(
     `SELECT * FROM trainers_daily WHERE day = (SELECT MAX(day) FROM trainers_daily)`).all()) {
     trainers[t.trainer_ref] = {
+      income:
+        'three sources of the five the game itself breaks out. Hustles come from ' +
+        '/capos/production and bounties from /bounties, both attributed per ' +
+        'player by the API; market is realized SOL from the sales feed. ' +
+        'Tournament winnings and territory income are NOT included because no ' +
+        'endpoint exposes either per player, and on the game\'s own panel those ' +
+        'two are around 43% of a season take. Nothing here is presented as a ' +
+        'total for that reason. Only bounties support a net figure, since the ' +
+        'poster and collector are both named; hustle initiation cost is a ' +
+        'game-wide sink and cannot be attributed.',
       prestige: t.trainer_prestige_level,
       jobs_completed: t.trainer_jobs_completed,
       jobs_settled: t.trainer_jobs_settled,
@@ -259,6 +638,41 @@ function main() {
       on_time_rate: t.trainer_on_time_rate,
       turnaround_hours: t.trainer_avg_turnaround_hours,
       rate_sol: t.rate_lamports ? t.rate_lamports / 1e9 : null,
+    }
+  }
+
+  /**
+   * Prestige level, for the few players who can have one attributed.
+   *
+   * The only per-player prestige anywhere in the API is trainer_prestige_level on
+   * /contracts, so this covers players who have listed themselves as a trainer
+   * and nobody else: 125 of 4,769 profiles when this was written. Game-wide 496
+   * players have ever prestiged, so even among those who have one, three in four
+   * are unknowable. An absent prestige on a profile therefore means "not visible
+   * to us", never "level zero", and the page has to say so rather than let a
+   * missing badge read as an absence.
+   *
+   * Last known level rather than currently listed. A trainer who delists still
+   * had the level we saw, and dropping it would lose a fact the archive holds.
+   * The day it was seen travels with it, because the level does move: 9 of 125
+   * trainers changed level inside five days of archive.
+   */
+  const levelStats = prestigeLevels()
+  const prestige = {}
+  for (const r of db.prepare(`
+    SELECT t.trainer_ref, t.trainer_prestige_level AS level, t.day
+    FROM trainers_daily t
+    JOIN (SELECT trainer_ref, MAX(day) AS day FROM trainers_daily
+          WHERE trainer_prestige_level IS NOT NULL GROUP BY trainer_ref) m
+      ON m.trainer_ref = t.trainer_ref AND m.day = t.day
+    WHERE t.trainer_prestige_level IS NOT NULL`).all()) {
+    const stat = levelStats[r.level] || {}
+    prestige[r.trainer_ref] = {
+      level: r.level,
+      seen_on: r.day,
+      holders: stat.holders ?? null,
+      holders_pct: stat.holders_pct ?? null,
+      source: 'trainer listing',
     }
   }
 
@@ -324,6 +738,13 @@ function main() {
   } catch { /* no capture yet */ }
 
   const trading = tradingByPlayer()
+  const production = loadProduction()
+  const benchmarks = classBenchmarks(production.rows)
+  const daily = dailyEarnings()
+  const season = seasonInfo()
+  const bounties = bountyIncome(season?.season ?? null)
+  const seasonTrading = tradingThisSeason(season?.started_at ?? null)
+  const recon = reconcileTrading(trading)
 
   const comps = buildCompTable(db)
   const floors = buildFloorTable(db)
@@ -384,6 +805,49 @@ function main() {
       // one of the only per-account RACKET figures the API exposes.
       promotion_spend_racket: r.racket_invested,
     },
+    // RACKET earned by the whole account. Null rather than zero when the player
+    // owns nothing that has ever earned, because "has not earned" and "earns
+    // nothing" read the same as a zero and are not the same claim.
+    earnings: production.byRef[r.owner_ref]
+      ? { ...production.byRef[r.owner_ref], daily: daily.byRef[r.owner_ref] ?? [] }
+      : null,
+    prestige: prestige[r.owner_ref] ?? null,
+    /**
+     * Where the account's money came from, season and lifetime.
+     *
+     * Three sources, not five. Tournament winnings and territory income are both
+     * real and both invisible: no endpoint exposes either per player, and the
+     * game's own panel shows them at roughly 43% of a season take. So this is
+     * deliberately NOT presented as a total, and the page says which pieces are
+     * missing rather than quietly summing what is left.
+     */
+    income: (() => {
+      const e = production.byRef[r.owner_ref]
+      const b = bounties[r.owner_ref]
+      const t = trading[r.owner_ref]
+      if (!e && !b && !t) return null
+      return {
+        // Null, not zero, when no production snapshot exists yet. Zero would
+        // claim the account earned nothing, which is a measurement we have not
+        // made. That is the state every fresh deploy is in for its first day.
+        hustles: e
+          ? { season: e.season_racket, all_time: e.lifetime_racket }
+          : null,
+        bounties: b
+          ? {
+              season: b.season_collected, season_spent: b.season_posted,
+              season_collections: b.season_collections,
+              all_time: b.collected, all_time_spent: b.posted,
+              all_time_collections: b.collections,
+            }
+          : null,
+        market_sol: {
+          season: seasonTrading[r.owner_ref] != null
+            ? +seasonTrading[r.owner_ref].toFixed(4) : null,
+          all_time: t ? +t.realized_sol.toFixed(4) : null,
+        },
+      }
+    })(),
     combat: combat[r.owner_ref] ?? null,
     territory: territory[r.owner_ref] ?? null,
     trainer: trainers[r.owner_ref] ?? null,
@@ -407,13 +871,38 @@ function main() {
     position_net_positive: players.filter((p) => p.position?.net_sol > 0).length,
     // Stated on the page: this is what a visitor needs in order to read a
     // missing PnL figure correctly rather than as a zero.
+    earnings_as_of: production.as_of,
+    earning_owners: production.owners,
+    // Keyed rarity|tier. 42 cells at most, so it rides in the page payload
+    // rather than costing a fetch.
+    class_benchmarks: benchmarks,
+    season: season,
+    // How many days of differenced earnings exist at all. The page states this
+    // rather than implying a full week it does not have.
+    earnings_daily: {
+      days: daily.days, window: daily.window, first_snapshot: daily.first_snapshot,
+    },
+    trading_reconciliation: recon,
     coverage: {
       racket_earnings:
-        'not available: /leaderboards is capped at 50 capos, so per-account RACKET earnings are not exposed',
+        'RACKET earned per account, summed from /capos/production over every capo the player ' +
+        'owns. Lifetime, current season, and the last 7 and 30 days are all stated by the game ' +
+        'per capo, so the windows are theirs rather than differences between our snapshots. It ' +
+        'covers capos that have earned at all: a player with none is reported as having no ' +
+        'earnings record rather than as zero. Side-hustle earnings only, which is the only ' +
+        'earnings stream the API breaks out per capo.',
+      prestige:
+        'only for players who have listed themselves as a trainer, because ' +
+        'trainer_prestige_level on /contracts is the sole per-player prestige ' +
+        'figure in the API; /prestige is aggregate and carries no identities. ' +
+        'That is a small minority of profiles, and 3 of every 4 players who have ' +
+        'prestiged cannot be named at all, so no prestige shown means not visible ' +
+        'rather than level zero. The level is the last one we observed, dated.',
       sol_trading:
         'realized secondary-market trading only, attributed per player from the buyer_ref and ' +
         'seller_ref on each sale; pack purchases are not in the API so money spent entering the ' +
-        'game is not counted',
+        'game is not counted. Tensor sales only: in-game sales are priced in RACKET and carry a ' +
+        'converted lamport figure alongside, which the game itself leaves out of SOL trading.',
       holdings:
         'mark-to-market on tradeable capos only, priced at the median comparable sale by rarity ' +
         'and tier. Only minted capos are tradeable (all rare and above, none common or uncommon), ' +
@@ -459,6 +948,34 @@ function main() {
   const kb = (fs.statSync(OUT).size / 1024).toFixed(0)
   console.log(`players: ${players.length}, wallets resolved: ${Object.keys(wallets).length}`)
   console.log(`with trading data: ${Object.keys(trading).length}`)
+  const earners = players.filter((p) => p.earnings)
+  if (earners.length) {
+    const totalRacket = earners.reduce((s, p) => s + p.earnings.lifetime_racket, 0)
+    console.log(
+      `earnings: ${earners.length} accounts have earned, ` +
+      `${totalRacket.toLocaleString('en-US')} RACKET lifetime`)
+  } else {
+    console.log('earnings: no capos_production snapshot found, earnings omitted')
+  }
+  console.log(
+    `season: ${season ? `${season.season}, day ${season.day}` : 'unknown'}` +
+    `, bounty income for ${Object.keys(bounties).length} players`)
+  console.log(
+    `daily earnings: ${daily.days.length} differenced day(s) ` +
+    `(${daily.days.join(', ') || 'none yet, needs a second daily snapshot'})`)
+  console.log(
+    `prestige: ${Object.keys(prestige).length} players attributable, ` +
+    `of ${Object.values(levelStats).reduce((a, l) => a + (l.holders || 0), 0)} who have prestiged`)
+  console.log(
+    `class benchmarks: ${Object.keys(benchmarks.cells).length} rarity/rank cells ` +
+    `and ${Object.keys(benchmarks.ranks).length} rank fallbacks, ` +
+    `at least ${benchmarks.min_sample} earning capos each`)
+  if (recon) {
+    console.log(
+      `trading check vs /market/traders (${recon.checked_on}): ` +
+      `${recon.agree} agree, ${recon.differ} differ, ${recon.not_in_ours} not in ours` +
+      (recon.differ ? `, worst ${recon.worst_delta_sol} SOL` : ''))
+  }
   const valued = players.filter((p) => (p.holdings?.portfolio_sol ?? 0) > 0)
   const totalSol = valued.reduce((s, p) => s + p.holdings.portfolio_sol, 0)
   console.log(

@@ -2,12 +2,21 @@
 /**
  * Per-player capo rosters, sharded for on-demand loading.
  *
- * WHAT IS NOT HERE: RACKET collected per capo. The API exposes per-capo earnings
- * only through /leaderboards, which is capped at 50 rows and has ever named 106
- * capos belonging to 17 owners, out of 95k+ alive. There is no honest way to put
- * an earnings column on a roster, so this carries `invested` instead, which is
- * the RACKET the owner has SPENT promoting that capo. It is a cost, not income,
- * and the page says so.
+ * Carries both sides of a capo's ledger: `invested`, the RACKET its owner has
+ * SPENT promoting it, and `earned`, the RACKET it has brought in from side
+ * hustles. The second only became possible with /capos/production; before that
+ * the sole per-capo earnings source was /leaderboards, capped at 50 rows and
+ * naming 106 capos out of 95k alive, and this file said so at length.
+ *
+ * Three earnings fields travel together: `earned` (lifetime), `per_day` (the
+ * game's own lifetime total over its active days) and `last_7d`. The rate is
+ * what the Hustles tab benchmarks against a capo's class, and the week is what
+ * tells an idle capo from a working one; lifetime alone cannot do either, since
+ * a capo that earned heavily and then stopped looks identical to one still
+ * working.
+ *
+ * All three are null, not zero, for a capo with no production row. Roughly half
+ * the population has never earned, and a zero would claim we measured that.
  *
  * Sharded on the first two characters of owner_ref: 256 files of ~11KB rather
  * than one 2.9MB blob nobody needs all of, or 4,700 tiny files. A profile fetches
@@ -17,6 +26,7 @@
  */
 import fs from 'node:fs'
 import path from 'node:path'
+import zlib from 'node:zlib'
 import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
 
@@ -51,10 +61,43 @@ const currentSeason = currentSeasonFromSections()
 
 const rows = db.prepare(`
   SELECT owner_ref, name, character_name, rarity, tier, role, specialty,
-         season_created, total_racket_invested, status, is_founder
+         season_created, total_racket_invested, status, is_founder, capo_id
   FROM capos_daily
   WHERE day = ? AND owner_ref IS NOT NULL
   ORDER BY owner_ref`).all(day)
+
+/**
+ * Lifetime RACKET earned, per capo, from the newest /capos/production snapshot.
+ *
+ * Read from raw rather than SQLite for the same reason players.js does: one
+ * snapshot is 52k rows answering a question about now, and a daily table would
+ * cost 19M rows a year to answer nothing extra.
+ */
+function earningsByCapo() {
+  const dir = path.join(ROOT, 'data', 'raw', 'capos_production')
+  if (!fs.existsSync(dir)) return new Map()
+  const files = []
+  ;(function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const f = path.join(d, e.name)
+      if (e.isDirectory()) walk(f); else files.push(f)
+    }
+  })(dir)
+  if (!files.length) return new Map()
+  let j
+  try { j = JSON.parse(zlib.gunzipSync(fs.readFileSync(files.sort().at(-1)))) } catch { return new Map() }
+  while (j.data) j = j.data
+  const out = new Map()
+  for (const r of j.capos || []) {
+    out.set(r.capo_id, {
+      earned: r.total_racket_earned || 0,
+      per_day: r.avg_racket_per_day || 0,
+      last_7d: r.racket_last_7d || 0,
+    })
+  }
+  return out
+}
+const earned = earningsByCapo()
 
 const RARITY_ORDER = ['god', 'founder', 'legendary', 'epic', 'rare', 'uncommon', 'common']
 const RANK_ORDER = ['boss', 'underboss', 'lieutenant', 'captain', 'soldier', 'recruit']
@@ -63,7 +106,7 @@ const idx = (arr, v) => { const i = arr.indexOf(v); return i === -1 ? arr.length
 // Positional arrays, not objects: repeating eleven key names 95,000 times cost
 // 16.9MB against 3MB for the same data. Field order is published in the payload
 // so the page decodes it without a hardcoded contract.
-const FIELDS = ['name', 'rarity', 'tier', 'age', 'invested', 'active']
+const FIELDS = ['name', 'rarity', 'tier', 'age', 'invested', 'active', 'earned', 'per_day', 'last_7d']
 const byRef = {}
 for (const r of rows) {
   const age = r.season_created != null && currentSeason != null
@@ -76,6 +119,9 @@ for (const r of rows) {
     age,
     r.total_racket_invested || 0,
     r.status === 'active' ? 1 : 0,
+    earned.has(r.capo_id) ? earned.get(r.capo_id).earned : null,
+    earned.has(r.capo_id) ? earned.get(r.capo_id).per_day : null,
+    earned.has(r.capo_id) ? earned.get(r.capo_id).last_7d : null,
   ])
 }
 // Best first: rarity, then rank, then the most invested in.
@@ -101,6 +147,7 @@ for (const [key, payload] of Object.entries(shards)) {
 }
 
 console.log('rosters:', rows.length, 'capos for', Object.keys(byRef).length, 'players')
+console.log('  ' + earned.size.toLocaleString() + ' of them have an earnings row')
 console.log('  ' + Object.keys(shards).length + ' shards,',
   (bytes / 1048576).toFixed(2) + ' MB total,',
   Math.round(bytes / Object.keys(shards).length / 1024) + ' KB average')
