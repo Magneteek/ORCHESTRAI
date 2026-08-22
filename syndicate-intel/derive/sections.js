@@ -885,7 +885,9 @@ function capos() {
       personality_spread_pct: spread(personality),
     },
     by_rarity: byRarity,
-    age: ageBuckets,
+    // ageBuckets is no longer published. Nothing rendered it, and it carried the
+    // same derived ages the pages stopped showing on 2026-08-22.
+
     avg_age_years: ageStats.avg_years,
     oldest_years: ageStats.max_years,
     current_season: ageStats.current_season,

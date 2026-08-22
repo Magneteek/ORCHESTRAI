@@ -312,7 +312,7 @@ function render() {
   document.getElementById('guide').innerHTML = [
     ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes, plus who arrives and who stays.'],
     ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, what each gear item does, win rates, cities and leagues.'],
-    ['Capos', '/capos.html', 'Who earns most, how capos rank up, and how many exist by rank, age and owner.'],
+    ['Capos', '/capos.html', 'Who earns most, how capos rank up, and how many exist by rank, rarity and owner.'],
     ['Market', '/market.html', 'What capos sell for, how fast they sell, whether traits move the price, and every trainer for hire.'],
     ['Economy', '/money.html', 'RACKET supply, what mints and burns it, and the USD prize pools paid out on chain.'],
   ].map(([name, href, what]) =>
@@ -1364,7 +1364,10 @@ function renderTiles() {
   const boss = (rk.pyramid.find((r) => r.rank === 'boss') || {}).capos || 0
   document.getElementById('tiles').innerHTML = [
     ['Capos in existence', nfmt(DATA.total), ''],
-    ['Average age', DATA.avg_age_years + ' yrs', 'oldest ' + DATA.oldest_years + ', born at 25'],
+    // Average age removed 2026-08-22. It rested on the same birth-season
+    // derivation as the roster column: a year too high for every capo that has
+    // taken an elixir rewind, and eleven years out on founders. The mean landed
+    // close by luck, but it averages figures we cannot stand behind one by one.
     ['Bosses', nfmt(boss), 'the top of the ladder'],
     ['Promoted this week', nfmt(rk.promoted_last_7d), 'capos ranked up in 7 days'],
     ['Spent on promotions', (rk.promotion_spend_racket / 1e6).toFixed(0) + 'M $R',
@@ -2042,7 +2045,7 @@ const PAGES = [
     share: 'What it actually costs to take a capo to boss in The Syndicate, measured from real promotions.',
     title: 'Capos and promotion costs · The Syndicate · ' + SITE, heading: 'Capos',
     eyebrow: 'The Syndicate &middot; population and progression',
-    description: 'Every capo in The Syndicate by rank, rarity and age, who earns the most ' +
+    description: 'Every capo in The Syndicate by rank, rarity and owner, who earns the most ' +
       'RACKET, and what each promotion actually costs, measured from real promotions.',
     // Three tabs, because ten screens of stacked duos on a phone is not a page
     // anyone reaches the bottom of. The sections are alternatives rather than an

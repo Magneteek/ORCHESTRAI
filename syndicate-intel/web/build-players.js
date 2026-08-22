@@ -910,7 +910,6 @@ const CAPO_SORTS = [
   { key: 2, label: 'Rank', dir: 1 },
   // Descending by default: nobody opens an earnings column to find the worst.
   { key: 6, label: 'Earned', dir: -1 },
-  { key: 3, label: 'Age', dir: -1 },
   { key: 0, label: 'Name', dir: 1 },
 ]
 let capoList = []
@@ -940,7 +939,6 @@ function drawRoster(pane) {
     '<span class="sortable" data-capo-sort="0" role="button" tabindex="0">Capo' + arrow(0) + '</span>' +
     '<span class="sortable" data-capo-sort="1" role="button" tabindex="0">Rarity' + arrow(1) + '</span>' +
     '<span class="sortable" data-capo-sort="2" role="button" tabindex="0">Rank' + arrow(2) + '</span>' +
-    '<span class="num sortable" data-capo-sort="3" role="button" tabindex="0">Age' + arrow(3) + '</span>' +
     '<span class="num sortable" data-capo-sort="6" role="button" tabindex="0">Earned' + arrow(6) + '</span>' +
     '</div>'
   const rows = sorted.map((c, i) =>
@@ -949,14 +947,20 @@ function drawRoster(pane) {
     '<span class="extra">' +
     '<span><span class="cell-label">Rarity</span>' + cap(RAR[c[1]] || '-') + '</span>' +
     '<span><span class="cell-label">Rank</span>' + cap(RNK[c[2]] || '-') + '</span>' +
-    '<span class="num"><span class="cell-label">Age</span>' + (c[3] == null ? '-' : c[3]) + '</span>' +
     // A capo with no production row has never earned. Shown as a dash rather
     // than 0 $R, because the two say different things and the dash is the one
     // that is true.
     '<span class="num"><span class="cell-label">Earned</span>' +
       (c[6] == null ? '-' : rkt(c[6])) + '</span>' +
     '</span></div>').join('')
-  pane.innerHTML = bar + '<div class="ledger" data-cols="6">' + head + rows + '</div>'
+  // Age was a column here until 2026-08-22. The API states a real age only on a
+  // marketplace listing, which covers about 2% of capos; everywhere else it had
+  // to be derived from the birth season, and that is a year too high for anyone
+  // who has taken an elixir rewind. Since a rewind is invisible to us there is no
+  // way to tell a right age from a wrong one, so the column is gone rather than
+  // quietly wrong. derive/age.js still resolves it and the shard still carries
+  // it, so restoring the column is one line once /capos exposes age.
+  pane.innerHTML = bar + '<div class="ledger" data-cols="5">' + head + rows + '</div>'
 
   pane.querySelectorAll('[data-capo-sort]').forEach((el) => {
     const pick = () => {
