@@ -9,6 +9,7 @@
 #   fast     5m      listings, sales, royalties
 #   hourly   :05     combat, contracts, territory, bounties
 #   daily    04:15   the 58MB capos dump, equipment, economy, supply
+#   seasonclose 18:50 capo production again, ten minutes before seasons end
 #   derive   10m     rebuild the derived layer and the site. Was 20m only
 #                    because Vercel's free tier capped deployments per day;
 #                    the droplet has no such ceiling, and a rebuild costs 44s
@@ -53,6 +54,13 @@ JOBS=(
   "fast|Listings, sales and royalties|$NODE_BIN --no-warnings ingest/snapshot.js --tier fast|every:300"
   "hourly|Combat, contracts and territory|$NODE_BIN --no-warnings ingest/snapshot.js --tier hourly|*-*-* *:05:00"
   "daily|Full capo, equipment and economy pull|$NODE_BIN --no-warnings ingest/snapshot.js --tier daily|*-*-* 04:15:00"
+  # Seasons end at 19:00 UTC and the game zeroes racket_current_season the moment
+  # they do, keeping no record of the total. The 04:15 pull therefore read season
+  # 12 fifteen hours before it closed and never saw it again, so that season's
+  # final earnings are gone for good. This runs ten minutes before the boundary,
+  # every day, so the last reading of any season is minutes old rather than most
+  # of a day. One extra 4.8MB snapshot daily, about 1.7GB a year.
+  "seasonclose|Capo production, just before the season boundary|$NODE_BIN --no-warnings ingest/snapshot.js --endpoint capos_production|*-*-* 18:50:00"
   "derive|Rebuild derived layer and site|/bin/bash derive/refresh.sh|every:600"
   "rewards|On-chain prize and bounty watch|$NODE_BIN --no-warnings ingest/rewards-watch.js --watch|every:3600"
   "verify|Archive gap check|$NODE_BIN --no-warnings ingest/verify.js|*-*-* 09:00:00"
@@ -81,7 +89,7 @@ EnvironmentFile=-$PROJECT_DIR/.env
 # purely waiting. It checkpoints per wallet and resumes, so a kill costs
 # progress rather than data, but it still needs most of its hour. daily pulls a
 # 58MB payload and offload can push hundreds of MB on its early runs.
-TimeoutStartSec=$(case "$name" in rewards) echo 3000;; daily|offload) echo 1800;; *) echo 600;; esac)
+TimeoutStartSec=$(case "$name" in rewards) echo 3000;; daily|seasonclose|offload) echo 1800;; *) echo 600;; esac)
 Nice=10
 # One CPU shared with nginx: keep a burst of JSON parsing from starving the
 # thing actually serving the site.

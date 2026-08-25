@@ -327,26 +327,51 @@ function loadBounties(db, doc, capturedAt) {
   return n
 }
 
+/**
+ * Which season was running when a snapshot was taken.
+ *
+ * Read from the city calendar rather than assumed, and falling back to the
+ * nearest earlier day so a snapshot taken before that day's city pull still
+ * lands on the right season. Null when the calendar has nothing to say, which is
+ * better than guessing the counter belongs to a season it does not.
+ */
+function seasonOn(db, day) {
+  const r = db.prepare(`
+    SELECT MAX(season_number) s FROM cities_daily
+    WHERE is_active = 1 AND season_number IS NOT NULL AND day <= ?
+      AND day = (SELECT MAX(day) FROM cities_daily WHERE day <= ?)`).get(day, day)
+  return r?.s ?? null
+}
+
 function loadProductionOwners(db, doc, capturedAt) {
   const day = dayOf(capturedAt)
+  const season = seasonOn(db, day)
   const byOwner = new Map()
   for (const r of doc.data?.capos ?? []) {
     if (!r.owner_ref) continue
-    const o = byOwner.get(r.owner_ref) || { racket: 0, capos: 0 }
+    const o = byOwner.get(r.owner_ref) || { racket: 0, capos: 0, season: 0, seasonCapos: 0 }
     o.racket += r.total_racket_earned || 0
     o.capos++
+    if (r.racket_current_season) { o.season += r.racket_current_season; o.seasonCapos++ }
     byOwner.set(r.owner_ref, o)
   }
   const stmt = db.prepare(`
-    INSERT INTO production_owner_daily (day, owner_ref, captured_at, lifetime_racket, earning_capos)
-    VALUES (?,?,?,?,?)
+    INSERT INTO production_owner_daily (
+      day, owner_ref, captured_at, lifetime_racket, earning_capos,
+      season, season_racket, season_capos)
+    VALUES (?,?,?,?,?,?,?,?)
     ON CONFLICT(day, owner_ref) DO UPDATE SET
       captured_at = excluded.captured_at,
       lifetime_racket = excluded.lifetime_racket,
-      earning_capos = excluded.earning_capos`)
+      earning_capos = excluded.earning_capos,
+      season = excluded.season,
+      -- Later on the same day wins, which is what we want: the closer a reading
+      -- is to 19:00 the closer it is to the season's true final figure.
+      season_racket = excluded.season_racket,
+      season_capos = excluded.season_capos`)
   let n = 0
   for (const [ref, o] of byOwner) {
-    stmt.run(day, ref, capturedAt, o.racket, o.capos)
+    stmt.run(day, ref, capturedAt, o.racket, o.capos, season, o.season, o.seasonCapos)
     n++
   }
   return n
@@ -581,6 +606,11 @@ const LOADERS = {
  */
 function migrate(db) {
   const added = []
+  // Columns added here are empty on existing rows, and the load is incremental,
+  // so the files that hold the missing values are already marked done and would
+  // never be read again. Anything named here has its provenance cleared so the
+  // next pass replays it from raw, which is the whole reason raw is authoritative.
+  const replay = new Set()
   const columns = (table) =>
     new Set(db.prepare(`PRAGMA table_info(${table})`).all().map((r) => r.name))
 
@@ -589,6 +619,19 @@ function migrate(db) {
     if (!salesCols.has(col)) {
       db.exec(`ALTER TABLE sales ADD COLUMN ${col} TEXT`)
       added.push(`sales.${col}`)
+    }
+  }
+
+  // production_owner_daily predates the season columns; add them rather than
+  // forcing a full rebuild, and replay from raw picks the values up.
+  if (db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='production_owner_daily'").get()) {
+    const prodCols = columns('production_owner_daily')
+    for (const col of ['season', 'season_racket', 'season_capos']) {
+      if (!prodCols.has(col)) {
+        db.exec(`ALTER TABLE production_owner_daily ADD COLUMN ${col} INTEGER`)
+        added.push(`production_owner_daily.${col}`)
+        replay.add('capos_production')
+      }
     }
   }
 
@@ -621,6 +664,10 @@ function migrate(db) {
     CREATE INDEX IF NOT EXISTS idx_sales_seller_ref ON sales (seller_ref);
   `)
 
+  for (const endpoint of replay) {
+    const { changes } = db.prepare('DELETE FROM loaded_files WHERE endpoint = ?').run(endpoint)
+    console.log(`migrated: replaying ${changes} ${endpoint} file(s) to fill the new columns`)
+  }
   if (added.length) console.log(`migrated: added ${added.join(', ')}`)
   return added
 }

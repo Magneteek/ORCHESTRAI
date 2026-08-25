@@ -245,6 +245,14 @@ CREATE TABLE IF NOT EXISTS production_owner_daily (
   captured_at     TEXT,
   lifetime_racket INTEGER,
   earning_capos   INTEGER,
+  -- The season counter the game resets at every rollover, and which season it
+  -- belonged to. Without these a finished season is unrecoverable: the game
+  -- zeroes racket_current_season at 19:00 UTC and keeps no record of the total,
+  -- so the last reading we took before the boundary IS the season's figure and
+  -- there is nowhere else to get it.
+  season          INTEGER,
+  season_racket   INTEGER,
+  season_capos    INTEGER,
   PRIMARY KEY (day, owner_ref)
 );
 CREATE INDEX IF NOT EXISTS idx_prod_owner ON production_owner_daily (owner_ref, day);

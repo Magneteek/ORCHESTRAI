@@ -358,8 +358,12 @@ h3 {
 }
 @media (min-width: 46rem) { .topduo { grid-template-columns: 1fr 1fr; } }
 /* Both panels own their spacing through the grid, so the search panel drops the
-   top margin it carries when it stands alone. */
-.topduo > * { margin-top: 0; }
+   top margin it carries when it stands alone.
+   Both children are named explicitly rather than matched with a universal child
+   selector: .psearch sets its own margin and is defined ~180 lines further down
+   this sheet, so a single-class selector loses the tie on source order and the
+   search panel sat lower than its neighbour. */
+.topduo > .psearch, .topduo > .toolcard { margin-top: 0; }
 .toolcard {
   padding: var(--space-4);
   border: 1px solid var(--accent-deep);
