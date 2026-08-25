@@ -2226,7 +2226,15 @@ const PAGES = [
   <p class="basis">The game publishes the chance a whole three-card pack holds at least one of a
   rarity. <b>Per card</b> is that inverted into the odds for a single card, which is what actually
   governs a pack holding two legendaries. <b>Value</b> counts every card in the pack, not just the
-  best one, priced at the median sale for its rarity.</p>
+  best one, priced at the median sale for its rarity. Cash and contraband prices, and both pack
+  columns, are the game's own published figures.</p>
+  <p class="basis">The per-card column rests on one reading: the docs say a pack guarantees its
+  rarity "or better", so the guaranteed slot is treated as able to roll up like the other two. If
+  it is instead fixed at exactly the guaranteed rarity, the true per-card odds are about half again
+  as high. Value barely moves either way, by under 1.5%, and the pack columns do not move at all
+  because they are published rather than derived. Signature is priced at its current $300 rather
+  than its $500 list. Daily supply caps are real and not modelled here: four Signature packs a day,
+  twenty Dons, and a limited slice of each tier redeemable with contraband.</p>
   <div class="section-head"><h2>Build a basket</h2><span class="section-meta">up to three piles, side by side</span></div>
   <div class="controls">
     <label class="fillerctl" for="filler">Filler slots
@@ -2236,7 +2244,8 @@ const PAGES = [
   <p class="basis">One number per tier cannot be derived: when a non-guaranteed slot lands at or
   below the pack's guaranteed rarity, is it that rarity or something worthless? At 0% every such
   slot is a common, which cannot be sold at all. Zero is the honest default, because the docs say a
-  Rookie still turns up commons and uncommons. Everything else on this page is derived.</p>
+  Rookie still turns up commons and uncommons. Everything else is either published by the game or
+  derived from what it publishes.</p>
   <div class="baskets" id="baskets"></div>
   <div id="verdict"></div>`,
     script: PACKS_JS,
