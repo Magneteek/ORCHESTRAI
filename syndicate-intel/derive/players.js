@@ -922,9 +922,11 @@ function main() {
     },
     market: {
       comp_window_days: comps.window_days,
+      comp_recent_days: comps.recent_days,
       capo_medians_sol: Object.fromEntries(
         [...new Set([
-          ...Object.keys(comps.rarity), ...Object.keys(comps.rarityWide),
+          ...Object.keys(comps.rarityRecent), ...Object.keys(comps.rarity),
+          ...Object.keys(comps.rarityWide),
         ])].map((k) => {
           const p = effectiveRarityPrice(comps, k)
           return [k, {

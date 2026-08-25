@@ -1037,7 +1037,9 @@ write('wars', { ...w, gear: c.gear })
  */
 const comps = buildCompTable(db)
 const compPrices = {}
-for (const rarity of new Set([...Object.keys(comps.rarity), ...Object.keys(comps.rarityWide)])) {
+for (const rarity of new Set([
+  ...Object.keys(comps.rarityRecent), ...Object.keys(comps.rarity),
+  ...Object.keys(comps.rarityWide)])) {
   const q = effectiveRarityPrice(comps, rarity)
   compPrices[rarity] = {
     median_sol: q.lamports == null ? null : +(q.lamports / 1e9).toFixed(4),
@@ -1048,7 +1050,12 @@ for (const rarity of new Set([...Object.keys(comps.rarity), ...Object.keys(comps
 
 write('market', {
   generated_at, sales: market, liquidity, trait_price: c.trait_price,
-  comps: { window_days: comps.window_days, wide_window_days: comps.wide_window_days, by_rarity: compPrices },
+  comps: {
+    recent_days: comps.recent_days,
+    window_days: comps.window_days,
+    wide_window_days: comps.wide_window_days,
+    by_rarity: compPrices,
+  },
 })
 // The growth page is gone. Its supply and ownership blocks belong with the
 // capos they describe, and its player blocks with the players. growth.json is

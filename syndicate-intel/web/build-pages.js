@@ -1967,8 +1967,11 @@ var money = function (n) {
   return '$' + Number(n).toLocaleString('en-US',
     { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })
 }
-// Local, not shared: cap1 lives inside the wars page script and is undefined here.
+// Local, not shared: cap1 and exactN live inside the wars page script and are
+// undefined here. render() swallows anything it throws after the first load, so
+// a missing helper does not error, it just silently blanks the section.
 var capr = function (v) { return v == null ? '-' : String(v).charAt(0).toUpperCase() + String(v).slice(1) }
+var exactr = function (n) { return Number(n || 0).toLocaleString('en-US') }
 
 /** Card prices in SOL, from the same comps the player profiles value holdings with. */
 function cardPrices() {
@@ -2209,10 +2212,41 @@ function renderVerdict(all) {
     (split ? ' Value points the other way, so this is a real trade-off between one big pull and ' +
       'steadier return.' : '') + '</p></div>'
 }
+/**
+ * Say where each rarity's price came from.
+ *
+ * The window is no longer the same for every card: a rarity is priced off the
+ * last 7 days when that week holds enough sales to mean something, and widens
+ * to 30 or 90 days when it does not. God is the case that matters -- it trades
+ * a handful of times a week, so it is usually carrying a much older median than
+ * rare is, and a reader deciding whether to spend $299 should be able to see
+ * that rather than take one median on faith.
+ */
+function renderPriceBasis() {
+  var by = (DATA.comps && DATA.comps.by_rarity) || {}
+  var windows = { rarity_7d: 7, rarity_30d: 30, rarity_90d: 90 }
+  var parts = []
+  var order = ['rare', 'epic', 'legendary', 'god']
+  for (var i = 0; i < order.length; i++) {
+    var k = order[i], c = by[k]
+    if (!c || c.median_sol == null) continue
+    var days = windows[c.basis]
+    parts.push(capr(k) + ' ' + c.median_sol + ' SOL, ' + exactr(c.sales) +
+      (c.sales === 1 ? ' sale' : ' sales') +
+      (days ? ' in ' + days + ' days' : ''))
+  }
+  if (!parts.length) return
+  var el = document.getElementById('pricebasis')
+  if (el) el.innerHTML = 'Every price here is the median of what capos of that rarity actually ' +
+    'sold for, and the window widens when a week is too thin to trust: ' + parts.join('. ') +
+    '. A card priced off a longer window is tracking the market with more lag, so the thinner ' +
+    'the sample the more the figure above it should be read as a rough one.'
+}
 function render() {
   var P = cardPrices()
   renderTiles(P)
   renderLadder(P)
+  renderPriceBasis()
   renderVerdict(KEYS.map(function (k) { return renderBasket(k, P) }))
 }
 document.addEventListener('DOMContentLoaded', function () {
@@ -2325,6 +2359,7 @@ const PAGES = [
   three cards at the median sale for their rarity, not just the best one. <b>Boosted stats</b> is a
   single roll per pack that lifts every card in it, and is real value this page does not attempt to
   price, so every tier is worth a little more than it says here, Signature most of all at 40%.</p>
+  <p class="basis" id="pricebasis"></p>
   <p class="basis">Signature is priced at its current $299 promotion rather than its $500 list, so
   this goes stale if that ends. Daily supply caps are real and not modelled: four Signature packs a
   day, twenty Dons, and a limited slice of each tier redeemable with contraband, which bounds how

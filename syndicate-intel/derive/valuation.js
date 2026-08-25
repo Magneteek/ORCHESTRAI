@@ -44,6 +44,20 @@
  */
 export const SOL_SALES = "source = 'tensor'"
 
+// Three windows, not one. The 30-day median was the only basis until it was
+// checked against the market it claims to describe: epic capos traded at a
+// 0.1986 SOL median eight weeks ago and 0.1100 in the last seven days, and
+// legendary went 1.1000 to 0.7600 over the same stretch. A 30-day median walks
+// down a slope like that roughly two weeks late, so every card was being
+// marked ~11-21% above what it was actually fetching.
+//
+// Seven days is short enough to track the slope and, for the rarities that
+// carry the value, still deep enough to mean something: rare 855 sales in the
+// last week, epic 198, legendary 26. It is NOT deep enough for god or founder,
+// which is exactly what the sample gate below is for -- those fall through to
+// the 30- and 90-day windows on their own rather than being repriced off a
+// handful of trades.
+const RECENT_DAYS = 7
 const WINDOW_DAYS = 30
 const WIDE_WINDOW_DAYS = 90
 
@@ -79,13 +93,19 @@ export function buildCompTable(db) {
       AND sold_at > date('now', '-${WIDE_WINDOW_DAYS} day')`).all()
 
   const cutoff = new Date(Date.now() - WINDOW_DAYS * 86400_000).toISOString()
+  const recentCutoff = new Date(Date.now() - RECENT_DAYS * 86400_000).toISOString()
 
+  const byRarityTierRecent = {}
+  const byRarityRecent = {}
   const byRarityTier = {}
   const byRarity = {}
   const byRarityWide = {}
   for (const r of rows) {
-    const recent = r.sold_at > cutoff
-    if (recent) {
+    if (r.sold_at > recentCutoff) {
+      ;(byRarityTierRecent[`${r.rarity}|${r.tier}`] ||= []).push(r.price_lamports)
+      ;(byRarityRecent[r.rarity] ||= []).push(r.price_lamports)
+    }
+    if (r.sold_at > cutoff) {
       ;(byRarityTier[`${r.rarity}|${r.tier}`] ||= []).push(r.price_lamports)
       ;(byRarity[r.rarity] ||= []).push(r.price_lamports)
     }
@@ -102,9 +122,12 @@ export function buildCompTable(db) {
   }
 
   return {
+    rarityTierRecent: finish(byRarityTierRecent),
+    rarityRecent: finish(byRarityRecent),
     rarityTier: finish(byRarityTier),
     rarity: finish(byRarity),
     rarityWide: finish(byRarityWide),
+    recent_days: RECENT_DAYS,
     window_days: WINDOW_DAYS,
     wide_window_days: WIDE_WINDOW_DAYS,
   }
@@ -115,9 +138,20 @@ export function buildCompTable(db) {
  * rather than arriving as a bare figure.
  */
 export function priceCapo(comps, rarity, tier) {
+  // Sharpness first, then recency within each level of sharpness: a fresh
+  // legendary-underboss median beats a stale one, but a stale one still beats
+  // a fresh median that has thrown the tier away.
+  const tr = comps.rarityTierRecent[`${rarity}|${tier}`]
+  if (tr && tr.n >= MIN_SAMPLES) {
+    return { lamports: tr.median, basis: `rarity_tier_${RECENT_DAYS}d`, n: tr.n }
+  }
   const cell = comps.rarityTier[`${rarity}|${tier}`]
   if (cell && cell.n >= MIN_SAMPLES) {
     return { lamports: cell.median, basis: 'rarity_tier', n: cell.n }
+  }
+  const rr = comps.rarityRecent[rarity]
+  if (rr && rr.n >= MIN_SAMPLES) {
+    return { lamports: rr.median, basis: `rarity_${RECENT_DAYS}d`, n: rr.n }
   }
   const r = comps.rarity[rarity]
   if (r && r.n >= MIN_SAMPLES) {
@@ -140,6 +174,10 @@ export function priceCapo(comps, rarity, tier) {
  * the evidence is.
  */
 export function effectiveRarityPrice(comps, rarity) {
+  const rr = comps.rarityRecent[rarity]
+  if (rr && rr.n >= MIN_SAMPLES) {
+    return { lamports: rr.median, basis: `rarity_${RECENT_DAYS}d`, n: rr.n }
+  }
   const r = comps.rarity[rarity]
   if (r && r.n >= MIN_SAMPLES) {
     return { lamports: r.median, basis: `rarity_${WINDOW_DAYS}d`, n: r.n }
