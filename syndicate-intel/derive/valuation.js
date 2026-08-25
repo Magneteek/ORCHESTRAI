@@ -64,6 +64,15 @@ const WIDE_WINDOW_DAYS = 90
 // A cell needs this many sales before its own median is trusted.
 const MIN_SAMPLES = 5
 const MIN_SAMPLES_WIDE = 3
+// The 7-day window needs a higher bar than the 30-day one, not the same bar. A
+// week is a quarter of the length, so five sales inside it is a quarter of the
+// evidence five sales in a month represents, and the shorter the window the
+// more a single odd trade drags the median. Founder is the proof: at a shared
+// threshold of 5 it repriced from 2.5 to 3.251 SOL, a 30% jump, off exactly
+// five sales -- while rare moved 14% off 1,683. Twelve keeps the rarities that
+// actually trade on the fresh window and drops god and founder, which clear a
+// week's bar only by accident, back to the 30- and 90-day ones.
+const MIN_SAMPLES_RECENT = 12
 
 function median(sorted) {
   if (!sorted.length) return null
@@ -142,7 +151,7 @@ export function priceCapo(comps, rarity, tier) {
   // legendary-underboss median beats a stale one, but a stale one still beats
   // a fresh median that has thrown the tier away.
   const tr = comps.rarityTierRecent[`${rarity}|${tier}`]
-  if (tr && tr.n >= MIN_SAMPLES) {
+  if (tr && tr.n >= MIN_SAMPLES_RECENT) {
     return { lamports: tr.median, basis: `rarity_tier_${RECENT_DAYS}d`, n: tr.n }
   }
   const cell = comps.rarityTier[`${rarity}|${tier}`]
@@ -150,7 +159,7 @@ export function priceCapo(comps, rarity, tier) {
     return { lamports: cell.median, basis: 'rarity_tier', n: cell.n }
   }
   const rr = comps.rarityRecent[rarity]
-  if (rr && rr.n >= MIN_SAMPLES) {
+  if (rr && rr.n >= MIN_SAMPLES_RECENT) {
     return { lamports: rr.median, basis: `rarity_${RECENT_DAYS}d`, n: rr.n }
   }
   const r = comps.rarity[rarity]
@@ -175,7 +184,7 @@ export function priceCapo(comps, rarity, tier) {
  */
 export function effectiveRarityPrice(comps, rarity) {
   const rr = comps.rarityRecent[rarity]
-  if (rr && rr.n >= MIN_SAMPLES) {
+  if (rr && rr.n >= MIN_SAMPLES_RECENT) {
     return { lamports: rr.median, basis: `rarity_${RECENT_DAYS}d`, n: rr.n }
   }
   const r = comps.rarity[rarity]
