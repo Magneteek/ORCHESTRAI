@@ -1934,6 +1934,22 @@ var PACKS = [
     pub: { god: 0.10 }, boost: [0.40, 0.20], half: true, list: 500 },
 ]
 var perSlot = function (p) { return 1 - Math.pow(1 - p, 1 / 3) }
+/**
+ * What a pack costs in contraband.
+ *
+ * The four redeemable tiers have published, round costs, and they are not the
+ * price times twenty: a Rookie is 100 even though it is $4.99. Deriving it gave
+ * 2,994 for thirty Rookies when they really cost 3,000, which would tell someone
+ * holding 2,995 that they could afford a basket they cannot.
+ *
+ * Signature has no published cost because it cannot be redeemed outright, only
+ * discounted by half, so its figure IS derived: half the cash price at the
+ * standard $0.05 a unit. It moves if the promotion does.
+ */
+var contrabandCost = function (p) {
+  if (!p.cb && !p.half) return 0
+  return p.half ? Math.round(p.usd * 0.5 * 20) : p.cb
+}
 var BUYABLE = PACKS.filter(function (p) { return p.usd !== null })
 var KEYS = ['A', 'B', 'C']
 var BASKETS = {
@@ -2070,9 +2086,9 @@ function renderLadder(P) {
     var tag = !p.pub.god ? ''
             : r.ratio === hi ? '<span class="tag pos">best value</span>'
             : r.ratio === lo ? '<span class="tag neg">worst value</span>' : ''
-    var cb = !p.cb ? 'bought with $R'
-           : p.half ? num(p.cb) + ' contraband, half off'
-           : num(p.cb) + ' contraband'
+    var cb = !p.cb && !p.half ? 'bought with $R'
+           : p.half ? num(contrabandCost(p)) + ' contraband, half off'
+           : num(contrabandCost(p)) + ' contraband'
     return '<div class="packcard">' +
       '<div class="pname"><b>' + esc(p.name) + '</b>' +
       '<span class="price">' + money(p.usd) + '<span>' + cb + '</span></span></div>' +
@@ -2142,7 +2158,7 @@ function renderBasket(k, P) {
   list.forEach(function (e) {
     var p = findPack(e[0]), q = e[1]
     cash += p.usd * q
-    cb += p.usd * (p.half ? 0.5 : 1) * 20 * q
+    cb += contrabandCost(p) * q
     cashAfter += (p.half ? p.usd * 0.5 : 0) * q
     ev += q * packEv(p, P)
   })
