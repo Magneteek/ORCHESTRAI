@@ -64,7 +64,10 @@ const LAMPORTS_PER_SOL = 1e9
 // Public RPC is rate limited and occasionally flaky, so every call retries with
 // backoff and every wallet scan is spaced out. Override with a paid RPC for
 // speed if one is ever configured.
-const DEFAULT_RPC = 'https://api.mainnet-beta.solana.com'
+// Measured 2026-08-25, five getSignaturesForAddress calls: mainnet-beta 5.1s,
+// this one 0.9s. Both free, neither needs a key. At 979 wallets a sweep that
+// difference decides whether a run finishes at all.
+const DEFAULT_RPC = 'https://solana-rpc.publicnode.com'
 const RETRY_DELAYS_MS = [1_000, 3_000, 8_000, 20_000]
 const INTER_CALL_MS = 130
 // Per-request ceiling. Without it a single unanswered socket hangs the run.
@@ -161,10 +164,18 @@ async function rpc(method, params) {
         if (j.error.code === -32005 || /rate/i.test(j.error.message || '')) {
           lastErr = 'rpc ' + j.error.message; continue
         }
-        throw new Error('rpc error: ' + JSON.stringify(j.error))
+        // Marked, because this throw sits inside the try and the catch below
+        // would otherwise swallow it and retry anyway, making the comment above
+        // untrue. That is what made a pruned-bookmark lookup cost the full 32s
+        // retry budget per wallet rather than failing at once, which across 979
+        // wallets is nine hours and why no sweep ever finished.
+        const fatal = new Error('rpc error: ' + JSON.stringify(j.error))
+        fatal.fatal = true
+        throw fatal
       }
       return j.result
     } catch (e) {
+      if (e.fatal) throw e
       lastErr = e.name === 'AbortError' ? `timeout after ${RPC_TIMEOUT_MS}ms` : e.message
     } finally {
       clearTimeout(timer)
@@ -190,8 +201,27 @@ async function signaturesSince(address, untilSig, maxPages = MAX_SIG_PAGES,
     try {
       res = await rpc('getSignaturesForAddress', [address, opts])
     } catch (e) {
-      console.warn(`  signaturesSince stopped early at page ${page}: ${e.message}`)
-      break
+      // A public node prunes history, so a bookmark stored days ago is no longer
+      // a transaction it can resolve, and it answers -32020 "not found" rather
+      // than ignoring the cursor. Left alone that is terminal: every wallet fails
+      // on its first page, burns the whole retry budget, and the sweep makes no
+      // progress while merely looking slow. It is what stopped season 12's payout
+      // being recorded. Drop the cursor and take the page unbounded; the caller
+      // dedups by signature, so the only cost is re-reading what we already hold.
+      if (untilSig && /not found|-32020/.test(e.message)) {
+        console.warn(`  ${String(address).slice(0, 8)}: bookmark aged out of node history, rescanning unbounded`)
+        untilSig = null
+        delete opts.until
+        try {
+          res = await rpc('getSignaturesForAddress', [address, opts])
+        } catch (e2) {
+          console.warn(`  signaturesSince gave up at page ${page}: ${e2.message}`)
+          break
+        }
+      } else {
+        console.warn(`  signaturesSince stopped early at page ${page}: ${e.message}`)
+        break
+      }
     }
     await sleep(INTER_CALL_MS)
     if (!res || !res.length) break

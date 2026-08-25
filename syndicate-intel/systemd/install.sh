@@ -21,6 +21,11 @@
 # Timers, not cron, for three reasons that matter here: Persistent=true makes a
 # calendar job that was missed while the box was down run once on boot rather
 # than silently skipping a day of the archive; systemd will not start a second
+# The rewards watch gets two hours rather than fifty minutes: when a bookmark
+# ages out of the public node's history the whole wallet list has to be rescanned
+# unbounded, which is about an hour of work. It checkpoints every 100 wallets, so
+# a clipped run still makes progress, but clipping it every time is how the sweep
+# went months without finishing.
 # copy of a job that is still running, so a slow daily pull cannot pile up; and
 # output lands in the journal with the unit name attached instead of in a log
 # file nobody rotates.
@@ -89,7 +94,7 @@ EnvironmentFile=-$PROJECT_DIR/.env
 # purely waiting. It checkpoints per wallet and resumes, so a kill costs
 # progress rather than data, but it still needs most of its hour. daily pulls a
 # 58MB payload and offload can push hundreds of MB on its early runs.
-TimeoutStartSec=$(case "$name" in rewards) echo 3000;; daily|seasonclose|offload) echo 1800;; *) echo 600;; esac)
+TimeoutStartSec=$(case "$name" in rewards) echo 7200;; daily|seasonclose|offload) echo 1800;; *) echo 600;; esac)
 Nice=10
 # One CPU shared with nginx: keep a burst of JSON parsing from starving the
 # thing actually serving the site.
