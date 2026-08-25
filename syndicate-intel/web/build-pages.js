@@ -314,6 +314,7 @@ function render() {
     ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, what each gear item does, win rates, cities and leagues.'],
     ['Capos', '/capos.html', 'Who earns most, how capos rank up, and how many exist by rank, rarity and owner.'],
     ['Market', '/market.html', 'What capos sell for, how fast they sell, whether traits move the price, and every trainer for hire.'],
+    ['Packs', '/packs.html', 'What a pack is really worth: the chance of a god per card, and which tier returns most per dollar.'],
     ['Economy', '/money.html', 'RACKET supply, what mints and burns it, and the USD prize pools paid out on chain.'],
   ].map(([name, href, what]) =>
     '<div class="guide-item">' +
@@ -1881,6 +1882,275 @@ document.addEventListener('keydown', (e) => {
 `
 
 
+const PACKS_JS = String.raw`
+/**
+ * What a pack is worth, against what the cards actually sell for.
+ *
+ * The game publishes, per tier, the chance the whole three-card pack contains AT
+ * LEAST ONE card of a rarity. That is not directly usable: it says nothing about
+ * a pack holding two legendaries, which a Don does 13% of the time per slot.
+ *
+ * For any rarity ABOVE a pack's guarantee, flooring the guaranteed slot changes
+ * nothing, so all three slots are independent draws at that rarity and the
+ * published figure inverts exactly:
+ *
+ *     P(pack has >= 1 X) = 1 - (1 - d)^3   ->   d = 1 - (1-P)^(1/3)
+ *
+ * Everything above a guarantee is therefore derived, not assumed. Exactly one
+ * number per tier is not recoverable: how often a free slot lands AT the
+ * guaranteed rarity rather than below it. Three published chances, four
+ * unknowns. That one is the filler input, and it defaults to zero because the
+ * docs say a Rookie still turns up commons and uncommons, which are never
+ * minted and cannot be sold at all.
+ */
+var ORDER = ['rare', 'epic', 'legendary', 'god']
+var PACKS = [
+  { name: 'RACKET pack', usd: null, guar: null, pub: {}, note: '2,500 $R+' },
+  { name: 'Rookie', usd: 5, guar: 'rare', pub: { epic: 0.03, legendary: 0.002, god: 0.0005 } },
+  { name: 'Made-Man', usd: 15, guar: 'rare', pub: { epic: 0.20, legendary: 0.004, god: 0.002 } },
+  { name: 'Boss', usd: 50, guar: 'epic', pub: { legendary: 0.08, god: 0.0075 } },
+  { name: 'Don', usd: 150, guar: 'epic', pub: { legendary: 0.35, god: 0.01 } },
+  { name: 'Signature', usd: 300, guar: 'legendary', pub: { god: 0.10 }, half: true }
+]
+var BUYABLE = PACKS.filter(function (p) { return p.usd !== null })
+var KEYS = ['A', 'B', 'C']
+var BASKETS = {
+  A: { Rookie: 0, 'Made-Man': 4, Boss: 3, Don: 0, Signature: 0 },
+  B: { Rookie: 0, 'Made-Man': 0, Boss: 0, Don: 0, Signature: 1 },
+  C: { Rookie: 30, 'Made-Man': 0, Boss: 0, Don: 0, Signature: 0 }
+}
+var fillerShare = 0
+var perSlot = function (p) { return 1 - Math.pow(1 - p, 1 / 3) }
+var pctf = function (n) { return (n * 100).toFixed(n < 0.01 ? 2 : 1) + '%' }
+var num = function (n) { return Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }) }
+
+/** Card prices in SOL, from the same comps the player profiles value holdings with. */
+function cardPrices() {
+  var by = (DATA.comps && DATA.comps.by_rarity) || {}
+  var out = { rare: 0, epic: 0, legendary: 0, god: 0 }
+  for (var r in out) if (by[r] && by[r].median_sol != null) out[r] = by[r].median_sol
+  return out
+}
+/** Expected value of one pack, in SOL. Counts every card, not just the best. */
+function packEv(p, P) {
+  if (p.usd === null) return 0
+  var above = ORDER.slice(ORDER.indexOf(p.guar) + 1)
+  var d = {}
+  for (var i = 0; i < above.length; i++) d[above[i]] = perSlot(p.pub[above[i]] || 0)
+  var exact = function (r) {
+    var j = above.indexOf(r), nxt = above[j + 1]
+    return d[r] - (nxt ? d[nxt] : 0)
+  }
+  var upside = 0
+  for (var k = 0; k < above.length; k++) upside += exact(above[k]) * P[above[k]]
+  var pAbove = above.length ? d[above[0]] : 0
+  var slot1 = (1 - pAbove) * P[p.guar] + upside
+  var free = (1 - pAbove) * P[p.guar] * fillerShare + upside
+  return slot1 + 2 * free
+}
+var solPerUsd = function () { return window.SOL_USD ? 1 / window.SOL_USD : null }
+/** A pack's price expressed in SOL, so EV and price compare in one unit. */
+function packSol(p) { var r = solPerUsd(); return r == null ? null : p.usd * r }
+
+function renderTiles(P) {
+  var best = null, worst = null
+  for (var i = 0; i < BUYABLE.length; i++) {
+    var p = BUYABLE[i], s = packSol(p)
+    if (s == null || !s) continue
+    var ratio = packEv(p, P) / s
+    if (!best || ratio > best.r) best = { p: p, r: ratio }
+    if (!worst || ratio < worst.r) worst = { p: p, r: ratio }
+  }
+  var sig = PACKS.filter(function (p) { return p.name === 'Signature' })[0]
+  var t = function (label, value, note) {
+    return '<div class="tile"><span class="tile-label">' + label + '</span>' +
+      '<span class="tile-value">' + value + '</span>' +
+      (note ? '<span class="tile-note">' + note + '</span>' : '') + '</div>'
+  }
+  document.getElementById('tiles').innerHTML =
+    t('Best value', best ? best.p.name : '-', best ? best.r.toFixed(2) + ' back per $1' : '') +
+    t('Worst value', worst ? worst.p.name : '-', worst ? worst.r.toFixed(2) + ' back per $1' : '') +
+    t('Best god odds', 'Signature', pctf(sig.pub.god) + ' a pack') +
+    t('A god is worth', solAmount(P.god, { bare: true }), 'median sale') +
+    (function () {
+      var cheap = null
+      for (var j = 0; j < BUYABLE.length; j++) {
+        var q = BUYABLE[j]
+        if (!q.pub.god) continue
+        var per = q.usd / q.pub.god
+        if (!cheap || per < cheap.per) cheap = { p: q, per: per }
+      }
+      return cheap
+        ? t('Cheapest god', '$' + num(cheap.per), 'expected spend, via ' + cheap.p.name)
+        : ''
+    })()
+}
+
+function renderLadder(P) {
+  var rows = [], rates = []
+  for (var i = 0; i < PACKS.length; i++) {
+    var p = PACKS[i]
+    var s = packSol(p), e = packEv(p, P)
+    var ratio = (s && p.usd !== null) ? e / s : null
+    rows.push({ p: p, e: e, ratio: ratio })
+    if (ratio != null) rates.push(ratio)
+  }
+  var hi = Math.max.apply(null, rates), lo = Math.min.apply(null, rates)
+  var head = '<div class="row head"><span></span>' +
+    '<span>Pack</span><span class="num">Cash</span><span class="num">Contraband</span>' +
+    '<span class="num">Per card: god</span><span class="num">Pack: god</span>' +
+    '<span class="num">Pack: legendary</span><span class="num">Value</span>' +
+    '<span class="num">Per $1</span></div>'
+  var body = rows.map(function (r, i) {
+    var p = r.p
+    if (p.usd === null) {
+      return '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
+        '<span class="name">' + esc(p.name) + '</span>' +
+        '<span class="extra"><span class="num">' + esc(p.note) + '</span>' +
+        '<span class="num">-</span><span class="num">-</span><span class="num">-</span>' +
+        '<span class="num">-</span><span class="num">-</span>' +
+        '<span class="num sub">common and uncommon only</span></span></div>'
+    }
+    var cb = p.half ? num(p.usd * 0.5 * 20) + ' <span class="sub">half off</span>' : num(p.usd * 20)
+    var cls = r.ratio === hi ? ' pos' : r.ratio === lo ? ' neg' : ''
+    return '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
+      '<span class="name">' + esc(p.name) + '</span>' +
+      '<span class="extra">' +
+      '<span class="num"><span class="cell-label">Cash</span>$' + num(p.usd) + '</span>' +
+      '<span class="num"><span class="cell-label">Contraband</span>' + cb + '</span>' +
+      '<span class="num"><span class="cell-label">Per card: god</span>' + pctf(perSlot(p.pub.god || 0)) + '</span>' +
+      '<span class="num"><span class="cell-label">Pack: god</span>' + pctf(p.pub.god || 0) + '</span>' +
+      '<span class="num"><span class="cell-label">Pack: legendary</span>' +
+        pctf(packChance(p, 'legendary')) + '</span>' +
+      '<span class="num"><span class="cell-label">Value</span>' + solAmount(r.e, { bare: true }) + '</span>' +
+      '<span class="num' + cls + '"><span class="cell-label">Per $1</span>' +
+        (r.ratio == null ? '-' : r.ratio.toFixed(2)) + '</span>' +
+      '</span></div>'
+  }).join('')
+  document.getElementById('ladder').innerHTML =
+    '<div class="ledger" data-cols="9">' + head + body + '</div>'
+}
+
+function drawPicks() {
+  document.getElementById('baskets').innerHTML = KEYS.map(function (k) {
+    return '<div class="basket" id="basket' + k + '">' +
+      '<div class="bhead"><h3>Basket ' + k + '</h3><span class="bcost" id="cost' + k + '"></span></div>' +
+      '<div class="picks">' + BUYABLE.map(function (p) {
+        return '<div class="pick"><label for="q' + k + p.name + '">' + esc(p.name) +
+          ' <small>$' + num(p.usd) + '</small></label>' +
+          '<input id="q' + k + p.name + '" type="number" min="0" step="1" inputmode="numeric" value="' +
+          BASKETS[k][p.name] + '" data-b="' + k + '" data-p="' + esc(p.name) + '"></div>'
+      }).join('') + '</div>' +
+      '<div class="bout" id="out' + k + '"></div></div>'
+  }).join('')
+}
+function readBasket(k) {
+  var list = []
+  for (var i = 0; i < BUYABLE.length; i++) {
+    var p = BUYABLE[i]
+    var el = document.getElementById('q' + k + p.name)
+    var q = Math.max(0, parseInt(el && el.value, 10) || 0)
+    BASKETS[k][p.name] = q
+    if (q > 0) list.push([p.name, q])
+  }
+  return list
+}
+var findPack = function (n) {
+  return PACKS.filter(function (p) { return p.name === n })[0]
+}
+/**
+ * Chance a single pack holds at least one card of a rarity.
+ *
+ * The published table only lists rarities ABOVE the guarantee, because the
+ * guarantee makes the rest certain. Reading pub[] straight reported a Signature
+ * as 0% for legendary, which it guarantees.
+ */
+function packChance(p, rarity) {
+  if (p.guar && ORDER.indexOf(rarity) <= ORDER.indexOf(p.guar)) return 1
+  return p.pub[rarity] || 0
+}
+function anyOf(list, key) {
+  return 1 - list.reduce(function (a, e) {
+    return a * Math.pow(1 - packChance(findPack(e[0]), key), e[1])
+  }, 1)
+}
+function renderBasket(k, P) {
+  var list = readBasket(k)
+  var packs = list.reduce(function (a, e) { return a + e[1] }, 0)
+  var cash = 0, cb = 0, cashAfter = 0, ev = 0
+  list.forEach(function (e) {
+    var p = findPack(e[0]), q = e[1]
+    cash += p.usd * q
+    cb += p.usd * (p.half ? 0.5 : 1) * 20 * q
+    cashAfter += (p.half ? p.usd * 0.5 : 0) * q
+    ev += q * packEv(p, P)
+  })
+  var r = { key: k, packs: packs, cash: cash, cb: cb, cashAfter: cashAfter, ev: ev,
+    god: anyOf(list, 'god'), leg: anyOf(list, 'legendary') }
+  document.getElementById('cost' + k).innerHTML = packs
+    ? '$' + num(cash) + '<span class="sub">or ' + num(cb) + ' contraband' +
+      (cashAfter ? ' + $' + num(cashAfter) : '') + '</span>'
+    : ''
+  var evSol = ev, price = solPerUsd() == null ? null : cash * solPerUsd()
+  document.getElementById('out' + k).innerHTML = packs
+    ? '<div class="stat big"><span>Chance of a god</span><span>' + pctf(r.god) + '</span></div>' +
+      '<div class="stat"><span>Chance of a legendary</span><span>' + pctf(r.leg) + '</span></div>' +
+      '<div class="stat"><span>Expected value</span><span>' + solAmount(evSol, { bare: true }) + '</span></div>' +
+      '<div class="stat"><span>Back per $1</span><span>' +
+        (price ? (evSol / price).toFixed(2) : '-') + '</span></div>' +
+      '<div class="stat"><span>Cards opened</span><span>' + num(packs * 3) + '</span></div>'
+    : '<p class="basis">Add a pack to see the odds.</p>'
+  return r
+}
+function renderVerdict(all) {
+  var live = all.filter(function (b) { return b.packs > 0 })
+  KEYS.forEach(function (k) {
+    var el = document.getElementById('basket' + k)
+    if (el) el.classList.remove('win')
+  })
+  var box = document.getElementById('verdict')
+  if (live.length < 2) {
+    box.innerHTML = '<div class="callout"><p class="basis">Fill at least two baskets and this ' +
+      'compares them on the chance of a god, the chance of a legendary, and value against real ' +
+      'sale prices.</p></div>'
+    return
+  }
+  var byGod = live.slice().sort(function (a, b) { return b.god - a.god })
+  var byEv = live.slice().sort(function (a, b) { return b.ev - a.ev })
+  var godTop = byGod[0], evTop = byEv[0]
+  var tied = byGod.filter(function (b) { return b.god === godTop.god }).length > 1
+  if (!tied) document.getElementById('basket' + godTop.key).classList.add('win')
+  var split = !tied && evTop.key !== godTop.key
+  var lines = byGod.map(function (b) {
+    return 'Basket ' + b.key + ' ' + pctf(b.god) + ' for a god, ' +
+      solAmount(b.ev, { bare: true }) + ' of value'
+  })
+  box.innerHTML = '<div class="callout">' +
+    '<p class="calltitle">' + (tied ? 'Level on the god shot'
+      : 'Basket ' + godTop.key + ' for the god shot') + '</p>' +
+    '<p>' + lines.join('. ') + '.' +
+    (split ? ' Value points the other way, so this is a real trade-off between one big pull and ' +
+      'steadier return.' : '') + '</p></div>'
+}
+function render() {
+  var P = cardPrices()
+  renderTiles(P)
+  renderLadder(P)
+  renderVerdict(KEYS.map(function (k) { return renderBasket(k, P) }))
+}
+document.addEventListener('DOMContentLoaded', function () {
+  drawPicks()
+  var f = document.getElementById('filler')
+  f.addEventListener('input', function () {
+    fillerShare = Math.min(1, Math.max(0, (parseFloat(f.value) || 0) / 100))
+    if (DATA) render()
+  })
+  document.getElementById('baskets').addEventListener('input', function (e) {
+    if (e.target.matches('input') && DATA) render()
+  })
+})
+`
+
 const PAGES = [
   {
     // The prize ledger joins the overview: what the game has actually paid
@@ -1938,6 +2208,38 @@ const PAGES = [
   <div class="section-head"><h2>Where these numbers come from</h2><span class="section-meta">recorded, not reported</span></div>
   <div id="verify"></div>`,
     script: SEASONBAR_JS + PAYS_JS,
+  },
+  {
+    // The one page that answers a question before money changes hands rather
+    // than after. Pack odds are published by the game; what a pull is actually
+    // worth is not, and that half comes from our own sale medians.
+    file: 'packs.html', section: 'market',
+    share: 'What a card pack in The Syndicate is really worth, priced against what capos actually sell for.',
+    title: 'Which pack is worth buying? &middot; The Syndicate &middot; ' + SITE,
+    heading: 'Packs',
+    eyebrow: 'The Syndicate &middot; what a pull is worth',
+    description: 'Pack odds for The Syndicate priced against real sale data: the chance of a god ' +
+      'per card, expected value per tier, and a basket builder to compare what to buy.',
+    body: `<div class="tiles" id="tiles"></div>
+  <div class="section-head"><h2>The ladder</h2><span class="section-meta">every tier, priced against real sales</span></div>
+  <div id="ladder"></div>
+  <p class="basis">The game publishes the chance a whole three-card pack holds at least one of a
+  rarity. <b>Per card</b> is that inverted into the odds for a single card, which is what actually
+  governs a pack holding two legendaries. <b>Value</b> counts every card in the pack, not just the
+  best one, priced at the median sale for its rarity.</p>
+  <div class="section-head"><h2>Build a basket</h2><span class="section-meta">up to three piles, side by side</span></div>
+  <div class="controls">
+    <label class="fillerctl" for="filler">Filler slots
+      <input id="filler" type="number" min="0" max="100" step="5" value="0">
+      <span>% of the guaranteed rarity</span></label>
+  </div>
+  <p class="basis">One number per tier cannot be derived: when a non-guaranteed slot lands at or
+  below the pack's guaranteed rarity, is it that rarity or something worthless? At 0% every such
+  slot is a common, which cannot be sold at all. Zero is the honest default, because the docs say a
+  Rookie still turns up commons and uncommons. Everything else on this page is derived.</p>
+  <div class="baskets" id="baskets"></div>
+  <div id="verdict"></div>`,
+    script: PACKS_JS,
   },
   {
     // Two files: the RACKET economy this page has always covered, and the prize

@@ -15,7 +15,7 @@ import zlib from 'node:zlib'
 import path from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { fileURLToPath } from 'node:url'
-import { SOL_SALES } from './valuation.js'
+import { SOL_SALES, buildCompTable, effectiveRarityPrice } from './valuation.js'
 import { buildAgeResolver } from './age.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -1027,7 +1027,29 @@ write('wars', { ...w, gear: c.gear })
 // `sales`, not `market`: trainers.json is fetched onto the same page and already
 // owns a `market` key describing the hiring market. Two different markets under
 // one name would have silently shadowed each other at merge time.
-write('market', { generated_at, sales: market, liquidity, trait_price: c.trait_price })
+/**
+ * The same comparable prices the player profiles value portfolios with.
+ *
+ * Published here so the pack calculator prices a pull off exactly the number a
+ * profile prices a holding with. The 7-day medians beside it are thinner: god
+ * turned over 5 times last week against 7 in thirty days, and a calculator
+ * resting on five sales would swing wildly week to week.
+ */
+const comps = buildCompTable(db)
+const compPrices = {}
+for (const rarity of new Set([...Object.keys(comps.rarity), ...Object.keys(comps.rarityWide)])) {
+  const q = effectiveRarityPrice(comps, rarity)
+  compPrices[rarity] = {
+    median_sol: q.lamports == null ? null : +(q.lamports / 1e9).toFixed(4),
+    sales: q.n,
+    basis: q.basis,
+  }
+}
+
+write('market', {
+  generated_at, sales: market, liquidity, trait_price: c.trait_price,
+  comps: { window_days: comps.window_days, wide_window_days: comps.wide_window_days, by_rarity: compPrices },
+})
 // The growth page is gone. Its supply and ownership blocks belong with the
 // capos they describe, and its player blocks with the players. growth.json is
 // still written because build-players.js reads its `players` block at build

@@ -318,6 +318,55 @@ h3 {
   max-width: 68ch;
 }
 
+/* ---- the packs calculator ---- */
+/* Two text columns and six numbers is wider than any other table here, so it
+   gets its own template rather than bending the shared nine-column one. */
+@media (min-width: 46rem) {
+  .ledger[data-cols="9"] .row {
+    grid-template-columns: 2.25rem minmax(6rem, 1fr) 4.5rem 6rem 6rem 5rem 6.5rem 5.5rem 4.5rem;
+  }
+}
+.fillerctl {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-family: var(--mono); font-size: var(--step--1); color: var(--ink-muted);
+}
+.fillerctl input {
+  background: var(--band); border: 1px solid var(--rule-firm); color: var(--accent);
+  font-family: var(--mono); font-size: var(--step-0); padding: 0.25rem 0.5rem;
+  width: 4.5rem; text-align: right; font-variant-numeric: tabular-nums;
+}
+.fillerctl span { color: var(--ink-faint); }
+.baskets {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+  margin-top: var(--space-4);
+}
+.basket { background: var(--surface); padding: var(--pad); display: flex; flex-direction: column; gap: var(--space-3); }
+/* The winner is marked with a rail rather than a fill, so the three panels keep
+   the same weight and only one edge changes. */
+.basket.win { background: var(--band); box-shadow: inset 3px 0 0 var(--accent); }
+.basket h3 { margin: 0; font-family: var(--display); font-size: var(--step-1); text-transform: uppercase; letter-spacing: 0.04em; }
+.bhead { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2); }
+.bcost { font-family: var(--mono); font-size: var(--step--1); color: var(--accent); text-align: right; font-variant-numeric: tabular-nums; }
+.bcost .sub { display: block; color: var(--ink-faint); }
+.picks { display: grid; gap: 0.2rem; }
+.pick { display: grid; grid-template-columns: 1fr 4.4rem; align-items: center; gap: var(--space-3); }
+.pick label { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-muted); }
+.pick label small { color: var(--ink-faint); }
+.pick input {
+  background: var(--band); border: 1px solid var(--rule-firm); color: var(--accent);
+  font-family: var(--mono); font-size: var(--step-0); padding: 0.25rem 0.5rem;
+  width: 100%; text-align: right; font-variant-numeric: tabular-nums;
+}
+.pick input:focus-visible, .fillerctl input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bout { border-top: 1px solid var(--rule); padding-top: var(--space-3); display: grid; gap: var(--space-2); }
+.bout .stat { display: flex; justify-content: space-between; gap: var(--space-3); font-family: var(--mono); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+.bout .stat span:first-child { color: var(--ink-faint); }
+.bout .stat.big { font-size: var(--step-0); }
+.callout { border: 1px solid var(--accent-deep); background: var(--surface); padding: var(--pad); margin-top: var(--space-4); }
+.calltitle { font-family: var(--display); font-size: var(--step-2); text-transform: uppercase; color: var(--accent-bright); margin: 0 0 var(--space-2); }
+.callout p { margin: 0; color: var(--ink-muted); max-width: 66ch; }
+
 /* Window disclosure: the actual coverage, never the requested period. */
 .window-note {
   font-family: var(--mono);
@@ -1297,6 +1346,7 @@ export const NAV = [
   { href: '/wars.html', label: 'Wars' },
   { href: '/capos.html', label: 'Capos' },
   { href: '/market.html', label: 'Market' },
+  { href: '/packs.html', label: 'Packs' },
   { href: '/money.html', label: 'Economy' },
   // Last, and named as a question, because it is the one page addressed to
   // someone who does not play rather than to the regulars.
