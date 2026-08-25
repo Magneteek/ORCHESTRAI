@@ -1903,15 +1903,37 @@ const PACKS_JS = String.raw`
  * docs say a Rookie still turns up commons and uncommons, which are never
  * minted and cannot be sold at all.
  */
-var ORDER = ['rare', 'epic', 'legendary', 'god']
+var ORDER = ['none', 'rare', 'epic', 'legendary', 'god']
+/**
+ * Straight from the game's own pack screens, not the docs site.
+ *
+ * The docs and the store disagreed, and the store is what people actually buy
+ * from. Don was the worst of it: the docs said 35% legendary and 1% god, the
+ * store says 50% and 2%, which moved Don from the worst value on the ladder to
+ * the middle of it.
+ *
+ * guar  the floor on the guaranteed card
+ * floor the floor on the other two, which the store states and the docs never did
+ * pub   chance the PACK holds at least one of that rarity. Confirmed rather than
+ *       assumed: every "~1 in N packs" the store prints equals 1/P, across all
+ *       eleven of them.
+ * boost one roll per pack; if it hits, every card in it starts with better stats.
+ */
 var PACKS = [
-  { name: 'RACKET pack', usd: null, guar: null, pub: {}, note: '2,500 $R+' },
-  { name: 'Rookie', usd: 5, guar: 'rare', pub: { epic: 0.03, legendary: 0.002, god: 0.0005 } },
-  { name: 'Made-Man', usd: 15, guar: 'rare', pub: { epic: 0.20, legendary: 0.004, god: 0.002 } },
-  { name: 'Boss', usd: 50, guar: 'epic', pub: { legendary: 0.08, god: 0.0075 } },
-  { name: 'Don', usd: 150, guar: 'epic', pub: { legendary: 0.35, god: 0.01 } },
-  { name: 'Signature', usd: 300, guar: 'legendary', pub: { god: 0.10 }, half: true }
+  { name: 'RACKET pack', usd: 2, guar: 'none', floor: 'none', pub: {},
+    note: '$R, or $2', rolls: '70% common, 30% uncommon, each card' },
+  { name: 'Rookie', usd: 4.99, cb: 100, guar: 'rare', floor: 'none',
+    pub: { epic: 0.03, legendary: 0.002, god: 0.0006 }, boost: [0.10, 0.05] },
+  { name: 'Made-Man', usd: 14.99, cb: 300, guar: 'rare', floor: 'rare',
+    pub: { epic: 0.25, legendary: 0.004, god: 0.002 }, boost: [0.10, 0.05] },
+  { name: 'Boss', usd: 49.99, cb: 1000, guar: 'epic', floor: 'rare',
+    pub: { legendary: 0.08, god: 0.0075 }, boost: [0.10, 0.05] },
+  { name: 'Don', usd: 149.99, cb: 3000, guar: 'epic', floor: 'epic',
+    pub: { legendary: 0.50, god: 0.02 }, boost: [0.20, 0.10] },
+  { name: 'Signature', usd: 299, cb: 3000, guar: 'legendary', floor: 'epic',
+    pub: { god: 0.10 }, boost: [0.40, 0.20], half: true, list: 500 },
 ]
+var perSlot = function (p) { return 1 - Math.pow(1 - p, 1 / 3) }
 var BUYABLE = PACKS.filter(function (p) { return p.usd !== null })
 var KEYS = ['A', 'B', 'C']
 var BASKETS = {
@@ -1923,6 +1945,12 @@ var fillerShare = 0
 var perSlot = function (p) { return 1 - Math.pow(1 - p, 1 / 3) }
 var pctf = function (n) { return (n * 100).toFixed(n < 0.01 ? 2 : 1) + '%' }
 var num = function (n) { return Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }) }
+// $4.99 is not $5, and a page about whether something is worth buying should not
+// round the price it is judging.
+var money = function (n) {
+  return '$' + Number(n).toLocaleString('en-US',
+    { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })
+}
 // Local, not shared: cap1 lives inside the wars page script and is undefined here.
 var capr = function (v) { return v == null ? '-' : String(v).charAt(0).toUpperCase() + String(v).slice(1) }
 
@@ -1931,24 +1959,48 @@ function cardPrices() {
   var by = (DATA.comps && DATA.comps.by_rarity) || {}
   var out = { rare: 0, epic: 0, legendary: 0, god: 0 }
   for (var r in out) if (by[r] && by[r].median_sol != null) out[r] = by[r].median_sol
+  // Common and uncommon are never minted on chain, so they cannot be sold and
+  // are worth exactly nothing. That is the floor Rookie's spare cards sit on.
+  out.none = 0
   return out
 }
-/** Expected value of one pack, in SOL. Counts every card, not just the best. */
+/**
+ * Expected value of one pack, in SOL, counting all three cards.
+ *
+ * Each card is worth its floor unless it rolls higher. The store states both
+ * floors, so for four of the five tiers there is nothing left to assume: a Don
+ * is three epics or better, a Made-Man three rares or better. Only Rookie leaves
+ * a gap, since its other two cards may be common or uncommon and neither is
+ * minted on chain, so neither can be sold at all.
+ */
 function packEv(p, P) {
-  if (p.usd === null) return 0
-  var above = ORDER.slice(ORDER.indexOf(p.guar) + 1)
+  var pubR = []
+  for (var k = 0; k < ORDER.length; k++) if (p.pub[ORDER[k]] != null) pubR.push(ORDER[k])
   var d = {}
-  for (var i = 0; i < above.length; i++) d[above[i]] = perSlot(p.pub[above[i]] || 0)
+  for (var i = 0; i < pubR.length; i++) d[pubR[i]] = perSlot(p.pub[pubR[i]])
   var exact = function (r) {
-    var j = above.indexOf(r), nxt = above[j + 1]
-    return d[r] - (nxt ? d[nxt] : 0)
+    var j = pubR.indexOf(r), nx = pubR[j + 1]
+    return d[r] - (nx ? d[nx] : 0)
   }
-  var upside = 0
-  for (var k = 0; k < above.length; k++) upside += exact(above[k]) * P[above[k]]
-  var pAbove = above.length ? d[above[0]] : 0
-  var slot1 = (1 - pAbove) * P[p.guar] + upside
-  var free = (1 - pAbove) * P[p.guar] * fillerShare + upside
-  return slot1 + 2 * free
+  var card = function (floor) {
+    var v = 0, above = 0
+    for (var m = 0; m < pubR.length; m++) {
+      var r = pubR[m]
+      if (ORDER.indexOf(r) <= ORDER.indexOf(floor)) continue
+      v += exact(r) * P[r]; above += exact(r)
+    }
+    // Rookie's two spare cards are the only ones the store does not floor, so
+    // they are the only place the filler figure applies.
+    var base = floor === 'none' ? P.rare * fillerShare : P[floor]
+    return v + (1 - above) * base
+  }
+  return card(p.guar) + 2 * card(p.floor)
+}
+/** Cash you would expect to spend at this tier before one god turns up. */
+function godCost(p) {
+  var r = solPerUsd()
+  if (!p.pub.god || r == null) return null
+  return (p.usd / p.pub.god) * r
 }
 var solPerUsd = function () { return window.SOL_USD ? 1 / window.SOL_USD : null }
 /** A pack's price expressed in SOL, so EV and price compare in one unit. */
@@ -1958,7 +2010,7 @@ function renderTiles(P) {
   var best = null, worst = null
   for (var i = 0; i < BUYABLE.length; i++) {
     var p = BUYABLE[i], s = packSol(p)
-    if (s == null || !s) continue
+    if (s == null || !s || !p.pub.god) continue
     var ratio = packEv(p, P) / s
     if (!best || ratio > best.r) best = { p: p, r: ratio }
     if (!worst || ratio < worst.r) worst = { p: p, r: ratio }
@@ -1995,7 +2047,10 @@ function renderLadder(P) {
     var sol = packSol(p), e = packEv(p, P)
     var ratio = (sol && p.usd !== null) ? e / sol : null
     rows.push({ p: p, e: e, ratio: ratio })
-    if (ratio != null) rates.push(ratio)
+    // The RACKET pack is left out of best/worst: it is bought with in-game
+    // currency for play, and ranking it against cash tiers on resale value is a
+    // comparison it was never in.
+    if (ratio != null && p.pub.god != null) rates.push(ratio)
   }
   var hi = Math.max.apply(null, rates), lo = Math.min.apply(null, rates)
   var line = function (k, v) {
@@ -2006,22 +2061,30 @@ function renderLadder(P) {
     if (p.usd === null) {
       return '<div class="packcard dim">' +
         '<div class="pname"><b>' + esc(p.name) + '</b>' +
-        '<span class="price">' + esc(p.note) + '<span>in-game currency</span></span></div>' +
-        line('Rolls', 'Common and uncommon') +
-        line('Sellable on chain', 'Neither is minted') +
-        '<div class="packback"><span class="lbl">Back per $1</span><b>&mdash;</b></div></div>'
+        '<span class="price">' + esc(p.note) + '<span>3 cards</span></span></div>' +
+        line('Every card', esc(p.rolls)) +
+        line('Sellable on chain', 'Neither rarity is minted') +
+        line('Packs for a god', 'Never') +
+        '<div class="packback"><span class="lbl">Back per $1</span><b>0.00</b></div></div>'
     }
-    var tag = r.ratio === hi ? '<span class="tag pos">best value</span>'
+    var tag = !p.pub.god ? ''
+            : r.ratio === hi ? '<span class="tag pos">best value</span>'
             : r.ratio === lo ? '<span class="tag neg">worst value</span>' : ''
-    var cb = p.half ? num(p.usd * 0.5 * 20) + ' contraband, half off'
-                    : num(p.usd * 20) + ' contraband'
+    var cb = !p.cb ? 'bought with $R'
+           : p.half ? num(p.cb) + ' contraband, half off'
+           : num(p.cb) + ' contraband'
     return '<div class="packcard">' +
       '<div class="pname"><b>' + esc(p.name) + '</b>' +
-      '<span class="price">$' + num(p.usd) + '<span>' + cb + '</span></span></div>' +
+      '<span class="price">' + money(p.usd) + '<span>' + cb + '</span></span></div>' +
       line('Guarantees', capr(p.guar)) +
-      line('God, per card', pctf(perSlot(p.pub.god || 0))) +
+      line('Other two cards', p.floor === 'none' ? 'Common or uncommon' : capr(p.floor) + ' or better') +
       line('God, per pack', pctf(packChance(p, 'god'))) +
+      line('Packs for a god', p.pub.god
+        ? num(Math.round(1 / p.pub.god)) + '  <span class="sub">' + solAmount(godCost(p), { bare: true }) + '</span>'
+        : '&mdash;') +
       line('Legendary, per pack', pctf(packChance(p, 'legendary'))) +
+      line('Boosted stats', p.boost
+        ? pctf(p.boost[0]) + ' / ' + pctf(p.boost[1]) + ' double' : '&mdash;') +
       line('Value of the pack', solAmount(r.e, { bare: true })) +
       '<div class="packback"><span class="lbl">Back per $1</span>' +
       '<span>' + tag + ' <b class="' + (r.ratio === hi ? 'pos' : r.ratio === lo ? 'neg' : '') + '">' +
@@ -2227,31 +2290,29 @@ const PAGES = [
     body: `<div class="tiles" id="tiles"></div>
   <div class="section-head"><h2>Plan the spend</h2><span class="section-meta">up to three piles, side by side</span></div>
   <div class="controls">
-    <label class="fillerctl" for="filler">Filler slots
+    <label class="fillerctl" for="filler">Rookie spare cards
       <input id="filler" type="number" min="0" max="100" step="5" value="0">
-      <span>% of the guaranteed rarity</span></label>
+      <span>% as often rare as worthless</span></label>
   </div>
   <div class="baskets" id="baskets"></div>
   <div id="verdict"></div>
-  <p class="basis">One number per tier cannot be derived: when a non-guaranteed slot lands at or
-  below the pack's guaranteed rarity, is it that rarity or something worthless? At 0% every such
-  slot is a common, which cannot be sold at all. Zero is the honest default, because the docs say a
-  Rookie still turns up commons and uncommons. Everything else is either published by the game or
-  derived from what it publishes.</p>
+  <p class="basis">Only Rookie leaves anything to assume. Every other tier floors all three cards at
+  a rarity that can be sold, so their value needs no guesswork: a Don is three epics or better, a
+  Made-Man three rares or better. Rookie's two spare cards may be common or uncommon, and neither is
+  minted on chain, so at 0% they are worth nothing. That is the honest default and makes Rookie's
+  figure a floor rather than an estimate.</p>
   <div class="section-head"><h2>Every tier</h2><span class="section-meta">priced against real sales</span></div>
   <div class="packgrid" id="ladder"></div>
-  <p class="basis">The game publishes the chance a whole three-card pack holds at least one of a
-  rarity. <b>Per card</b> is that inverted into the odds for a single card, which is what actually
-  governs a pack holding two legendaries. <b>Value</b> counts every card in the pack, not just the
-  best one, priced at the median sale for its rarity. Cash and contraband prices, and both pack
-  figures, are the game's own published numbers.</p>
-  <p class="basis">The per-card figure rests on one reading: the docs say a pack guarantees its
-  rarity "or better", so the guaranteed slot is treated as able to roll up like the other two. If
-  it is instead fixed at exactly the guaranteed rarity, the true per-card odds are about half again
-  as high. Value barely moves either way, by under 1.5%, and the pack figures do not move at all
-  because they are published rather than derived. Signature is priced at its current $300 rather
-  than its $500 list. Daily supply caps are real and not modelled here: four Signature packs a day,
-  twenty Dons, and a limited slice of each tier redeemable with contraband.</p>`,
+  <p class="basis">Odds and prices are read off the game's own pack screens rather than its docs
+  site, which disagreed with them. <b>Packs for a god</b> is one divided by the god chance, and
+  matches the "~1 in N packs" the store prints on all eleven of its figures. <b>Value</b> counts all
+  three cards at the median sale for their rarity, not just the best one. <b>Boosted stats</b> is a
+  single roll per pack that lifts every card in it, and is real value this page does not attempt to
+  price, so every tier is worth a little more than it says here, Signature most of all at 40%.</p>
+  <p class="basis">Signature is priced at its current $299 promotion rather than its $500 list, so
+  this goes stale if that ends. Daily supply caps are real and not modelled: four Signature packs a
+  day, twenty Dons, and a limited slice of each tier redeemable with contraband, which bounds how
+  fast any basket here can actually be bought.</p>`,
     script: PACKS_JS,
   },
   {
