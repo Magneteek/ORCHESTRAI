@@ -14,7 +14,7 @@
 #                    because Vercel's free tier capped deployments per day;
 #                    the droplet has no such ceiling, and a rebuild costs 44s
 #                    of CPU, so ten minutes is about 7% of the single core.
-#   rewards  1h      on-chain prize and bounty watch over public RPC
+#   rewards  :20     on-chain prize and bounty watch over public RPC
 #   verify   09:00   archive gap check
 #   offload  03:30   push cold raw feeds to the Space and reclaim local disk
 #
@@ -67,7 +67,11 @@ JOBS=(
   # of a day. One extra 4.8MB snapshot daily, about 1.7GB a year.
   "seasonclose|Capo production, just before the season boundary|$NODE_BIN --no-warnings ingest/snapshot.js --endpoint capos_production|*-*-* 18:50:00"
   "derive|Rebuild derived layer and site|/bin/bash derive/refresh.sh|every:600"
-  "rewards|On-chain prize and bounty watch|$NODE_BIN --no-warnings ingest/rewards-watch.js --watch|every:3600"
+  # OnCalendar, not every:3600. An interval timer is armed only by the previous
+  # run: stop it once -- to sweep by hand, say -- and it never re-arms itself,
+  # which is exactly how the season 12 prize payout went unread for a day. A
+  # calendar timer with Persistent=true cannot be left disarmed that way.
+  "rewards|On-chain prize and bounty watch|$NODE_BIN --no-warnings ingest/rewards-watch.js --watch|*-*-* *:20:00"
   "verify|Archive gap check|$NODE_BIN --no-warnings ingest/verify.js|*-*-* 09:00:00"
   "offload|Move the cold raw archive to object storage|/bin/bash ingest/archive-offload.sh|*-*-* 03:30:00"
 )
