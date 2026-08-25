@@ -1923,6 +1923,8 @@ var fillerShare = 0
 var perSlot = function (p) { return 1 - Math.pow(1 - p, 1 / 3) }
 var pctf = function (n) { return (n * 100).toFixed(n < 0.01 ? 2 : 1) + '%' }
 var num = function (n) { return Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }) }
+// Local, not shared: cap1 lives inside the wars page script and is undefined here.
+var capr = function (v) { return v == null ? '-' : String(v).charAt(0).toUpperCase() + String(v).slice(1) }
 
 /** Card prices in SOL, from the same comps the player profiles value holdings with. */
 function cardPrices() {
@@ -1990,45 +1992,41 @@ function renderLadder(P) {
   var rows = [], rates = []
   for (var i = 0; i < PACKS.length; i++) {
     var p = PACKS[i]
-    var s = packSol(p), e = packEv(p, P)
-    var ratio = (s && p.usd !== null) ? e / s : null
+    var sol = packSol(p), e = packEv(p, P)
+    var ratio = (sol && p.usd !== null) ? e / sol : null
     rows.push({ p: p, e: e, ratio: ratio })
     if (ratio != null) rates.push(ratio)
   }
   var hi = Math.max.apply(null, rates), lo = Math.min.apply(null, rates)
-  var head = '<div class="row head"><span></span>' +
-    '<span>Pack</span><span class="num">Cash</span><span class="num">Contraband</span>' +
-    '<span class="num">Per card: god</span><span class="num">Pack: god</span>' +
-    '<span class="num">Pack: legendary</span><span class="num">Value</span>' +
-    '<span class="num">Per $1</span></div>'
-  var body = rows.map(function (r, i) {
+  var line = function (k, v) {
+    return '<div class="packrow"><span>' + k + '</span><span>' + v + '</span></div>'
+  }
+  document.getElementById('ladder').innerHTML = rows.map(function (r) {
     var p = r.p
     if (p.usd === null) {
-      return '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
-        '<span class="name">' + esc(p.name) + '</span>' +
-        '<span class="extra"><span class="num">' + esc(p.note) + '</span>' +
-        '<span class="num">-</span><span class="num">-</span><span class="num">-</span>' +
-        '<span class="num">-</span><span class="num">-</span>' +
-        '<span class="num sub">common and uncommon only</span></span></div>'
+      return '<div class="packcard dim">' +
+        '<div class="pname"><b>' + esc(p.name) + '</b>' +
+        '<span class="price">' + esc(p.note) + '<span>in-game currency</span></span></div>' +
+        line('Rolls', 'Common and uncommon') +
+        line('Sellable on chain', 'Neither is minted') +
+        '<div class="packback"><span class="lbl">Back per $1</span><b>&mdash;</b></div></div>'
     }
-    var cb = p.half ? num(p.usd * 0.5 * 20) + ' <span class="sub">half off</span>' : num(p.usd * 20)
-    var cls = r.ratio === hi ? ' pos' : r.ratio === lo ? ' neg' : ''
-    return '<div class="row"><span class="rank">' + (i + 1) + '</span>' +
-      '<span class="name">' + esc(p.name) + '</span>' +
-      '<span class="extra">' +
-      '<span class="num"><span class="cell-label">Cash</span>$' + num(p.usd) + '</span>' +
-      '<span class="num"><span class="cell-label">Contraband</span>' + cb + '</span>' +
-      '<span class="num"><span class="cell-label">Per card: god</span>' + pctf(perSlot(p.pub.god || 0)) + '</span>' +
-      '<span class="num"><span class="cell-label">Pack: god</span>' + pctf(p.pub.god || 0) + '</span>' +
-      '<span class="num"><span class="cell-label">Pack: legendary</span>' +
-        pctf(packChance(p, 'legendary')) + '</span>' +
-      '<span class="num"><span class="cell-label">Value</span>' + solAmount(r.e, { bare: true }) + '</span>' +
-      '<span class="num' + cls + '"><span class="cell-label">Per $1</span>' +
-        (r.ratio == null ? '-' : r.ratio.toFixed(2)) + '</span>' +
-      '</span></div>'
+    var tag = r.ratio === hi ? '<span class="tag pos">best value</span>'
+            : r.ratio === lo ? '<span class="tag neg">worst value</span>' : ''
+    var cb = p.half ? num(p.usd * 0.5 * 20) + ' contraband, half off'
+                    : num(p.usd * 20) + ' contraband'
+    return '<div class="packcard">' +
+      '<div class="pname"><b>' + esc(p.name) + '</b>' +
+      '<span class="price">$' + num(p.usd) + '<span>' + cb + '</span></span></div>' +
+      line('Guarantees', capr(p.guar)) +
+      line('God, per card', pctf(perSlot(p.pub.god || 0))) +
+      line('God, per pack', pctf(packChance(p, 'god'))) +
+      line('Legendary, per pack', pctf(packChance(p, 'legendary'))) +
+      line('Value of the pack', solAmount(r.e, { bare: true })) +
+      '<div class="packback"><span class="lbl">Back per $1</span>' +
+      '<span>' + tag + ' <b class="' + (r.ratio === hi ? 'pos' : r.ratio === lo ? 'neg' : '') + '">' +
+      (r.ratio == null ? '-' : r.ratio.toFixed(2)) + '</b></span></div></div>'
   }).join('')
-  document.getElementById('ladder').innerHTML =
-    '<div class="ledger" data-cols="9">' + head + body + '</div>'
 }
 
 function drawPicks() {
@@ -2174,6 +2172,16 @@ const PAGES = [
   <div class="section-head"><h2>What the game pays out</h2><span class="section-meta">real USD, on chain</span></div>
   <div id="c-seasonbar"></div>
   <div class="tiles" id="paidtiles"></div>
+  <div class="section-head"><h2>Before you spend</h2><span class="section-meta">the one page to read first</span></div>
+  <div class="toolcard">
+    <div>
+      <p class="q">Planning how to open your packs, or how to spend your contraband?</p>
+      <p>Pack odds priced against what capos actually sell for. Compare three baskets side by side
+      on the chance of a god, the chance of a legendary, and what comes back per dollar. Every tier
+      returns less than it costs, and the gap between best and worst is more than twofold.</p>
+    </div>
+    <a class="go" href="/packs.html">Open the pack planner &rarr;</a>
+  </div>
   <div class="section-head"><h2>Where to look</h2><span class="section-meta">the rest of the ledger</span></div>
   <div id="guide"></div>`,
     script: SEASONBAR_JS + OVERVIEW_JS,
@@ -2221,33 +2229,33 @@ const PAGES = [
     description: 'Pack odds for The Syndicate priced against real sale data: the chance of a god ' +
       'per card, expected value per tier, and a basket builder to compare what to buy.',
     body: `<div class="tiles" id="tiles"></div>
-  <div class="section-head"><h2>The ladder</h2><span class="section-meta">every tier, priced against real sales</span></div>
-  <div id="ladder"></div>
-  <p class="basis">The game publishes the chance a whole three-card pack holds at least one of a
-  rarity. <b>Per card</b> is that inverted into the odds for a single card, which is what actually
-  governs a pack holding two legendaries. <b>Value</b> counts every card in the pack, not just the
-  best one, priced at the median sale for its rarity. Cash and contraband prices, and both pack
-  columns, are the game's own published figures.</p>
-  <p class="basis">The per-card column rests on one reading: the docs say a pack guarantees its
-  rarity "or better", so the guaranteed slot is treated as able to roll up like the other two. If
-  it is instead fixed at exactly the guaranteed rarity, the true per-card odds are about half again
-  as high. Value barely moves either way, by under 1.5%, and the pack columns do not move at all
-  because they are published rather than derived. Signature is priced at its current $300 rather
-  than its $500 list. Daily supply caps are real and not modelled here: four Signature packs a day,
-  twenty Dons, and a limited slice of each tier redeemable with contraband.</p>
-  <div class="section-head"><h2>Build a basket</h2><span class="section-meta">up to three piles, side by side</span></div>
+  <div class="section-head"><h2>Plan the spend</h2><span class="section-meta">up to three piles, side by side</span></div>
   <div class="controls">
     <label class="fillerctl" for="filler">Filler slots
       <input id="filler" type="number" min="0" max="100" step="5" value="0">
       <span>% of the guaranteed rarity</span></label>
   </div>
+  <div class="baskets" id="baskets"></div>
+  <div id="verdict"></div>
   <p class="basis">One number per tier cannot be derived: when a non-guaranteed slot lands at or
   below the pack's guaranteed rarity, is it that rarity or something worthless? At 0% every such
   slot is a common, which cannot be sold at all. Zero is the honest default, because the docs say a
   Rookie still turns up commons and uncommons. Everything else is either published by the game or
   derived from what it publishes.</p>
-  <div class="baskets" id="baskets"></div>
-  <div id="verdict"></div>`,
+  <div class="section-head"><h2>Every tier</h2><span class="section-meta">priced against real sales</span></div>
+  <div class="packgrid" id="ladder"></div>
+  <p class="basis">The game publishes the chance a whole three-card pack holds at least one of a
+  rarity. <b>Per card</b> is that inverted into the odds for a single card, which is what actually
+  governs a pack holding two legendaries. <b>Value</b> counts every card in the pack, not just the
+  best one, priced at the median sale for its rarity. Cash and contraband prices, and both pack
+  figures, are the game's own published numbers.</p>
+  <p class="basis">The per-card figure rests on one reading: the docs say a pack guarantees its
+  rarity "or better", so the guaranteed slot is treated as able to roll up like the other two. If
+  it is instead fixed at exactly the guaranteed rarity, the true per-card odds are about half again
+  as high. Value barely moves either way, by under 1.5%, and the pack figures do not move at all
+  because they are published rather than derived. Signature is priced at its current $300 rather
+  than its $500 list. Daily supply caps are real and not modelled here: four Signature packs a day,
+  twenty Dons, and a limited slice of each tier redeemable with contraband.</p>`,
     script: PACKS_JS,
   },
   {

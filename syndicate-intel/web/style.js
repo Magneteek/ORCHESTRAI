@@ -319,6 +319,53 @@ h3 {
 }
 
 /* ---- the packs calculator ---- */
+/* Six tiers, so a fixed three-across grid lands as two clean rows rather than
+   the ragged wrap auto-fit would give. */
+.packgrid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+}
+@media (min-width: 58rem) { .packgrid { grid-template-columns: repeat(3, 1fr); } }
+.packcard { background: var(--surface); padding: var(--pad); display: flex; flex-direction: column; gap: var(--space-3); }
+.packcard.dim { color: var(--ink-faint); }
+.packcard .pname {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);
+  border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2);
+}
+.packcard .pname b {
+  font-family: var(--display); font-size: var(--step-1); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink);
+}
+.packcard .price { font-family: var(--mono); font-size: var(--step-0); color: var(--accent); text-align: right; }
+.packcard .price span { display: block; font-size: var(--step--2); color: var(--ink-faint); }
+.packrow { display: flex; justify-content: space-between; gap: var(--space-3); font-family: var(--mono); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+.packrow span:first-child { color: var(--ink-faint); }
+/* The number the page exists to compare. It gets the size and the colour; the
+   rows above it stay quiet so this is what the eye lands on. */
+.packback {
+  margin-top: auto; border-top: 1px solid var(--rule); padding-top: var(--space-3);
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);
+}
+.packback b { font-family: var(--mono); font-size: var(--step-2); font-variant-numeric: tabular-nums; }
+.packback .lbl { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.packback .tag { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* The overview's pointer at the calculator. */
+.toolcard {
+  border: 1px solid var(--accent-deep); background: var(--surface);
+  padding: var(--pad); display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: var(--space-4); margin-top: var(--space-4);
+}
+.toolcard .q { font-family: var(--display); font-size: var(--step-2); text-transform: uppercase; color: var(--accent-bright); margin: 0 0 var(--space-2); line-height: 1.15; }
+.toolcard p { margin: 0; color: var(--ink-muted); max-width: 54ch; font-size: var(--step--1); }
+.toolcard .go {
+  font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.08em;
+  text-transform: uppercase; border: 1px solid var(--rule-firm);
+  padding: 0.5rem 0.9rem; color: var(--accent); text-decoration: none; white-space: nowrap;
+}
+.toolcard .go:hover { border-color: var(--accent); color: var(--accent-bright); }
+
+
 /* Two text columns and six numbers is wider than any other table here, so it
    gets its own template rather than bending the shared nine-column one. */
 @media (min-width: 46rem) {
@@ -1342,11 +1389,13 @@ export const FOOTER = `<footer>
 
 export const NAV = [
   { href: '/', label: 'Overview' },
+  // Second, because it is the only page read BEFORE money changes hands. The
+  // rest explain what already happened.
+  { href: '/packs.html', label: 'Packs' },
   { href: '/players.html', label: 'Players' },
   { href: '/wars.html', label: 'Wars' },
   { href: '/capos.html', label: 'Capos' },
   { href: '/market.html', label: 'Market' },
-  { href: '/packs.html', label: 'Packs' },
   { href: '/money.html', label: 'Economy' },
   // Last, and named as a question, because it is the one page addressed to
   // someone who does not play rather than to the regulars.
