@@ -350,20 +350,41 @@ h3 {
 .packback .lbl { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
 .packback .tag { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em; text-transform: uppercase; }
 
-/* The overview's pointer at the calculator. */
-.toolcard {
-  border: 1px solid var(--accent-deep); background: var(--surface);
-  padding: var(--pad); display: flex; flex-wrap: wrap; align-items: center;
-  justify-content: space-between; gap: var(--space-4); margin-top: var(--space-4);
+/* The overview opens with the two things somebody actually arrives to do: look
+   up a player, or work out what to spend. Side by side, matching panels. */
+.topduo {
+  display: grid; grid-template-columns: 1fr; gap: var(--gap);
+  margin: var(--space-5) 0 0;
 }
-.toolcard .q { font-family: var(--display); font-size: var(--step-2); text-transform: uppercase; color: var(--accent-bright); margin: 0 0 var(--space-2); line-height: 1.15; }
-.toolcard p { margin: 0; color: var(--ink-muted); max-width: 54ch; font-size: var(--step--1); }
+@media (min-width: 46rem) { .topduo { grid-template-columns: 1fr 1fr; } }
+/* Both panels own their spacing through the grid, so the search panel drops the
+   top margin it carries when it stands alone. */
+.topduo > * { margin-top: 0; }
+.toolcard {
+  padding: var(--space-4);
+  border: 1px solid var(--accent-deep);
+  background: var(--surface);
+  display: flex; flex-direction: column; gap: var(--space-4);
+  text-decoration: none;
+  /* Not stretched. The search panel beside it grows tall the moment results
+     open, and a stretching card became a mostly-empty box with its button
+     stranded at the bottom of the screen. */
+  align-self: start;
+}
+.toolcard:hover { border-color: var(--accent); }
+.toolcard:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Mirrors .psearch-label exactly, so the two headings sit on one line. */
+.toolcard .q {
+  font-family: var(--display); font-size: var(--step-1); font-weight: 500;
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--accent);
+}
 .toolcard .go {
+  align-self: flex-start;
   font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.08em;
   text-transform: uppercase; border: 1px solid var(--rule-firm);
-  padding: 0.5rem 0.9rem; color: var(--accent); text-decoration: none; white-space: nowrap;
+  padding: var(--space-3) var(--space-4); color: var(--accent-bright);
 }
-.toolcard .go:hover { border-color: var(--accent); color: var(--accent-bright); }
+.toolcard:hover .go { border-color: var(--accent); }
 
 
 /* Two text columns and six numbers is wider than any other table here, so it

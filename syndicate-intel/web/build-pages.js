@@ -2159,12 +2159,18 @@ const PAGES = [
     eyebrow: 'The Syndicate &middot; kept by the community',
     description: 'Community-kept data for The Syndicate: what the game has paid out, ' +
       'who is winning, and live capo, combat and market figures. Unofficial, made by players.',
-    body: `<div class="psearch">
-    <label class="psearch-label" for="psearch">Look up a player</label>
-    <input id="psearch" type="search" placeholder="Type a player name"
-           autocomplete="off" aria-label="Look up a player by name">
-    <div class="presults" id="presults"></div>
-    <p class="psearch-note" id="psearch-note"></p>
+    body: `<div class="topduo">
+    <div class="psearch">
+      <label class="psearch-label" for="psearch">Look up a player</label>
+      <input id="psearch" type="search" placeholder="Type a player name"
+             autocomplete="off" aria-label="Look up a player by name">
+      <div class="presults" id="presults"></div>
+      <p class="psearch-note" id="psearch-note"></p>
+    </div>
+    <a class="toolcard" href="/packs.html">
+      <span class="q">Plan how to spend your contraband</span>
+      <span class="go">Open the pack planner &rarr;</span>
+    </a>
   </div>
   <div class="tiles" id="tiles"></div>
   <div class="section-head"><h2>Last 24 hours</h2><span class="section-meta">what moved today</span></div>
@@ -2172,16 +2178,6 @@ const PAGES = [
   <div class="section-head"><h2>What the game pays out</h2><span class="section-meta">real USD, on chain</span></div>
   <div id="c-seasonbar"></div>
   <div class="tiles" id="paidtiles"></div>
-  <div class="section-head"><h2>Before you spend</h2><span class="section-meta">the one page to read first</span></div>
-  <div class="toolcard">
-    <div>
-      <p class="q">Planning how to open your packs, or how to spend your contraband?</p>
-      <p>Pack odds priced against what capos actually sell for. Compare three baskets side by side
-      on the chance of a god, the chance of a legendary, and what comes back per dollar. Every tier
-      returns less than it costs, and the gap between best and worst is more than twofold.</p>
-    </div>
-    <a class="go" href="/packs.html">Open the pack planner &rarr;</a>
-  </div>
   <div class="section-head"><h2>Where to look</h2><span class="section-meta">the rest of the ledger</span></div>
   <div id="guide"></div>`,
     script: SEASONBAR_JS + OVERVIEW_JS,
