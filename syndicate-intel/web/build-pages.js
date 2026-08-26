@@ -1921,8 +1921,6 @@ var ORDER = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'god']
  * boost one roll per pack; if it hits, every card in it starts with better stats.
  */
 var PACKS = [
-  { name: 'RACKET pack', usd: 2, guar: null, note: '$R, or $2',
-    odds: { common: 70, uncommon: 30 } },
   { name: 'Rookie', usd: 4.99, cb: 100, guar: 'rare', boost: [0.10, 0.05],
     odds: { common: 46.86, uncommon: 20.08, rare: 32.05, epic: 0.94, legendary: 0.07, god: 0 } },
   { name: 'Made-Man', usd: 14.99, cb: 300, guar: 'rare', boost: [0.10, 0.05],
@@ -1976,9 +1974,9 @@ var contrabandCost = function (p) {
 var BUYABLE = PACKS.filter(function (p) { return p.usd !== null })
 var KEYS = ['A', 'B', 'C']
 var BASKETS = {
-  A: { 'RACKET pack': 0, Rookie: 0, 'Made-Man': 4, Classic: 0, Boss: 3, Don: 0, Signature: 0 },
-  B: { 'RACKET pack': 0, Rookie: 0, 'Made-Man': 0, Classic: 0, Boss: 0, Don: 0, Signature: 1 },
-  C: { 'RACKET pack': 0, Rookie: 30, 'Made-Man': 0, Classic: 0, Boss: 0, Don: 0, Signature: 0 }
+  A: { Rookie: 0, 'Made-Man': 4, Classic: 0, Boss: 3, Don: 0, Signature: 0 },
+  B: { Rookie: 0, 'Made-Man': 0, Classic: 0, Boss: 0, Don: 0, Signature: 1 },
+  C: { Rookie: 30, 'Made-Man': 0, Classic: 0, Boss: 0, Don: 0, Signature: 0 }
 }
 var perSlot = function (p) { return 1 - Math.pow(1 - p, 1 / 3) }
 var pctf = function (n) { return (n * 100).toFixed(n < 0.01 ? 2 : 1) + '%' }
@@ -2050,11 +2048,11 @@ function packSol(p) { var r = solPerUsd(); return r == null ? null : p.usd * r }
 /**
  * A pack belongs in the value ranking if it can produce a card worth anything.
  *
- * This used to test for a god chance, which quietly worked while every tier had
- * one. The new table gives Rookie 0% god, and testing on god would have dropped
- * the cheapest pack out of the ranking entirely rather than showing it. The
- * RACKET pack is the one that really does belong out: commons and uncommons are
- * never minted, so nothing in it can be sold.
+ * Every tier listed here does, now that the RACKET pack is off the page, so this
+ * is a guard rather than a filter. It stays because the test it replaced was a
+ * god chance, which worked only while every tier had one: Rookie's new 0% would
+ * have dropped the cheapest pack out of the ranking rather than showing it. A
+ * pack that cannot produce a sellable card should fall out here, not there.
  */
 function ranked(p) { return oddsAtLeast(p, 'rare') > 0 }
 function renderTiles(P) {
@@ -2103,11 +2101,8 @@ function renderLadder(P) {
   for (var i = 0; i < PACKS.length; i++) {
     var p = PACKS[i]
     var sol = packSol(p), e = packEv(p, P)
-    var ratio = (sol && p.usd !== null) ? e / sol : null
+    var ratio = sol ? e / sol : null
     rows.push({ p: p, e: e, ratio: ratio })
-    // The RACKET pack is left out of best/worst: it is bought with in-game
-    // currency for play, and ranking it against cash tiers on resale value is a
-    // comparison it was never in.
     if (ratio != null && ranked(p)) rates.push(ratio)
   }
   var hi = Math.max.apply(null, rates), lo = Math.min.apply(null, rates)
@@ -2116,21 +2111,11 @@ function renderLadder(P) {
   }
   document.getElementById('ladder').innerHTML = rows.map(function (r) {
     var p = r.p
-    if (p.usd === null) {
-      return '<div class="packcard dim">' +
-        '<div class="pname"><b>' + esc(p.name) + '</b>' +
-        '<span class="price">' + esc(p.note) + '<span>3 cards</span></span></div>' +
-        line('Every card', esc(p.rolls)) +
-        line('Sellable on chain', 'Neither rarity is minted') +
-        line('Packs for a god', 'Never') +
-        '<div class="packback"><span class="lbl">Back per $1</span><b>0.00</b></div></div>'
-    }
     var tag = !ranked(p) ? ''
             : r.ratio === hi ? '<span class="tag pos">best value</span>'
             : r.ratio === lo ? '<span class="tag neg">worst value</span>' : ''
     var cbv = contrabandCost(p)
     var cb = cbv === null ? 'contraband cost unpublished'
-           : !p.cb && !p.half ? 'bought with $R'
            : p.half ? num(cbv) + ' contraband, half off'
            : num(cbv) + ' contraband'
     return '<div class="packcard">' +

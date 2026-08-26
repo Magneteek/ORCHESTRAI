@@ -327,7 +327,6 @@ h3 {
 }
 @media (min-width: 58rem) { .packgrid { grid-template-columns: repeat(3, 1fr); } }
 .packcard { background: var(--surface); padding: var(--pad); display: flex; flex-direction: column; gap: var(--space-3); }
-.packcard.dim { color: var(--ink-faint); }
 .packcard .pname {
   display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);
   border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2);
