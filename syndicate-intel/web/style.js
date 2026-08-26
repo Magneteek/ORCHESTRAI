@@ -420,7 +420,7 @@ h3 {
   font-family: var(--mono); font-size: var(--step-0); padding: 0.25rem 0.5rem;
   width: 100%; text-align: right; font-variant-numeric: tabular-nums;
 }
-.pick input:focus-visible, .fillerctl input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pick input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .bout { border-top: 1px solid var(--rule); padding-top: var(--space-3); display: grid; gap: var(--space-2); }
 .bout .stat { display: flex; justify-content: space-between; gap: var(--space-3); font-family: var(--mono); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
 .bout .stat span:first-child { color: var(--ink-faint); }
