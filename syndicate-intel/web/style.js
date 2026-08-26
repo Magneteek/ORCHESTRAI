@@ -398,16 +398,6 @@ h3 {
     grid-template-columns: 2.25rem minmax(6rem, 1fr) 4.5rem 6rem 6rem 5rem 6.5rem 5.5rem 4.5rem;
   }
 }
-.fillerctl {
-  display: flex; align-items: center; gap: var(--space-2);
-  font-family: var(--mono); font-size: var(--step--1); color: var(--ink-muted);
-}
-.fillerctl input {
-  background: var(--band); border: 1px solid var(--rule-firm); color: var(--accent);
-  font-family: var(--mono); font-size: var(--step-0); padding: 0.25rem 0.5rem;
-  width: 4.5rem; text-align: right; font-variant-numeric: tabular-nums;
-}
-.fillerctl span { color: var(--ink-faint); }
 .baskets {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1px; background: var(--rule); border: 1px solid var(--rule);
