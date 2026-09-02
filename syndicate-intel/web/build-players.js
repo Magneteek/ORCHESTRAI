@@ -12,7 +12,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, PRICE_JS, PRICE_TICKER } from './style.js'
+import { CSS, NAV_CSS, navHtml, FONTS, SITE, metaHead, ANALYTICS, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, PRICE_JS, PRICE_TICKER } from './style.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -1615,6 +1615,7 @@ function main() {
 <title>${TITLE}</title>
 <meta name="description" content="${DESCRIPTION}">${robots}
 ${metaHead({ title: TITLE, description: DESCRIPTION, path: '/players.html' })}
+${ANALYTICS}
 ${FONTS}
 <style>${CSS}${NAV_CSS}${PAGE_CSS}</style>
 </head>

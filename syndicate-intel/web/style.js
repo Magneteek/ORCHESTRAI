@@ -52,6 +52,37 @@ export const metaHead = ({ title, description, path = '/' }) => {
 }
 
 /**
+ * Google Analytics (GA4), on the live domain only.
+ *
+ * Every builder writes the same files to web/dist/site, and web/preview.sh
+ * serves that directory from localhost, so a plain tag would count our own
+ * build checks as visits. On a site this small that is not noise, it is most
+ * of the number. The hostname test is the only thing separating a real visit
+ * from a preview, because the built HTML is byte-identical either way.
+ *
+ * The loader is injected rather than written as a script tag so the guard can
+ * wrap it: a static async src fetches gtag.js on localhost too, which both
+ * loads a tracker we do not want there and reaches out to Google on a page
+ * being previewed offline.
+ */
+export const GA_ID = 'G-8PMZKHQQLL'
+
+export const ANALYTICS = String.raw`<script>
+(function () {
+  const h = location.hostname
+  if (h !== 'capowatch.com' && !h.endsWith('.capowatch.com')) return
+  window.dataLayer = window.dataLayer || []
+  window.gtag = function () { dataLayer.push(arguments) }
+  gtag('js', new Date())
+  gtag('config', '${GA_ID}')
+  const s = document.createElement('script')
+  s.async = true
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID}'
+  document.head.appendChild(s)
+})()
+</script>`
+
+/**
  * The three faces the game itself uses. Its display face is proprietary, so
  * Oswald - already part of the game's own stack - carries the headings.
  * display=swap so text paints immediately in the fallback rather than waiting.

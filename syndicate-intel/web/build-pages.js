@@ -14,7 +14,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, SITE_URL, PRICE_JS, PRICE_TICKER } from './style.js'
+import { CSS, NAV_CSS, FONTS, navHtml, SITE, metaHead, ANALYTICS, STAMP_JS, FOOTER, REVEAL_JS, REFERRAL, shareBar, SITE_URL, PRICE_JS, PRICE_TICKER } from './style.js'
 import { CHART_CSS, CHART_JS } from './charts.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -140,6 +140,7 @@ function page({ file, title, description, heading, eyebrow, section, body, scrip
 <title>${title}</title>
 <meta name="description" content="${description}">${robots}
 ${metaHead({ title, description, path: href })}
+${ANALYTICS}
 ${FONTS}
 <style>${CSS}${NAV_CSS}${CHART_CSS}${SHELL_CSS}${CALC_CSS}</style>
 </head>
