@@ -2479,10 +2479,11 @@ function pwBuild() {
     '<div>' + PW_SLOTS.map((s) => slotRow(s[0], s[1])).join('') + '</div>' +
     '<div class="section-head"><h2>The district</h2><span class="section-meta">and the defensive bonuses in play</span></div>' +
     '<div class="calc calc-ground">' +
+      pwSelect('pw-role', 'This capo is',
+        [['attack', 'Attacking this district'], ['defend', 'Holding it']], 'attack') +
       pwSelect('pw-district', 'District type', districtOpts, 'racket_hub') +
       pwSelect('pw-league', 'League', leagueOpts, 'street') +
-      pwSelect('pw-shield', 'Shield', [['0', 'No'], ['0.15', 'Yes (+15%)']], '0') +
-      pwSelect('pw-safe', 'Safe House bonus', [['0', 'No'], ['0.20', 'Yes (+20%)']], '0') +
+      pwSelect('pw-shield', 'Shield on the district', [['0', 'No'], ['0.15', 'Yes (+15%)']], '0') +
       pwSelect('pw-caps', 'Rarity stat caps',
         [['0', 'Not applied (current game)'], ['1', 'Applied (as documented)']], '0') +
     '</div>' +
@@ -2545,8 +2546,19 @@ function pwRecalc() {
   }
 
   const finesse = parseFloat(pwVal('pw-finesse')) || 0
-  const shield = parseFloat(pwVal('pw-shield')) || 0
-  const safe = parseFloat(pwVal('pw-safe')) || 0
+  /* Both defensive bonuses lift the score of whoever HOLDS the district and do
+     nothing whatsoever for an attacker, so they are gated on the role rather
+     than offered as free multipliers. Ungated, picking a shield raised the
+     attacker's own score, which is backwards.
+
+     The Safe House +20% is not a choice at all: it is that district type's own
+     bonus, so it follows the district dropdown. As its own dropdown it allowed
+     a Racket Hub carrying a Safe House bonus, which cannot happen in the game. */
+  const defending = pwVal('pw-role') === 'defend'
+  const shieldEl = pwEl('pw-shield')
+  if (shieldEl) shieldEl.disabled = !defending
+  const shield = defending ? (parseFloat(pwVal('pw-shield')) || 0) : 0
+  const safe = defending && pwVal('pw-district') === 'safe_house' ? 0.2 : 0
   // Finesse is a share of the weighted score added at the very end, so it is
   // not scaled by the shield or the Safe House the way the rest of the score is.
   const finesseBonus = weighted * 0.005 * finesse
@@ -2558,7 +2570,8 @@ function pwRecalc() {
 
   out.innerHTML =
     '<span class="verdict-num">' + n1(pw) + '</span>' +
-    '<span class="verdict-word">power score for a ' + district.label + '</span>' +
+    '<span class="verdict-word">power score ' + (defending ? 'holding' : 'attacking') +
+      ' a ' + district.label + '</span>' +
     '<div class="pw-workwrap"><table class="pw-work"><thead><tr>' +
       '<th>Stat</th><th>Base</th><th>Gear</th><th>With gear</th><th>Aged</th>' +
       (cap != null ? '<th>Capped</th>' : '') +
@@ -2573,7 +2586,7 @@ function pwRecalc() {
     '<ul class="pw-tail">' +
       '<li><span class="pw-tail-label">Weighted score</span><span>' + n1(weighted) + '</span></li>' +
       (shield ? '<li><span class="pw-tail-label">Shield</span><span>+15%</span></li>' : '') +
-      (safe ? '<li><span class="pw-tail-label">Safe House</span><span>+20%</span></li>' : '') +
+      (safe ? '<li><span class="pw-tail-label">Safe House district</span><span>+20%</span></li>' : '') +
       (shield || safe ? '<li><span class="pw-tail-label">After defensive bonuses</span><span>' +
         n1(defended) + '</span></li>' : '') +
       '<li><span class="pw-tail-label">Finesse ' + finesse + '★ (+' +
@@ -2581,6 +2594,12 @@ function pwRecalc() {
       '<li><span class="pw-tail-label">Power score</span><span>' + n1(pw) + '</span></li>' +
     '</ul>' +
     '<p class="pw-note">Age ' + age + ' multiplies every stat by ' + ageMult.toFixed(2) + '×. ' +
+      (defending
+        ? (pwVal('pw-district') === 'safe_house'
+            ? 'Holding a Safe House carries its own +20%, so that is applied for you. '
+            : 'Only a Safe House district carries the +20%, and this is not one. ')
+        : 'A shield and the Safe House bonus lift the score of whoever holds the district, ' +
+          'never the attacker, so neither counts here. ') +
       (cap != null
         ? 'Stats are capped at ' + cap + (leagueCap != null && (rarityCap == null || leagueCap <= rarityCap)
             ? ' by ' + pwCap1(league) + ' league. '
