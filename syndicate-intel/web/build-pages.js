@@ -65,6 +65,59 @@ const CALC_CSS = String.raw`
 .ledger .mirror { color: var(--accent); }
 `
 
+const POWER_CSS = String.raw`
+/* The power calculator takes numbers, not just choices, so it needs input
+   styling the odds calculator never did. Same box as .calc-field select. */
+.calc-field input[type="number"] { width: 100%; background: var(--surface);
+  color: var(--ink); font-family: var(--mono); font-size: var(--step--1);
+  padding: 0.5rem 0.55rem; border: 1px solid var(--rule-firm); border-radius: 0; }
+.calc-field input[type="number"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+/* Five stats sit on one row on a wide screen and wrap to two or three columns
+   on a phone, rather than becoming five full-width bars a thumb has to scroll. */
+.pw-stats { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 46rem) { .pw-stats { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 26rem) { .pw-stats { grid-template-columns: repeat(2, 1fr); } }
+/* One gear slot is three linked choices (item, rarity, secondary stat), so it
+   is one labelled row rather than three loose dropdowns that lose their pairing
+   the moment the grid wraps. */
+.pw-slot { display: grid; grid-template-columns: 6rem 1fr 1fr 1fr; gap: var(--space-3);
+  align-items: end; margin-bottom: var(--space-3); }
+.pw-slot > .pw-slot-name { font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+  padding-bottom: 0.6rem; }
+@media (max-width: 40rem) {
+  .pw-slot { grid-template-columns: 1fr 1fr; }
+  .pw-slot > .pw-slot-name { grid-column: 1 / -1; padding-bottom: 0;
+    border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+}
+/* The working, shown. A single output number is unfalsifiable; the per-stat
+   rows are what let a reader spot which input is wrong. */
+/* Eight columns do not fit a phone. The table scrolls inside its own box so
+   the page itself never scrolls sideways, which is the thing that actually
+   feels broken: at 375px this pushed the whole document to 441px wide. */
+.pw-workwrap { overflow-x: auto; margin-top: var(--space-4); }
+.pw-work { width: 100%; min-width: 26rem; border-collapse: collapse;
+  font-family: var(--mono); font-size: var(--step--1); }
+.pw-work th { text-align: right; font-weight: 500; color: var(--ink-faint);
+  font-size: var(--step--2); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0 0.5rem 0.4rem; border-bottom: 1px solid var(--rule-firm); }
+.pw-work th:first-child, .pw-work td:first-child { text-align: left; }
+.pw-work td { text-align: right; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--rule); }
+.pw-work tbody tr:last-child td { border-bottom: 1px solid var(--rule-firm); }
+.pw-work .pw-capped { color: var(--debit); }
+.pw-work .pw-contrib { color: var(--accent); }
+/* The closing arithmetic: weighted total, then each multiplier, then pw. */
+.pw-tail { list-style: none; padding: 0; margin: var(--space-4) 0 0;
+  font-family: var(--mono); font-size: var(--step--1); max-width: 34rem; }
+.pw-tail li { display: flex; justify-content: space-between; gap: var(--space-4);
+  padding: 0.3rem 0; border-bottom: 1px solid var(--rule); }
+.pw-tail li:last-child { border-bottom: none; border-top: 1px solid var(--rule-firm);
+  margin-top: var(--space-2); padding-top: var(--space-3); color: var(--accent-bright); }
+.pw-tail .pw-tail-label { color: var(--ink-faint); }
+.pw-note { font-size: var(--step--1); color: var(--ink-faint); max-width: 62ch;
+  margin-top: var(--space-3); }
+`
+
 const SHELL_CSS = String.raw`
 /* The active-item rule now lives in NAV_CSS so every builder shares it. */
 .stale { color: var(--debit); }
@@ -142,7 +195,7 @@ function page({ file, title, description, heading, eyebrow, section, body, scrip
 ${metaHead({ title, description, path: href })}
 ${ANALYTICS}
 ${FONTS}
-<style>${CSS}${NAV_CSS}${CHART_CSS}${SHELL_CSS}${CALC_CSS}</style>
+<style>${CSS}${NAV_CSS}${CHART_CSS}${SHELL_CSS}${CALC_CSS}${POWER_CSS}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -172,7 +225,9 @@ ${isStatic
   // A static page ships the reveal and nothing else. RUNTIME calls render() on
   // load, so including it here would have the page fetch a payload it has no
   // use for and then blank itself when no render function turns up.
-  ? PRICE_JS + REVEAL_JS + '\ndocument.addEventListener("DOMContentLoaded", () => revealIn())'
+  ? PRICE_JS + REVEAL_JS + (script || '') +
+    '\ndocument.addEventListener("DOMContentLoaded", () => { revealIn();' +
+    ' if (typeof pwBuild === "function") pwBuild() })'
   : `const SECTION_URLS = ${JSON.stringify([].concat(section).map((n) => '/data/' + n + '.json'))};
 ${STAMP_JS}
 ${PRICE_JS}
@@ -313,6 +368,7 @@ function render() {
   document.getElementById('guide').innerHTML = [
     ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes, plus who arrives and who stays.'],
     ['Wars', '/wars.html', 'Takeover odds, the specialty wheel, what each gear item does, win rates, cities and leagues.'],
+    ['Power', '/power.html', 'Work out any capo\u2019s power score for a district, with every step shown.'],
     ['Capos', '/capos.html', 'Who earns most, how capos rank up, and how many exist by rank, rarity and owner.'],
     ['Market', '/market.html', 'What capos sell for, how fast they sell, whether traits move the price, and every trainer for hire.'],
     ['Packs', '/packs.html', 'What a pack is really worth: the chance of a god per card, and which tier returns most per dollar.'],
@@ -2294,6 +2350,247 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 `
 
+/**
+ * Power calculator: the documented takeover formula, run forwards.
+ *
+ * Distinct from the odds calculator on the wars page, which is measured from
+ * settled fights and answers "how often does this matchup win". This one takes
+ * a capo you describe and reproduces the score the game itself computes, so it
+ * answers "what am I bringing" and, more usefully, "which district should I
+ * bring it to".
+ *
+ * Every constant here is published by the game rather than inferred, except the
+ * two noted at their definitions. The page shows its whole working for the same
+ * reason valuation.js publishes how a price was reached: a single output number
+ * cannot be checked, and a per-stat table can.
+ */
+const POWER_JS = String.raw`
+const PW_STATS = ['muscle', 'hustle', 'brains', 'rep', 'grit']
+
+/* Published in Territory & Combat. Every row sums to 100. */
+const PW_DISTRICTS = {
+  racket_hub:        { label: 'Racket Hub',        brains: 35, rep: 25, hustle: 20, grit: 15, muscle: 5 },
+  training_ground:   { label: 'Training Ground',   brains: 10, rep: 15, hustle: 15, grit: 25, muscle: 35 },
+  safe_house:        { label: 'Safe House',        brains: 15, rep: 30, hustle: 10, grit: 35, muscle: 10 },
+  intelligence_post: { label: 'Intelligence Post', brains: 30, rep: 10, hustle: 35, grit: 15, muscle: 10 },
+  syndicate_hq:      { label: 'Syndicate HQ',      brains: 20, rep: 20, hustle: 20, grit: 20, muscle: 20 },
+}
+
+/* Primary stat percentage by item rarity; the rolled secondary gets half.
+   Confirmed against all 39,657 items in the archive for common through
+   legendary. God reads 0 in the API and 30 in the docs; the docs win, because
+   an unset field is the likelier of the two errors. */
+const PW_GEAR_PCT = { common: 5, rare: 10, epic: 15, legendary: 20, god: 30 }
+
+/* Item to primary stat, from the Equipment Reference. All twenty were checked
+   against the archive and every one matched, so this table is not guesswork.
+   Defense items are deliberately absent: they are equipped to a hex rather than
+   a capo and carry no stat bonus at all. */
+const PW_ITEMS = {
+  head:  [['fedora', 'Fedora', 'brains'], ['bandana', 'Bandana', 'rep'],
+          ['gas_mask', 'Gas Mask', 'grit'], ['night_vision_goggles', 'Night-Vision Goggles', 'hustle'],
+          ['balaclava', 'Balaclava', 'muscle']],
+  chest: [['bulletproof_vest', 'Bulletproof Vest', 'grit'], ['trench_coat', 'Trench Coat', 'rep'],
+          ['bomb_suit', 'Bomb Suit', 'brains'], ['ghillie_suit', 'Ghillie Suit', 'hustle'],
+          ['tactical_rig', 'Tactical Rig', 'muscle']],
+  hands: [['brass_knuckles', 'Brass Knuckles', 'muscle'], ['gauntlets', 'Gauntlets', 'grit'],
+          ['shock_gloves', 'Shock Gloves', 'brains'], ['lock_picks', 'Lock Picks', 'hustle'],
+          ['throwing_knives', 'Throwing Knives', 'rep']],
+  feet:  [['steel_toe_boots', 'Steel-Toe Boots', 'muscle'], ['silent_sneakers', 'Silent Sneakers', 'hustle'],
+          ['combat_boots', 'Combat Boots', 'grit'], ['climbing_shoes', 'Climbing Shoes', 'rep'],
+          ['rocket_boots', 'Rocket Boots', 'brains']],
+}
+const PW_SLOTS = [['head', 'Head'], ['chest', 'Chest'], ['hands', 'Hands'], ['feet', 'Feet']]
+
+/* Opening stats are deliberately uneven. Five equal stats score identically in
+   every district, because every district's weights sum to 100, so a flat
+   starting spread makes the district dropdown look like it does nothing. This
+   one also straddles the Street cap, so the clipping is visible on load rather
+   than being something you have to go looking for. */
+const PW_DEFAULT_STATS = { muscle: 10, hustle: 14, brains: 20, rep: 16, grit: 12 }
+
+/* Documented ceilings on the stat value that counts in combat. Currently only
+   Street enforces a cap at all, so these are opt-in rather than the default. */
+const PW_RARITY_CAP = { common: 30, uncommon: 40, rare: 60, epic: 70, legendary: 90, god: 100, founder: 100 }
+const PW_LEAGUE_CAP = { street: 15, borough: null, district: null, metro: null, kingpin: null }
+
+/**
+ * The age multiplier, reconstructed from the four published anchors.
+ *
+ * Docs give 25 = 1.0, 35 = 1.4, 50 = 1.1 and 64 = 0.82 and nothing between. The
+ * three decline anchors are exactly collinear at -0.02 a year (35 to 50, 35 to
+ * 64 and 50 to 64 all give the same slope), so that half is effectively
+ * confirmed rather than assumed. The rise from 25 to 35 has only its two
+ * endpoints, so straight-line there is the assumption, and the likeliest one.
+ */
+function pwAgeMult(age) {
+  if (age <= 25) return 1
+  if (age <= 35) return 1 + 0.04 * (age - 25)
+  return Math.max(0, 1.4 - 0.02 * (age - 35))
+}
+
+const pwEl = (id) => document.getElementById(id)
+const pwVal = (id) => { const e = pwEl(id); return e ? e.value : '' }
+const pwNum = (id) => { const n = parseFloat(pwVal(id)); return isFinite(n) ? n : 0 }
+const pwCap1 = (s) => String(s).replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase())
+
+function pwSelect(id, label, opts, sel) {
+  return '<div class="calc-field"><label for="' + id + '">' + label + '</label><select id="' + id + '">' +
+    opts.map((o) => '<option value="' + o[0] + '"' + (o[0] === sel ? ' selected' : '') +
+      '>' + o[1] + '</option>').join('') + '</select></div>'
+}
+function pwNumber(id, label, value, min, max) {
+  return '<div class="calc-field"><label for="' + id + '">' + label + '</label>' +
+    '<input id="' + id + '" type="number" inputmode="numeric" value="' + value +
+    '" min="' + min + '" max="' + max + '" step="1"></div>'
+}
+
+function pwBuild() {
+  const el = pwEl('pwcalc')
+  if (!el) return
+
+  const districtOpts = Object.keys(PW_DISTRICTS).map((k) => [k, PW_DISTRICTS[k].label])
+  const leagueOpts = Object.keys(PW_LEAGUE_CAP).map((k) => [k,
+    pwCap1(k) + (PW_LEAGUE_CAP[k] ? ' (stats cap at ' + PW_LEAGUE_CAP[k] + ')' : '')])
+  const rarityOpts = Object.keys(PW_RARITY_CAP).map((k) => [k, pwCap1(k)])
+  const gearRarityOpts = Object.keys(PW_GEAR_PCT).map((k) => [k, pwCap1(k) + ' (+' + PW_GEAR_PCT[k] + '%)'])
+  const statOpts = PW_STATS.map((k) => [k, pwCap1(k)])
+  const halfStars = []
+  for (let i = 0; i <= 10; i++) halfStars.push([String(i / 2), (i / 2) + '★'])
+
+  const slotRow = (slot, name) => '<div class="pw-slot"><span class="pw-slot-name">' + name + '</span>' +
+    pwSelect('pw-' + slot + '-item', 'Item',
+      [['', 'Empty']].concat(PW_ITEMS[slot].map((i) => [i[0], i[1] + ' · ' + pwCap1(i[2])])), '') +
+    pwSelect('pw-' + slot + '-rar', 'Rarity', gearRarityOpts, 'common') +
+    pwSelect('pw-' + slot + '-sec', 'Secondary stat', [['', 'None']].concat(statOpts), '') +
+    '</div>'
+
+  el.innerHTML =
+    '<div class="section-head"><h2>The capo</h2><span class="section-meta">stats as trained</span></div>' +
+    '<div class="calc pw-stats">' +
+      PW_STATS.map((k) => pwNumber('pw-' + k, pwCap1(k), PW_DEFAULT_STATS[k], 1, 100)).join('') +
+    '</div>' +
+    '<div class="calc calc-ground">' +
+      pwNumber('pw-age', 'Age', 25, 25, 64) +
+      pwSelect('pw-finesse', 'Finesse', halfStars, '0') +
+      pwSelect('pw-rarity', 'Card rarity', rarityOpts, 'rare') +
+    '</div>' +
+    '<div class="section-head"><h2>Attack gear</h2><span class="section-meta">the item sets the primary stat, you pick the rolled secondary</span></div>' +
+    '<div>' + PW_SLOTS.map((s) => slotRow(s[0], s[1])).join('') + '</div>' +
+    '<div class="section-head"><h2>The district</h2><span class="section-meta">and the defensive bonuses in play</span></div>' +
+    '<div class="calc calc-ground">' +
+      pwSelect('pw-district', 'District type', districtOpts, 'racket_hub') +
+      pwSelect('pw-league', 'League', leagueOpts, 'street') +
+      pwSelect('pw-shield', 'Shield', [['0', 'No'], ['0.15', 'Yes (+15%)']], '0') +
+      pwSelect('pw-safe', 'Safe House bonus', [['0', 'No'], ['0.20', 'Yes (+20%)']], '0') +
+      pwSelect('pw-caps', 'Rarity stat caps',
+        [['0', 'Not applied (current game)'], ['1', 'Applied (as documented)']], '0') +
+    '</div>' +
+    '<div class="verdict" id="pw-out"></div>'
+
+  el.querySelectorAll('select, input').forEach((x) => {
+    x.addEventListener('change', pwRecalc)
+    x.addEventListener('input', pwRecalc)
+  })
+  pwRecalc()
+}
+
+function pwRecalc() {
+  const out = pwEl('pw-out')
+  if (!out) return
+
+  const district = PW_DISTRICTS[pwVal('pw-district')]
+  const league = pwVal('pw-league')
+  const age = Math.min(64, Math.max(25, pwNum('pw-age')))
+  const ageMult = pwAgeMult(age)
+
+  // The binding cap is whichever of the two is lower, and either may be absent.
+  const leagueCap = PW_LEAGUE_CAP[league]
+  const rarityCap = pwVal('pw-caps') === '1' ? PW_RARITY_CAP[pwVal('pw-rarity')] : null
+  let cap = null
+  if (leagueCap != null && rarityCap != null) cap = Math.min(leagueCap, rarityCap)
+  else if (leagueCap != null) cap = leagueCap
+  else if (rarityCap != null) cap = rarityCap
+
+  /* Gear percentages are of the capo's own stat, so they are gathered per stat
+     first and applied to the base together. Two items boosting one stat add
+     their percentages rather than compounding: the docs say each item raises
+     the stat by its rarity percent, which reads as a share of the same base. */
+  const pct = {}
+  for (const st of PW_STATS) pct[st] = 0
+  for (const s of PW_SLOTS) {
+    const slot = s[0]
+    const itemKey = pwVal('pw-' + slot + '-item')
+    if (!itemKey) continue
+    const item = PW_ITEMS[slot].find((i) => i[0] === itemKey)
+    if (!item) continue
+    const full = PW_GEAR_PCT[pwVal('pw-' + slot + '-rar')] || 0
+    pct[item[2]] += full
+    const sec = pwVal('pw-' + slot + '-sec')
+    if (sec && pct[sec] != null) pct[sec] += full / 2
+  }
+
+  const rows = []
+  let weighted = 0
+  for (const st of PW_STATS) {
+    const base = Math.min(100, Math.max(0, pwNum('pw-' + st)))
+    const geared = base * (1 + pct[st] / 100)
+    const aged = geared * ageMult
+    const capped = cap != null ? Math.min(aged, cap) : aged
+    const w = district[st] / 100
+    const contrib = capped * w
+    weighted += contrib
+    rows.push({ st: st, base: base, pct: pct[st], geared: geared, aged: aged,
+      capped: capped, clipped: cap != null && aged > cap, w: district[st], contrib: contrib })
+  }
+
+  const finesse = parseFloat(pwVal('pw-finesse')) || 0
+  const shield = parseFloat(pwVal('pw-shield')) || 0
+  const safe = parseFloat(pwVal('pw-safe')) || 0
+  // Finesse is a share of the weighted score added at the very end, so it is
+  // not scaled by the shield or the Safe House the way the rest of the score is.
+  const finesseBonus = weighted * 0.005 * finesse
+  const defended = weighted * (1 + shield + safe)
+  const pw = defended + finesseBonus
+
+  const n1 = (x) => x.toFixed(1)
+  const anyClipped = rows.some((r) => r.clipped)
+
+  out.innerHTML =
+    '<span class="verdict-num">' + n1(pw) + '</span>' +
+    '<span class="verdict-word">power score for a ' + district.label + '</span>' +
+    '<div class="pw-workwrap"><table class="pw-work"><thead><tr>' +
+      '<th>Stat</th><th>Base</th><th>Gear</th><th>With gear</th><th>Aged</th>' +
+      (cap != null ? '<th>Capped</th>' : '') +
+      '<th>Weight</th><th>Counts as</th>' +
+    '</tr></thead><tbody>' +
+    rows.map((r) => '<tr><td>' + pwCap1(r.st) + '</td><td>' + r.base + '</td><td>' +
+      (r.pct ? '+' + r.pct + '%' : '—') + '</td><td>' + n1(r.geared) + '</td><td>' +
+      n1(r.aged) + '</td>' +
+      (cap != null ? '<td class="' + (r.clipped ? 'pw-capped' : '') + '">' + n1(r.capped) + '</td>' : '') +
+      '<td>' + r.w + '%</td><td class="pw-contrib">' + n1(r.contrib) + '</td></tr>').join('') +
+    '</tbody></table></div>' +
+    '<ul class="pw-tail">' +
+      '<li><span class="pw-tail-label">Weighted score</span><span>' + n1(weighted) + '</span></li>' +
+      (shield ? '<li><span class="pw-tail-label">Shield</span><span>+15%</span></li>' : '') +
+      (safe ? '<li><span class="pw-tail-label">Safe House</span><span>+20%</span></li>' : '') +
+      (shield || safe ? '<li><span class="pw-tail-label">After defensive bonuses</span><span>' +
+        n1(defended) + '</span></li>' : '') +
+      '<li><span class="pw-tail-label">Finesse ' + finesse + '★ (+' +
+        (finesse * 0.5).toFixed(1) + '% of weighted)</span><span>+' + n1(finesseBonus) + '</span></li>' +
+      '<li><span class="pw-tail-label">Power score</span><span>' + n1(pw) + '</span></li>' +
+    '</ul>' +
+    '<p class="pw-note">Age ' + age + ' multiplies every stat by ' + ageMult.toFixed(2) + '×. ' +
+      (cap != null
+        ? 'Stats are capped at ' + cap + (leagueCap != null && (rarityCap == null || leagueCap <= rarityCap)
+            ? ' by ' + pwCap1(league) + ' league. '
+            : ' by card rarity. ') +
+          (anyClipped ? 'Figures in red are being clipped by that cap: training them higher does nothing here.' : '')
+        : 'No stat cap applies in ' + pwCap1(league) + ' league, so trained stats count in full.') +
+    '</p>'
+}
+`
+
 const PAGES = [
   {
     // The prize ledger joins the overview: what the game has actually paid
@@ -2507,6 +2804,38 @@ const PAGES = [
     script: WARS_JS,
   },
   {
+    /**
+     * The only page on the site that computes rather than reports.
+     *
+     * Static on purpose: it takes everything it needs from the reader and the
+     * published formula, so it has no payload to fetch and cannot go stale or
+     * fail to load the way a data page can. The odds calculator on the wars
+     * page answers a different question from measured fights; this one runs the
+     * game's own arithmetic forwards.
+     */
+    file: 'power.html', section: 'wars',
+    share: 'Work out any capo\u2019s takeover power score in The Syndicate, and which district plays to its stats.',
+    title: 'Capo power calculator \u00b7 The Syndicate \u00b7 ' + SITE,
+    heading: 'Power calculator',
+    eyebrow: 'The Syndicate &middot; what your capo actually brings',
+    description: 'Work out a capo\u2019s takeover power score: stats, gear, age and Finesse, ' +
+      'weighted by district type. The published formula, with every step shown.',
+    body: `<p class="basis">Describe a capo and this runs the game\u2019s published takeover
+    arithmetic on it: gear folded into the stats, the age multiplier, the district\u2019s
+    stat weighting, then the defensive bonuses and Finesse. Every step is shown, because a
+    single number you cannot check is not worth much.</p>
+  <div id="pwcalc"></div>
+  <div class="section-head"><h2>Where these numbers come from</h2><span class="section-meta">published, not guessed</span></div>
+  <div class="guide">
+    <div class="guide-item"><span class="name">District weights</span><span class="what">Published in full by the game. Every district\u2019s five weights sum to 100%.</span></div>
+    <div class="guide-item"><span class="name">Gear percentages</span><span class="what">Published, and checked against all 39,657 items in our archive. Every one of the twenty attack items matched its documented stat.</span></div>
+    <div class="guide-item"><span class="name">Age multiplier</span><span class="what">Four anchors are published (25 = 1.0\u00d7, 35 = 1.4\u00d7, 50 = 1.1\u00d7, 64 = 0.82\u00d7). The decline anchors are exactly collinear, so that half is confirmed; the rise from 25 to 35 is drawn straight between its two endpoints.</span></div>
+    <div class="guide-item"><span class="name">What is not here</span><span class="what">The specialty matchup, the Passion upset roll and each item\u2019s named special effect all move a real fight and none of them are part of this score. For the matchup and the upset, see <a href="/wars.html">Wars</a>.</span></div>
+  </div>`,
+    script: POWER_JS,
+    isStatic: true,
+  },
+  {
     file: 'capos.html', section: 'capos',
     share: 'What it actually costs to take a capo to boss in The Syndicate, measured from real promotions.',
     title: 'Capos and promotion costs · The Syndicate · ' + SITE, heading: 'Capos',
@@ -2642,6 +2971,7 @@ function main() {
       [['Overview', '/', 'What the game has paid out, and what moved today.'],
        ['Players', '/players.html', 'One page per player: roster, combat, trading and prizes.'],
        ['Wars', '/wars.html', 'Takeover odds, the specialty wheel and what gear does.'],
+       ['Power', '/power.html', 'Work out what a capo brings to a district.'],
        ['Capos', '/capos.html', 'Who earns most, and what promotion costs.'],
        ['Market', '/market.html', 'What capos sell for, and every trainer for hire.'],
        ['Economy', '/money.html', 'RACKET supply, and every prize paid on chain.'],

@@ -1439,6 +1439,7 @@ export const NAV = [
   { href: '/packs.html', label: 'Packs' },
   { href: '/players.html', label: 'Players' },
   { href: '/wars.html', label: 'Wars' },
+  { href: '/power.html', label: 'Power' },
   { href: '/capos.html', label: 'Capos' },
   { href: '/market.html', label: 'Market' },
   { href: '/money.html', label: 'Economy' },
