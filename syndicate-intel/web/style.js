@@ -114,7 +114,14 @@ export const CSS = String.raw`
   --accent-deep:   #8f7a3a;
   --debit:     #d97066;
   --credit:    #7fb894;
+  /* The third verdict state: neither a win nor a loss but a coin flip. Sits
+     between the credit green and the debit red on purpose. */
+  --warn:      #d9a05c;
   --shadow:    rgba(0, 0, 0, 0.55);
+  /* Card ground, a shade under the page so a panel reads as recessed.
+     The gold stroke and the shadow carry the edge; on a near-black page
+     the fill alone cannot. */
+  --card:      #030302;
 
   /* One scale, no exceptions. Every font-size on the site resolves to a step:
      the previous sheet carried twenty ad-hoc sizes between 0.66 and 0.85rem
@@ -164,7 +171,9 @@ export const CSS = String.raw`
   --accent-deep:   #5d4c18;
   --debit:     #8C2F26;
   --credit:    #2E5C43;
+  --warn:      #8A5A1C;
   --shadow:    rgba(26, 28, 22, 0.10);
+  --card:      #DEDFD5;
 }
 
 * { box-sizing: border-box; }

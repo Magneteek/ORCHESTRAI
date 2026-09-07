@@ -74,22 +74,92 @@ const POWER_CSS = String.raw`
 .calc-field input[type="number"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 /* Five stats sit on one row on a wide screen and wrap to two or three columns
    on a phone, rather than becoming five full-width bars a thumb has to scroll. */
-.pw-stats { grid-template-columns: repeat(5, 1fr); }
-@media (max-width: 46rem) { .pw-stats { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 26rem) { .pw-stats { grid-template-columns: repeat(2, 1fr); } }
-/* One gear slot is three linked choices (item, rarity, secondary stat), so it
-   is one labelled row rather than three loose dropdowns that lose their pairing
-   the moment the grid wraps. */
-.pw-slot { display: grid; grid-template-columns: 6rem 1fr 1fr 1fr; gap: var(--space-3);
-  align-items: end; margin-bottom: var(--space-3); }
-.pw-slot > .pw-slot-name { font-family: var(--mono); font-size: var(--step--2);
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
-  padding-bottom: 0.6rem; }
-@media (max-width: 40rem) {
-  .pw-slot { grid-template-columns: 1fr 1fr; }
-  .pw-slot > .pw-slot-name { grid-column: 1 / -1; padding-bottom: 0;
-    border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+/* Every block of the calculator is a card: one padding value, one gap, one
+   stroke. Before this the sections were separated only by whitespace and a
+   heading rule, so at a glance the page read as one long undifferentiated
+   form rather than four things you fill in.
+
+   Stroke is the brand gold rather than the neutral rule, because these are the
+   page's primary surfaces. Full border on all four sides, flat fill, no
+   gradient. Radius stays at 3px: enough to soften the corner, not enough to
+   read as a rounded UI kit. */
+/* min-width:0 is load bearing. A grid item defaults to min-width:auto, so a
+   card refuses to shrink below its content's minimum and pushes the document
+   wider than the phone: this blew the page out to 491px at a 375px viewport. */
+.pw-card { background: var(--card); border: 1px solid var(--accent-deep);
+  border-radius: 3px; box-shadow: 0 1px 4px var(--shadow);
+  padding: var(--space-5); min-width: 0; }
+/* The card edge already separates the title from the page, so the heading
+   keeps its colour and drops its underline. */
+.pw-card > .calc-side-head { border-bottom: none; padding-bottom: 0;
+  margin-bottom: var(--space-4); }
+/* A hidden card must take no grid space at all, not merely draw nothing. */
+.pw-card[hidden] { display: none; }
+/* Results are cards too, so the run down the page is one rhythm. .verdict
+   carries a top rule for the un-carded layout; inside a card that is a second
+   edge saying the same thing. */
+/* Only the spacing needs resetting here. Restating the border made this rule
+   two classes deep, which out-specified the single-class state colours below
+   and left the card with three coloured edges and a gold one. .pw-card already
+   wins the border against .verdict by coming later in the sheet. */
+.verdict.pw-card { padding-top: var(--space-5); margin-top: 0; }
+.pw-cards { display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5); margin-bottom: var(--space-5); }
+
+/* The capo and its gear side by side. They were stacked full-width, which left
+   five stat boxes strung across a 1100px row and the gear a screen further
+   down, so nothing that belongs together was visible at once. */
+/* Not an even split. The capo side holds eight short fields and the gear side
+   holds twelve dropdowns across three columns, so an even split left one half
+   padded with dead space while the other truncated its item names. */
+.pw-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5);
+  margin-bottom: var(--space-5); align-items: stretch; }
+@media (max-width: 58rem) { .pw-top { grid-template-columns: minmax(0, 1fr); } }
+/* Label left, field right. A stat box only ever holds two digits, so it is
+   capped rather than stretched to whatever the column happens to be. */
+.pw-row { display: grid; grid-template-columns: 5rem 1fr; align-items: center;
+  gap: var(--space-3); margin-bottom: var(--space-2); }
+.pw-row > label { display: block; font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: 0; }
+.pw-row > input, .pw-row > select { width: 100%; background: var(--surface); color: var(--ink);
+  font-family: var(--mono); font-size: var(--step--1); padding: 0.4rem 0.5rem;
+  border: 1px solid var(--rule-firm); border-radius: 0; }
+.pw-row > input:focus, .pw-row > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+/* A stat box holds two digits and an age three, so they are capped rather than
+   stretched to the column. The selects fill what is left of the 21rem panel. */
+.pw-row-num > input { max-width: 5rem; }
+@media (max-width: 58rem) {
+  .pw-row { max-width: 22rem; }
 }
+.pw-rowgap { height: var(--space-4); }
+/* Attributes left, trained stats right. Collapses before the outer grid does,
+   because two columns of label-plus-field need more room than one. */
+.pw-capo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-4); }
+.pw-capo .pw-row { grid-template-columns: 4.75rem minmax(0, 1fr); }
+@media (max-width: 40rem) { .pw-capo { grid-template-columns: minmax(0, 1fr); } }
+/* The lower pair splits evenly: both hold stacked dropdowns rather than one
+   holding stat boxes, and their labels are longer. */
+.pw-ground { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.pw-ground .pw-row { grid-template-columns: 7rem 1fr; }
+@media (max-width: 58rem) { .pw-ground { grid-template-columns: 1fr; } }
+/* One gear slot is three linked choices, kept on one line so the pairing
+   survives. The item column is widest because its label carries the primary
+   stat, which is the part you actually read when choosing. */
+.pw-slot { margin-bottom: var(--space-3); }
+.pw-slot > .pw-slot-name { display: block; font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.3rem; }
+/* Capped rather than stretched. The widest option in these three lists is
+   "Night-Vision Goggles - Hustle"; the other two hold a word each, so filling
+   an 800px card with them left three boxes mostly empty. */
+.pw-slot-fields { display: grid; grid-template-columns: 1.35fr 1fr 0.8fr;
+  gap: var(--space-2); max-width: 33rem; }
+.pw-slot-fields > select { width: 100%; min-width: 0; background: var(--surface); color: var(--ink);
+  font-family: var(--mono); font-size: var(--step--1); padding: 0.4rem 0.5rem;
+  border: 1px solid var(--rule-firm); border-radius: 0; }
+.pw-slot-fields > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+@media (max-width: 30rem) { .pw-slot-fields { grid-template-columns: 1fr; } }
 /* The working, shown. A single output number is unfalsifiable; the per-stat
    rows are what let a reader spot which input is wrong. */
 /* Eight columns do not fit a phone. The table scrolls inside its own box so
@@ -107,13 +177,57 @@ const POWER_CSS = String.raw`
 .pw-work .pw-capped { color: var(--debit); }
 .pw-work .pw-contrib { color: var(--accent); }
 /* The closing arithmetic: weighted total, then each multiplier, then pw. */
+/* The verdict carries its own colour, because "Not close" and "Clear" are the
+   two things you most want to read without reading. State tints the card ground
+   and the heading; the two inner cards keep the plain card ground so the tint
+   reads as a wash behind them rather than colouring the numbers themselves.
+   Flat fills throughout, no gradients. */
+.pw-v-good { border-color: var(--credit); background: color-mix(in srgb, var(--credit) 7%, var(--card)); }
+.pw-v-warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 7%, var(--card)); }
+.pw-v-bad { border-color: var(--debit); background: color-mix(in srgb, var(--debit) 7%, var(--card)); }
+.pw-v-good > .verdict-num { color: var(--credit); }
+.pw-v-warn > .verdict-num { color: var(--warn); }
+.pw-v-bad > .verdict-num { color: var(--debit); }
+/* One card a side, so the two capos are compared rather than listed. */
+.pw-vcard { background: var(--card); border: 1px solid var(--rule-firm);
+  border-radius: 3px; padding: var(--space-4); min-width: 0; }
+.pw-vcard-head { font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint);
+  margin: 0 0 var(--space-2); }
+.pw-vnum { display: block; font-family: var(--mono); font-size: var(--step-2);
+  line-height: 1.1; color: var(--ink); }
+.pw-vcard .pw-tail { margin-top: var(--space-3); max-width: none; }
+
+/* Verdict left, working right. Collapses early: the tail rows are label and
+   value on one line and need the width more than the headline does. */
+.pw-vsplit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-4); align-items: stretch; }
+@media (max-width: 46rem) { .pw-vsplit { grid-template-columns: minmax(0, 1fr); } }
+.pw-vsplit > .pw-tail { margin-top: 0; max-width: none; }
 .pw-tail { list-style: none; padding: 0; margin: var(--space-4) 0 0;
   font-family: var(--mono); font-size: var(--step--1); max-width: 34rem; }
 .pw-tail li { display: flex; justify-content: space-between; gap: var(--space-4);
-  padding: 0.3rem 0; border-bottom: 1px solid var(--rule); }
+  padding: 0.3rem 0; border-bottom: 1px solid var(--rule); min-width: 0; }
+.pw-tail li > span { min-width: 0; overflow-wrap: anywhere; }
 .pw-tail li:last-child { border-bottom: none; border-top: 1px solid var(--rule-firm);
   margin-top: var(--space-2); padding-top: var(--space-3); color: var(--accent-bright); }
 .pw-tail .pw-tail-label { color: var(--ink-faint); }
+/* Two states, so a switch rather than a dropdown you must open to read which
+   one is active. Borrows the tab treatment already used elsewhere on the site. */
+.pw-switch { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+  margin-bottom: var(--space-4); }
+.pw-switch-label { font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.pw-sw { font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.06em;
+  padding: 0.45rem 0.9rem; background: var(--surface); color: var(--ink-muted);
+  border: 1px solid var(--rule-firm); border-radius: 0; cursor: pointer; }
+.pw-sw + .pw-sw { margin-left: -1px; }
+.pw-sw:hover { color: var(--ink); }
+.pw-sw:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pw-sw[aria-checked="true"] { background: var(--band); color: var(--accent-bright);
+  border-color: var(--accent-deep); }
+.pw-band { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-muted);
+  margin: var(--space-2) 0 0; }
 .pw-note { font-size: var(--step--1); color: var(--ink-faint); max-width: 62ch;
   margin-top: var(--space-3); }
 `
@@ -2402,6 +2516,115 @@ const PW_ITEMS = {
 }
 const PW_SLOTS = [['head', 'Head'], ['chest', 'Chest'], ['hands', 'Hands'], ['feet', 'Feet']]
 
+/* The specialty wheel, read off the game's own takeover sheet. It is not in the
+   published docs, which describe the shape (+10/+5/0/-5/-10, every row summing
+   to zero) without ever giving the grid.
+
+   It cannot be recovered from our fight archive either. Measured win rates put
+   the MIRROR matchup top for four of five specialties, which contradicts a
+   zero-sum wheel outright: attackers pick targets near their own specialty, and
+   that selection effect swamps a five point modifier. So this table is quoted,
+   and the row sums are asserted below as the check on the transcription.
+
+   Row attacks column, positive means the row wins. Applies to the ATTACKER's
+   score only; a defender gets no matchup bonus of its own. */
+const PW_SPEC = {
+  enforcer:   { enforcer: 0, hustler: 5, negotiator: 10, fixer: -5, survivor: -10 },
+  hustler:    { enforcer: -5, hustler: 0, negotiator: -5, fixer: 5, survivor: 5 },
+  negotiator: { enforcer: -10, hustler: 5, negotiator: 0, fixer: 5, survivor: 0 },
+  fixer:      { enforcer: 5, hustler: -5, negotiator: -5, fixer: 0, survivor: 5 },
+  survivor:   { enforcer: 10, hustler: -5, negotiator: 0, fixer: -5, survivor: 0 },
+}
+const PW_SPECIALTIES = Object.keys(PW_SPEC)
+/* A transcription guard, not decoration: a mistyped cell is invisible in the
+   output but breaks the zero-sum property the game states. */
+for (const a of PW_SPECIALTIES) {
+  let sum = 0
+  for (const d of PW_SPECIALTIES) sum += PW_SPEC[a][d]
+  if (sum !== 0) console.warn('specialty row does not sum to zero: ' + a)
+}
+/* The roll sits on top of the matchup every fight, so a +5% lands anywhere in
+   +2.5% to +7.5%. Reported as a band rather than hidden in a point estimate. */
+const PW_SPEC_RNG = 2.5
+
+/* Rank sets the scale the power bar is drawn against, which is the single most
+   misread thing about scouting. The bar is NOT eight slices of an absolute 500:
+   it is the capo's stat total against what its RANK could hold, so six bars on
+   a Captain is 145 stats and six bars on a Boss is nearly 375.
+
+   Established against two real capos: a Rare Boss at 300 stats reads 4.8 bars
+   and shows 5, and an Epic Captain at 145 reads 5.8 and shows 6. An absolute
+   500 scale misses the Captain by four bars; scaling to the rarity cap instead
+   misses the Boss by three. Only this fits both. */
+const PW_RANK_CAP = { recruit: 20, soldier: 30, captain: 40, lieutenant: 60, underboss: 80, boss: 100 }
+
+/* A full four-slot set adds 4 x (p + p/2) percent spread across the stats,
+   which is 1.2p% of the stat total. Checked against a real capo: a Rare Boss on
+   300 stats showed +36, and 1.2 x 10% x 300 is exactly 36.
+
+   This assumes the set is spread evenly rather than stacked on the stats this
+   district happens to weight heavily. Stacked, it is worth more, so the top of
+   the band below is a floor on the worst case rather than a hard ceiling. */
+const PW_SET_PCT = { none: 0, rare: 12, epic: 18, legendary: 24 }
+
+/* Specialty implies the stat a capo trains cheapest, and so usually its
+   highest. Inferred from one fight's summary line ("BRAIN vs REPUTATION" for a
+   Negotiator attacking a Fixer), not from the docs, so it is used only to
+   narrow a band and never to harden a number. */
+const PW_SPEC_STAT = { enforcer: 'muscle', hustler: 'hustle', negotiator: 'brains',
+  fixer: 'rep', survivor: 'grit' }
+
+/**
+ * What a bar reading actually tells you, and what it does not.
+ *
+ * Bars give a stat TOTAL. The score depends on how that total is split across
+ * five stats, and scouting never shows the split, so the honest output is a
+ * band. It is not a narrow one: three bars on a Lieutenant is 94 to 131 stats,
+ * which on a Racket Hub scores anywhere from 8 to 38 depending purely on where
+ * the points sit. A point estimate here would be a fiction.
+ */
+function pwDefenderBand(w) {
+  const rank = pwVal('pw-drank')
+  const bars = parseFloat(pwVal('pw-dbars')) || 1
+  const rankCap = PW_RANK_CAP[rank]
+  const scale = rankCap * 5
+  // Rank fixes the bar scale; rarity then clips the top, because no capo can
+  // hold more than its rarity allows per stat however many bars it shows.
+  const statCap = Math.min(rankCap, PW_RARITY_CAP[pwVal('pw-drarity')])
+  const ceiling = statCap * 5
+  let tLo = Math.min(Math.max(0, (bars - 0.5) * scale / 8), ceiling)
+  let tHi = Math.min((bars + 0.5) * scale / 8, ceiling)
+
+  /* Specialty is the one thing scouting does tell you about the SHAPE, and it
+     tightens the floor considerably: a Fixer cannot have dumped everything into
+     Muscle, because Rep has to be its largest stat. Sweeping the specialty stat
+     over every value it could hold and spreading the remainder into the
+     heaviest or lightest stats gives a true extreme at each end rather than an
+     unconstrained one that no real capo could occupy. */
+  const spec = PW_SPEC_STAT[pwVal('pw-dspec')] || PW_STATS[0]
+  const others = PW_STATS.filter((k) => k !== spec)
+  const heavy = others.slice().sort((a, b) => w[b] - w[a])
+  const light = heavy.slice().reverse()
+
+  const sweep = (T, seq, better) => {
+    let best = null
+    for (let r = Math.ceil(T / 5); r <= statCap; r++) {
+      const room = Math.min(statCap, r)       // nothing may exceed the specialty stat
+      let left = T - r, sum = r * w[spec]
+      if (left > room * 4 + 1e-9) continue    // the remainder does not fit under it
+      for (const k of seq) { const v = Math.min(room, Math.max(0, left)); sum += v * w[k]; left -= v }
+      if (left > 1e-9) continue
+      if (best === null || better(sum, best)) best = sum
+    }
+    return best
+  }
+  // Worst case for the attacker is the remainder sitting on the heaviest stats.
+  const hi = sweep(tHi, heavy, (a, b) => a > b)
+  const lo = sweep(tLo, light, (a, b) => a < b)
+  return { tLo: tLo, tHi: tHi, statCap: statCap, scale: scale, spec: spec,
+    lo: lo === null ? 0 : lo, hi: hi === null ? 0 : hi }
+}
+
 /* Opening stats are deliberately uneven. Five equal stats score identically in
    every district, because every district's weights sum to 100, so a flat
    starting spread makes the district dropdown look like it does nothing. This
@@ -2434,6 +2657,19 @@ const pwVal = (id) => { const e = pwEl(id); return e ? e.value : '' }
 const pwNum = (id) => { const n = parseFloat(pwVal(id)); return isFinite(n) ? n : 0 }
 const pwCap1 = (s) => String(s).replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase())
 
+/* Label beside the field, not above it. Stacked labels doubled the height of
+   every row and pushed the capo panel and the gear panel apart; side by side
+   they fit in one screen. */
+const pwCtlSelect = (id, opts, sel) =>
+  '<select id="' + id + '">' + opts.map((o) => '<option value="' + o[0] + '"' +
+    (o[0] === sel ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select>'
+const pwCtlNumber = (id, value, min, max) =>
+  '<input id="' + id + '" type="number" inputmode="numeric" value="' + value +
+  '" min="' + min + '" max="' + max + '" step="1">'
+const pwRow = (id, label, ctl, cls) =>
+  '<div class="pw-row' + (cls ? ' ' + cls : '') + '"><label for="' + id + '">' + label +
+  '</label>' + ctl + '</div>'
+
 function pwSelect(id, label, opts, sel) {
   return '<div class="calc-field"><label for="' + id + '">' + label + '</label><select id="' + id + '">' +
     opts.map((o) => '<option value="' + o[0] + '"' + (o[0] === sel ? ' selected' : '') +
@@ -2458,40 +2694,106 @@ function pwBuild() {
   const halfStars = []
   for (let i = 0; i <= 10; i++) halfStars.push([String(i / 2), (i / 2) + '★'])
 
-  const slotRow = (slot, name) => '<div class="pw-slot"><span class="pw-slot-name">' + name + '</span>' +
-    pwSelect('pw-' + slot + '-item', 'Item',
-      [['', 'Empty']].concat(PW_ITEMS[slot].map((i) => [i[0], i[1] + ' · ' + pwCap1(i[2])])), '') +
-    pwSelect('pw-' + slot + '-rar', 'Rarity', gearRarityOpts, 'common') +
-    pwSelect('pw-' + slot + '-sec', 'Secondary stat', [['', 'None']].concat(statOpts), '') +
-    '</div>'
+  /* One gear slot is three linked choices. The item gets the wider column
+     because its label carries the primary stat, which is the part you are
+     actually reading when you pick. */
+  const slotRow = (slot, name) =>
+    '<div class="pw-slot"><span class="pw-slot-name">' + name + '</span>' +
+    '<div class="pw-slot-fields">' +
+      pwCtlSelect('pw-' + slot + '-item',
+        [['', 'Empty']].concat(PW_ITEMS[slot].map((i) => [i[0], i[1] + ' · ' + pwCap1(i[2])])), '') +
+      pwCtlSelect('pw-' + slot + '-rar', gearRarityOpts, 'common') +
+      pwCtlSelect('pw-' + slot + '-sec', [['', 'None']].concat(statOpts), '') +
+    '</div></div>'
 
   el.innerHTML =
-    '<div class="section-head"><h2>The capo</h2><span class="section-meta">stats as trained</span></div>' +
-    '<div class="calc pw-stats">' +
-      PW_STATS.map((k) => pwNumber('pw-' + k, pwCap1(k), PW_DEFAULT_STATS[k], 1, 100)).join('') +
+    '<div class="pw-top">' +
+      '<div class="pw-card">' +
+        '<p class="calc-side-head">The capo</p>' +
+        /* Two columns inside the card: what the capo IS on the left, what it
+           has TRAINED on the right. Nine rows in one column made this card
+           twice the height of the gear beside it. */
+        '<div class="pw-capo">' +
+          '<div>' +
+            pwRow('pw-finesse', 'Finesse', pwCtlSelect('pw-finesse', halfStars, '0')) +
+            pwRow('pw-rarity', 'Rarity', pwCtlSelect('pw-rarity', rarityOpts, 'rare')) +
+            pwRow('pw-age', 'Age', pwCtlNumber('pw-age', 25, 25, 64), 'pw-row-num') +
+            pwRow('pw-spec', 'Specialty',
+              pwCtlSelect('pw-spec', PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'negotiator')) +
+          '</div>' +
+          '<div>' +
+            PW_STATS.map((k) => pwRow('pw-' + k, pwCap1(k),
+              pwCtlNumber('pw-' + k, PW_DEFAULT_STATS[k], 1, 100), 'pw-row-num')).join('') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pw-card">' +
+        '<p class="calc-side-head">Attack gear &middot; item sets the primary, you pick the secondary</p>' +
+        PW_SLOTS.map((s) => slotRow(s[0], s[1])).join('') +
+      '</div>' +
     '</div>' +
-    '<div class="calc calc-ground">' +
-      pwNumber('pw-age', 'Age', 25, 25, 64) +
-      pwSelect('pw-finesse', 'Finesse', halfStars, '0') +
-      pwSelect('pw-rarity', 'Card rarity', rarityOpts, 'rare') +
+    /* A two-state choice is a switch, not a dropdown you have to open to read.
+       The hidden input keeps pwVal('pw-role') working unchanged. It sits above
+       the two panels because it decides whether the right-hand one exists. */
+    '<div class="pw-switch" role="radiogroup" aria-label="This capo is">' +
+      '<span class="pw-switch-label">This capo is</span>' +
+      '<button type="button" class="pw-sw" data-role="attack" role="radio" aria-checked="true">Attacking</button>' +
+      '<button type="button" class="pw-sw" data-role="defend" role="radio" aria-checked="false">Holding it</button>' +
     '</div>' +
-    '<div class="section-head"><h2>Attack gear</h2><span class="section-meta">the item sets the primary stat, you pick the rolled secondary</span></div>' +
-    '<div>' + PW_SLOTS.map((s) => slotRow(s[0], s[1])).join('') + '</div>' +
-    '<div class="section-head"><h2>The district</h2><span class="section-meta">and the defensive bonuses in play</span></div>' +
-    '<div class="calc calc-ground">' +
-      pwSelect('pw-role', 'This capo is',
-        [['attack', 'Attacking this district'], ['defend', 'Holding it']], 'attack') +
-      pwSelect('pw-district', 'District type', districtOpts, 'racket_hub') +
-      pwSelect('pw-league', 'League', leagueOpts, 'street') +
-      pwSelect('pw-shield', 'Shield on the district', [['0', 'No'], ['0.15', 'Yes (+15%)']], '0') +
-      pwSelect('pw-caps', 'Rarity stat caps',
-        [['0', 'Not applied (current game)'], ['1', 'Applied (as documented)']], '0') +
+    '<input type="hidden" id="pw-role" value="attack">' +
+    '<div class="pw-top pw-ground">' +
+      '<div class="pw-card">' +
+        '<p class="calc-side-head">The district</p>' +
+        pwRow('pw-district', 'District', pwCtlSelect('pw-district', districtOpts, 'racket_hub')) +
+        pwRow('pw-league', 'League', pwCtlSelect('pw-league', leagueOpts, 'district')) +
+        /* One shield field, not two. A shield belongs to whoever HOLDS the
+           district, so the same answer serves both roles: it lifts your score
+           when you are holding and the defender's when you are attacking.
+           Asking twice invited the two to disagree. */
+        pwRow('pw-shield', 'Shield',
+          pwCtlSelect('pw-shield', [['0', 'No'], ['0.15', 'Yes (+15%)']], '0')) +
+
+      '</div>' +
+      '<div class="pw-card" id="pw-defwrap">' +
+        '<p class="calc-side-head">The defender &middot; what you can see from the outside</p>' +
+        /* No "Their" on these. The panel is headed The defender, so the
+           possessive was repeated six times to say nothing. */
+        /* Rarity leads, because it decides what the two rows under it can even
+           offer: rank shows the total this rarity can actually reach, and the
+           bar list stops at the highest reading such a capo could show. */
+        pwRow('pw-drarity', 'Rarity', pwCtlSelect('pw-drarity', rarityOpts, 'epic')) +
+        pwRow('pw-drank', 'Rank', pwCtlSelect('pw-drank',
+          Object.keys(PW_RANK_CAP).map((k) => [k, pwCap1(k)]), 'lieutenant')) +
+        pwRow('pw-dbars', 'Power bars', pwCtlSelect('pw-dbars',
+          [1, 2, 3, 4, 5, 6, 7, 8].map((n) => [String(n), n + ' / 8']), '3')) +
+        pwRow('pw-dspec', 'Specialty',
+          pwCtlSelect('pw-dspec', PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'fixer')) +
+        pwRow('pw-dgear', 'Gear', pwCtlSelect('pw-dgear',
+          Object.keys(PW_SET_PCT).map((k) => [k, k === 'none' ? 'None'
+            : 'Full ' + k + ' set (+' + PW_SET_PCT[k] + '%)']), 'rare')) +
+        pwRow('pw-dage', 'Age', pwCtlSelect('pw-dage',
+          [['0', 'Unknown, assume peak']].concat([25, 28, 30, 32, 35, 40, 45, 50]
+            .map((a) => [String(a), a + ' (x' + pwAgeMult(a).toFixed(2) + ')'])), '0')) +
+      '</div>' +
     '</div>' +
-    '<div class="verdict" id="pw-out"></div>'
+    /* Results below the inputs, and only one headline at a time: the verdict
+       when you are attacking, your own score when you are holding. */
+    '<div class="pw-cards">' +
+      '<div class="verdict pw-card" id="pw-verdict"></div>' +
+      '<div class="verdict pw-card" id="pw-out"></div>' +
+    '</div>'
 
   el.querySelectorAll('select, input').forEach((x) => {
     x.addEventListener('change', pwRecalc)
     x.addEventListener('input', pwRecalc)
+  })
+  el.querySelectorAll('.pw-sw').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      pwEl('pw-role').value = btn.dataset.role
+      el.querySelectorAll('.pw-sw').forEach((b) =>
+        b.setAttribute('aria-checked', b === btn ? 'true' : 'false'))
+      pwRecalc()
+    })
   })
   pwRecalc()
 }
@@ -2506,12 +2808,11 @@ function pwRecalc() {
   const ageMult = pwAgeMult(age)
 
   // The binding cap is whichever of the two is lower, and either may be absent.
-  const leagueCap = PW_LEAGUE_CAP[league]
-  const rarityCap = pwVal('pw-caps') === '1' ? PW_RARITY_CAP[pwVal('pw-rarity')] : null
-  let cap = null
-  if (leagueCap != null && rarityCap != null) cap = Math.min(leagueCap, rarityCap)
-  else if (leagueCap != null) cap = leagueCap
-  else if (rarityCap != null) cap = rarityCap
+  /* Street is the only league that caps stats, so the cap follows the league
+     and there is nothing to configure. The documented rarity caps are NOT
+     applied by the game today; PW_RARITY_CAP survives because it still bounds
+     what stat spread a DEFENDER could be hiding, which is a separate job. */
+  const cap = PW_LEAGUE_CAP[league]
 
   /* Gear percentages are of the capo's own stat, so they are gathered per stat
      first and applied to the base together. Two items boosting one stat add
@@ -2555,23 +2856,40 @@ function pwRecalc() {
      bonus, so it follows the district dropdown. As its own dropdown it allowed
      a Racket Hub carrying a Safe House bonus, which cannot happen in the game. */
   const defending = pwVal('pw-role') === 'defend'
-  const shieldEl = pwEl('pw-shield')
-  if (shieldEl) shieldEl.disabled = !defending
-  const shield = defending ? (parseFloat(pwVal('pw-shield')) || 0) : 0
+  /* The shield is on the district, so it helps whoever is holding it: you when
+     you are defending, the other capo when you are attacking. It is no longer
+     disabled while attacking, because it still matters then, just to them. */
+  const shieldOnHex = parseFloat(pwVal('pw-shield')) || 0
+  const shield = defending ? shieldOnHex : 0
   const safe = defending && pwVal('pw-district') === 'safe_house' ? 0.2 : 0
   // Finesse is a share of the weighted score added at the very end, so it is
   // not scaled by the shield or the Safe House the way the rest of the score is.
   const finesseBonus = weighted * 0.005 * finesse
-  const defended = weighted * (1 + shield + safe)
+  /* The matchup modifies the ATTACKER's score and the shield and Safe House
+     modify the DEFENDER's, so exactly one side of this applies and the role
+     picks which. Confirmed against a real fight: a Negotiator into a Fixer on a
+     Racket Hub weighted 16.830, and the game showed 18.14, which is the +5%
+     matchup plus a small roll plus the Finesse tail. */
+  const specMod = PW_SPEC[pwVal('pw-spec')][pwVal('pw-dspec')] || 0
+  const bonus = defending ? (shield + safe) : specMod / 100
+  const defended = weighted * (1 + bonus)
   const pw = defended + finesseBonus
+  // The roll only exists on an attack, so the band collapses when holding.
+  const rng = defending ? 0 : PW_SPEC_RNG / 100
+  const pwLo = weighted * (1 + bonus - rng) + finesseBonus
+  const pwHi = weighted * (1 + bonus + rng) + finesseBonus
 
   const n1 = (x) => x.toFixed(1)
   const anyClipped = rows.some((r) => r.clipped)
 
+  /* Only one headline number on the page. When you are attacking, the verdict
+     block above already states your band against theirs, so this block drops to
+     being the working behind it rather than repeating the figure. */
   out.innerHTML =
-    '<span class="verdict-num">' + n1(pw) + '</span>' +
-    '<span class="verdict-word">power score ' + (defending ? 'holding' : 'attacking') +
-      ' a ' + district.label + '</span>' +
+    (defending
+      ? '<span class="verdict-num">' + n1(pw) + '</span>' +
+        '<span class="verdict-word">power score holding a ' + district.label + '</span>'
+      : '<p class="calc-side-head">How your ' + n1(pw) + ' is built</p>') +
     '<div class="pw-workwrap"><table class="pw-work"><thead><tr>' +
       '<th>Stat</th><th>Base</th><th>Gear</th><th>With gear</th><th>Aged</th>' +
       (cap != null ? '<th>Capped</th>' : '') +
@@ -2584,29 +2902,161 @@ function pwRecalc() {
       '<td>' + r.w + '%</td><td class="pw-contrib">' + n1(r.contrib) + '</td></tr>').join('') +
     '</tbody></table></div>' +
     '<ul class="pw-tail">' +
+      '<li><span class="pw-tail-label">' + pwCap1(pwVal('pw-rarity')) +
+        ', so this capo tops out at</span><span>' + PW_RARITY_CAP[pwVal('pw-rarity')] +
+        ' pw</span></li>' +
       '<li><span class="pw-tail-label">Weighted score</span><span>' + n1(weighted) + '</span></li>' +
       (shield ? '<li><span class="pw-tail-label">Shield</span><span>+15%</span></li>' : '') +
       (safe ? '<li><span class="pw-tail-label">Safe House district</span><span>+20%</span></li>' : '') +
       (shield || safe ? '<li><span class="pw-tail-label">After defensive bonuses</span><span>' +
         n1(defended) + '</span></li>' : '') +
+      (!defending ? '<li><span class="pw-tail-label">' + pwCap1(pwVal('pw-spec')) +
+        ' into ' + pwCap1(pwVal('pw-dspec')) + '</span><span>' +
+        (specMod > 0 ? '+' : '') + specMod + '%</span></li>' : '') +
       '<li><span class="pw-tail-label">Finesse ' + finesse + '★ (+' +
         (finesse * 0.5).toFixed(1) + '% of weighted)</span><span>+' + n1(finesseBonus) + '</span></li>' +
       '<li><span class="pw-tail-label">Power score</span><span>' + n1(pw) + '</span></li>' +
     '</ul>' +
-    '<p class="pw-note">Age ' + age + ' multiplies every stat by ' + ageMult.toFixed(2) + '×. ' +
-      (defending
-        ? (pwVal('pw-district') === 'safe_house'
-            ? 'Holding a Safe House carries its own +20%, so that is applied for you. '
-            : 'Only a Safe House district carries the +20%, and this is not one. ')
-        : 'A shield and the Safe House bonus lift the score of whoever holds the district, ' +
-          'never the attacker, so neither counts here. ') +
-      (cap != null
-        ? 'Stats are capped at ' + cap + (leagueCap != null && (rarityCap == null || leagueCap <= rarityCap)
-            ? ' by ' + pwCap1(league) + ' league. '
-            : ' by card rarity. ') +
-          (anyClipped ? 'Figures in red are being clipped by that cap: training them higher does nothing here.' : '')
-        : 'No stat cap applies in ' + pwCap1(league) + ' league, so trained stats count in full.') +
-    '</p>'
+    // One line, and only when it changes what you would do next.
+    (anyClipped
+      ? '<p class="pw-note">Red figures are clipped by the Street cap of ' + cap +
+        '. Training those does nothing until you promote out of Street.</p>'
+      : '')
+
+  pwVerdict(district, defending, pw, pwLo, pwHi)
+}
+
+/**
+ * Whether the attack is worth the cooldown.
+ *
+ * Both sides are bands rather than numbers, so the answer is which band sits
+ * clear of the other. Where they overlap there is no honest single figure: it
+ * turns on how the defender happens to have spread stats we cannot see, and
+ * saying "62% chance" would dress an unknown distribution up as a measurement.
+ */
+/**
+ * Keep rank and bars honest about the rarity above them.
+ *
+ * Rarity caps every stat, so it caps the TOTAL a capo can hold, but the power
+ * bar is still drawn against what its RANK could hold. A Rare Boss therefore
+ * tops out at 300 of a possible 500 and can never show more than five of eight
+ * bars. The list offered all eight, so you could describe a Rare Boss at 8/8,
+ * a capo that cannot exist, and the band came back as a degenerate point.
+ *
+ * The rank labels move too: a Boss reads "500 max" for a God and "300 max" for
+ * a Rare, because that is the number that constrains the read.
+ */
+function pwSyncDefender() {
+  const rankSel = pwEl('pw-drank')
+  const barsSel = pwEl('pw-dbars')
+  if (!rankSel || !barsSel) return
+  const rarityCap = PW_RARITY_CAP[pwVal('pw-drarity')]
+  for (const opt of rankSel.options) {
+    opt.textContent = pwCap1(opt.value) +
+      ' (' + Math.min(PW_RANK_CAP[opt.value], rarityCap) * 5 + ' max)'
+  }
+  const rankCap = PW_RANK_CAP[pwVal('pw-drank')]
+  const ceiling = Math.min(rankCap, rarityCap) * 5
+  const maxBars = Math.max(1, Math.min(8, Math.round(ceiling / (rankCap * 5) * 8)))
+  if (barsSel.options.length === maxBars) return
+  const want = Math.min(parseInt(barsSel.value, 10) || 1, maxBars)
+  barsSel.innerHTML = ''
+  for (let n = 1; n <= maxBars; n++) {
+    const o = document.createElement('option')
+    o.value = String(n)
+    o.textContent = n + ' / 8'
+    o.selected = n === want
+    barsSel.appendChild(o)
+  }
+}
+
+function pwVerdict(district, defending, pw, pwLo, pwHi) {
+  const wrap = pwEl('pw-defwrap')
+  if (wrap) wrap.hidden = defending
+  const out = pwEl('pw-verdict')
+  if (!out) return
+  // Hide the card as well as skipping the render. Left visible it would draw an
+  // empty bordered box, or worse, keep the previous opponent's verdict on
+  // screen while you are holding and there is no opponent at all.
+  out.hidden = defending
+  if (defending) return
+  pwSyncDefender()
+
+  const w = {}
+  for (const st of PW_STATS) w[st] = district[st] / 100
+  const band = pwDefenderBand(w)
+
+  const gearPct = PW_SET_PCT[pwVal('pw-dgear')] || 0
+  const ageSel = parseFloat(pwVal('pw-dage')) || 0
+  // Unknown age is taken at the 1.40x peak. Scouting cannot see it, and the
+  // expensive mistake is the one that flatters the attacker.
+  /* An unknown age has to widen the band at BOTH ends, not raise the floor:
+     applying the peak to the bottom too would claim a floor no evidence
+     supports. Young at the bottom, peak at the top. */
+  const ageLo = ageSel ? pwAgeMult(ageSel) : 1
+  const ageHi = ageSel ? pwAgeMult(ageSel) : 1.4
+  const shield = parseFloat(pwVal('pw-shield')) || 0
+  const safe = pwVal('pw-district') === 'safe_house' ? 0.2 : 0
+  const base = (1 + gearPct / 100) * (1 + shield + safe)
+  const mult = base * ageHi
+  const dLo = band.lo * base * ageLo
+  // Their Finesse is not visible either, so the top of the band carries the
+  // full five stars.
+  const dHi = band.hi * mult * 1.025
+
+  const n1 = (x) => x.toFixed(1)
+  let word, state, share = null
+  if (pwLo > dHi) { word = 'Clear'; state = 'good' }
+  else if (pwHi <= dLo) { word = 'Not close'; state = 'bad' }
+  else {
+    const span = dHi - dLo
+    share = span > 0 ? Math.max(0, Math.min(1, (pw - dLo) / span)) : 0
+    // Anything inside the overlap is a gamble, so only a clear lead earns green.
+    word = share > 0.6 ? 'Favoured' : share < 0.35 ? 'Against you' : 'Coin flip'
+    state = share > 0.6 ? 'good' : 'warn'
+  }
+  out.className = 'verdict pw-card pw-v-' + state
+  const specMod = PW_SPEC[pwVal('pw-spec')][pwVal('pw-dspec')] || 0
+
+  out.innerHTML =
+    /* Answer on the left, how it was reached on the right. Stacked, the tail
+       pushed the verdict itself off the top of a short screen.
+
+       Three rows were dropped as noise: the rarity cap and the specialty shape
+       are inputs you just set two cards above, and the pre-multiplier subtotal
+       is a working figure nobody acts on. What is left is the reading, the two
+       multipliers applied to it, and the result. */
+    '<span class="verdict-num">' + word + '</span>' +
+    '<div class="pw-vsplit">' +
+      '<div class="pw-vcard">' +
+        '<p class="pw-vcard-head">Your capo</p>' +
+        '<span class="pw-vnum">' + n1(pwLo) + '&ndash;' + n1(pwHi) + '</span>' +
+        '<ul class="pw-tail">' +
+          '<li><span class="pw-tail-label">' + pwCap1(pwVal('pw-spec')) + ' into ' +
+            pwCap1(pwVal('pw-dspec')) + '</span><span>' + (specMod > 0 ? '+' : '') +
+            specMod + '%</span></li>' +
+          (share !== null ? '<li><span class="pw-tail-label">Clears</span><span>' +
+            Math.round(share * 100) + '% of their range</span></li>' : '') +
+        '</ul>' +
+      '</div>' +
+      '<div class="pw-vcard">' +
+        '<p class="pw-vcard-head">Their capo</p>' +
+        '<span class="pw-vnum">' + n1(dLo) + '&ndash;' + n1(dHi) + '</span>' +
+        '<ul class="pw-tail">' +
+          '<li><span class="pw-tail-label">' + pwVal('pw-dbars') +
+            (pwVal('pw-dbars') === '1' ? ' bar on a ' : ' bars on a ') +
+            pwCap1(pwVal('pw-drank')) + '</span><span>' + Math.ceil(band.tLo) + '&ndash;' +
+            Math.floor(band.tHi) + ' stats</span></li>' +
+          (gearPct ? '<li><span class="pw-tail-label">Gear</span><span>+' + gearPct +
+            '%</span></li>' : '') +
+          '<li><span class="pw-tail-label">Age' + (ageSel ? '' : ', unknown') +
+            '</span><span>' + (ageSel ? '&times;' + ageHi.toFixed(2)
+              : '&times;1.00 to &times;1.40') + '</span></li>' +
+          (shield ? '<li><span class="pw-tail-label">Shield</span><span>+15%</span></li>' : '') +
+          (safe ? '<li><span class="pw-tail-label">Safe House</span><span>+20%</span></li>' : '') +
+        '</ul>' +
+      '</div>' +
+    '</div>'
 }
 `
 
@@ -2839,11 +3289,10 @@ const PAGES = [
     eyebrow: 'The Syndicate &middot; what your capo actually brings',
     description: 'Work out a capo\u2019s takeover power score: stats, gear, age and Finesse, ' +
       'weighted by district type. The published formula, with every step shown.',
-    body: `<p class="basis">Describe a capo and this runs the game\u2019s published takeover
-    arithmetic on it: gear folded into the stats, the age multiplier, the district\u2019s
-    stat weighting, then the defensive bonuses and Finesse. Every step is shown, because a
-    single number you cannot check is not worth much.</p>
-  <div id="pwcalc"></div>
+    // No standfirst. The form is self-explanatory and the explainer only pushed
+    // it below the fold. What the page is for still reaches search engines
+    // through the meta description above.
+    body: `<div id="pwcalc"></div>
   <div class="section-head"><h2>Where these numbers come from</h2><span class="section-meta">published, not guessed</span></div>
   <div class="guide">
     <div class="guide-item"><span class="name">District weights</span><span class="what">Published in full by the game. Every district\u2019s five weights sum to 100%.</span></div>
