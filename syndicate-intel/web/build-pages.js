@@ -228,6 +228,10 @@ const POWER_CSS = String.raw`
   border-color: var(--accent-deep); }
 .pw-band { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-muted);
   margin: var(--space-2) 0 0; }
+/* The one sentence the defender card exists to produce. */
+.pw-threshold { font-size: var(--step--1); color: var(--ink-muted); margin: var(--space-3) 0 0;
+  padding-top: var(--space-3); border-top: 1px solid var(--rule); }
+.pw-threshold b { color: var(--accent-bright); font-weight: 500; }
 .pw-note { font-size: var(--step--1); color: var(--ink-faint); max-width: 62ch;
   margin-top: var(--space-3); }
 `
@@ -2565,7 +2569,32 @@ const PW_RANK_CAP = { recruit: 20, soldier: 30, captain: 40, lieutenant: 60, und
    This assumes the set is spread evenly rather than stacked on the stats this
    district happens to weight heavily. Stacked, it is worth more, so the top of
    the band below is a floor on the worst case rather than a hard ceiling. */
-const PW_SET_PCT = { none: 0, rare: 12, epic: 18, legendary: 24 }
+/* A set is four primaries and four secondaries, and WHERE they land beats what
+   rarity they are. Every slot carries one item per stat, so all four primaries
+   can sit on a single stat: a full grit set is gas mask, vest, gauntlets and
+   combat boots. That is 4p% on one stat and 2p% on another.
+
+   Placed well against a district's weighting a rare set is worth +20% of the
+   score; placed badly a legendary one is worth +12%. The old flat figure
+   (+12/18/24 regardless) could be 28 points out on a Racket Hub and was only
+   ever exactly right on a Syndicate HQ, where all five weights are 20% and
+   placement genuinely cannot matter. */
+const PW_GEAR_TIERS = [
+  { key: 'none', label: 'no gear', pct: 0 },
+  { key: 'rare', label: 'a rare set', pct: 10 },
+  { key: 'epic', label: 'an epic set', pct: 15 },
+  { key: 'legendary', label: 'a legendary set', pct: 20 },
+]
+
+/** Four primaries on the heaviest stat, four secondaries on the next. */
+function pwBestPlacement(w, pct) {
+  const order = PW_STATS.slice().sort((a, b) => w[b] - w[a])
+  const out = {}
+  for (const k of PW_STATS) out[k] = 0
+  out[order[0]] = 4 * pct
+  out[order[1]] = 2 * pct
+  return { pct: out, on: [order[0], order[1]] }
+}
 
 /* Specialty implies the stat a capo trains cheapest, and so usually its
    highest. Inferred from one fight's summary line ("BRAIN vs REPUTATION" for a
@@ -2583,7 +2612,7 @@ const PW_SPEC_STAT = { enforcer: 'muscle', hustler: 'hustle', negotiator: 'brain
  * which on a Racket Hub scores anywhere from 8 to 38 depending purely on where
  * the points sit. A point estimate here would be a fiction.
  */
-function pwDefenderBand(w) {
+function pwDefenderBand(w, gearPct) {
   const rank = pwVal('pw-drank')
   const bars = parseFloat(pwVal('pw-dbars')) || 1
   const rankCap = PW_RANK_CAP[rank]
@@ -2603,16 +2632,23 @@ function pwDefenderBand(w) {
      unconstrained one that no real capo could occupy. */
   const spec = PW_SPEC_STAT[pwVal('pw-dspec')] || PW_STATS[0]
   const others = PW_STATS.filter((k) => k !== spec)
-  const heavy = others.slice().sort((a, b) => w[b] - w[a])
+  const heavy = others.slice().sort((a, b) =>
+    w[b] * (1 + ((gearPct || {})[b] || 0) / 100) - w[a] * (1 + ((gearPct || {})[a] || 0) / 100))
   const light = heavy.slice().reverse()
 
+  /* Gear multiplies the stat it sits on, so it has to be inside the sweep. A
+     grit set on a capo that dumped grit is worth almost nothing; the same set
+     on a grit-heavy capo is worth a fifth of its score. Applying it afterwards
+     as a flat factor loses that entirely. */
+  const g = gearPct || {}
+  const wg = (k) => w[k] * (1 + (g[k] || 0) / 100)
   const sweep = (T, seq, better) => {
     let best = null
     for (let r = Math.ceil(T / 5); r <= statCap; r++) {
       const room = Math.min(statCap, r)       // nothing may exceed the specialty stat
-      let left = T - r, sum = r * w[spec]
+      let left = T - r, sum = r * wg(spec)
       if (left > room * 4 + 1e-9) continue    // the remainder does not fit under it
-      for (const k of seq) { const v = Math.min(room, Math.max(0, left)); sum += v * w[k]; left -= v }
+      for (const k of seq) { const v = Math.min(room, Math.max(0, left)); sum += v * wg(k); left -= v }
       if (left > 1e-9) continue
       if (best === null || better(sum, best)) best = sum
     }
@@ -2768,9 +2804,6 @@ function pwBuild() {
           [1, 2, 3, 4, 5, 6, 7, 8].map((n) => [String(n), n + ' / 8']), '3')) +
         pwRow('pw-dspec', 'Specialty',
           pwCtlSelect('pw-dspec', PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'fixer')) +
-        pwRow('pw-dgear', 'Gear', pwCtlSelect('pw-dgear',
-          Object.keys(PW_SET_PCT).map((k) => [k, k === 'none' ? 'None'
-            : 'Full ' + k + ' set (+' + PW_SET_PCT[k] + '%)']), 'rare')) +
         pwRow('pw-dage', 'Age', pwCtlSelect('pw-dage',
           [['0', 'Unknown, assume peak']].concat([25, 28, 30, 32, 35, 40, 45, 50]
             .map((a) => [String(a), a + ' (x' + pwAgeMult(a).toFixed(2) + ')'])), '0')) +
@@ -2984,25 +3017,54 @@ function pwVerdict(district, defending, pw, pwLo, pwHi) {
 
   const w = {}
   for (const st of PW_STATS) w[st] = district[st] / 100
-  const band = pwDefenderBand(w)
 
-  const gearPct = PW_SET_PCT[pwVal('pw-dgear')] || 0
-  const ageSel = parseFloat(pwVal('pw-dage')) || 0
-  // Unknown age is taken at the 1.40x peak. Scouting cannot see it, and the
-  // expensive mistake is the one that flatters the attacker.
-  /* An unknown age has to widen the band at BOTH ends, not raise the floor:
+  /* An unknown age widens the band at BOTH ends rather than raising the floor:
      applying the peak to the bottom too would claim a floor no evidence
      supports. Young at the bottom, peak at the top. */
+  const ageSel = parseFloat(pwVal('pw-dage')) || 0
   const ageLo = ageSel ? pwAgeMult(ageSel) : 1
   const ageHi = ageSel ? pwAgeMult(ageSel) : 1.4
   const shield = parseFloat(pwVal('pw-shield')) || 0
   const safe = pwVal('pw-district') === 'safe_house' ? 0.2 : 0
-  const base = (1 + gearPct / 100) * (1 + shield + safe)
-  const mult = base * ageHi
-  const dLo = band.lo * base * ageLo
-  // Their Finesse is not visible either, so the top of the band carries the
-  // full five stars.
-  const dHi = band.hi * mult * 1.025
+  const base = 1 + shield + safe
+
+  /* Gear is no longer guessed at, it is solved for. Their loadout is the one
+     thing scouting cannot show at all, so rather than ask you to pick a tier,
+     work out the smallest tier that would beat you and say so. That turns an
+     unanswerable question into one you can act on: scout harder, or pick a
+     different hex.
+
+     Their Finesse is invisible too, so every ceiling carries the full five
+     stars. */
+  const bare = pwDefenderBand(w)
+  const dLo = bare.lo * base * ageLo
+  const tiers = PW_GEAR_TIERS.map((t) => {
+    const place = pwBestPlacement(w, t.pct)
+    const b = pwDefenderBand(w, place.pct)
+    /* Two numbers per tier, and they answer different questions.
+
+       max is the envelope: their best stat spread, peak age, full Finesse.
+       Useful as a worst case, useless as a threshold, because a defender's
+       ungeared ceiling already clears most attackers and every tier then reads
+       "no gear needed". (No backticks in here: this whole block lives inside a
+       String.raw template and one would end it.)
+
+       typ is the threshold: the bar's midpoint total spread evenly, age 30,
+       Finesse 2.5. Not a prediction, a stated baseline, so the sentence means
+       "against an ordinary build of this size". Gear is the only thing varying
+       between tiers, which is the whole point of asking. */
+    const T = (b.tLo + b.tHi) / 2
+    let per = 0
+    for (const k of PW_STATS) per += w[k] * (1 + (place.pct[k] || 0) / 100)
+    return { ...t, on: place.on,
+      max: b.hi * base * ageHi * 1.025,
+      typ: (T / 5) * per * base * pwAgeMult(ageSel || 30) * 1.0125 }
+  })
+  const bareTyp = tiers[0].typ
+  const dHi = tiers[tiers.length - 1].max
+  // The lightest tier whose typical build reaches your score. Ties go to them.
+  const beats = tiers.find((t) => t.typ >= pw) || null
+  const band = bare
 
   const n1 = (x) => x.toFixed(1)
   let word, state, share = null
@@ -3047,14 +3109,26 @@ function pwVerdict(district, defending, pw, pwLo, pwHi) {
             (pwVal('pw-dbars') === '1' ? ' bar on a ' : ' bars on a ') +
             pwCap1(pwVal('pw-drank')) + '</span><span>' + Math.ceil(band.tLo) + '&ndash;' +
             Math.floor(band.tHi) + ' stats</span></li>' +
-          (gearPct ? '<li><span class="pw-tail-label">Gear</span><span>+' + gearPct +
-            '%</span></li>' : '') +
+          '<li><span class="pw-tail-label">Typical build, ungeared</span><span>' +
+            n1(bareTyp) + '</span></li>' +
           '<li><span class="pw-tail-label">Age' + (ageSel ? '' : ', unknown') +
             '</span><span>' + (ageSel ? '&times;' + ageHi.toFixed(2)
               : '&times;1.00 to &times;1.40') + '</span></li>' +
           (shield ? '<li><span class="pw-tail-label">Shield</span><span>+15%</span></li>' : '') +
           (safe ? '<li><span class="pw-tail-label">Safe House</span><span>+20%</span></li>' : '') +
         '</ul>' +
+        '<p class="pw-threshold">' +
+          (beats === null
+            ? 'A typical build this size does not reach your ' + n1(pw) +
+              ' even with <b>a legendary set</b> placed on ' + pwCap1(tiers[3].on[0]) +
+              ' and ' + pwCap1(tiers[3].on[1]) + '.'
+            : beats.key === 'none'
+              ? 'A typical build this size beats your ' + n1(pw) +
+                ' <b>with no gear at all</b>.'
+              : 'They beat your ' + n1(pw) + ' once they carry <b>' + beats.label +
+                '</b> placed on ' + pwCap1(beats.on[0]) + ' and ' +
+                pwCap1(beats.on[1]) + '.') +
+        '</p>' +
       '</div>' +
     '</div>'
 }
