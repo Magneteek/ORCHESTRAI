@@ -98,7 +98,13 @@ EnvironmentFile=-$PROJECT_DIR/.env
 # purely waiting. It checkpoints per wallet and resumes, so a kill costs
 # progress rather than data, but it still needs most of its hour. daily pulls a
 # 58MB payload and offload can push hundreds of MB on its early runs.
-TimeoutStartSec=$(case "$name" in rewards) echo 7200;; daily|seasonclose|offload) echo 1800;; *) echo 600;; esac)
+#
+# derive was on the 600s default and that stopped being honest once the heap
+# ceiling was raised and the rebuild started completing again: the first
+# successful run after the 2026-09-08 OOM fix took 396s, two thirds of the
+# budget, most of it swapping. The archive grows every day, so on the old
+# ceiling a timeout would have become the next way the site went quietly stale.
+TimeoutStartSec=$(case "$name" in rewards) echo 7200;; daily|derive|seasonclose|offload) echo 1800;; *) echo 600;; esac)
 Nice=10
 # One CPU shared with nginx: keep a burst of JSON parsing from starving the
 # thing actually serving the site.
