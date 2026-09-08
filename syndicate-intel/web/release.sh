@@ -43,12 +43,31 @@ if [ -n "$(git log "origin/$branch..$branch" --oneline 2>/dev/null)" ]; then
 fi
 
 echo "  releasing $(git rev-parse --short HEAD) to ${PROD_HOST}"
+# Two things this has to catch, both of which it used to miss.
+#
+# pipefail, because refresh.sh is piped into tail: without it the status of the
+# release was tail's, so a rebuild that aborted half way through was reported as
+# a clean release.
+#
+# And a freshness check, because exiting zero is not evidence that anything was
+# built. When sections.js ran out of heap for two days straight, the smoke test
+# below passed on every run: a stale page answers 200 exactly as happily as a
+# fresh one. So the box is made to prove it wrote the site, by beating a marker
+# stamped immediately before the build.
 ssh -o BatchMode=yes "${PROD_USER}@${PROD_HOST}" "
-  set -e
+  set -eo pipefail
   cd \$(dirname ${PROD_DIR}) && git pull -q origin ${branch}
   cd ${PROD_DIR}
   echo \"  now on \$(git rev-parse --short HEAD)\"
+  marker=\$(mktemp)
   bash derive/refresh.sh 2>&1 | tail -3
+  built=\$(find web/dist/site -name '*.html' -newer \"\$marker\" | wc -l | tr -d ' ')
+  rm -f \"\$marker\"
+  if [ \"\$built\" -eq 0 ]; then
+    echo \"  FATAL: the build exited 0 and wrote no HTML. The site is unchanged.\" >&2
+    exit 1
+  fi
+  echo \"  wrote \$built pages\"
 "
 
 echo
