@@ -550,13 +550,31 @@ function playerActivity() {
  * 2,200,000 across the only 19 promotions anyone has made. p25 and p75 ship so a
  * consumer can see the spread, and the promotion count ships so a thin rung
  * cannot be mistaken for a firm price.
+ *
+ * Two things here used to cost the site its updates. This function selected
+ * every row of capos_daily, 2,700,314 of them, and looked for tier changes in
+ * JavaScript. Promotions are rare, so nearly all of that was thrown away again
+ * immediately: the boss rung has 19 in the entire archive. Building 2.7 million
+ * objects to keep a few thousand took 984 MB of heap, and was most of what put
+ * the rebuild over the line it died on for two days in September 2026. The
+ * window still runs across the whole table, but it runs inside SQLite now, and
+ * only the promotions themselves cross into JS.
+ *
+ * It was also called twice, from tierEconomics and from the capos payload, so
+ * the scan happened twice on every rebuild. Nothing can change it within a run,
+ * so it is computed once and kept.
  */
+let promotionCostCache = null
 function promotionCost() {
-  const rows = all(`SELECT tier, total_racket_invested AS inv,
-                           LAG(tier) OVER w AS pt,
-                           LAG(total_racket_invested) OVER w AS pi
-                    FROM capos_daily
-                    WINDOW w AS (PARTITION BY capo_id ORDER BY day)`)
+  if (promotionCostCache) return promotionCostCache
+
+  const rows = all(`SELECT tier, inv, pt, pi FROM (
+                      SELECT tier, total_racket_invested AS inv,
+                             LAG(tier) OVER w AS pt,
+                             LAG(total_racket_invested) OVER w AS pi
+                      FROM capos_daily
+                      WINDOW w AS (PARTITION BY capo_id ORDER BY day))
+                    WHERE pt IS NOT NULL AND pt != tier AND inv - pi > 0`)
 
   const q = (v, p) => v[Math.floor(p * (v.length - 1))]
   const out = []
@@ -573,7 +591,7 @@ function promotionCost() {
       step, total: cumulative, p25: q(v, 0.25), p75: q(v, 0.75),
     })
   }
-  return out
+  return (promotionCostCache = out)
 }
 
 
