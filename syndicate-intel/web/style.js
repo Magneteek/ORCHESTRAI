@@ -117,6 +117,16 @@ export const CSS = String.raw`
   /* The third verdict state: neither a win nor a loss but a coin flip. Sits
      between the credit green and the debit red on purpose. */
   --warn:      #d9a05c;
+  /* Rarity. Desaturated on purpose: the page is warm gold on near-black, and
+     saturated game-UI colours punch a hole straight through it. Uncommon and
+     legendary reuse the credit and warn hues already in the palette rather than
+     introducing a second green and a second orange. */
+  --rar-common:    #8a8269;
+  --rar-uncommon:  #7fb894;
+  --rar-rare:      #7aa5c8;
+  --rar-epic:      #a98ac9;
+  --rar-legendary: #d9a05c;
+  --rar-god:       #f4efe4;
   --shadow:    rgba(0, 0, 0, 0.55);
   /* Card ground, a shade under the page so a panel reads as recessed.
      The gold stroke and the shadow carry the edge; on a near-black page
@@ -172,6 +182,15 @@ export const CSS = String.raw`
   --debit:     #8C2F26;
   --credit:    #2E5C43;
   --warn:      #8A5A1C;
+  /* Light theme needs the same hues carried down, not the same values: the dark
+     ones vanish on an off-white ground. God is the exception. "White" cannot
+     mean white here, so it takes the strongest neutral instead. */
+  --rar-common:    #6C7161;
+  --rar-uncommon:  #2E5C43;
+  --rar-rare:      #2b5f80;
+  --rar-epic:      #5b3f86;
+  --rar-legendary: #8A5A1C;
+  --rar-god:       #1A1C16;
   --shadow:    rgba(26, 28, 22, 0.10);
   --card:      #DEDFD5;
 }

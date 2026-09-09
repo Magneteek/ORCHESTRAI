@@ -150,6 +150,13 @@ const POWER_CSS = String.raw`
 .pw-gear-slot { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--accent); flex: 0 0 4rem; }
 .pw-gear-item { font-size: var(--step--1); color: var(--ink); }
+.pw-rar { font-family: var(--mono); font-weight: 500; }
+.pw-rar-common { color: var(--rar-common); }
+.pw-rar-uncommon { color: var(--rar-uncommon); }
+.pw-rar-rare { color: var(--rar-rare); }
+.pw-rar-epic { color: var(--rar-epic); }
+.pw-rar-legendary { color: var(--rar-legendary); }
+.pw-rar-god { color: var(--rar-god); }
 .pw-gear-stats { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-muted);
   flex: 1 1 13rem; }
 .pw-gear-acts { display: flex; gap: var(--space-2); margin-left: auto; }
@@ -280,6 +287,31 @@ const POWER_CSS = String.raw`
    word on a phone, rather than being squeezed into a column beside it. */
 .pw-odds-note { font-size: var(--step--1); color: var(--ink-muted); margin: 0;
   flex: 1 1 20rem; }
+/* The power bar as the game draws it: eight segments, the ones reached filled
+   in brand gold. Reading a bar off a scouting screen and reproducing it here is
+   the whole task, and a dropdown made you translate it first. */
+/* The bars take whatever the row has left rather than a fixed width, so they
+   are as large as they can be at every screen size instead of being sized for
+   the narrowest one. Width is what makes them easy to hit, so the height is
+   half what it was and every pixel saved goes sideways. */
+/* A full line to itself. Sharing one with Age gave the width straight back and
+   put the segments back where they started. */
+.pw-inline-bars { flex: 1 1 100%; min-width: 0; }
+.pw-bars { display: flex; flex: 1; width: 100%; gap: 3px; }
+.pw-bar { flex: 1 1 0; min-width: 1.5rem; height: 1.05rem; padding: 0;
+  background: var(--surface); border: 1px solid var(--rule-firm);
+  border-radius: 0; cursor: pointer; }
+.pw-bars-read { font-family: var(--mono); font-size: var(--step--1);
+  color: var(--ink-muted); white-space: nowrap; }
+/* The dialog's preview line names the effect in the accent, matching the way a
+   gear row names its item. */
+.pw-dlg-note > b { color: var(--accent); font-weight: 500; }
+.pw-bar.is-on { background: var(--accent); border-color: var(--accent); }
+.pw-bar:hover:not(:disabled) { border-color: var(--accent-bright); }
+.pw-bar:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* A reading this capo cannot show. Dimmed and inert rather than absent, so the
+   scale stays eight wide and the ceiling is visible rather than implied. */
+.pw-bar:disabled { opacity: 0.25; cursor: not-allowed; }
 .pw-v-good { border-color: var(--credit); background: color-mix(in srgb, var(--credit) 7%, var(--card)); }
 .pw-v-warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 7%, var(--card)); }
 .pw-v-bad { border-color: var(--debit); background: color-mix(in srgb, var(--debit) 7%, var(--card)); }
@@ -2644,6 +2676,58 @@ const PW_SPEC_RNG = 2.5
    misses the Boss by three. Only this fits both. */
 const PW_RANK_CAP = { recruit: 20, soldier: 30, captain: 40, lieutenant: 60, underboss: 80, boss: 100 }
 
+/* Defence items, from the Equipment Reference. One per hex, and the docs are
+   explicit that they grant no stat bonus at all: their entire value is the
+   named effect. (Our archive disagrees, populating a primary and secondary stat
+   on all 13,647 of them on the attack ladder. The docs are stated twice and
+   these read as shared-schema columns left over from crafting, so the docs win
+   and the stats are ignored, exactly as they were before this existed.)
+
+   Values are common / rare / epic / legendary. God uses the legendary value;
+   its edge is 75 durability. There is no uncommon tier, which the archive
+   confirms: zero uncommon defence items exist.
+
+   Each item is full strength on its specialist territory and HALF everywhere
+   else, and the home territories map one-to-one onto the districts already in
+   the dropdown, so that is computed rather than asked for. */
+const PW_HEX_DEF = {
+  cctv: { label: 'CCTV', home: 'intelligence_post', kind: 'chance', pct: [10, 20, 30, 40],
+    effect: 'Full Blackout', short: 'to nullify attacker gear',
+    says: 'chance to nullify every attacker item bonus' },
+  lookouts: { label: 'Lookouts', home: 'syndicate_hq', kind: 'flat', pct: [10, 20, 30, 40],
+    effect: 'Overwatch', says: 'defending Rep' },
+  barricades: { label: 'Barricades', home: 'training_ground', kind: 'per', pct: [4, 6, 8, 10],
+    cap: 3, arg: 'Held', argUnit: 'h', dflt: 3, effect: 'Dig In',
+    says: 'per hour held unattacked' },
+  alarms: { label: 'Alarms', home: 'racket_hub', kind: 'chance', pct: [7.5, 15, 22.5, 30],
+    effect: 'Hard Stop', short: 'to fail the attack',
+    says: 'chance an attack instantly fails' },
+  safehouses: { label: 'Safehouses', home: 'safe_house', kind: 'per', pct: [5, 8, 12, 16],
+    cap: 3, arg: 'Item lead', argUnit: '', dflt: 0, effect: 'Muscle Up',
+    says: 'per attack item the attacker leads by' },
+}
+/* God takes the legendary column rather than a fifth one of its own. */
+const PW_HEX_RAR = ['common', 'rare', 'epic', 'legendary', 'god']
+const PW_HEX_IDX = { common: 0, rare: 1, epic: 2, legendary: 3, god: 3 }
+
+/* Resolves the current hex defence to the two things the score cares about: a
+   deterministic share that joins the additive defence stack, and an activation
+   chance that deliberately does NOT, because folding a 30% instant-fail into a
+   score would state as a number something that is a coin toss. */
+function pwHexDef() {
+  const key = pwVal('pw-hexdef')
+  const d = PW_HEX_DEF[key]
+  if (!d) return { det: 0, chance: 0, d: null, onHome: false, full: 0 }
+  const full = d.pct[PW_HEX_IDX[pwVal('pw-hexdef-rar')] || 0]
+  const onHome = pwVal('pw-district') === d.home
+  const v = onHome ? full : full / 2
+  if (d.kind === 'chance')
+    return { det: 0, chance: v, d: d, onHome: onHome, full: v, per: v, mult: 1 }
+  const mult = d.kind === 'per' ? Math.min(d.cap, Math.max(0, pwNum('pw-hexdef-arg'))) : 1
+  return { det: (v * mult) / 100, chance: 0, d: d, onHome: onHome,
+    full: v * mult, per: v, mult: mult }
+}
+
 /* A full four-slot set adds 4 x (p + p/2) percent spread across the stats,
    which is 1.2p% of the stat total. Checked against a real capo: a Rare Boss on
    300 stats showed +36, and 1.2 x 10% x 300 is exactly 36.
@@ -2878,7 +2962,18 @@ function pwBuild() {
            Asking twice invited the two to disagree. */
         pwRow('pw-shield', 'Shield',
           pwCtlSelect('pw-shield', [['0', 'No'], ['0.15', 'Yes (+15%)']], '0')) +
-
+        /* Hex defence lives here rather than on the defender panel, for exactly
+           the reason the shield does: it belongs to whoever HOLDS the district,
+           so one answer serves both roles. On the defender panel it would
+           vanish the moment you switched to Holding it, which is precisely when
+           the hex being defended is your own. */
+        /* Same shape as gear: a button and a dialog, not four controls sitting
+           on the card. One per hex, so the list is never longer than one row. */
+        '<input type="hidden" id="pw-hexdef" value="">' +
+        '<input type="hidden" id="pw-hexdef-rar" value="common">' +
+        '<input type="hidden" id="pw-hexdef-arg" value="0">' +
+        '<button type="button" class="pw-add" id="pw-hexdef-add">Add hex defence</button>' +
+        '<div class="pw-gear-list" id="pw-hexdef-list"></div>' +
       '</div>' +
       '<div class="pw-card" id="pw-defwrap">' +
         '<p class="calc-side-head">The defender &middot; what you can see from the outside</p>' +
@@ -2887,16 +2982,46 @@ function pwBuild() {
         /* Rarity leads, because it decides what the two rows under it can even
            offer: rank shows the total this rarity can actually reach, and the
            bar list stops at the highest reading such a capo could show. */
-        pwRow('pw-drarity', 'Rarity', pwCtlSelect('pw-drarity', PW_RARITY_OPTS, 'epic')) +
-        pwRow('pw-drank', 'Rank', pwCtlSelect('pw-drank',
-          Object.keys(PW_RANK_CAP).map((k) => [k, pwCap1(k)]), 'lieutenant')) +
-        pwRow('pw-dbars', 'Power bars', pwCtlSelect('pw-dbars',
-          [1, 2, 3, 4, 5, 6, 7, 8].map((n) => [String(n), n + ' / 8']), '3')) +
-        pwRow('pw-dspec', 'Specialty',
-          pwCtlSelect('pw-dspec', PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'fixer')) +
-        pwRow('pw-dage', 'Age', pwCtlSelect('pw-dage',
-          [['0', 'Unknown, assume peak']].concat([25, 28, 30, 32, 35, 40, 45, 50]
-            .map((a) => [String(a), a + ' (x' + pwAgeMult(a).toFixed(2) + ')'])), '0')) +
+        /* The three things a scout reads off one capo, on one line, in the
+           order the game shows them: an Epic Boss on 3 of 8 bars. They were
+           three stacked rows saying it three times. */
+        '<div class="pw-sum-row">' +
+          /* No visible labels on these two. "Epic" and "Boss" say what they are,
+             a label each cost about 110px, and the row only fits on one line
+             without them. The names survive for screen readers as aria-label. */
+          '<div class="pw-inline">' +
+            pwCtlSelect('pw-drarity', PW_RARITY_OPTS, 'epic').replace('<select',
+              '<select aria-label="Defender rarity"') +
+          '</div>' +
+          '<div class="pw-inline">' +
+            pwCtlSelect('pw-drank', Object.keys(PW_RANK_CAP).map((k) => [k, pwCap1(k)]),
+              'lieutenant').replace('<select', '<select aria-label="Defender rank"') +
+          '</div>' +
+          '<div class="pw-inline">' +
+            pwCtlSelect('pw-dspec', PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'fixer')
+              .replace('<select', '<select aria-label="Defender specialty"') +
+          '</div>' +
+          /* Drawn as the game draws it rather than picked from a dropdown,
+             because reading a bar off a scouting screen and reproducing it is
+             the whole job. The hidden field keeps pwVal('pw-dbars') working. */
+          '<div class="pw-inline pw-inline-bars">' +
+            '<span class="pw-bars" id="pw-dbars-ui" role="radiogroup" aria-label="Power bars">' +
+              [1, 2, 3, 4, 5, 6, 7, 8].map((n) =>
+                '<button type="button" class="pw-bar" data-n="' + n + '" role="radio"' +
+                ' aria-checked="' + (n === 3 ? 'true' : 'false') +
+                '" aria-label="' + n + ' of 8"></button>').join('') +
+            '</span>' +
+            '<span class="pw-bars-read" id="pw-dbars-read">3 / 8</span>' +
+            '<input type="hidden" id="pw-dbars" value="3">' +
+          '</div>' +
+          /* Age keeps its label: unlike Epic, Lieutenant and Fixer, "Unknown,
+             assume peak" does not announce what question it is answering. It
+             sits in the same band rather than a second one, because a bordered
+             row holding a single field reads as an unfinished section. */
+          pwInline('pw-dage', 'Age', pwCtlSelect('pw-dage',
+            [['0', 'Unknown, assume peak']].concat([25, 28, 30, 32, 35, 40, 45, 50]
+              .map((a) => [String(a), a + ' (x' + pwAgeMult(a).toFixed(2) + ')'])), '0')) +
+        '</div>' +
       '</div>' +
     '</div>' +
     /* Results below the inputs, and only one headline at a time: the verdict
@@ -2920,6 +3045,9 @@ function pwBuild() {
   pwGearWire()
   pwGearRender()
   pwCapoWire()
+  pwBarsWire()
+  pwHexWire()
+  pwHexRender()
   pwRecalc()
 }
 
@@ -2935,6 +3063,10 @@ const PW_HALF_STARS = (() => {
   for (let i = 0; i <= 10; i++) out.push([String(i / 2), (i / 2) + '★'])
   return out
 })()
+
+/* Rarity is the first thing you look for on an item, so it is coloured and it
+   leads. One helper, so gear rows and the hex row cannot drift apart. */
+const pwRar = (r) => '<span class="pw-rar pw-rar-' + r + '">' + pwCap1(r) + '</span>'
 
 const pwInline = (id, label, ctl) =>
   '<div class="pw-inline"><label for="' + id + '">' + label + '</label>' + ctl + '</div>'
@@ -3019,7 +3151,7 @@ function pwGearRender() {
       '<div class="pw-gear-row">' +
         '<span class="pw-gear-slot">' + s[1] + '</span>' +
         '<span class="pw-gear-item">' + item[1] + '</span>' +
-        '<span class="pw-gear-stats">' + pwCap1(rar) + ' &middot; ' +
+        '<span class="pw-gear-stats">' + pwRar(rar) + ' &middot; ' +
           pwCap1(item[2]) + ' +' + full + '% &middot; ' +
           pwCap1(sec) + ' +' + (full / 2) + '%</span>' +
         '<span class="pw-gear-acts">' +
@@ -3226,7 +3358,11 @@ function pwRecalc() {
      Racket Hub weighted 16.830, and the game showed 18.14, which is the +5%
      matchup plus a small roll plus the Finesse tail. */
   const specMod = PW_SPEC[pwVal('pw-spec')][pwVal('pw-dspec')] || 0
-  const bonus = defending ? (shield + safe) : specMod / 100
+  /* The hex's deterministic defence joins the same additive stack as the shield
+     and the Safe House, which is what the docs specify: "added together and
+     applied to your whole score with no upper limit". It counts for whoever is
+     holding, so it rides on the same role gate. */
+  const bonus = defending ? (shield + safe + pwHexDef().det) : specMod / 100
   const defended = weighted * (1 + bonus)
   const pw = defended + finesseBonus
   // The roll only exists on an attack, so the band collapses when holding.
@@ -3278,6 +3414,7 @@ function pwRecalc() {
         '. Training those does nothing until you promote out of Street.</p>'
       : '')
 
+  pwHexRender()
   pwEstimate(pw, pwLo, pwHi, defending)
   pwVerdict(district, defending, pw, pwLo, pwHi)
 }
@@ -3314,16 +3451,191 @@ function pwSyncDefender() {
   const rankCap = PW_RANK_CAP[pwVal('pw-drank')]
   const ceiling = Math.min(rankCap, rarityCap) * 5
   const maxBars = Math.max(1, Math.min(8, Math.round(ceiling / (rankCap * 5) * 8)))
-  if (barsSel.options.length === maxBars) return
+  /* The readings above maxBars are not merely unlikely, a capo of this rarity
+     and rank cannot show them, so they are disabled rather than offered and
+     silently clamped. Buttons are updated in place, never rebuilt, so clicking
+     one does not throw away the focus that clicked it. */
   const want = Math.min(parseInt(barsSel.value, 10) || 1, maxBars)
-  barsSel.innerHTML = ''
-  for (let n = 1; n <= maxBars; n++) {
-    const o = document.createElement('option')
-    o.value = String(n)
-    o.textContent = n + ' / 8'
-    o.selected = n === want
-    barsSel.appendChild(o)
+  if (String(want) !== barsSel.value) barsSel.value = String(want)
+  const ui = pwEl('pw-dbars-ui')
+  if (ui) {
+    ui.querySelectorAll('.pw-bar').forEach((b) => {
+      const n = parseInt(b.dataset.n, 10)
+      b.disabled = n > maxBars
+      b.classList.toggle('is-on', n <= want)
+      b.setAttribute('aria-checked', n === want ? 'true' : 'false')
+      b.title = n > maxBars
+        ? pwCap1(pwVal('pw-drarity')) + ' ' + pwCap1(pwVal('pw-drank')) +
+          ' tops out at ' + maxBars + ' of 8'
+        : n + ' of 8'
+    })
   }
+  const read = pwEl('pw-dbars-read')
+  if (read) read.textContent = want + ' / 8'
+}
+
+/* Hex defence, built the way gear is: hidden fields hold it, a dialog edits it,
+   a row reads it back. Four controls on the card was the most crowded thing on
+   the page for a field most hexes do not have at all. */
+
+function pwHexRender() {
+  const list = pwEl('pw-hexdef-list')
+  const add = pwEl('pw-hexdef-add')
+  if (!list || !add) return
+  const h = pwHexDef()
+  if (!h.d) {
+    list.innerHTML = '<p class="pw-gear-none">No hex defence. A hex carries one item.</p>'
+    add.disabled = false
+    add.textContent = 'Add hex defence'
+    return
+  }
+  const n1 = (x) => (Math.round(x * 10) / 10)
+  /* The row says what it is worth AND whether it is on its own territory,
+     because the same item is worth half as much one hex over and that is the
+     single most actionable thing about these items. */
+  const worth = h.d.kind === 'chance'
+    ? n1(h.full) + '% ' + h.d.short + ' &middot; not scored'
+    : '+' + n1(h.det * 100) + '% defence'
+  const halved = h.onHome ? '' : ' &middot; halved off ' + PW_DISTRICTS[h.d.home].label
+  /* A "per something" item at zero is worth zero, but "+0% defence" alone reads
+     as a broken control, so the rate is spelled out whenever the total is nil. */
+  const rate = h.d.kind === 'per' && h.mult === 0
+    ? ' &middot; +' + n1(h.per) + '% ' + h.d.says
+    : ''
+  list.innerHTML =
+    '<div class="pw-gear-row">' +
+      '<span class="pw-gear-item">' + pwRar(pwVal('pw-hexdef-rar')) + ' ' + h.d.label + '</span>' +
+      '<span class="pw-gear-stats">' + h.d.effect + ' ' + worth + halved + rate + '</span>' +
+      '<span class="pw-gear-acts">' +
+        '<button type="button" class="pw-mini" data-hexedit="1">Edit</button>' +
+        '<button type="button" class="pw-mini" data-hexdel="1">Remove</button>' +
+      '</span>' +
+    '</div>'
+  add.disabled = true
+  add.textContent = 'One item per hex'
+}
+
+const pwHexDlg = () => {
+  const found = pwEl('pw-hex-dlg')
+  if (found) return found
+  const dlg = document.createElement('dialog')
+  dlg.id = 'pw-hex-dlg'
+  dlg.className = 'pw-dlg'
+  dlg.innerHTML =
+    '<form method="dialog" class="pw-dlg-form">' +
+      '<h3 class="pw-dlg-head" id="pw-hd-head">Hex defence</h3>' +
+      /* The effect and its number lead the dialog. They are the answer you came
+         for; underneath them are the three controls that change it. */
+      '<p class="pw-dlg-note" id="pw-hd-note"></p>' +
+      '<div class="pw-dlg-field"><label for="pw-hd-item">Item</label>' +
+        '<select id="pw-hd-item">' + Object.keys(PW_HEX_DEF).map((k) =>
+          '<option value="' + k + '">' + PW_HEX_DEF[k].label + ' &middot; ' +
+          PW_DISTRICTS[PW_HEX_DEF[k].home].label + '</option>').join('') + '</select></div>' +
+      '<div class="pw-dlg-field"><label for="pw-hd-rar">Rarity</label>' +
+        '<select id="pw-hd-rar">' + PW_HEX_RAR.map((k) =>
+          '<option value="' + k + '">' + pwCap1(k) +
+          (k === 'god' ? ' (legendary value)' : '') + '</option>').join('') + '</select></div>' +
+      '<div class="pw-dlg-field" id="pw-hd-arg-wrap" hidden>' +
+        '<label for="pw-hd-arg" id="pw-hd-arg-label">Held</label>' +
+        '<select id="pw-hd-arg">' + [0, 1, 2, 3].map((n) =>
+          '<option value="' + n + '">' + n + '</option>').join('') + '</select></div>' +
+      '<div class="pw-dlg-acts">' +
+        '<button type="button" class="pw-sw" id="pw-hd-cancel">Cancel</button>' +
+        '<button type="button" class="pw-sw pw-dlg-save" id="pw-hd-save">Save</button>' +
+      '</div>' +
+    '</form>'
+  document.body.appendChild(dlg)
+  pwEl('pw-hd-item').addEventListener('change', pwHexSyncDlg)
+  pwEl('pw-hd-rar').addEventListener('change', pwHexSyncDlg)
+  pwEl('pw-hd-arg').addEventListener('change', pwHexSyncDlg)
+  pwEl('pw-hd-cancel').addEventListener('click', () => dlg.close())
+  pwEl('pw-hd-save').addEventListener('click', pwHexSave)
+  return dlg
+}
+
+/* The dialog previews its own effect rather than making you save to find out,
+   including the halving, which depends on the district picked outside it. */
+function pwHexSyncDlg() {
+  const d = PW_HEX_DEF[pwVal('pw-hd-item')]
+  const wrap = pwEl('pw-hd-arg-wrap')
+  const note = pwEl('pw-hd-note')
+  if (!d || !wrap || !note) return
+  wrap.hidden = d.kind !== 'per'
+  if (d.kind === 'per') {
+    const lab = pwEl('pw-hd-arg-label')
+    if (lab) lab.textContent = d.arg + (d.arg === 'Held' ? ' (hours, max 3)' : ' (max 3)')
+    /* Seed the item's own default the first time it is picked, so Barricades
+       does not open on 0 hours and report itself worthless. */
+    const argEl = pwEl('pw-hd-arg')
+    if (argEl && argEl.dataset.seeded !== pwVal('pw-hd-item')) {
+      argEl.value = String(d.dflt)
+      argEl.dataset.seeded = pwVal('pw-hd-item')
+    }
+  }
+  const full = d.pct[PW_HEX_IDX[pwVal('pw-hd-rar')] || 0]
+  const onHome = pwVal('pw-district') === d.home
+  const v = onHome ? full : full / 2
+  const mult = d.kind === 'per' ? Math.min(d.cap, Math.max(0, pwNum('pw-hd-arg'))) : 1
+  const n1 = (x) => (Math.round(x * 10) / 10)
+  /* Effect, number, and the halving only when it is actually halved. On its own
+     territory there is nothing to say and saying it anyway buried the number. */
+  const halved = onHome ? '' : ' &middot; halved off ' + PW_DISTRICTS[d.home].label
+  /* A "per something" item at zero is genuinely worth zero, but "+0% defence"
+     on its own reads as a broken control, so the rate is spelled out whenever
+     the total is nothing. */
+  const rate = d.kind === 'per' && mult === 0
+    ? ' &middot; +' + n1(v) + '% ' + d.says
+    : ''
+  note.innerHTML = '<b>' + d.effect + '</b> &middot; ' + (d.kind === 'chance'
+    ? n1(v) + '% ' + d.short + halved + ' &middot; not scored'
+    : '+' + n1(v * mult) + '% defence' + halved + rate)
+}
+
+function pwHexOpen() {
+  const dlg = pwHexDlg()
+  const cur = pwVal('pw-hexdef')
+  pwEl('pw-hd-item').value = cur || Object.keys(PW_HEX_DEF)[0]
+  pwEl('pw-hd-rar').value = pwVal('pw-hexdef-rar') || 'common'
+  pwEl('pw-hd-arg').value = pwVal('pw-hexdef-arg') || '0'
+  pwEl('pw-hd-head').textContent = cur ? 'Edit hex defence' : 'Add hex defence'
+  pwHexSyncDlg()
+  dlg.showModal()
+}
+
+function pwHexSave() {
+  pwEl('pw-hexdef').value = pwVal('pw-hd-item')
+  pwEl('pw-hexdef-rar').value = pwVal('pw-hd-rar')
+  pwEl('pw-hexdef-arg').value = pwVal('pw-hd-arg')
+  pwEl('pw-hex-dlg').close()
+  pwHexRender()
+  pwRecalc()
+}
+
+function pwHexWire() {
+  const add = pwEl('pw-hexdef-add')
+  if (add) add.addEventListener('click', pwHexOpen)
+  const list = pwEl('pw-hexdef-list')
+  if (!list) return
+  list.addEventListener('click', (e) => {
+    if (e.target.closest('[data-hexedit]')) { pwHexOpen(); return }
+    if (e.target.closest('[data-hexdel]')) {
+      pwEl('pw-hexdef').value = ''
+      pwEl('pw-hexdef-arg').value = '0'
+      pwHexRender()
+      pwRecalc()
+    }
+  })
+}
+
+function pwBarsWire() {
+  const ui = pwEl('pw-dbars-ui')
+  if (!ui) return
+  ui.addEventListener('click', (e) => {
+    const b = e.target.closest('.pw-bar')
+    if (!b || b.disabled) return
+    pwEl('pw-dbars').value = b.dataset.n
+    pwRecalc()
+  })
 }
 
 function pwVerdict(district, defending, pw, pwLo, pwHi) {
@@ -3349,7 +3661,9 @@ function pwVerdict(district, defending, pw, pwLo, pwHi) {
   const ageHi = ageSel ? pwAgeMult(ageSel) : 1.4
   const shield = parseFloat(pwVal('pw-shield')) || 0
   const safe = pwVal('pw-district') === 'safe_house' ? 0.2 : 0
-  const base = 1 + shield + safe
+  /* Attacking, the hex being defended is theirs, so its defence lifts THEIR
+     band by the same additive rule. */
+  const base = 1 + shield + safe + pwHexDef().det
 
   /* Gear is no longer guessed at, it is solved for. Their loadout is the one
      thing scouting cannot show at all, so rather than ask you to pick a tier,
