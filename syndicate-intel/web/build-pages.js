@@ -143,23 +143,58 @@ const POWER_CSS = String.raw`
 .pw-ground { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .pw-ground .pw-row { grid-template-columns: 7rem 1fr; }
 @media (max-width: 58rem) { .pw-ground { grid-template-columns: 1fr; } }
-/* One gear slot is three linked choices, kept on one line so the pairing
-   survives. The item column is widest because its label carries the primary
-   stat, which is the part you actually read when choosing. */
-.pw-slot { margin-bottom: var(--space-3); }
-.pw-slot > .pw-slot-name { display: block; font-family: var(--mono); font-size: var(--step--2);
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
-  margin-bottom: 0.3rem; }
-/* Capped rather than stretched. The widest option in these three lists is
-   "Night-Vision Goggles - Hustle"; the other two hold a word each, so filling
-   an 800px card with them left three boxes mostly empty. */
-.pw-slot-fields { display: grid; grid-template-columns: 1.35fr 1fr 0.8fr;
-  gap: var(--space-2); max-width: 33rem; }
-.pw-slot-fields > select { width: 100%; min-width: 0; background: var(--surface); color: var(--ink);
-  font-family: var(--mono); font-size: var(--step--1); padding: 0.4rem 0.5rem;
+/* Gear is a list you add to, not four rows of dropdowns permanently on screen.
+   Most capos carry one or two items, so three quarters of that grid was empty
+   most of the time. It also had a "None" secondary, which the archive says is
+   not a thing that exists: of 39,366 attack-slot items, every single one rolls
+   a secondary. A control should not offer a state the game cannot produce. */
+.pw-gear-list { display: grid; gap: var(--space-2); margin-bottom: var(--space-3); }
+.pw-gear-none { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint);
+  margin: 0 0 var(--space-3); }
+/* Flex-wrap rather than a column grid: at 375px the numbers drop to their own
+   line on their own, and the buttons stay pinned right at every width. */
+.pw-gear-row { display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--space-2) var(--space-3); background: var(--surface);
+  border: 1px solid var(--rule-firm); padding: var(--space-2) var(--space-3); }
+.pw-gear-slot { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); flex: 0 0 4rem; }
+.pw-gear-item { font-size: var(--step--1); color: var(--ink); }
+.pw-gear-stats { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-muted);
+  flex: 1 1 13rem; }
+.pw-gear-acts { display: flex; gap: var(--space-2); margin-left: auto; }
+.pw-mini { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.06em;
+  padding: 0.25rem 0.6rem; background: var(--card); color: var(--ink-muted);
+  border: 1px solid var(--rule-firm); border-radius: 0; cursor: pointer; }
+.pw-mini:hover { color: var(--ink); }
+.pw-mini:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pw-add { font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.06em;
+  padding: 0.45rem 0.9rem; background: var(--band); color: var(--accent-bright);
+  border: 1px solid var(--accent-deep); border-radius: 0; cursor: pointer; }
+.pw-add:hover:not(:disabled) { color: var(--ink); }
+.pw-add:disabled { background: var(--surface); color: var(--ink-faint);
+  border-color: var(--rule-firm); cursor: default; }
+.pw-add:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* A native dialog, so Escape, focus trapping and the backdrop come for free. */
+.pw-dlg { background: var(--card); color: var(--ink); border: 1px solid var(--accent-deep);
+  border-radius: 0; padding: 0; width: min(26rem, calc(100vw - 2rem)); }
+.pw-dlg::backdrop { background: rgba(0, 0, 0, 0.72); }
+.pw-dlg-form { padding: var(--space-4); display: grid; gap: var(--space-3); }
+.pw-dlg-head { font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin: 0; }
+.pw-dlg-field { display: grid; gap: 0.3rem; }
+.pw-dlg-field > label { font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.pw-dlg-field > select { width: 100%; min-width: 0; background: var(--surface); color: var(--ink);
+  font-family: var(--mono); font-size: var(--step--1); padding: 0.45rem 0.5rem;
   border: 1px solid var(--rule-firm); border-radius: 0; }
-.pw-slot-fields > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-@media (max-width: 30rem) { .pw-slot-fields { grid-template-columns: 1fr; } }
+.pw-dlg-field > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.pw-dlg-note { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-faint);
+  margin: 0; }
+.pw-dlg-acts { display: flex; gap: var(--space-2); justify-content: flex-end; }
+/* The primary action reuses the switch's look but not its aria: aria-checked
+   belongs to a radio, not to a button that saves. */
+.pw-dlg-save { background: var(--band); color: var(--accent-bright);
+  border-color: var(--accent-deep); }
 /* The working, shown. A single output number is unfalsifiable; the per-stat
    rows are what let a reader spot which input is wrong. */
 /* Eight columns do not fit a phone. The table scrolls inside its own box so
@@ -2725,22 +2760,16 @@ function pwBuild() {
   const leagueOpts = Object.keys(PW_LEAGUE_CAP).map((k) => [k,
     pwCap1(k) + (PW_LEAGUE_CAP[k] ? ' (stats cap at ' + PW_LEAGUE_CAP[k] + ')' : '')])
   const rarityOpts = Object.keys(PW_RARITY_CAP).map((k) => [k, pwCap1(k)])
-  const gearRarityOpts = Object.keys(PW_GEAR_PCT).map((k) => [k, pwCap1(k) + ' (+' + PW_GEAR_PCT[k] + '%)'])
-  const statOpts = PW_STATS.map((k) => [k, pwCap1(k)])
   const halfStars = []
   for (let i = 0; i <= 10; i++) halfStars.push([String(i / 2), (i / 2) + '★'])
 
-  /* One gear slot is three linked choices. The item gets the wider column
-     because its label carries the primary stat, which is the part you are
-     actually reading when you pick. */
-  const slotRow = (slot, name) =>
-    '<div class="pw-slot"><span class="pw-slot-name">' + name + '</span>' +
-    '<div class="pw-slot-fields">' +
-      pwCtlSelect('pw-' + slot + '-item',
-        [['', 'Empty']].concat(PW_ITEMS[slot].map((i) => [i[0], i[1] + ' · ' + pwCap1(i[2])])), '') +
-      pwCtlSelect('pw-' + slot + '-rar', gearRarityOpts, 'common') +
-      pwCtlSelect('pw-' + slot + '-sec', [['', 'None']].concat(statOpts), '') +
-    '</div></div>'
+  /* Gear state lives in hidden fields, one trio per slot, under exactly the
+     ids pwRecalc already reads. The dialog writes them and the list renders
+     from them, so the scoring path below is untouched by this whole change. */
+  const gearState = PW_SLOTS.map((s) =>
+    '<input type="hidden" id="pw-' + s[0] + '-item" value="">' +
+    '<input type="hidden" id="pw-' + s[0] + '-rar" value="common">' +
+    '<input type="hidden" id="pw-' + s[0] + '-sec" value="">').join('')
 
   el.innerHTML =
     '<div class="pw-top">' +
@@ -2764,8 +2793,10 @@ function pwBuild() {
         '</div>' +
       '</div>' +
       '<div class="pw-card">' +
-        '<p class="calc-side-head">Attack gear &middot; item sets the primary, you pick the secondary</p>' +
-        PW_SLOTS.map((s) => slotRow(s[0], s[1])).join('') +
+        '<p class="calc-side-head">Attack gear &middot; the item sets the primary, the roll sets the secondary</p>' +
+        gearState +
+        '<div class="pw-gear-list" id="pw-gear-list"></div>' +
+        '<button type="button" class="pw-add" id="pw-gear-add">Add gear</button>' +
       '</div>' +
     '</div>' +
     /* A two-state choice is a switch, not a dropdown you have to open to read.
@@ -2828,7 +2859,184 @@ function pwBuild() {
       pwRecalc()
     })
   })
+  pwGearWire()
+  pwGearRender()
   pwRecalc()
+}
+
+/* ------------------------------------------------------------------ gear ---
+   Four dropdown rows became a list you add to through a dialog, for one reason
+   that is not cosmetic: the old secondary select offered "None", and no such
+   item exists. Checked against the archive rather than assumed: of 39,366
+   attack-slot items, every one carries a secondary, and not one of them rolls
+   it on the same stat as its primary. Both facts are now enforced by the
+   control instead of being left to the reader to know.
+
+   The scoring path is unchanged. These functions only write the same hidden
+   fields pwRecalc has always read. */
+
+const pwGearClear = (slot) => {
+  pwEl('pw-' + slot + '-item').value = ''
+  pwEl('pw-' + slot + '-rar').value = 'common'
+  pwEl('pw-' + slot + '-sec').value = ''
+}
+
+const pwGearItem = (v) => {
+  const parts = String(v).split(':')
+  const it = (PW_ITEMS[parts[0]] || []).find((i) => i[0] === parts[1])
+  return it ? { slot: parts[0], key: it[0], name: it[1], primary: it[2] } : null
+}
+
+/* One row per equipped item, and nothing at all for the empty slots. */
+function pwGearRender() {
+  const list = pwEl('pw-gear-list')
+  if (!list) return
+  const rows = []
+  PW_SLOTS.forEach((s) => {
+    const slot = s[0]
+    const key = pwVal('pw-' + slot + '-item')
+    if (!key) return
+    const item = (PW_ITEMS[slot] || []).find((i) => i[0] === key)
+    if (!item) return
+    const rar = pwVal('pw-' + slot + '-rar')
+    const sec = pwVal('pw-' + slot + '-sec')
+    const full = PW_GEAR_PCT[rar] || 0
+    rows.push(
+      '<div class="pw-gear-row">' +
+        '<span class="pw-gear-slot">' + s[1] + '</span>' +
+        '<span class="pw-gear-item">' + item[1] + '</span>' +
+        '<span class="pw-gear-stats">' + pwCap1(rar) + ' &middot; ' +
+          pwCap1(item[2]) + ' +' + full + '% &middot; ' +
+          pwCap1(sec) + ' +' + (full / 2) + '%</span>' +
+        '<span class="pw-gear-acts">' +
+          '<button type="button" class="pw-mini" data-edit="' + slot + '">Edit</button>' +
+          '<button type="button" class="pw-mini" data-del="' + slot + '">Remove</button>' +
+        '</span>' +
+      '</div>')
+  })
+  list.innerHTML = rows.length ? rows.join('') :
+    '<p class="pw-gear-none">No gear. A capo carries one item in each of the four slots.</p>'
+  const add = pwEl('pw-gear-add')
+  if (add) {
+    const free = PW_SLOTS.filter((s) => !pwVal('pw-' + s[0] + '-item')).length
+    add.disabled = free === 0
+    add.textContent = free === 0 ? 'All four slots filled' : 'Add gear'
+  }
+}
+
+/* The dialog is appended to the body, not into #pwcalc, on purpose: pwBuild
+   wires every select and input inside #pwcalc to pwRecalc, and a dialog in
+   there would rescore the capo on each half-made choice before the reader has
+   committed to any of it. */
+const pwGearDlg = () => {
+  const found = pwEl('pw-gear-dlg')
+  if (found) return found
+  const rarOpts = Object.keys(PW_GEAR_PCT).map((k) =>
+    '<option value="' + k + '">' + pwCap1(k) + ' (+' + PW_GEAR_PCT[k] + '%)</option>').join('')
+  const dlg = document.createElement('dialog')
+  dlg.id = 'pw-gear-dlg'
+  dlg.className = 'pw-dlg'
+  dlg.innerHTML =
+    '<form method="dialog" class="pw-dlg-form">' +
+      '<h3 class="pw-dlg-head" id="pw-dlg-head">Add gear</h3>' +
+      '<div class="pw-dlg-field"><label for="pw-dlg-item">Gear type</label>' +
+        '<select id="pw-dlg-item"></select></div>' +
+      '<div class="pw-dlg-field"><label for="pw-dlg-rar">Rarity</label>' +
+        '<select id="pw-dlg-rar">' + rarOpts + '</select></div>' +
+      '<div class="pw-dlg-field"><label for="pw-dlg-sec">Secondary stat</label>' +
+        '<select id="pw-dlg-sec"></select></div>' +
+      '<p class="pw-dlg-note" id="pw-dlg-note"></p>' +
+      '<div class="pw-dlg-acts">' +
+        '<button type="button" class="pw-sw" id="pw-dlg-cancel">Cancel</button>' +
+        '<button type="button" class="pw-sw pw-dlg-save" id="pw-dlg-save">Save</button>' +
+      '</div>' +
+    '</form>'
+  document.body.appendChild(dlg)
+  pwEl('pw-dlg-item').addEventListener('change', pwGearSyncSec)
+  pwEl('pw-dlg-cancel').addEventListener('click', () => dlg.close())
+  pwEl('pw-dlg-save').addEventListener('click', pwGearSave)
+  return dlg
+}
+
+/* The secondary list is derived from the chosen item rather than being a fixed
+   five, because it must never offer the item's own primary and must never
+   offer nothing. There is no empty option, so "mandatory" is a property of the
+   control rather than a rule someone has to remember to enforce. */
+function pwGearSyncSec() {
+  const sec = pwEl('pw-dlg-sec')
+  if (!sec) return
+  const item = pwGearItem(pwVal('pw-dlg-item'))
+  const primary = item ? item.primary : ''
+  const keep = sec.value
+  const opts = PW_STATS.filter((k) => k !== primary)
+  sec.innerHTML = opts.map((k) =>
+    '<option value="' + k + '">' + pwCap1(k) + '</option>').join('')
+  sec.value = opts.indexOf(keep) >= 0 ? keep : opts[0]
+  const note = pwEl('pw-dlg-note')
+  if (note) {
+    note.textContent = item
+      ? 'Full bonus on ' + pwCap1(primary) + ', half on the secondary. No item rolls ' +
+        'its secondary on the primary, so ' + pwCap1(primary) + ' is not offered.'
+      : ''
+  }
+}
+
+/* Passing a slot edits that slot; passing nothing adds. In add mode only the
+   free slots are offered, so saving can never silently overwrite gear that is
+   already on the capo. */
+function pwGearOpen(editSlot) {
+  const dlg = pwGearDlg()
+  const allowed = PW_SLOTS.filter((s) => s[0] === editSlot || !pwVal('pw-' + s[0] + '-item'))
+  if (!allowed.length) return
+  const sel = pwEl('pw-dlg-item')
+  sel.innerHTML = allowed.map((s) =>
+    '<optgroup label="' + s[1] + '">' +
+    PW_ITEMS[s[0]].map((i) => '<option value="' + s[0] + ':' + i[0] + '">' +
+      i[1] + ' &middot; ' + pwCap1(i[2]) + '</option>').join('') +
+    '</optgroup>').join('')
+  pwEl('pw-dlg-head').textContent = editSlot ? 'Edit gear' : 'Add gear'
+  dlg.dataset.edit = editSlot || ''
+  if (editSlot) {
+    sel.value = editSlot + ':' + pwVal('pw-' + editSlot + '-item')
+    pwEl('pw-dlg-rar').value = pwVal('pw-' + editSlot + '-rar') || 'common'
+  } else {
+    pwEl('pw-dlg-rar').value = 'common'
+  }
+  pwGearSyncSec()
+  if (editSlot) {
+    const cur = pwVal('pw-' + editSlot + '-sec')
+    const secEl = pwEl('pw-dlg-sec')
+    if (cur && secEl.querySelector('option[value="' + cur + '"]')) secEl.value = cur
+  }
+  dlg.showModal()
+}
+
+function pwGearSave() {
+  const dlg = pwEl('pw-gear-dlg')
+  const item = pwGearItem(pwVal('pw-dlg-item'))
+  if (!item) return
+  const was = dlg.dataset.edit
+  /* Moving an item to a different slot moves it rather than cloning it. */
+  if (was && was !== item.slot) pwGearClear(was)
+  pwEl('pw-' + item.slot + '-item').value = item.key
+  pwEl('pw-' + item.slot + '-rar').value = pwVal('pw-dlg-rar')
+  pwEl('pw-' + item.slot + '-sec').value = pwVal('pw-dlg-sec')
+  dlg.close()
+  pwGearRender()
+  pwRecalc()
+}
+
+function pwGearWire() {
+  const add = pwEl('pw-gear-add')
+  if (add) add.addEventListener('click', () => pwGearOpen(''))
+  const list = pwEl('pw-gear-list')
+  if (!list) return
+  list.addEventListener('click', (e) => {
+    const ed = e.target.closest('[data-edit]')
+    if (ed) { pwGearOpen(ed.dataset.edit); return }
+    const del = e.target.closest('[data-del]')
+    if (del) { pwGearClear(del.dataset.del); pwGearRender(); pwRecalc() }
+  })
 }
 
 function pwRecalc() {
