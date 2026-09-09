@@ -125,19 +125,10 @@ const POWER_CSS = String.raw`
   font-family: var(--mono); font-size: var(--step--1); padding: 0.4rem 0.5rem;
   border: 1px solid var(--rule-firm); border-radius: 0; }
 .pw-row > input:focus, .pw-row > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-/* A stat box holds two digits and an age three, so they are capped rather than
-   stretched to the column. The selects fill what is left of the 21rem panel. */
-.pw-row-num > input { max-width: 5rem; }
 @media (max-width: 58rem) {
   .pw-row { max-width: 22rem; }
 }
 .pw-rowgap { height: var(--space-4); }
-/* Attributes left, trained stats right. Collapses before the outer grid does,
-   because two columns of label-plus-field need more room than one. */
-.pw-capo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--space-4); }
-.pw-capo .pw-row { grid-template-columns: 4.75rem minmax(0, 1fr); }
-@media (max-width: 40rem) { .pw-capo { grid-template-columns: minmax(0, 1fr); } }
 /* The lower pair splits evenly: both hold stacked dropdowns rather than one
    holding stat boxes, and their labels are longer. */
 .pw-ground { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
@@ -148,9 +139,9 @@ const POWER_CSS = String.raw`
    most of the time. It also had a "None" secondary, which the archive says is
    not a thing that exists: of 39,366 attack-slot items, every single one rolls
    a secondary. A control should not offer a state the game cannot produce. */
-.pw-gear-list { display: grid; gap: var(--space-2); margin-bottom: var(--space-3); }
+.pw-gear-list { display: grid; gap: var(--space-2); }
 .pw-gear-none { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint);
-  margin: 0 0 var(--space-3); }
+  margin: 0; }
 /* Flex-wrap rather than a column grid: at 375px the numbers drop to their own
    line on their own, and the buttons stay pinned right at every width. */
 .pw-gear-row { display: flex; flex-wrap: wrap; align-items: baseline;
@@ -174,6 +165,16 @@ const POWER_CSS = String.raw`
 .pw-add:disabled { background: var(--surface); color: var(--ink-faint);
   border-color: var(--rule-firm); cursor: default; }
 .pw-add:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* The action leads its panel, so it needs the gap under it rather than over. */
+.pw-add { margin-bottom: var(--space-3); }
+/* What the dialogs are holding, read back. Same row treatment as a gear row so
+   the two panels sit at the same weight beside each other. */
+.pw-summary { display: grid; gap: var(--space-2); }
+.pw-sum-row { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3);
+  background: var(--surface); border: 1px solid var(--rule-firm);
+  padding: var(--space-2) var(--space-3); }
+.pw-sum-item { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-muted); }
+.pw-sum-item > b { color: var(--ink); font-weight: 500; }
 /* A native dialog, so Escape, focus trapping and the backdrop come for free. */
 .pw-dlg { background: var(--card); color: var(--ink); border: 1px solid var(--accent-deep);
   border-radius: 0; padding: 0; width: min(26rem, calc(100vw - 2rem)); }
@@ -190,11 +191,28 @@ const POWER_CSS = String.raw`
 .pw-dlg-field > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .pw-dlg-note { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-faint);
   margin: 0; }
+.pw-dlg-sub { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin: 0; }
+.pw-dlg-field > input { width: 100%; min-width: 0; background: var(--surface); color: var(--ink);
+  font-family: var(--mono); font-size: var(--step--1); padding: 0.45rem 0.5rem;
+  border: 1px solid var(--rule-firm); border-radius: 0; }
+.pw-dlg-field > input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+/* Two columns for the four identity fields; the five stats are short enough to
+   flow into as many columns as the dialog width allows, which is three on a
+   phone and keeps the whole thing inside one screen without scrolling. */
+.pw-dlg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.pw-dlg-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: var(--space-2) var(--space-3); }
 .pw-dlg-acts { display: flex; gap: var(--space-2); justify-content: flex-end; }
 /* The primary action reuses the switch's look but not its aria: aria-checked
-   belongs to a radio, not to a button that saves. */
-.pw-dlg-save { background: var(--band); color: var(--accent-bright);
+   belongs to a radio, not to a button that saves. Scoped to .pw-dlg so it beats
+   the .pw-sw block below it rather than depending on which is written last,
+   which is how the first attempt at this silently did nothing. */
+.pw-dlg .pw-dlg-save { background: var(--band); color: var(--accent-bright);
   border-color: var(--accent-deep); }
+/* The switch negative margin joins two segments of one control; these are two
+   separate buttons and want the gap the row already sets. */
+.pw-dlg-acts > .pw-sw + .pw-sw { margin-left: 0; }
 /* The working, shown. A single output number is unfalsifiable; the per-stat
    rows are what let a reader spot which input is wrong. */
 /* Eight columns do not fit a phone. The table scrolls inside its own box so
@@ -2734,9 +2752,6 @@ const pwCap1 = (s) => String(s).replace(/_/g, ' ').replace(/^./, (c) => c.toUppe
 const pwCtlSelect = (id, opts, sel) =>
   '<select id="' + id + '">' + opts.map((o) => '<option value="' + o[0] + '"' +
     (o[0] === sel ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select>'
-const pwCtlNumber = (id, value, min, max) =>
-  '<input id="' + id + '" type="number" inputmode="numeric" value="' + value +
-  '" min="' + min + '" max="' + max + '" step="1">'
 const pwRow = (id, label, ctl, cls) =>
   '<div class="pw-row' + (cls ? ' ' + cls : '') + '"><label for="' + id + '">' + label +
   '</label>' + ctl + '</div>'
@@ -2759,55 +2774,49 @@ function pwBuild() {
   const districtOpts = Object.keys(PW_DISTRICTS).map((k) => [k, PW_DISTRICTS[k].label])
   const leagueOpts = Object.keys(PW_LEAGUE_CAP).map((k) => [k,
     pwCap1(k) + (PW_LEAGUE_CAP[k] ? ' (stats cap at ' + PW_LEAGUE_CAP[k] + ')' : '')])
-  const rarityOpts = Object.keys(PW_RARITY_CAP).map((k) => [k, pwCap1(k)])
-  const halfStars = []
-  for (let i = 0; i <= 10; i++) halfStars.push([String(i / 2), (i / 2) + '★'])
-
-  /* Gear state lives in hidden fields, one trio per slot, under exactly the
-     ids pwRecalc already reads. The dialog writes them and the list renders
-     from them, so the scoring path below is untouched by this whole change. */
+  /* Capo and gear state both live in hidden fields, under exactly the ids
+     pwRecalc already reads. The dialogs write them and the summaries render
+     from them, so the scoring path below is untouched by any of this. */
+  const capoState =
+    '<input type="hidden" id="pw-finesse" value="0">' +
+    '<input type="hidden" id="pw-rarity" value="rare">' +
+    '<input type="hidden" id="pw-age" value="25">' +
+    '<input type="hidden" id="pw-spec" value="negotiator">' +
+    PW_STATS.map((k) =>
+      '<input type="hidden" id="pw-' + k + '" value="' + PW_DEFAULT_STATS[k] + '">').join('')
   const gearState = PW_SLOTS.map((s) =>
     '<input type="hidden" id="pw-' + s[0] + '-item" value="">' +
     '<input type="hidden" id="pw-' + s[0] + '-rar" value="common">' +
     '<input type="hidden" id="pw-' + s[0] + '-sec" value="">').join('')
 
   el.innerHTML =
-    '<div class="pw-top">' +
-      '<div class="pw-card">' +
-        '<p class="calc-side-head">The capo</p>' +
-        /* Two columns inside the card: what the capo IS on the left, what it
-           has TRAINED on the right. Nine rows in one column made this card
-           twice the height of the gear beside it. */
-        '<div class="pw-capo">' +
-          '<div>' +
-            pwRow('pw-finesse', 'Finesse', pwCtlSelect('pw-finesse', halfStars, '0')) +
-            pwRow('pw-rarity', 'Rarity', pwCtlSelect('pw-rarity', rarityOpts, 'rare')) +
-            pwRow('pw-age', 'Age', pwCtlNumber('pw-age', 25, 25, 64), 'pw-row-num') +
-            pwRow('pw-spec', 'Specialty',
-              pwCtlSelect('pw-spec', PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'negotiator')) +
-          '</div>' +
-          '<div>' +
-            PW_STATS.map((k) => pwRow('pw-' + k, pwCap1(k),
-              pwCtlNumber('pw-' + k, PW_DEFAULT_STATS[k], 1, 100), 'pw-row-num')).join('') +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="pw-card">' +
-        '<p class="calc-side-head">Attack gear &middot; the item sets the primary, the roll sets the secondary</p>' +
-        gearState +
-        '<div class="pw-gear-list" id="pw-gear-list"></div>' +
-        '<button type="button" class="pw-add" id="pw-gear-add">Add gear</button>' +
-      '</div>' +
-    '</div>' +
-    /* A two-state choice is a switch, not a dropdown you have to open to read.
-       The hidden input keeps pwVal('pw-role') working unchanged. It sits above
-       the two panels because it decides whether the right-hand one exists. */
+    /* The role comes first because it decides what the rest of the page even
+       means: which panels exist, and whether the headline is a verdict about
+       an attack or a score for a defence. Asking it after the capo had the
+       reader fill in a form before learning which form they were filling. */
     '<div class="pw-switch" role="radiogroup" aria-label="This capo is">' +
       '<span class="pw-switch-label">This capo is</span>' +
       '<button type="button" class="pw-sw" data-role="attack" role="radio" aria-checked="true">Attacking</button>' +
       '<button type="button" class="pw-sw" data-role="defend" role="radio" aria-checked="false">Holding it</button>' +
     '</div>' +
     '<input type="hidden" id="pw-role" value="attack">' +
+    '<div class="pw-top">' +
+      /* Each panel leads with its button. The thing you came to do sits at a
+         fixed spot at the top of the card rather than moving down the page as
+         the summary under it grows. */
+      '<div class="pw-card">' +
+        '<p class="calc-side-head">The capo</p>' +
+        capoState +
+        '<button type="button" class="pw-add" id="pw-capo-edit">Capo stats</button>' +
+        '<div class="pw-summary" id="pw-capo-summary"></div>' +
+      '</div>' +
+      '<div class="pw-card">' +
+        '<p class="calc-side-head">Attack gear &middot; the item sets the primary, the roll sets the secondary</p>' +
+        gearState +
+        '<button type="button" class="pw-add" id="pw-gear-add">Add gear</button>' +
+        '<div class="pw-gear-list" id="pw-gear-list"></div>' +
+      '</div>' +
+    '</div>' +
     '<div class="pw-top pw-ground">' +
       '<div class="pw-card">' +
         '<p class="calc-side-head">The district</p>' +
@@ -2828,7 +2837,7 @@ function pwBuild() {
         /* Rarity leads, because it decides what the two rows under it can even
            offer: rank shows the total this rarity can actually reach, and the
            bar list stops at the highest reading such a capo could show. */
-        pwRow('pw-drarity', 'Rarity', pwCtlSelect('pw-drarity', rarityOpts, 'epic')) +
+        pwRow('pw-drarity', 'Rarity', pwCtlSelect('pw-drarity', PW_RARITY_OPTS, 'epic')) +
         pwRow('pw-drank', 'Rank', pwCtlSelect('pw-drank',
           Object.keys(PW_RANK_CAP).map((k) => [k, pwCap1(k)]), 'lieutenant')) +
         pwRow('pw-dbars', 'Power bars', pwCtlSelect('pw-dbars',
@@ -2861,7 +2870,119 @@ function pwBuild() {
   })
   pwGearWire()
   pwGearRender()
+  pwCapoWire()
+  pwCapoRender()
   pwRecalc()
+}
+
+/* ------------------------------------------------------------------ capo ---
+   Same shape as the gear panel: hidden fields hold the state, a dialog edits
+   them, a summary reads them back. Nine controls permanently on screen was the
+   single tallest thing on the page, and eight of them are set once and then
+   left alone for the rest of the session. */
+
+const PW_RARITY_OPTS = Object.keys(PW_RARITY_CAP).map((k) => [k, pwCap1(k)])
+const PW_HALF_STARS = (() => {
+  const out = []
+  for (let i = 0; i <= 10; i++) out.push([String(i / 2), (i / 2) + '★'])
+  return out
+})()
+
+const pwDlgSelect = (id, label, opts) =>
+  '<div class="pw-dlg-field"><label for="' + id + '">' + label + '</label>' +
+  '<select id="' + id + '">' + opts.map((o) =>
+    '<option value="' + o[0] + '">' + o[1] + '</option>').join('') + '</select></div>'
+const pwDlgNumber = (id, label, min, max) =>
+  '<div class="pw-dlg-field"><label for="' + id + '">' + label + '</label>' +
+  '<input id="' + id + '" type="number" inputmode="numeric" min="' + min +
+  '" max="' + max + '" step="1"></div>'
+
+function pwCapoRender() {
+  const box = pwEl('pw-capo-summary')
+  if (!box) return
+  const cell = (label, val) =>
+    '<span class="pw-sum-item">' + label + ' <b>' + val + '</b></span>'
+  box.innerHTML =
+    '<div class="pw-sum-row">' +
+      cell('Rarity', pwCap1(pwVal('pw-rarity'))) +
+      cell('Specialty', pwCap1(pwVal('pw-spec'))) +
+      cell('Age', pwVal('pw-age')) +
+      cell('Finesse', pwVal('pw-finesse') + '★') +
+    '</div>' +
+    '<div class="pw-sum-row">' +
+      PW_STATS.map((k) => cell(pwCap1(k), pwVal('pw-' + k))).join('') +
+    '</div>'
+}
+
+const pwCapoDlg = () => {
+  const found = pwEl('pw-capo-dlg')
+  if (found) return found
+  const specOpts = PW_SPECIALTIES.map((k) => [k, pwCap1(k)])
+  const dlg = document.createElement('dialog')
+  dlg.id = 'pw-capo-dlg'
+  dlg.className = 'pw-dlg'
+  dlg.innerHTML =
+    '<form method="dialog" class="pw-dlg-form">' +
+      '<h3 class="pw-dlg-head">The capo</h3>' +
+      '<div class="pw-dlg-grid">' +
+        pwDlgSelect('pw-cd-rarity', 'Rarity', PW_RARITY_OPTS) +
+        pwDlgSelect('pw-cd-spec', 'Specialty', specOpts) +
+        pwDlgNumber('pw-cd-age', 'Age', 25, 64) +
+        pwDlgSelect('pw-cd-finesse', 'Finesse', PW_HALF_STARS) +
+      '</div>' +
+      '<p class="pw-dlg-sub">Stats</p>' +
+      '<div class="pw-dlg-stats">' +
+        PW_STATS.map((k) => pwDlgNumber('pw-cd-' + k, pwCap1(k), 1, 100)).join('') +
+      '</div>' +
+      '<p class="pw-dlg-note">Age peaks at 35 and declines from there. Stats are ' +
+        'capped in Street league, and the cap is applied after gear and age.</p>' +
+      '<div class="pw-dlg-acts">' +
+        '<button type="button" class="pw-sw" id="pw-cd-cancel">Cancel</button>' +
+        '<button type="button" class="pw-sw pw-dlg-save" id="pw-cd-save">Save</button>' +
+      '</div>' +
+    '</form>'
+  document.body.appendChild(dlg)
+  pwEl('pw-cd-cancel').addEventListener('click', () => dlg.close())
+  pwEl('pw-cd-save').addEventListener('click', pwCapoSave)
+  return dlg
+}
+
+function pwCapoOpen() {
+  const dlg = pwCapoDlg()
+  pwEl('pw-cd-rarity').value = pwVal('pw-rarity')
+  pwEl('pw-cd-spec').value = pwVal('pw-spec')
+  pwEl('pw-cd-age').value = pwVal('pw-age')
+  pwEl('pw-cd-finesse').value = pwVal('pw-finesse')
+  PW_STATS.forEach((k) => { pwEl('pw-cd-' + k).value = pwVal('pw-' + k) })
+  dlg.showModal()
+}
+
+/* Clamped on save rather than only inside pwRecalc, so the summary always
+   shows the number the score was actually built from. A typed 900 that scores
+   as 100 but reads back as 900 is exactly the kind of quiet disagreement this
+   page exists to avoid. */
+const pwClamp = (v, lo, hi, fallback) => {
+  const n = parseFloat(v)
+  if (!isFinite(n)) return fallback
+  return Math.min(hi, Math.max(lo, Math.round(n)))
+}
+
+function pwCapoSave() {
+  pwEl('pw-rarity').value = pwVal('pw-cd-rarity')
+  pwEl('pw-spec').value = pwVal('pw-cd-spec')
+  pwEl('pw-finesse').value = pwVal('pw-cd-finesse')
+  pwEl('pw-age').value = pwClamp(pwVal('pw-cd-age'), 25, 64, 25)
+  PW_STATS.forEach((k) => {
+    pwEl('pw-' + k).value = pwClamp(pwVal('pw-cd-' + k), 1, 100, PW_DEFAULT_STATS[k])
+  })
+  pwEl('pw-capo-dlg').close()
+  pwCapoRender()
+  pwRecalc()
+}
+
+function pwCapoWire() {
+  const btn = pwEl('pw-capo-edit')
+  if (btn) btn.addEventListener('click', pwCapoOpen)
 }
 
 /* ------------------------------------------------------------------ gear ---
