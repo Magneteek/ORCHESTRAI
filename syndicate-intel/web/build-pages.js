@@ -165,29 +165,60 @@ const POWER_CSS = String.raw`
 .pw-add:disabled { background: var(--surface); color: var(--ink-faint);
   border-color: var(--rule-firm); cursor: default; }
 .pw-add:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* Gear leads with its action, so that button carries the gap under it. The capo
-   panel trails with its action, and the summary above it already owns that gap. */
+/* Gear leads with its action, so that button carries the gap under it. */
 .pw-add { margin-bottom: var(--space-3); }
-.pw-add-foot { margin-bottom: 0; }
-/* What the dialogs are holding, read back. This is the panel's headline rather
-   than a caption under a button, so it carries real size: the stat values are
-   the largest thing in either input card. */
-.pw-summary { display: grid; gap: var(--space-2); margin-bottom: var(--space-3); }
-.pw-sum-row { display: flex; flex-wrap: wrap; align-items: baseline;
+/* Heading left, estimate hard right, one line. margin-left:auto rather than
+   space-between alone, so the estimate still sits right when a narrow card
+   wraps it onto its own line instead of falling back to the left edge. */
+.pw-cardtop { display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--space-1, 0.4rem) var(--space-3); margin-bottom: var(--space-3); }
+.pw-cardtop > .calc-side-head { margin: 0; }
+.pw-est { display: flex; align-items: baseline; gap: var(--space-2);
+  margin-left: auto; min-width: 0; }
+.pw-est-label { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-faint); }
+/* Same size as a stat tile value, so the card has one big-number scale rather
+   than a headline that towers over the heading beside it. */
+.pw-est-num { font-family: var(--mono); font-size: var(--step-2); line-height: 1.15;
+  color: var(--accent-bright); font-weight: 500; }
+/* Label beside control, so the four identity fields wrap through one row and
+   occupy the space the read-only chips used to. */
+.pw-sum-row { display: flex; flex-wrap: wrap; align-items: center;
   gap: var(--space-2) var(--space-3); background: var(--surface);
-  border: 1px solid var(--rule-firm); padding: var(--space-2) var(--space-3); }
-.pw-sum-item { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint); }
-.pw-sum-item > b { color: var(--ink); font-weight: 500; font-size: var(--step-0); }
-/* auto-fit rather than five fixed columns: five tiles across at 1280, and they
-   fold to three and then two on a phone without a breakpoint for each. */
+  border: 1px solid var(--rule-firm); padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2); }
+.pw-inline { display: flex; align-items: center; gap: var(--space-2); }
+.pw-inline > label { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint); }
+/* Sized to read, not to fit one line. The four controls need about 592px and
+   the card gives 546, so Finesse wraps at 1280 whatever the font; shrinking
+   them bought a smaller row with the same number of lines. */
+.pw-inline > select, .pw-inline > input { background: var(--card); color: var(--ink);
+  font-family: var(--mono); font-size: var(--step-0); padding: 0.25rem 0.4rem;
+  border: 1px solid var(--rule-firm); border-radius: 0; min-width: 0; }
+.pw-inline > input { width: 3.4rem; text-align: center; }
+.pw-inline > select:focus, .pw-inline > input:focus { outline: 2px solid var(--accent);
+  outline-offset: 1px; }
+/* auto-fit rather than five fixed columns: five across at 1280, folding to
+   three and then two on a phone without a breakpoint for each. */
 .pw-sum-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
   gap: var(--space-2); }
+/* The tile IS the field. The number keeps the size it had as a readout, and the
+   tile border carries the focus and hover states so the big figure stays clean. */
 .pw-sum-stat { background: var(--surface); border: 1px solid var(--rule-firm);
-  padding: var(--space-2) var(--space-3); text-align: center; }
-.pw-sum-stat > span { display: block; font-family: var(--mono); font-size: var(--step--2);
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
-.pw-sum-stat > b { display: block; font-family: var(--mono); font-size: var(--step-2);
-  line-height: 1.25; color: var(--accent-bright); font-weight: 500; }
+  padding: var(--space-2) var(--space-3); text-align: center; cursor: text; }
+.pw-sum-stat:hover { border-color: var(--accent-deep); }
+.pw-sum-stat:focus-within { border-color: var(--accent); }
+.pw-sum-stat > label { display: block; font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); cursor: text; }
+.pw-sum-stat > input { display: block; width: 100%; background: transparent; border: 0;
+  border-radius: 0; padding: 0; text-align: center; font-family: var(--mono);
+  font-size: var(--step-2); line-height: 1.25; color: var(--accent-bright);
+  font-weight: 500; appearance: textfield; -moz-appearance: textfield; }
+.pw-sum-stat > input:focus { outline: none; }
+/* Spinners at 1.4rem are larger than the digits beside them and crowd a
+   four-character tile, and the field is still a number input without them. */
+.pw-sum-stat > input::-webkit-outer-spin-button,
+.pw-sum-stat > input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 /* A native dialog, so Escape, focus trapping and the backdrop come for free. */
 .pw-dlg { background: var(--card); color: var(--ink); border: 1px solid var(--accent-deep);
   border-radius: 0; padding: 0; width: min(26rem, calc(100vw - 2rem)); }
@@ -204,18 +235,6 @@ const POWER_CSS = String.raw`
 .pw-dlg-field > select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .pw-dlg-note { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-faint);
   margin: 0; }
-.pw-dlg-sub { font-family: var(--mono); font-size: var(--step--2); letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--accent); margin: 0; }
-.pw-dlg-field > input { width: 100%; min-width: 0; background: var(--surface); color: var(--ink);
-  font-family: var(--mono); font-size: var(--step--1); padding: 0.45rem 0.5rem;
-  border: 1px solid var(--rule-firm); border-radius: 0; }
-.pw-dlg-field > input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-/* Two columns for the four identity fields; the five stats are short enough to
-   flow into as many columns as the dialog width allows, which is three on a
-   phone and keeps the whole thing inside one screen without scrolling. */
-.pw-dlg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
-.pw-dlg-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
-  gap: var(--space-2) var(--space-3); }
 .pw-dlg-acts { display: flex; gap: var(--space-2); justify-content: flex-end; }
 /* The primary action reuses the switch's look but not its aria: aria-checked
    belongs to a radio, not to a button that saves. Scoped to .pw-dlg so it beats
@@ -248,28 +267,25 @@ const POWER_CSS = String.raw`
    and the heading; the two inner cards keep the plain card ground so the tint
    reads as a wash behind them rather than colouring the numbers themselves.
    Flat fills throughout, no gradients. */
+/* One strip, full width, above the inputs: the word and the sentence that says
+   what would change it. Flat fill, full border, tinted by state. */
+.pw-odds { display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--space-2) var(--space-4); border: 1px solid var(--rule-firm);
+  background: var(--card); padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4); }
+.pw-odds[hidden] { display: none; }
+.pw-odds-word { font-family: var(--mono); font-size: var(--step-2); line-height: 1.1;
+  letter-spacing: 0.04em; text-transform: uppercase; font-weight: 500; color: var(--ink); }
+/* The sentence takes the rest of the line on a wide screen and drops under the
+   word on a phone, rather than being squeezed into a column beside it. */
+.pw-odds-note { font-size: var(--step--1); color: var(--ink-muted); margin: 0;
+  flex: 1 1 20rem; }
 .pw-v-good { border-color: var(--credit); background: color-mix(in srgb, var(--credit) 7%, var(--card)); }
 .pw-v-warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 7%, var(--card)); }
 .pw-v-bad { border-color: var(--debit); background: color-mix(in srgb, var(--debit) 7%, var(--card)); }
-.pw-v-good > .verdict-num { color: var(--credit); }
-.pw-v-warn > .verdict-num { color: var(--warn); }
-.pw-v-bad > .verdict-num { color: var(--debit); }
-/* One card a side, so the two capos are compared rather than listed. */
-.pw-vcard { background: var(--card); border: 1px solid var(--rule-firm);
-  border-radius: 3px; padding: var(--space-4); min-width: 0; }
-.pw-vcard-head { font-family: var(--mono); font-size: var(--step--2);
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint);
-  margin: 0 0 var(--space-2); }
-.pw-vnum { display: block; font-family: var(--mono); font-size: var(--step-2);
-  line-height: 1.1; color: var(--ink); }
-.pw-vcard .pw-tail { margin-top: var(--space-3); max-width: none; }
-
-/* Verdict left, working right. Collapses early: the tail rows are label and
-   value on one line and need the width more than the headline does. */
-.pw-vsplit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--space-4); align-items: stretch; }
-@media (max-width: 46rem) { .pw-vsplit { grid-template-columns: minmax(0, 1fr); } }
-.pw-vsplit > .pw-tail { margin-top: 0; max-width: none; }
+.pw-v-good > .pw-odds-word { color: var(--credit); }
+.pw-v-warn > .pw-odds-word { color: var(--warn); }
+.pw-v-bad > .pw-odds-word { color: var(--debit); }
 .pw-tail { list-style: none; padding: 0; margin: var(--space-4) 0 0;
   font-family: var(--mono); font-size: var(--step--1); max-width: 34rem; }
 .pw-tail li { display: flex; justify-content: space-between; gap: var(--space-4);
@@ -2787,16 +2803,11 @@ function pwBuild() {
   const districtOpts = Object.keys(PW_DISTRICTS).map((k) => [k, PW_DISTRICTS[k].label])
   const leagueOpts = Object.keys(PW_LEAGUE_CAP).map((k) => [k,
     pwCap1(k) + (PW_LEAGUE_CAP[k] ? ' (stats cap at ' + PW_LEAGUE_CAP[k] + ')' : '')])
-  /* Capo and gear state both live in hidden fields, under exactly the ids
-     pwRecalc already reads. The dialogs write them and the summaries render
-     from them, so the scoring path below is untouched by any of this. */
-  const capoState =
-    '<input type="hidden" id="pw-finesse" value="0">' +
-    '<input type="hidden" id="pw-rarity" value="rare">' +
-    '<input type="hidden" id="pw-age" value="25">' +
-    '<input type="hidden" id="pw-spec" value="negotiator">' +
-    PW_STATS.map((k) =>
-      '<input type="hidden" id="pw-' + k + '" value="' + PW_DEFAULT_STATS[k] + '">').join('')
+  /* Gear state lives in hidden fields, one trio per slot, under exactly the ids
+     pwRecalc already reads. The dialog writes them and the list renders from
+     them, so the scoring path below is untouched. The capo's own fields are
+     plain inputs sitting in the card: they are the numbers you come here to
+     push around, and a dialog put a click between every nudge and its effect. */
   const gearState = PW_SLOTS.map((s) =>
     '<input type="hidden" id="pw-' + s[0] + '-item" value="">' +
     '<input type="hidden" id="pw-' + s[0] + '-rar" value="common">' +
@@ -2813,19 +2824,41 @@ function pwBuild() {
       '<button type="button" class="pw-sw" data-role="defend" role="radio" aria-checked="false">Holding it</button>' +
     '</div>' +
     '<input type="hidden" id="pw-role" value="attack">' +
+    /* The answer sits above the things that produce it. It used to be the last
+       card on the page, so the one line worth reading was the one you had to
+       scroll furthest for. Kept to two things: the word, and what it would take
+       to change it. */
+    '<div class="pw-odds" id="pw-verdict"></div>' +
     '<div class="pw-top">' +
       /* Each panel leads with its button. The thing you came to do sits at a
          fixed spot at the top of the card rather than moving down the page as
          the summary under it grows. */
-      /* The capo panel is led by what the capo IS, not by the button that
-         changes it. Unlike gear, which is a list you come to add to, this is a
-         readout you come to check and occasionally correct, so the numbers take
-         the first position and the button sits under them. */
+      /* Estimated power leads the panel. It is the one number the page exists
+         to produce, and it was only readable after scrolling past every input
+         that feeds it. The verdict against an opponent stays below, because
+         that is a statement about them rather than about this capo. */
       '<div class="pw-card">' +
-        '<p class="calc-side-head">The capo</p>' +
-        capoState +
-        '<div class="pw-summary" id="pw-capo-summary"></div>' +
-        '<button type="button" class="pw-add pw-add-foot" id="pw-capo-edit">Capo stats</button>' +
+        /* Heading and headline number share one line. The estimate had a band
+           of its own, which cost a whole row to say what fits in the space the
+           heading was already leaving empty on its right. */
+        '<div class="pw-cardtop">' +
+          '<p class="calc-side-head">The capo</p>' +
+          '<div class="pw-est" id="pw-est"></div>' +
+        '</div>' +
+        '<div class="pw-sum-row">' +
+          pwInline('pw-rarity', 'Rarity', pwCtlSelect('pw-rarity', PW_RARITY_OPTS, 'rare')) +
+          pwInline('pw-spec', 'Specialty', pwCtlSelect('pw-spec',
+            PW_SPECIALTIES.map((k) => [k, pwCap1(k)]), 'negotiator')) +
+          pwInline('pw-age', 'Age', pwStatInput('pw-age', 25, 25, 64)) +
+          pwInline('pw-finesse', 'Finesse', pwCtlSelect('pw-finesse', PW_HALF_STARS, '0')) +
+        '</div>' +
+        /* The stat tiles are the inputs now rather than a readout of them. Same
+           size, same weight, one less click between a guess and its answer. */
+        '<div class="pw-sum-stats">' +
+          PW_STATS.map((k) => '<div class="pw-sum-stat">' +
+            '<label for="pw-' + k + '">' + pwCap1(k) + '</label>' +
+            pwStatInput('pw-' + k, PW_DEFAULT_STATS[k], 1, 100) + '</div>').join('') +
+        '</div>' +
       '</div>' +
       '<div class="pw-card">' +
         '<p class="calc-side-head">Attack gear &middot; the item sets the primary, the roll sets the secondary</p>' +
@@ -2869,7 +2902,6 @@ function pwBuild() {
     /* Results below the inputs, and only one headline at a time: the verdict
        when you are attacking, your own score when you are holding. */
     '<div class="pw-cards">' +
-      '<div class="verdict pw-card" id="pw-verdict"></div>' +
       '<div class="verdict pw-card" id="pw-out"></div>' +
     '</div>'
 
@@ -2888,16 +2920,15 @@ function pwBuild() {
   pwGearWire()
   pwGearRender()
   pwCapoWire()
-  pwCapoRender()
   pwRecalc()
 }
 
 /* ------------------------------------------------------------------ capo ---
-   Same shape as the gear panel: hidden fields hold the state, a dialog edits
-   them, a summary reads them back. Nine controls permanently on screen was the
-   single tallest thing on the page, and eight of them are set once and then
-   left alone for the rest of the session. */
+   The capo's fields sit in the card rather than behind a dialog. Gear earns a
+   dialog because one item is three linked choices and most slots are empty;
+   a stat is one number you nudge and immediately want the score for. */
 
+/* Shared: the capo card and the defender panel offer the same rarity ladder. */
 const PW_RARITY_OPTS = Object.keys(PW_RARITY_CAP).map((k) => [k, pwCap1(k)])
 const PW_HALF_STARS = (() => {
   const out = []
@@ -2905,105 +2936,46 @@ const PW_HALF_STARS = (() => {
   return out
 })()
 
-const pwDlgSelect = (id, label, opts) =>
-  '<div class="pw-dlg-field"><label for="' + id + '">' + label + '</label>' +
-  '<select id="' + id + '">' + opts.map((o) =>
-    '<option value="' + o[0] + '">' + o[1] + '</option>').join('') + '</select></div>'
-const pwDlgNumber = (id, label, min, max) =>
-  '<div class="pw-dlg-field"><label for="' + id + '">' + label + '</label>' +
-  '<input id="' + id + '" type="number" inputmode="numeric" min="' + min +
-  '" max="' + max + '" step="1"></div>'
+const pwInline = (id, label, ctl) =>
+  '<div class="pw-inline"><label for="' + id + '">' + label + '</label>' + ctl + '</div>'
+const pwStatInput = (id, value, min, max) =>
+  '<input id="' + id + '" type="number" inputmode="numeric" value="' + value +
+  '" min="' + min + '" max="' + max + '" step="1">'
 
-function pwCapoRender() {
-  const box = pwEl('pw-capo-summary')
+/* The one number the page exists to produce. Holding it has no roll, so the
+   band collapses and a single figure is the honest way to show it. */
+function pwEstimate(pw, pwLo, pwHi, defending) {
+  const box = pwEl('pw-est')
   if (!box) return
-  const chip = (label, val) =>
-    '<span class="pw-sum-item">' + label + ' <b>' + val + '</b></span>'
-  /* The five stats get tiles rather than another line of chips. They are the
-     numbers the whole score is built from and the ones most likely to be wrong,
-     so they are the thing that should be legible from across the desk. */
+  const n1 = (x) => x.toFixed(1)
   box.innerHTML =
-    '<div class="pw-sum-row">' +
-      chip('Rarity', pwCap1(pwVal('pw-rarity'))) +
-      chip('Specialty', pwCap1(pwVal('pw-spec'))) +
-      chip('Age', pwVal('pw-age')) +
-      chip('Finesse', pwVal('pw-finesse') + '★') +
-    '</div>' +
-    '<div class="pw-sum-stats">' +
-      PW_STATS.map((k) => '<div class="pw-sum-stat"><span>' + pwCap1(k) +
-        '</span><b>' + pwVal('pw-' + k) + '</b></div>').join('') +
-    '</div>'
+    '<span class="pw-est-label">Estimated power</span>' +
+    '<span class="pw-est-num">' +
+      (defending ? n1(pw) : n1(pwLo) + '&ndash;' + n1(pwHi)) + '</span>'
 }
 
-const pwCapoDlg = () => {
-  const found = pwEl('pw-capo-dlg')
-  if (found) return found
-  const specOpts = PW_SPECIALTIES.map((k) => [k, pwCap1(k)])
-  const dlg = document.createElement('dialog')
-  dlg.id = 'pw-capo-dlg'
-  dlg.className = 'pw-dlg'
-  dlg.innerHTML =
-    '<form method="dialog" class="pw-dlg-form">' +
-      '<h3 class="pw-dlg-head">The capo</h3>' +
-      '<div class="pw-dlg-grid">' +
-        pwDlgSelect('pw-cd-rarity', 'Rarity', PW_RARITY_OPTS) +
-        pwDlgSelect('pw-cd-spec', 'Specialty', specOpts) +
-        pwDlgNumber('pw-cd-age', 'Age', 25, 64) +
-        pwDlgSelect('pw-cd-finesse', 'Finesse', PW_HALF_STARS) +
-      '</div>' +
-      '<p class="pw-dlg-sub">Stats</p>' +
-      '<div class="pw-dlg-stats">' +
-        PW_STATS.map((k) => pwDlgNumber('pw-cd-' + k, pwCap1(k), 1, 100)).join('') +
-      '</div>' +
-      '<p class="pw-dlg-note">Age peaks at 35 and declines from there. Stats are ' +
-        'capped in Street league, and the cap is applied after gear and age.</p>' +
-      '<div class="pw-dlg-acts">' +
-        '<button type="button" class="pw-sw" id="pw-cd-cancel">Cancel</button>' +
-        '<button type="button" class="pw-sw pw-dlg-save" id="pw-cd-save">Save</button>' +
-      '</div>' +
-    '</form>'
-  document.body.appendChild(dlg)
-  pwEl('pw-cd-cancel').addEventListener('click', () => dlg.close())
-  pwEl('pw-cd-save').addEventListener('click', pwCapoSave)
-  return dlg
-}
-
-function pwCapoOpen() {
-  const dlg = pwCapoDlg()
-  pwEl('pw-cd-rarity').value = pwVal('pw-rarity')
-  pwEl('pw-cd-spec').value = pwVal('pw-spec')
-  pwEl('pw-cd-age').value = pwVal('pw-age')
-  pwEl('pw-cd-finesse').value = pwVal('pw-finesse')
-  PW_STATS.forEach((k) => { pwEl('pw-cd-' + k).value = pwVal('pw-' + k) })
-  dlg.showModal()
-}
-
-/* Clamped on save rather than only inside pwRecalc, so the summary always
-   shows the number the score was actually built from. A typed 900 that scores
-   as 100 but reads back as 900 is exactly the kind of quiet disagreement this
-   page exists to avoid. */
 const pwClamp = (v, lo, hi, fallback) => {
   const n = parseFloat(v)
   if (!isFinite(n)) return fallback
   return Math.min(hi, Math.max(lo, Math.round(n)))
 }
 
-function pwCapoSave() {
-  pwEl('pw-rarity').value = pwVal('pw-cd-rarity')
-  pwEl('pw-spec').value = pwVal('pw-cd-spec')
-  pwEl('pw-finesse').value = pwVal('pw-cd-finesse')
-  pwEl('pw-age').value = pwClamp(pwVal('pw-cd-age'), 25, 64, 25)
-  PW_STATS.forEach((k) => {
-    pwEl('pw-' + k).value = pwClamp(pwVal('pw-cd-' + k), 1, 100, PW_DEFAULT_STATS[k])
-  })
-  pwEl('pw-capo-dlg').close()
-  pwCapoRender()
-  pwRecalc()
-}
-
+/* Clamped when the field is committed, not on every keystroke, which would
+   fight you as you type a two digit number. It has to happen somewhere: the
+   scorer already clamps internally, so without this a typed 900 would score as
+   100 while the box still read 900, and the card would be lying about the
+   number the score was built from. */
 function pwCapoWire() {
-  const btn = pwEl('pw-capo-edit')
-  if (btn) btn.addEventListener('click', pwCapoOpen)
+  const clamp = (id, lo, hi, fallback) => {
+    const box = pwEl(id)
+    if (!box) return
+    box.addEventListener('change', () => {
+      const v = String(pwClamp(box.value, lo, hi, fallback))
+      if (v !== box.value) { box.value = v; pwRecalc() }
+    })
+  }
+  clamp('pw-age', 25, 64, 25)
+  PW_STATS.forEach((k) => clamp('pw-' + k, 1, 100, PW_DEFAULT_STATS[k]))
 }
 
 /* ------------------------------------------------------------------ gear ---
@@ -3306,6 +3278,7 @@ function pwRecalc() {
         '. Training those does nothing until you promote out of Street.</p>'
       : '')
 
+  pwEstimate(pw, pwLo, pwHi, defending)
   pwVerdict(district, defending, pw, pwLo, pwHi)
 }
 
@@ -3427,60 +3400,26 @@ function pwVerdict(district, defending, pw, pwLo, pwHi) {
     word = share > 0.6 ? 'Favoured' : share < 0.35 ? 'Against you' : 'Coin flip'
     state = share > 0.6 ? 'good' : 'warn'
   }
-  out.className = 'verdict pw-card pw-v-' + state
-  const specMod = PW_SPEC[pwVal('pw-spec')][pwVal('pw-dspec')] || 0
+  out.className = 'pw-odds pw-v-' + state
 
+  /* Everything the two inner cards used to list is either an input you set a
+     few centimetres away, or working that the panel below already shows. What
+     survives is the answer and the single sentence that says what would change
+     it, which is the only line here anyone acts on. */
   out.innerHTML =
-    /* Answer on the left, how it was reached on the right. Stacked, the tail
-       pushed the verdict itself off the top of a short screen.
-
-       Three rows were dropped as noise: the rarity cap and the specialty shape
-       are inputs you just set two cards above, and the pre-multiplier subtotal
-       is a working figure nobody acts on. What is left is the reading, the two
-       multipliers applied to it, and the result. */
-    '<span class="verdict-num">' + word + '</span>' +
-    '<div class="pw-vsplit">' +
-      '<div class="pw-vcard">' +
-        '<p class="pw-vcard-head">Your capo</p>' +
-        '<span class="pw-vnum">' + n1(pwLo) + '&ndash;' + n1(pwHi) + '</span>' +
-        '<ul class="pw-tail">' +
-          '<li><span class="pw-tail-label">' + pwCap1(pwVal('pw-spec')) + ' into ' +
-            pwCap1(pwVal('pw-dspec')) + '</span><span>' + (specMod > 0 ? '+' : '') +
-            specMod + '%</span></li>' +
-          (share !== null ? '<li><span class="pw-tail-label">Clears</span><span>' +
-            Math.round(share * 100) + '% of their range</span></li>' : '') +
-        '</ul>' +
-      '</div>' +
-      '<div class="pw-vcard">' +
-        '<p class="pw-vcard-head">Their capo</p>' +
-        '<span class="pw-vnum">' + n1(dLo) + '&ndash;' + n1(dHi) + '</span>' +
-        '<ul class="pw-tail">' +
-          '<li><span class="pw-tail-label">' + pwVal('pw-dbars') +
-            (pwVal('pw-dbars') === '1' ? ' bar on a ' : ' bars on a ') +
-            pwCap1(pwVal('pw-drank')) + '</span><span>' + Math.ceil(band.tLo) + '&ndash;' +
-            Math.floor(band.tHi) + ' stats</span></li>' +
-          '<li><span class="pw-tail-label">Typical build, ungeared</span><span>' +
-            n1(bareTyp) + '</span></li>' +
-          '<li><span class="pw-tail-label">Age' + (ageSel ? '' : ', unknown') +
-            '</span><span>' + (ageSel ? '&times;' + ageHi.toFixed(2)
-              : '&times;1.00 to &times;1.40') + '</span></li>' +
-          (shield ? '<li><span class="pw-tail-label">Shield</span><span>+15%</span></li>' : '') +
-          (safe ? '<li><span class="pw-tail-label">Safe House</span><span>+20%</span></li>' : '') +
-        '</ul>' +
-        '<p class="pw-threshold">' +
-          (beats === null
-            ? 'A typical build this size does not reach your ' + n1(pw) +
-              ' even with <b>a legendary set</b> placed on ' + pwCap1(tiers[3].on[0]) +
-              ' and ' + pwCap1(tiers[3].on[1]) + '.'
-            : beats.key === 'none'
-              ? 'A typical build this size beats your ' + n1(pw) +
-                ' <b>with no gear at all</b>.'
-              : 'They beat your ' + n1(pw) + ' once they carry <b>' + beats.label +
-                '</b> placed on ' + pwCap1(beats.on[0]) + ' and ' +
-                pwCap1(beats.on[1]) + '.') +
-        '</p>' +
-      '</div>' +
-    '</div>'
+    '<span class="pw-odds-word">' + word + '</span>' +
+    '<p class="pw-odds-note">' +
+      (beats === null
+        ? 'A typical build this size does not reach your ' + n1(pw) +
+          ' even with <b>a legendary set</b> placed on ' + pwCap1(tiers[3].on[0]) +
+          ' and ' + pwCap1(tiers[3].on[1]) + '.'
+        : beats.key === 'none'
+          ? 'A typical build this size beats your ' + n1(pw) +
+            ' <b>with no gear at all</b>.'
+          : 'They beat your ' + n1(pw) + ' once they carry <b>' + beats.label +
+            '</b> placed on ' + pwCap1(beats.on[0]) + ' and ' +
+            pwCap1(beats.on[1]) + '.') +
+    '</p>'
 }
 `
 
