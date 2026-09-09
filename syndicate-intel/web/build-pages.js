@@ -165,16 +165,29 @@ const POWER_CSS = String.raw`
 .pw-add:disabled { background: var(--surface); color: var(--ink-faint);
   border-color: var(--rule-firm); cursor: default; }
 .pw-add:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* The action leads its panel, so it needs the gap under it rather than over. */
+/* Gear leads with its action, so that button carries the gap under it. The capo
+   panel trails with its action, and the summary above it already owns that gap. */
 .pw-add { margin-bottom: var(--space-3); }
-/* What the dialogs are holding, read back. Same row treatment as a gear row so
-   the two panels sit at the same weight beside each other. */
-.pw-summary { display: grid; gap: var(--space-2); }
-.pw-sum-row { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3);
-  background: var(--surface); border: 1px solid var(--rule-firm);
-  padding: var(--space-2) var(--space-3); }
-.pw-sum-item { font-family: var(--mono); font-size: var(--step--2); color: var(--ink-muted); }
-.pw-sum-item > b { color: var(--ink); font-weight: 500; }
+.pw-add-foot { margin-bottom: 0; }
+/* What the dialogs are holding, read back. This is the panel's headline rather
+   than a caption under a button, so it carries real size: the stat values are
+   the largest thing in either input card. */
+.pw-summary { display: grid; gap: var(--space-2); margin-bottom: var(--space-3); }
+.pw-sum-row { display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--space-2) var(--space-3); background: var(--surface);
+  border: 1px solid var(--rule-firm); padding: var(--space-2) var(--space-3); }
+.pw-sum-item { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-faint); }
+.pw-sum-item > b { color: var(--ink); font-weight: 500; font-size: var(--step-0); }
+/* auto-fit rather than five fixed columns: five tiles across at 1280, and they
+   fold to three and then two on a phone without a breakpoint for each. */
+.pw-sum-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
+  gap: var(--space-2); }
+.pw-sum-stat { background: var(--surface); border: 1px solid var(--rule-firm);
+  padding: var(--space-2) var(--space-3); text-align: center; }
+.pw-sum-stat > span { display: block; font-family: var(--mono); font-size: var(--step--2);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.pw-sum-stat > b { display: block; font-family: var(--mono); font-size: var(--step-2);
+  line-height: 1.25; color: var(--accent-bright); font-weight: 500; }
 /* A native dialog, so Escape, focus trapping and the backdrop come for free. */
 .pw-dlg { background: var(--card); color: var(--ink); border: 1px solid var(--accent-deep);
   border-radius: 0; padding: 0; width: min(26rem, calc(100vw - 2rem)); }
@@ -2804,11 +2817,15 @@ function pwBuild() {
       /* Each panel leads with its button. The thing you came to do sits at a
          fixed spot at the top of the card rather than moving down the page as
          the summary under it grows. */
+      /* The capo panel is led by what the capo IS, not by the button that
+         changes it. Unlike gear, which is a list you come to add to, this is a
+         readout you come to check and occasionally correct, so the numbers take
+         the first position and the button sits under them. */
       '<div class="pw-card">' +
         '<p class="calc-side-head">The capo</p>' +
         capoState +
-        '<button type="button" class="pw-add" id="pw-capo-edit">Capo stats</button>' +
         '<div class="pw-summary" id="pw-capo-summary"></div>' +
+        '<button type="button" class="pw-add pw-add-foot" id="pw-capo-edit">Capo stats</button>' +
       '</div>' +
       '<div class="pw-card">' +
         '<p class="calc-side-head">Attack gear &middot; the item sets the primary, the roll sets the secondary</p>' +
@@ -2900,17 +2917,21 @@ const pwDlgNumber = (id, label, min, max) =>
 function pwCapoRender() {
   const box = pwEl('pw-capo-summary')
   if (!box) return
-  const cell = (label, val) =>
+  const chip = (label, val) =>
     '<span class="pw-sum-item">' + label + ' <b>' + val + '</b></span>'
+  /* The five stats get tiles rather than another line of chips. They are the
+     numbers the whole score is built from and the ones most likely to be wrong,
+     so they are the thing that should be legible from across the desk. */
   box.innerHTML =
     '<div class="pw-sum-row">' +
-      cell('Rarity', pwCap1(pwVal('pw-rarity'))) +
-      cell('Specialty', pwCap1(pwVal('pw-spec'))) +
-      cell('Age', pwVal('pw-age')) +
-      cell('Finesse', pwVal('pw-finesse') + '★') +
+      chip('Rarity', pwCap1(pwVal('pw-rarity'))) +
+      chip('Specialty', pwCap1(pwVal('pw-spec'))) +
+      chip('Age', pwVal('pw-age')) +
+      chip('Finesse', pwVal('pw-finesse') + '★') +
     '</div>' +
-    '<div class="pw-sum-row">' +
-      PW_STATS.map((k) => cell(pwCap1(k), pwVal('pw-' + k))).join('') +
+    '<div class="pw-sum-stats">' +
+      PW_STATS.map((k) => '<div class="pw-sum-stat"><span>' + pwCap1(k) +
+        '</span><b>' + pwVal('pw-' + k) + '</b></div>').join('') +
     '</div>'
 }
 
